@@ -1,12 +1,13 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Auth-65537-blue" alt="Auth: 65537">
   <img src="https://img.shields.io/badge/License-Apache%202.0-green" alt="License: Apache 2.0">
-  <img src="https://img.shields.io/badge/Status-Coming%20Soon-orange" alt="Status: Coming Soon">
+  <img src="https://img.shields.io/badge/Software-5.0-purple" alt="Software 5.0">
+  <img src="https://img.shields.io/badge/Tips-Welcome-yellow" alt="Tips Welcome">
 </p>
 
 # Stillwater OS
 
-> **The Linux of AI. Compiler-grade intelligence for everyone.**
+> **Software 5.0 — The Linux of AI. Compiler-grade intelligence for everyone.**
 
 Stillwater OS is an open-source operating system for AI that replaces probabilistic agents with deterministic, verifiable programs. It's the difference between hoping your AI works and *proving* it works.
 
@@ -120,14 +121,30 @@ Stillwater OS is built on the belief that intelligence should be:
 
 ---
 
+## Software 5.0
+
+Stillwater OS defines **Software 5.0** — intelligence externalized as verifiable recipes.
+
+| Era | Paradigm | Who Writes | What's Stored |
+|-----|----------|-----------|---------------|
+| 1.0 | Classical | Humans write code | Source code |
+| 2.0 | Neural | Data writes weights | Opaque weights |
+| 3.0 | Prompted | Humans write prompts | Prompt chains |
+| 4.0 | Agentic | Agents write prompts | Agent traces |
+| **5.0** | **Recipes** | **Intelligence writes recipes** | **Verifiable, inspectable, shareable recipes** |
+
+**Why it matters:** Recipes run on CPUs. They can be read, audited, verified, and shared. No GPU required. No black box. No hallucination. A $200 laptop can run what took a datacenter.
+
+---
+
 ## Roadmap
 
-- [ ] Public release of Kernel (Lane Algebra + State Machines)
+- [x] Kernel: Lane Algebra engine
+- [x] `stillwater verify` CLI tool
 - [ ] Prime Skills v2.0 (open source 31+ skills)
-- [ ] `stillwater verify` CLI tool
 - [ ] Benchmark proofs package (OOLONG, NIAH, SWE-bench)
 - [ ] Community templates and starter kits
-- [ ] Documentation site (docs.stillwater-os.dev)
+- [ ] Documentation site
 - [ ] Launch Week 1
 
 ---
@@ -146,8 +163,20 @@ Apache 2.0 — Free to use, modify, and distribute.
 
 ---
 
+## Part of the Stillwater OS Ecosystem
+
+| Project | Role | Link |
+|---------|------|------|
+| **Stillwater OS** | The Platform | Beat entropy at everything |
+| [PZIP](https://pzip.net) | Compression Engine | Compress the generator, not the data |
+| [Solace AGI](https://solaceagi.com) | Persistent Identity | Memory x Care x Iteration |
+| [IF Theory](https://github.com/phuc-stillwater/if) | Physics Engine | Information as the first force |
+
+---
+
 <p align="center">
   <i>"Don't compress the data. Compress the generator."</i><br>
-  <i>"If it isn't reproducible, it isn't Stillwater."</i><br>
-  <b>Auth: 65537</b>
+  <i>"Software 5.0: Intelligence you can see, verify, and share."</i><br>
+  <b>Auth: 65537</b><br><br>
+  <i>Built by <a href="https://phuc.net">Phuc Vinh Truong</a> | Working for tips | <a href="https://ko-fi.com/phucnet">Support this work</a></i>
 </p>
