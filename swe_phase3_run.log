@@ -323,3 +323,2404 @@ Running: django__django-11049
 
 ============================================================
 [13/300] Processing django__django-11099
+============================================================
+
+============================================================
+Running: django__django-11099
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 auth_tests.test_validators
+   Test directives: auth_tests.test_validators
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 22/22 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (441 chars)
+⚠️  Model patch failed: error: corrupt patch at line 9
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[14/300] Processing django__django-11133
+============================================================
+
+============================================================
+Running: django__django-11133
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 httpwrappers.tests
+   Test directives: httpwrappers.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 64/65 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (434 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[15/300] Processing django__django-11179
+============================================================
+
+============================================================
+Running: django__django-11179
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 delete.tests
+   Test directives: delete.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 42/42 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (413 chars)
+⚠️  Model patch failed: error: corrupt patch at line 10
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[16/300] Processing django__django-11283
+============================================================
+
+============================================================
+Running: django__django-11283
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 auth_tests.test_migrations
+   Test directives: auth_tests.test_migrations
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 9/9 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (453 chars)
+⚠️  Model patch failed: error: corrupt patch at line 10
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[17/300] Processing django__django-11422
+============================================================
+
+============================================================
+Running: django__django-11422
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 utils_tests.test_autoreload
+   Test directives: utils_tests.test_autoreload
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 67/68 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (410 chars)
+⚠️  Model patch failed: error: patch fragment without header at line 11: @@ -8,4 +9,5 @@ def main():
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[18/300] Processing django__django-11564
+============================================================
+
+============================================================
+Running: django__django-11564
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 file_storage.tests settings_tests.tests
+   Test directives: file_storage.tests, settings_tests.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 179/179 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (988 chars)
+⚠️  Model patch failed: error: corrupt patch at line 22
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[19/300] Processing django__django-11583
+============================================================
+
+============================================================
+Running: django__django-11583
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 utils_tests.test_autoreload
+   Test directives: utils_tests.test_autoreload
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 71/73 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (791 chars)
+⚠️  Model patch failed: error: corrupt patch at line 13
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[20/300] Processing django__django-11620
+============================================================
+
+============================================================
+Running: django__django-11620
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 view_tests.tests.test_debug
+   Test directives: view_tests.tests.test_debug
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 72/72 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (336 chars)
+⚠️  Model patch failed: error: corrupt patch at line 8
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[21/300] Processing django__django-11630
+============================================================
+
+============================================================
+Running: django__django-11630
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 check_framework.test_model_checks
+   Test directives: check_framework.test_model_checks
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 18/18 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (720 chars)
+⚠️  Model patch failed: error: corrupt patch at line 13
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[22/300] Processing django__django-11742
+============================================================
+
+============================================================
+Running: django__django-11742
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 invalid_models_tests.test_ordinary_fields
+   Test directives: invalid_models_tests.test_ordinary_fields
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 47/47 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (692 chars)
+⚠️  Model patch failed: error: corrupt patch at line 10
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[23/300] Processing django__django-11797
+============================================================
+
+============================================================
+Running: django__django-11797
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 lookup.tests
+   Test directives: lookup.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 39/39 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (689 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[24/300] Processing django__django-11815
+============================================================
+
+============================================================
+Running: django__django-11815
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 migrations.test_writer
+   Test directives: migrations.test_writer
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 44/46 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (529 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[25/300] Processing django__django-11848
+============================================================
+
+============================================================
+Running: django__django-11848
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 utils_tests.test_http
+   Test directives: utils_tests.test_http
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 44/45 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (424 chars)
+⚠️  Model patch failed: error: corrupt patch at line 12
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[26/300] Processing django__django-11905
+============================================================
+
+============================================================
+Running: django__django-11905
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 lookup.models lookup.tests
+   Test directives: lookup.models, lookup.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 40/40 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (724 chars)
+⚠️  Model patch failed: error: corrupt patch at line 12
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[27/300] Processing django__django-11910
+============================================================
+
+============================================================
+Running: django__django-11910
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 migrations.test_autodetector
+   Test directives: migrations.test_autodetector
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 114/114 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (632 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[28/300] Processing django__django-11964
+============================================================
+
+============================================================
+Running: django__django-11964
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 model_enums.tests
+   Test directives: model_enums.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 2/17 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (387 chars)
+⚠️  Model patch failed: error: corrupt patch at line 8
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[29/300] Processing django__django-11999
+============================================================
+
+============================================================
+Running: django__django-11999
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 model_fields.tests
+   Test directives: model_fields.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 31/31 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (384 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[30/300] Processing django__django-12113
+============================================================
+
+============================================================
+Running: django__django-12113
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 backends.sqlite.test_creation
+   Test directives: backends.sqlite.test_creation
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 0/1 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (385 chars)
+⚠️  Model patch failed: error: corrupt patch at line 17
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[31/300] Processing django__django-12125
+============================================================
+
+============================================================
+Running: django__django-12125
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 migrations.test_writer
+   Test directives: migrations.test_writer
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 45/47 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (426 chars)
+⚠️  Model patch failed: error: corrupt patch at line 10
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[32/300] Processing django__django-12184
+============================================================
+
+============================================================
+Running: django__django-12184
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 urlpatterns.path_urls urlpatterns.tests
+   Test directives: urlpatterns.path_urls, urlpatterns.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 25/26 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (427 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[33/300] Processing django__django-12284
+============================================================
+
+============================================================
+Running: django__django-12284
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 model_fields.tests
+   Test directives: model_fields.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 32/32 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (518 chars)
+⚠️  Model patch failed: error: corrupt patch at line 10
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[34/300] Processing django__django-12286
+============================================================
+
+============================================================
+Running: django__django-12286
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 check_framework.test_translation
+   Test directives: check_framework.test_translation
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 4/8 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (294 chars)
+⚠️  Model patch failed: Checking patch django/conf/locale.py...
+error: django/conf/locale.py: No such file or directory
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[35/300] Processing django__django-12308
+============================================================
+
+============================================================
+Running: django__django-12308
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 admin_utils.tests
+   Test directives: admin_utils.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 22/22 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (305 chars)
+⚠️  Model patch failed: Checking patch django/utils/formats.py...
+error: while searching for:
+    """
+    Find format modules.
+    """
+    if not check_for_language(lang):
+        return
+
+
+error: patch failed: django/utils/formats.py:100
+error: django/utils/formats.py: patch does not apply
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[36/300] Processing django__django-12453
+============================================================
+
+============================================================
+Running: django__django-12453
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 backends.base.test_creation backends.models
+   Test directives: backends.base.test_creation, backends.models
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 6/6 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (535 chars)
+⚠️  Model patch failed: error: corrupt patch at line 12
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[37/300] Processing django__django-12470
+============================================================
+
+============================================================
+Running: django__django-12470
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 model_inheritance.models model_inheritance.tests
+   Test directives: model_inheritance.models, model_inheritance.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 34/34 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (190 chars)
+⚠️  Model patch failed: error: corrupt patch at line 9
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[38/300] Processing django__django-12497
+============================================================
+
+============================================================
+Running: django__django-12497
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 invalid_models_tests.test_relative_fields
+   Test directives: invalid_models_tests.test_relative_fields
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 82/84 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (391 chars)
+⚠️  Model patch failed: error: corrupt patch at line 10
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[39/300] Processing django__django-12589
+============================================================
+
+============================================================
+Running: django__django-12589
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 aggregation.models aggregation.tests
+   Test directives: aggregation.models, aggregation.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 67/67 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (487 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[40/300] Processing django__django-12700
+============================================================
+
+============================================================
+Running: django__django-12700
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 view_tests.tests.test_debug
+   Test directives: view_tests.tests.test_debug
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 83/83 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (961 chars)
+⚠️  Model patch failed: error: corrupt patch at line 17
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[41/300] Processing django__django-12708
+============================================================
+
+============================================================
+Running: django__django-12708
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 migrations.test_base migrations.test_operations
+   Test directives: migrations.test_base, migrations.test_operations
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 102/102 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (397 chars)
+⚠️  Model patch failed: error: corrupt patch at line 10
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[42/300] Processing django__django-12747
+============================================================
+
+============================================================
+Running: django__django-12747
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 delete.tests
+   Test directives: delete.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 53/53 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (1029 chars)
+⚠️  Model patch failed: error: corrupt patch at line 28
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[43/300] Processing django__django-12856
+============================================================
+
+============================================================
+Running: django__django-12856
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 invalid_models_tests.test_models
+   Test directives: invalid_models_tests.test_models
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 83/83 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (867 chars)
+⚠️  Model patch failed: error: corrupt patch at line 15
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[44/300] Processing django__django-12908
+============================================================
+
+============================================================
+Running: django__django-12908
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 queries.test_qs_combinators
+   Test directives: queries.test_qs_combinators
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 29/29 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (244 chars)
+⚠️  Model patch failed: error: corrupt patch at line 10
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[45/300] Processing django__django-12915
+============================================================
+
+============================================================
+Running: django__django-12915
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 asgi.tests staticfiles_tests.test_handlers
+   Test directives: asgi.tests, staticfiles_tests.test_handlers
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 7/11 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (610 chars)
+⚠️  Model patch failed: error: corrupt patch at line 12
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[46/300] Processing django__django-12983
+============================================================
+
+============================================================
+Running: django__django-12983
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 utils_tests.test_text
+   Test directives: utils_tests.test_text
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 15/16 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (595 chars)
+⚠️  Model patch failed: error: corrupt patch at line 20
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[47/300] Processing django__django-13028
+============================================================
+
+============================================================
+Running: django__django-13028
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 queries.models queries.tests
+   Test directives: queries.models, queries.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 284/284 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (501 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[48/300] Processing django__django-13033
+============================================================
+
+============================================================
+Running: django__django-13033
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 ordering.models ordering.tests
+   Test directives: ordering.models, ordering.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 27/27 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (362 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[49/300] Processing django__django-13158
+============================================================
+
+============================================================
+Running: django__django-13158
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 queries.test_qs_combinators
+   Test directives: queries.test_qs_combinators
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 32/32 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (2158 chars)
+⚠️  Model patch failed: error: corrupt patch at line 51
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[50/300] Processing django__django-13220
+============================================================
+
+============================================================
+Running: django__django-13220
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 test_exceptions.test_validation_error
+   Test directives: test_exceptions.test_validation_error
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 1/5 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (838 chars)
+⚠️  Model patch failed: error: corrupt patch at line 21
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[51/300] Processing django__django-13230
+============================================================
+
+============================================================
+Running: django__django-13230
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 syndication_tests.feeds syndication_tests.tests
+   Test directives: syndication_tests.feeds, syndication_tests.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 24/24 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (827 chars)
+⚠️  Model patch failed: error: corrupt patch at line 26
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[52/300] Processing django__django-13265
+============================================================
+
+============================================================
+Running: django__django-13265
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 migrations.test_autodetector
+   Test directives: migrations.test_autodetector
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 126/126 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (1455 chars)
+⚠️  Model patch failed: error: corrupt patch at line 25
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[53/300] Processing django__django-13315
+============================================================
+
+============================================================
+Running: django__django-13315
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 model_forms.models model_forms.tests
+   Test directives: model_forms.models, model_forms.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 149/149 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (545 chars)
+⚠️  Model patch failed: error: corrupt patch at line 10
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[54/300] Processing django__django-13321
+============================================================
+
+============================================================
+Running: django__django-13321
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 sessions_tests.tests
+   Test directives: sessions_tests.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 384/384 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (309 chars)
+⚠️  Model patch failed: error: corrupt patch at line 9
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[55/300] Processing django__django-13401
+============================================================
+
+============================================================
+Running: django__django-13401
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 model_fields.tests
+   Test directives: model_fields.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 33/33 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (722 chars)
+⚠️  Model patch failed: error: corrupt patch at line 29
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[56/300] Processing django__django-13447
+============================================================
+
+============================================================
+Running: django__django-13447
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 admin_views.test_adminsite
+   Test directives: admin_views.test_adminsite
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 6/6 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (474 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[57/300] Processing django__django-13448
+============================================================
+
+============================================================
+Running: django__django-13448
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 backends.base.app_unmigrated.__init__ backends.base.app_unmigrated.migrations.0001_initial backends.base.app_unmigrated.migrations.__init__ backends.base.app_unmigrated.models backends.base.test_creation
+   Test directives: backends.base.app_unmigrated.__init__, backends.base.app_unmigrated.migrations.0001_initial, backends.base.app_unmigrated.migrations.__init__, backends.base.app_unmigrated.models, backends.base.test_creation
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 8/8 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (646 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[58/300] Processing django__django-13551
+============================================================
+
+============================================================
+Running: django__django-13551
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 auth_tests.models.__init__ auth_tests.models.with_custom_email_field auth_tests.test_models auth_tests.test_tokens
+   Test directives: auth_tests.models.__init__, auth_tests.models.with_custom_email_field, auth_tests.test_models, auth_tests.test_tokens
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 58/58 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (562 chars)
+⚠️  Model patch failed: error: corrupt patch at line 19
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[59/300] Processing django__django-13590
+============================================================
+
+============================================================
+Running: django__django-13590
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 expressions.tests
+   Test directives: expressions.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 149/149 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (99 chars)
+⚠️  Model patch failed: error: corrupt patch at line 4
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[60/300] Processing django__django-13658
+============================================================
+
+============================================================
+Running: django__django-13658
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 admin_scripts.tests
+   Test directives: admin_scripts.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 196/196 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (703 chars)
+⚠️  Model patch failed: error: corrupt patch at line 18
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[61/300] Processing django__django-13660
+============================================================
+
+============================================================
+Running: django__django-13660
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 shell.tests
+   Test directives: shell.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 6/8 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (533 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[62/300] Processing django__django-13710
+============================================================
+
+============================================================
+Running: django__django-13710
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 admin_inlines.tests
+   Test directives: admin_inlines.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 75/75 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (455 chars)
+⚠️  Model patch failed: error: corrupt patch at line 12
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[63/300] Processing django__django-13757
+============================================================
+
+============================================================
+Running: django__django-13757
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 model_fields.test_jsonfield
+   Test directives: model_fields.test_jsonfield
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 85/85 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (375 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[64/300] Processing django__django-13768
+============================================================
+
+============================================================
+Running: django__django-13768
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 dispatch.tests
+   Test directives: dispatch.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 18/19 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (294 chars)
+⚠️  Model patch failed: error: corrupt patch at line 10
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[65/300] Processing django__django-13925
+============================================================
+
+============================================================
+Running: django__django-13925
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 check_framework.test_model_checks
+   Test directives: check_framework.test_model_checks
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 26/26 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (711 chars)
+⚠️  Model patch failed: error: corrupt patch at line 19
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[66/300] Processing django__django-13933
+============================================================
+
+============================================================
+Running: django__django-13933
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 forms_tests.tests.test_error_messages
+   Test directives: forms_tests.tests.test_error_messages
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 20/20 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (642 chars)
+⚠️  Model patch failed: error: corrupt patch at line 15
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[67/300] Processing django__django-13964
+============================================================
+
+============================================================
+Running: django__django-13964
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 many_to_one.models many_to_one.tests
+   Test directives: many_to_one.models, many_to_one.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 37/37 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (248 chars)
+⚠️  Model patch failed: error: corrupt patch at line 5
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[68/300] Processing django__django-14016
+============================================================
+
+============================================================
+Running: django__django-14016
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 queries.test_q
+   Test directives: queries.test_q
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 13/15 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (288 chars)
+⚠️  Model patch failed: error: corrupt patch at line 6
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[69/300] Processing django__django-14017
+============================================================
+
+============================================================
+Running: django__django-14017
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 expressions.tests
+   Test directives: expressions.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 152/152 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (362 chars)
+⚠️  Model patch failed: error: corrupt patch at line 12
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[70/300] Processing django__django-14155
+============================================================
+
+============================================================
+Running: django__django-14155
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 urlpatterns_reverse.tests
+   Test directives: urlpatterns_reverse.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 95/95 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (855 chars)
+⚠️  Model patch failed: error: corrupt patch at line 24
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[71/300] Processing django__django-14238
+============================================================
+
+============================================================
+Running: django__django-14238
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 model_fields.test_autofield model_options.test_default_pk
+   Test directives: model_fields.test_autofield, model_options.test_default_pk
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 61/61 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (236 chars)
+⚠️  Model patch failed: error: corrupt patch at line 10
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[72/300] Processing django__django-14382
+============================================================
+
+============================================================
+Running: django__django-14382
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 admin_scripts.tests
+   Test directives: admin_scripts.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 199/199 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (434 chars)
+⚠️  Model patch failed: error: corrupt patch at line 9
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[73/300] Processing django__django-14411
+============================================================
+
+============================================================
+Running: django__django-14411
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 auth_tests.test_forms
+   Test directives: auth_tests.test_forms
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 84/84 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (436 chars)
+⚠️  Model patch failed: error: corrupt patch at line 9
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[74/300] Processing django__django-14534
+============================================================
+
+============================================================
+Running: django__django-14534
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 forms_tests.tests.test_forms
+   Test directives: forms_tests.tests.test_forms
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 119/121 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (310 chars)
+⚠️  Model patch failed: error: corrupt patch at line 8
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[75/300] Processing django__django-14580
+============================================================
+
+============================================================
+Running: django__django-14580
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 migrations.test_writer
+   Test directives: migrations.test_writer
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 49/50 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (215 chars)
+⚠️  Model patch failed: error: corrupt patch at line 7
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[76/300] Processing django__django-14608
+============================================================
+
+============================================================
+Running: django__django-14608
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 admin_views.tests forms_tests.tests.test_formsets
+   Test directives: admin_views.tests, forms_tests.tests.test_formsets
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 417/417 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (751 chars)
+⚠️  Model patch failed: error: corrupt patch at line 19
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[77/300] Processing django__django-14667
+============================================================
+
+============================================================
+Running: django__django-14667
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 defer.tests
+   Test directives: defer.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 30/30 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (1051 chars)
+⚠️  Model patch failed: error: corrupt patch at line 18
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[78/300] Processing django__django-14672
+============================================================
+
+============================================================
+Running: django__django-14672
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 invalid_models_tests.test_models m2m_through.models m2m_through.tests
+   Test directives: invalid_models_tests.test_models, m2m_through.models, m2m_through.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+❌ FAILED: Red Gate failed: ❌ Test execution failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+
+============================================================
+[79/300] Processing django__django-14730
+============================================================
+
+============================================================
+Running: django__django-14730
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 field_deconstruction.tests invalid_models_tests.test_relative_fields model_meta.models
+   Test directives: field_deconstruction.tests, invalid_models_tests.test_relative_fields, model_meta.models
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 120/121 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (317 chars)
+⚠️  Model patch failed: error: corrupt patch at line 7
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[80/300] Processing django__django-14752
+============================================================
+
+============================================================
+Running: django__django-14752
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 admin_views.test_autocomplete_view
+   Test directives: admin_views.test_autocomplete_view
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 19/19 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (1178 chars)
+⚠️  Model patch failed: error: corrupt patch at line 30
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[81/300] Processing django__django-14787
+============================================================
+
+============================================================
+Running: django__django-14787
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 decorators.tests
+   Test directives: decorators.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 20/21 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (1153 chars)
+⚠️  Model patch failed: error: corrupt patch at line 26
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[82/300] Processing django__django-14855
+============================================================
+
+============================================================
+Running: django__django-14855
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 admin_views.admin admin_views.tests
+   Test directives: admin_views.admin, admin_views.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 345/345 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (409 chars)
+⚠️  Model patch failed: error: corrupt patch at line 9
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[83/300] Processing django__django-14915
+============================================================
+
+============================================================
+Running: django__django-14915
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 model_forms.test_modelchoicefield
+   Test directives: model_forms.test_modelchoicefield
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 24/24 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (261 chars)
+⚠️  Model patch failed: error: corrupt patch at line 6
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[84/300] Processing django__django-14997
+============================================================
+
+============================================================
+Running: django__django-14997
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 backends.test_ddl_references migrations.test_operations
+   Test directives: backends.test_ddl_references, migrations.test_operations
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 153/153 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (545 chars)
+⚠️  Model patch failed: error: corrupt patch at line 9
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[85/300] Processing django__django-14999
+============================================================
+
+============================================================
+Running: django__django-14999
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 migrations.test_operations
+   Test directives: migrations.test_operations
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 120/120 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (576 chars)
+🟢 Green Gate: Checking tests after patch...
+✅ No regressions (120/120 passing)
+✅ VERIFIED (9969ms)
+
+============================================================
+[86/300] Processing django__django-15061
+============================================================
+
+============================================================
+Running: django__django-15061
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 forms_tests.field_tests.test_multivaluefield forms_tests.field_tests.test_splitdatetimefield postgres_tests.test_ranges
+   Test directives: forms_tests.field_tests.test_multivaluefield, forms_tests.field_tests.test_splitdatetimefield, postgres_tests.test_ranges
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 116/116 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (350 chars)
+⚠️  Model patch failed: error: corrupt patch at line 6
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[87/300] Processing django__django-15202
+============================================================
+
+============================================================
+Running: django__django-15202
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 forms_tests.field_tests.test_urlfield
+   Test directives: forms_tests.field_tests.test_urlfield
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 6/8 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (549 chars)
+⚠️  Model patch failed: error: corrupt patch at line 14
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[88/300] Processing django__django-15213
+============================================================
+
+============================================================
+Running: django__django-15213
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 annotations.tests
+   Test directives: annotations.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 77/77 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (435 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[89/300] Processing django__django-15252
+============================================================
+
+============================================================
+Running: django__django-15252
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 backends.base.test_creation migrations.test_executor
+   Test directives: backends.base.test_creation, migrations.test_executor
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 36/36 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (1260 chars)
+⚠️  Model patch failed: error: corrupt patch at line 28
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[90/300] Processing django__django-15320
+============================================================
+
+============================================================
+Running: django__django-15320
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 expressions.tests
+   Test directives: expressions.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 164/164 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (315 chars)
+⚠️  Model patch failed: error: corrupt patch at line 6
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[91/300] Processing django__django-15347
+============================================================
+
+============================================================
+Running: django__django-15347
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 messages_tests.test_cookie
+   Test directives: messages_tests.test_cookie
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 29/30 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (813 chars)
+⚠️  Model patch failed: error: patch fragment without header at line 14: @@ -110,6 +110,12 @@ class MessageEncoder(JSONEncoder):
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[92/300] Processing django__django-15388
+============================================================
+
+============================================================
+Running: django__django-15388
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 template_tests.test_autoreloader
+   Test directives: template_tests.test_autoreloader
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 9/10 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (419 chars)
+⚠️  Model patch failed: error: corrupt patch at line 10
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[93/300] Processing django__django-15400
+============================================================
+
+============================================================
+Running: django__django-15400
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 utils_tests.test_lazyobject
+   Test directives: utils_tests.test_lazyobject
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 62/65 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (340 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[94/300] Processing django__django-15498
+============================================================
+
+============================================================
+Running: django__django-15498
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 view_tests.tests.test_static
+   Test directives: view_tests.tests.test_static
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 29/30 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (1244 chars)
+⚠️  Model patch failed: error: corrupt patch at line 27
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[95/300] Processing django__django-15695
+============================================================
+
+============================================================
+Running: django__django-15695
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 migrations.test_operations
+   Test directives: migrations.test_operations
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 130/130 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (1293 chars)
+⚠️  Model patch failed: error: corrupt patch at line 16
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[96/300] Processing django__django-15738
+============================================================
+
+============================================================
+Running: django__django-15738
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 migrations.test_autodetector
+   Test directives: migrations.test_autodetector
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 148/148 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (283 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[97/300] Processing django__django-15781
+============================================================
+
+============================================================
+Running: django__django-15781
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 user_commands.tests
+   Test directives: user_commands.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 41/44 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (288 chars)
+⚠️  Model patch failed: error: corrupt patch at line 5
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[98/300] Processing django__django-15789
+============================================================
+
+============================================================
+Running: django__django-15789
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 utils_tests.test_html
+   Test directives: utils_tests.test_html
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 17/18 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (690 chars)
+⚠️  Model patch failed: error: corrupt patch at line 19
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[99/300] Processing django__django-15790
+============================================================
+
+============================================================
+Running: django__django-15790
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 check_framework.test_templates
+   Test directives: check_framework.test_templates
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 12/13 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (209 chars)
+⚠️  Model patch failed: error: corrupt patch at line 8
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[100/300] Processing django__django-15814
+============================================================
+
+============================================================
+Running: django__django-15814
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 proxy_models.tests
+   Test directives: proxy_models.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 30/30 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (455 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[101/300] Processing django__django-15819
+============================================================
+
+============================================================
+Running: django__django-15819
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 inspectdb.models inspectdb.tests
+   Test directives: inspectdb.models, inspectdb.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 24/24 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (595 chars)
+⚠️  Model patch failed: error: corrupt patch at line 12
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[102/300] Processing django__django-15851
+============================================================
+
+============================================================
+Running: django__django-15851
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 dbshell.test_postgresql
+   Test directives: dbshell.test_postgresql
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 9/10 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (620 chars)
+⚠️  Model patch failed: error: patch fragment without header at line 12: @@ -8,6 +9,7 @@ class Migration(migrations.Migration):
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[103/300] Processing django__django-15902
+============================================================
+
+============================================================
+Running: django__django-15902
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 forms_tests.tests.test_formsets
+   Test directives: forms_tests.tests.test_formsets
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 156/157 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (204 chars)
+⚠️  Model patch failed: error: corrupt patch at line 5
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[104/300] Processing django__django-15996
+============================================================
+
+============================================================
+Running: django__django-15996
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 migrations.test_writer
+   Test directives: migrations.test_writer
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 51/52 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (1919 chars)
+⚠️  Model patch failed: error: corrupt patch at line 24
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[105/300] Processing django__django-16041
+============================================================
+
+============================================================
+Running: django__django-16041
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 forms_tests.tests.test_formsets
+   Test directives: forms_tests.tests.test_formsets
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 157/159 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (391 chars)
+⚠️  Model patch failed: error: corrupt patch at line 10
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[106/300] Processing django__django-16046
+============================================================
+
+============================================================
+Running: django__django-16046
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 utils_tests.test_numberformat
+   Test directives: utils_tests.test_numberformat
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 6/7 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (266 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[107/300] Processing django__django-16139
+============================================================
+
+============================================================
+Running: django__django-16139
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 auth_tests.test_forms
+   Test directives: auth_tests.test_forms
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 87/87 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (384 chars)
+⚠️  Model patch failed: error: corrupt patch at line 8
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[108/300] Processing django__django-16229
+============================================================
+
+============================================================
+Running: django__django-16229
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 forms_tests.tests.tests
+   Test directives: forms_tests.tests.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 23/23 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (376 chars)
+⚠️  Model patch failed: error: corrupt patch at line 12
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[109/300] Processing django__django-16255
+============================================================
+
+============================================================
+Running: django__django-16255
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 sitemaps_tests.test_http sitemaps_tests.urls.http
+   Test directives: sitemaps_tests.test_http, sitemaps_tests.urls.http
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 40/40 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (784 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[110/300] Processing django__django-16379
+============================================================
+
+============================================================
+Running: django__django-16379
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 cache.tests
+   Test directives: cache.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 574/574 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (349 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[111/300] Processing django__django-16400
+============================================================
+
+============================================================
+Running: django__django-16400
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 auth_tests.test_management
+   Test directives: auth_tests.test_management
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 65/65 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (1625 chars)
+⚠️  Model patch failed: error: corrupt patch at line 23
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[112/300] Processing django__django-16408
+============================================================
+
+============================================================
+Running: django__django-16408
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 known_related_objects.tests
+   Test directives: known_related_objects.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 20/20 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (1090 chars)
+⚠️  Model patch failed: error: corrupt patch at line 26
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[113/300] Processing django__django-16527
+============================================================
+
+============================================================
+Running: django__django-16527
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 admin_views.test_templatetags
+   Test directives: admin_views.test_templatetags
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 7/7 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (770 chars)
+⚠️  Model patch failed: error: corrupt patch at line 18
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[114/300] Processing django__django-16595
+============================================================
+
+============================================================
+Running: django__django-16595
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 migrations.test_optimizer
+   Test directives: migrations.test_optimizer
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 37/38 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (1404 chars)
+⚠️  Model patch failed: error: corrupt patch at line 26
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[115/300] Processing django__django-16816
+============================================================
+
+============================================================
+Running: django__django-16816
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 modeladmin.test_checks
+   Test directives: modeladmin.test_checks
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 123/125 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (529 chars)
+⚠️  Model patch failed: error: corrupt patch at line 10
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[116/300] Processing django__django-16820
+============================================================
+
+============================================================
+Running: django__django-16820
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 migrations.test_autodetector migrations.test_optimizer
+   Test directives: migrations.test_autodetector, migrations.test_optimizer
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 217/217 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (563 chars)
+⚠️  Model patch failed: error: corrupt patch at line 10
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[117/300] Processing django__django-16873
+============================================================
+
+============================================================
+Running: django__django-16873
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 template_tests.filter_tests.test_join
+   Test directives: template_tests.filter_tests.test_join
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 12/14 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (475 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[118/300] Processing django__django-16910
+============================================================
+
+============================================================
+Running: django__django-16910
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 defer_regress.tests select_related_onetoone.tests
+   Test directives: defer_regress.tests, select_related_onetoone.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 39/39 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (263 chars)
+⚠️  Model patch failed: error: corrupt patch at line 7
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[119/300] Processing django__django-17051
+============================================================
+
+============================================================
+Running: django__django-17051
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 bulk_create.tests
+   Test directives: bulk_create.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 52/52 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (781 chars)
+⚠️  Model patch failed: error: corrupt patch at line 18
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[120/300] Processing django__django-17087
+============================================================
+
+============================================================
+Running: django__django-17087
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 migrations.test_writer
+   Test directives: migrations.test_writer
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 53/54 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (389 chars)
+⚠️  Model patch failed: Checking patch appname/models.py...
+error: appname/models.py: No such file or directory
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[121/300] Processing matplotlib__matplotlib-18869
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-18869
+============================================================
+📋 Test command: pytest -rA --tb=no -p no:cacheprovider lib/matplotlib/tests/test_matplotlib.py
+   Test directives: lib/matplotlib/tests/test_matplotlib.py
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...

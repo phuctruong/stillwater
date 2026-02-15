@@ -1,0 +1,93 @@
+{
+  "phase": 2,
+  "timestamp": "2026-02-15T07:42:51.276763",
+  "config": {
+    "model": "llama3.1:8b",
+    "approach": "direct_edits_plus_feedback_loop",
+    "attempts_max": 6,
+    "files_context": "full"
+  },
+  "summary": {
+    "total_instances": 10,
+    "verified": 1,
+    "success_rate": 0.1,
+    "avg_duration_seconds": 49.736049032211305,
+    "total_duration_seconds": 497.3606879711151
+  },
+  "results": [
+    {
+      "instance_id": "astropy__astropy-12907",
+      "verified": false,
+      "attempts": 1,
+      "duration_seconds": 27.55140972137451,
+      "error": "Red Gate failed: \u274c Test execution failed: /home/phuc/.local/lib/python3.10/site-packages/_pytest/config/__init__.py:328: PluggyTeardownRaisedWarning: A plugin raised an exception during an old-style h"
+    },
+    {
+      "instance_id": "django__django-12286",
+      "verified": false,
+      "attempts": 1,
+      "duration_seconds": 99.94865369796753,
+      "error": "Failed to generate edits after 6 attempts"
+    },
+    {
+      "instance_id": "django__django-14608",
+      "verified": true,
+      "attempts": 1,
+      "duration_seconds": 88.21601343154907,
+      "error": null
+    },
+    {
+      "instance_id": "django__django-15819",
+      "verified": false,
+      "attempts": 1,
+      "duration_seconds": 120.90828132629395,
+      "error": "Failed to generate edits after 6 attempts"
+    },
+    {
+      "instance_id": "psf__requests-1963",
+      "verified": false,
+      "attempts": 1,
+      "duration_seconds": 9.822439432144165,
+      "error": "Red Gate failed: \u274c Test execution failed: /home/phuc/.local/lib/python3.10/site-packages/_pytest/config/__init__.py:328: PluggyTeardownRaisedWarning: A plugin raised an exception during an old-style h"
+    },
+    {
+      "instance_id": "pylint-dev__pylint-7993",
+      "verified": false,
+      "attempts": 1,
+      "duration_seconds": 16.335936784744263,
+      "error": "Red Gate failed: \u274c Test execution failed: /home/phuc/.local/lib/python3.10/site-packages/_pytest/config/__init__.py:328: PluggyTeardownRaisedWarning: A plugin raised an exception during an old-style h"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-14983",
+      "verified": false,
+      "attempts": 1,
+      "duration_seconds": 30.457116842269897,
+      "error": "Red Gate failed: \u274c Test execution failed: /home/phuc/.local/lib/python3.10/site-packages/_pytest/config/__init__.py:328: PluggyTeardownRaisedWarning: A plugin raised an exception during an old-style h"
+    },
+    {
+      "instance_id": "sympy__sympy-13146",
+      "verified": false,
+      "attempts": 1,
+      "duration_seconds": 30.977327823638916,
+      "error": "Red Gate failed: \u274c Test execution failed: Traceback (most recent call last):\n  File \"/tmp/sweb-sympy__sympy-13146-m3hs33gm/repo/bin/test\", line 105, in <module>\n    import sympy\n  File \"/tmp/sweb-symp"
+    },
+    {
+      "instance_id": "sympy__sympy-18189",
+      "verified": false,
+      "attempts": 1,
+      "duration_seconds": 38.610995054244995,
+      "error": "Red Gate failed: \u274c Test execution failed: "
+    },
+    {
+      "instance_id": "sympy__sympy-24909",
+      "verified": false,
+      "attempts": 1,
+      "duration_seconds": 34.53231620788574,
+      "error": "Red Gate failed: \u274c Test execution failed: "
+    }
+  ],
+  "error_analysis": {
+    "Red Gate failed": 7,
+    "Failed to generate edits after 6 attempts": 2
+  }
+}

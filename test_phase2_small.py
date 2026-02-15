@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 """
-Phase 1 Micro Test: 5 instances to verify orchestration works
-
-This is the start of our ramp to 100% with llama 8B.
-We'll measure everything and document for the A/B notebook.
+Phase 2 Small Batch: 10 instances to measure scaling
 """
 
 import sys
@@ -19,18 +16,19 @@ from stillwater.swe.runner import run_instance
 from stillwater.swe.loader import _parse_instance
 
 
-def test_phase_1_micro():
-    """Run Phase 1: 5 diverse instances"""
+def test_phase_2_small():
+    """Run Phase 2: 10 diverse instances"""
 
     print("=" * 70)
-    print("PHASE 1: MICRO TEST (5 Instances)")
+    print("PHASE 2: SMALL BATCH (10 Instances)")
     print("=" * 70)
-    print("\nGoal: Verify orchestration works, identify critical issues")
+    print("\nGoal: Measure scaling, identify patterns")
     print("Model: llama 8B")
     print("Approach: Direct edits + Feedback loop (up to 6 attempts)")
+    print("Expected: 30-50% success (improvement from Phase 1's 20%)")
     print()
 
-    # Load dataset from HuggingFace
+    # Load dataset
     print("📦 Loading SWE-bench Lite dataset...")
     try:
         dataset = hf_load_dataset("princeton-nlp/SWE-bench_Lite", split="test")
@@ -40,11 +38,22 @@ def test_phase_1_micro():
         print(f"❌ Failed to load dataset: {e}")
         return False
 
-    # Select 5 diverse instances
-    indices = [0, len(instances_list)//4, len(instances_list)//2, 3*len(instances_list)//4, -1]
+    # Select 10 diverse instances
+    indices = [
+        0,
+        len(instances_list) // 9,
+        len(instances_list) // 4,
+        3 * len(instances_list) // 9,
+        len(instances_list) // 2,
+        5 * len(instances_list) // 9,
+        2 * len(instances_list) // 3,
+        7 * len(instances_list) // 9,
+        8 * len(instances_list) // 9,
+        -1,
+    ]
     selected_instances = [instances_list[i] for i in indices if i < len(instances_list)]
-    if len(selected_instances) < 5:
-        selected_instances = instances_list[:5]
+    if len(selected_instances) < 10:
+        selected_instances = instances_list[:10]
 
     instance_ids = [inst.instance_id for inst in selected_instances]
 
@@ -71,7 +80,7 @@ def test_phase_1_micro():
 
             verified = result.verified
             error = result.error
-            attempts = 1  # We can't track this yet, will improve
+            attempts = 1
 
             results.append({
                 'instance_id': instance_id,
@@ -102,7 +111,7 @@ def test_phase_1_micro():
 
     # Analyze results
     print(f"\n\n{'='*70}")
-    print("PHASE 1 RESULTS")
+    print("PHASE 2 RESULTS")
     print(f"{'='*70}\n")
 
     verified_count = sum(1 for r in results if r['verified'])
@@ -120,7 +129,7 @@ def test_phase_1_micro():
     error_types = {}
     for r in results:
         if r['error']:
-            error_msg = r['error'].split(':')[0]  # Get first part
+            error_msg = r['error'].split(':')[0]
             error_types[error_msg] = error_types.get(error_msg, 0) + 1
 
     if error_types:
@@ -130,21 +139,25 @@ def test_phase_1_micro():
         print()
 
     # Decision
-    print("DECISION FOR PHASE 2:")
-    if success_rate == 0:
-        print("  🛑 STOP - Critical bug exists")
-        print("     Debug failures before continuing")
-    elif success_rate < 0.4:
-        print("  ⚠️  Continue with caution")
-        print("     Expect to improve in Phase 2")
+    print("DECISION FOR PHASE 3:")
+    if success_rate < 0.2:
+        print("  🛑 Regressed - investigate why")
+        print("     Review Phase 1 vs Phase 2 differences")
+    elif success_rate < 0.3:
+        print("  ⚠️  Scaling slowly, continue with improvements")
+        print("     Try better file context or error feedback")
+    elif success_rate < 0.5:
+        print("  ✅ Good progress - proceed to Phase 3")
+        print("     Improvements are working")
     else:
-        print("  ✅ Good baseline - proceed to Phase 2")
+        print("  🎉 Excellent - likely on track for 100%")
+        print("     Continue to Phase 3 and beyond")
 
     print()
 
     # Save for A/B notebook
-    phase_1_data = {
-        'phase': 1,
+    phase_2_data = {
+        'phase': 2,
         'timestamp': datetime.now().isoformat(),
         'config': {
             'model': 'llama3.1:8b',
@@ -163,23 +176,23 @@ def test_phase_1_micro():
         'error_analysis': error_types,
     }
 
-    output_path = Path('phase_1_results.json')
+    output_path = Path('phase_2_results.json')
     with open(output_path, 'w') as f:
-        json.dump(phase_1_data, f, indent=2)
+        json.dump(phase_2_data, f, indent=2)
 
     print(f"✅ Results saved to: {output_path}")
     print(f"   (For A/B Jupyter notebook later)")
     print()
 
-    return success_rate >= 0.2  # Return True if we should continue
+    return success_rate >= 0.2
 
 
 if __name__ == '__main__':
-    success = test_phase_1_micro()
+    success = test_phase_2_small()
 
     if success:
-        print("Phase 1 passed! Ready for Phase 2.")
+        print("Phase 2 passed! Ready for Phase 3.")
         sys.exit(0)
     else:
-        print("Phase 1 needs debugging before Phase 2.")
+        print("Phase 2 needs debugging before Phase 3.")
         sys.exit(1)

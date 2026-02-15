@@ -1,12 +1,11 @@
 [llm]
-provider = "ollama"       # "ollama" | "openai"
+provider = "ollama"       # "ollama" | "anthropic"
 
 [llm.ollama]
 host = "192.168.68.100"
 port = 11434
 model = "llama3.1:8b"
 
-[llm.openai]
-base_url = "https://api.openai.com/v1"
+[llm.anthropic]
 api_key = ""
-model = "gpt-4o-mini"
+model = "claude-haiku-4-5-20251001"
