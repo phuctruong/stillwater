@@ -188,3 +188,54 @@ def count_skills_loaded() -> int:
         return len(list(skills_dir.rglob("*.md")))
     except:
         return 0
+
+
+def load_skill_excerpts(max_excerpts: int = 15, chars_per_skill: int = 400) -> str:
+    """
+    Load key excerpts from top skills to enhance context without overwhelming token budget.
+
+    Takes first N characters from each of the top M most important skills.
+
+    Args:
+        max_excerpts: Number of top skills to excerpt (default: 15)
+        chars_per_skill: Characters to extract per skill (default: 400)
+
+    Returns:
+        Formatted string with excerpts from key skills
+    """
+    skills_dir = get_skills_directory()
+    essential = get_essential_skills()[:max_excerpts]  # Top 15 skills
+
+    excerpts = []
+    for skill_name in essential:
+        # Try root directory first
+        skill_path = skills_dir / skill_name
+        if not skill_path.exists():
+            # Try subdirectories
+            for subdir in ["coding", "math", "epistemic", "verification", "infrastructure"]:
+                candidate = skills_dir / subdir / skill_name
+                if candidate.exists():
+                    skill_path = candidate
+                    break
+
+        if skill_path.exists():
+            try:
+                content = skill_path.read_text()
+                # Extract first N chars (usually header + key points)
+                excerpt = content[:chars_per_skill]
+                # Clean up incomplete lines at end
+                if len(content) > chars_per_skill:
+                    last_newline = excerpt.rfind('\n')
+                    if last_newline > 0:
+                        excerpt = excerpt[:last_newline]
+
+                excerpts.append(f"## {skill_name}\n{excerpt}\n[...truncated...]")
+            except:
+                continue
+
+    if not excerpts:
+        return ""
+
+    return f"""# KEY SKILL EXCERPTS (Top {len(excerpts)} of {len(essential)})
+
+{chr(10).join(excerpts)}"""
