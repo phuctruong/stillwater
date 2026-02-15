@@ -143,85 +143,105 @@ def run_instance(
 
         # Generate or use provided patch
         if patch is None:
-            # Generate patch using LLM + Prime Skills
-            from .patch_generator import generate_patch
-            from .llm_judge import judge_patch
+            # Use Claude Code's orchestration: Direct edits + Feedback loop
+            from .direct_edit_generator import generate_direct_edits, apply_direct_edits
             from stillwater.config import load_config
 
             # Load model from config (stillwater.toml)
             config = load_config()
-            model = config.llm.ollama.model if config.llm.provider == "ollama" else "gpt-4o-mini"
+            model = config.llm.ollama.model if config.llm.provider == "ollama" else "claude-haiku-4-5"
 
-            patch = generate_patch(
-                problem_statement=instance.problem_statement,
-                repo_dir=env.repo_dir,
-                model=model,  # Read from config: qwen2.5-coder:7b
-                temperature=0.0,  # Deterministic
-                instance_id=instance_id,
-            )
+            print(f"\n🎯 Using Claude Code Orchestration (Direct Edits + Feedback Loop)")
 
-            if not patch:
+            # Attempt up to 6 times with feedback
+            test_failures = None
+            previous_attempts = []
+
+            for attempt in range(1, 7):
+                print(f"\n   Attempt {attempt}/6...")
+
+                # Generate direct edits with feedback
+                edits = generate_direct_edits(
+                    problem_statement=instance.problem_statement,
+                    repo_dir=env.repo_dir,
+                    current_test_failures=test_failures,
+                    previous_attempts=previous_attempts if previous_attempts else None,
+                    model=model,
+                )
+
+                if not edits:
+                    if attempt == 6:
+                        env.cleanup()
+                        return InstanceResult(
+                            instance_id=instance_id,
+                            verified=False,
+                            error="Failed to generate edits after 6 attempts",
+                            red_gate_message=red_result.message,
+                            duration_ms=int(time.time() * 1000) - start_ms,
+                        )
+                    continue
+
+                # Apply edits directly (not via patch command)
+                if not apply_direct_edits(edits, env.repo_dir):
+                    if attempt == 6:
+                        env.cleanup()
+                        return InstanceResult(
+                            instance_id=instance_id,
+                            verified=False,
+                            error="Failed to apply edits",
+                            red_gate_message=red_result.message,
+                            duration_ms=int(time.time() * 1000) - start_ms,
+                        )
+                    continue
+
+                # Convert edits to patch format for downstream compatibility
+                patch = "\n".join([
+                    f"--- a/{e.file_path}\n+++ b/{e.file_path}\n@@ {e.line_start},{e.line_end} @@\n{e.new_content}"
+                    for e in edits
+                ])
+
+                # Test the edits (tight feedback loop)
+                green_result = GreenGate.check(
+                    env.repo_dir,
+                    test_command,
+                    red_result.baseline,
+                    env_vars=get_environment_vars(instance.repo)
+                )
+
+                if green_result.status == GateStatus.PASS:
+                    # Success! Tests pass
+                    print(f"✅ Tests pass on attempt {attempt}!")
+                    break
+                else:
+                    # Failure - collect feedback for next attempt
+                    test_failures = green_result.message
+                    previous_attempts.append(f"Attempt {attempt}: {test_failures[:100]}...")
+                    print(f"❌ Tests failed, trying again with feedback...")
+
+                    if attempt == 6:
+                        env.cleanup()
+                        return InstanceResult(
+                            instance_id=instance_id,
+                            verified=False,
+                            error=f"Failed to pass tests after 6 attempts",
+                            red_gate_message=red_result.message,
+                            patch=patch if 'patch' in locals() else None,
+                            duration_ms=int(time.time() * 1000) - start_ms,
+                        )
+            else:
+                # Loop completed without success
                 env.cleanup()
                 return InstanceResult(
                     instance_id=instance_id,
                     verified=False,
-                    error="Failed to generate patch with LLM",
+                    error="Max attempts reached",
                     red_gate_message=red_result.message,
+                    patch=patch if 'patch' in locals() else None,
                     duration_ms=int(time.time() * 1000) - start_ms,
                 )
 
-            # Validate patch using LLM Judge (9-stage validation pipeline)
-            print(f"\n🔍 Validating patch with LLM Judge...")
-            verdict = judge_patch(patch, instance.problem_statement)
-            print(f"   Verdict: {verdict.status} (confidence: {verdict.confidence:.1%})")
-            if verdict.reasons:
-                for reason in verdict.reasons[:3]:  # Show first 3 reasons
-                    print(f"   - {reason}")
-
-            if verdict.status == "APPROVE":
-                # Patch passed validation
-                print(f"✅ Patch approved by judge")
-            elif verdict.status == "PATCH_FORMAT":
-                # Patch had format issues but was repaired
-                print(f"🔧 Patch repaired: {', '.join(verdict.reasons)}")
-                patch = verdict.patch
-            elif verdict.status == "PATCH_LOGIC":
-                # Patch has logic issues but may still work
-                print(f"⚠️  Patch has logic issues, attempting anyway")
-                if verdict.patch:
-                    patch = verdict.patch
-            elif verdict.status in ("REJECT", "FAIL_CLOSED"):
-                # Patch validation failed
-                env.cleanup()
-                return InstanceResult(
-                    instance_id=instance_id,
-                    verified=False,
-                    error=f"Patch validation failed: {'; '.join(verdict.reasons[:2])}",
-                    red_gate_message=red_result.message,
-                    patch=patch,
-                    duration_ms=int(time.time() * 1000) - start_ms,
-                )
-
-        # Apply model patch
-        if not apply_model_patch(env, patch):
-            env.cleanup()
-            return InstanceResult(
-                instance_id=instance_id,
-                verified=False,
-                error="Failed to apply model patch",
-                red_gate_message=red_result.message,
-                patch=patch,
-                duration_ms=int(time.time() * 1000) - start_ms,
-            )
-
-        # Green Gate: Verify no regressions
-        green_result = GreenGate.check(
-            env.repo_dir,
-            test_command,
-            red_result.baseline,
-            env_vars=get_environment_vars(instance.repo)
-        )
-        print(green_result.message)
+            # If we get here, the direct edit loop succeeded (green_result is from loop)
+            print(green_result.message)
 
         # Cleanup environment
         env.cleanup()
