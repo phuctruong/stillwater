@@ -78,6 +78,22 @@ def main() -> None:
         "--verbose", action="store_true", help="Show per-instance details"
     )
 
+    # oolong subcommand (standalone OOLONG benchmark)
+    oolong_parser = subparsers.add_parser(
+        "oolong",
+        help="Run the OOLONG benchmark (CPU-only, no LLM required)",
+        description="Run OOLONG long-context aggregation benchmark with deterministic solver",
+    )
+    oolong_parser.add_argument(
+        "--split", default="validation", help="Dataset split: validation or test"
+    )
+    oolong_parser.add_argument(
+        "--max-samples", type=int, default=0, help="Limit number of samples (0 = all)"
+    )
+    oolong_parser.add_argument(
+        "--verbose", action="store_true", help="Show per-sample details"
+    )
+
     args = parser.parse_args()
 
     if args.command == "connect":
@@ -120,6 +136,9 @@ def main() -> None:
 
         all_ok = cert["status"] == "PASSED"
         sys.exit(0 if all_ok else 1)
+
+    elif args.command == "oolong":
+        _cmd_oolong(args)
 
     else:
         parser.print_help()
@@ -196,6 +215,75 @@ def _cmd_chat(args: argparse.Namespace) -> None:
     except LLMError as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
+
+
+def _cmd_oolong(args: argparse.Namespace) -> None:
+    """Run OOLONG benchmark standalone."""
+    from stillwater.bench.oolong import run_oolong
+
+    print("Stillwater OOLONG Benchmark")
+    print(f"Split: {args.split}")
+    if args.max_samples:
+        print(f"Max samples: {args.max_samples}")
+    print("Solver: CPU-only (Counter + regex)")
+    print()
+
+    result = run_oolong(
+        split=args.split,
+        verbose=args.verbose,
+        max_samples=args.max_samples,
+    )
+
+    if result.total == 0:
+        for d in result.details:
+            if "error" in d:
+                print(f"Error: {d['error']}")
+        sys.exit(1)
+
+    # Print results
+    print(f"Results: {result.passed}/{result.total} ({result.score:.1%})")
+    print(f"Elapsed: {result.elapsed_ms:.0f}ms")
+
+    # Print failures if any
+    failures = [d for d in result.details if isinstance(d, dict) and not d.get("passed", True)]
+    if failures and args.verbose:
+        print(f"\nFailures ({len(failures)}):")
+        for f in failures[:20]:
+            print(f"  [{f.get('index', '?')}] {f.get('task', '')} | "
+                  f"expected={f.get('expected', '')} got={f.get('predicted', '')}")
+            print(f"       Q: {f.get('question', '')[:100]}")
+
+    # Print failure summary by type
+    for d in result.details:
+        if isinstance(d, dict) and "failures_by_type" in d:
+            print(f"\nFailures by task type:")
+            for task_type, count in sorted(d["failures_by_type"].items()):
+                print(f"  {task_type}: {count}")
+
+    # Generate certificate
+    cert = {
+        "benchmark": "oolong",
+        "dataset": "oolongbench/oolong-synth",
+        "split": args.split,
+        "total": result.total,
+        "correct": result.passed,
+        "accuracy": result.score,
+        "elapsed_ms": round(result.elapsed_ms, 1),
+        "status": "PASSED" if result.ok else "FAILED",
+    }
+
+    import hashlib
+    cert_json = json.dumps({k: v for k, v in sorted(cert.items()) if k != "hash"},
+                          sort_keys=True, separators=(",", ":"))
+    cert["hash"] = f"sha256:{hashlib.sha256(cert_json.encode()).hexdigest()}"
+
+    cert_path = "stillwater-oolong-certificate.json"
+    with open(cert_path, "w") as f:
+        json.dump(cert, sort_keys=True, indent=2, fp=f)
+
+    print(f"\nCertificate: {cert_path}")
+    print("PASSED" if result.ok else "FAILED")
+    sys.exit(0 if result.ok else 1)
 
 
 if __name__ == "__main__":

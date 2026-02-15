@@ -1,0 +1,11 @@
+{
+  "accuracy": 0.8730769230769231,
+  "benchmark": "oolong",
+  "correct": 1135,
+  "dataset": "oolongbench/oolong-synth",
+  "elapsed_ms": 94819.6,
+  "hash": "sha256:0e9ab0fd9bef377bb288e1fa0f2257cb6a3435c1e5281af65e9affe17f09878b",
+  "split": "validation",
+  "status": "FAILED",
+  "total": 1300
+}

@@ -77,4 +77,10 @@ BENCHMARKS: dict[str, dict] = {
         "threshold": 5,
         "total": 5,
     },
+    "oolong": {
+        "module": "stillwater.bench.oolong",
+        "description": "OOLONG Aggregation",
+        "threshold": 1300,
+        "total": 1300,
+    },
 }

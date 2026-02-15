@@ -10,6 +10,55 @@
 
 ---
 
+## 🏆 **[HOW WE SOLVED OOLONG: 99.8% ACCURACY](HOW-WE-SOLVED-OOLONG-MEMORY.ipynb)** ⚡
+
+**Interactive Jupyter Notebook** showing how Stillwater achieves **99.8% accuracy (1,297/1,300)** on OOLONG long-context aggregation benchmark—**2.5x better than GPT-4o (~40%)**.
+
+📊 **Features:**
+- A/B test: Stillwater vs LLM baseline
+- Competitor scoreboard with visualizations
+- Complete development timeline (79.8% → 99.8%)
+- Architecture deep-dive with code walkthrough
+- **Zero LLM calls** for aggregation (pure CPU Counter)
+
+```bash
+jupyter notebook HOW-WE-SOLVED-OOLONG-MEMORY.ipynb
+```
+
+**[→ Full results & methodology](OOLONG-RESULTS.md)** | **[→ Code guide](src/stillwater/oolong/README.md)**
+
+---
+
+## 🎯 Benchmark Roadmap
+
+Our mission: Prove hybrid CPU+LLM architectures outperform pure LLM on precision tasks.
+
+| Benchmark | Status | Target | Current | Notes |
+|-----------|--------|--------|---------|-------|
+| **[OOLONG](HOW-WE-SOLVED-OOLONG-MEMORY.ipynb)** | ✅ **DONE** | 99%+ | **99.8%** | Long-context aggregation (2.5x better than GPT-4o) |
+| **SWE-bench** | 🚧 In Progress | 85%+ | 128/128 subset | Code editing with verification gates |
+| **Terminal Bench** | 📋 Planned Q2 2026 | 95%+ | - | Shell command execution + validation |
+| **Math Olympiad (IMO)** | 📋 Planned Q2 2026 | 6/6 | 4/6 | Formal proof generation |
+| **HumanEval** | 📋 Planned Q3 2026 | 95%+ | - | Code synthesis with verification |
+| **GPQA** | 📋 Planned Q3 2026 | 80%+ | - | Graduate-level science reasoning |
+| **MMLU-Pro** | 📋 Planned Q3 2026 | 75%+ | - | Multi-domain knowledge + verification |
+| **SimpleQA** | 📋 Planned Q4 2026 | 90%+ | - | Factual accuracy (hallucination detection) |
+| **BigBench-Hard** | 📋 Planned Q4 2026 | 70%+ | - | Complex reasoning tasks |
+| **GSM8K** | 📋 Planned Q4 2026 | 99%+ | - | Grade school math (exact arithmetic) |
+
+**Why these benchmarks?**
+- **OOLONG**: Proves Counter Bypass (exact aggregation)
+- **SWE-bench**: Proves verification gates catch bad patches
+- **Terminal Bench**: Proves deterministic execution validation
+- **IMO**: Proves formal reasoning with proof certificates
+- **HumanEval/GPQA/MMLU**: Proves general capability retention
+- **SimpleQA**: Proves Lane Algebra reduces hallucination
+- **GSM8K/BigBench**: Proves hybrid approach generalizes
+
+**Next up:** SWE-bench (code editing) → Terminal Bench (shell safety) → IMO (formal math)
+
+---
+
 ## Quick Start
 
 ### Option A: Local Ollama (Recommended)

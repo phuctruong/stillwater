@@ -304,7 +304,7 @@ class TestRunner:
         with mock.patch("stillwater.bench.runner.run_benchmark", side_effect=mock_import_and_run):
             results, cert = run_all(client, verbose=False)
 
-        assert len(results) == 8
+        assert len(results) == len(BENCHMARKS)
         assert cert["status"] == "PASSED"
         assert "hash" in cert
 
