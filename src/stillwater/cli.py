@@ -94,6 +94,47 @@ def main() -> None:
         "--verbose", action="store_true", help="Show per-sample details"
     )
 
+    # swe subcommand (SWE-bench with Red-Green-God verification)
+    swe_parser = subparsers.add_parser(
+        "swe",
+        help="Run SWE-bench with verification gates",
+        description="Run SWE-bench instances with Red-Green-God verification protocol",
+    )
+    swe_parser.add_argument(
+        "instance",
+        nargs="?",
+        default=None,
+        help="Specific instance ID (e.g., django__django-12345), or 'all' for batch run",
+    )
+    swe_parser.add_argument(
+        "--patch",
+        default=None,
+        help="Provide a patch file instead of generating one",
+    )
+    swe_parser.add_argument(
+        "--test-command",
+        default="pytest -xvs",
+        help="Command to run tests (default: pytest -xvs)",
+    )
+    swe_parser.add_argument(
+        "--cache-dir",
+        default=None,
+        help="Directory for caching cloned repos",
+    )
+    swe_parser.add_argument(
+        "--check-determinism",
+        action="store_true",
+        help="Enable God Gate (determinism check)",
+    )
+    swe_parser.add_argument(
+        "--output",
+        default="stillwater-swe-results.json",
+        help="Output file for results (default: stillwater-swe-results.json)",
+    )
+    swe_parser.add_argument(
+        "--verbose", action="store_true", help="Show detailed gate output"
+    )
+
     args = parser.parse_args()
 
     if args.command == "connect":
@@ -139,6 +180,9 @@ def main() -> None:
 
     elif args.command == "oolong":
         _cmd_oolong(args)
+
+    elif args.command == "swe":
+        _cmd_swe(args)
 
     else:
         parser.print_help()
@@ -284,6 +328,111 @@ def _cmd_oolong(args: argparse.Namespace) -> None:
     print(f"\nCertificate: {cert_path}")
     print("PASSED" if result.ok else "FAILED")
     sys.exit(0 if result.ok else 1)
+
+
+def _cmd_swe(args: argparse.Namespace) -> None:
+    """Run SWE-bench with Red-Green-God verification gates."""
+    from pathlib import Path
+    from stillwater.swe import run_instance, run_batch, load_dataset
+
+    print("Stillwater SWE-bench Harness")
+    print("Verification: Red-Green-God gates")
+    print()
+
+    # Read patch from file if provided
+    patch = None
+    if args.patch:
+        patch_path = Path(args.patch)
+        if not patch_path.exists():
+            print(f"Error: Patch file not found: {args.patch}")
+            sys.exit(1)
+        with open(patch_path, "r") as f:
+            patch = f.read()
+        print(f"Using patch from: {args.patch}")
+
+    # Determine cache directory
+    cache_dir = Path(args.cache_dir) if args.cache_dir else None
+
+    # Run single instance or batch
+    if args.instance and args.instance != "all":
+        # Single instance
+        print(f"Instance: {args.instance}")
+        print()
+
+        result = run_instance(
+            instance_id=args.instance,
+            patch=patch,
+            test_command=args.test_command,
+            cache_dir=cache_dir,
+            check_determinism=args.check_determinism,
+        )
+
+        # Print result
+        print()
+        print("="*60)
+        if result.verified:
+            print(f"✅ VERIFIED")
+            print(f"Baseline: {result.baseline_passing} passing")
+            print(f"After:    {result.after_patch_passing} passing")
+            print(f"New fixes: {result.new_fixes}")
+            print(f"Regressions: {result.regressions}")
+            print(f"Duration: {result.duration_ms}ms")
+
+            # Save certificate
+            cert_path = f"{args.instance}-certificate.json"
+            with open(cert_path, "w") as f:
+                json.dump(result.certificate, indent=2, fp=f)
+            print(f"Certificate: {cert_path}")
+        else:
+            print(f"❌ REJECTED")
+            print(f"Reason: {result.error}")
+            print(f"Red Gate: {result.red_gate_message}")
+            print(f"Green Gate: {result.green_gate_message}")
+
+        sys.exit(0 if result.verified else 1)
+
+    elif args.instance == "all":
+        # Batch run
+        print("Loading dataset...")
+        try:
+            dataset = load_dataset()
+            instance_ids = [inst.instance_id for inst in dataset]
+        except Exception as e:
+            print(f"Error loading dataset: {e}")
+            print("Install with: pip install datasets")
+            sys.exit(1)
+
+        print(f"Running {len(instance_ids)} instances...")
+        print()
+
+        results = run_batch(
+            instance_ids=instance_ids,
+            output_path=Path(args.output),
+            patch=patch,
+            test_command=args.test_command,
+            cache_dir=cache_dir,
+            check_determinism=args.check_determinism,
+        )
+
+        # Print summary
+        verified = sum(1 for r in results if r.verified)
+        print()
+        print("="*60)
+        print(f"Results: {verified}/{len(results)} verified")
+        print(f"Accuracy: {verified/len(results):.1%}")
+        print(f"Output: {args.output}")
+
+        sys.exit(0 if verified == len(results) else 1)
+
+    else:
+        # No instance specified
+        print("Error: Please specify an instance ID or 'all'")
+        print()
+        print("Examples:")
+        print("  stillwater swe django__django-12345")
+        print("  stillwater swe all")
+        print("  stillwater swe django__django-12345 --patch my-fix.patch")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
