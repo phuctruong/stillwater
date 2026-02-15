@@ -18,5 +18,10 @@
     "value": "Infrastructure > Model Size proven. Phase 1: 100%, Phase 2: 80%, llama 8B standard model",
     "timestamp": "2026-02-15T10:49:09.962490",
     "tags": []
+  },
+  "papers_published": {
+    "value": "HOW_WE_SOLVED_AI_SCALABILITY.md + INFRASTRUCTURE_UPLIFT_MEASUREMENT.md + README updates",
+    "timestamp": "2026-02-15T10:49:10.001791",
+    "tags": []
   }
 }
