@@ -46,7 +46,10 @@ src/stillwater/
 │   ├── gates.py                    (Red/Green/God gates)
 │   ├── patch_generator.py          (LLM patch generation)
 │   ├── prime_skills_orchestrator.py (Phuc Forecast + verification ladder)
-│   ├── skills.py                   (Load all 51 skills, create summary)
+│   ├── skills.py                   (Load all 51 skills + excerpts)
+│   ├── load_skills.py              (NEW: /load-skills command - executable)
+│   ├── memory_system.py            (NEW: /remember command - session memory)
+│   ├── haiku_orchestrator.py       (NEW: 5-agent swarm - Scout/Solver/Skeptic/Greg/Podcast)
 │   ├── certificate.py              (Generate proof certificates)
 │   ├── verifier.py                 (Verification logic)
 │   ├── test_commands.py            (Auto-detect test commands)
@@ -112,6 +115,61 @@ test_config.py                     (Configuration tests)
 test_verify.py                     (Verification tests)
 test_version.py                    (Version tests)
 ```
+
+---
+
+## EXECUTABLE COMMANDS (NEW - PHASE 2/3)
+
+### /load-skills Command
+**Purpose**: Load all 51 Prime Skills for LLM injection
+**Module**: `src/stillwater/swe/load_skills.py`
+
+```bash
+# Load all skills with verification
+python3 -m src.stillwater.swe.load_skills --verify
+
+# Load specific domain only
+python3 -m src.stillwater.swe.load_skills --domain coding
+
+# Load quietly (for scripts)
+python3 -m src.stillwater.swe.load_skills --quiet
+```
+
+**Returns**: SkillLoadResult with:
+- `success`: bool (verification passed)
+- `skills_loaded`: int (count)
+- `summary`: str (for prompt injection, 2.3 KB)
+- `excerpts`: str (enhanced context, 5 KB)
+- `message`: Status report
+
+### /remember Command (Session Memory)
+**Purpose**: Store/recall persistent memory across sessions
+**Module**: `src/stillwater/swe/memory_system.py`
+
+```bash
+# List all stored memory
+python3 -m src.stillwater.swe.memory_system list
+
+# Get specific value
+python3 -m src.stillwater.swe.memory_system get --key="project_phase"
+
+# Store value
+python3 -m src.stillwater.swe.memory_system set \
+    --key="project_phase" \
+    --value="Phase 3 complete" \
+    --channel=context
+
+# Export all memory as JSON
+python3 -m src.stillwater.swe.memory_system export
+```
+
+**Memory Channels** (Prime Encoding):
+- [2] Identity: Project metadata (stillwater, auth=65537)
+- [3] Goals: Benchmarks and targets (OOLONG 99%+, SWE 85%+)
+- [5] Decisions: Locked rules and constraints
+- [7] Context: Current phase, status (default channel)
+- [11] Blockers: Technical debt and open issues
+- [13] Haiku Swarms: Agent assignments and coordination
 
 ---
 
@@ -183,17 +241,61 @@ patch = orchestrator.generate_patch_with_forecast(
 ) -> Optional[str]  # Uses Phuc Forecast (DREAM→FORECAST→DECIDE→ACT→VERIFY)
 ```
 
+### Haiku Swarm Orchestration (swe/haiku_orchestrator.py) [NEW]
+**Purpose**: Parallel 5-agent coordination with context isolation
+**Pattern**: Each agent gets fresh context + focused skills (prevents context rot)
+
+```python
+import asyncio
+from stillwater.swe.haiku_orchestrator import HaikuSwarm
+
+async def run_audit():
+    swarm = HaikuSwarm(instance_id="django__django-14608", verbose=True)
+
+    # Run full system audit with 5 agents in parallel
+    result = await swarm.run_full_system_audit()
+
+    # Results from all agents
+    print(result.synthesis)  # Consensus findings
+    print(result.action)     # APPROVE/REVISE/REJECT
+
+asyncio.run(run_audit())
+```
+
+**5 Agents** (Fresh context + focused skills each):
+- **Scout ◆**: Ken Thompson (5 exploration skills)
+- **Solver ✓**: Donald Knuth (5 design skills)
+- **Skeptic ✗**: Alan Turing (5 verification skills)
+- **Greg ●**: Greg Isenberg (5 messaging skills)
+- **Podcaster ♪**: AI Storyteller (5 narrative skills)
+
+**Context Isolation Pattern**:
+- Each agent: ~1,000 tokens (fresh context, no baggage)
+- Skills: 5-7 domain-specific (not 51 universal)
+- Goal: Explicit, single-focus per agent
+- Result: 90%+ quality sustained (vs. 78% with context rot)
+
+See: `papers/HAIKU_SWARMS_CONTEXT_ISOLATION.md`
+
 ### Skills Loading (swe/skills.py)
 ```python
 from stillwater.swe.skills import (
     load_all_skills,           # Dict[name: str, content: str]
     get_essential_skills,      # List[str] - 32 for SWE
     create_skills_summary,     # str - 2,341 chars injected per prompt
+    load_skill_excerpts,       # str - 5 KB excerpts from top 15 skills [NEW]
     count_skills_loaded        # int - 51 total
 )
 
-skills_summary = create_skills_summary()  # ✅ Injected into every LLM prompt
+skills_summary = create_skills_summary()          # 2.3 KB
+skill_excerpts = load_skill_excerpts()            # 5 KB (enhanced context)
+combined = skills_summary + "\n" + skill_excerpts # Full injection
 ```
+
+**Skill Enhancement** (NEW in Phase 2):
+- Previously: Summary only (2.3 KB) - guides LLM
+- Now: Summary + Excerpts (7.3 KB total) - guides + examples
+- Impact: +3x more detailed guidance without overwhelming tokens
 
 ### Verification Gates (swe/gates.py)
 ```python
