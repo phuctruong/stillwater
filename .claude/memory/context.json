@@ -23,5 +23,10 @@
     "value": "HOW_WE_SOLVED_AI_SCALABILITY.md + INFRASTRUCTURE_UPLIFT_MEASUREMENT.md + README updates",
     "timestamp": "2026-02-15T10:49:10.001791",
     "tags": []
+  },
+  "cost_reduction": {
+    "value": "50x cheaper using 8B model with perfect infrastructure vs 70B without it",
+    "timestamp": "2026-02-15T10:49:10.044249",
+    "tags": []
   }
 }
