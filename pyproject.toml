@@ -4,11 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "stillwater-os"
-version = "0.1.0"
+version = "0.2.0"
 description = "Stillwater OS - Beat entropy at everything"
 requires-python = ">=3.10"
 license = "Apache-2.0"
-dependencies = []
+dependencies = [
+    "requests>=2.28",
+    "tomli>=2.0; python_version < '3.11'",
+]
 
 [project.optional-dependencies]
 dev = ["pytest"]
