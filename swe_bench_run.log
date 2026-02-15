@@ -1,0 +1,3248 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+============================================================
+Stillwater SWE-bench Lite Runner (300 instances)
+============================================================
+Model: llama3.1:8b
+Skills: 51 Prime Skills loaded
+Verification: Red-Green-God gates
+============================================================
+
+📦 Loading SWE-bench Lite...
+✅ Loaded 300 instances
+
+
+============================================================
+[1/300] Processing astropy__astropy-12907
+============================================================
+
+============================================================
+Running: astropy__astropy-12907
+============================================================
+📦 Caching repository: astropy/astropy
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-astropy__astropy-12907-bub_0gi3/repo/conftest.py'.
+conftest.py:9: in <module>
+    import hypothesis
+E   ModuleNotFoundError: No module named 'hypothesis'
+
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-astropy__astropy-12907-bub_0gi3/repo/conftest.py'.
+conftest.py:9: in <module>
+    import hypothesis
+E   ModuleNotFoundError: No module named 'hypothesis'
+
+
+============================================================
+[2/300] Processing astropy__astropy-14182
+============================================================
+
+============================================================
+Running: astropy__astropy-14182
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-astropy__astropy-14182-o7i4i62b/repo/conftest.py'.
+conftest.py:9: in <module>
+    import hypothesis
+E   ModuleNotFoundError: No module named 'hypothesis'
+
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-astropy__astropy-14182-o7i4i62b/repo/conftest.py'.
+conftest.py:9: in <module>
+    import hypothesis
+E   ModuleNotFoundError: No module named 'hypothesis'
+
+
+============================================================
+[3/300] Processing astropy__astropy-14365
+============================================================
+
+============================================================
+Running: astropy__astropy-14365
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-astropy__astropy-14365-md2hpv4i/repo/conftest.py'.
+conftest.py:9: in <module>
+    import hypothesis
+E   ModuleNotFoundError: No module named 'hypothesis'
+
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-astropy__astropy-14365-md2hpv4i/repo/conftest.py'.
+conftest.py:9: in <module>
+    import hypothesis
+E   ModuleNotFoundError: No module named 'hypothesis'
+
+
+============================================================
+[4/300] Processing astropy__astropy-14995
+============================================================
+
+============================================================
+Running: astropy__astropy-14995
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-astropy__astropy-14995-0_vu3rp6/repo/conftest.py'.
+conftest.py:9: in <module>
+    import hypothesis
+E   ModuleNotFoundError: No module named 'hypothesis'
+
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-astropy__astropy-14995-0_vu3rp6/repo/conftest.py'.
+conftest.py:9: in <module>
+    import hypothesis
+E   ModuleNotFoundError: No module named 'hypothesis'
+
+
+============================================================
+[5/300] Processing astropy__astropy-6938
+============================================================
+
+============================================================
+Running: astropy__astropy-6938
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: /tmp/sweb-astropy__astropy-6938-rnn86fh7/repo/astropy/utils/introspection.py:147: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The p
+❌ FAILED: Red Gate failed: ❌ Test execution failed: /tmp/sweb-astropy__astropy-6938-rnn86fh7/repo/astropy/utils/introspection.py:147: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The p
+
+============================================================
+[6/300] Processing astropy__astropy-7746
+============================================================
+
+============================================================
+Running: astropy__astropy-7746
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: Traceback (most recent call last):
+  File "/home/phuc/.local/bin/pytest", line 8, in <module>
+    sys.exit(console_main())
+  File "/home/phuc/.local/lib/python3.10/site-packages/_pytest/config/__init_
+❌ FAILED: Red Gate failed: ❌ Test execution failed: Traceback (most recent call last):
+  File "/home/phuc/.local/bin/pytest", line 8, in <module>
+    sys.exit(console_main())
+  File "/home/phuc/.local/lib/python3.10/site-packages/_pytest/config/__init_
+
+============================================================
+[7/300] Processing django__django-10914
+============================================================
+
+============================================================
+Running: django__django-10914
+============================================================
+📦 Caching repository: django/django
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[8/300] Processing django__django-10924
+============================================================
+
+============================================================
+Running: django__django-10924
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[9/300] Processing django__django-11001
+============================================================
+
+============================================================
+Running: django__django-11001
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[10/300] Processing django__django-11019
+============================================================
+
+============================================================
+Running: django__django-11019
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[11/300] Processing django__django-11039
+============================================================
+
+============================================================
+Running: django__django-11039
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[12/300] Processing django__django-11049
+============================================================
+
+============================================================
+Running: django__django-11049
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[13/300] Processing django__django-11099
+============================================================
+
+============================================================
+Running: django__django-11099
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[14/300] Processing django__django-11133
+============================================================
+
+============================================================
+Running: django__django-11133
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[15/300] Processing django__django-11179
+============================================================
+
+============================================================
+Running: django__django-11179
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[16/300] Processing django__django-11283
+============================================================
+
+============================================================
+Running: django__django-11283
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[17/300] Processing django__django-11422
+============================================================
+
+============================================================
+Running: django__django-11422
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[18/300] Processing django__django-11564
+============================================================
+
+============================================================
+Running: django__django-11564
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[19/300] Processing django__django-11583
+============================================================
+
+============================================================
+Running: django__django-11583
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[20/300] Processing django__django-11620
+============================================================
+
+============================================================
+Running: django__django-11620
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[21/300] Processing django__django-11630
+============================================================
+
+============================================================
+Running: django__django-11630
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[22/300] Processing django__django-11742
+============================================================
+
+============================================================
+Running: django__django-11742
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[23/300] Processing django__django-11797
+============================================================
+
+============================================================
+Running: django__django-11797
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[24/300] Processing django__django-11815
+============================================================
+
+============================================================
+Running: django__django-11815
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[25/300] Processing django__django-11848
+============================================================
+
+============================================================
+Running: django__django-11848
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[26/300] Processing django__django-11905
+============================================================
+
+============================================================
+Running: django__django-11905
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[27/300] Processing django__django-11910
+============================================================
+
+============================================================
+Running: django__django-11910
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[28/300] Processing django__django-11964
+============================================================
+
+============================================================
+Running: django__django-11964
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[29/300] Processing django__django-11999
+============================================================
+
+============================================================
+Running: django__django-11999
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[30/300] Processing django__django-12113
+============================================================
+
+============================================================
+Running: django__django-12113
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[31/300] Processing django__django-12125
+============================================================
+
+============================================================
+Running: django__django-12125
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[32/300] Processing django__django-12184
+============================================================
+
+============================================================
+Running: django__django-12184
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[33/300] Processing django__django-12284
+============================================================
+
+============================================================
+Running: django__django-12284
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[34/300] Processing django__django-12286
+============================================================
+
+============================================================
+Running: django__django-12286
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[35/300] Processing django__django-12308
+============================================================
+
+============================================================
+Running: django__django-12308
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[36/300] Processing django__django-12453
+============================================================
+
+============================================================
+Running: django__django-12453
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[37/300] Processing django__django-12470
+============================================================
+
+============================================================
+Running: django__django-12470
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[38/300] Processing django__django-12497
+============================================================
+
+============================================================
+Running: django__django-12497
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[39/300] Processing django__django-12589
+============================================================
+
+============================================================
+Running: django__django-12589
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[40/300] Processing django__django-12700
+============================================================
+
+============================================================
+Running: django__django-12700
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[41/300] Processing django__django-12708
+============================================================
+
+============================================================
+Running: django__django-12708
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[42/300] Processing django__django-12747
+============================================================
+
+============================================================
+Running: django__django-12747
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[43/300] Processing django__django-12856
+============================================================
+
+============================================================
+Running: django__django-12856
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[44/300] Processing django__django-12908
+============================================================
+
+============================================================
+Running: django__django-12908
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[45/300] Processing django__django-12915
+============================================================
+
+============================================================
+Running: django__django-12915
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[46/300] Processing django__django-12983
+============================================================
+
+============================================================
+Running: django__django-12983
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[47/300] Processing django__django-13028
+============================================================
+
+============================================================
+Running: django__django-13028
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[48/300] Processing django__django-13033
+============================================================
+
+============================================================
+Running: django__django-13033
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[49/300] Processing django__django-13158
+============================================================
+
+============================================================
+Running: django__django-13158
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[50/300] Processing django__django-13220
+============================================================
+
+============================================================
+Running: django__django-13220
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[51/300] Processing django__django-13230
+============================================================
+
+============================================================
+Running: django__django-13230
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[52/300] Processing django__django-13265
+============================================================
+
+============================================================
+Running: django__django-13265
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[53/300] Processing django__django-13315
+============================================================
+
+============================================================
+Running: django__django-13315
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[54/300] Processing django__django-13321
+============================================================
+
+============================================================
+Running: django__django-13321
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[55/300] Processing django__django-13401
+============================================================
+
+============================================================
+Running: django__django-13401
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[56/300] Processing django__django-13447
+============================================================
+
+============================================================
+Running: django__django-13447
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[57/300] Processing django__django-13448
+============================================================
+
+============================================================
+Running: django__django-13448
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[58/300] Processing django__django-13551
+============================================================
+
+============================================================
+Running: django__django-13551
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[59/300] Processing django__django-13590
+============================================================
+
+============================================================
+Running: django__django-13590
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[60/300] Processing django__django-13658
+============================================================
+
+============================================================
+Running: django__django-13658
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[61/300] Processing django__django-13660
+============================================================
+
+============================================================
+Running: django__django-13660
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[62/300] Processing django__django-13710
+============================================================
+
+============================================================
+Running: django__django-13710
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[63/300] Processing django__django-13757
+============================================================
+
+============================================================
+Running: django__django-13757
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[64/300] Processing django__django-13768
+============================================================
+
+============================================================
+Running: django__django-13768
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[65/300] Processing django__django-13925
+============================================================
+
+============================================================
+Running: django__django-13925
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[66/300] Processing django__django-13933
+============================================================
+
+============================================================
+Running: django__django-13933
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[67/300] Processing django__django-13964
+============================================================
+
+============================================================
+Running: django__django-13964
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[68/300] Processing django__django-14016
+============================================================
+
+============================================================
+Running: django__django-14016
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[69/300] Processing django__django-14017
+============================================================
+
+============================================================
+Running: django__django-14017
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[70/300] Processing django__django-14155
+============================================================
+
+============================================================
+Running: django__django-14155
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[71/300] Processing django__django-14238
+============================================================
+
+============================================================
+Running: django__django-14238
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[72/300] Processing django__django-14382
+============================================================
+
+============================================================
+Running: django__django-14382
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[73/300] Processing django__django-14411
+============================================================
+
+============================================================
+Running: django__django-14411
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[74/300] Processing django__django-14534
+============================================================
+
+============================================================
+Running: django__django-14534
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[75/300] Processing django__django-14580
+============================================================
+
+============================================================
+Running: django__django-14580
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[76/300] Processing django__django-14608
+============================================================
+
+============================================================
+Running: django__django-14608
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[77/300] Processing django__django-14667
+============================================================
+
+============================================================
+Running: django__django-14667
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[78/300] Processing django__django-14672
+============================================================
+
+============================================================
+Running: django__django-14672
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[79/300] Processing django__django-14730
+============================================================
+
+============================================================
+Running: django__django-14730
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[80/300] Processing django__django-14752
+============================================================
+
+============================================================
+Running: django__django-14752
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[81/300] Processing django__django-14787
+============================================================
+
+============================================================
+Running: django__django-14787
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[82/300] Processing django__django-14855
+============================================================
+
+============================================================
+Running: django__django-14855
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[83/300] Processing django__django-14915
+============================================================
+
+============================================================
+Running: django__django-14915
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[84/300] Processing django__django-14997
+============================================================
+
+============================================================
+Running: django__django-14997
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[85/300] Processing django__django-14999
+============================================================
+
+============================================================
+Running: django__django-14999
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[86/300] Processing django__django-15061
+============================================================
+
+============================================================
+Running: django__django-15061
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[87/300] Processing django__django-15202
+============================================================
+
+============================================================
+Running: django__django-15202
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[88/300] Processing django__django-15213
+============================================================
+
+============================================================
+Running: django__django-15213
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[89/300] Processing django__django-15252
+============================================================
+
+============================================================
+Running: django__django-15252
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[90/300] Processing django__django-15320
+============================================================
+
+============================================================
+Running: django__django-15320
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[91/300] Processing django__django-15347
+============================================================
+
+============================================================
+Running: django__django-15347
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[92/300] Processing django__django-15388
+============================================================
+
+============================================================
+Running: django__django-15388
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[93/300] Processing django__django-15400
+============================================================
+
+============================================================
+Running: django__django-15400
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[94/300] Processing django__django-15498
+============================================================
+
+============================================================
+Running: django__django-15498
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[95/300] Processing django__django-15695
+============================================================
+
+============================================================
+Running: django__django-15695
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[96/300] Processing django__django-15738
+============================================================
+
+============================================================
+Running: django__django-15738
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[97/300] Processing django__django-15781
+============================================================
+
+============================================================
+Running: django__django-15781
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[98/300] Processing django__django-15789
+============================================================
+
+============================================================
+Running: django__django-15789
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[99/300] Processing django__django-15790
+============================================================
+
+============================================================
+Running: django__django-15790
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[100/300] Processing django__django-15814
+============================================================
+
+============================================================
+Running: django__django-15814
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[101/300] Processing django__django-15819
+============================================================
+
+============================================================
+Running: django__django-15819
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[102/300] Processing django__django-15851
+============================================================
+
+============================================================
+Running: django__django-15851
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[103/300] Processing django__django-15902
+============================================================
+
+============================================================
+Running: django__django-15902
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[104/300] Processing django__django-15996
+============================================================
+
+============================================================
+Running: django__django-15996
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[105/300] Processing django__django-16041
+============================================================
+
+============================================================
+Running: django__django-16041
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[106/300] Processing django__django-16046
+============================================================
+
+============================================================
+Running: django__django-16046
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[107/300] Processing django__django-16139
+============================================================
+
+============================================================
+Running: django__django-16139
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[108/300] Processing django__django-16229
+============================================================
+
+============================================================
+Running: django__django-16229
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[109/300] Processing django__django-16255
+============================================================
+
+============================================================
+Running: django__django-16255
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[110/300] Processing django__django-16379
+============================================================
+
+============================================================
+Running: django__django-16379
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[111/300] Processing django__django-16400
+============================================================
+
+============================================================
+Running: django__django-16400
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[112/300] Processing django__django-16408
+============================================================
+
+============================================================
+Running: django__django-16408
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[113/300] Processing django__django-16527
+============================================================
+
+============================================================
+Running: django__django-16527
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[114/300] Processing django__django-16595
+============================================================
+
+============================================================
+Running: django__django-16595
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[115/300] Processing django__django-16816
+============================================================
+
+============================================================
+Running: django__django-16816
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[116/300] Processing django__django-16820
+============================================================
+
+============================================================
+Running: django__django-16820
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[117/300] Processing django__django-16873
+============================================================
+
+============================================================
+Running: django__django-16873
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[118/300] Processing django__django-16910
+============================================================
+
+============================================================
+Running: django__django-16910
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[119/300] Processing django__django-17051
+============================================================
+
+============================================================
+Running: django__django-17051
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[120/300] Processing django__django-17087
+============================================================
+
+============================================================
+Running: django__django-17087
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[121/300] Processing matplotlib__matplotlib-18869
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-18869
+============================================================
+📦 Caching repository: matplotlib/matplotlib
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[122/300] Processing matplotlib__matplotlib-22711
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-22711
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[123/300] Processing matplotlib__matplotlib-22835
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-22835
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[124/300] Processing matplotlib__matplotlib-23299
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-23299
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[125/300] Processing matplotlib__matplotlib-23314
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-23314
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[126/300] Processing matplotlib__matplotlib-23476
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-23476
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[127/300] Processing matplotlib__matplotlib-23562
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-23562
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[128/300] Processing matplotlib__matplotlib-23563
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-23563
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[129/300] Processing matplotlib__matplotlib-23913
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-23913
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[130/300] Processing matplotlib__matplotlib-23964
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-23964
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[131/300] Processing matplotlib__matplotlib-23987
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-23987
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[132/300] Processing matplotlib__matplotlib-24149
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-24149
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[133/300] Processing matplotlib__matplotlib-24265
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-24265
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[134/300] Processing matplotlib__matplotlib-24334
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-24334
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[135/300] Processing matplotlib__matplotlib-24970
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-24970
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[136/300] Processing matplotlib__matplotlib-25079
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-25079
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[137/300] Processing matplotlib__matplotlib-25311
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-25311
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[138/300] Processing matplotlib__matplotlib-25332
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-25332
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[139/300] Processing matplotlib__matplotlib-25433
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-25433
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[140/300] Processing matplotlib__matplotlib-25442
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-25442
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[141/300] Processing matplotlib__matplotlib-25498
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-25498
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[142/300] Processing matplotlib__matplotlib-26011
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-26011
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[143/300] Processing matplotlib__matplotlib-26020
+============================================================
+
+============================================================
+Running: matplotlib__matplotlib-26020
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[144/300] Processing mwaskom__seaborn-2848
+============================================================
+
+============================================================
+Running: mwaskom__seaborn-2848
+============================================================
+📦 Caching repository: mwaskom/seaborn
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[145/300] Processing mwaskom__seaborn-3010
+============================================================
+
+============================================================
+Running: mwaskom__seaborn-3010
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[146/300] Processing mwaskom__seaborn-3190
+============================================================
+
+============================================================
+Running: mwaskom__seaborn-3190
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[147/300] Processing mwaskom__seaborn-3407
+============================================================
+
+============================================================
+Running: mwaskom__seaborn-3407
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[148/300] Processing pallets__flask-4045
+============================================================
+
+============================================================
+Running: pallets__flask-4045
+============================================================
+📦 Caching repository: pallets/flask
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-pallets__flask-4045-q_5mucub/repo/tests/conftest.py'.
+tests/conftest.py:9: in <module>
+    import flask
+E   ModuleNotFoundError: No module named 'flask'
+
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-pallets__flask-4045-q_5mucub/repo/tests/conftest.py'.
+tests/conftest.py:9: in <module>
+    import flask
+E   ModuleNotFoundError: No module named 'flask'
+
+
+============================================================
+[149/300] Processing pallets__flask-4992
+============================================================
+
+============================================================
+Running: pallets__flask-4992
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-pallets__flask-4992-7jdxjzgh/repo/tests/conftest.py'.
+tests/conftest.py:9: in <module>
+    from flask import Flask
+E   ModuleNotFoundError: No module name
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-pallets__flask-4992-7jdxjzgh/repo/tests/conftest.py'.
+tests/conftest.py:9: in <module>
+    from flask import Flask
+E   ModuleNotFoundError: No module name
+
+============================================================
+[150/300] Processing pallets__flask-5063
+============================================================
+
+============================================================
+Running: pallets__flask-5063
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-pallets__flask-5063-12z1t8qt/repo/tests/conftest.py'.
+tests/conftest.py:9: in <module>
+    from flask import Flask
+E   ModuleNotFoundError: No module name
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-pallets__flask-5063-12z1t8qt/repo/tests/conftest.py'.
+tests/conftest.py:9: in <module>
+    from flask import Flask
+E   ModuleNotFoundError: No module name
+
+============================================================
+[151/300] Processing psf__requests-1963
+============================================================
+
+============================================================
+Running: psf__requests-1963
+============================================================
+📦 Caching repository: psf/requests
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[152/300] Processing psf__requests-2148
+============================================================
+
+============================================================
+Running: psf__requests-2148
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[153/300] Processing psf__requests-2317
+============================================================
+
+============================================================
+Running: psf__requests-2317
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[154/300] Processing psf__requests-2674
+============================================================
+
+============================================================
+Running: psf__requests-2674
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[155/300] Processing psf__requests-3362
+============================================================
+
+============================================================
+Running: psf__requests-3362
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-psf__requests-3362-r_y1mi5o/repo/tests/conftest.py'.
+tests/__init__.py:12: in <module>
+    from requests.packages import urllib3 as urllib3_bundle
+request
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-psf__requests-3362-r_y1mi5o/repo/tests/conftest.py'.
+tests/__init__.py:12: in <module>
+    from requests.packages import urllib3 as urllib3_bundle
+request
+
+============================================================
+[156/300] Processing psf__requests-863
+============================================================
+
+============================================================
+Running: psf__requests-863
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[157/300] Processing pydata__xarray-3364
+============================================================
+
+============================================================
+Running: pydata__xarray-3364
+============================================================
+📦 Caching repository: pydata/xarray
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[158/300] Processing pydata__xarray-4094
+============================================================
+
+============================================================
+Running: pydata__xarray-4094
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[159/300] Processing pydata__xarray-4248
+============================================================
+
+============================================================
+Running: pydata__xarray-4248
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[160/300] Processing pydata__xarray-4493
+============================================================
+
+============================================================
+Running: pydata__xarray-4493
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[161/300] Processing pydata__xarray-5131
+============================================================
+
+============================================================
+Running: pydata__xarray-5131
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[162/300] Processing pylint-dev__pylint-5859
+============================================================
+
+============================================================
+Running: pylint-dev__pylint-5859
+============================================================
+📦 Caching repository: pylint-dev/pylint
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[163/300] Processing pylint-dev__pylint-6506
+============================================================
+
+============================================================
+Running: pylint-dev__pylint-6506
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[164/300] Processing pylint-dev__pylint-7080
+============================================================
+
+============================================================
+Running: pylint-dev__pylint-7080
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[165/300] Processing pylint-dev__pylint-7114
+============================================================
+
+============================================================
+Running: pylint-dev__pylint-7114
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[166/300] Processing pylint-dev__pylint-7228
+============================================================
+
+============================================================
+Running: pylint-dev__pylint-7228
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[167/300] Processing pylint-dev__pylint-7993
+============================================================
+
+============================================================
+Running: pylint-dev__pylint-7993
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[168/300] Processing pytest-dev__pytest-11143
+============================================================
+
+============================================================
+Running: pytest-dev__pytest-11143
+============================================================
+📦 Caching repository: pytest-dev/pytest
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[169/300] Processing pytest-dev__pytest-11148
+============================================================
+
+============================================================
+Running: pytest-dev__pytest-11148
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[170/300] Processing pytest-dev__pytest-5103
+============================================================
+
+============================================================
+Running: pytest-dev__pytest-5103
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ERROR: while parsing the following warning configuration:
+
+  ignore:yield tests are deprecated, and scheduled to be removed in pytest 4.0:pytest.RemovedInPytest4Warning
+
+This error occurred:
+
+Tracebac
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ERROR: while parsing the following warning configuration:
+
+  ignore:yield tests are deprecated, and scheduled to be removed in pytest 4.0:pytest.RemovedInPytest4Warning
+
+This error occurred:
+
+Tracebac
+
+============================================================
+[171/300] Processing pytest-dev__pytest-5221
+============================================================
+
+============================================================
+Running: pytest-dev__pytest-5221
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ERROR: while parsing the following warning configuration:
+
+  ignore:yield tests are deprecated, and scheduled to be removed in pytest 4.0:pytest.RemovedInPytest4Warning
+
+This error occurred:
+
+Tracebac
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ERROR: while parsing the following warning configuration:
+
+  ignore:yield tests are deprecated, and scheduled to be removed in pytest 4.0:pytest.RemovedInPytest4Warning
+
+This error occurred:
+
+Tracebac
+
+============================================================
+[172/300] Processing pytest-dev__pytest-5227
+============================================================
+
+============================================================
+Running: pytest-dev__pytest-5227
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ERROR: while parsing the following warning configuration:
+
+  ignore:yield tests are deprecated, and scheduled to be removed in pytest 4.0:pytest.RemovedInPytest4Warning
+
+This error occurred:
+
+Tracebac
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ERROR: while parsing the following warning configuration:
+
+  ignore:yield tests are deprecated, and scheduled to be removed in pytest 4.0:pytest.RemovedInPytest4Warning
+
+This error occurred:
+
+Tracebac
+
+============================================================
+[173/300] Processing pytest-dev__pytest-5413
+============================================================
+
+============================================================
+Running: pytest-dev__pytest-5413
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ERROR: while parsing the following warning configuration:
+
+  ignore:yield tests are deprecated, and scheduled to be removed in pytest 4.0:pytest.RemovedInPytest4Warning
+
+This error occurred:
+
+Tracebac
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ERROR: while parsing the following warning configuration:
+
+  ignore:yield tests are deprecated, and scheduled to be removed in pytest 4.0:pytest.RemovedInPytest4Warning
+
+This error occurred:
+
+Tracebac
+
+============================================================
+[174/300] Processing pytest-dev__pytest-5495
+============================================================
+
+============================================================
+Running: pytest-dev__pytest-5495
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ERROR: while parsing the following warning configuration:
+
+  ignore:yield tests are deprecated, and scheduled to be removed in pytest 4.0:pytest.RemovedInPytest4Warning
+
+This error occurred:
+
+Tracebac
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ERROR: while parsing the following warning configuration:
+
+  ignore:yield tests are deprecated, and scheduled to be removed in pytest 4.0:pytest.RemovedInPytest4Warning
+
+This error occurred:
+
+Tracebac
+
+============================================================
+[175/300] Processing pytest-dev__pytest-5692
+============================================================
+
+============================================================
+Running: pytest-dev__pytest-5692
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[176/300] Processing pytest-dev__pytest-6116
+============================================================
+
+============================================================
+Running: pytest-dev__pytest-6116
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[177/300] Processing pytest-dev__pytest-7168
+============================================================
+
+============================================================
+Running: pytest-dev__pytest-7168
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-pytest-dev__pytest-7168-qu0888ly/repo/testing/conftest.py'.
+testing/conftest.py:7: in <module>
+    from _pytest.pytester import Testdir
+E   ImportError: c
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-pytest-dev__pytest-7168-qu0888ly/repo/testing/conftest.py'.
+testing/conftest.py:7: in <module>
+    from _pytest.pytester import Testdir
+E   ImportError: c
+
+============================================================
+[178/300] Processing pytest-dev__pytest-7220
+============================================================
+
+============================================================
+Running: pytest-dev__pytest-7220
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-pytest-dev__pytest-7220-psnkci9t/repo/testing/conftest.py'.
+testing/conftest.py:7: in <module>
+    from _pytest.pytester import Testdir
+E   ImportError: c
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-pytest-dev__pytest-7220-psnkci9t/repo/testing/conftest.py'.
+testing/conftest.py:7: in <module>
+    from _pytest.pytester import Testdir
+E   ImportError: c
+
+============================================================
+[179/300] Processing pytest-dev__pytest-7373
+============================================================
+
+============================================================
+Running: pytest-dev__pytest-7373
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-pytest-dev__pytest-7373-ismc5fow/repo/testing/conftest.py'.
+testing/conftest.py:7: in <module>
+    from _pytest.pytester import Testdir
+E   ImportError: c
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-pytest-dev__pytest-7373-ismc5fow/repo/testing/conftest.py'.
+testing/conftest.py:7: in <module>
+    from _pytest.pytester import Testdir
+E   ImportError: c
+
+============================================================
+[180/300] Processing pytest-dev__pytest-7432
+============================================================
+
+============================================================
+Running: pytest-dev__pytest-7432
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-pytest-dev__pytest-7432-6p154cnv/repo/testing/conftest.py'.
+testing/conftest.py:7: in <module>
+    from _pytest.pytester import Testdir
+E   ImportError: c
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-pytest-dev__pytest-7432-6p154cnv/repo/testing/conftest.py'.
+testing/conftest.py:7: in <module>
+    from _pytest.pytester import Testdir
+E   ImportError: c
+
+============================================================
+[181/300] Processing pytest-dev__pytest-7490
+============================================================
+
+============================================================
+Running: pytest-dev__pytest-7490
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-pytest-dev__pytest-7490-mbt76ku9/repo/testing/conftest.py'.
+testing/conftest.py:7: in <module>
+    from _pytest.pytester import Testdir
+E   ImportError: c
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-pytest-dev__pytest-7490-mbt76ku9/repo/testing/conftest.py'.
+testing/conftest.py:7: in <module>
+    from _pytest.pytester import Testdir
+E   ImportError: c
+
+============================================================
+[182/300] Processing pytest-dev__pytest-8365
+============================================================
+
+============================================================
+Running: pytest-dev__pytest-8365
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[183/300] Processing pytest-dev__pytest-8906
+============================================================
+
+============================================================
+Running: pytest-dev__pytest-8906
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[184/300] Processing pytest-dev__pytest-9359
+============================================================
+
+============================================================
+Running: pytest-dev__pytest-9359
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[185/300] Processing scikit-learn__scikit-learn-10297
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-10297
+============================================================
+📦 Caching repository: scikit-learn/scikit-learn
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[186/300] Processing scikit-learn__scikit-learn-10508
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-10508
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[187/300] Processing scikit-learn__scikit-learn-10949
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-10949
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[188/300] Processing scikit-learn__scikit-learn-11040
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-11040
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[189/300] Processing scikit-learn__scikit-learn-11281
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-11281
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[190/300] Processing scikit-learn__scikit-learn-12471
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-12471
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-scikit-learn__scikit-learn-12471-ezn4llpe/repo/conftest.py'.
+conftest.py:14: in <module>
+    from sklearn.utils.fixes import PY3_OR_LATER
+sklearn/__init__
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-scikit-learn__scikit-learn-12471-ezn4llpe/repo/conftest.py'.
+conftest.py:14: in <module>
+    from sklearn.utils.fixes import PY3_OR_LATER
+sklearn/__init__
+
+============================================================
+[191/300] Processing scikit-learn__scikit-learn-13142
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-13142
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[192/300] Processing scikit-learn__scikit-learn-13241
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-13241
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[193/300] Processing scikit-learn__scikit-learn-13439
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-13439
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[194/300] Processing scikit-learn__scikit-learn-13496
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-13496
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[195/300] Processing scikit-learn__scikit-learn-13497
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-13497
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[196/300] Processing scikit-learn__scikit-learn-13584
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-13584
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[197/300] Processing scikit-learn__scikit-learn-13779
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-13779
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[198/300] Processing scikit-learn__scikit-learn-14087
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-14087
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-scikit-learn__scikit-learn-14087-c7er5ajh/repo/conftest.py'.
+conftest.py:11: in <module>
+    from sklearn import set_config
+sklearn/__init__.py:75: in <mo
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-scikit-learn__scikit-learn-14087-c7er5ajh/repo/conftest.py'.
+conftest.py:11: in <module>
+    from sklearn import set_config
+sklearn/__init__.py:75: in <mo
+
+============================================================
+[199/300] Processing scikit-learn__scikit-learn-14092
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-14092
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-scikit-learn__scikit-learn-14092-bxe_dg2l/repo/conftest.py'.
+conftest.py:11: in <module>
+    from sklearn import set_config
+sklearn/__init__.py:75: in <mo
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-scikit-learn__scikit-learn-14092-bxe_dg2l/repo/conftest.py'.
+conftest.py:11: in <module>
+    from sklearn import set_config
+sklearn/__init__.py:75: in <mo
+
+============================================================
+[200/300] Processing scikit-learn__scikit-learn-14894
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-14894
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-scikit-learn__scikit-learn-14894-ynd8wfpo/repo/conftest.py'.
+conftest.py:14: in <module>
+    from sklearn import set_config
+sklearn/__init__.py:78: in <mo
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-scikit-learn__scikit-learn-14894-ynd8wfpo/repo/conftest.py'.
+conftest.py:14: in <module>
+    from sklearn import set_config
+sklearn/__init__.py:78: in <mo
+
+============================================================
+[201/300] Processing scikit-learn__scikit-learn-14983
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-14983
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-scikit-learn__scikit-learn-14983-fpdue1ml/repo/conftest.py'.
+conftest.py:14: in <module>
+    from sklearn import set_config
+sklearn/__init__.py:75: in <mo
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-scikit-learn__scikit-learn-14983-fpdue1ml/repo/conftest.py'.
+conftest.py:14: in <module>
+    from sklearn import set_config
+sklearn/__init__.py:75: in <mo
+
+============================================================
+[202/300] Processing scikit-learn__scikit-learn-15512
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-15512
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-scikit-learn__scikit-learn-15512-yi16pgu9/repo/conftest.py'.
+conftest.py:15: in <module>
+    from sklearn import set_config
+sklearn/__init__.py:73: in <mo
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-scikit-learn__scikit-learn-15512-yi16pgu9/repo/conftest.py'.
+conftest.py:15: in <module>
+    from sklearn import set_config
+sklearn/__init__.py:73: in <mo
+
+============================================================
+[203/300] Processing scikit-learn__scikit-learn-15535
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-15535
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-scikit-learn__scikit-learn-15535-55sjo4ae/repo/conftest.py'.
+conftest.py:15: in <module>
+    from sklearn import set_config
+sklearn/__init__.py:73: in <mo
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-scikit-learn__scikit-learn-15535-55sjo4ae/repo/conftest.py'.
+conftest.py:15: in <module>
+    from sklearn import set_config
+sklearn/__init__.py:73: in <mo
+
+============================================================
+[204/300] Processing scikit-learn__scikit-learn-25500
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-25500
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: Traceback (most recent call last):
+  File "/home/phuc/.local/lib/python3.10/site-packages/_pytest/config/__init__.py", line 879, in import_plugin
+    __import__(importspec)
+ModuleNotFoundError: No mod
+❌ FAILED: Red Gate failed: ❌ Test execution failed: Traceback (most recent call last):
+  File "/home/phuc/.local/lib/python3.10/site-packages/_pytest/config/__init__.py", line 879, in import_plugin
+    __import__(importspec)
+ModuleNotFoundError: No mod
+
+============================================================
+[205/300] Processing scikit-learn__scikit-learn-25570
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-25570
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: Traceback (most recent call last):
+  File "/home/phuc/.local/lib/python3.10/site-packages/_pytest/config/__init__.py", line 879, in import_plugin
+    __import__(importspec)
+ModuleNotFoundError: No mod
+❌ FAILED: Red Gate failed: ❌ Test execution failed: Traceback (most recent call last):
+  File "/home/phuc/.local/lib/python3.10/site-packages/_pytest/config/__init__.py", line 879, in import_plugin
+    __import__(importspec)
+ModuleNotFoundError: No mod
+
+============================================================
+[206/300] Processing scikit-learn__scikit-learn-25638
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-25638
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: Traceback (most recent call last):
+  File "/home/phuc/.local/lib/python3.10/site-packages/_pytest/config/__init__.py", line 879, in import_plugin
+    __import__(importspec)
+ModuleNotFoundError: No mod
+❌ FAILED: Red Gate failed: ❌ Test execution failed: Traceback (most recent call last):
+  File "/home/phuc/.local/lib/python3.10/site-packages/_pytest/config/__init__.py", line 879, in import_plugin
+    __import__(importspec)
+ModuleNotFoundError: No mod
+
+============================================================
+[207/300] Processing scikit-learn__scikit-learn-25747
+============================================================
+
+============================================================
+Running: scikit-learn__scikit-learn-25747
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: Traceback (most recent call last):
+  File "/home/phuc/.local/lib/python3.10/site-packages/_pytest/config/__init__.py", line 879, in import_plugin
+    __import__(importspec)
+ModuleNotFoundError: No mod
+❌ FAILED: Red Gate failed: ❌ Test execution failed: Traceback (most recent call last):
+  File "/home/phuc/.local/lib/python3.10/site-packages/_pytest/config/__init__.py", line 879, in import_plugin
+    __import__(importspec)
+ModuleNotFoundError: No mod
+
+============================================================
+[208/300] Processing sphinx-doc__sphinx-10325
+============================================================
+
+============================================================
+Running: sphinx-doc__sphinx-10325
+============================================================
+📦 Caching repository: sphinx-doc/sphinx
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-10325-sx23na8v/repo/tests/conftest.py'.
+tests/conftest.py:4: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-10325-sx23na8v/repo/tests/conftest.py'.
+tests/conftest.py:4: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+
+============================================================
+[209/300] Processing sphinx-doc__sphinx-10451
+============================================================
+
+============================================================
+Running: sphinx-doc__sphinx-10451
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-10451-g_cld5ds/repo/tests/conftest.py'.
+tests/conftest.py:4: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-10451-g_cld5ds/repo/tests/conftest.py'.
+tests/conftest.py:4: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+
+============================================================
+[210/300] Processing sphinx-doc__sphinx-11445
+============================================================
+
+============================================================
+Running: sphinx-doc__sphinx-11445
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-11445-0yvvizxu/repo/tests/conftest.py'.
+tests/conftest.py:4: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-11445-0yvvizxu/repo/tests/conftest.py'.
+tests/conftest.py:4: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+
+============================================================
+[211/300] Processing sphinx-doc__sphinx-7686
+============================================================
+
+============================================================
+Running: sphinx-doc__sphinx-7686
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-7686-s7wnl_y8/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-7686-s7wnl_y8/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+
+============================================================
+[212/300] Processing sphinx-doc__sphinx-7738
+============================================================
+
+============================================================
+Running: sphinx-doc__sphinx-7738
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-7738-n9tlazfx/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-7738-n9tlazfx/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+
+============================================================
+[213/300] Processing sphinx-doc__sphinx-7975
+============================================================
+
+============================================================
+Running: sphinx-doc__sphinx-7975
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-7975-43x0eunt/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-7975-43x0eunt/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+
+============================================================
+[214/300] Processing sphinx-doc__sphinx-8273
+============================================================
+
+============================================================
+Running: sphinx-doc__sphinx-8273
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8273-0j5mdnq9/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8273-0j5mdnq9/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+
+============================================================
+[215/300] Processing sphinx-doc__sphinx-8282
+============================================================
+
+============================================================
+Running: sphinx-doc__sphinx-8282
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8282-ijwthpsz/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8282-ijwthpsz/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+
+============================================================
+[216/300] Processing sphinx-doc__sphinx-8435
+============================================================
+
+============================================================
+Running: sphinx-doc__sphinx-8435
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8435-v47irxs3/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8435-v47irxs3/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+
+============================================================
+[217/300] Processing sphinx-doc__sphinx-8474
+============================================================
+
+============================================================
+Running: sphinx-doc__sphinx-8474
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8474-u_gd_vch/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8474-u_gd_vch/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+
+============================================================
+[218/300] Processing sphinx-doc__sphinx-8506
+============================================================
+
+============================================================
+Running: sphinx-doc__sphinx-8506
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8506-l9k_zsob/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8506-l9k_zsob/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+
+============================================================
+[219/300] Processing sphinx-doc__sphinx-8595
+============================================================
+
+============================================================
+Running: sphinx-doc__sphinx-8595
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8595-dg4g8t_s/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8595-dg4g8t_s/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+
+============================================================
+[220/300] Processing sphinx-doc__sphinx-8627
+============================================================
+
+============================================================
+Running: sphinx-doc__sphinx-8627
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8627-gdssek1w/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8627-gdssek1w/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+
+============================================================
+[221/300] Processing sphinx-doc__sphinx-8713
+============================================================
+
+============================================================
+Running: sphinx-doc__sphinx-8713
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8713-dyvq0hi2/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8713-dyvq0hi2/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+
+============================================================
+[222/300] Processing sphinx-doc__sphinx-8721
+============================================================
+
+============================================================
+Running: sphinx-doc__sphinx-8721
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8721-6ropsu5c/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8721-6ropsu5c/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+
+============================================================
+[223/300] Processing sphinx-doc__sphinx-8801
+============================================================
+
+============================================================
+Running: sphinx-doc__sphinx-8801
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8801-4lk5ist7/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+❌ FAILED: Red Gate failed: ❌ Test execution failed: ImportError while loading conftest '/tmp/sweb-sphinx-doc__sphinx-8801-4lk5ist7/repo/tests/conftest.py'.
+tests/conftest.py:12: in <module>
+    import docutils
+E   ModuleNotFoundError: No module named '
+
+============================================================
+[224/300] Processing sympy__sympy-11400
+============================================================
+
+============================================================
+Running: sympy__sympy-11400
+============================================================
+📦 Caching repository: sympy/sympy
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[225/300] Processing sympy__sympy-11870
+============================================================
+
+============================================================
+Running: sympy__sympy-11870
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[226/300] Processing sympy__sympy-11897
+============================================================
+
+============================================================
+Running: sympy__sympy-11897
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[227/300] Processing sympy__sympy-12171
+============================================================
+
+============================================================
+Running: sympy__sympy-12171
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[228/300] Processing sympy__sympy-12236
+============================================================
+
+============================================================
+Running: sympy__sympy-12236
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[229/300] Processing sympy__sympy-12419
+============================================================
+
+============================================================
+Running: sympy__sympy-12419
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[230/300] Processing sympy__sympy-12454
+============================================================
+
+============================================================
+Running: sympy__sympy-12454
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[231/300] Processing sympy__sympy-12481
+============================================================
+
+============================================================
+Running: sympy__sympy-12481
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[232/300] Processing sympy__sympy-13031
+============================================================
+
+============================================================
+Running: sympy__sympy-13031
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[233/300] Processing sympy__sympy-13043
+============================================================
+
+============================================================
+Running: sympy__sympy-13043
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[234/300] Processing sympy__sympy-13146
+============================================================
+
+============================================================
+Running: sympy__sympy-13146
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[235/300] Processing sympy__sympy-13177
+============================================================
+
+============================================================
+Running: sympy__sympy-13177
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[236/300] Processing sympy__sympy-13437
+============================================================
+
+============================================================
+Running: sympy__sympy-13437
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[237/300] Processing sympy__sympy-13471
+============================================================
+
+============================================================
+Running: sympy__sympy-13471
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[238/300] Processing sympy__sympy-13480
+============================================================
+
+============================================================
+Running: sympy__sympy-13480
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[239/300] Processing sympy__sympy-13647
+============================================================
+
+============================================================
+Running: sympy__sympy-13647
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[240/300] Processing sympy__sympy-13773
+============================================================
+
+============================================================
+Running: sympy__sympy-13773
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[241/300] Processing sympy__sympy-13895
+============================================================
+
+============================================================
+Running: sympy__sympy-13895
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[242/300] Processing sympy__sympy-13915
+============================================================
+
+============================================================
+Running: sympy__sympy-13915
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[243/300] Processing sympy__sympy-13971
+============================================================
+
+============================================================
+Running: sympy__sympy-13971
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[244/300] Processing sympy__sympy-14024
+============================================================
+
+============================================================
+Running: sympy__sympy-14024
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[245/300] Processing sympy__sympy-14308
+============================================================
+
+============================================================
+Running: sympy__sympy-14308
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[246/300] Processing sympy__sympy-14317
+============================================================
+
+============================================================
+Running: sympy__sympy-14317
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[247/300] Processing sympy__sympy-14396
+============================================================
+
+============================================================
+Running: sympy__sympy-14396
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[248/300] Processing sympy__sympy-14774
+============================================================
+
+============================================================
+Running: sympy__sympy-14774
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[249/300] Processing sympy__sympy-14817
+============================================================
+
+============================================================
+Running: sympy__sympy-14817
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[250/300] Processing sympy__sympy-15011
+============================================================
+
+============================================================
+Running: sympy__sympy-15011
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[251/300] Processing sympy__sympy-15308
+============================================================
+
+============================================================
+Running: sympy__sympy-15308
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[252/300] Processing sympy__sympy-15345
+============================================================
+
+============================================================
+Running: sympy__sympy-15345
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[253/300] Processing sympy__sympy-15346
+============================================================
+
+============================================================
+Running: sympy__sympy-15346
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[254/300] Processing sympy__sympy-15609
+============================================================
+
+============================================================
+Running: sympy__sympy-15609
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[255/300] Processing sympy__sympy-15678
+============================================================
+
+============================================================
+Running: sympy__sympy-15678
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[256/300] Processing sympy__sympy-16106
+============================================================
+
+============================================================
+Running: sympy__sympy-16106
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[257/300] Processing sympy__sympy-16281
+============================================================
+
+============================================================
+Running: sympy__sympy-16281
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[258/300] Processing sympy__sympy-16503
+============================================================
+
+============================================================
+Running: sympy__sympy-16503
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[259/300] Processing sympy__sympy-16792
+============================================================
+
+============================================================
+Running: sympy__sympy-16792
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[260/300] Processing sympy__sympy-16988
+============================================================
+
+============================================================
+Running: sympy__sympy-16988
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[261/300] Processing sympy__sympy-17022
+============================================================
+
+============================================================
+Running: sympy__sympy-17022
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[262/300] Processing sympy__sympy-17139
+============================================================
+
+============================================================
+Running: sympy__sympy-17139
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[263/300] Processing sympy__sympy-17630
+============================================================
+
+============================================================
+Running: sympy__sympy-17630
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[264/300] Processing sympy__sympy-17655
+============================================================
+
+============================================================
+Running: sympy__sympy-17655
+============================================================
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: 
+❌ FAILED: Red Gate failed: ❌ Test execution failed: 
+
+============================================================
+[265/300] Processing sympy__sympy-18057
+============================================================

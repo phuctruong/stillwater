@@ -116,6 +116,13 @@ def apply_test_patch(env: Environment) -> bool:
         This does NOT apply the model's generated patch.
         This only sets up the test infrastructure.
     """
+    # Install test dependencies FIRST before applying patch
+    # This ensures tests can run when we verify the patch
+    print("📦 Installing test dependencies...")
+    if not _install_test_dependencies(env.repo_dir):
+        print("⚠️  Failed to install test dependencies")
+        # Continue anyway - some repos might work without full deps
+
     if not env.instance.test_patch:
         # No test patch to apply
         env.test_patch_applied = True
@@ -293,3 +300,102 @@ def _checkout_commit(repo_dir: Path, commit: str):
 
     if result.returncode != 0:
         raise RuntimeError(f"Git checkout failed: {result.stderr.decode()}")
+
+
+def _install_test_dependencies(repo_dir: Path) -> bool:
+    """
+    Install test dependencies for a repository.
+
+    This is the fix for the infrastructure issue where test environments
+    don't have required dependencies installed.
+
+    Strategy:
+        1. Install common test dependencies (pytest, hypothesis, etc.)
+        2. Install from requirements.txt if available
+        3. Install package in editable mode if setup.py exists
+
+    Args:
+        repo_dir: Path to repository
+
+    Returns:
+        True if installation succeeded, False otherwise
+    """
+    import sys
+
+    try:
+        # 1. Install common test dependencies
+        # These are the most common dependencies across SWE-bench instances
+        common_deps = [
+            "pytest>=6.0",
+            "hypothesis>=6.0",
+            "pytest-django>=4.0",
+            "pytest-xdist>=2.0",
+            "pytest-cov>=3.0",
+            "pytest-timeout>=2.0",
+        ]
+
+        print(f"  Installing common test deps: {', '.join(common_deps)}")
+        result = subprocess.run(
+            [sys.executable, "-m", "pip", "install", "--quiet", "--no-warn-conflicts"] + common_deps,
+            capture_output=True,
+            timeout=120,
+        )
+
+        if result.returncode != 0:
+            print(f"    Warning: Some common deps failed: {result.stderr.decode()[:200]}")
+
+        # 2. Try to install from requirements files
+        # Check for common requirement file patterns
+        req_patterns = [
+            "requirements.txt",
+            "requirements/test.txt",
+            "requirements/dev.txt",
+            "test-requirements.txt",
+            "dev-requirements.txt",
+        ]
+
+        for req_file in req_patterns:
+            req_path = repo_dir / req_file
+            if req_path.exists():
+                print(f"  Installing from {req_file}")
+                result = subprocess.run(
+                    [sys.executable, "-m", "pip", "install", "--quiet", "--no-warn-conflicts", "-r", str(req_path)],
+                    capture_output=True,
+                    timeout=180,
+                )
+                if result.returncode != 0:
+                    print(f"    Warning: Failed to install from {req_file}")
+                break  # Only install from first matching requirements file
+
+        # 3. Install package in editable mode if setup.py exists
+        setup_py = repo_dir / "setup.py"
+        setup_cfg = repo_dir / "setup.cfg"
+        pyproject_toml = repo_dir / "pyproject.toml"
+
+        if setup_py.exists() or setup_cfg.exists() or pyproject_toml.exists():
+            print("  Installing package in editable mode")
+            result = subprocess.run(
+                [sys.executable, "-m", "pip", "install", "--quiet", "--no-warn-conflicts", "-e", str(repo_dir)],
+                capture_output=True,
+                timeout=240,
+            )
+            if result.returncode != 0:
+                # Try without editable mode
+                print("    Warning: Editable install failed, trying regular install")
+                result = subprocess.run(
+                    [sys.executable, "-m", "pip", "install", "--quiet", "--no-warn-conflicts", str(repo_dir)],
+                    capture_output=True,
+                    timeout=240,
+                )
+                if result.returncode != 0:
+                    print(f"    Warning: Package install failed: {result.stderr.decode()[:200]}")
+
+        print("  ✅ Dependency installation complete")
+        return True
+
+    except subprocess.TimeoutExpired:
+        print("  ⚠️  Dependency installation timed out")
+        return False
+    except Exception as e:
+        print(f"  ⚠️  Dependency installation error: {e}")
+        return False

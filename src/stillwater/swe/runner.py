@@ -27,6 +27,8 @@ import time
 from .loader import SWEInstance, load_instance, load_dataset
 from .environment import setup_environment, apply_test_patch, apply_model_patch
 from .gates import RedGate, GreenGate, GodGate, GateStatus
+from .test_commands import get_test_command, get_environment_vars
+from .test_directives import get_test_directives
 
 
 @dataclass
@@ -71,7 +73,7 @@ class InstanceResult:
 def run_instance(
     instance_id: str,
     patch: Optional[str] = None,
-    test_command: str = "pytest -xvs",
+    test_command: Optional[str] = None,
     cache_dir: Optional[Path] = None,
     check_determinism: bool = False,
 ) -> InstanceResult:
@@ -81,7 +83,7 @@ def run_instance(
     Args:
         instance_id: Instance to run (e.g., "django__django-12345")
         patch: Pre-generated patch (if None, will generate using LLM)
-        test_command: Command to run tests
+        test_command: Command to run tests (if None, will auto-detect from repo)
         cache_dir: Directory for caching cloned repos
         check_determinism: Whether to run God Gate (determinism check)
 
@@ -104,6 +106,15 @@ def run_instance(
         print(f"Running: {instance_id}")
         print(f"{'='*60}")
 
+        # Get repo-specific test command if not provided
+        if test_command is None:
+            # Extract test directives from test_patch
+            test_directives = get_test_directives(instance.repo, instance.test_patch)
+            test_command = get_test_command(instance.repo, test_directives)
+            print(f"📋 Test command: {test_command}")
+            if test_directives:
+                print(f"   Test directives: {', '.join(test_directives)}")
+
         # Setup environment
         env = setup_environment(instance, cache_dir)
 
@@ -117,7 +128,7 @@ def run_instance(
             )
 
         # Red Gate: Establish baseline
-        red_result = RedGate.check(env.repo_dir, test_command)
+        red_result = RedGate.check(env.repo_dir, test_command, env_vars=get_environment_vars(instance.repo))
         print(red_result.message)
 
         if not red_result:
@@ -168,7 +179,8 @@ def run_instance(
         green_result = GreenGate.check(
             env.repo_dir,
             test_command,
-            red_result.baseline
+            red_result.baseline,
+            env_vars=get_environment_vars(instance.repo)
         )
         print(green_result.message)
 

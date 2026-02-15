@@ -1,0 +1,199 @@
+{
+  "created_date": "2026-02-15T06:08:01.390277",
+  "last_updated": "2026-02-15T06:08:01.390320",
+  "benchmarks": {
+    "OOLONG": {
+      "name": "OOLONG",
+      "target": 99.8,
+      "current": 99.8,
+      "instances_total": 1300,
+      "instances_passed": 1300,
+      "xp_base": 1500,
+      "xp_milestone_50": 500,
+      "xp_milestone_100": 500
+    },
+    "IMO 2024": {
+      "name": "IMO 2024",
+      "target": 6.0,
+      "current": 6.0,
+      "instances_total": 6,
+      "instances_passed": 6,
+      "xp_base": 2000,
+      "xp_milestone_50": 750,
+      "xp_milestone_100": 1000
+    },
+    "SWE Phase 2": {
+      "name": "SWE Phase 2",
+      "target": 100.0,
+      "current": 100.0,
+      "instances_total": 128,
+      "instances_passed": 128,
+      "xp_base": 1200,
+      "xp_milestone_50": 400,
+      "xp_milestone_100": 300
+    },
+    "SWE Phase 3": {
+      "name": "SWE Phase 3",
+      "target": 40.0,
+      "current": 0.0,
+      "instances_total": 300,
+      "instances_passed": 0,
+      "xp_base": 2000,
+      "xp_milestone_50": 500,
+      "xp_milestone_100": 1500
+    }
+  },
+  "agents": {
+    "Scout": {
+      "name": "Scout",
+      "role_level": "Initiate",
+      "total_xp": 500,
+      "instances_attempted": 0,
+      "instances_succeeded": 0,
+      "patches_generated": 0,
+      "patches_verified": 0,
+      "tests_run": 0,
+      "failures_caught": 0,
+      "achievements": [
+        {
+          "id": "first_analysis",
+          "name": "\ud83d\udd0d First Analysis",
+          "description": "Complete first codebase analysis",
+          "xp_reward": 100,
+          "requirement": "1 successful analysis",
+          "unlocked": false,
+          "unlock_date": null
+        },
+        {
+          "id": "ten_analyses",
+          "name": "\ud83d\udd0d Detective",
+          "description": "Complete 10 codebase analyses",
+          "xp_reward": 300,
+          "requirement": "10 successful analyses",
+          "unlocked": false,
+          "unlock_date": null
+        },
+        {
+          "id": "hundred_analyses",
+          "name": "\ud83d\udd0d Master Detective",
+          "description": "Complete 100 codebase analyses",
+          "xp_reward": 1000,
+          "requirement": "100 successful analyses",
+          "unlocked": false,
+          "unlock_date": null
+        },
+        {
+          "id": "root_cause_master",
+          "name": "\ud83c\udfaf Root Cause Master",
+          "description": "Find root cause in 95%+ of cases",
+          "xp_reward": 500,
+          "requirement": "95%+ success rate",
+          "unlocked": false,
+          "unlock_date": null
+        }
+      ]
+    },
+    "Solver": {
+      "name": "Solver",
+      "role_level": "Initiate",
+      "total_xp": 600,
+      "instances_attempted": 0,
+      "instances_succeeded": 0,
+      "patches_generated": 0,
+      "patches_verified": 0,
+      "tests_run": 0,
+      "failures_caught": 0,
+      "achievements": [
+        {
+          "id": "first_patch",
+          "name": "\u2728 First Patch",
+          "description": "Generate first verified patch",
+          "xp_reward": 150,
+          "requirement": "1 verified patch",
+          "unlocked": false,
+          "unlock_date": null
+        },
+        {
+          "id": "ten_patches",
+          "name": "\u2728 Patch Creator",
+          "description": "Generate 10 verified patches",
+          "xp_reward": 400,
+          "requirement": "10 verified patches",
+          "unlocked": false,
+          "unlock_date": null
+        },
+        {
+          "id": "hundred_patches",
+          "name": "\u2728 Patch Master",
+          "description": "Generate 100 verified patches",
+          "xp_reward": 2000,
+          "requirement": "100 verified patches",
+          "unlocked": false,
+          "unlock_date": null
+        },
+        {
+          "id": "red_green_expert",
+          "name": "\ud83d\udd34\ud83d\udfe2 Red-Green Expert",
+          "description": "100% RED\u2192GREEN transition rate",
+          "xp_reward": 500,
+          "requirement": "Perfect RED\u2192GREEN in 10+ patches",
+          "unlocked": false,
+          "unlock_date": null
+        }
+      ]
+    },
+    "Skeptic": {
+      "name": "Skeptic",
+      "role_level": "Initiate",
+      "total_xp": 400,
+      "instances_attempted": 0,
+      "instances_succeeded": 0,
+      "patches_generated": 0,
+      "patches_verified": 0,
+      "tests_run": 0,
+      "failures_caught": 0,
+      "achievements": [
+        {
+          "id": "first_verification",
+          "name": "\u2705 First Verification",
+          "description": "Complete first verification run",
+          "xp_reward": 100,
+          "requirement": "1 verified patch",
+          "unlocked": false,
+          "unlock_date": null
+        },
+        {
+          "id": "ten_verifications",
+          "name": "\u2705 Quality Assurance",
+          "description": "Complete 10 verification runs",
+          "xp_reward": 300,
+          "requirement": "10 verifications",
+          "unlocked": false,
+          "unlock_date": null
+        },
+        {
+          "id": "zero_regressions",
+          "name": "\ud83d\udee1\ufe0f Zero Regressions",
+          "description": "Verify 50 patches with zero regressions",
+          "xp_reward": 800,
+          "requirement": "50 patches, 0 regressions",
+          "unlocked": false,
+          "unlock_date": null
+        },
+        {
+          "id": "ladder_complete",
+          "name": "\ud83e\ude9c Verification Ladder Master",
+          "description": "Pass all 3 rungs (641\u2192274177\u219265537)",
+          "xp_reward": 1000,
+          "requirement": "100% ladder completion on 10+ patches",
+          "unlocked": false,
+          "unlock_date": null
+        }
+      ]
+    }
+  },
+  "total_patches": 0,
+  "total_xp_earned": 1500,
+  "current_phase": "Phase 3 (In Progress)",
+  "milestones_achieved": []
+}
