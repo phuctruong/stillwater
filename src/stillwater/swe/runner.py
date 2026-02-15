@@ -132,17 +132,22 @@ def run_instance(
 
         # Generate or use provided patch
         if patch is None:
-            # TODO: Implement LLM patch generation
-            # For now, use gold patch if available (for testing harness)
-            if instance.gold_patch:
-                patch = instance.gold_patch
-                print("📝 Using gold patch (LLM generation not yet implemented)")
-            else:
+            # Generate patch using LLM + Prime Skills
+            from .patch_generator import generate_patch
+
+            patch = generate_patch(
+                problem_statement=instance.problem_statement,
+                repo_dir=env.repo_dir,
+                model="llama3.1:8b",  # Default to 8B model
+                temperature=0.0,  # Deterministic
+            )
+
+            if not patch:
                 env.cleanup()
                 return InstanceResult(
                     instance_id=instance_id,
                     verified=False,
-                    error="No patch provided and LLM generation not yet implemented",
+                    error="Failed to generate patch with LLM",
                     red_gate_message=red_result.message,
                     duration_ms=int(time.time() * 1000) - start_ms,
                 )
