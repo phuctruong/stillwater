@@ -145,11 +145,16 @@ def run_instance(
         if patch is None:
             # Generate patch using LLM + Prime Skills
             from .patch_generator import generate_patch
+            from stillwater.config import load_config
+
+            # Load model from config (stillwater.toml)
+            config = load_config()
+            model = config.llm.ollama.model if config.llm.provider == "ollama" else "gpt-4o-mini"
 
             patch = generate_patch(
                 problem_statement=instance.problem_statement,
                 repo_dir=env.repo_dir,
-                model="llama3.1:8b",  # Default to 8B model
+                model=model,  # Read from config: qwen2.5-coder:7b
                 temperature=0.0,  # Deterministic
             )
 

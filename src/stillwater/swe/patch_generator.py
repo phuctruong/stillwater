@@ -250,28 +250,45 @@ def _extract_patch(response: str) -> Optional[str]:
     Extract unified diff patch from LLM response.
 
     Handles various formats:
-    - ```diff ... ```
+    - ```diff ... ``` (Qwen wraps in code blocks)
     - --- a/file ... +++ b/file ...
     - Raw diff without markers
+
+    Post-processes for Qwen output which may wrap in code blocks.
     """
     import re
 
-    # Try to find ```diff code block
+    # 1. Try to find ```diff code block (Qwen format)
     diff_block = re.search(r'```diff\n(.*?)\n```', response, re.DOTALL)
     if diff_block:
-        return diff_block.group(1).strip()
+        patch = diff_block.group(1).strip()
+        patch = _post_process_patch(patch)
+        if patch:
+            return patch
 
-    # Try to find diff starting with ---
-    diff_start = response.find('--- a/')
+    # 2. Also try ```diff without newline after
+    diff_block = re.search(r'```diff(.*?)```', response, re.DOTALL)
+    if diff_block:
+        patch = diff_block.group(1).strip()
+        patch = _post_process_patch(patch)
+        if patch:
+            return patch
+
+    # 3. Try to find diff starting with --- (standard format)
+    diff_start = response.find('--- ')
     if diff_start != -1:
         # Find end (next --- or end of string)
-        next_diff = response.find('--- a/', diff_start + 5)
+        next_diff = response.find('--- ', diff_start + 5)
         if next_diff != -1:
-            return response[diff_start:next_diff].strip()
+            patch = response[diff_start:next_diff].strip()
         else:
-            return response[diff_start:].strip()
+            patch = response[diff_start:].strip()
 
-    # Try to find diff starting with @@
+        patch = _post_process_patch(patch)
+        if patch:
+            return patch
+
+    # 4. Try to find diff starting with @@
     if '@@' in response:
         lines = response.split('\n')
         diff_lines = []
@@ -285,9 +302,60 @@ def _extract_patch(response: str) -> Optional[str]:
                 diff_lines.append(line)
 
         if diff_lines:
-            return '\n'.join(diff_lines)
+            patch = '\n'.join(diff_lines)
+            patch = _post_process_patch(patch)
+            if patch:
+                return patch
 
     # If no clear diff found, return None
     print(f"⚠️  Could not extract diff from response")
-    print(f"Response preview: {response[:500]}")
+    print(f"Response preview: {response[:200]}")
+    return None
+
+
+def _post_process_patch(patch: str) -> Optional[str]:
+    """
+    Post-process patch to ensure valid unified diff format.
+
+    Qwen sometimes generates mostly correct diffs that just need cleanup.
+    """
+    import re
+
+    if not patch:
+        return None
+
+    lines = patch.split('\n')
+
+    # Find the first --- line
+    first_diff_idx = -1
+    for i, line in enumerate(lines):
+        if line.startswith('---'):
+            first_diff_idx = i
+            break
+
+    if first_diff_idx == -1:
+        return None
+
+    # Truncate before first ---
+    lines = lines[first_diff_idx:]
+
+    # Find the last valid diff line (starts with space, +, -, or @@)
+    last_valid_idx = -1
+    for i, line in enumerate(lines):
+        if line and line[0] in ' +-@':
+            last_valid_idx = i
+
+    if last_valid_idx == -1:
+        return None
+
+    # Truncate after last valid line
+    lines = lines[:last_valid_idx + 1]
+
+    # Join and return
+    result = '\n'.join(lines).strip()
+
+    # Quick validation
+    if result.startswith('---') and '+++' in result and '@@' in result:
+        return result
+
     return None

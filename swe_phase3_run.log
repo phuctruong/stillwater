@@ -1,0 +1,325 @@
+Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", line 192, in addpackage
+      exec(line)
+    File "<string>", line 1, in <module>
+    File "<frozen importlib._bootstrap>", line 568, in module_from_spec
+  AttributeError: 'NoneType' object has no attribute 'loader'
+
+Remainder of file ignored
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+============================================================
+Stillwater SWE-bench Lite Runner (300 instances)
+============================================================
+Model: qwen2.5-coder:7b
+Skills: 51 Prime Skills loaded
+Verification: Red-Green-God gates
+============================================================
+
+📦 Loading SWE-bench Lite...
+✅ Loaded 300 instances
+
+
+============================================================
+[1/300] Processing astropy__astropy-12907
+============================================================
+
+============================================================
+Running: astropy__astropy-12907
+============================================================
+📋 Test command: pytest -rA --tb=no -p no:cacheprovider astropy/modeling/tests/test_separable.py
+   Test directives: astropy/modeling/tests/test_separable.py
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+    Warning: Editable install failed, trying regular install
+    Warning: Package install failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+❌ FAILED: Red Gate failed: ❌ Test execution failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+
+============================================================
+[2/300] Processing astropy__astropy-14182
+============================================================
+
+============================================================
+Running: astropy__astropy-14182
+============================================================
+📋 Test command: pytest -rA --tb=no -p no:cacheprovider astropy/io/ascii/tests/test_rst.py
+   Test directives: astropy/io/ascii/tests/test_rst.py
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+    Warning: Editable install failed, trying regular install
+    Warning: Package install failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+❌ FAILED: Red Gate failed: ❌ Test execution failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+
+============================================================
+[3/300] Processing astropy__astropy-14365
+============================================================
+
+============================================================
+Running: astropy__astropy-14365
+============================================================
+📋 Test command: pytest -rA --tb=no -p no:cacheprovider astropy/io/ascii/tests/test_qdp.py
+   Test directives: astropy/io/ascii/tests/test_qdp.py
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+    Warning: Editable install failed, trying regular install
+    Warning: Package install failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+❌ FAILED: Red Gate failed: ❌ Test execution failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+
+============================================================
+[4/300] Processing astropy__astropy-14995
+============================================================
+
+============================================================
+Running: astropy__astropy-14995
+============================================================
+📋 Test command: pytest -rA --tb=no -p no:cacheprovider astropy/nddata/mixins/tests/test_ndarithmetic.py
+   Test directives: astropy/nddata/mixins/tests/test_ndarithmetic.py
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+    Warning: Editable install failed, trying regular install
+    Warning: Package install failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+❌ FAILED: Red Gate failed: ❌ Test execution failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+
+============================================================
+[5/300] Processing astropy__astropy-6938
+============================================================
+
+============================================================
+Running: astropy__astropy-6938
+============================================================
+📋 Test command: pytest -rA --tb=no -p no:cacheprovider astropy/io/fits/tests/test_checksum.py astropy/io/fits/tests/test_table.py
+   Test directives: astropy/io/fits/tests/test_checksum.py, astropy/io/fits/tests/test_table.py
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+    Warning: Editable install failed, trying regular install
+    Warning: Package install failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+❌ FAILED: Red Gate failed: ❌ Test execution failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+
+============================================================
+[6/300] Processing astropy__astropy-7746
+============================================================
+
+============================================================
+Running: astropy__astropy-7746
+============================================================
+📋 Test command: pytest -rA --tb=no -p no:cacheprovider astropy/wcs/tests/test_wcs.py
+   Test directives: astropy/wcs/tests/test_wcs.py
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+    Warning: Editable install failed, trying regular install
+    Warning: Package install failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+❌ Test execution failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+❌ FAILED: Red Gate failed: ❌ Test execution failed: Error processing line 1 of /home/phuc/.local/lib/python3.10/site-packages/matplotlib-3.8.0.dev1164+gf6a781f77-nspkg.pth:
+
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/site.py", l
+
+============================================================
+[7/300] Processing django__django-10914
+============================================================
+
+============================================================
+Running: django__django-10914
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 test_utils.tests
+   Test directives: test_utils.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 100/100 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (390 chars)
+⚠️  Model patch failed: error: corrupt patch at line 9
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[8/300] Processing django__django-10924
+============================================================
+
+============================================================
+Running: django__django-10924
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 model_fields.test_filepathfield
+   Test directives: model_fields.test_filepathfield
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 1/2 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (656 chars)
+⚠️  Model patch failed: error: corrupt patch at line 18
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[9/300] Processing django__django-11001
+============================================================
+
+============================================================
+Running: django__django-11001
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 expressions.tests
+   Test directives: expressions.tests
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 121/121 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (258 chars)
+⚠️  Model patch failed: error: corrupt patch at line 8
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[10/300] Processing django__django-11019
+============================================================
+
+============================================================
+Running: django__django-11019
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 admin_inlines.tests admin_widgets.test_autocomplete_widget forms_tests.tests.test_media
+   Test directives: admin_inlines.tests, admin_widgets.test_autocomplete_widget, forms_tests.tests.test_media
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 80/80 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (310 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[11/300] Processing django__django-11039
+============================================================
+
+============================================================
+Running: django__django-11039
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 migrations.test_commands
+   Test directives: migrations.test_commands
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 89/89 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (554 chars)
+⚠️  Model patch failed: error: corrupt patch at line 12
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[12/300] Processing django__django-11049
+============================================================
+
+============================================================
+Running: django__django-11049
+============================================================
+📋 Test command: ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 model_fields.test_durationfield
+   Test directives: model_fields.test_durationfield
+📦 Installing test dependencies...
+  Installing common test deps: pytest>=6.0, hypothesis>=6.0, pytest-django>=4.0, pytest-xdist>=2.0, pytest-cov>=3.0, pytest-timeout>=2.0
+  Installing package in editable mode
+  ✅ Dependency installation complete
+🔴 Red Gate: Checking baseline tests...
+✅ Baseline established: 9/9 passing
+🔧 Generating patch with qwen2.5-coder:7b + Prime Skills...
+   Skills loaded: 51
+✅ Patch generated (1949 chars)
+⚠️  Model patch failed: error: corrupt patch at line 11
+
+❌ FAILED: Failed to apply model patch
+
+============================================================
+[13/300] Processing django__django-11099

@@ -15,7 +15,7 @@ from stillwater.swe import run_instance
 OUTPUT_FILE = Path("stillwater-swe-lite-predictions.jsonl")
 RESULTS_FILE = Path("stillwater-swe-lite-results.json")
 PROGRESS_FILE = Path("stillwater-swe-lite-progress.json")
-MODEL = "llama3.1:8b"
+MODEL = "qwen2.5-coder:7b"  # Switched from llama3.1:8b for better patch generation
 # TEST_COMMAND will auto-detect based on repo
 CACHE_DIR = Path("/tmp/stillwater-swe-cache")
 
@@ -71,7 +71,7 @@ def main():
             result = run_instance(
                 instance_id=instance.instance_id,
                 cache_dir=CACHE_DIR,
-                # test_command will auto-detect based on repo
+                # Model comes from config file: stillwater.toml
             )
 
             # Save result
