@@ -4,7 +4,7 @@ provider = "ollama"       # "ollama" | "openai"
 [llm.ollama]
 host = "192.168.68.100"
 port = 11434
-model = "qwen2.5-coder:7b"
+model = "llama3.1:8b"
 
 [llm.openai]
 base_url = "https://api.openai.com/v1"
