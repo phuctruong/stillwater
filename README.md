@@ -36,7 +36,7 @@ Our mission: Prove hybrid CPU+LLM architectures outperform pure LLM on precision
 | Benchmark | Status | Target | Current | Notes |
 |-----------|--------|--------|---------|-------|
 | **[OOLONG](HOW-WE-SOLVED-OOLONG-MEMORY.ipynb)** | ✅ **DONE** | 99%+ | **99.8%** | Long-context aggregation (2.5x better than GPT-4o) |
-| **SWE-bench** | 🚧 In Progress | 85%+ | 128/128 subset | Code editing with verification gates |
+| **[SWE-bench](SWE-BENCH-PROGRESS.md)** | 🚧 Phase 1 ✅ | 85%+ | Harness ready | Red-Green-God verification gates |
 | **Terminal Bench** | 📋 Planned Q2 2026 | 95%+ | - | Shell command execution + validation |
 | **Math Olympiad (IMO)** | 📋 Planned Q2 2026 | 6/6 | 4/6 | Formal proof generation |
 | **HumanEval** | 📋 Planned Q3 2026 | 95%+ | - | Code synthesis with verification |
