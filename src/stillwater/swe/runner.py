@@ -145,6 +145,7 @@ def run_instance(
         if patch is None:
             # Generate patch using LLM + Prime Skills
             from .patch_generator import generate_patch
+            from .llm_judge import judge_patch
             from stillwater.config import load_config
 
             # Load model from config (stillwater.toml)
@@ -156,6 +157,7 @@ def run_instance(
                 repo_dir=env.repo_dir,
                 model=model,  # Read from config: qwen2.5-coder:7b
                 temperature=0.0,  # Deterministic
+                instance_id=instance_id,
             )
 
             if not patch:
@@ -165,6 +167,38 @@ def run_instance(
                     verified=False,
                     error="Failed to generate patch with LLM",
                     red_gate_message=red_result.message,
+                    duration_ms=int(time.time() * 1000) - start_ms,
+                )
+
+            # Validate patch using LLM Judge (9-stage validation pipeline)
+            print(f"\n🔍 Validating patch with LLM Judge...")
+            verdict = judge_patch(patch, instance.problem_statement)
+            print(f"   Verdict: {verdict.status} (confidence: {verdict.confidence:.1%})")
+            if verdict.reasons:
+                for reason in verdict.reasons[:3]:  # Show first 3 reasons
+                    print(f"   - {reason}")
+
+            if verdict.status == "APPROVE":
+                # Patch passed validation
+                print(f"✅ Patch approved by judge")
+            elif verdict.status == "PATCH_FORMAT":
+                # Patch had format issues but was repaired
+                print(f"🔧 Patch repaired: {', '.join(verdict.reasons)}")
+                patch = verdict.patch
+            elif verdict.status == "PATCH_LOGIC":
+                # Patch has logic issues but may still work
+                print(f"⚠️  Patch has logic issues, attempting anyway")
+                if verdict.patch:
+                    patch = verdict.patch
+            elif verdict.status in ("REJECT", "FAIL_CLOSED"):
+                # Patch validation failed
+                env.cleanup()
+                return InstanceResult(
+                    instance_id=instance_id,
+                    verified=False,
+                    error=f"Patch validation failed: {'; '.join(verdict.reasons[:2])}",
+                    red_gate_message=red_result.message,
+                    patch=patch,
                     duration_ms=int(time.time() * 1000) - start_ms,
                 )
 

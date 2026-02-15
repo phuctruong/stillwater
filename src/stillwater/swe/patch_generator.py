@@ -17,6 +17,7 @@ def generate_patch(
     model: str = "llama3.1:8b",
     temperature: float = 0.0,
     provider: str = "ollama",
+    instance_id: str = "",
 ) -> Optional[str]:
     """
     Generate a patch from a problem statement using LLM + Prime Skills.
@@ -59,6 +60,8 @@ def generate_patch(
         problem_statement=problem_statement,
         skills_summary=skills_summary,
         codebase_context=codebase_context,
+        instance_id=instance_id,
+        repo_dir=str(repo_dir),
     )
 
     # Generate patch using LLM
@@ -198,50 +201,90 @@ def _build_patch_prompt(
     problem_statement: str,
     skills_summary: str,
     codebase_context: str,
+    instance_id: str = "",
+    repo_dir: str = "",
 ) -> str:
     """Build comprehensive prompt for patch generation."""
 
-    return f"""{skills_summary}
+    return f"""# PRIME-CODER v2.0.0 STATE MACHINE (Auth: 65537)
+
+{skills_summary}
 
 ---
 
-## TASK: Generate Patch for SWE-bench Instance
-
-### Problem Statement
+## INSTANCE: {instance_id}
+## PROBLEM
 {problem_statement}
 
-### Codebase Context
+## CODEBASE
 {codebase_context}
 
-### Instructions
+---
 
-1. **Understand the problem**: Read the problem statement carefully
-2. **Localize**: Identify which file(s) need changes
-3. **Plan**: Design a minimal fix following state machine discipline
-4. **Implement**: Create the patch
-5. **Verify**: Ensure RED → GREEN transition (conceptually)
+## EXECUTION PIPELINE (Follow EXACTLY)
 
-### Output Requirements
+### Stage 1: UNDERSTAND (Lane A Required)
+- What is the bug? (Specific symptom)
+- Why does it happen? (Root cause)
+- What fixes it? (Specific change)
+→ All 3 must be proven (Lane A), not guessed (Lane C)
 
-Return ONLY the unified diff patch in this exact format:
+### Stage 2: PLAN (State Machine)
+State machine enforces order. Never skip states.
+- IDENTIFY_ROOT_CAUSE: Why is this broken?
+- PLAN_PATCH: What needs to change?
+- DETERMINE_FIX: What is the fix?
+- VERIFY_FIX_LOGIC: Will this solve it?
 
+### Stage 3: GENERATE (Unified Diff ONLY)
+- Generate unified diff format (---, +++, @@, context lines)
+- Each line starts with: space (context), + (add), or - (remove)
+- Context lines must have exact spacing
+- @@ line numbers must match file
+
+### Stage 4: VALIDATE (No Forbidden Actions)
+
+**FORBIDDEN ACTIONS (NEVER):**
+❌ SILENT_RELAXATION: Don't accept without proof
+❌ UNWITNESSED_PASS: Don't pass tests without witness
+❌ HALLUCINATED_FILE: Don't invent files
+❌ LOGIC_MUTATION: Don't change logic without justification
+❌ BOUNDARY_VIOLATION: Don't modify code outside scope
+❌ IMPLICIT_CHANGE: Only changes in unified diff
+❌ CONFIDENCE_UPGRADE: Never claim certainty without proof
+
+**REQUIRED:**
+✅ RED → GREEN: Failing test becomes passing
+✅ WITNESS: Proof that patch is correct
+✅ LANE A: Everything is proven, not guessed
+✅ DETERMINISM: Same input = same output
+
+### Stage 5: OUTPUT
+
+**CRITICAL: Return ONLY the unified diff:**
 ```diff
 --- a/path/to/file.py
 +++ b/path/to/file.py
-@@ -line,count +line,count @@
- context line
--old line to remove
-+new line to add
- context line
+@@ -10,7 +10,7 @@
+  context line
+  context line
+-old broken line
++new fixed line
+  context line
 ```
 
-**CRITICAL:**
-- NO explanations before or after the patch
-- NO markdown except the ```diff code block
-- ONLY the unified diff
-- Use git diff format exactly
+**NO explanations. NO markdown code blocks. ONLY the diff.**
 
-Generate the patch now:
+---
+
+## VERIFICATION LADDER (641 → 274177 → 65537)
+
+Your patch must pass:
+1. **641 (Edge Sanity):** Correct format, applies cleanly
+2. **274177 (Stress Test):** All tests pass, no regressions
+3. **65537 (God Approval):** Deterministic, proof valid
+
+Generate the patch following this state machine:
 """
 
 
