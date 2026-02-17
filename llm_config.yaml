@@ -1,0 +1,81 @@
+# Stillwater OS - LLM Configuration
+# Auth: 65537
+# Purpose: Centralized LLM endpoint configuration for all notebooks and solvers
+#
+# Switch between providers by setting `provider:` and updating the URL/API key below
+
+# Current active provider
+provider: "claude-code"  # Options: "claude-code", "openai", "claude", "openrouter", "togetherai", "gemini"
+
+# Claude Code (Local Server) - Default
+claude-code:
+  name: "Claude Code (Local)"
+  type: "http"
+  url: "http://localhost:8080"
+  description: "Local Claude Code server running on localhost:8080"
+  requires_api_key: false
+  environment_variables: []
+
+# Alternative: OpenAI API
+openai:
+  name: "OpenAI"
+  type: "api"
+  url: "https://api.openai.com/v1"
+  model: "gpt-4o-mini"  # Change to gpt-4 for full GPT-4, gpt-5 for GPT-5 when available
+  description: "OpenAI API endpoint"
+  requires_api_key: true
+  environment_variables:
+    - "OPENAI_API_KEY"
+
+# Alternative: Anthropic Claude (Direct API)
+claude:
+  name: "Anthropic Claude"
+  type: "api"
+  url: "https://api.anthropic.com/v1"
+  model: "claude-3-5-sonnet-20241022"  # Change to claude-opus-4-1 for Opus
+  description: "Anthropic Claude API endpoint"
+  requires_api_key: true
+  environment_variables:
+    - "ANTHROPIC_API_KEY"
+
+# Alternative: OpenRouter (Proxy for multiple models)
+openrouter:
+  name: "OpenRouter"
+  type: "api"
+  url: "https://openrouter.ai/api/v1"
+  model: "openai/gpt-4o"  # Can use any model available on OpenRouter
+  description: "OpenRouter proxy - supports 100+ models"
+  requires_api_key: true
+  environment_variables:
+    - "OPENROUTER_API_KEY"
+
+# Alternative: TogetherAI
+togetherai:
+  name: "TogetherAI"
+  type: "api"
+  url: "https://api.together.xyz"
+  model: "meta-llama/Llama-3-70b-chat-hf"
+  description: "TogetherAI endpoint - optimized for open models"
+  requires_api_key: true
+  environment_variables:
+    - "TOGETHER_API_KEY"
+
+# Alternative: Google Gemini
+gemini:
+  name: "Google Gemini"
+  type: "api"
+  url: "https://generativelanguage.googleapis.com/v1beta/openai"
+  model: "gemini-2-0-pro"
+  description: "Google Gemini API endpoint"
+  requires_api_key: true
+  environment_variables:
+    - "GOOGLE_API_KEY"
+
+# Quick reference table for switching
+# ===================================
+# To use OpenAI:       provider: "openai"   + export OPENAI_API_KEY=sk-...
+# To use Claude:       provider: "claude"   + export ANTHROPIC_API_KEY=sk-ant-...
+# To use OpenRouter:   provider: "openrouter" + export OPENROUTER_API_KEY=sk-or-...
+# To use TogetherAI:   provider: "togetherai" + export TOGETHER_API_KEY=...
+# To use Gemini:       provider: "gemini"   + export GOOGLE_API_KEY=...
+# To use Claude Code:  provider: "claude-code" (no API key needed, uses local server)
