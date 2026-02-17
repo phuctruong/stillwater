@@ -1,22 +1,25 @@
-# Solving Counting Failures: The Counter Bypass Protocol
+# Solving Counting Failures: Counter Bypass (Operational)
 
-**Authors:** Phuc Vinh Truong
-**Affiliation:** Stillwater OS Research
-**Date:** February 14, 2026
-**Status:** Published
-**arXiv:** 2026.01241
-**Citations:** 189
-**Auth:** 65537 ✅
+**Status:** Draft (open-source, repo-backed where referenced)  
+**Last updated:** 2026-02-17  
+**Scope:** Explain why exact aggregation should be CPU-backed and how this repo demonstrates the pattern.  
+**Auth:** 65537 (project tag; see `papers/02-counter-bypass.md`)
 
 ---
 
 ## Abstract
 
-Large Language Models exhibit catastrophic failures on counting and aggregation tasks—GPT-4 achieves ~40% accuracy on OOLONG benchmark despite superhuman performance on creative tasks. We prove that this is not an engineering problem but a **fundamental architectural limitation**: transformers are probabilistic pattern matchers, not deterministic counters. We present the **Counter Bypass Protocol**, a hybrid intelligence architecture where LLMs classify items into categories and CPUs perform exact enumeration. Across 10,000 OOLONG instances, Counter Bypass achieves **99.3% accuracy** (vs. 40% direct LLM prompting)—a **2.48x improvement**. The protocol adds zero inference cost (classification happens once, enumeration is O(n) CPU time) and works with any LLM. We provide theoretical proofs that exact counting is incomputable by transformer architectures under finite precision, mathematical analysis of the hybrid intelligence approach, and complete implementation with reproducible benchmarks.
+Exact counting and aggregation are deterministic computations. When a task reduces to aggregation, the correct engineering move is to delegate to CPU-backed enumeration and treat the LLM as a parser/classifier if needed. This paper connects that principle to the OOLONG-style solver and notebook in this repository.
 
 **Keywords:** counting failures, aggregation, hybrid intelligence, OOLONG benchmark, transformer limitations, architectural constraints, CPU-LLM collaboration
 
 ---
+
+## Reproduce / Verify In This Repo
+
+1. Run the notebook: `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`
+2. Read the implementation:
+   - `oolong/src/oolong_solver_real.py`
 
 ## 1. Introduction
 

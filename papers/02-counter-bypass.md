@@ -1,22 +1,32 @@
-# Counter Bypass Protocol: Solving LLM Counting and Aggregation Failures
+# Counter Bypass Protocol: LLM Classifies, CPU Enumerates
 
-**Authors:** Phuc Vinh Truong
-**Affiliation:** Stillwater OS Research
-**Date:** February 14, 2026
-**Status:** Published
-**arXiv:** 2026.01235
-**Citations:** 203
-**Auth:** 65537 ✅
+**Status:** Draft (open-source, repo-backed where referenced)  
+**Last updated:** 2026-02-17  
+**Scope:** A hybrid pattern for exact aggregation: use an LLM for parsing/classification and a deterministic CPU routine for counting/aggregation.  
+**Auth:** 65537 (project tag; see `papers/03-verification-ladder.md` for what this means here)
 
 ---
 
 ## Abstract
 
-Large Language Models (LLMs) exhibit catastrophic failures on counting and aggregation tasks, achieving only 40% accuracy on OOLONG benchmark despite superhuman performance on creative tasks. We demonstrate that this is not a solvable engineering problem but an **architectural limitation**: transformers are classifiers, not counters. We present the **Counter Bypass Protocol**, a hybrid intelligence architecture where LLMs classify items into groups and CPUs perform exact enumeration. Across 10,000 OOLONG instances, Counter Bypass achieves **99.3% accuracy** versus 40% for direct LLM prompting—a **2.48x improvement**. The protocol adds zero inference cost (classification happens once, enumeration is O(n) CPU operations) and is model-agnostic. We provide theoretical proof that exact counting is incomputable by transformer architectures and demonstrate that hybrid intelligence (LLM + CPU) is the only viable solution. Our work challenges the "bigger model solves everything" paradigm and suggests a future where AI systems leverage CPUs for exact operations.
+Exact aggregation (counts, top-k, uniqueness) is a deterministic computation. The Counter Bypass Protocol is the operational pattern: let the LLM do what it's good at (parsing and classification) and let the CPU do what it's good at (exact enumeration and arithmetic). This is not a trick; it is the standard engineering move whenever you need correctness.
+
+This repository includes an OOLONG-style solver and notebook that demonstrate the pattern on an included test suite. The core point is simple: if you can reduce your task to a deterministic aggregation, you should do so.
 
 **Keywords:** counting failures, aggregation, hybrid intelligence, architectural limitations, OOLONG benchmark, transformer constraints
 
 ---
+
+## Reproduce / Verify In This Repo
+
+1. Run the notebook: `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`
+2. Read the implementations:
+   - `oolong/src/oolong_solver_real.py`
+   - `oolong/src/solve-oolong.py`
+
+## Notes On Claims
+
+Any accuracy claims must be backed by a specific dataset, script/notebook run, and logged outputs in this repository. Treat third-party benchmark numbers as background unless reproduced here.
 
 ## 1. Introduction
 

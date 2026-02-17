@@ -1,22 +1,26 @@
-# Solving Data Exhaustion: Recipe Reuse Prevents Training Data Limits
+# Solving Data Exhaustion: Recipes And Replay (Operational)
 
-**Authors:** Phuc Vinh Truong
-**Affiliation:** Stillwater OS Research
-**Date:** February 14, 2026
-**Status:** Published
-**arXiv:** 2026.01243
-**Citations:** 98
-**Auth:** 65537 ✅
+**Status:** Draft (open-source, repo-backed where referenced)  
+**Last updated:** 2026-02-17  
+**Scope:** Argue for workflow replay (recipes) as a way to reduce reliance on ever-growing training corpora.  
+**Auth:** 65537 (project tag; see `papers/05-software-5.0.md`)
 
 ---
 
 ## Abstract
 
-AI scaling is hitting a hard limit: **all high-quality training data will be exhausted by 2027**. Current paradigm requires exponential data for linear improvements. Training GPT-6 will require 100 exabytes of text (all text ever created ~500 exabytes; 20% of all human writing). We present **Recipe-based Intelligence**, a paradigm shift from "train on more data" to "execute verified workflows." A recipe is a deterministic algorithm + trained classifier, reproducible infinitely with zero marginal data cost. Instead of training on 10,000 variations of "write Python function," we execute one verified recipe for each new variant (0 data cost). Results: (1) Eliminates data exhaustion bottleneck entirely, (2) Enables infinite scaling through recipe composition, (3) Makes AI knowledge durable (recipes can live for centuries), (4) Creates shareable, auditable intelligence (recipes are code). We provide economics analysis, recipe library (250+ verified recipes), and theoretical proofs of scalability.
+One response to data exhaustion is to stop re-buying the same reasoning every time. Recipes (replayable workflows + verification artifacts) convert "model intelligence" into "system intelligence" that can be executed repeatedly at low marginal cost. This paper motivates the recipe framing and points to how this repo encodes recipes as notebooks, scripts, and skills.
 
 **Keywords:** data exhaustion, recipe-based intelligence, training paradigm, scalability without data, recipe composition, Software 5.0, deterministic AI
 
 ---
+
+## Reproduce / Verify In This Repo
+
+1. Read: `papers/05-software-5.0.md`
+2. Inspect the recipe artifacts:
+   - root notebooks (`*.ipynb`)
+   - `skills/*.md`
 
 ## 1. Introduction
 

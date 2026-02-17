@@ -1,22 +1,25 @@
-# Solving Security: Math-Grade Security vs Plugin Marketplaces
+# Solving Security: Evidence Gates Beat Plugin Trust (Operational)
 
-**Authors:** Phuc Vinh Truong
-**Affiliation:** Stillwater OS Research
-**Date:** February 14, 2026
-**Status:** Published
-**arXiv:** 2026.01248
-**Citations:** 142
-**Auth:** 65537 ✅
+**Status:** Draft (open-source, repo-backed where referenced)  
+**Last updated:** 2026-02-17  
+**Scope:** Prevent prompt-injection and supply-chain style failures by treating untrusted inputs as untrusted and requiring evidence gates for tool use.  
+**Auth:** 65537 (project tag; see `skills/prime-safety.md`)
 
 ---
 
 ## Abstract
 
-AI assistant ecosystems rely on plugin/skill marketplaces (OpenClaw, Cursor Skills, Copilot Extensions), creating massive attack surface. OpenClaw alone has 341 confirmed malicious skills discovered (OpenClaw Security Report, Feb 2026), with estimated 5,000+ hidden backdoors. Current security approach: social review, code auditing, user reports—all insufficient against sophisticated attacks. We present **Mathematical Security**, where every skill passes the verification ladder (641→274177→65537) before deployment, making exploitation impossible without breaking mathematics. Key insight: **Verification > Trust**. Instead of trusting plugin authors or reviewers, we mathematically prove skill correctness. Across Stillwater OS (18 months, 31 operational controls, 250+ recipes), zero CVEs, zero backdoors, zero exploitation incidents. Competitor ecosystem (OpenClaw): 341 CVEs in 6 months. We provide security proofs, vulnerability analysis of plugin marketplaces, and architectural defense mechanisms.
+AI assistant ecosystems expand attack surface via plugins/skills and untrusted text inputs. The operational defense is: capability envelopes, explicit intent ledgers, prompt-injection firewalls, and evidence gates before tool use. This repo encodes those controls as skills and uses them in orchestration.
 
 **Keywords:** AI security, skill verification, supply chain attacks, mathematical guarantees, plugin security, CVE prevention, exploitation defense, formal security proofs
 
 ---
+
+## Reproduce / Verify In This Repo
+
+1. Read the safety envelope + injection firewall: `skills/prime-safety.md`
+2. See evidence gate framing: `skills/prime-coder.md`
+3. See swarm application: `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb`
 
 ## 1. Introduction
 

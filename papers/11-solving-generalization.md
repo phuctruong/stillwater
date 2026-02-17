@@ -1,22 +1,26 @@
-# Solving Generalization: State Machines for Compositional Generalization
+# Solving Generalization: Explicit State Machines (Operational)
 
-**Authors:** Phuc Vinh Truong
-**Affiliation:** Stillwater OS Research
-**Date:** February 14, 2026
-**Status:** Published
-**arXiv:** 2026.01245
-**Citations:** 167
-**Auth:** 65537 ✅
+**Status:** Draft (open-source, repo-backed where referenced)  
+**Last updated:** 2026-02-17  
+**Scope:** Explain why explicit state machines and forbidden states improve reliability in agentic workflows.  
+**Auth:** 65537 (project tag)
 
 ---
 
 ## Abstract
 
-Compositional generalization—the ability to combine learned primitives into novel configurations—remains a fundamental failure mode for neural networks. Standard transformers achieve ~60% on compositional tasks, with performance degrading sharply on unseen combinations. We present **Explicit State Machines**, an operational control that enforces compositional structure through five mechanisms: (1) **Explicit state tracking** (what is the system's current state?), (2) **Forbidden state detection** (which states are impossible?), (3) **Deterministic transitions** (state A + input X → state B always), (4) **Invariant preservation** (what stays true?), (5) **Proof-of-state** (why are we here?). Across SCAN, CFQ, and COGS benchmarks, Explicit State Machines achieve **100% on compositional tasks** (vs. 60% neural baseline). The system adds <5% overhead, requires no retraining, and works with any LLM. We provide theoretical proofs, complete implementation, and reproducible evaluation.
+Compositional generalization fails when systems drift across implicit states without tracking what is allowed. An explicit state machine makes the workflow legible: you name states, define transitions, and forbid dangerous shortcuts. This repo encodes state machines in skills (for coding and orchestration), and uses them to make behavior reproducible and reviewable.
 
 **Keywords:** compositional generalization, state machines, explicit reasoning, invariant preservation, deterministic systems, neural limitations, operational controls
 
 ---
+
+## Reproduce / Verify In This Repo
+
+1. Read state machine specs:
+   - `skills/prime-coder.md` (State_Machine + forbidden states)
+   - `skills/phuc-swarms.md` (Swarm state machine)
+2. See them used in orchestration: `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb`
 
 ## 1. Introduction
 

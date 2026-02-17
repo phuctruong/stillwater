@@ -11,7 +11,7 @@ This is the REAL implementation:
 - Real verification rungs (mathematical correctness checks, not data existence)
 - All 7 Phuc Forecast generalized patterns applied
 
-Reference: /home/phuc/projects/solace-cli/canon/prime-skills/papers/02-imo-2024-mathematics.md
+References (repo): skills/prime-math.md, papers/01-lane-algebra.md
 """
 
 import sys

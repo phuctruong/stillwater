@@ -1,22 +1,31 @@
-# Solving Reasoning Failures: Exact Math Kernel Achieves IMO 6/6
+# Solving Reasoning Failures: Exact Math Kernel (Repo-Backed Demonstrator)
 
-**Authors:** Phuc Vinh Truong
-**Affiliation:** Stillwater OS Research
-**Date:** February 14, 2026
-**Status:** Published
-**arXiv:** 2026.01242
-**Citations:** 234
-**Auth:** 65537 ✅
+**Status:** Draft (open-source, repo-backed where referenced)  
+**Last updated:** 2026-02-17  
+**Scope:** This paper explains the "Exact Math Kernel" approach as implemented in this repository and demonstrated by the root notebook and IMO solver code.  
+**Auth:** 65537 (project tag; see `papers/03-verification-ladder.md` for what this means here)
 
 ---
 
 ## Abstract
 
-Multi-step mathematical reasoning remains a frontier challenge for AI. Current systems achieve 0/6 on IMO (International Math Olympiad), with formal proof systems like Lean requiring prohibitive manual effort. We present the **Exact Math Kernel**, a framework combining four operational controls: (1) **Fraction-based arithmetic** eliminating floating-point contamination, (2) **Dual-witness proofs** providing provable correctness via Red-Green gates, (3) **Executable lemmas** encoding 47 verified geometry theorems as code, and (4) **Deterministic reasoning chains** preventing hallucinated proofs. On IMO 2024, Stillwater OS + Exact Math Kernel achieved **6/6 problems (42 points, Gold medal)** versus DeepMind AlphaProof 4/6, Google Gemini Deep Think 5/6, and GPT-4 0/6. The system requires no formal proof system (Lean/Isabelle), no symbolic solvers, and no external tools—only LLM + operational controls. We provide complete implementation, all 47 geometry lemmas, proof certificates for all 6 problems, and theoretical analysis.
+Multi-step mathematical reasoning fails in practice for two recurring reasons: (1) arithmetic drift (approximations and floating-point contamination) and (2) proof drift (claims that are not anchored to checkable witnesses). This paper presents an "Exact Math Kernel" approach that pushes math claims toward checkable artifacts: exact arithmetic, bounded lemma libraries, and verification framing (Red/Green analogs and rung targets). This repository includes a runnable notebook and IMO-related solver code that demonstrate the approach on an IMO 2024-style harness.
 
 **Keywords:** mathematical reasoning, IMO, exact arithmetic, proof verification, lemma libraries, deterministic reasoning, operational controls, hybrid intelligence
 
 ---
+
+## Reproduce / Verify In This Repo
+
+1. Run the notebook: `HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb`
+2. Read the implementation:
+   - `imo/src/imo_2024_complete_solver.py`
+   - `imo/src/imo_2024_solver_proper.py`
+   - `imo/src/geometry_lemma_library.py`
+
+## Notes On Claims
+
+This repo does not claim to reproduce official IMO scoring or third-party proprietary model results. Treat any comparative numbers in the legacy draft below as background that requires independent verification from upstream sources.
 
 ## 1. Introduction
 

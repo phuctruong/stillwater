@@ -1,22 +1,39 @@
-# Lane Algebra: Epistemic Typing System for Preventing AI Hallucination
+# Lane Algebra: Epistemic Typing For Claims (A / B / C / STAR)
 
-**Authors:** Phuc Vinh Truong
-**Affiliation:** Stillwater OS Research
-**Date:** February 14, 2026
-**Status:** Published
-**arXiv:** 2026.01234
-**Citations:** 112
-**Auth:** 65537 ✅
+**Status:** Draft (open-source, repo-backed where referenced)  
+**Last updated:** 2026-02-17  
+**Scope:** Define a minimal "epistemic type system" for claims so that outputs can be audited and upgraded only via evidence.  
+**Auth:** 65537 (project tag; see `papers/03-verification-ladder.md` for what this means here)
 
 ---
 
 ## Abstract
 
-Large Language Models (LLMs) exhibit catastrophic hallucination rates—71.8% for GPT-5, 60% for Claude Opus—rendering them unsuitable for production systems requiring mathematical certainty. We present **Lane Algebra**, a four-tier epistemic typing system that prevents hallucination through rigorous premise tracking and the **MIN rule**, which ensures that claim confidence cannot exceed the weakest supporting premise. Across 10,000 test instances, Lane Algebra reduced hallucination from 65.4% (baseline) to 8.7%, an **87% reduction**. When combined with the verification ladder (641→274177→65537), Lane Algebra achieves **zero false positives** over 18 months of production deployment. Our approach is model-agnostic, adding negligible computational overhead (<2%), and compatible with any LLM architecture. We provide complete implementation, benchmarks, and theoretical proofs of correctness.
+LLMs are excellent generators and poor witnesses: they can produce plausible statements without a machine-checkable connection to truth. Lane Algebra is a simple epistemic typing system that makes that distinction explicit. It assigns every claim to a lane based on the strength of its support:
+
+- **Lane A:** directly witnessed by executable evidence (tests, tool output, checked artifacts)
+- **Lane B:** stable background assumptions that still require caution
+- **Lane C:** heuristic/model output (useful, but not proof)
+- **STAR:** unknown or out-of-distribution
+
+The key rule is **MIN**: the combined confidence of a claim cannot exceed the weakest premise supporting it. This prevents "premise laundering" where a weak premise is accidentally upgraded into a strong claim.
+
+This repository implements Lane Algebra as operational constraints inside the skills layer (for coding and planning), and uses it in the notebooks as a reporting discipline.
 
 **Keywords:** hallucination prevention, epistemic typing, premise tracking, AI safety, verification systems, operational controls
 
 ---
+
+## Reproduce / Verify In This Repo
+
+1. Read the operational spec: `skills/prime-coder.md` (Axiomatic_Truth_Lanes + Lane_Algebra)
+2. See it used in notebooks (reporting discipline):
+   - `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`
+   - `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb`
+
+## Notes On Claims
+
+This paper is primarily definitional/spec. If you want empirical hallucination-rate claims, they must be backed by a runnable benchmark harness and logged outputs in this repo.
 
 ## 1. Introduction
 

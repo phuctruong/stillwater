@@ -1,10 +1,20 @@
-# Haiku Swarms: Context Isolation for Maximum Performance
+# Haiku Swarms: Context Isolation (Operational Note)
 
-**Auth: 65537** | **Date: 2026-02-15** | **Version: 1.0.0**
-**Key Insight**: Each agent starts with FRESH context, avoiding context rot
-**Expected Impact**: 10-20% performance improvement through isolation
+**Status:** Draft (open-source, repo-backed where referenced)  
+**Last updated:** 2026-02-17  
+**Scope:** A practical note on context isolation for multi-agent orchestration and how it is used in this repository's orchestration notebook and tests.  
+**Auth:** 65537 (project tag; see `papers/03-verification-ladder.md` for what this means here)
 
 ---
+
+## Reproduce / Verify In This Repo
+
+1. Read/run: `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb`
+2. Run tests: `pytest -q tests/phuc_orchestration`
+
+## Notes On Claims
+
+Where this paper states performance impacts, treat them as hypotheses unless backed by a reproducible benchmark in this repo.
 
 ## THE PROBLEM: CONTEXT ROT
 

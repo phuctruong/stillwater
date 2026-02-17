@@ -1,22 +1,25 @@
-# Solving Alignment: Verification Ladder as Mathematical Proof of Alignment
+# Solving Alignment: Operational Alignment Via Evidence Gates (Operational)
 
-**Authors:** Phuc Vinh Truong
-**Affiliation:** Stillwater OS Research
-**Date:** February 14, 2026
-**Status:** Published
-**arXiv:** 2026.01246
-**Citations:** 91
-**Auth:** 65537 ✅
+**Status:** Draft (open-source, repo-backed where referenced)  
+**Last updated:** 2026-02-17  
+**Scope:** Reframe "alignment" as an operational property of a system: what it is allowed to do and what evidence it must produce before acting.  
+**Auth:** 65537 (project tag; see `skills/prime-safety.md` and `papers/03-verification-ladder.md`)
 
 ---
 
 ## Abstract
 
-AI safety through RLHF and Constitutional AI remains fundamentally black-box: we train models to "sound aligned" without proving they are. Current alignment research relies on behavioral testing (hope-based approach), leaving production systems vulnerable to distributional shift, adversarial inputs, and emergent misalignment. We present **Verification Ladder as Alignment Proof**: a mathematical framework proving correctness of AI outputs through three nested verification rungs (641→274177→65537). Key insight: Alignment is not a property of weights, but of **provable operational constraints**. By proving that every output satisfies three nested tests (sanity, stress, formal), we achieve measurable, auditable, reproducible alignment guarantees. Across 18 months of production deployment on Stillwater OS, zero alignment failures occurred on 12,841 verified patches and recipes (Auth: 65537). We provide formal mathematical definitions of "alignment," proofs that verification ladder implies alignment, and analysis of why RLHF/Constitutional AI cannot provide equivalent guarantees.
+Many alignment failures are not "model psychology" problems; they are system design problems: unclear capability envelopes, weak evidence gates, and failure to treat untrusted inputs as untrusted. This paper describes an operational alignment stance: constrain tool use (envelope), require an intent ledger, and require reproducible evidence artifacts before any high-stakes action.
 
 **Keywords:** AI alignment, formal verification, proof systems, operational constraints, constitutional AI limitations, mathematical safety, trustworthy AI
 
 ---
+
+## Reproduce / Verify In This Repo
+
+1. Read safety envelope + injection firewall: `skills/prime-safety.md`
+2. Read evidence gates and red/green: `skills/prime-coder.md`
+3. See orchestration application: `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb`
 
 ## 1. Introduction
 

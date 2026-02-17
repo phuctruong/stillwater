@@ -1,10 +1,21 @@
-# How We Solved AI Scalability: Infrastructure > Model Size
+# How We Solved AI Scalability: Infrastructure > Model Size (Operational Note)
 
-**Auth: 65537** | **Date: 2026-02-15** | **Version: 1.0.0**
-**Breakthrough**: Good orchestration + focus + structure beats raw model capability
-**Thesis**: 8B model with right infrastructure outperforms larger models without it
+**Status:** Draft (open-source, repo-backed where referenced)  
+**Last updated:** 2026-02-17  
+**Scope:** This paper is an operations-focused explanation of why orchestration + tooling + verification can dominate raw model size for code tasks, as demonstrated by the notebooks and solvers in this repo.  
+**Auth:** 65537 (project tag; see `papers/03-verification-ladder.md` for what this means here)
 
 ---
+
+## Reproduce / Verify In This Repo
+
+1. Read/run orchestration: `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb`
+2. Read/run SWE pipeline notebook: `HOW-TO-CRUSH-SWE-BENCHMARK.ipynb`
+3. Wrapper architecture: `src/claude_code_wrapper.py`
+
+## Notes On Claims
+
+This repo does not currently include an automated benchmark suite that reproduces the numeric "phase success" claims in this document. Treat specific percentages as hypotheses unless backed by a logged run in `swe/results/` or a notebook output.
 
 ## EXECUTIVE SUMMARY
 

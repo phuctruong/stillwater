@@ -1,22 +1,24 @@
-# Solving Energy Crisis: 300x Efficiency Through CPU-First Architecture
+# Solving Energy Crisis: CPU-First Execution (Operational Essay)
 
-**Authors:** Phuc Vinh Truong
-**Affiliation:** Stillwater OS Research
-**Date:** February 14, 2026
-**Status:** Published
-**arXiv:** 2026.01247
-**Citations:** 76
-**Auth:** 65537 ✅
+**Status:** Draft (open-source, repo-backed where referenced)  
+**Last updated:** 2026-02-17  
+**Scope:** Argue that most practical "AI work" should be executed deterministically on CPUs with small-model assistance, not as repeated cloud inference.  
+**Auth:** 65537 (project tag)
 
 ---
 
 ## Abstract
 
-AI's energy consumption is unsustainable. Global AI datacenters consume 460 TWh/year by 2030 estimate, equivalent to 2% of world electricity. Training one large model requires 25,000 MWh (10,000 tons CO2). Inference scales with queries: a single GPT-4 query uses 0.3 Wh energy. We present **CPU-First Architecture**, a paradigm shift where recipes (verifiable algorithms) execute on CPUs instead of calling distant GPUs. Key insight: **Most AI work is not neural computation**—it's classification (LLM, 1% compute) + deterministic execution (CPU, 99% compute). By separating concerns, Stillwater achieves **300x energy efficiency** over cloud-based GPT-4 API: $200 laptop (7B model) uses 0.001 Wh per result vs. datacenter 0.3 Wh. Across full ecosystem (training + inference + storage), CPU-First is **100x more efficient** than current paradigm. We provide energy measurements, architectural analysis, and economic/environmental impact projections.
+Energy costs scale with repeated neural inference. A CPU-first architecture reduces those costs by pushing stable computation into deterministic workflows (recipes) and using LLMs where they add the most leverage (parsing/classification), not where correctness is required (exact enumeration). This paper is primarily an argument and design note; energy numbers require independent measurement and are not reproduced by this repo today.
 
 **Keywords:** energy efficiency, AI sustainability, CPU-first architecture, green AI, datacenter elimination, computational paradigm shift, environmental impact
 
 ---
+
+## Reproduce / Verify In This Repo
+
+1. See CPU-first patterns in OOLONG: `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`
+2. Read recipes framing: `papers/05-software-5.0.md`
 
 ## 1. Introduction
 

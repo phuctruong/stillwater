@@ -300,7 +300,7 @@ for instance in instances:
 ### File Structure
 
 ```
-/home/phuc/projects/stillwater/
+./
 ├── HOW-TO-CRUSH-SWE-BENCHMARK-v1.0.md  (this guide)
 ├── batch_1_phuc_orchestration.py        (execute phases 1-4)
 ├── diff_postprocessor.py                (repair malformed diffs)

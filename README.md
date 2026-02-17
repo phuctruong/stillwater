@@ -29,7 +29,7 @@ jupyter notebook HOW-WE-SOLVED-OOLONG-MEMORY.ipynb
 
 ---
 
-## 🚀 **[HOW WE SOLVED AI SCALABILITY: Infrastructure > Model Size](papers/HOW_WE_SOLVED_AI_SCALABILITY.md)**
+## 🚀 **[HOW WE SOLVED AI SCALABILITY: Infrastructure > Model Size](papers/22-how-we-solved-ai-scalability.md)**
 
 **The Breakthrough**: Good orchestration beats raw model capability. **8B model with right infrastructure outperforms larger models without it.**
 
@@ -78,7 +78,7 @@ New:  8B × 10.0 = 80B effective capability (8B model, perfect orchestration)
 Smaller model + better infrastructure = better results + 10x cost savings
 ```
 
-**Read the full paper**: [How We Solved AI Scalability](papers/HOW_WE_SOLVED_AI_SCALABILITY.md)
+**Read the full paper**: [How We Solved AI Scalability](papers/22-how-we-solved-ai-scalability.md)
 
 ---
 

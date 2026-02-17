@@ -1,22 +1,24 @@
-# Solving Context Length: Shannon Compaction Enables Infinite Context
+# Solving Context Length: Compaction As Interface-First Engineering (Operational)
 
-**Authors:** Phuc Vinh Truong
-**Affiliation:** Stillwater OS Research
-**Date:** February 14, 2026
-**Status:** Published
-**arXiv:** 2026.01244
-**Citations:** 134
-**Auth:** 65537 ✅
+**Status:** Draft (open-source, repo-backed where referenced)  
+**Last updated:** 2026-02-17  
+**Scope:** Explain why interface-first compaction is necessary for long-context workflows and how this repo applies compaction concepts in its prompts and evidence bundles.  
+**Auth:** 65537 (project tag)
 
 ---
 
 ## Abstract
 
-Context length is the fundamental constraint on LLM capabilities. Current systems max out at 128K tokens (GPT-4 Turbo, Claude 3), with quadratic attention complexity O(n²) limiting practical context. We present **Shannon Compaction**, a deterministic compression framework using interface-first design to reduce context requirements by 10-100x without retraining. The key innovation: **stillwater (condensed interface) + ripple (streaming details)**. Queries hit the stillwater (interface), then stream ripples (details) as needed. A 1M-document knowledge base compresses to 47KB stillwater + streaming ripples. Across RAG tasks, Shannon Compaction enables **effective context length >1M tokens** (vs. 128K baseline) while using **99% less memory**. The system requires no model changes, works with any LLM, and adds negligible latency. We provide theoretical proofs of optimality, complete implementation, and reproducible benchmarks.
+Long-context systems fail when they treat "more tokens" as the solution. In practice, reliable long-context work requires compaction: distilling interfaces (what matters) and preserving traceability to details (what was omitted). This paper frames compaction as interface-first engineering and points to where compaction is applied in this repo (evidence bundles, witness lines, and prompt-building).
 
 **Keywords:** context length, attention complexity, information compression, interface-first design, streaming architecture, infinite context, transformer scaling
 
 ---
+
+## Reproduce / Verify In This Repo
+
+1. See compaction rules in the coding skill: `skills/prime-coder.md` (Shannon compaction + witness lines).
+2. See compaction in the SWE notebook prompt builder: `HOW-TO-CRUSH-SWE-BENCHMARK.ipynb`.
 
 ## 1. Introduction
 

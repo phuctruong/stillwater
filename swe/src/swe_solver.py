@@ -8,9 +8,8 @@ Status: EDUCATIONAL DEMONSTRATOR
 ⚠️  IMPORTANT: This is a DEMONSTRATION implementation showing the methodology.
 It does NOT run actual tests or generate real patches.
 
-For the ACTUAL 300/300 implementation with verified results, see:
-- /home/phuc/projects/solace-cli/canon/prime-skills/tests/
-- /home/phuc/projects/solace-cli/canon/prime-skills/papers/FINAL_SWE_RESULTS.md
+For the runnable solver entrypoint used in this repo, see:
+- swe/src/swe_solver_real.py
 
 This solver demonstrates the Prime Skills methodology:
 - Prime Coder v1.3.0 (Red-Green gates, Secret Sauce, Resolution Limits)

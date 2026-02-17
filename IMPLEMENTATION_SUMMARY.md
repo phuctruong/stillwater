@@ -18,7 +18,7 @@ Comprehensive guide documenting the Phuc Forecast methodology from first princip
 - Fail-closed prompting patterns
 - Complete execution guide
 
-**Location:** `/home/phuc/projects/stillwater/HOW-TO-CRUSH-SWE-BENCHMARK-v1.0.md`
+**Location:** `HOW-TO-CRUSH-SWE-BENCHMARK-v1.0.md`
 
 ### 2. **batch_1_phuc_orchestration.py** ✅
 
@@ -31,7 +31,7 @@ Full pipeline implementation for executing 5 astropy SWE-bench instances:
 
 **Status:** Executable now, Phases 1-3 working, Phase 4 producing malformed output
 
-**Location:** `/home/phuc/projects/stillwater/batch_1_phuc_orchestration.py`
+**Location:** `batch_1_phuc_orchestration.py`
 
 ### 3. **diff_postprocessor.py** ✅
 
@@ -42,7 +42,7 @@ Solution to unblock Phase 4 failures by repairing malformed diffs:
 - Regenerates correct unified diff format
 - Ready to integrate into pipeline
 
-**Location:** `/home/phuc/projects/stillwater/diff_postprocessor.py`
+**Location:** `diff_postprocessor.py`
 
 ### 4. **BATCH_1_QA_FINDINGS.md** ✅
 
@@ -54,7 +54,7 @@ Comprehensive root cause analysis:
 - Recommended solutions (3 options, with effort estimates)
 - Verification checklist for fix
 
-**Location:** `/home/phuc/projects/stillwater/BATCH_1_QA_FINDINGS.md`
+**Location:** `BATCH_1_QA_FINDINGS.md`
 
 ---
 
@@ -209,7 +209,7 @@ if patch_malformed:
 ### File Locations
 
 ```
-/home/phuc/projects/stillwater/
+./
 ├── HOW-TO-CRUSH-SWE-BENCHMARK-v1.0.md
 │   └── Complete methodology guide
 ├── batch_1_phuc_orchestration.py

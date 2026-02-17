@@ -1,21 +1,32 @@
-# OOLONG 100%: Why Counter() Beats Attention on Every Aggregation Task
+# OOLONG-Style Aggregation: Why Counter() Beats Attention For Exact Counting
 
-**Authors:** Phuc Vinh Truong
-**Affiliation:** Stillwater OS Research
-**Date:** February 14, 2026
-**Status:** Pre-implementation (results pending)
-**Benchmark:** OOLONG-synth (Bertsch et al., arXiv:2511.02817)
-**Auth:** 65537
+**Status:** Draft (open-source, repo-backed where referenced)  
+**Last updated:** 2026-02-17  
+**Scope:** This paper documents a CPU-first aggregation approach and how it is implemented and demonstrated in this repository.  
+**Auth:** 65537 (project tag; see `papers/03-verification-ladder.md` for what this means here)
 
 ---
 
 ## Abstract
 
-We present a deterministic solver for the OOLONG long-context aggregation benchmark that achieves **100% accuracy** where frontier LLMs score below 50%. Our approach is deliberately simple: parse structured records, build `Counter()` indexes, classify queries via regex, and dispatch to CPU-only handlers. **No LLM is involved in any computation.** The LLM's role is reduced to zero -- every step is deterministic Python. We prove this is not a trick but a mathematical necessity: attention mechanisms compute weighted averages (interpolation), while counting requires exact enumeration. These are distinct computational classes. We release a fully reproducible implementation in Stillwater OS that any user can run with `stillwater bench oolong` against the public HuggingFace dataset.
+Exact aggregation tasks (counts, top-k, uniqueness) demand deterministic enumeration, not probabilistic interpolation. This paper argues from first principles that (a) transformer attention is not an exact counting primitive, and (b) production systems should treat exact aggregation as a CPU responsibility. This repository demonstrates a Counter-based solver and a runnable notebook that exercises an OOLONG-style aggregation suite.
 
-**Keywords:** OOLONG, counting, aggregation, Counter(), deterministic, long-context, transformer limitations
+**In-repo reproduction:** `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb` runs the included solver and reports pass/fail on the included test suite.
+
+**Keywords:** counting, aggregation, Counter(), deterministic execution, long-context
 
 ---
+
+## Reproduce / Verify In This Repo
+
+1. Run the notebook: `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`
+2. Read the implementation:
+   - `oolong/src/oolong_solver_real.py`
+   - `oolong/src/solve-oolong.py`
+
+## Notes On Empirical Claims
+
+This repo does not attempt to reproduce third-party leaderboard numbers for proprietary models. Where this paper discusses published results, treat them as background and check the referenced upstream sources directly.
 
 ## 1. The Problem
 

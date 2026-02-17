@@ -1,22 +1,38 @@
-# The Verification Ladder: Mathematical Foundations of 641→274177→65537
+# The Verification Ladder: 641 -> 274177 -> 65537 (Evidence Strength Rungs)
 
-**Authors:** Phuc Vinh Truong
-**Affiliation:** Stillwater OS Research
-**Date:** February 14, 2026
-**Status:** Published
-**arXiv:** 2026.01236
-**Citations:** 47
-**Auth:** 65537 ✅
+**Status:** Draft (open-source, repo-backed where referenced)  
+**Last updated:** 2026-02-17  
+**Scope:** Define a runged notion of verification strength and the minimum artifacts needed to justify an upgrade in confidence.  
+**Auth:** 65537 (project tag used throughout this repo)
 
 ---
 
 ## Abstract
 
-Large Language Models lack fundamental guarantees of correctness. Current AI systems rely on hope-based testing and probabilistic confidence scores, leaving production systems vulnerable to silent failures. We present the **Verification Ladder**, a three-rung mathematical verification system indexed by prime numbers (641 → 274177 → 65537) that provides provable correctness for AI-generated code and reasoning. The ladder combines edge-case testing (641), stress testing under adversarial conditions (274177), and formal mathematical verification (65537), creating a hierarchical proof system where each rung increases confidence exponentially. In 18 months of production deployment on Stillwater OS, the verification ladder achieved **zero false positives** across 12,841 verified patches and recipes. The system is compatible with all LLM architectures and adds only 3% computational overhead. We provide complete formal specifications, proof certificates, and reproducible benchmarks.
+Verification claims need typed strength. A single passing unit test does not mean "correct"; it means "did not fail under this check." The Verification Ladder is a simple rung system for expressing what kind of evidence you actually have:
+
+- **641:** edge sanity / minimal witness (Red-Green where applicable)
+- **274177:** stress/regression/seed sweeps (broader coverage)
+- **65537:** invariant-style checks / strongest available verification for the domain
+
+In this repository, the ladder is used as a reporting discipline and as a gating concept in skills and solvers. Where a script claims a rung, reviewers should check the corresponding artifacts (commands, outputs, and logs).
 
 **Keywords:** verification systems, proof certificates, correctness guarantees, AI safety, mathematical proofs, prime-indexed hierarchies, formal methods
 
 ---
+
+## Reproduce / Verify In This Repo
+
+1. See ladder framing in notebooks:
+   - `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`
+   - `HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb`
+2. See ladder references in code:
+   - `imo/src/imo_2024_solver_proper.py`
+   - `swe/src/swe_solver_real.py`
+
+## Notes On Claims
+
+This repo currently treats rung numbers as a strength label and an operational checklist. If a document claims "formal" verification, it should link to actual invariant checks or formal tooling runs, not just a label.
 
 ## 1. Introduction
 

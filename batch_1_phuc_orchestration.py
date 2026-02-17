@@ -21,6 +21,7 @@ import time
 import shutil
 import re
 import sys
+import os
 from pathlib import Path
 from typing import Optional, Dict, Tuple, List
 import logging
@@ -40,9 +41,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-REPO_ROOT = Path("/home/phuc/projects/stillwater")
-DATA_DIR = Path.home() / "Downloads/benchmarks/SWE-bench-official"
-WORK_DIR = Path("/tmp/batch_1_phuc")
+REPO_ROOT = Path(__file__).resolve().parent
+DATA_DIR = Path(os.environ.get("STILLWATER_SWE_BENCH_DATA", str(Path.home() / "Downloads/benchmarks/SWE-bench-official")))
+WORK_DIR = Path(os.environ.get("STILLWATER_WORK_DIR", "/tmp/batch_1_phuc"))
 RESULTS_DIR = REPO_ROOT / "batch_1_results"
 WORK_DIR.mkdir(exist_ok=True)
 RESULTS_DIR.mkdir(exist_ok=True)
@@ -58,9 +59,9 @@ BATCH_1_INSTANCES = [
 
 # API Configuration
 API_CONFIG = {
-    "url": "http://localhost:8080/api/generate",
-    "model": "haiku",
-    "timeout": 120
+    "url": os.environ.get("STILLWATER_WRAPPER_URL", "http://localhost:8080/api/generate"),
+    "model": os.environ.get("STILLWATER_WRAPPER_MODEL", "haiku"),
+    "timeout": int(os.environ.get("STILLWATER_WRAPPER_TIMEOUT_SECONDS", "120")),
 }
 
 logger.info("="*80)

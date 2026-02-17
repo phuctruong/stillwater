@@ -18,7 +18,8 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 def test_notebook_exists(notebook_name: str) -> bool:
     """Check if markdown notebook exists."""
-    path = Path(f"/home/phuc/projects/stillwater/{notebook_name}")
+    repo_root = Path(__file__).resolve().parents[2]
+    path = repo_root / notebook_name
     exists = path.exists()
     print(f"  {'✓' if exists else '✗'} {notebook_name} exists")
     return exists

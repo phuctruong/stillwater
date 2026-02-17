@@ -1,22 +1,27 @@
-# Solving Hallucination: How Lane Algebra Achieves 87% Reduction
+# Solving Hallucination: Lane Algebra + Verification Discipline (Operational)
 
-**Authors:** Phuc Vinh Truong
-**Affiliation:** Stillwater OS Research
-**Date:** February 14, 2026
-**Status:** Published
-**arXiv:** 2026.01240
-**Citations:** 156
-**Auth:** 65537 ✅
+**Status:** Draft (open-source, repo-backed where referenced)  
+**Last updated:** 2026-02-17  
+**Scope:** Explain how epistemic typing + evidence gates reduce ungrounded claims in tool-using sessions.  
+**Auth:** 65537 (project tag; see `papers/01-lane-algebra.md` + `papers/03-verification-ladder.md`)
 
 ---
 
 ## Abstract
 
-Hallucination remains the #1 blocker for deploying Large Language Models in production. GPT-5 hallucinates at 71.8%, Claude Opus at 60%, and no scaling solution has meaningfully reduced this fundamental problem. We demonstrate that hallucination is not primarily a data or scale issue, but an **epistemic one**: models conflate "sounds right" with "is right" because they track claims without tracking evidence quality. We present **Lane Algebra**, a four-tier epistemic typing system (A > B > C > STAR) that enforces the **MIN rule**: claims cannot exceed their weakest supporting premise in confidence. Across controlled trials with 10,000 test instances, Lane Algebra reduces hallucination from 65.4% baseline to 8.7%, a **87% reduction**. When combined with the verification ladder (641→274177→65537), Lane Algebra achieves zero hallucinations in 18 months of production deployment. The system adds negligible overhead (2%), is compatible with all LLM architectures, and requires no retraining. We provide theoretical proofs, complete implementation, and reproducible benchmarks.
+Hallucination is best understood operationally: a system emits claims without sufficient witness strength. This paper describes how Lane Algebra (typed claims) and verification discipline (evidence artifacts + rung targets) reduce ungrounded upgrades in tool-using sessions. The approach is not model-specific; it is a workflow and reporting constraint.
 
 **Keywords:** hallucination prevention, epistemic typing, premise tracking, MIN rule, AI safety, confidence management, verification systems
 
 ---
+
+## Reproduce / Verify In This Repo
+
+1. Read the spec layers:
+   - `papers/01-lane-algebra.md`
+   - `skills/prime-coder.md`
+2. See a swarm-style application:
+   - `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb`
 
 ## 1. Introduction
 

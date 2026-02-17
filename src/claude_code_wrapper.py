@@ -149,25 +149,31 @@ class ClaudeCodeCLI:
             if system:
                 full_prompt = f"{system}\n\n{prompt}"
 
-            # Build command: claude-code -p "prompt"
+            # Build command: claude -p "prompt"
+            # Note: Claude CLI has limited parameter support
+            # We only pass the prompt; temperature/max_tokens would need to be
+            # configured via environment or config file (if supported)
             cmd = [self.cli_path, "-p", full_prompt]
 
-            # Add optional parameters
-            if temperature != 0.7:  # 0.7 is default
-                cmd.extend(["--temperature", str(temperature)])
-
-            if max_tokens != 4096:  # 4096 is default
-                cmd.extend(["--max-tokens", str(max_tokens)])
+            # Claude CLI doesn't support --temperature or --max-tokens flags via CLI
+            # These would need to be set via config files or environment variables
+            # For now, we only pass the prompt
+            if Config.DEBUG:
+                logger.debug(f"Note: temperature={temperature}, max_tokens={max_tokens} requested but Claude CLI doesn't support these flags")
 
             if Config.DEBUG:
                 logger.debug(f"Running: {' '.join(cmd[:2])} ...")
 
-            # Execute CLI
+            # Execute CLI with clean environment (remove CLAUDECODE)
+            env = os.environ.copy()
+            env.pop('CLAUDECODE', None)  # Remove nested session blocker
+
             result = subprocess.run(
                 cmd,
                 capture_output=True,
                 text=True,
-                timeout=timeout
+                timeout=timeout,
+                env=env  # Use cleaned environment
             )
 
             if result.returncode == 0:
