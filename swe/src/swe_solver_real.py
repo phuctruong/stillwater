@@ -27,10 +27,14 @@ from typing import Optional, Dict, List, Tuple
 from dataclasses import dataclass
 import requests
 import os
+import sys
+
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+from src.claude_code_wrapper import ClaudeCodeWrapper
 
 # Configuration
-HAIKU_LOCAL_URL = os.environ.get("HAIKU_URL", "http://localhost:11434")
-HAIKU_API_ENDPOINT = f"{HAIKU_LOCAL_URL}/api/generate"
 SWE_BENCH_DATA_DIR = Path(os.environ.get("SWE_BENCH_DATA", "/home/phuc/Downloads/benchmarks/SWE-bench/data"))
 
 
@@ -63,10 +67,11 @@ class PatchResult:
 class SWEBenchSolverReal:
     """Real SWE-bench solver using Haiku and Prime Skills."""
 
-    def __init__(self, haiku_url: str = HAIKU_LOCAL_URL):
-        """Initialize solver."""
-        self.haiku_url = haiku_url
-        self.endpoint = f"{haiku_url}/api/generate"
+    def __init__(self, model: str = "claude-haiku-4-5-20251001"):
+        """Initialize solver with ClaudeCodeWrapper for localhost:8080."""
+        self.wrapper = ClaudeCodeWrapper(model=model)
+        self.haiku_url = self.wrapper.localhost_url
+        self.endpoint = f"{self.haiku_url}/api/generate"
         self.instances_solved = 0
         self.instances_failed = 0
         self.prime_skills = self._load_prime_skills()
@@ -178,21 +183,14 @@ OUTPUT FORMAT:
 Generate the patch now:"""
 
         try:
-            # Try local Haiku server first
-            response = requests.post(
-                self.endpoint,
-                json={
-                    "model": "claude-haiku-4-5-20251001",
-                    "prompt": prompt,
-                    "stream": False,
-                    "temperature": 0.0,  # Deterministic
-                },
-                timeout=60,
+            # Use ClaudeCodeWrapper for localhost:8080
+            patch_text = self.wrapper.query(
+                prompt=prompt,
+                temperature=0.0,  # Deterministic
+                max_tokens=4096
             )
 
-            if response.status_code == 200:
-                data = response.json()
-                patch_text = data.get("response", "")
+            if patch_text:
 
                 # Extract diff block if wrapped
                 if "```diff" in patch_text:
@@ -206,14 +204,14 @@ Generate the patch now:"""
 
                 return patch_text if patch_text else None
             else:
-                print(f"❌ Haiku request failed: {response.status_code}")
+                print(f"❌ Haiku did not return patch (empty response)")
+                print(f"   URL: {self.haiku_url}")
+                print(f"   Status: {'✅ Server running' if self.wrapper.server_running else '❌ Server not running'}")
                 return None
 
         except requests.exceptions.ConnectionError:
-            print(
-                f"❌ Cannot connect to Haiku server at {self.haiku_url}"
-            )
-            print("   Start the server with: python3 swe/src/haiku_local_server.py")
+            print(f"❌ Cannot connect to Haiku server at {self.haiku_url}")
+            print(f"   Start the server with: python3 src/claude_code_wrapper.py --port 8080")
             return None
         except Exception as e:
             print(f"❌ Error generating patch: {e}")
