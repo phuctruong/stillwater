@@ -149,6 +149,26 @@ class LLMConfigManager:
         Returns:
             Tuple of (is_valid, message)
         """
+        config = self.get_active_provider_config()
+        provider_type = config.get("type", "http")
+
+        # For CLI-type providers, check if CLI is available
+        if provider_type == "cli":
+            try:
+                import subprocess
+                result = subprocess.run(
+                    ["which", config.get("url", "claude-code")],
+                    capture_output=True,
+                    timeout=5
+                )
+                if result.returncode == 0:
+                    return True, f"✅ {self.get_provider_name()} is available"
+                else:
+                    return False, f"❌ {config.get('url', 'claude-code')} not found in PATH"
+            except Exception as e:
+                return False, f"❌ Error checking CLI: {str(e)}"
+
+        # For API-type providers, check API keys
         if self.requires_api_key():
             missing = []
             for env_var in self.get_required_env_vars():

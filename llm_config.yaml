@@ -7,12 +7,12 @@
 # Current active provider
 provider: "claude-code"  # Options: "claude-code", "openai", "claude", "openrouter", "togetherai", "gemini"
 
-# Claude Code (Local Server) - Default
+# Claude Code (Local CLI) - Default
 claude-code:
-  name: "Claude Code (Local)"
-  type: "http"
-  url: "http://localhost:8080"
-  description: "Local Claude Code server running on localhost:8080"
+  name: "Claude Code (Local CLI)"
+  type: "cli"
+  url: "claude-code"
+  description: "Local Claude Code CLI (uses -p flag for prompts)"
   requires_api_key: false
   environment_variables: []
 
