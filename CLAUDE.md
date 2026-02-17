@@ -7,7 +7,7 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
   status: FINAL
 
   # ============================================================
-  # PRIME CODER — SECRET SAUCE (v2.0.2, streamlined)   [10/10]
+  # PRIME CODER — SECRET SAUCE (v2.0.2, streamlined)
   #
   # Goal:
   # - Preserve core fail-closed operational controls of v2.0.0/2.0.1
