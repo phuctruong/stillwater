@@ -168,6 +168,20 @@ class LLMConfigManager:
             except Exception as e:
                 return False, f"❌ Error checking CLI: {str(e)}"
 
+        # For HTTP-type providers (localhost), check if server is running
+        if provider_type == "http" and "localhost" in config.get("url", ""):
+            try:
+                import requests
+                response = requests.get(f"{config.get('url')}/", timeout=2)
+                if response.status_code in [200, 404, 405]:  # Any response means server is up
+                    return True, f"✅ {self.get_provider_name()} is running"
+                else:
+                    return False, f"⚠️  {self.get_provider_name()} responded with {response.status_code}"
+            except requests.exceptions.ConnectionError:
+                return False, f"❌ Cannot connect to {config.get('url')} - is Claude Code server running?"
+            except Exception as e:
+                return False, f"❌ Error checking server: {str(e)}"
+
         # For API-type providers, check API keys
         if self.requires_api_key():
             missing = []
