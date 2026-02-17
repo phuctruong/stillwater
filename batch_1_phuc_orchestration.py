@@ -605,6 +605,10 @@ Output ONLY JSON (no explanations):
     return {
         "chosen_approach": "Unable to determine approach",
         "scope_locked": [],
+        "line_number": "unknown",
+        "before_code": "(see source)",
+        "after_code": "(see decision)",
+        "test_will_pass_if": "(see required_evidence)",
         "rationale": "Insufficient information",
         "stop_rules": [],
         "required_evidence": []
@@ -678,27 +682,27 @@ class SolverGenerator:
         system = """AUTHORITY: 65537 (Prime Coder + Phuc Forecast)
 
 PERSONA: Brian Kernighan (K&R C, clarity master)
-ROLE: ACT phase - Specify exact changes in JSON format (NOT unified diff)
+ROLE: ACT phase - Specify exact changes in JSON format ONLY
 
-YOU MUST OUTPUT VALID JSON. NO QUESTIONS, NO ESCAPE HATCHES.
+CRITICAL: YOU MUST OUTPUT EXACTLY THIS JSON STRUCTURE. NOTHING ELSE.
 
-OUTPUT STRICT JSON (MANDATORY):
 {
-  "file": "path/to/file.py",
-  "line_number": 42,
-  "old_text": "the exact current code (1-3 lines)",
-  "new_text": "the exact replacement code (1-3 lines)",
-  "rationale": "why this change is correct"
+  "file": "MUST BE EXACT PATH FROM SOURCE (see SOURCE CODE SECTION)",
+  "line_number": (number between 1 and max line in that file),
+  "old_text": "COPY-PASTE EXACT CODE FROM SOURCE (2-4 lines including indentation)",
+  "new_text": "THE CORRECTED CODE (same structure, same indentation)",
+  "rationale": "Why this fixes the bug"
 }
 
-RULES (STRICT):
-1. file: MUST be exact path from source files provided
-2. line_number: MUST be the line number where old_text appears
-3. old_text: MUST be copy-pasted EXACTLY from source (including indentation)
-4. new_text: MUST be the corrected version (same indentation)
-5. Output ONLY valid JSON, no text before or after
+RULES (FAIL-CLOSED):
+1. LOOK AT SOURCE CODE SECTION BELOW - only use files listed there
+2. old_text MUST be copy-pasted exactly from source file (lines shown with numbers)
+3. new_text MUST have same indentation as old_text
+4. Do NOT create new files, modify files not in source, or add new functions
+5. Output ONLY the JSON object. No markdown, no code blocks, no explanations.
+6. If you cannot determine the fix, output an empty change: {"file":"", "line_number":0, "old_text":"", "new_text":"", "rationale":"unable"}
 
-Do NOT try to generate a unified diff. Output JSON only."""
+This is strict. There are no alternatives. Output JSON only."""
 
         # Build source files with line numbers for reference
         source_section = ""
@@ -711,9 +715,11 @@ Do NOT try to generate a unified diff. Output JSON only."""
         line_info = decision.get("line_number", "(not identified)")
         before = decision.get("before_code", "(see source code)")
         after = decision.get("after_code", "(see decision record)")
+        scope_list = decision.get('scope_locked', [])
+        scope_file = scope_list[0] if scope_list else "(unknown)"
 
         prompt = f"""DECISION_RECORD (what to change):
-FILE: {decision.get('scope_locked', ['(unknown)'])[0]}
+FILE: {scope_file}
 AT LINE: {line_info}
 FROM: {before}
 TO: {after}
@@ -763,6 +769,7 @@ Output ONLY JSON:
                 json_match = re.search(r'\{(?:[^{}]|(?:\{[^{}]*\}))*\}', response, re.DOTALL)
                 if not json_match:
                     logger.warning("No JSON found in Solver response")
+                    logger.warning(f"Solver response:\n{response[:500]}")
                     return None
 
                 try:
