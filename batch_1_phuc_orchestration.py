@@ -494,49 +494,74 @@ Output ONLY JSON (valid JSON, no text):{{"""
 # PHASE 3: DECIDE — Judge Agent (Decision Locking)
 # ============================================================================
 
-def judge_decide(scout: Dict, grace: Dict) -> Dict:
-    """DECIDE phase: Lock the approach."""
+def judge_decide(scout: Dict, grace: Dict, problem: str = "", error_output: str = "", source_context: Dict[str, str] = None) -> Dict:
+    """DECIDE phase: Lock the approach with full context for specificity."""
 
-    system = """AUTHORITY: 65537 (Prime Coder)
+    if source_context is None:
+        source_context = {}
 
-PERSONA: Richard Stallman (principled, decisive)
-ROLE: DECIDE phase - Lock the approach (no changes after this)
+    system = """AUTHORITY: 65537 (Prime Coder + Phuc Forecast)
 
-YOU MUST OUTPUT VALID JSON. NO QUESTIONS. NO ESCAPE HATCHES.
+PERSONA: Donald Knuth (precise, meticulous, line-specific)
+ROLE: DECIDE phase - Lock exact changes (line numbers, before/after code)
+
+YOU MUST OUTPUT VALID JSON. NO VAGUE APPROACHES. SPECIFIC OR FAIL.
 
 OUTPUT STRICT JSON (MANDATORY):
 {
-  "chosen_approach": "specific approach (e.g., fix tokenizer.py line 42, change X to Y)",
-  "scope_locked": ["list of exact files to modify"],
-  "rationale": "why this is minimal/correct",
-  "stop_rules": ["reject if X", "reject if Y"],
-  "required_evidence": ["test_name passes", "no regression in Y"]
+  "chosen_approach": "EXACT change: In FILE, at LINE N, change 'OLD_CODE' to 'NEW_CODE' because REASON",
+  "scope_locked": ["ONLY these exact files"],
+  "line_number": "N (where the bug is, if known from error/source)",
+  "before_code": "The exact problematic code snippet (2-5 lines)",
+  "after_code": "The exact fixed code snippet (2-5 lines)",
+  "test_will_pass_if": "This specific condition is met (e.g., 'test_X passes AND test_Y passes')",
+  "rationale": "Why this is the root cause and minimal fix",
+  "stop_rules": ["reject if any existing tests fail", "reject if change goes beyond these files"],
+  "required_evidence": ["SPECIFIC test name that was failing", "All other tests remain passing"]
 }
 
-RULES (STRICT):
-1. Approach must be specific and actionable
-2. Scope must list exact files (not vague, e.g., ["file.py"] not ["multiple files"])
-3. Rationale must justify minimalism
-4. Stop rules must prevent scope creep
-5. Required evidence must list specific tests
+CRITICAL RULES:
+1. chosen_approach MUST include: FILE + LINE NUMBER + "change X to Y"
+2. before_code MUST be the EXACT code from source (copy-paste, not paraphrased)
+3. after_code MUST be the EXACT replacement (copy-paste the fix, not description)
+4. line_number MUST be set if identifiable from error output
+5. test_will_pass_if MUST be concrete, not vague
 6. Output ONLY valid JSON, no text before or after
-7. All five keys are required
+7. All nine keys are required
 
-If in doubt about scope, pick the MOST LIKELY file from scout.suspect_files"""
+Do not guess or be vague. Use error output + source context to be PRECISE."""
 
-    prompt = f"""SCOUT REPORT (what's broken):
+    source_snippet = ""
+    if source_context:
+        source_snippet = "\n\nSOURCE CODE CONTEXT (relevant files):\n"
+        for fname, content in list(source_context.items())[:3]:
+            lines = content.split('\n')[:30]  # First 30 lines
+            source_snippet += f"\n--- {fname} ---\n"
+            for i, line in enumerate(lines, 1):
+                source_snippet += f"{i:3d}: {line}\n"
+
+    prompt = f"""FULL CONTEXT FOR PRECISE DECISION:
+
+PROBLEM STATEMENT:
+{problem[:800]}
+
+PYTEST ERROR OUTPUT (where the bug shows):
+{error_output[:800]}
+
+SCOUT REPORT (what was analyzed):
 {json.dumps(scout, indent=2)}
 
 GRACE MEMO (failure modes to avoid):
-{json.dumps(grace.get('top_failure_modes_ranked', [])[:3], indent=2)}
+{json.dumps(grace.get('top_failure_modes_ranked', [])[:2], indent=2)}
+{source_snippet}
 
-JUDGE TASK (DECIDE Phase - Lock the approach):
-Based on Scout analysis and Grace warnings, decide:
-1. WHAT to change (specific file + location if possible)
-2. SCOPE (only these files)
-3. WHY (minimal/correct)
-4. STOP rules (what would make this wrong)
-5. REQUIRED evidence (what must pass)
+JUDGE TASK (DECIDE Phase - Precise Decision):
+Using the error output, scout analysis, and source code:
+1. IDENTIFY exact line number where bug is
+2. COPY the exact problematic code from source
+3. SPECIFY exact replacement code
+4. NAME the specific test that will pass
+5. Explain WHY this is the root cause
 
 Output ONLY JSON (no explanations):
 {{"""
@@ -563,9 +588,15 @@ Output ONLY JSON (no explanations):
             match = re.search(r'\{(?:[^{}]|(?:\{[^{}]*\}))*\}', response, re.DOTALL)
             if match:
                 judge_json = json.loads(match.group(0))
-                required = ['chosen_approach', 'scope_locked', 'rationale', 'stop_rules', 'required_evidence']
-                if all(k in judge_json for k in required):
-                    logger.info("✅ Judge decision valid")
+                # Check for enhanced Judge fields (new format) or basic fields (fallback)
+                required_new = ['chosen_approach', 'scope_locked', 'line_number', 'before_code', 'after_code', 'test_will_pass_if']
+                required_old = ['chosen_approach', 'scope_locked', 'rationale', 'stop_rules', 'required_evidence']
+
+                if all(k in judge_json for k in required_new):
+                    logger.info("✅ Judge decision valid (enhanced format)")
+                    return judge_json
+                elif all(k in judge_json for k in required_old):
+                    logger.info("✅ Judge decision valid (basic format)")
                     return judge_json
     except Exception as e:
         logger.warning(f"Judge error: {e}")
@@ -584,59 +615,122 @@ Output ONLY JSON (no explanations):
 # ============================================================================
 
 class SolverGenerator:
-    """Generate patches with strict format validation."""
+    """Generate patches with JSON-to-diff conversion (avoids LLM formatting issues)."""
+
+    def _json_to_unified_diff(self, change_spec: Dict, source_files: Dict[str, str]) -> Optional[str]:
+        """Convert JSON change spec to proper unified diff format."""
+        try:
+            filepath = change_spec.get("file")
+            line_num = change_spec.get("line_number", 1)
+            old_text = change_spec.get("old_text", "")
+            new_text = change_spec.get("new_text", "")
+
+            if not filepath or filepath not in source_files:
+                logger.warning(f"File not found in source: {filepath}")
+                return None
+
+            source = source_files[filepath]
+            lines = source.split('\n')
+
+            # Convert to 0-indexed
+            line_idx = max(0, line_num - 1)
+
+            # Find the old text in source
+            found_idx = -1
+            for i, line in enumerate(lines):
+                if old_text.strip() in line:
+                    found_idx = i
+                    break
+
+            if found_idx < 0:
+                logger.warning(f"Could not locate '{old_text}' in {filepath}")
+                return None
+
+            # Build unified diff with proper format
+            hunk_lines = []
+            context_before = max(0, found_idx - 2)
+            context_after = min(len(lines), found_idx + 2)
+
+            # Generate diff header
+            diff = f"--- a/{filepath}\n+++ b/{filepath}\n"
+            old_lines_count = context_after - context_before + 1
+            new_lines_count = old_lines_count  # Assume same count for now
+            diff += f"@@ -{context_before+1},{old_lines_count} +{context_before+1},{new_lines_count} @@\n"
+
+            # Add context and changes with proper prefixes
+            for i in range(context_before, context_after):
+                if i == found_idx:
+                    diff += f"-{lines[i]}\n"  # Removed line with minus prefix
+                    diff += f"+{new_text}\n"  # Added line with plus prefix
+                else:
+                    diff += f" {lines[i]}\n"  # Context lines with space prefix
+
+            logger.debug(f"Generated diff:\n{diff}")
+            return diff
+
+        except Exception as e:
+            logger.error(f"Error converting JSON to diff: {e}")
+            return None
 
     def generate_patch(self, decision: Dict, problem: str, source_files: Dict[str, str]) -> Optional[str]:
-        """ACT phase: Generate unified diff."""
+        """ACT phase: Generate patch via JSON spec, convert to diff."""
 
-        # EXACT SYSTEM PROMPT FROM WORKING NOTEBOOK
         system = """AUTHORITY: 65537 (Prime Coder + Phuc Forecast)
 
 PERSONA: Brian Kernighan (K&R C, clarity master)
-ROLE: ACT phase - Implement minimal, elegant patch per locked DECISION_RECORD
-CRITICAL: See DECISION_RECORD + SOURCE CODE only. No prior reasoning. Fresh context.
+ROLE: ACT phase - Specify exact changes in JSON format (NOT unified diff)
 
-YOU MUST OUTPUT A UNIFIED DIFF. NO QUESTIONS, NO ESCAPE HATCHES.
+YOU MUST OUTPUT VALID JSON. NO QUESTIONS, NO ESCAPE HATCHES.
 
-REQUIRED DIFF FORMAT:
-```diff
---- a/FILENAME
-+++ b/FILENAME
-@@ -LINE,COUNT +LINE,COUNT @@
- context line with space prefix
--removed line with minus prefix
-+added line with plus prefix
- more context with space prefix
-```
+OUTPUT STRICT JSON (MANDATORY):
+{
+  "file": "path/to/file.py",
+  "line_number": 42,
+  "old_text": "the exact current code (1-3 lines)",
+  "new_text": "the exact replacement code (1-3 lines)",
+  "rationale": "why this change is correct"
+}
 
-CRITICAL RULES:
-1. Every line MUST start with SPACE, MINUS, or PLUS (no other prefixes)
-2. Include 2-3 context lines before and after changes
-3. Output code block with exactly 3 backticks: ```diff
-4. Never ask questions - generate diff from available context
-5. Diff is minimal (only necessary changes to fix bug)
-6. If multiple files need changes, create multiple hunks
-"""
+RULES (STRICT):
+1. file: MUST be exact path from source files provided
+2. line_number: MUST be the line number where old_text appears
+3. old_text: MUST be copy-pasted EXACTLY from source (including indentation)
+4. new_text: MUST be the corrected version (same indentation)
+5. Output ONLY valid JSON, no text before or after
 
-        # Build source files with full content
+Do NOT try to generate a unified diff. Output JSON only."""
+
+        # Build source files with line numbers for reference
         source_section = ""
         for filepath, content in source_files.items():
-            source_section += f"\n### {filepath}\n```python\n{content}\n```\n"
+            source_section += f"\n### {filepath}\n"
+            for line_num, line in enumerate(content.split('\n')[:50], 1):
+                source_section += f"{line_num:3d}: {line}\n"
 
-        # USER PROMPT - EXACT STYLE FROM NOTEBOOK
-        prompt = f"""DECISION_RECORD (locked - implement this):
+        # Extract decision fields
+        line_info = decision.get("line_number", "(not identified)")
+        before = decision.get("before_code", "(see source code)")
+        after = decision.get("after_code", "(see decision record)")
+
+        prompt = f"""DECISION_RECORD (what to change):
+FILE: {decision.get('scope_locked', ['(unknown)'])[0]}
+AT LINE: {line_info}
+FROM: {before}
+TO: {after}
+
+FULL DECISION:
 {json.dumps(decision, indent=2)}
 
-PROBLEM:
-{problem}
+PROBLEM SUMMARY:
+{problem[:400]}
 
-SOURCE CODE:
+SOURCE CODE WITH LINE NUMBERS:
 {source_section}
 
-Generate a minimal unified diff to implement the approach above.
-Output ONLY the diff code block with proper formatting.
-
-```diff"""
+TASK: Output JSON specifying the EXACT change needed.
+The JSON must identify the exact line number where '{before}' appears and what to change it to.
+Output ONLY JSON:
+{{"""
 
         try:
             payload = {
@@ -665,37 +759,33 @@ Output ONLY the diff code block with proper formatting.
 
                 logger.debug(f"Solver response (first 1000 chars):\n{response[:1000]}")
 
-                # Try to extract diff from code block first
-                diff_match = re.search(r'```diff\n(.*?)\n```', response, re.DOTALL)
-                if diff_match:
-                    patch = diff_match.group(1)
-                    logger.debug(f"Extracted diff from code block: {len(patch)} chars")
-                else:
-                    logger.debug("No ```diff code block found")
-                    # Try to find diff by looking for --- a/ header
-                    if "--- a/" in response:
-                        lines = response.split('\n')
-                        diff_start = next((i for i, l in enumerate(lines) if l.startswith('--- a/')), -1)
-                        if diff_start >= 0:
-                            # Get up to the next code block or end
-                            diff_end = next((i for i in range(diff_start + 1, len(lines)) if lines[i].startswith('```')), len(lines))
-                            patch = '\n'.join(lines[diff_start:diff_end])
-                            logger.debug(f"Extracted diff from response: {len(patch)} chars, {diff_end - diff_start} lines")
-                        else:
-                            logger.warning("Could not find diff start")
-                            return None
-                    else:
-                        logger.warning("No '--- a/' found in response")
-                        logger.debug(f"Response preview (1000 chars):\n{response[:1000]}")
+                # Extract JSON change specification from response
+                json_match = re.search(r'\{(?:[^{}]|(?:\{[^{}]*\}))*\}', response, re.DOTALL)
+                if not json_match:
+                    logger.warning("No JSON found in Solver response")
+                    return None
+
+                try:
+                    change_spec = json.loads(json_match.group(0))
+                    logger.debug(f"Extracted change spec: {json.dumps(change_spec, indent=2)}")
+
+                    # Validate JSON has required fields
+                    required_fields = ['file', 'line_number', 'old_text', 'new_text']
+                    if not all(f in change_spec for f in required_fields):
+                        logger.warning(f"Change spec missing fields. Has: {list(change_spec.keys())}")
                         return None
 
-                # Validate before returning
-                if self._validate_diff_format(patch):
-                    logger.info("✅ Patch generated and validated")
-                    return patch
-                else:
-                    logger.warning("Patch validation failed")
-                    logger.debug(f"Patch preview: {patch[:300]}")
+                    # Convert JSON to unified diff
+                    patch = self._json_to_unified_diff(change_spec, source_files)
+                    if patch:
+                        logger.info("✅ Converted JSON change spec to unified diff")
+                        return patch
+                    else:
+                        logger.warning("Failed to convert JSON to diff")
+                        return None
+
+                except json.JSONDecodeError as e:
+                    logger.warning(f"Failed to parse JSON from response: {e}")
                     return None
 
         except subprocess.TimeoutExpired:
@@ -926,9 +1016,15 @@ def run_batch_1():
             continue
         print(f" ✅")
 
-        # PHASE 3: DECIDE — Judge
+        # PHASE 3: DECIDE — Judge (with full context for specificity)
         print(f"  [3/5] DECIDE (Judge)...", end="", flush=True)
-        decision = judge_decide(scout=scout, grace=grace)
+        decision = judge_decide(
+            scout=scout,
+            grace=grace,
+            problem=context["problem"],
+            error_output=context["error_output"],
+            source_context=context["source_files"]
+        )
         if not decision.get("chosen_approach"):
             print(f" ❌")
             results[iid] = {"status": "FAILED", "reason": "judge_failed"}

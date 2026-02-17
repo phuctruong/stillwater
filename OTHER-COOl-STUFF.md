@@ -16,23 +16,30 @@ If you read it and disagree: congratulations, you are invited to the world’s n
 
 Site: https://www.phuc.net
 
-Books (from the site’s Books section):
-- Prime Physics
-- Prime Theory
-- Primes Theory
-- The Gravity of Primes
-- Unified Prime Theory
+My Theories of Everything and Personal Books:
 
-Also: if you can find something that makes you laugh and makes you smarter, that’s basically the whole brand.
+- Dark Matter/Dark Energy, Quantum, Gravity and Physics Theories including solutions to greatest questions in physics.  Opps!  I solved Physics :)
+
+- Math Theories including resolutions to all unresolved Clay Math Problems, finished Godel's work, and the greatest questiosn in math.   Opps, I did it again... :)
+
+- AI Theories including AI Enhanced Science.  If you ain't cheating, you aint trying :)
+
+- Personal Journey including the Bubbles of Life
+
+- Glow - The Science of Living Longer
+
+My spell books are available on Amazon.  You can support me and uplift yourself by buying one.  I would appreciate it!
 
 ## C) PZip.net (The Real Pied Piper, But With AI Cheats)
 
 Site: https://pzip.net
 
-The vibe:
+One of my favorite shows is Silicon Valley and I built the real Pied Piper - PZip + PDrive (coming soon).  If there was a real Weissman Score for compression, this would be off the charts!  
+
+It turns out the solution was USA + Russia = Shannon + Kolmgorov. I added a few theories of my own and invented adaptive compression... so USA + Russia + Vietnam = Phuc Compression!
+
 - Compression experiments and benchmarks, presented like a scoreboard.
 - A “never worse” philosophy: try to beat the classics, but don’t break people’s files.
 
-Yes, the Silicon Valley references are intentional.
-No, I will not confirm whether the dragon was used in production.
+If you like getting 18-88% more storage with a simple free softawre upgrade, then PZip.net is for you.  That's my tip!  Hint hint :)
 
