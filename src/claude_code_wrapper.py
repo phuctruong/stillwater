@@ -197,6 +197,71 @@ class ClaudeCodeCLI:
 cli = ClaudeCodeCLI()
 
 
+class ClaudeCodeWrapper:
+    """HTTP client for Claude Code Server (localhost wrapper)"""
+
+    def __init__(self, model: str = "claude-haiku-4-5-20251001", host: str = "127.0.0.1", port: int = 8080):
+        """Initialize HTTP client wrapper"""
+        self.model = model
+        self.host = host
+        self.port = port
+        self.localhost_url = f"http://{host}:{port}"
+        self.server_running = self._check_server()
+
+    def _check_server(self) -> bool:
+        """Check if HTTP server is running on localhost"""
+        try:
+            import requests
+            response = requests.get(f"{self.localhost_url}/", timeout=2)
+            return response.status_code in [200, 404, 405]
+        except Exception:
+            return False
+
+    def query(self, prompt: str, system: Optional[str] = None, temperature: float = 0.0, max_tokens: int = 4096) -> Optional[str]:
+        """Send query to Claude Code server via HTTP"""
+        try:
+            import requests
+
+            payload = {
+                "prompt": prompt,
+                "model": self.model,
+                "stream": False,
+                "temperature": temperature,
+                "max_tokens": max_tokens
+            }
+
+            if system:
+                payload["system"] = system
+
+            response = requests.post(
+                f"{self.localhost_url}/api/generate",
+                json=payload,
+                timeout=120
+            )
+
+            if response.status_code == 200:
+                data = response.json()
+                return data.get("response", "")
+            else:
+                logger.error(f"Server error: {response.status_code}")
+                return None
+
+        except ImportError:
+            logger.error("requests library not found. Install with: pip install requests")
+            return None
+        except Exception as e:
+            logger.error(f"Query failed: {e}")
+            return None
+
+    def solve_counting(self, prompt: str) -> Optional[str]:
+        """Solve counting problem via Claude Code (Counter Bypass pattern)"""
+        return self.query(prompt, temperature=0.0)
+
+    def solve_math(self, prompt: str, system: Optional[str] = None) -> Optional[str]:
+        """Solve math problem via Claude Code (IMO/math pattern)"""
+        return self.query(prompt, system=system, temperature=0.0)
+
+
 class OllamaCompatibleHandler(BaseHTTPRequestHandler):
     """HTTP request handler (Ollama-compatible API)"""
 
