@@ -100,12 +100,28 @@ else:
     print(f"❌ Prime Skills not loaded")
 
 # ============================================================================
-# CHECK 5: Data Directory
+# CHECK 5: Data Directory (Dynamic Path Discovery)
 # ============================================================================
-print("\n[CHECK 5] Data Directory & Sample Data")
+print("\n[CHECK 5] Data Directory & Sample Data (Dynamic Discovery)")
 print("-" * 80)
 
-data_dir = Path("/home/phuc/Downloads/benchmarks/SWE-bench/data")
+# Find data directory dynamically (no hardcoded paths)
+home = Path.home()
+data_dir_candidates = [
+    home / "Downloads" / "benchmarks" / "SWE-bench" / "data",
+    home / "Downloads" / "SWE-bench" / "data",
+    Path.cwd() / "data" / "SWE-bench",
+    Path.cwd() / "SWE-bench" / "data",
+]
+
+data_dir = None
+for candidate in data_dir_candidates:
+    if candidate.exists():
+        data_dir = candidate
+        break
+
+if data_dir is None:
+    data_dir = data_dir_candidates[0]  # Use first candidate as reference
 if data_dir.exists():
     print(f"✅ Data directory exists")
     print(f"   Path: {data_dir}")

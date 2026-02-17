@@ -34,8 +34,30 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.claude_code_wrapper import ClaudeCodeWrapper
 
-# Configuration
-SWE_BENCH_DATA_DIR = Path(os.environ.get("SWE_BENCH_DATA", "/home/phuc/Downloads/benchmarks/SWE-bench/data"))
+# Configuration (dynamic path discovery)
+def _find_swe_bench_data_dir():
+    """Find SWE-bench data directory (no hardcoded paths)."""
+    # Option 1: Environment variable
+    if "SWE_BENCH_DATA" in os.environ:
+        return Path(os.environ["SWE_BENCH_DATA"])
+
+    # Option 2: Look in Downloads relative to home
+    home = Path.home()
+    candidates = [
+        home / "Downloads" / "benchmarks" / "SWE-bench" / "data",
+        home / "Downloads" / "SWE-bench" / "data",
+        Path.cwd() / "data" / "SWE-bench",
+        Path.cwd() / "SWE-bench" / "data",
+    ]
+
+    for path in candidates:
+        if path.exists():
+            return path
+
+    # Default (might not exist, but notebook will handle gracefully)
+    return home / "Downloads" / "benchmarks" / "SWE-bench" / "data"
+
+SWE_BENCH_DATA_DIR = _find_swe_bench_data_dir()
 
 
 @dataclass
