@@ -9,7 +9,7 @@
 # Default is an offline demo provider so the repo can be executed without any
 # external services. Switch to "claude-code" (local wrapper) or an API provider
 # when you want LLM-backed runs.
-provider: "offline"  # Options: "offline", "claude-code", "openai", "claude", "openrouter", "togetherai", "gemini"
+provider: "claude-code"  # Options: "offline", "claude-code", "openai", "claude", "openrouter", "togetherai", "gemini", "ollama"
 
 # Offline Demo - Default
 offline:
@@ -20,12 +20,14 @@ offline:
   requires_api_key: false
   environment_variables: []
 
-# Claude Code (Local Server) - Default
+# Claude Code (Local Server) - Default Provider
+# Start with: python3 src/claude_code_wrapper.py --port 8080 &
 claude-code:
-  name: "Claude Code (Local Server)"
+  name: "Claude Code Haiku (Local Server)"
   type: "http"
   url: "http://localhost:8080"
-  description: "Local Claude Code server on localhost:8080 (uses HTTP API)"
+  model: "claude-haiku-4-5-20251001"  # Fast + cheap; change to claude-sonnet-4-6 or claude-opus-4-6
+  description: "Local Claude Code wrapper on localhost:8080 (Ollama-compatible API). Default provider."
   requires_api_key: false
   environment_variables:
     - "ANTHROPIC_API_KEY"  # Required to run claude-code server
@@ -46,7 +48,7 @@ claude:
   name: "Anthropic Claude"
   type: "api"
   url: "https://api.anthropic.com/v1"
-  model: "claude-3-5-sonnet-20241022"  # Change to claude-opus-4-1 for Opus
+  model: "claude-haiku-4-5-20251001"  # Or: claude-sonnet-4-6, claude-opus-4-6
   description: "Anthropic Claude API endpoint"
   requires_api_key: true
   environment_variables:
@@ -85,11 +87,23 @@ gemini:
   environment_variables:
     - "GOOGLE_API_KEY"
 
+# Alternative: Ollama (Local, open models)
+ollama:
+  name: "Ollama (Local)"
+  type: "http"
+  url: "http://localhost:11434"
+  model: "llama3.1:8b"  # Or: mistral, qwen2.5-coder:7b, deepseek-coder:6.7b
+  description: "Ollama local server - run open models without API keys"
+  requires_api_key: false
+  environment_variables: []
+
 # Quick reference table for switching
 # ===================================
-# To use OpenAI:       provider: "openai"   + export OPENAI_API_KEY=sk-...
-# To use Claude:       provider: "claude"   + export ANTHROPIC_API_KEY=sk-ant-...
+# To use Claude Code:  provider: "claude-code" (DEFAULT - start wrapper first)
+# To use Ollama:       provider: "ollama"     (start ollama serve first)
+# To use OpenAI:       provider: "openai"     + export OPENAI_API_KEY=sk-...
+# To use Claude:       provider: "claude"     + export ANTHROPIC_API_KEY=sk-ant-...
 # To use OpenRouter:   provider: "openrouter" + export OPENROUTER_API_KEY=sk-or-...
 # To use TogetherAI:   provider: "togetherai" + export TOGETHER_API_KEY=...
-# To use Gemini:       provider: "gemini"   + export GOOGLE_API_KEY=...
-# To use Claude Code:  provider: "claude-code" (no API key needed, uses local server)
+# To use Gemini:       provider: "gemini"     + export GOOGLE_API_KEY=...
+# To use Offline:      provider: "offline"    (no network, deterministic demo mode)

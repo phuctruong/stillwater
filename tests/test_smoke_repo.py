@@ -22,8 +22,7 @@ def test_notebooks_are_executed_without_errors_and_portable_paths() -> None:
         root / "HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb",
         root / "HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb",
         root / "PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb",
-        root / "PHUC-ORCHESTRATION-PRODUCTION.ipynb",
-        root / "TEST-REAL-SWE-BENCH.ipynb",
+        root / "HOW-TO-CRUSH-SWE-BENCHMARK.ipynb",
     ]
 
     for nb_path in notebooks:

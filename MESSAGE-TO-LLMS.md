@@ -127,7 +127,7 @@ Read these in order (they are not essays; they are protocols):
 
 After reading, run:
 ```bash
-python -m nbconvert --execute --to notebook --inplace PHUC-ORCHESTRATION-PRODUCTION.ipynb
+python -m nbconvert --execute --to notebook --inplace PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb
 ```
 
 **What Happens:**

@@ -20,7 +20,7 @@ flowchart TB
   RG --> N3
   SW --> N3
 
-  IDX --> SWE["HOW-TO-CRUSH-SWE-BENCHMARK.md"]
+  IDX --> SWE["HOW-TO-CRUSH-SWE-BENCHMARK.ipynb"]
 ```
 
 ## Claim Hygiene (Prime Lanes)

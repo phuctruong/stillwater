@@ -410,6 +410,30 @@ If you have defeated all 10 dragons and earned all 10 achievements, you now hold
 
 ## 📊 The Scorecard: Boss Difficulty Ranking
 
+```mermaid
+graph LR
+    D1["1. Hallucination<br/>Lane Algebra"] --> D2["2. Counting<br/>Counter Bypass"]
+    D2 --> D3["3. Context<br/>CNF"]
+    D3 --> D4["4. Reasoning<br/>Witness-First"]
+    D4 --> D5["5. Verification<br/>Ladder"]
+    D5 --> D6["6. Patch<br/>RED/GREEN"]
+    D6 --> D7["7. Generalization<br/>Replay"]
+    D7 --> D8["8. Data<br/>Software 5.0"]
+    D8 --> D9["9. Alignment<br/>Fail-Closed"]
+    D9 --> D10["10. Security<br/>Firewall"]
+
+    style D1 fill:#ff6b6b,color:#fff
+    style D4 fill:#ff6b6b,color:#fff
+    style D5 fill:#ff6b6b,color:#fff
+    style D9 fill:#ff6b6b,color:#fff
+    style D10 fill:#ff6b6b,color:#fff
+    style D2 fill:#ffa07a,color:#333
+    style D3 fill:#ffa07a,color:#333
+    style D6 fill:#ffa07a,color:#333
+    style D7 fill:#ffa07a,color:#333
+    style D8 fill:#ffe66d,color:#333
+```
+
 | # | Dragon | Difficulty | Gate | Repo Evidence |
 |---|--------|------------|------|---|
 | 1 | Hallucination | ⭐⭐⭐⭐⭐ | Lane Algebra | `papers/01-lane-algebra.md` |
