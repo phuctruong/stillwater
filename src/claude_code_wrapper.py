@@ -1,70 +1,79 @@
 #!/usr/bin/env python3
 """
-Claude Code Local Wrapper - Uses Claude Code CLI with -p flag
-Auth: 65537
-Purpose: Unified wrapper for Claude Code CLI
+Claude Code Wrapper - Ollama-Compatible HTTP Server
 
-This wrapper:
-1. Uses local Claude Code CLI (claude-code command)
-2. Sends prompts via -p flag to claude-code CLI
-3. Parses and returns responses
-4. Provides clean interface for patch generation, solving, etc.
-5. Works with OOLONG, IMO, and SWE-bench
+Runs as HTTP server (like Ollama) but uses local Claude Code CLI with -p flag.
+This allows notebooks and scripts to use consistent API regardless of LLM provider.
 
-No server needed - directly invokes claude-code CLI
+Usage:
+  python3 src/claude_code_wrapper.py --port 8080
+
+  # In curl:
+  curl -X POST http://localhost:8080/api/generate \\
+    -H "Content-Type: application/json" \\
+    -d '{"prompt": "What is 2+2?", "stream": false}'
+
+  # In Python:
+  import requests
+  response = requests.post(
+    "http://localhost:8080/api/generate",
+    json={"prompt": "What is 2+2?"}
+  )
+  print(response.json()['response'])
+
+Auth: 65537 | Status: Production Ready
 """
 
-import subprocess
-import json
 import os
-import tempfile
-from pathlib import Path
+import sys
+import json
+import subprocess
+import argparse
+import logging
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from typing import Optional, Dict, Any
+from pathlib import Path
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(levelname)s] %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 
-class ClaudeCodeWrapper:
-    """Wrapper for Claude Code CLI (uses -p flag for prompts)."""
+class Config:
+    """Configuration for Claude Code Server"""
+    HOST = os.getenv("CLAUDE_CODE_HOST", "127.0.0.1")
+    PORT = int(os.getenv("CLAUDE_CODE_PORT", "8080"))
+    MODEL = os.getenv("CLAUDE_CODE_MODEL", "claude-haiku-4-5-20251001")
+    TEMPERATURE = float(os.getenv("CLAUDE_CODE_TEMPERATURE", "0.0"))
+    MAX_TOKENS = int(os.getenv("CLAUDE_CODE_MAX_TOKENS", "4096"))
+    TIMEOUT = int(os.getenv("CLAUDE_CODE_TIMEOUT", "120"))
+    DEBUG = os.getenv("DEBUG", "false").lower() == "true"
 
-    def __init__(
-        self,
-        cli_path: Optional[str] = None,
-        model: str = "claude-haiku-4-5-20251001",
-    ):
-        """
-        Initialize Claude Code wrapper.
 
-        Args:
-            cli_path: Path to claude-code CLI (auto-detect if None)
-            model: Model to use (haiku, sonnet, opus) - may be overridden by CLI config
-        """
-        self.cli_path = cli_path or self._find_claude_cli()
-        self.model = model
-        self.localhost_url = "claude-code-cli"  # For compatibility
-        self.server_running = self._check_cli()
+class ClaudeCodeCLI:
+    """Wrapper for Claude Code CLI (local command with -p flag)"""
 
-    def _find_claude_cli(self) -> str:
-        """Find Claude Code CLI in PATH or common locations."""
-        # Check PATH
-        result = subprocess.run(["which", "claude-code"], capture_output=True, text=True)
+    def __init__(self):
+        """Initialize CLI wrapper"""
+        self.cli_path = self._find_cli()
+        self.available = self._check_available()
+
+    def _find_cli(self) -> str:
+        """Find claude-code CLI in PATH"""
+        result = subprocess.run(
+            ["which", "claude-code"],
+            capture_output=True,
+            text=True
+        )
         if result.returncode == 0:
             return result.stdout.strip()
-
-        # Check common locations
-        common_paths = [
-            "/usr/local/bin/claude-code",
-            "/opt/claude-code/bin/claude-code",
-            os.path.expanduser("~/.local/bin/claude-code"),
-            "/usr/bin/claude-code",
-        ]
-
-        for path in common_paths:
-            if os.path.exists(path):
-                return path
-
         return "claude-code"  # Hope it's in PATH
 
-    def _check_cli(self) -> bool:
-        """Check if Claude Code CLI is available."""
+    def _check_available(self) -> bool:
+        """Check if CLI is available"""
         try:
             result = subprocess.run(
                 [self.cli_path, "--version"],
@@ -73,7 +82,8 @@ class ClaudeCodeWrapper:
                 timeout=5
             )
             return result.returncode == 0
-        except:
+        except Exception as e:
+            logger.warning(f"Claude Code CLI check failed: {e}")
             return False
 
     def query(
@@ -82,22 +92,22 @@ class ClaudeCodeWrapper:
         system: Optional[str] = None,
         temperature: float = 0.0,
         max_tokens: int = 4096,
+        timeout: int = 120
     ) -> Optional[str]:
         """
-        Query Claude Code CLI using -p flag.
+        Query Claude Code CLI using -p flag
 
         Args:
             prompt: User prompt
-            system: System prompt (optional - prepended to prompt)
+            system: System prompt (optional)
             temperature: Temperature (0.0 = deterministic)
             max_tokens: Max tokens in response
+            timeout: Command timeout in seconds
 
         Returns:
             Response text or None if error
         """
-        if not self.server_running:
-            print(f"⚠️  Claude Code CLI not found at {self.cli_path}")
-            print(f"   Install with: pip install claude-code")
+        if not self.available:
             return None
 
         try:
@@ -106,7 +116,7 @@ class ClaudeCodeWrapper:
             if system:
                 full_prompt = f"{system}\n\n{prompt}"
 
-            # Call claude-code CLI with -p flag for prompt
+            # Build command: claude-code -p "prompt"
             cmd = [self.cli_path, "-p", full_prompt]
 
             # Add optional parameters
@@ -116,222 +126,274 @@ class ClaudeCodeWrapper:
             if max_tokens != 4096:  # 4096 is default
                 cmd.extend(["--max-tokens", str(max_tokens)])
 
+            if Config.DEBUG:
+                logger.debug(f"Running: {' '.join(cmd[:2])} ...")
+
+            # Execute CLI
             result = subprocess.run(
                 cmd,
                 capture_output=True,
                 text=True,
-                timeout=120,
+                timeout=timeout
             )
 
             if result.returncode == 0:
-                # Response is in stdout
                 return result.stdout.strip()
             else:
-                print(f"❌ Claude Code CLI error: {result.stderr}")
+                logger.error(f"CLI error: {result.stderr}")
                 return None
 
         except subprocess.TimeoutExpired:
-            print(f"❌ Claude Code CLI timed out after 120 seconds")
+            logger.error(f"CLI timed out after {timeout}s")
             return None
         except FileNotFoundError:
-            print(f"❌ Claude Code CLI not found: {self.cli_path}")
+            logger.error(f"Claude Code CLI not found: {self.cli_path}")
             return None
         except Exception as e:
-            print(f"❌ Error calling Claude Code CLI: {e}")
+            logger.error(f"Error calling CLI: {e}")
             return None
 
-    def generate_patch(
-        self, problem_statement: str, repo_context: Optional[str] = None
-    ) -> Optional[str]:
-        """
-        Generate a code patch for the given problem.
 
-        Args:
-            problem_statement: Description of the bug/feature
-            repo_context: Optional context about the repository
-
-        Returns:
-            Unified diff format patch or None
-        """
-        prompt = f"""You are an expert code fixer. Generate a MINIMAL, REVERSIBLE patch.
-
-PROBLEM:
-{problem_statement}
-
-{f'REPO CONTEXT:{chr(10)}{repo_context}' if repo_context else ''}
-
-OUTPUT ONLY a unified diff (no explanation):
-```diff
---- a/file/path
-+++ b/file/path
-@@ -start,count +start,count @@
- context
--removed
-+added
-```
-
-Generate the patch:"""
-
-        system = """You are an expert at writing minimal, surgical code patches.
-- Only change what's necessary
-- Use unified diff format
-- Include context lines
-- Ensure syntactically valid
-- No refactoring, just fixes"""
-
-        response = self.query(prompt, system=system, temperature=0.0)
-
-        if response:
-            # Extract diff block if wrapped in markdown
-            if "```diff" in response:
-                start = response.find("```diff") + 7
-                end = response.find("```", start)
-                return response[start:end].strip()
-            elif "```" in response:
-                start = response.find("```") + 3
-                end = response.find("```", start)
-                return response[start:end].strip()
-            return response
-
-        return None
-
-    def solve_math(self, problem: str) -> Optional[str]:
-        """
-        Solve a math problem.
-
-        Args:
-            problem: Math problem description
-
-        Returns:
-            Solution or None
-        """
-        prompt = f"""Solve this problem step-by-step with exact arithmetic.
-
-PROBLEM:
-{problem}
-
-Requirements:
-- Use exact arithmetic (fractions, not floats)
-- Show all steps
-- Verify the answer
-- State the final answer clearly"""
-
-        system = """You are a math expert using exact arithmetic.
-- Use Fraction() for division
-- Use integers where possible
-- Show step-by-step work
-- Double-check calculations"""
-
-        return self.query(prompt, system=system, temperature=0.0)
-
-    def solve_counting(self, query: str) -> Optional[str]:
-        """
-        Solve a counting problem (for OOLONG).
-
-        Args:
-            query: Counting problem
-
-        Returns:
-            Answer or None
-        """
-        prompt = f"""Solve this counting problem using exact enumeration.
-
-PROBLEM:
-{query}
-
-Requirements:
-- Enumerate all items exactly
-- Use Python Counter for counting
-- Return only the final count as a number
-- Show brief working"""
-
-        system = """You solve counting problems using exact enumeration.
-- List all items explicitly
-- Count exactly (not estimate)
-- Use Python Counter() syntax
-- Return just the number"""
-
-        return self.query(prompt, system=system, temperature=0.0)
-
-    def explain_code(self, code: str, question: str) -> Optional[str]:
-        """
-        Explain code behavior.
-
-        Args:
-            code: Code to explain
-            question: What to explain
-
-        Returns:
-            Explanation or None
-        """
-        prompt = f"""Explain this code:
-
-CODE:
-{code}
-
-QUESTION:
-{question}
-
-Answer clearly and concisely."""
-
-        return self.query(prompt)
-
-    def verify_solution(self, problem: str, solution: str) -> bool:
-        """
-        Verify if a solution is correct.
-
-        Args:
-            problem: Original problem
-            solution: Proposed solution
-
-        Returns:
-            True if correct, False otherwise
-        """
-        prompt = f"""Verify if this solution is correct.
-
-PROBLEM:
-{problem}
-
-SOLUTION:
-{solution}
-
-Answer: Is this solution correct? (YES/NO)
-Briefly explain why."""
-
-        response = self.query(prompt)
-
-        if response:
-            return "yes" in response.lower()
-
-        return False
+# Global CLI instance
+cli = ClaudeCodeCLI()
 
 
-# Convenience function
-def create_wrapper(model: str = "claude-haiku-4-5-20251001") -> ClaudeCodeWrapper:
-    """Create and return a Claude Code wrapper."""
-    wrapper = ClaudeCodeWrapper(model=model)
-    if not wrapper.server_running:
-        print(f"⚠️  Claude Code CLI not found at {wrapper.cli_path}")
+class OllamaCompatibleHandler(BaseHTTPRequestHandler):
+    """HTTP request handler (Ollama-compatible API)"""
+
+    def do_GET(self):
+        """Handle GET requests"""
+        if self.path == "/api/tags":
+            # Ollama-compatible /api/tags endpoint
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+
+            response = {
+                "models": [
+                    {"name": "claude-haiku", "size": 7000000000},
+                    {"name": "claude-haiku-4-5-20251001", "size": 7000000000},
+                ]
+            }
+            self.wfile.write(json.dumps(response).encode())
+
+        elif self.path == "/":
+            # Health check
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+
+            response = {
+                "status": "ok",
+                "message": "Claude Code Server (Ollama-compatible)",
+                "cli_available": cli.available,
+                "cli_path": cli.cli_path
+            }
+            self.wfile.write(json.dumps(response).encode())
+
+        else:
+            self.send_response(404)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({"error": "not found"}).encode())
+
+    def do_POST(self):
+        """Handle POST requests"""
+        if self.path == "/api/generate":
+            self._handle_generate()
+        else:
+            self.send_response(404)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({"error": "not found"}).encode())
+
+    def _handle_generate(self):
+        """Handle /api/generate requests"""
+        try:
+            # Parse request
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length)
+            data = json.loads(body.decode())
+
+            prompt = data.get("prompt", "")
+            model = data.get("model", Config.MODEL)
+            system = data.get("system", None)
+            stream = data.get("stream", False)
+            temperature = float(data.get("temperature", Config.TEMPERATURE))
+            max_tokens = int(data.get("max_tokens", Config.MAX_TOKENS))
+
+            if not prompt:
+                self.send_response(400)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": "prompt required"}).encode())
+                return
+
+            # Check CLI availability
+            if not cli.available:
+                self.send_response(503)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                error = {
+                    "error": "Claude Code CLI not available",
+                    "details": f"CLI path: {cli.cli_path}",
+                    "solution": "Install with: pip install claude-code"
+                }
+                self.wfile.write(json.dumps(error).encode())
+                return
+
+            # Query CLI
+            response_text = cli.query(
+                prompt=prompt,
+                system=system,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                timeout=Config.TIMEOUT
+            )
+
+            if response_text is None:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": "failed to generate response"}).encode())
+                return
+
+            # Send response
+            self.send_response(200)
+
+            if stream:
+                # Streaming mode (NDJSON)
+                self.send_header('Content-Type', 'application/x-ndjson')
+                self.end_headers()
+
+                # Stream word by word
+                for word in response_text.split():
+                    chunk = {
+                        "model": model,
+                        "response": word + " ",
+                        "done": False
+                    }
+                    self.wfile.write((json.dumps(chunk) + "\n").encode())
+
+                # Final chunk
+                final = {
+                    "model": model,
+                    "response": "",
+                    "done": True
+                }
+                self.wfile.write((json.dumps(final) + "\n").encode())
+
+            else:
+                # Non-streaming mode (JSON)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+
+                response = {
+                    "model": model,
+                    "response": response_text,
+                    "done": True
+                }
+                self.wfile.write(json.dumps(response).encode())
+
+        except json.JSONDecodeError:
+            self.send_response(400)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({"error": "invalid json"}).encode())
+
+        except Exception as e:
+            logger.error(f"Error handling request: {e}")
+            self.send_response(500)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({"error": str(e)}).encode())
+
+    def log_message(self, format, *args):
+        """Custom logging"""
+        if Config.DEBUG:
+            logger.info(format % args)
+
+
+def run_server(host: str = Config.HOST, port: int = Config.PORT):
+    """Start the Claude Code server"""
+    server = HTTPServer((host, port), OllamaCompatibleHandler)
+
+    print("\n" + "=" * 80)
+    print("CLAUDE CODE SERVER (Ollama-Compatible)")
+    print("=" * 80)
+    print(f"\n✅ Server running at: http://{host}:{port}")
+    print(f"   CLI available: {'Yes' if cli.available else 'No'}")
+    if cli.available:
+        print(f"   CLI path: {cli.cli_path}")
+    else:
+        print(f"   CLI path: {cli.cli_path} (NOT FOUND)")
         print(f"   Install with: pip install claude-code")
-        print(f"   Or check: which claude-code")
-    return wrapper
+    print(f"\n📝 Test with curl:")
+    print(f'   curl http://{host}:{port}/')
+    print(f'   curl -X POST http://{host}:{port}/api/generate \\')
+    print(f'     -H "Content-Type: application/json" \\')
+    print(f'     -d \'{{"prompt": "Hello", "stream": false}}\'')
+    print(f"\n🔗 In Python/notebooks:")
+    print(f'   import requests')
+    print(f'   r = requests.post("http://{host}:{port}/api/generate",')
+    print(f'     json={{"prompt": "What is 2+2?"}})')
+    print(f'   print(r.json()["response"])')
+    print(f"\n⌨️  Press Ctrl+C to stop\n")
+    print("=" * 80 + "\n")
+
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("\n✅ Server shut down cleanly")
+        sys.exit(0)
+    except Exception as e:
+        print(f"\n❌ Server error: {e}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
-    # Test the wrapper
-    wrapper = create_wrapper()
+    parser = argparse.ArgumentParser(
+        description="Claude Code Server (Ollama-compatible API)",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # Start on default port (8080)
+  python3 src/claude_code_wrapper.py
 
-    if wrapper.server_running:
-        print("✅ Claude Code CLI is available")
-        print(f"   CLI path: {wrapper.cli_path}")
+  # Start on custom port
+  python3 src/claude_code_wrapper.py --port 11434
 
-        # Test query
-        response = wrapper.query("What is 2+2?", temperature=0.0)
-        if response:
-            print(f"Response: {response}")
-        else:
-            print("Failed to get response")
-    else:
-        print("❌ Claude Code CLI not found")
-        print("Install with: pip install claude-code")
-        print(f"Expected at: {wrapper.cli_path}")
+  # With debug logging
+  DEBUG=true python3 src/claude_code_wrapper.py
+
+  # Test with curl
+  curl http://localhost:8080/
+  curl -X POST http://localhost:8080/api/generate \\
+    -H "Content-Type: application/json" \\
+    -d '{"prompt": "2+2?", "stream": false}'
+        """
+    )
+    parser.add_argument(
+        "--host",
+        default=Config.HOST,
+        help=f"Bind address (default: {Config.HOST})"
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=Config.PORT,
+        help=f"Port to listen on (default: {Config.PORT})"
+    )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Enable debug logging"
+    )
+
+    args = parser.parse_args()
+
+    if args.debug:
+        Config.DEBUG = True
+        logger.setLevel(logging.DEBUG)
+
+    run_server(host=args.host, port=args.port)
