@@ -25,7 +25,7 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-  R641["641: sanity"] --> R274177["274177: stress"] --> R65537["65537: gate"]
+  R641["641: sanity"] --> R274177["274177: stress"] --> R65537["65537: explanation/review gate (demo)"]
 ```
 
 ## Run
@@ -33,4 +33,3 @@ flowchart LR
 ```bash
 python -m nbconvert --execute --to notebook --inplace HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb
 ```
-

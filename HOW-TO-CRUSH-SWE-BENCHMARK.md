@@ -9,7 +9,11 @@
 
 ## Executive Summary
 
-This guide documents the **Phuc Forecast orchestration methodology** for solving SWE-benchmark instances with 100% reliability. The key innovation is **fail-closed prompting** combined with **anti-rot context isolation**.
+This guide documents the **Phuc Forecast orchestration methodology** for approaching SWE-bench-style bugfix tasks with stronger structure: fail-closed prompting, context isolation, and artifact-driven verification.
+
+Claim hygiene:
+- This document is a methodology guide and status report.
+- It is not (yet) a reproduced end-to-end SWE-bench evaluation with pinned data + logs.
 
 ### Current Status: 3/5 Phases Working ✅
 
@@ -243,7 +247,7 @@ If we can **extract the LLM's intent** (which lines changed), we can **regenerat
 - **ROOT CAUSE:** Unified diff format is LLM-hostile
 - **SOLUTION:** Post-process diffs to repair malformed output
 - **EFFORT:** ~3 hours to implement + test
-- **EXPECTED OUTCOME:** 5/5 (100%) success on Batch 1
+- **GOAL:** 5/5 success on Batch 1 (not yet reproduced here)
 
 ---
 
@@ -259,7 +263,7 @@ If we can **extract the LLM's intent** (which lines changed), we can **regenerat
 8. ⏳ **Update guide with results** (~0.5 hours)
 
 **Target completion:** 4-6 hours from now
-**Expected final outcome:** 5/5 (100%) on Batch 1
+**Goal:** 5/5 on Batch 1 (not yet reproduced here)
 
 ---
 
@@ -312,9 +316,9 @@ for instance in instances:
 **Auth:** 65537 (Prime Authority)
 **Version:** 1.0.0
 **Status:** FRAMEWORK ESTABLISHED + SOLUTION DESIGNED
-**Mission:** Achieve 5/5 (100%) on Batch 1
+**Mission:** Achieve 5/5 on Batch 1
 
-**Timeline:** 4-6 hours to complete Phase 4 fix and reach 100% success
+**Timeline:** TBD (depends on Phase 4/5 implementation and a reproducible harness)
 
 ---
 

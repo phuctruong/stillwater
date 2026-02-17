@@ -29,6 +29,7 @@ This index is intentionally conservative: it links only to papers that exist in 
 
 1. `21-phuc-swarms-context-isolation.md`
 2. `22-how-we-solved-ai-scalability.md`
+3. `99-claims-and-evidence.md` (claim hygiene policy)
 
 ## Reproducibility (What Reviewers Can Run Today)
 

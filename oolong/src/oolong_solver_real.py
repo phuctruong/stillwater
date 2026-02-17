@@ -2,14 +2,16 @@
 """
 OOLONG Benchmark Solver - Real Implementation using Claude Code
 Auth: 65537
-Status: PRODUCTION - Uses actual Claude Code, not simulated
+Status: Experimental / Optional (requires external tooling)
 
-This solver:
-1. Uses Claude Code local server (not simulated Counter())
-2. Generates real counting solutions via LLM
-3. Verifies accuracy on test cases
-4. Generates proof certificates
-5. Achieves 99%+ accuracy through hybrid intelligence (LLM + CPU)
+What this file is:
+- An optional demo path that can call a local Claude Code HTTP wrapper (see
+  `src/claude_code_wrapper.py`) and combine it with deterministic CPU counting.
+
+What this file is NOT:
+- Not a reproduced OOLONG benchmark harness.
+- Not a formal proof system and does not produce machine-checked certificates.
+- Not a claim of any external accuracy/leaderboard numbers.
 """
 
 import sys
@@ -129,9 +131,9 @@ Answer with only the result (no explanation)."""
         return expected == actual
 
     def generate_proof(self, test: OOLONGTest, result: OOLONGResult) -> str:
-        """Generate proof certificate."""
+        """Generate a human-readable run record (not a formal proof certificate)."""
         return f"""
-PROOF CERTIFICATE: {test.name}
+RUN RECORD (demo): {test.name}
 Auth: 65537
 
 PROBLEM: {test.problem}
@@ -151,9 +153,7 @@ METHOD:
   4. Verification: Comparing results to expected output
 
 ACCURACY: {'PASS ✓' if result.success else 'FAIL ✗'}
-
-Failure probability: ≤ 10^-7 (CPU-backed, not probabilistic)
-Confidence: Lane A (Proven - CPU verification)
+Confidence: Lane B (Checked against expected output in this local harness)
 """
 
     def run_test(self, test: OOLONGTest) -> OOLONGResult:
@@ -213,7 +213,7 @@ Confidence: Lane A (Proven - CPU verification)
     def run_all_tests(self, tests: List[OOLONGTest]) -> List[OOLONGResult]:
         """Run all tests."""
         print("=" * 80)
-        print("OOLONG BENCHMARK - REAL SOLVER WITH CLAUDE CODE")
+        print("OOLONG-STYLE TESTS - OPTIONAL REAL SOLVER PATH (EXPERIMENTAL)")
         print("=" * 80)
 
         for test in tests:
@@ -233,10 +233,9 @@ Confidence: Lane A (Proven - CPU verification)
         print(f"Success Rate: {passed/total*100:.1f}%")
 
         if passed == total:
-            print("\n✅ PERFECT SCORE - ALL TESTS PASS")
-            print("   Method: Claude Code LLM + CPU Counter enumeration")
-            print("   Accuracy: 100% (CPU-backed)")
-            print("   Confidence: Lane A (Proven)")
+            print("\nAll included tests passed (local harness).")
+            print("Method: optional LLM call + deterministic Counter() enumeration")
+            print("Confidence: Lane B (local harness only)")
         else:
             print(f"\n⚠️  {total - passed} tests failed")
             for result in self.test_results:
@@ -291,7 +290,8 @@ def main():
         print("✅ Claude Code server is running\n")
     else:
         print("⚠️  Claude Code server not running")
-        print("   Start with: claude-code server --host localhost --port 8080\n")
+        print("   Start the wrapper with: python3 src/claude_code_wrapper.py\n")
+        print("   (This path is optional; the notebook defaults to offline demo mode.)\n")
 
     # Run tests
     results = solver.run_all_tests(DEFAULT_TESTS)
@@ -299,8 +299,8 @@ def main():
     # Print summary
     solver.print_summary()
 
-    # Print proof certificates
-    print("\nProof Certificates:")
+    # Print run records
+    print("\nRun Records:")
     for result in results:
         if result.proof:
             print(result.proof)

@@ -2,14 +2,15 @@
 """
 IMO 2024 Solver - Real Implementation using Claude Code
 Auth: 65537
-Status: PRODUCTION - Uses actual Claude Code LLM
+Status: Experimental / Optional (requires external tooling)
 
-This solver:
-1. Uses Claude Code local server for mathematical reasoning
-2. Generates step-by-step proofs
-3. Verifies solutions with formal proofs
-4. Achieves 6/6 on IMO problems
-5. Uses exact arithmetic (Fraction-based, no floats)
+This file is an optional scaffold that can call a local Claude Code wrapper to
+generate solution drafts and then run a lightweight self-check prompt.
+
+Claim hygiene:
+- This is not an official IMO grader.
+- It does not produce machine-checked formal proofs.
+- Any \"certificate\" text produced here is a run record for review.
 """
 
 import sys
@@ -153,9 +154,9 @@ Explanation:"""
     def _generate_proof(
         self, problem: IMOProblem, solution: str, success: bool
     ) -> str:
-        """Generate formal proof certificate."""
+        """Generate a human-readable run record (not a formal proof certificate)."""
         return f"""
-PROOF CERTIFICATE: IMO Problem {problem.number}
+RUN RECORD (demo): IMO Problem {problem.number}
 Auth: 65537
 
 PROBLEM:
@@ -164,17 +165,15 @@ PROBLEM:
 SOLUTION:
 {solution}
 
-VERIFICATION: {'CORRECT ✓' if success else 'NEEDS REVIEW ⚠️'}
+VERIFICATION (self-check prompt): {'CORRECT ✓' if success else 'NEEDS REVIEW ⚠️'}
 
-PROOF METHOD:
+METHOD:
 1. Claude Code: Mathematical reasoning and proof generation
 2. Exact Arithmetic: Fraction-based, no floating-point errors
 3. Step-by-Step: All reasoning shown
-4. Verification: Solution checked for correctness
+4. Verification: LLM self-check prompt (not authoritative)
 
-CONFIDENCE: Lane A (Proven via formal verification)
-
-Failure probability: ≤ 10^-7 (proven mathematically)
+CONFIDENCE: Lane C/STAR (draft output; requires independent verification)
 """
 
     def run_all(self, problems: List[IMOProblem]) -> List[IMOSolution]:
@@ -200,11 +199,8 @@ Failure probability: ≤ 10^-7 (proven mathematically)
         print(f"Success Rate: {solved/total*100:.1f}%")
 
         if solved == 6:
-            print("\n✅ PERFECT SCORE - 6/6 GOLD MEDAL")
-            print("   All IMO 2024 problems solved")
-            print("   Method: Claude Code mathematical reasoning")
-            print("   Verification: Formal proofs provided")
-            print("   Confidence: Lane A (Proven)")
+            print("\nAll 6 problems were marked CORRECT by the self-check prompt.")
+            print("This is not equivalent to official IMO grading or a formal proof system.")
         else:
             print(f"\n   Problems solved: {solved}/6")
 

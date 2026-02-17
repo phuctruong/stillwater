@@ -1,16 +1,22 @@
 #!/usr/bin/env python3
 """
-IMO 2024: Proper 6/6 Solver with REAL Verification
+IMO 2024: Proper 6/6 Demo Solver with Executable Checks
 
 Auth: 65537 | Date: 2026-02-16
-Status: HONEST - Shows what's working, what needs work
+Status: HONEST - runnable demo with explicit checks and clear limitations
 
-This version:
-✓ Has REAL verification (not fake string matching)
-✓ Implements all 6 problems (with honest status)
-✓ Uses executable geometry lemmas
-✓ Tests multiple triangles for P4
-✓ Uses exact arithmetic
+What this is:
+- Runnable implementations for all 6 problems.
+- Executable checks (tests + consistency checks) that run in this repo.
+- Exact arithmetic where appropriate.
+
+What this is NOT:
+- A formal proof assistant.
+- A machine-checked proof certificate system.
+
+Notes:
+- The "verification ladder" rungs here are operational gates, not formal math proofs.
+- If you need Lane A (proven), you need a proof certificate system; this file does not provide that.
 """
 
 import sys
@@ -93,7 +99,10 @@ class RealVerificationLadder:
     def verify_rung_274177(problem_name: str, generalization_proof: str, num_examples: int = 0) -> VerificationResult:
         """
         RUNG 274177: Stress test / generalization
-        REAL CHECK: Verify proof is universal (applies to all cases, not just one)
+        CHECK TYPE: Heuristic gate (does the explanation attempt universality?)
+
+        This is not a formal proof checker; it only enforces a minimum bar for a
+        generalization narrative.
         """
         if not generalization_proof or not generalization_proof.strip():
             return VerificationResult(
@@ -112,7 +121,7 @@ class RealVerificationLadder:
 
         success = has_universal and proof_substantial
 
-        message = f"{problem_name}: Generalization proof {'valid' if success else 'incomplete'}"
+        message = f"{problem_name}: Generalization narrative {'present' if success else 'incomplete'}"
         return VerificationResult(
             rung=274177, passed=success,
             message=message,
@@ -122,8 +131,12 @@ class RealVerificationLadder:
     @staticmethod
     def verify_rung_65537(problem_name: str, formal_proof: str, test_results: List[bool]) -> VerificationResult:
         """
-        RUNG 65537: Formal proof
-        REAL CHECK: Verify proof is complete and test results are consistent
+        RUNG 65537: Production gate (demo)
+        CHECK TYPE: Proof-narrative + test-consistency gate
+
+        This is not a machine-checked formal proof. It enforces:
+        - tests are consistent (all pass in the provided test set)
+        - the explanation is substantive (length threshold)
         """
         if not formal_proof or not test_results:
             return VerificationResult(
@@ -142,7 +155,7 @@ class RealVerificationLadder:
         success = all_pass and proof_complete
 
         passed_tests = sum(1 for t in test_results if t)
-        message = f"{problem_name}: {passed_tests}/{len(test_results)} verified, formal proof {'complete' if proof_complete else 'incomplete'}"
+        message = f"{problem_name}: {passed_tests}/{len(test_results)} verified, narrative {'substantial' if proof_complete else 'thin'}"
 
         return VerificationResult(
             rung=65537, passed=success,

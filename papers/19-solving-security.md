@@ -11,7 +11,7 @@
 
 AI assistant ecosystems expand attack surface via plugins/skills and untrusted text inputs. The operational defense is: capability envelopes, explicit intent ledgers, prompt-injection firewalls, and evidence gates before tool use. This repo encodes those controls as skills and uses them in orchestration.
 
-**Keywords:** AI security, skill verification, supply chain attacks, mathematical guarantees, plugin security, CVE prevention, exploitation defense, formal security proofs
+**Keywords:** AI security, skill verification, supply chain risk, prompt injection, capability envelopes, least privilege, evidence gates, reproducibility
 
 ---
 
@@ -25,24 +25,23 @@ AI assistant ecosystems expand attack surface via plugins/skills and untrusted t
 
 ### 1.1 The Security Crisis
 
-**OpenClaw Breach Report (Feb 2026):**
+This paper focuses on *operational* security: how tool-using assistants fail in the real world, and what controls reduce risk.
+
+**Claim hygiene:** Any competitor incident counts, CVE counts, or breach statistics in older drafts are **not** verified in this repo. Treat them as illustrative threat narratives unless backed by primary sources. See `papers/99-claims-and-evidence.md`.
+
+**Illustrative marketplace risk scenario (not a factual report):**
 
 ```
-Total skills in marketplace: 50,000
-Malicious skills discovered: 341
-Estimated undiscovered: 5,000+ (10% infection rate)
+Large marketplace
+├─ Many third-party skills/extensions
+├─ Mixed trust levels
+└─ Some malicious or compromised plugins
 
-Attack vector breakdown:
-├─ Credential theft: 89 skills
-├─ Data exfiltration: 127 skills
-├─ Ransomware: 45 skills
-├─ Cryptojacking: 52 skills
-├─ Supply chain (dependency) attacks: 28 skills
-
-Impact:
-├─ Companies compromised: 12,000+
-├─ Users affected: 500,000+
-├─ Cost: $2.1 billion in damages
+Typical attack classes:
+├─ Credential theft / secrets exfiltration
+├─ Data exfiltration via tool calls
+├─ Supply-chain dependency poisoning
+└─ Prompt injection leading to unintended actions
 ```
 
 **Why plugins are insecure:**
@@ -93,7 +92,7 @@ Result: Doesn't prevent exploitation
 ```
 Idea: Run plugins in restricted environment
 Problem:
-├─ Sandboxes have escapes (CVE-2026-xxxxx discovered this month)
+├─ Sandboxes have escapes (CVE-YYYY-NNNN (placeholder) discovered this month)
 ├─ Legitimate plugins need file/network access
 └─ Escapes are discovered months after deployment
 Result: Temporary mitigation, not permanent solution
@@ -109,7 +108,7 @@ Result: Victim-blaming (blame users for clicking)
 
 ### 1.3 Our Contribution
 
-**Mathematical Security** through verification ladder:
+**Operational security** through explicit gates + least privilege:
 
 ```
 Every skill must pass three rungs:
@@ -127,15 +126,9 @@ Rung 65537 (Formal Verification):
 ├─ Skill provably implements intended behavior
 ├─ Proves: Impossible to misbehave (no backdoors)
 └─ Requires: Proof certificate or bounded-failure proof
-
-Result: Math-grade security (impossible to break without breaking math)
 ```
 
-**Results:**
-- **Zero CVEs** (18 months, 31 operational controls)
-- **Zero exploits** on Stillwater OS
-- **341 CVE comparison** (competitor ecosystem)
-- **Irreversible security** (no patching needed if verified)
+**Honest result:** This repo provides guardrails (capability envelopes, authority ordering, and fail-closed behavior) as skills. It does not ship a full formal verification system for arbitrary skills; treat rung 65537 as a *target bar*.
 
 ---
 
@@ -234,8 +227,8 @@ Total: 341 | All preventable with verification ladder
 
 ```
 Claim: Skill S does exactly what it claims, nothing more
-Proof: Formal verification shows no hidden code paths
-Rung 65537: Generates proof certificate
+Evidence: strongest available witness (tests + review + analysis where feasible)
+Rung 65537: Run record / review gate (not a machine-checked proof certificate)
 ```
 
 **Property 2: No Data Exfiltration**
@@ -351,6 +344,8 @@ class SkillVerification:
 
 ### 4.1 Security Track Record
 
+Claim hygiene: the table below is an older illustrative comparison and is not a verified dataset in this repo. Treat as a narrative placeholder.
+
 ```
 System | Period | Total Skills | CVEs | Exploits | Auth
 ---|---|---|---|---|---
@@ -371,11 +366,10 @@ Traditional (OpenClaw):
    On 50,000 skills = 15 missed = STILL TOO MANY
 
 Stillwater:
-├─ Rung 641: Edge sanity (eliminates 99% of bugs)
-├─ Rung 274177: Stress test (eliminates 99.9% remaining)
-├─ Rung 65537: Formal proof (eliminates 99.99% remaining)
-└─ Combined: Miss rate = 10^-8
-   On 250 skills = 0.0000025 missed ≈ 0
+├─ Rung 641: Edge sanity (catches obvious failures)
+├─ Rung 274177: Stress test (catches many adversarial failures)
+├─ Rung 65537: Formal proof (if you have a proof system)
+└─ Combined: stronger evidence reduces risk, but does not eliminate it
 ```
 
 ---
@@ -475,47 +469,20 @@ stillwater security verify --skill my-skill.py
 #   ├─ Invariant verification: ✅ All maintained
 #   └─ Proof certificate: ✅ Generated
 #
-# Auth: 65537 ✅ SECURE FOR DEPLOYMENT
+# Auth: 65537 (project tag) | Status: DEMO REPORT (not a deployment certificate)
 ```
 
 ---
 
-## 6. Experimental Results
+## 6. Evaluation Guidance (Repo-Backed)
 
-### 6.1 Vulnerability Detection
+This repository does not currently ship a full security benchmark harness with:
+- a curated dataset
+- pinned versions
+- logged outputs
+- reproduction scripts
 
-**Test:** Run Stillwater verification on 50,000 OpenClaw skills
-
-```
-OpenClaw skills | Verified | Rejected | Detection Rate
----|---|---|---
-Total: 50,000 | 49,659 | 341 | 0.68%
-
-By vulnerability type:
-├─ Direct trojans (89): 89/89 detected (100%)
-├─ Dependency attacks (127): 125/127 detected (98%)
-├─ Privilege escalation (45): 45/45 detected (100%)
-├─ Side-channels (52): 48/52 detected (92%)
-├─ Zero-days (28): 18/28 detected (64%)
-
-Average detection: 91% of known vulnerabilities
-```
-
-### 6.2 False Positive Rate
-
-**Test:** Verify 1000 legitimate skills for security
-
-```
-Legitimate skills | Approved | Rejected | False Positive Rate
----|---|---|---
-Total: 1000 | 998 | 2 | 0.2%
-
-Rejected skills analysis:
-├─ Skill 1: Legitimate but used eval() → unsafe
-├─ Skill 2: Legitimate but timing-dependent → potential side-channel
-
-Both rejections were correct. No false positives on truly safe code.
-```
+If you want to include detection rates / false positive rates, add an in-repo harness and publish the artifacts. Until then, treat numeric tables in older drafts as illustrative and not verified claims.
 
 ---
 

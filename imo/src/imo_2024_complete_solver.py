@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 """
-IMO 2024: Complete 6/6 Solver with Real Verification
+IMO 2024: Complete Demo Scaffold (Executable Checks, Not a Proof Assistant)
 
 Auth: 65537 | Northstar: Phuc Forecast
 Date: 2026-02-16
 
-This is the REAL implementation:
-- Executable geometry lemma library (22 lemmas from solace-cli canon)
-- Lane A witness tracking (proven theorems only)
-- Real verification rungs (mathematical correctness checks, not data existence)
-- All 7 Phuc Forecast generalized patterns applied
+What this is:
+- A larger, experimental scaffold that combines a lemma library with runnable checks.
+- A place to prototype \"witness\" tracking ideas in code.
+
+What this is NOT:
+- Not a machine-checked formal proof system.
+- Not a claim of official IMO grading or external benchmark numbers.
 
 References (repo): skills/prime-math.md, papers/01-lane-algebra.md
 """
@@ -46,9 +48,7 @@ RED-GREEN GATE (TDD): Every proof must demonstrate:
 VERIFICATION LADDER (3-RUNG PROOF SYSTEM):
   Rung 641: Edge case sanity (test on 5 cases)
   Rung 274177: Stress test/generalization (100+ cases)
-  Rung 65537: Formal proof (mathematical guarantee)
-
-  Failure probability: ≤ 10^-7 (safer than human code)
+  Rung 65537: Explanation/review gate (not a machine-checked proof)
 
 STATE MACHINE: Explicit states, transitions, forbidden states
   INIT → PARSE → CLASSIFY → ROUTE → BUILD → EXECUTE → VERIFY → EXIT
@@ -79,10 +79,10 @@ MULTI-WITNESS PROOFS: Each theorem needs witnesses
 COUNTER BYPASS PROTOCOL: For counting/enumeration
   Step 1: LLM classifies pattern (e.g., "this is a prime number")
   Step 2: CPU enumerates exact count (deterministic)
-  Result: 99.3% accuracy (vs 40% pure LLM)
+  Result: deterministic aggregation step; end-to-end depends on classification
 
 RESOLUTION LIMITS (R_p): Convergence detection
-  EXACT: Proven theorem with formal proof
+  EXACT: Strongest available witness for this scaffold (not a proof assistant)
   CONVERGED: Verified via finite test set
   TIMEOUT: Too many iterations
   DIVERGED: Counter-example found
@@ -96,7 +96,7 @@ RESOLUTION LIMITS (R_p): Convergence detection
 
 PHUC_PATTERNS = {
     "witness_diversity": "Multi-witness (lemma + deductive + structural)",
-    "bypass_architecture": "LLM classifies, CPU executes (99.3% accuracy)",
+    "bypass_architecture": "LLM classifies, CPU executes (deterministic aggregation step)",
     "state_machines": "Explicit states prevent hallucination",
     "compression_law": "|Generator| << |Solution|, diagnose ratio mismatches",
     "lane_provenance": "A > B > C > STAR, prevent upgrades",
@@ -220,7 +220,7 @@ class VerificationLadder:
             return VerificationResult(
                 rung=65537,
                 passed=False,
-                evidence="Missing formal proof or witnesses",
+                evidence="Missing witnesses or check artifacts",
                 lane='C'
             )
 
@@ -232,7 +232,7 @@ class VerificationLadder:
             return VerificationResult(
                 rung=65537,
                 passed=True,
-                evidence=f"{problem_name}: {len(witnesses)} Lane A witnesses, formal proof complete",
+                evidence=f"{problem_name}: {len(witnesses)} Lane A witnesses, checks complete (scaffold)",
                 lane='A'
             )
         else:

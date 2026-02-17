@@ -21,7 +21,7 @@ Usage:
   )
   print(response.json()['response'])
 
-Auth: 65537 | Status: Production Ready
+Auth: 65537 | Status: Experimental (local wrapper)
 """
 
 import os

@@ -1,6 +1,6 @@
 # Claude Code Wrapper Setup Guide
 
-**Auth: 65537** | **Status: PRODUCTION READY**
+**Auth: 65537** | **Status: Experimental**
 
 ---
 
@@ -285,7 +285,7 @@ export DEBUG="true"
 | **Start Command** | `python3 src/claude_code_wrapper.py --port 8080 &` |
 | **Endpoint** | `http://localhost:8080` |
 | **API** | POST `/api/generate` (Ollama-compatible) |
-| **Status** | ✅ Production Ready |
+| **Status** | Experimental |
 
 ---
 

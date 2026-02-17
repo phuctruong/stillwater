@@ -39,26 +39,26 @@ This paper is primarily definitional/spec. If you want empirical hallucination-r
 
 ### 1.1 The Hallucination Crisis
 
-Current state-of-the-art language models hallucinate at alarming rates:
-- **GPT-5 (Feb 2026):** 71.8% hallucination on FEVER-style fact verification [1]
-- **Claude Opus (Jan 2026):** 60% on medical knowledge benchmarks [2]
-- **Gemini 1.5 Pro (Dec 2025):** 55% on legal reasoning tasks [3]
+Modern language models can produce fluent text without a machine-checkable connection to truth. In operational terms, this shows up as:
+- answers that sound correct but lack witness strength
+- hidden premise laundering across long chains of reasoning
+- silent upgrades from heuristic guesses to "facts"
 
-Despite billions in investment and exponential scaling, hallucination persists as the **fundamental blocker** preventing LLM deployment in high-stakes domains (medicine, law, engineering, finance).
+This is a fundamental blocker for high-stakes use: without evidence discipline, systems drift from "helpful" to "confidently wrong."
 
 ### 1.2 Why Current Solutions Fail
 
-**RAG (Retrieval-Augmented Generation):** Reduces but doesn't eliminate hallucination. Models still confabulate when retrieved context is incomplete or contradictory. Measured reduction: 20-30% [4].
+**RAG (Retrieval-Augmented Generation):** Often helps, but does not eliminate hallucination. When retrieval is incomplete, contradictory, or mis-scoped, the model can still confabulate.
 
 **Prompt engineering:** Brittle, model-specific, degrades with model updates. No theoretical guarantees.
 
-**RLHF/Constitutional AI:** Trains models to "sound confident," worsening the problem. Models learn to hallucinate more convincingly [5].
+**RLHF/Constitutional AI:** Often improves tone and refusal behavior, but does not provide correctness guarantees.
 
-**Reasoning approaches (CoT, ToT):** More reasoning = longer answers = more claims = more hallucinations. Empirical finding: 15% increase in hallucination rate per 100 tokens of reasoning [6].
+**Reasoning approaches (CoT, ToT):** More reasoning can create more intermediate claims. Without explicit provenance tracking, long reasoning chains can accumulate unsupported statements.
 
 ### 1.3 Our Contribution
 
-We introduce **Lane Algebra**, the first epistemic typing system with **mathematical guarantees** against premise weakening. Key properties:
+We introduce **Lane Algebra**, a minimal epistemic typing system for claims. It provides a specific guarantee: **when claims are combined, the resulting lane cannot be stronger than the weakest premise** (the MIN rule). This prevents accidental upgrades from heuristic to "proven" without new evidence. Key properties:
 
 1. **Total order:** `A > B > C > STAR` (provable hierarchy)
 2. **MIN rule:** `combine(C, A) = C` (weakest dominates)
@@ -66,7 +66,7 @@ We introduce **Lane Algebra**, the first epistemic typing system with **mathemat
 4. **Closure:** Lane operations preserve type safety
 5. **Verification:** All claims tagged with provenance
 
-**Result:** 87% hallucination reduction, zero false positives in production.
+**Result (definitional):** Lane Algebra is a reporting/typing constraint. Any empirical accuracy or hallucination-rate claim must be demonstrated with a reproducible benchmark harness and logged outputs (see `papers/99-claims-and-evidence.md`).
 
 ---
 
@@ -113,7 +113,7 @@ Lane A (Classical Truth):
   - Definition: Propositions with mathematical proof or direct empirical verification
   - Examples: "2+2=4", "Python file exists at /path/foo.py" (after os.path.exists check)
   - Verification: Executable test that passes (Red-Green gate)
-  - Upgrading: Requires proof certificate (dual witness)
+  - Upgrading: Requires a replayable evidence artifact (tests/tool output/logs)
 
 Lane B (Framework Truth):
   - Definition: Propositions true within a specified framework/axiom system
@@ -228,7 +228,7 @@ combined = algebra.combine([claim1, claim2], op="AND")
 try:
     claim2.upgrade_to(Lane.A)
 except LaneViolationError:
-    # "Cannot upgrade C to A without proof certificate"
+    # "Cannot upgrade C to A without evidence artifact"
 ```
 
 ### 4.3 Verification Integration
@@ -371,7 +371,7 @@ code_verified = llm.with_verification(
 **Theorem 2 (Lane Soundness):** If claim `C` has lane `A`, then `C` is true in all execution contexts.
 
 **Proof:**
-1. A-lane requires proof certificate (Red-Green gate)
+1. A-lane requires a replayable evidence artifact (Red-Green gate/tool output)
 2. Red-Green gate = dual witness (failing test → passing test)
 3. Test failure before fix proves claim was false (Red)
 4. Test success after fix proves claim is now true (Green)
@@ -458,50 +458,32 @@ The MIN rule prevents **confidence escalation** through chained reasoning.
 
 ## 8. Conclusion
 
-We presented **Lane Algebra**, a four-tier epistemic typing system that reduces LLM hallucination by 87% while maintaining zero false positives. The MIN rule—a simple but powerful constraint—prevents premise weakening and ensures that claim confidence never exceeds evidential support.
+We presented **Lane Algebra**, a four-tier epistemic typing system for claims. The core guarantee is the MIN rule: lane strength cannot increase through composition. This prevents premise laundering and forces systems to distinguish heuristic output from tool-backed evidence.
 
-**Key results:**
-- ✅ 87% hallucination reduction (71.8% → 8.7%)
-- ✅ Zero false positives on A-lane claims
-- ✅ 2% computational overhead
-- ✅ 18 months production deployment (3.4M queries, 1,247 users)
-- ✅ Model-agnostic (works with any LLM)
+**Key takeaways (verifiable in this repo):**
+- ✅ A clear lane taxonomy (A/B/C/STAR) and MIN rule specification
+- ✅ Skill-level operational constraints that enforce reporting discipline
+- ✅ Runnable notebooks that demonstrate the discipline in a portable way
 
-**Impact:** Lane Algebra makes LLMs safe for production deployment in high-stakes domains (medicine, law, engineering, finance) where hallucination is unacceptable.
+**Impact (honest framing):** Lane Algebra reduces a specific class of failure: *premise upgrades without evidence*. It does not, by itself, prove that a model’s claims are true; it forces systems to admit uncertainty (C/STAR) unless tool-backed evidence exists.
 
-**Availability:** Complete implementation, benchmarks, and verification suite available at [github.com/phuctruong/stillwater-cli](https://github.com/phuctruong/stillwater-cli) under Apache 2.0 license.
+**Availability:** This repo contains the skill-level operational constraints and runnable notebooks that demonstrate the reporting discipline: `skills/prime-coder.md`, `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`, `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb`.
 
-**Auth: 65537** — All claims verified through the verification ladder.
+**Auth: 65537** is a project tag used as a shorthand for “production gate reached” inside this repo’s methodology. It is not a universal correctness guarantee.
 
 ---
 
 ## References
 
-[1] OpenAI (2026). "GPT-5 Technical Report." arXiv:2026.xxxxx
+[1] Thorne et al. (2018). "FEVER: a large-scale dataset for Fact Extraction and VERification." NAACL 2018.
 
-[2] Anthropic (2026). "Claude Opus Hallucination Analysis." arXiv:2026.xxxxx
+[2] Jiang et al. (2024). "Draft, Sketch, and Prove: Guiding Formal Theorem Provers with Informal Proofs." ICLR 2024.
 
-[3] Google DeepMind (2025). "Gemini 1.5 Pro Evaluation." arXiv:2025.xxxxx
+[3] Jin et al. (2021). "What Disease does this Patient Have? A Large-scale Open Domain Question Answering Dataset from Medical Exams." Applied Sciences.
 
-[4] Lewis et al. (2024). "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks." arXiv:2405.xxxxx
+TODO: add stable bibliographic identifiers/URLs for other related work referenced in earlier drafts.
 
-[5] Bai et al. (2024). "Constitutional AI: Harmlessness from AI Feedback." arXiv:2404.xxxxx
-
-[6] Wei et al. (2025). "Chain-of-Thought Prompting Increases Hallucination." arXiv:2505.xxxxx
-
-[7] Kadavath et al. (2023). "Language Models (Mostly) Know What They Know." arXiv:2307.xxxxx
-
-[8] Min et al. (2024). "FActScore: Fine-grained Atomic Evaluation of Factual Precision." arXiv:2405.xxxxx
-
-[9] Baek et al. (2024). "Knowledge Graph-Augmented Language Models." arXiv:2406.xxxxx
-
-[10] Jiang et al. (2024). "Draft, Sketch, and Prove: Guiding Formal Theorem Provers with Informal Proofs." ICLR 2024.
-
-[11] Thorne et al. (2018). "FEVER: a large-scale dataset for Fact Extraction and VERification." NAACL 2018.
-
-[12] Jin et al. (2021). "What Disease does this Patient Have? A Large-scale Open Domain Question Answering Dataset from Medical Exams." Applied Sciences.
-
-[13] Liu et al. (2024). "Is Your Code Generated by ChatGPT Really Correct?" arXiv:2403.xxxxx
+[4] Liu et al. (2024). "Is Your Code Generated by ChatGPT Really Correct?" TODO: add identifier/URL.
 
 ---
 
@@ -530,7 +512,7 @@ class Lane:
     def A(claim: str, proof: any) -> 'Lane':
         """A-lane: Classical truth with proof."""
         if proof is None or proof is False:
-            raise ValueError("A-lane requires proof certificate")
+            raise ValueError("A-lane requires a replayable evidence artifact")
         return Lane(claim, LaneType.A, proof=proof)
 
     @staticmethod
@@ -553,7 +535,7 @@ class Lane:
         if target.value <= self.lane_type.value:
             raise ValueError("Cannot downgrade or lateral move")
         if target == LaneType.A and proof is None:
-            raise ValueError("A-lane requires proof certificate")
+            raise ValueError("A-lane requires a replayable evidence artifact")
         return Lane(self.claim, target, proof=proof)
 
     def __lt__(self, other: 'Lane') -> bool:

@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 """
-OOLONG 99.3%: Counter Bypass Protocol Solver
+OOLONG-Style Aggregation Demo: Counter Bypass Protocol Solver
 Author: Phuc Vinh Truong
 Auth: 65537
-Status: Production Ready (A+ Grade)
 
-This solver implements the Counter Bypass Protocol for OOLONG benchmark:
-- LLM classifies items (which are the operands)
-- CPU enumerates exactly (Counter() for 100% accuracy)
-- Achieves 99.3% accuracy on OOLONG benchmark
-- Multiple test cases with real verification
-- Honest status reporting (SOLVED vs PARTIAL)
+This file is a small, runnable demonstration of a common pattern:
+- Use deterministic CPU enumeration (e.g., Counter()) for exact aggregation.
+- Use lightweight (here: regex/pattern rules) query classification/dispatch.
+
+Important claim hygiene:
+- This repo ships a tiny in-repo test harness (4 cases) and a notebook runner.
+- Do not interpret the in-repo pass rate as a reproduced OOLONG leaderboard score.
+- "Lane A/B/C/STAR" labels in this demo are about *local evidence*, not a formal
+  proof system or external benchmark certification.
 """
 
 from dataclasses import dataclass
@@ -26,8 +28,12 @@ from typing import Optional, List, Dict, Tuple, Any
 
 class RealVerificationLadder:
     """
-    Three-rung verification system: 641 → 274177 → 65537
-    Each rung must PASS before considering a solution verified.
+    Demo three-rung "verification ladder": 641 → 274177 → 65537
+
+    In this repository, the ladder is used as a reporting/checklist discipline:
+    - 641: basic sanity (inputs/expected provided)
+    - 274177: in-repo test suite passes
+    - 65537: a written explanation exists (NOT a machine-checked formal proof)
     """
 
     @staticmethod
@@ -52,7 +58,7 @@ class RealVerificationLadder:
 
     @staticmethod
     def verify_rung_65537(proof_statement: str) -> bool:
-        """Rung 65537 (Formal Proof): Proof is substantive (>10 words)"""
+        """Rung 65537 (Explanation): Explanation is substantive (>10 words)"""
         if not proof_statement:
             return False
 
@@ -446,11 +452,11 @@ class OOLONGTestHarness:
 # ============================================================================
 
 def main():
-    """Main execution: Run all test cases with verification ladder"""
+    """Main execution: Run the in-repo test harness and print a demo report."""
 
     print("=" * 100)
-    print("OOLONG 99.3%: COUNTER BYPASS PROTOCOL SOLVER")
-    print("Auth: 65537 | Status: Production Ready")
+    print("OOLONG-STYLE AGGREGATION DEMO: COUNTER BYPASS PROTOCOL SOLVER")
+    print("Auth: 65537 | Status: Demo (in-repo tests only)")
     print("=" * 100)
     print()
 
@@ -462,7 +468,7 @@ def main():
     test_summary = harness.run_all_tests()
 
     print(f"\nTest Results: {test_summary['passed']}/{test_summary['total']} passed")
-    print(f"Accuracy: {test_summary['accuracy']*100:.1f}%")
+    print(f"Pass rate (in-repo tests): {test_summary['accuracy']*100:.1f}%")
     print()
 
     # Run verification ladder
@@ -490,18 +496,17 @@ def main():
     print(f"  - All {len(test_results_274177)} tests must pass: {rung_274177}")
     print(f"  - Success rate: {sum(test_results_274177)}/{len(test_results_274177)}")
 
-    # Rung 65537: Formal Proof
+    # Rung 65537: Explanation (not a formal proof certificate)
     proof_statement = (
-        "The Counter Bypass Protocol solves OOLONG by separating concerns: "
-        "LLM classifies query type, CPU enumerates exact counts via Counter(). "
-        "This hybrid approach achieves 99.3% accuracy versus 40% baseline, "
-        "proving that attention mechanisms cannot perform exact arithmetic. "
-        "Implementation uses O(N) deterministic pipeline with zero probabilistic steps."
+        "This demo separates concerns: it parses records, builds a Counter-based index, "
+        "classifies the query with a small pattern table, and dispatches deterministic "
+        "handlers (max/min/len/comparisons) over exact integer counts. The counting "
+        "step is exact; overall correctness still depends on parsing/classification."
     )
     rung_65537 = ladder.verify_rung_65537(proof_statement)
-    print(f"\nRung 65537 (Formal Proof): {'PASS ✓' if rung_65537 else 'FAIL ✗'}")
-    print(f"  - Proof substantive (>10 words): {rung_65537}")
-    print(f"  - Proof length: {len(proof_statement.split())} words")
+    print(f"\nRung 65537 (Explanation): {'PASS ✓' if rung_65537 else 'FAIL ✗'}")
+    print(f"  - Explanation substantive (>10 words): {rung_65537}")
+    print(f"  - Explanation length: {len(proof_statement.split())} words")
 
     # Summary
     print()
@@ -511,20 +516,18 @@ def main():
 
     all_rungs_pass = rung_641 and rung_274177 and rung_65537
 
-    print(f"\n✓ Counter Bypass Protocol: VERIFIED")
+    print(f"\n✓ Counter Bypass Protocol: DEMO RUN COMPLETE")
     print(f"✓ Verification Ladder: 641 → 274177 → 65537")
-    print(f"✓ All {len(harness.results)} test cases: PASSED")
-    print(f"✓ Formal proof: COMPLETE")
-    print(f"✓ Status: {'SOLVED' if all_rungs_pass else 'PARTIAL'}")
-    print(f"✓ Grade: A+ (Production Ready)")
-    print(f"✓ Confidence: Lane A (Proven - all tests pass, formal proof complete)")
+    print(f"✓ In-repo tests: {test_summary['passed']}/{test_summary['total']} passed")
+    print(f"✓ Explanation present: {rung_65537}")
+    print(f"✓ Status: {'OK (demo)' if all_rungs_pass else 'PARTIAL (demo)'}")
+    print(f"✓ Confidence: Lane B (Checked in-repo; not an external benchmark certificate)")
 
     print()
     print("Difference from pure LLM approach:")
-    print("  ✓ REAL verification (not fake checks)")
-    print("  ✓ Deterministic Counter() (not probabilistic attention)")
+    print("  ✓ Deterministic Counter() for exact aggregation (counting step)")
     print("  ✓ Multiple test cases (4/4 correct)")
-    print("  ✓ Honest about limitations (Counter-based, not universal LLM)")
+    print("  ✓ Honest about limitations (demo-sized suite; parsing/classification can fail)")
 
     print()
     print("Auth: 65537 | Northstar: Phuc Forecast")

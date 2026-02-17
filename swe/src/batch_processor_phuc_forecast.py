@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 """
 SWE-BENCH Batch Processor with Phuc Forecast Methodology
-Auth: 65537 | Status: Production-Ready
+Auth: 65537 | Status: Experimental / Demo
 
 Phuc Forecast: DREAM → FORECAST → DECIDE → ACT → VERIFY
 
 This system processes 300+ SWE-bench instances with:
 - Lane Algebra epistemic typing (A/B/C/STAR)
-- Counter Bypass Protocol (99.3% accuracy)
 - Verification Ladder (641→274177→65537)
 - RED-GREEN-GOLD gate verification
+
+Claim hygiene:
+- This file is an experimental scaffold. It does not, by itself, reproduce an
+  external SWE-bench score.
 """
 
 import json
@@ -183,7 +186,7 @@ class PhucForecastBatchProcessor:
             print(f"  ✓ GREEN gates passed: {green_gates}/{len(self.results)}")
         
         # Rung 65537: Formal proof
-        print(f"\n[RUNG 65537] Formal Proof:")
+        print(f"\n[RUNG 65537] Explanation / Review Gate:")
         print(f"  ✓ Execution time: {self.stats.duration_seconds:.1f}s")
         print(f"  ✓ Avg per instance: {self.stats.avg_time_per_instance:.1f}s")
         print(f"  ✓ Auth: 65537 (verified)")
@@ -230,7 +233,7 @@ class PhucForecastBatchProcessor:
         print(f"\nVerification Status:")
         print(f"  ✓ Rung 641 (Edge Sanity): PASS")
         print(f"  ✓ Rung 274177 (Stress Test): PASS")
-        print(f"  ✓ Rung 65537 (Formal Proof): PASS")
+        print(f"  ✓ Rung 65537 (Explanation): PASS")
         
         print(f"\n{'='*80}")
         if success_rate >= 100:

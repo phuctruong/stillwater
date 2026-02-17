@@ -101,7 +101,8 @@ The root notebooks are the public "recipes" for major claims:
 
 Concrete implementations live here:
 
-- OOLONG: `oolong/src/oolong_solver_real.py`, `oolong/src/solve-oolong.py`
+- OOLONG (repo-local demo): `oolong/src/oolong_solver.py`, `oolong/src/solve-oolong.py`
+  - optional (external tooling): `oolong/src/oolong_solver_real.py`
 - IMO: `imo/src/imo_2024_complete_solver.py`, `imo/src/imo_2024_solver_proper.py`
 - SWE: `swe/src/swe_solver_real.py`, wrapper in `src/claude_code_wrapper.py`
 - Orchestration: `tests/phuc_orchestration/` plus the orchestration notebook
@@ -125,7 +126,7 @@ Without them:
 Software 5.0 is a methodology. It does not automatically create:
 
 - complete test suites
-- formal proofs for every claim
+- explicit claim hygiene for every claim (what is verified vs. hypothesis)
 - security guarantees beyond the evidence you actually run
 
 The system is only as strong as its verification artifacts.

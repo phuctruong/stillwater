@@ -61,7 +61,7 @@ stateDiagram-v2
 ```mermaid
 flowchart LR
   R641["641: Edge sanity"] --> R274177["274177: Stress / determinism"]
-  R274177 --> R65537["65537: Production gate"]
+  R274177 --> R65537["65537: Explanation / review gate (demo)"]
 ```
 
 ## Optional: Enable LLM-Backed Runs

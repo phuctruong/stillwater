@@ -6,10 +6,11 @@ Primary documentation artifact:
 - `HOW-TO-CRUSH-SWE-BENCHMARK.md`
 
 Code:
-- `swe/src/swe_solver_real.py` (wrapper-backed solver implementation)
-- `swe/src/swe_solver_unified.py` (alternative unified runner)
-- `batch_1_phuc_orchestration.py` (batch orchestration driver)
-- `diff_postprocessor.py` (diff repair helper)
+- `swe/src/solve-swe.py` (runner: demo by default, optional real path)
+- `swe/src/swe_solver.py` (educational scaffold)
+- `swe/src/swe_solver_real.py` (optional scaffold that requires external data/tooling)
+- `swe/src/swe_solver_unified.py` (optional alternative scaffold)
+- `swe/src/batch_processor_phuc_forecast.py` (experimental batch processor)
 
 ## SWE Pipeline (Prime Diagram)
 
@@ -20,7 +21,7 @@ flowchart TB
   DREAM --> FORECAST["FORECAST (Grace)"]
   FORECAST --> DECIDE["DECIDE (Judge)"]
   DECIDE --> ACT["ACT (Solver)"]
-  ACT --> FIX["Diff post-process (repair)"]
+  ACT --> FIX["(Optional) diff repair / normalization"]
   FIX --> VERIFY["VERIFY (Skeptic)"]
   VERIFY --> ART["Artifacts: patch + verdict + logs"]
 ```
@@ -34,4 +35,3 @@ stateDiagram-v2
   GREEN --> GOLD
   GOLD --> [*]
 ```
-

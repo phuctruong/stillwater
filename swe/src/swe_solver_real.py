@@ -1,21 +1,26 @@
 #!/usr/bin/env python3
 """
-Real SWE-bench Solver with Prime Skills v1.3.0
+SWE-bench Solver Scaffold (Optional / Experimental)
 Auth: 65537
-Status: PRODUCTION IMPLEMENTATION
+Status: Experimental (requires external data + tooling)
 
-This is the ACTUAL solver that:
-1. Loads real SWE-bench instances
-2. Generates real patches via Haiku (local or API)
-3. Applies patches to repositories
-4. Runs actual test commands
-5. Verifies patches work (Red-Green gates)
-6. Generates proof certificates
+This file is a scaffold for an end-to-end SWE-bench-style loop:
+1. Load an instance description
+2. Generate a patch via a local wrapper (see `src/claude_code_wrapper.py`)
+3. Apply the patch
+4. Run tests (if repositories/data are available)
+5. Emit a run record
 
 Requires:
 - Local Haiku server running (python3 swe/src/haiku_local_server.py)
 - Or ANTHROPIC_API_KEY set for direct API access
 - Real SWE-bench data loaded
+
+Claim hygiene:
+- This repository does not ship a pinned SWE-bench harness + dataset + logs that
+  reproduce a specific score by default.
+- Any emitted \"certificate\" text below is a run record, not a machine-checked
+  proof certificate.
 """
 
 import json
@@ -400,10 +405,10 @@ Generate the patch now:"""
             )
         print("   ✓ PASSED: No regressions", file=sys.stderr)
 
-        # Generate proof
-        print("[6] VERIFY: Generating proof certificate...", file=sys.stderr)
-        proof = self._generate_proof(instance, patch)
-        print("   ✓ Proof generated", file=sys.stderr)
+        # Generate run record (not a formal proof)
+        print("[6] VERIFY: Generating run record...", file=sys.stderr)
+        proof = self._generate_run_record(instance, patch)
+        print("   ✓ Run record generated", file=sys.stderr)
 
         print(f"\n✅ SOLVED: {instance.instance_id}", file=sys.stderr)
         self.instances_solved += 1
@@ -419,17 +424,17 @@ Generate the patch now:"""
             proof=proof,
         )
 
-    def _generate_proof(self, instance: SWEInstance, patch: str) -> str:
-        """Generate proof certificate."""
+    def _generate_run_record(self, instance: SWEInstance, patch: str) -> str:
+        """Generate a human-readable run record (not a formal proof certificate)."""
         return f"""
-PROOF CERTIFICATE: {instance.instance_id}
+RUN RECORD (demo): {instance.instance_id}
 Auth: 65537
 Date: 2026-02-16
 
 VERIFICATION LADDER:
 ✓ Rung 641 (Edge Sanity): Patch applies without errors
 ✓ Rung 274177 (Generalization): Tests pass, no regressions
-✓ Rung 65537 (Formal Proof): Mathematical correctness verified
+✓ Rung 65537 (Explanation): Explanation present (not a machine-checked proof)
 
 RED-GREEN GATES:
 ✓ RED Gate: Tests fail before patch (bug exists)
@@ -439,11 +444,11 @@ RED-GREEN GATES:
 PATCH ANALYSIS:
 - Size: {len(patch)} bytes
 - Type: Minimal reversible patch (Secret Sauce)
-- Confidence: Lane A (Proven)
+- Confidence: Lane B (Checked in-repo; depends on available tests/data)
 - Prime Skills: v1.3.0
 
 CONCLUSION:
-Instance {instance.instance_id} is SOLVED with compiler-grade certainty.
+This run record documents what was attempted and what checks passed.
 """
 
     def solve_batch(
@@ -497,7 +502,7 @@ Instance {instance.instance_id} is SOLVED with compiler-grade certainty.
         print(f"  RED Gates (bug exists): {sum(1 for r in results if r.red_gate_pass)}/{total}")
         print(f"  GREEN Gates (bug fixed): {sum(1 for r in results if r.green_gate_pass)}/{total}")
         print(f"  GOLD Gates (no regressions): {sum(1 for r in results if r.no_regressions)}/{total}")
-        print(f"\nConfidence: Lane A (Proven with verification ladder)")
+        print(f"\nConfidence: Lane B (Run record; not a formal proof certificate)")
         print(f"{'='*80}\n")
 
 
@@ -506,7 +511,7 @@ def main():
     import sys
 
     print("="*80, file=sys.stderr)
-    print("SWE-BENCH REAL SOLVER - PRODUCTION IMPLEMENTATION", file=sys.stderr)
+    print("SWE-BENCH SOLVER SCAFFOLD (EXPERIMENTAL)", file=sys.stderr)
     print("Auth: 65537 | Status: Processing Instance", file=sys.stderr)
     print("="*80, file=sys.stderr)
 
@@ -522,7 +527,7 @@ def main():
             print("\nTo solve instances:")
             print("  1. Pass instance data via stdin as JSON")
             print("  2. Solver will generate patch with Haiku")
-            print("  3. Results include patches and proof certificates")
+            print("  3. Results include patches and run records")
             print("\nExample:")
             print("  cat instance.json | python3 swe_solver_real.py")
             return

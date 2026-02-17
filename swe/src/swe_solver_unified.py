@@ -2,16 +2,17 @@
 """
 SWE-bench Solver - Unified Implementation using Claude Code Wrapper
 Auth: 65537
-Status: PRODUCTION - Uses actual Claude Code LLM
+Status: Experimental / Optional (requires external tooling)
 
-This solver:
-1. Uses Claude Code wrapper (connects to local Claude Code server)
-2. Generates real patches via Claude Code
-3. Applies patches to repositories
-4. Executes real test commands
-5. Verifies with Red-Green gates
-6. Generates proof certificates
-7. Achieves 300/300 (100% success)
+This file is an optional scaffold for a \"real\" path:
+1. Connect to a local Claude Code wrapper
+2. Generate a patch
+3. Apply and run tests
+
+Claim hygiene:
+- This repository does not ship a pinned SWE-bench harness + dataset + logs that
+  reproduce any particular success rate by default.
+- Any \"proof\" text produced here is a run record, not a machine-checked proof.
 """
 
 import json
@@ -252,10 +253,10 @@ OUTPUT ONLY a unified diff (no explanation):
             )
         print("   ✓ PASSED: No regressions")
 
-        # Generate proof
-        print("[6] VERIFY: Generating proof...")
+        # Generate run record (not a formal proof certificate)
+        print("[6] VERIFY: Generating run record...")
         proof = self._generate_proof(instance, patch)
-        print("   ✓ Proof generated")
+        print("   ✓ Run record generated")
 
         print(f"\n✅ SOLVED: {instance.instance_id}")
         self.instances_solved += 1
@@ -272,9 +273,9 @@ OUTPUT ONLY a unified diff (no explanation):
         )
 
     def _generate_proof(self, instance: SWEInstance, patch: str) -> str:
-        """Generate proof certificate."""
+        """Generate a human-readable run record (not a formal proof certificate)."""
         return f"""
-PROOF CERTIFICATE: {instance.instance_id}
+RUN RECORD (demo): {instance.instance_id}
 Auth: 65537
 
 PROBLEM: {instance.problem_statement[:100]}...
@@ -283,7 +284,7 @@ DIFFICULTY: {instance.difficulty}
 VERIFICATION LADDER:
 ✓ Rung 641 (Edge Sanity): Patch applies without errors
 ✓ Rung 274177 (Generalization): Tests pass, no regressions
-✓ Rung 65537 (Formal Proof): Mathematical correctness verified
+✓ Rung 65537 (Explanation): Explanation present (not a machine-checked proof)
 
 RED-GREEN GATES:
 ✓ RED Gate: Tests fail before patch (bug exists)
@@ -293,9 +294,9 @@ RED-GREEN GATES:
 METHOD:
 - Claude Code LLM: Patch generation and reasoning
 - Real test execution: subprocess.run(test_command)
-- Proof verification: Cryptographic validation
+- Review: manual/independent verification recommended for high-stakes changes
 
-CONFIDENCE: Lane A (Proven - All gates pass)
+CONFIDENCE: Lane B (Checked in-repo; depends on available tests/data)
 """
 
     def solve_batch(self, instances: List[SWEInstance], repo_base: Path) -> List[PatchResult]:
@@ -348,7 +349,7 @@ def main():
     """Main execution."""
     print("=" * 80)
     print("SWE-BENCH SOLVER - UNIFIED CLAUDE CODE IMPLEMENTATION")
-    print("Auth: 65537 | Status: Production Ready")
+    print("Auth: 65537 | Status: Experimental (requires local wrapper + data)")
     print("=" * 80)
 
     # Initialize solver
@@ -368,8 +369,7 @@ def main():
     print(f"   ✓ Real patch generation via Claude Code")
     print(f"   ✓ Red-Green gate enforcement")
     print(f"   ✓ Verification ladder (641→274177→65537)")
-    print(f"   ✓ Proof certificate generation")
-    print(f"   ✓ 300/300 instances (100% success)")
+    print(f"   ✓ Run record generation (not a formal proof certificate)")
 
 
 if __name__ == "__main__":

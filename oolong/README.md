@@ -23,7 +23,7 @@ flowchart LR
 ```mermaid
 flowchart LR
   R641["641: edge sanity"] --> R274177["274177: stress / determinism"]
-  R274177 --> R65537["65537: production gate"]
+  R274177 --> R65537["65537: explanation / review gate (demo)"]
 ```
 
 ## Run
@@ -31,4 +31,3 @@ flowchart LR
 ```bash
 python -m nbconvert --execute --to notebook --inplace HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb
 ```
-

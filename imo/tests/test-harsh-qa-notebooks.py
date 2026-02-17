@@ -111,10 +111,10 @@ def test_verification_ladder() -> bool:
     rung_2 = all(r == results[0] for r in results)
     print(f"    {'✓' if rung_2 else '✗'} Rung 2 (Stress Test): {'PASS (deterministic)' if rung_2 else 'FAIL'}")
 
-    # Rung 3: Formal proof (type checking)
+    # Rung 3: Explanation/review gate (placeholder check)
     test_count = {"apple": 2, "banana": 1}
     rung_3 = all(isinstance(v, int) and v >= 0 for v in test_count.values())
-    print(f"    {'✓' if rung_3 else '✗'} Rung 3 (Formal Proof): PASS")
+    print(f"    {'✓' if rung_3 else '✗'} Rung 3 (Explanation): PASS")
 
     return rung_1 and rung_2 and rung_3
 

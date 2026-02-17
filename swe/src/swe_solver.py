@@ -18,10 +18,8 @@ This solver demonstrates the Prime Skills methodology:
 - Lane Algebra (Epistemic typing A/B/C/STAR)
 - Phuc Forecast (DREAM→FORECAST→DECIDE→ACT→VERIFY)
 
-ACTUAL ACHIEVEMENT: 300/300 instances (100% success) with Haiku 4.5
-METHODOLOGY DEMO: 3/3 demo instances showing structure
-
-For detailed critical analysis, see: SWE-HARSH-QA-AUDIT.md
+This file is intentionally scoped as an educational scaffold. It is not a
+reproduced SWE-bench evaluation harness.
 """
 
 from dataclasses import dataclass
@@ -58,8 +56,12 @@ class Gate(str, Enum):
 
 class RealVerificationLadder:
     """
-    Three-rung verification system: 641 → 274177 → 65537
-    Each rung must PASS before considering a solution verified.
+    Demo three-rung "verification ladder": 641 → 274177 → 65537
+
+    In this repo, the ladder is used as a reporting/checklist discipline:
+    - 641: basic sanity (inputs/expected provided)
+    - 274177: local test suite passes
+    - 65537: a written explanation exists (NOT a machine-checked formal proof)
     """
 
     @staticmethod
@@ -81,7 +83,7 @@ class RealVerificationLadder:
 
     @staticmethod
     def verify_rung_65537(proof_statement: str) -> bool:
-        """Rung 65537 (Formal Proof): Proof is substantive (>10 words)"""
+        """Rung 65537 (Explanation): Explanation is substantive (>10 words)"""
         if not proof_statement:
             return False
         return len(proof_statement.split()) > 10
@@ -284,7 +286,7 @@ class SWEBenchSolver:
             f"edge sanity, generalization, and formal proof rungs."
         )
         rung_65537 = self.verification_ladder.verify_rung_65537(proof_statement)
-        print(f"  Rung 65537 (Formal Proof): {'PASS ✓' if rung_65537 else 'FAIL ✗'}")
+    print(f"  Rung 65537 (Explanation): {'PASS ✓' if rung_65537 else 'FAIL ✗'}")
 
         # Determine confidence level
         all_pass = all([rung_641, rung_274177, rung_65537])
@@ -340,7 +342,7 @@ def main():
 
     print("=" * 100)
     print("SWE-BENCH SOLVER WITH PRIME SKILLS v1.3.0")
-    print("Auth: 65537 | Status: Production Ready")
+    print("Auth: 65537 | Status: Demo (educational scaffold)")
     print("=" * 100)
     print()
 
@@ -398,7 +400,7 @@ def main():
 
     print(f"  Rung 641 (Edge Sanity): {'PASS ✓' if all_rung_641 else 'FAIL ✗'}")
     print(f"  Rung 274177 (Generalization): {'PASS ✓' if all_rung_274177 else 'FAIL ✗'}")
-    print(f"  Rung 65537 (Formal Proof): {'PASS ✓' if all_rung_65537 else 'FAIL ✗'}")
+    print(f"  Rung 65537 (Explanation): {'PASS ✓' if all_rung_65537 else 'FAIL ✗'}")
 
     print("\n✓ Prime Skills:")
     print("  Prime Coder v1.3.0: ACTIVE (Red-Green gates, Secret Sauce)")
@@ -408,12 +410,12 @@ def main():
     print("\n✓ Lane Algebra Confidence:")
     confidences = [r.confidence for r in results]
     lane_a_count = sum(1 for c in confidences if c == Lane.A)
-    print(f"  Lane A (Proven): {lane_a_count}/{total}")
+    print(f"  Lane A (Locally checked): {lane_a_count}/{total}")
 
     print()
     print("=" * 100)
-    print("STATUS: PRODUCTION READY ✅")
-    print("Grade: A+ | Confidence: Lane A")
+    print("STATUS: DEMO COMPLETE")
+    print("Confidence: Lane B (Checked in-repo; not an external benchmark certificate)")
     print("Auth: 65537 | Northstar: Phuc Forecast")
     print("=" * 100)
     print()
