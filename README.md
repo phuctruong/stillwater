@@ -46,7 +46,7 @@ jupyter notebook HOW-WE-SOLVED-OOLONG-MEMORY.ipynb
 4. **Context (8KB+ Full Files)** - Complete imports, functions, classes
 5. **Structure (22-State FSM)** - Explicit state machine with 8 forbidden actions
 
-### Plus: Haiku Swarms + 13D Personas
+### Plus: Phuc Swarms + 13D Personas
 - **5 Parallel Agents**: Scout (Ken Thompson), Solver (Donald Knuth), Skeptic (Alan Turing), Greg (Greg Isenberg), Podcasters (Storyteller)
 - **Context Isolation**: Each agent gets fresh context + 5 focused skills (prevents 78%→95% quality)
 - **Famous Personas**: Name-based compression of expertise activates latent capability (+20% quality)

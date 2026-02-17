@@ -1,4 +1,4 @@
-# Haiku Swarms: Context Isolation (Operational Note)
+# Phuc Swarms: Context Isolation (Operational Note)
 
 **Status:** Draft (open-source, repo-backed where referenced)  
 **Last updated:** 2026-02-17  
@@ -28,9 +28,9 @@ As a single LLM session progresses, context accumulates:
 
 **Result**: Performance degrades over time in long sessions
 
-### Why Haiku Agents Prevent This
+### Why Phuc Agents Prevent This
 
-Each Haiku agent:
+Each Phuc agent:
 1. **Starts with FRESH context** (no historical baggage)
 2. **Gets injected with ONLY necessary skills** (not all 51)
 3. **Has explicit goals + constraints** (mission clarity)
@@ -419,7 +419,7 @@ synthesis = orchestrator.synthesize(
 ## NEXT STEPS
 
 ### 1. Implement Isolated Context Injection
-- Modify `haiku_orchestrator.py` to create fresh contexts
+- Modify your orchestrator to create fresh contexts (fresh process or fresh prompt capsule per agent)
 - Pass only essential skills per agent
 - Use memory system to share results cleanly
 

@@ -236,9 +236,7 @@ If we can **extract the LLM's intent** (which lines changed), we can **regenerat
 
 ## QA Findings Summary
 
-See `BATCH_1_QA_FINDINGS.md` for full analysis.
-
-**Key Findings:**
+**Key Findings (in-repo, summarized here):**
 - Phases 1-3: ✅ RELIABLE (5/5, 5/5, 4-5/5)
 - Phase 4: ❌ BLOCKED (0/5 valid diffs)
 - Phase 5: ⏸️ BLOCKED (waiting for Phase 4)
@@ -301,10 +299,9 @@ for instance in instances:
 
 ```
 ./
-├── HOW-TO-CRUSH-SWE-BENCHMARK-v1.0.md  (this guide)
+├── HOW-TO-CRUSH-SWE-BENCHMARK.md       (this guide)
 ├── batch_1_phuc_orchestration.py        (execute phases 1-4)
 ├── diff_postprocessor.py                (repair malformed diffs)
-├── BATCH_1_QA_FINDINGS.md               (root cause analysis)
 └── PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb (reference: working patterns)
 ```
 
@@ -323,9 +320,7 @@ for instance in instances:
 
 ## For More Details
 
-- **QA Analysis:** See `BATCH_1_QA_FINDINGS.md`
 - **Working Reference:** See `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb`
-- **Solver Issue:** Phase 4 diff generation (detailed in QA findings)
 - **Solution:** `diff_postprocessor.py` (under implementation)
 
 **Last Updated:** 2026-02-17 10:50 UTC

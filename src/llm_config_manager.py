@@ -171,7 +171,10 @@ class LLMConfigManager:
         # For HTTP-type providers (localhost), check if server is running
         if provider_type == "http" and "localhost" in config.get("url", ""):
             try:
-                import requests
+                import requests  # type: ignore
+            except Exception:
+                return False, "❌ Python dependency 'requests' not installed (needed to check localhost providers)"
+            try:
                 response = requests.get(f"{config.get('url')}/", timeout=2)
                 if response.status_code in [200, 404, 405]:  # Any response means server is up
                     return True, f"✅ {self.get_provider_name()} is running"

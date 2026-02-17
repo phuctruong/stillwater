@@ -3,7 +3,7 @@
 BATCH 1 PHUC ORCHESTRATION: Execute 5 astropy instances to 100% success
 
 Auth: 65537
-Status: Ready for execution
+Status: Ready for execution - WITH DIFF POST-PROCESSOR
 Mission: Achieve 5/5 on Batch 1 using fail-closed prompting + anti-rot isolation
 
 Instance IDs:
@@ -12,6 +12,13 @@ Instance IDs:
   3. astropy__astropy-14365
   4. astropy__astropy-14995
   5. astropy__astropy-6938
+
+Phases:
+  1. DREAM (Scout)     ✅ Working
+  2. FORECAST (Grace)  ✅ Working
+  3. DECIDE (Judge)    ✅ Working
+  4. ACT (Solver)      ✅ + DIFF POST-PROCESSOR (fix malformed diffs)
+  5. VERIFY (Skeptic)  ✅ RED-GREEN gate
 """
 
 import json
@@ -25,6 +32,15 @@ import os
 from pathlib import Path
 from typing import Optional, Dict, Tuple, List
 import logging
+
+# Import the diff post-processor to fix malformed diffs
+try:
+    from diff_postprocessor import DiffPostProcessor
+    DIFF_POSTPROCESSOR_AVAILABLE = True
+except ImportError:
+    logger_temp = logging.getLogger(__name__)
+    logger_temp.warning("DiffPostProcessor not available - diffs won't be repaired")
+    DIFF_POSTPROCESSOR_AVAILABLE = False
 
 # ============================================================================
 # SETUP: Logging + Configuration
@@ -573,46 +589,54 @@ class SolverGenerator:
     def generate_patch(self, decision: Dict, problem: str, source_files: Dict[str, str]) -> Optional[str]:
         """ACT phase: Generate unified diff."""
 
-        # ULTRA-MINIMAL SYSTEM PROMPT
-        system = """Output a unified diff in ```diff code block.
+        # EXACT SYSTEM PROMPT FROM WORKING NOTEBOOK
+        system = """AUTHORITY: 65537 (Prime Coder + Phuc Forecast)
 
-Each line starts with: SPACE (context), MINUS (remove), or PLUS (add).
-Include 3+ context lines before/after changes.
+PERSONA: Brian Kernighan (K&R C, clarity master)
+ROLE: ACT phase - Implement minimal, elegant patch per locked DECISION_RECORD
+CRITICAL: See DECISION_RECORD + SOURCE CODE only. No prior reasoning. Fresh context.
 
-Output only the diff block. No text."""
+YOU MUST OUTPUT A UNIFIED DIFF. NO QUESTIONS, NO ESCAPE HATCHES.
 
-        # Build source files clearly
-        source_section = "SOURCE CODE:\n"
-        for filepath, content in source_files.items():
-            lines = content.split('\n')
-            source_section += f"\nFILE: {filepath}\n```\n"
-            for i, line in enumerate(lines, 1):
-                source_section += f"{i:3d}: {line}\n"
-            source_section += "```\n"
-
-        # SIMPLIFIED USER PROMPT - be very direct with example
-        prompt = f"""Generate a unified diff:
-
-CHANGE: {decision.get('chosen_approach', 'Fix the bug')}
-
-FILES: {', '.join(decision.get('scope_locked', ['file.py']))}
-
-PROBLEM: {problem[:150]}
-
-{source_section}
-
-EXAMPLE:
+REQUIRED DIFF FORMAT:
 ```diff
---- a/example.py
-+++ b/example.py
-@@ -5,5 +5,5 @@
-     x = 1
--    return y / 0
-+    return y // 1
-     done()
+--- a/FILENAME
++++ b/FILENAME
+@@ -LINE,COUNT +LINE,COUNT @@
+ context line with space prefix
+-removed line with minus prefix
++added line with plus prefix
+ more context with space prefix
 ```
 
-Generate the ```diff code block now:"""
+CRITICAL RULES:
+1. Every line MUST start with SPACE, MINUS, or PLUS (no other prefixes)
+2. Include 2-3 context lines before and after changes
+3. Output code block with exactly 3 backticks: ```diff
+4. Never ask questions - generate diff from available context
+5. Diff is minimal (only necessary changes to fix bug)
+6. If multiple files need changes, create multiple hunks
+"""
+
+        # Build source files with full content
+        source_section = ""
+        for filepath, content in source_files.items():
+            source_section += f"\n### {filepath}\n```python\n{content}\n```\n"
+
+        # USER PROMPT - EXACT STYLE FROM NOTEBOOK
+        prompt = f"""DECISION_RECORD (locked - implement this):
+{json.dumps(decision, indent=2)}
+
+PROBLEM:
+{problem}
+
+SOURCE CODE:
+{source_section}
+
+Generate a minimal unified diff to implement the approach above.
+Output ONLY the diff code block with proper formatting.
+
+```diff"""
 
         try:
             payload = {
@@ -923,6 +947,20 @@ def run_batch_1():
             results[iid] = {"status": "FAILED", "reason": "solver_failed"}
             continue
         print(f" ✅")
+
+        # PHASE 4B: POST-PROCESS — Repair malformed diffs if needed
+        if DIFF_POSTPROCESSOR_AVAILABLE:
+            postprocessor = DiffPostProcessor()
+            # Combine all source files into one context string
+            full_source = ""
+            for filepath, content in context["source_files"].items():
+                full_source += f"# File: {filepath}\n{content}\n\n"
+
+            # Try to repair the patch
+            repaired_patch = postprocessor.repair(patch, full_source)
+            if repaired_patch:
+                logger.info("✅ Diff post-processor repaired malformed patch")
+                patch = repaired_patch
 
         # PHASE 5: VERIFY — Skeptic
         print(f"  [5/5] VERIFY (Skeptic - RED-GREEN)...", end="", flush=True)

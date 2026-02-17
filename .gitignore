@@ -1,6 +1,7 @@
 *.pyc
 __pycache__/
 .ipynb_checkpoints/
+*.log
 .eggs/
 dist/
 build/

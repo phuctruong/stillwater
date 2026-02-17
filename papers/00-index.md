@@ -27,9 +27,8 @@ This index is intentionally conservative: it links only to papers that exist in 
 
 ## System Notes (Operational / Architecture)
 
-1. `21-haiku-swarms-context-isolation.md`
+1. `21-phuc-swarms-context-isolation.md`
 2. `22-how-we-solved-ai-scalability.md`
-3. `90-system-audit-refactor-plan.md` (internal engineering plan)
 
 ## Reproducibility (What Reviewers Can Run Today)
 
@@ -37,7 +36,6 @@ This index is intentionally conservative: it links only to papers that exist in 
    - `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`
    - `HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb`
    - `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb`
-   - `HOW-TO-CRUSH-SWE-BENCHMARK.ipynb` (excluded from harsh QA in this audit, but still documented)
 2. Unit tests:
    - `tests/phuc_orchestration/`
 

@@ -23,7 +23,7 @@ This repo does not currently include an automated benchmark suite that reproduce
 
 **Discovery**: Infrastructure matters more than model size.
 
-**Solution**: 5 Weapons Architecture + Haiku Swarms + Context Isolation + Famous Personas
+**Solution**: 5 Weapons Architecture + Phuc Swarms + Context Isolation + Famous Personas
 
 **Result**: llama 8B (standard everyone knows) achieves 100% on Phase 1, scaling to 80%+ on Phase 2-3
 
@@ -138,7 +138,7 @@ Gain:        2x compression + 10x meaning density
 
 ---
 
-## BREAKTHROUGH 3: Haiku Swarms + Context Isolation
+## BREAKTHROUGH 3: Phuc Swarms + Context Isolation
 
 ### The Problem: Context Rot
 As a session progresses, context accumulates:
@@ -468,7 +468,7 @@ Stop scaling models. Build better infrastructure.
 
 We've proven:
 - ✅ Single instance: 100% (django__django-14608)
-- ✅ Infrastructure: Working (5 weapons, Haiku swarms)
+- ✅ Infrastructure: Working (5 weapons, Phuc swarms)
 - ✅ Personas: Integrated (famous CS experts)
 - ✅ Verification: In place (641→274177→65537)
 
