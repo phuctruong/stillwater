@@ -54,7 +54,7 @@ class Config:
 
 
 class ClaudeCodeCLI:
-    """Wrapper for Claude Code CLI (local command with -p flag)"""
+    """Wrapper for Claude CLI (local command with -p flag)"""
 
     def __init__(self):
         """Initialize CLI wrapper"""
@@ -62,15 +62,48 @@ class ClaudeCodeCLI:
         self.available = self._check_available()
 
     def _find_cli(self) -> str:
-        """Find claude-code CLI in PATH"""
-        result = subprocess.run(
-            ["which", "claude-code"],
-            capture_output=True,
-            text=True
-        )
-        if result.returncode == 0:
-            return result.stdout.strip()
-        return "claude-code"  # Hope it's in PATH
+        """Find claude CLI in PATH"""
+        # Try 'claude' first (Claude Code v2+)
+        try:
+            result = subprocess.run(
+                ["which", "claude"],
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            if result.returncode == 0:
+                return result.stdout.strip()
+        except:
+            pass
+
+        # Fallback to 'claude-code' (older versions)
+        try:
+            result = subprocess.run(
+                ["which", "claude-code"],
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            if result.returncode == 0:
+                return result.stdout.strip()
+        except:
+            pass
+
+        # Try direct execution to verify which works
+        for cmd in ["claude", "claude-code"]:
+            try:
+                result = subprocess.run(
+                    [cmd, "--version"],
+                    capture_output=True,
+                    text=True,
+                    timeout=5
+                )
+                if result.returncode == 0:
+                    return cmd
+            except:
+                pass
+
+        return "claude"  # Default to 'claude'
 
     def _check_available(self) -> bool:
         """Check if CLI is available"""
@@ -140,7 +173,13 @@ class ClaudeCodeCLI:
             if result.returncode == 0:
                 return result.stdout.strip()
             else:
-                logger.error(f"CLI error: {result.stderr}")
+                stderr = result.stderr
+                if "cannot be launched inside another Claude Code session" in stderr:
+                    logger.error(f"Nested Claude Code session detected.")
+                    logger.error(f"Solution: Unset CLAUDECODE variable or run outside Claude Code")
+                    logger.error(f"Command: unset CLAUDECODE && {self.cli_path} -p '{prompt[:30]}...'")
+                else:
+                    logger.error(f"CLI error: {stderr}")
                 return None
 
         except subprocess.TimeoutExpired:
