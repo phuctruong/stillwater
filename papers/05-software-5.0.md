@@ -93,7 +93,7 @@ The root notebooks are the public "recipes" for major claims:
 - `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb`
   - concept: swarm spine + fail-closed prompting + phase artifacts
   - evidence: unit tests for phases
-- `HOW-TO-CRUSH-SWE-BENCHMARK.ipynb`
+- `HOW-TO-CRUSH-SWE-BENCHMARK.md`
   - concept: patch generation pipeline + wrapper + progress tracking
   - evidence: batch runs, logs, result summaries (this notebook is treated separately for harsh QA)
 
@@ -138,4 +138,3 @@ When you add a new capability:
 2. Add a recipe (notebook/script/tests).
 3. Add verification artifacts (commands, outputs, hashes).
 4. Update `papers/00-index.md` with accurate links and reproduction steps.
-

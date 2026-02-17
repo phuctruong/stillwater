@@ -51,7 +51,7 @@ If you use Stillwater's research, please cite:
   author = {Truong, Phuc Vinh},
   title = {Stillwater OS: Solving the 15 Fundamental AGI Blockers},
   year = {2026},
-  url = {https://github.com/phuctruong/stillwater-cli},
+  url = {https://github.com/phuctruong/stillwater},
   note = {Auth: 65537}
 }
 ```
@@ -60,16 +60,13 @@ If you use Stillwater's research, please cite:
 
 ---
 
-## Open Science
+## Open Science (What Is True Today)
 
-All papers are:
-- ✅ **Open access** (no paywalls)
-- ✅ **Reproducible** (code + data included)
-- ✅ **Pre-print available** (arXiv)
-- ✅ **Community peer review** (GitHub issues)
-- ✅ **Living documents** (updated with new results)
-
-**This is what OpenAI was supposed to be.**
+- ✅ **Open access**: all content in this repo is publicly readable.
+- ✅ **Living documents**: papers may change as code + evidence evolves.
+- ✅ **Community review**: issues/PRs are the review mechanism.
+- ⚠️ **Reproducibility**: some claims are backed by runnable notebooks here; numeric performance claims should be treated as hypotheses unless reproduced in this repo and linked.
+- ⚠️ **Preprints**: this repo does not claim an arXiv preprint unless a paper explicitly links to one.
 
 ---
 

@@ -5,7 +5,20 @@
 # Switch between providers by setting `provider:` and updating the URL/API key below
 
 # Current active provider
-provider: "claude-code"  # Options: "claude-code", "openai", "claude", "openrouter", "togetherai", "gemini"
+#
+# Default is an offline demo provider so the repo can be executed without any
+# external services. Switch to "claude-code" (local wrapper) or an API provider
+# when you want LLM-backed runs.
+provider: "offline"  # Options: "offline", "claude-code", "openai", "claude", "openrouter", "togetherai", "gemini"
+
+# Offline Demo - Default
+offline:
+  name: "Offline (Demo Mode)"
+  type: "offline"
+  url: ""
+  description: "No network calls. Notebooks and demos run deterministically."
+  requires_api_key: false
+  environment_variables: []
 
 # Claude Code (Local Server) - Default
 claude-code:

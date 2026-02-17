@@ -10,7 +10,7 @@
 ## Reproduce / Verify In This Repo
 
 1. Read/run orchestration: `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb`
-2. Read/run SWE pipeline notebook: `HOW-TO-CRUSH-SWE-BENCHMARK.ipynb`
+2. Read the SWE guide: `HOW-TO-CRUSH-SWE-BENCHMARK.md`
 3. Wrapper architecture: `src/claude_code_wrapper.py`
 
 ## Notes On Claims

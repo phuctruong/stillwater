@@ -2,7 +2,7 @@
 provider = "ollama"       # "ollama" | "anthropic"
 
 [llm.ollama]
-host = "192.168.68.100"
+host = "localhost"
 port = 11434
 model = "llama3.1:8b"
 
