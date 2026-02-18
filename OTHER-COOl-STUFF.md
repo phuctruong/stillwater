@@ -40,10 +40,10 @@ Site: https://pzip.net
 
 One of my favorite shows is Silicon Valley and I built the real Pied Piper - PZip + PDrive (coming soon).  If there was a real Weissman Score for compression, this would be off the charts!  
 
-It turns out the solution was USA + Russia = Shannon + Kolmgorov. I added a few theories of my own and invented adaptive compression... so USA + Russia + Vietnam = Phuc Compression!
+It turns out the solution was USA + Russia = Shannon + Kolmogorov. I added a few theories of my own and invented adaptive compression... so USA + Russia + Vietnam = Phuc Compression!
 
 - Compression experiments and benchmarks, presented like a scoreboard.
 - A “never worse” philosophy: try to beat the classics, but don’t break people’s files.
 
-If you like getting 18-88% more storage with a simple free softawre upgrade, then PZip.net is for you.  That's my tip!  Hint hint :)
+If you like getting 18-88% more storage with a simple free software upgrade, then PZip.net is for you.  That's my tip!  Hint hint :)
 
