@@ -35,7 +35,7 @@ I think a new kind of person is emerging—someone symbiotic with AI, not replac
 
 It’s the end of the Year of the Dragon. I was born in the Year of the Dragon. And now the dragon rises.
 
-Happy Lunar New Year. Happy Year of the Snake.
+Happy Lunar New Year. Happy Year of the Horse/AGI.
 
 This is my red envelope to the world: not money, but **possibility**.
 
