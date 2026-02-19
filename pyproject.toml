@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "stillwater-os"
-version = "1.2.3"
+version = "1.2.4"
 description = "Stillwater OS - Beat entropy at everything"
 requires-python = ">=3.10"
 license = "Apache-2.0"

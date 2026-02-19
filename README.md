@@ -120,6 +120,7 @@ Your one technique is **verification**. Master it.
 3. Run `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb` (how the orchestration works).
 4. Skim `papers/00-index.md` (map of concepts and what is verifiable here).
 5. For upgrading an existing CLI/agent stack, use [`STILLWATER-OS-UPGRADE-GUIDE.md`](STILLWATER-OS-UPGRADE-GUIDE.md).
+6. Read case studies (real project usage): `case-studies/`
 
 ## A/B Test First (10-Minute Protocol)
 
