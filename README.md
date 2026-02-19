@@ -1,4 +1,4 @@
-# Stillwater OS - LLM KungFu Dojo (aka steroids for AI)
+# Stillwater OS - LLM Kung Fu Dojo (aka steroids for AI)
 
 > "Be water, my friend." -- Bruce Lee
 
