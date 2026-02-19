@@ -1,4 +1,4 @@
-# FINAL AUDIT: Stillwater Repository (v1.2.2 Readiness)
+# FINAL AUDIT: Stillwater Repository (v1.2.3 Readiness)
 
 > "The successful warrior is the average man, with laser-like focus." -- Bruce Lee
 
@@ -6,8 +6,8 @@
 **Auth:** 65537  
 **Auditor:** Codex (GPT-5.2)  
 **Skill Pack Referenced:** `prime-coder.md`, `prime-math.md`, `prime-safety.md`, `phuc-context.md`, `phuc-forecast.md`, `phuc-swarms.md`, `phuc-cleanup.md`  
-**Release Target:** v1.2.2  
-**Status:** READY FOR RELEASE (v1.2.2) — pending tag+push
+**Release Target:** v1.2.3  
+**Status:** RELEASED (v1.2.3)
 
 ---
 
@@ -28,16 +28,16 @@ flowchart TD
     RISK --> S
 ```
 
-**Assessment:** The repository is release-ready for v1.2.1 once the current worktree changes are committed. Harsh QA, unit tests, generated-doc checks, and compile checks pass; remaining risks are limited to optional REAL-backend runs on self-hosted runners.
+**Assessment:** The repository is release-ready for v1.2.3. Harsh QA, unit tests, generated-doc checks, and compile checks pass; remaining risks are limited to optional REAL-backend runs on self-hosted runners.
 
 ---
 
 ## Evidence Executed (2026-02-19)
 
-**Repo ref:** `v1.2.2`  
+**Repo ref:** `v1.2.3`  
 **Worktree:** CLEAN (audit intended to match the tag)
 
-Release delta (v1.2.2 highlights):
+Release delta (v1.2.3 highlights):
 - Added CI gate: `.github/workflows/ci.yml`
 - Skills bench now emits per-run prompt/response receipts under `artifacts/skills_ab/runs/<run_id>/` (plus latency/token proxies in `results.json`)
 - Skills bench coverage expanded (persistence + exfil safety probes; forecast JSON schema probe; Windows missing-assets probe)
@@ -54,7 +54,7 @@ Result: `5 passed, 4 skipped`
 4. `PYTHONPATH=src STILLWATER_AB_BACKEND=mock STILLWATER_AB_CACHE=0 python3 -m stillwater.skills_ab`  
 Result: PASS, artifacts regenerated (`artifacts/skills_ab/results.json`, `artifacts/skills_ab/report.md`)
 5. `PYTHONPATH=src python3 -m stillwater --version`  
-Result: PASS (`stillwater 1.2.2`)
+Result: PASS (`stillwater 1.2.3`)
 6. `python3 -m compileall -q /home/phuc/projects/stillwater/src /home/phuc/projects/stillwater/swe /home/phuc/projects/stillwater/imo`  
 Result: PASS (no output)
 7. Minimal secret-pattern scan (high-signal patterns only)  
