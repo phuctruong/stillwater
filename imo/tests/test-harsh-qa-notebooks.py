@@ -1,316 +1,174 @@
 #!/usr/bin/env python3
 """
-HARSH QA TEST: Verify each HOW-TO notebook is:
-✓ Syntactically correct
-✓ Peer-reviewable (clear, minimal prose)
-✓ Executable (code runs without errors)
-✓ Demonstrating the secret sauce correctly
+HARSH QA NOTEBOOK RUNNER (Stillwater, 2026-02-19)
+
+Goals:
+1) Ensure key notebooks exist and have no committed error outputs.
+2) Execute PHUC-SKILLS-SECRET-SAUCE.ipynb in deterministic mock mode.
+3) Verify A/B/AB/ABC move matrix artifacts are emitted.
 """
 
-import sys
+from __future__ import annotations
+
+import json
+import os
 import subprocess
+import sys
 from pathlib import Path
-from collections import Counter
-from fractions import Fraction
-
-sys.path.insert(0, str(Path(__file__).parent))
+from typing import Any
 
 
-def test_notebook_exists(notebook_name: str) -> bool:
-    """Check if markdown notebook exists."""
-    repo_root = Path(__file__).resolve().parents[2]
-    path = repo_root / notebook_name
-    exists = path.exists()
-    print(f"  {'✓' if exists else '✗'} {notebook_name} exists")
-    return exists
+def repo_root() -> Path:
+    return Path(__file__).resolve().parents[2]
 
 
-def test_markdown_syntax(notebook_path: Path) -> bool:
-    """Verify markdown syntax is valid."""
-    try:
-        content = notebook_path.read_text()
-        # Basic checks
-        has_headers = content.count("# ") > 0
-        has_code_blocks = "```" in content
-        has_sections = "---" in content
+def load_notebook(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
 
-        valid = has_headers and has_code_blocks
-        print(f"  {'✓' if valid else '✗'} Markdown syntax valid (headers, code blocks)")
-        return valid
-    except Exception as e:
-        print(f"  ✗ Markdown syntax error: {e}")
+
+def notebook_has_error_outputs(path: Path) -> bool:
+    nb = load_notebook(path)
+    for cell in nb.get("cells", []):
+        if cell.get("cell_type") != "code":
+            continue
+        for out in cell.get("outputs", []):
+            if out.get("output_type") == "error":
+                return True
+    return False
+
+
+def check_notebook_exists(path: Path) -> bool:
+    ok = path.exists()
+    print(f"  {'PASS' if ok else 'FAIL'} exists: {path.name}")
+    return ok
+
+
+def check_notebook_clean(path: Path) -> bool:
+    if not path.exists():
+        print(f"  FAIL clean-check skipped (missing): {path.name}")
         return False
+    ok = not notebook_has_error_outputs(path)
+    print(f"  {'PASS' if ok else 'FAIL'} no committed error outputs: {path.name}")
+    return ok
 
 
-def test_counter_bypass_concept() -> bool:
-    """Test Counter Bypass Protocol logic."""
-    print("\n  Testing Counter Bypass Protocol:")
+def run_skills_notebook_mock(root: Path) -> tuple[bool, str]:
+    nb = root / "PHUC-SKILLS-SECRET-SAUCE.ipynb"
+    if not nb.exists():
+        return False, "missing PHUC-SKILLS-SECRET-SAUCE.ipynb"
 
-    # Step 1: LLM would classify items
-    text = "apple banana apple orange"
-    items = ["apple", "banana", "orange"]
+    env = os.environ.copy()
+    env["STILLWATER_AB_BACKEND"] = "mock"
+    env["STILLWATER_AB_CACHE"] = "0"
+    env["PYTEST_DISABLE_PLUGIN_AUTOLOAD"] = "1"
 
-    # Step 2: CPU enumerates
-    counter = Counter()
-    for word in text.split():
-        if word in items:
-            counter[word] += 1
-
-    # Verify results
-    expected = {"apple": 2, "banana": 1, "orange": 1}
-    success = dict(counter) == expected
-
-    print(f"    {'✓' if success else '✗'} Counter Bypass works: {dict(counter)}")
-    return success
-
-
-def test_exact_math_kernel() -> bool:
-    """Test Exact Math Kernel with fractions."""
-    print("\n  Testing Exact Math Kernel:")
-
-    # Sum of squares formula: n(n+1)(2n+1)/6
-    def sum_squares_formula(n: int) -> Fraction:
-        return Fraction(n * (n + 1) * (2 * n + 1), 6)
-
-    def sum_squares_enumeration(n: int) -> Fraction:
-        return sum(Fraction(i ** 2) for i in range(1, n + 1))
-
-    # Test on several values
-    test_cases = [1, 5, 10, 50]
-    all_pass = True
-
-    for n in test_cases:
-        formula = sum_squares_formula(n)
-        enum = sum_squares_enumeration(n)
-        if formula != enum:
-            all_pass = False
-            print(f"    ✗ n={n}: formula={formula}, enum={enum}")
-        else:
-            print(f"    ✓ n={n}: {formula} (exact)")
-
-    return all_pass
+    cmd = [
+        sys.executable,
+        "-m",
+        "nbconvert",
+        "--execute",
+        "--to",
+        "notebook",
+        "--inplace",
+        str(nb),
+    ]
+    p = subprocess.run(
+        cmd,
+        cwd=root,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=900,
+    )
+    if p.returncode != 0:
+        msg = (p.stdout or "") + "\n" + (p.stderr or "")
+        return False, msg[-2000:]
+    return True, "ok"
 
 
-def test_verification_ladder() -> bool:
-    """Test 3-rung verification ladder concept."""
-    print("\n  Testing Verification Ladder (641→274177→65537):")
+def check_skills_artifacts(root: Path) -> tuple[bool, str]:
+    results_path = root / "artifacts" / "skills_ab" / "results.json"
+    report_path = root / "artifacts" / "skills_ab" / "report.md"
 
-    # Rung 1: Edge sanity
-    rung_1 = Counter({"a": 1}) == Counter({"a": 1})
-    print(f"    {'✓' if rung_1 else '✗'} Rung 1 (Edge Sanity): PASS")
+    if not results_path.exists():
+        return False, f"missing results artifact: {results_path}"
+    if not report_path.exists():
+        return False, f"missing report artifact: {report_path}"
 
-    # Rung 2: Stress test (determinism)
-    results = []
-    counter_text = "apple banana apple"
-    for _ in range(5):
-        c = Counter()
-        for word in counter_text.split():
-            c[word] += 1
-        results.append(dict(c))
+    data = json.loads(results_path.read_text(encoding="utf-8"))
+    scenario_variants = data.get("scenario_variants", {})
+    summary = data.get("summary", {})
+    runs = data.get("runs", [])
 
-    rung_2 = all(r == results[0] for r in results)
-    print(f"    {'✓' if rung_2 else '✗'} Rung 2 (Stress Test): {'PASS (deterministic)' if rung_2 else 'FAIL'}")
-
-    # Rung 3: Explanation/review gate (placeholder check)
-    test_count = {"apple": 2, "banana": 1}
-    rung_3 = all(isinstance(v, int) and v >= 0 for v in test_count.values())
-    print(f"    {'✓' if rung_3 else '✗'} Rung 3 (Explanation): PASS")
-
-    return rung_1 and rung_2 and rung_3
-
-
-def test_lane_algebra() -> bool:
-    """Test Lane Algebra epistemic typing."""
-    print("\n  Testing Lane Algebra (A > B > C > STAR):")
-
-    lanes = {
-        'A': "Proven (tests pass)",
-        'B': "Framework assumption",
-        'C': "Heuristic (LLM confidence)",
-        'STAR': "Unknown"
+    required_arms = {
+        "A_baseline_white_belt",
+        "AB_guarded_coder",
+        "ABC_master_stack",
     }
+    seen_arms = set()
+    for arms in scenario_variants.values():
+        if isinstance(arms, list):
+            seen_arms.update(arms)
 
-    # Verify lane hierarchy
-    hierarchy = ['A', 'B', 'C', 'STAR']
-    print(f"    ✓ Lane hierarchy: {' > '.join(hierarchy)}")
+    if not required_arms.issubset(seen_arms):
+        return False, f"missing required arms in scenario_variants: {sorted(required_arms - seen_arms)}"
 
-    # Test MIN rule: weakest lane dominates
-    def combine_lanes(*lanes_to_combine):
-        strength = {'A': 4, 'B': 3, 'C': 2, 'STAR': 1}
-        return min(lanes_to_combine, key=lambda x: strength[x])
+    required_scenarios = {"swarms_scout", "forecast_plan", "micro_swe_config"}
+    if not required_scenarios.issubset(set(summary.keys())):
+        return False, f"missing scenarios in summary: {sorted(required_scenarios - set(summary.keys()))}"
 
-    result = combine_lanes('A', 'C')  # Should return C (weakest)
-    correct = result == 'C'
-    print(f"    {'✓' if correct else '✗'} MIN rule (A ⊕ C = C): {result}")
+    if not runs:
+        return False, "runs list is empty"
 
-    return True
+    report_text = report_path.read_text(encoding="utf-8")
+    if "Kung-Fu Move Cards" not in report_text:
+        return False, "report missing 'Kung-Fu Move Cards' section"
 
-
-def test_phuc_forecast() -> bool:
-    """Test Phuc Forecast methodology structure."""
-    print("\n  Testing Phuc Forecast (DREAM→FORECAST→DECIDE→ACT→VERIFY):")
-
-    phases = ["DREAM", "FORECAST", "DECIDE", "ACT", "VERIFY"]
-    sequence = " → ".join(phases)
-
-    print(f"    ✓ Methodology: {sequence}")
-
-    # Verify each phase has a purpose
-    purposes = {
-        "DREAM": "Understand problem",
-        "FORECAST": "Predict success",
-        "DECIDE": "Commit approach",
-        "ACT": "Implement solution",
-        "VERIFY": "Validate with proofs"
-    }
-
-    for phase, purpose in purposes.items():
-        print(f"    ✓ {phase}: {purpose}")
-
-    return True
+    return True, "artifacts verified"
 
 
-def test_red_green_gates() -> bool:
-    """Test Red-Green gate TDD enforcement."""
-    print("\n  Testing Red-Green Gates (TDD enforcement):")
-
-    # RED gate: test fails without patch
-    red_gate_passes = True  # Simulated
-    print(f"    {'✓' if red_gate_passes else '✗'} RED Gate: Test fails without patch")
-
-    # GREEN gate: test passes with patch
-    green_gate_passes = True  # Simulated
-    print(f"    {'✓' if green_gate_passes else '✗'} GREEN Gate: Test passes with patch")
-
-    return red_gate_passes and green_gate_passes
-
-
-# ==============================================================================
-# HARSH QA TESTS FOR EACH NOTEBOOK
-# ==============================================================================
-
-def harsh_qa_oolong() -> bool:
-    """Harsh QA test for HOW-TO-SOLVE-OOLONG.md"""
-    print("\n" + "=" * 70)
-    print("HARSH QA: HOW-TO-SOLVE-OOLONG.md")
-    print("=" * 70)
-
-    checks = [
-        ("File exists", test_notebook_exists("HOW-TO-SOLVE-OOLONG.md")),
-        ("Markdown valid", test_markdown_syntax(Path("HOW-TO-SOLVE-OOLONG.md"))),
-        ("Counter Bypass works", test_counter_bypass_concept()),
-        ("Clear and peer-reviewable", True),  # Manual inspection required
+def main() -> int:
+    root = repo_root()
+    notebooks = [
+        root / "HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb",
+        root / "HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb",
+        root / "HOW-TO-CRUSH-SWE-BENCHMARK.ipynb",
+        root / "PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb",
+        root / "PHUC-SKILLS-SECRET-SAUCE.ipynb",
     ]
 
-    passed = sum(1 for _, result in checks if result)
-    total = len(checks)
+    print("=" * 72)
+    print("STILLWATER HARSH QA NOTEBOOK RUNNER")
+    print("=" * 72)
 
-    print(f"\n✓ OOLONG Notebook: {passed}/{total} checks passed")
-    return passed == total
+    ok = True
+    print("\n[1] Existence checks")
+    for nb in notebooks:
+        ok = check_notebook_exists(nb) and ok
 
+    print("\n[2] Committed notebook cleanliness")
+    for nb in notebooks:
+        ok = check_notebook_clean(nb) and ok
 
-def harsh_qa_imo() -> bool:
-    """Harsh QA test for HOW-TO-CRUSH-MATH-OLYMPIAD.md"""
-    print("\n" + "=" * 70)
-    print("HARSH QA: HOW-TO-CRUSH-MATH-OLYMPIAD.md")
-    print("=" * 70)
+    print("\n[3] Execute PHUC-SKILLS notebook in mock mode")
+    exec_ok, exec_msg = run_skills_notebook_mock(root)
+    print(f"  {'PASS' if exec_ok else 'FAIL'} mock execution")
+    if not exec_ok:
+        print(exec_msg)
+        ok = False
 
-    checks = [
-        ("File exists", test_notebook_exists("HOW-TO-CRUSH-MATH-OLYMPIAD.md")),
-        ("Markdown valid", test_markdown_syntax(Path("HOW-TO-CRUSH-MATH-OLYMPIAD.md"))),
-        ("Exact Math Kernel works", test_exact_math_kernel()),
-        ("Clear and peer-reviewable", True),
-    ]
+    print("\n[4] Validate emitted artifacts and move matrix")
+    art_ok, art_msg = check_skills_artifacts(root)
+    print(f"  {'PASS' if art_ok else 'FAIL'} {art_msg}")
+    ok = ok and art_ok
 
-    passed = sum(1 for _, result in checks if result)
-    total = len(checks)
+    print("\n" + "=" * 72)
+    if ok:
+        print("ALL HARSH QA CHECKS PASSED")
+        return 0
+    print("HARSH QA FAILED")
+    return 1
 
-    print(f"\n✓ IMO Notebook: {passed}/{total} checks passed")
-    return passed == total
-
-
-def harsh_qa_swe() -> bool:
-    """Harsh QA test for HOW-TO-CRUSH-SWE-BENCHMARKS.md"""
-    print("\n" + "=" * 70)
-    print("HARSH QA: HOW-TO-CRUSH-SWE-BENCHMARKS.md")
-    print("=" * 70)
-
-    checks = [
-        ("File exists", test_notebook_exists("HOW-TO-CRUSH-SWE-BENCHMARKS.md")),
-        ("Markdown valid", test_markdown_syntax(Path("HOW-TO-CRUSH-SWE-BENCHMARKS.md"))),
-        ("Phuc Forecast valid", test_phuc_forecast()),
-        ("Red-Green gates valid", test_red_green_gates()),
-        ("Clear and peer-reviewable", True),
-    ]
-
-    passed = sum(1 for _, result in checks if result)
-    total = len(checks)
-
-    print(f"\n✓ SWE Notebook: {passed}/{total} checks passed")
-    return passed == total
-
-
-# ==============================================================================
-# CORE CONCEPTS VERIFICATION
-# ==============================================================================
-
-def verify_core_concepts() -> bool:
-    """Verify all core AGI secret sauce concepts."""
-    print("\n" + "=" * 70)
-    print("CORE CONCEPTS VERIFICATION")
-    print("=" * 70)
-
-    checks = [
-        ("Counter Bypass Protocol", test_counter_bypass_concept()),
-        ("Exact Math Kernel", test_exact_math_kernel()),
-        ("Verification Ladder", test_verification_ladder()),
-        ("Lane Algebra", test_lane_algebra()),
-        ("Phuc Forecast", test_phuc_forecast()),
-        ("Red-Green Gates", test_red_green_gates()),
-    ]
-
-    passed = sum(1 for _, result in checks if result)
-    total = len(checks)
-
-    print(f"\n✓ Core Concepts: {passed}/{total} verified")
-    return passed == total
-
-
-# ==============================================================================
-# MAIN TEST RUNNER
-# ==============================================================================
 
 if __name__ == "__main__":
-    print("\n" + "=" * 70)
-    print("STILLWATER OS HARSH QA TEST SUITE")
-    print("=" * 70)
-    print("Testing: Executability, Peer-reviewability, Secret Sauce Correctness")
-
-    results = {
-        "OOLONG Notebook": harsh_qa_oolong(),
-        "IMO Notebook": harsh_qa_imo(),
-        "SWE Notebook": harsh_qa_swe(),
-        "Core Concepts": verify_core_concepts(),
-    }
-
-    # Summary
-    print("\n" + "=" * 70)
-    print("SUMMARY")
-    print("=" * 70)
-
-    for test_name, passed in results.items():
-        status = "✓ PASS" if passed else "✗ FAIL"
-        print(f"{status}: {test_name}")
-
-    all_passed = all(results.values())
-
-    print("\n" + "=" * 70)
-    if all_passed:
-        print("✅ ALL HARSH QA TESTS PASSED")
-        print("   Notebooks are ready for peer review")
-        print("   Secret sauce is correct and executable")
-    else:
-        print("❌ SOME TESTS FAILED")
-        print("   Fix issues above before release")
-
-    sys.exit(0 if all_passed else 1)
+    raise SystemExit(main())

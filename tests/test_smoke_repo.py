@@ -23,6 +23,7 @@ def test_notebooks_are_executed_without_errors_and_portable_paths() -> None:
         root / "HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb",
         root / "PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb",
         root / "HOW-TO-CRUSH-SWE-BENCHMARK.ipynb",
+        root / "PHUC-SKILLS-SECRET-SAUCE.ipynb",
     ]
 
     for nb_path in notebooks:
@@ -39,3 +40,4 @@ def test_notebooks_are_executed_without_errors_and_portable_paths() -> None:
 def test_cli_imports() -> None:
     # Basic smoke test to ensure the package entrypoint imports.
     from stillwater.cli import main  # noqa: F401
+    from stillwater.__main__ import main as module_main  # noqa: F401

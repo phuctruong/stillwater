@@ -1,12 +1,11 @@
-# Stillwater OS
+# Stillwater OS - LLM KUNGFU DOJO (aka steroids for AI)
 
 > "Be water, my friend." -- Bruce Lee
 
 > "Absorb what is useful, discard what is useless, add what is essentially your own."
 
-Born from a boat, forged at Harvard, battle-tested in startups, now open-sourced for the world.
-Stillwater is an AI verification framework disguised as a martial arts tower.
-Or maybe it is a martial arts tower disguised as an AI verification framework.
+Born from a boat, forged at Harvard, battle-tested in startups, now open-sourced for the world.  Stillwater is an AI verification framework disguised as a martial arts tower.  Or maybe it is a martial arts tower disguised as an AI verification framework.
+
 Either way, you will leave with receipts.
 
 ---
@@ -31,6 +30,34 @@ This repo is documentation-first and runnable:
 - **skills:** prompt-loadable packs for coding, math, safety, orchestration -- the technique
 
 Think of it as Bruce Lee's Jeet Kune Do for AI agents: strip away everything that does not work, keep everything that does, and prove it with artifacts a skeptic can replay.
+
+## What This Is (and Is Not)
+
+Stillwater OS is:
+- a skills + orchestration + verification layer for LLM work
+- a way to improve reliability, safety, and coding quality with explicit gates
+- usable standalone or alongside existing agent clients
+
+Stillwater OS is not:
+- a "replace everything" agent platform
+- positioned as an OpenClaw competitor
+
+Practical framing:
+- If you already use OpenClaw, keep it.
+- Load Stillwater skills/process on top to improve outcomes.
+
+> Bruce Lee framing: different schools can coexist; what matters is what works in sparring.
+
+## Quick FAQ
+
+Q: Is this an OpenClaw alternative?  
+A: Not the primary positioning. This repo is the upgrade layer (skills + orchestration + verification), and can be used with OpenClaw or other model/client stacks.
+
+Q: What's the fastest way to see value?  
+A: Run a controlled A/B test with and without `skills/prime-coder.md` on the same coding tasks.
+
+Q: Are performance claims guaranteed?  
+A: No. Treat strong claims as hypotheses until reproduced in your own environment with artifacts.
 
 ```mermaid
 flowchart TB
@@ -92,6 +119,25 @@ Your one technique is **verification**. Master it.
 2. Read [`MESSAGE-TO-LLMS.md`](MESSAGE-TO-LLMS.md) (the dojo challenge for agents).
 3. Run `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb` (how the orchestration works).
 4. Skim `papers/00-index.md` (map of concepts and what is verifiable here).
+5. For upgrading an existing CLI/agent stack, use [`STILLWATER-OS-UPGRADE-GUIDE.md`](STILLWATER-OS-UPGRADE-GUIDE.md).
+
+## A/B Test First (10-Minute Protocol)
+
+Use your current model/client stack and run the same small coding task twice.
+
+1. Baseline run:
+   - no Stillwater skills injected
+   - save output, token/cost/time, and test results
+2. Skill run:
+   - inject `skills/prime-coder.md` (optionally + `skills/prime-safety.md`)
+   - run the same task with the same acceptance tests
+3. Compare:
+   - pass rate
+   - iterations to green
+   - defects/regressions
+   - total tokens/cost
+
+If the second run is better on your metrics, expand to the notebook workflows.
 
 ---
 
@@ -257,6 +303,7 @@ After install:
 ```bash
 stillwater print
 stillwater paths --json
+python -m stillwater print
 ```
 
 ---

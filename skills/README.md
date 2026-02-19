@@ -12,6 +12,7 @@ Rule of thumb: if you want the behavior, load the whole skill. Do not compress a
 - `phuc-context.md`: context hygiene, anti-rot
 - `phuc-forecast.md`: decision loop and premortem lens
 - `phuc-swarms.md`: multi-agent orchestration spec
+- `phuc-cleanup.md`: glow-file cleanup and archive workflow with approval gates
 
 ```mermaid
 flowchart TB
@@ -22,12 +23,14 @@ flowchart TB
   PACK --> CTX["phuc-context.md"]
   PACK --> FC["phuc-forecast.md"]
   PACK --> SW["phuc-swarms.md"]
+  PACK --> CLN["phuc-cleanup.md"]
   PC --> OUT["Artifacts: diffs, reports, tests"]
   PM --> OUT
   PS --> OUT
   CTX --> OUT
   FC --> OUT
   SW --> OUT
+  CLN --> OUT
 ```
 
 ## Why “Don’t Compress”

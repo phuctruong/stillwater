@@ -31,7 +31,9 @@ def main(argv: list[str] | None = None) -> int:
     notebooks = [
         "HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb",
         "HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb",
+        "HOW-TO-CRUSH-SWE-BENCHMARK.ipynb",
         "PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb",
+        "PHUC-SKILLS-SECRET-SAUCE.ipynb",
     ]
     papers_index = "papers/00-index.md"
     mission = "MESSAGE-TO-HUMANITY.md"
@@ -74,4 +76,3 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     return 0
-
