@@ -61,17 +61,11 @@ def run_skills_notebook_mock(root: Path) -> tuple[bool, str]:
     env["STILLWATER_AB_BACKEND"] = "mock"
     env["STILLWATER_AB_CACHE"] = "0"
     env["PYTEST_DISABLE_PLUGIN_AUTOLOAD"] = "1"
+    env["PYTHONPATH"] = str(root / "src")
 
-    cmd = [
-        sys.executable,
-        "-m",
-        "nbconvert",
-        "--execute",
-        "--to",
-        "notebook",
-        "--inplace",
-        str(nb),
-    ]
+    # Run via pure-Python module entrypoint to avoid reliance on a Jupyter kernel
+    # (some environments prohibit opening local ports/sockets).
+    cmd = [sys.executable, "-m", "stillwater.skills_ab", "--backend", "mock", "--cache", "0"]
     p = subprocess.run(
         cmd,
         cwd=root,

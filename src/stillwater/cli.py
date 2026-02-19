@@ -25,6 +25,12 @@ def main(argv: list[str] | None = None) -> int:
 
     p_print = sub.add_parser("print", help="Print suggested next steps.")
 
+    p_skills_ab = sub.add_parser("skills-ab", help="Run the skills A/B/AB/ABC benchmark (local-first).")
+    p_skills_ab.add_argument("--backend", choices=["auto", "ollama", "mock"], default="auto")
+    p_skills_ab.add_argument("--ollama-url", default="http://localhost:11434")
+    p_skills_ab.add_argument("--model", default=None, help="Model name (backend-specific).")
+    p_skills_ab.add_argument("--no-cache", action="store_true", help="Disable response caching.")
+
     ns = parser.parse_args(argv)
 
     root = _repo_root()
@@ -56,6 +62,24 @@ def main(argv: list[str] | None = None) -> int:
             print("notebooks:")
             for p in data["notebooks"]:
                 print(f"  - {p}")
+        return 0
+
+    if ns.cmd == "skills-ab":
+        from .skills_ab import SkillsABConfig, run_skills_ab
+
+        cfg = SkillsABConfig(
+            repo_root=root,
+            skills_dir=root / "skills",
+            artifacts_dir=root / "artifacts" / "skills_ab",
+            backend=ns.backend,
+            ollama_url=ns.ollama_url,
+            model=ns.model or ("mock-kungfu-v1" if ns.backend == "mock" else "qwen2.5-coder:7b"),
+            use_cache=(not ns.no_cache),
+            seed=1337,
+        )
+        run_skills_ab(cfg)
+        print(f"Wrote: {cfg.artifacts_dir / 'results.json'}")
+        print(f"Wrote: {cfg.artifacts_dir / 'report.md'}")
         return 0
 
     # Default: print quick directions.
