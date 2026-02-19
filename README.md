@@ -172,6 +172,16 @@ Run the test suite:
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q
 ```
 
+Run the skills A/B/AB/ABC receipts harness (offline deterministic by default):
+```bash
+PYTHONPATH=src stillwater skills-ab --backend mock --no-cache
+```
+
+Generate (or check) the consolidated score README:
+```bash
+PYTHONPATH=src stillwater gen-ai-steroids-readme --check
+```
+
 If that runs clean, you have something rare: a methodology you can argue with using artifacts, not faith.
 
 ---

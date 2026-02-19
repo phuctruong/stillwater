@@ -5,7 +5,8 @@ This is a small CLI entrypoint for SWE-related demos in this repository.
 
 Paths:
 - Demo / educational scaffold: `swe/src/swe_solver.py`
-- Optional "real" path (requires external data + tooling): `swe/src/swe_solver_real.py`
+- Optional "real" path (requires external data + tooling; disabled by default): `swe/src/swe_solver_real.py`
+  - Enable explicitly with: `STILLWATER_ENABLE_LEGACY_SOLVERS=1`
 
 Claim hygiene:
 - This runner does not claim reproduced SWE-bench success rates.
@@ -14,6 +15,7 @@ Claim hygiene:
 from __future__ import annotations
 
 import argparse
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -34,6 +36,10 @@ def main(argv: list[str] | None = None) -> int:
 
     here = Path(__file__).resolve().parent
     if args.real:
+        if os.environ.get("STILLWATER_ENABLE_LEGACY_SOLVERS") != "1":
+            print("❌ Refusing to run legacy/experimental solver by default.", file=sys.stderr)
+            print("Enable explicitly with: export STILLWATER_ENABLE_LEGACY_SOLVERS=1", file=sys.stderr)
+            return 2
         return _run(here / "swe_solver_real.py")
     return _run(here / "swe_solver.py")
 

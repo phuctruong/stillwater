@@ -111,7 +111,7 @@ The exact schema is defined by the coding skill layer in this repository (`skill
 This repo contains multiple layers that refer to Red-Green:
 
 - Skill spec: `skills/prime-coder.md` (Kent_Red_Green_Gate section + Output_Contract)
-- SWE solver: `swe/src/swe_solver_real.py` (RED/GREEN gate plumbing and proof text generation)
+- SWE solver: `swe/src/swe_solver_real.py` (RED/GREEN gate plumbing and proof text generation; optional/legacy — requires `STILLWATER_ENABLE_LEGACY_SOLVERS=1`)
 - Orchestration tests: `tests/phuc_orchestration/` (phase-wise unit tests)
 - Notebooks:
   - `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb` (evidence + ladder framing)
@@ -132,4 +132,3 @@ This repo contains multiple layers that refer to Red-Green:
 4. Rerun the predicate and record GREEN output.
 5. Run regression suite (GOLD) if available.
 6. Save evidence artifacts with hashes.
-

@@ -104,7 +104,7 @@ Concrete implementations live here:
 - OOLONG (repo-local demo): `oolong/src/oolong_solver.py`, `oolong/src/solve-oolong.py`
   - optional (external tooling): `oolong/src/oolong_solver_real.py`
 - IMO: `imo/src/imo_2024_complete_solver.py`, `imo/src/imo_2024_solver_proper.py`
-- SWE: `swe/src/swe_solver_real.py`, wrapper in `src/claude_code_wrapper.py`
+- SWE: `swe/src/swe_solver_real.py` (optional/legacy — requires `STILLWATER_ENABLE_LEGACY_SOLVERS=1`), wrapper in `src/claude_code_wrapper.py`
 - Orchestration: `tests/phuc_orchestration/` plus the orchestration notebook
 
 ## 7. What This Enables For Open Source

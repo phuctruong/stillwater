@@ -11,8 +11,9 @@ This server:
 4. Can be used by any notebook expecting Ollama
 
 Usage:
-  python3 src/haiku_local_server.py &
-  # Server runs on http://localhost:11434
+  export STILLWATER_ENABLE_LEGACY_SOLVERS=1
+  python3 swe/src/haiku_local_server.py &
+  # Server runs on http://127.0.0.1:11434 by default (override with STILLWATER_HAIKU_SERVER_HOST/PORT)
   # Use in notebooks via requests to http://localhost:11434/api/generate
 """
 
@@ -25,8 +26,9 @@ import anthropic
 
 # Configuration
 HAIKU_MODEL = "claude-haiku-4-5-20251001"
-SERVER_HOST = "0.0.0.0"
-SERVER_PORT = 11434
+# Fail-closed: bind localhost by default (do not expose to LAN).
+SERVER_HOST = os.environ.get("STILLWATER_HAIKU_SERVER_HOST", "127.0.0.1")
+SERVER_PORT = int(os.environ.get("STILLWATER_HAIKU_SERVER_PORT", "11434"))
 API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 
 # Initialize Anthropic client
@@ -170,6 +172,11 @@ class HaikuLocalHandler(BaseHTTPRequestHandler):
 
 def start_server():
     """Start the Haiku local server."""
+    if os.environ.get("STILLWATER_ENABLE_LEGACY_SOLVERS") != "1":
+        print("❌ Legacy/experimental tool is disabled by default.")
+        print("Enable explicitly with: export STILLWATER_ENABLE_LEGACY_SOLVERS=1")
+        sys.exit(2)
+
     if not API_KEY:
         print("❌ ERROR: ANTHROPIC_API_KEY environment variable not set")
         print("Set it with: export ANTHROPIC_API_KEY=sk-...")

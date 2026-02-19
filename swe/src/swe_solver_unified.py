@@ -16,6 +16,7 @@ Claim hygiene:
 """
 
 import json
+import os
 import subprocess
 import tempfile
 from pathlib import Path
@@ -347,6 +348,11 @@ CONFIDENCE: Lane B (Checked in-repo; depends on available tests/data)
 
 def main():
     """Main execution."""
+    if os.environ.get("STILLWATER_ENABLE_LEGACY_SOLVERS") != "1":
+        print("❌ Legacy/experimental solver is disabled by default.")
+        print("Enable explicitly with: export STILLWATER_ENABLE_LEGACY_SOLVERS=1")
+        raise SystemExit(2)
+
     print("=" * 80)
     print("SWE-BENCH SOLVER - UNIFIED CLAUDE CODE IMPLEMENTATION")
     print("Auth: 65537 | Status: Experimental (requires local wrapper + data)")

@@ -30,6 +30,13 @@ def main(argv: list[str] | None = None) -> int:
     p_skills_ab.add_argument("--ollama-url", default="http://localhost:11434")
     p_skills_ab.add_argument("--model", default=None, help="Model name (backend-specific).")
     p_skills_ab.add_argument("--no-cache", action="store_true", help="Disable response caching.")
+    p_skills_ab.add_argument("--timeout", type=float, default=60.0, help="Backend request timeout in seconds.")
+    p_skills_ab.add_argument("--seed", type=int, default=1337, help="Determinism seed (mock backend).")
+    p_skills_ab.add_argument("--run-id", default=None, help="Optional run id for receipts (default: UTC timestamp).")
+    p_skills_ab.add_argument("--no-record-prompts", action="store_true", help="Do not write raw prompt/response receipts.")
+
+    p_gen = sub.add_parser("gen-ai-steroids-readme", help="Generate ai-steroids-results/README.md (or check it).")
+    p_gen.add_argument("--check", action="store_true", help="Exit non-zero if README would change.")
 
     ns = parser.parse_args(argv)
 
@@ -75,11 +82,29 @@ def main(argv: list[str] | None = None) -> int:
             ollama_url=ns.ollama_url,
             model=ns.model or ("mock-kungfu-v1" if ns.backend == "mock" else "qwen2.5-coder:7b"),
             use_cache=(not ns.no_cache),
-            seed=1337,
+            seed=ns.seed,
+            run_id=ns.run_id,
+            request_timeout_seconds=ns.timeout,
+            record_prompts=(not ns.no_record_prompts),
         )
         run_skills_ab(cfg)
         print(f"Wrote: {cfg.artifacts_dir / 'results.json'}")
         print(f"Wrote: {cfg.artifacts_dir / 'report.md'}")
+        return 0
+
+    if ns.cmd == "gen-ai-steroids-readme":
+        from .gen_ai_steroids_readme import generate_readme
+
+        out_path = root / "ai-steroids-results" / "README.md"
+        new_text = generate_readme(root=root)
+        if ns.check and out_path.exists():
+            old = out_path.read_text(encoding="utf-8")
+            if old != new_text:
+                print(f"README out of date: {out_path}")
+                return 1
+            return 0
+        out_path.write_text(new_text, encoding="utf-8")
+        print(f"Wrote: {out_path}")
         return 0
 
     # Default: print quick directions.

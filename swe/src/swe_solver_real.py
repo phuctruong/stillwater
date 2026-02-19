@@ -12,7 +12,7 @@ This file is a scaffold for an end-to-end SWE-bench-style loop:
 5. Emit a run record
 
 Requires:
-- Local Haiku server running (python3 swe/src/haiku_local_server.py)
+- Local Haiku server running (requires `STILLWATER_ENABLE_LEGACY_SOLVERS=1`; start via `python3 swe/src/haiku_local_server.py`)
 - Or ANTHROPIC_API_KEY set for direct API access
 - Real SWE-bench data loaded
 
@@ -43,6 +43,8 @@ from src.claude_code_wrapper import ClaudeCodeWrapper
 def _find_swe_bench_data_dir():
     """Find SWE-bench data directory (no hardcoded paths)."""
     # Option 1: Environment variable
+    if "STILLWATER_SWE_BENCH_DATA" in os.environ:
+        return Path(os.environ["STILLWATER_SWE_BENCH_DATA"])
     if "SWE_BENCH_DATA" in os.environ:
         return Path(os.environ["SWE_BENCH_DATA"])
 
@@ -509,6 +511,11 @@ This run record documents what was attempted and what checks passed.
 def main():
     """Main execution - reads instance data from stdin and processes it."""
     import sys
+
+    if os.environ.get("STILLWATER_ENABLE_LEGACY_SOLVERS") != "1":
+        print("❌ Legacy/experimental solver is disabled by default.", file=sys.stderr)
+        print("Enable explicitly with: export STILLWATER_ENABLE_LEGACY_SOLVERS=1", file=sys.stderr)
+        raise SystemExit(2)
 
     print("="*80, file=sys.stderr)
     print("SWE-BENCH SOLVER SCAFFOLD (EXPERIMENTAL)", file=sys.stderr)

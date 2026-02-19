@@ -8,7 +8,7 @@ Primary runnable artifact:
 Code:
 - `imo/src/imo_2024_solver_proper.py` (deterministic/offline path)
 - `imo/src/geometry_lemma_library.py` (executable lemma scaffolding)
-- `imo/src/imo_solver_real.py` (optional LLM-backed path)
+- `imo/src/imo_solver_real.py` (optional LLM-backed path; **disabled by default** — requires `STILLWATER_ENABLE_LEGACY_SOLVERS=1`)
 
 ## Proof Pipeline (Prime Diagram)
 

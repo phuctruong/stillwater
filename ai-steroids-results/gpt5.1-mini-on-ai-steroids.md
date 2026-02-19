@@ -1,6 +1,6 @@
-# gpt5.1-on-ai-steroidss Report
+# gpt5.1-mini-on-ai-steroids Report
 
-**Rubric definition.** Each skill is scored on a 1–10 scale for how well it prepares `gpt5.1-on-ai-steroids` to deliver disciplined, measurable, fail-closed outputs. “Before” is the baseline assumption (minimal awareness of discipline); “After” reflects the guidance extracted from the skill text, emphasizing clarity, gating, and measurable control.
+**Rubric definition.** Each skill is scored on a 1–10 scale for how well it prepares `gpt5.1-mini-on-ai-steroids` to deliver disciplined, measurable, fail-closed outputs. “Before” is the baseline assumption (minimal awareness of discipline); “After” reflects the guidance extracted from the skill text, emphasizing clarity, gating, and measurable control.
 
 ## prime-coder.md
 - Path: `skills/prime-coder.md`

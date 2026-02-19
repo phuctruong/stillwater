@@ -10,9 +10,12 @@ Primary runnable artifact:
 Code:
 - `swe/src/solve-swe.py` (runner: demo by default, optional real path)
 - `swe/src/swe_solver.py` (educational scaffold)
-- `swe/src/swe_solver_real.py` (optional scaffold that requires external data/tooling)
-- `swe/src/swe_solver_unified.py` (optional alternative scaffold)
-- `swe/src/batch_processor_phuc_forecast.py` (experimental batch processor)
+- `swe/src/swe_solver_real.py` (optional scaffold that requires external data/tooling; **disabled by default** — requires `STILLWATER_ENABLE_LEGACY_SOLVERS=1`)
+- `swe/src/swe_solver_unified.py` (optional alternative scaffold; **disabled by default** — requires `STILLWATER_ENABLE_LEGACY_SOLVERS=1`)
+- `swe/src/batch_processor_phuc_forecast.py` (experimental batch processor; **disabled by default** — requires `STILLWATER_ENABLE_LEGACY_SOLVERS=1`)
+
+Safety note:
+- `swe/src/haiku_local_server.py` binds to `127.0.0.1` by default and is disabled unless `STILLWATER_ENABLE_LEGACY_SOLVERS=1`.
 
 ## SWE Pipeline (Prime Diagram)
 

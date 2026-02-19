@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+      - name: Unit tests
+        run: |
+          PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q
+      - name: Harsh QA notebooks (mock)
+        run: |
+          python imo/tests/test-harsh-qa-notebooks.py
+      - name: Generated docs up-to-date
+        run: |
+          PYTHONPATH=src python -m stillwater.gen_ai_steroids_readme --check
+      - name: Compile check
+        run: |
+          python -m compileall -q src swe imo

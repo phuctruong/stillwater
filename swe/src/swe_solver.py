@@ -9,7 +9,7 @@ Status: EDUCATIONAL DEMONSTRATOR
 It does NOT run actual tests or generate real patches.
 
 For the runnable solver entrypoint used in this repo, see:
-- swe/src/swe_solver_real.py
+- swe/src/swe_solver_real.py (optional; disabled by default — requires `STILLWATER_ENABLE_LEGACY_SOLVERS=1`)
 
 This solver demonstrates the Prime Skills methodology:
 - Prime Coder v1.3.0 (Red-Green gates, Secret Sauce, Resolution Limits)
@@ -286,7 +286,7 @@ class SWEBenchSolver:
             f"edge sanity, generalization, and formal proof rungs."
         )
         rung_65537 = self.verification_ladder.verify_rung_65537(proof_statement)
-    print(f"  Rung 65537 (Explanation): {'PASS ✓' if rung_65537 else 'FAIL ✗'}")
+        print(f"  Rung 65537 (Explanation): {'PASS ✓' if rung_65537 else 'FAIL ✗'}")
 
         # Determine confidence level
         all_pass = all([rung_641, rung_274177, rung_65537])

@@ -248,14 +248,23 @@ class PhucForecastBatchProcessor:
 
 def main():
     """Main execution"""
+    if os.environ.get("STILLWATER_ENABLE_LEGACY_SOLVERS") != "1":
+        print("❌ Legacy/experimental batch processor is disabled by default.")
+        print("Enable explicitly with: export STILLWATER_ENABLE_LEGACY_SOLVERS=1")
+        raise SystemExit(2)
+
     print("\n" + "="*80)
     print("SWE-BENCH BATCH PROCESSOR - PHUC FORECAST")
     print("Auth: 65537 | Methodology: DREAM→FORECAST→DECIDE→ACT→VERIFY")
     print("="*80)
     
     # Load instances
-    home = Path.home()
-    data_dir = home / "Downloads" / "benchmarks" / "SWE-bench" / "data"
+    data_dir = Path(
+        os.environ.get(
+            "STILLWATER_SWE_BENCH_DATA",
+            str(Path.home() / "Downloads" / "benchmarks" / "SWE-bench" / "data"),
+        )
+    )
     
     if not data_dir.exists():
         print(f"❌ Data directory not found: {data_dir}")
