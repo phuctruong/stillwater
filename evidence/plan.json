@@ -1,38 +1,65 @@
 {
   "task_family": "swe_patch",
   "rung_target": 641,
-  "phase": "Phase 2 — Store Client SDK + Rung Validator",
+  "phase": "Phase 3 — Multi-LLM Provider Support + Session Encryption",
   "date": "2026-02-21",
   "design_decisions": [
-    "store/packager.py: SHA-256 over canonical JSON (sorted keys) — deterministic, no float",
-    "store/rung_validator.py: fail-closed string returns (VALID/INVALID), not bool, to prevent coercion",
-    "store/rung_validator.py: null rung_target → INVALID (null != 0, null != rung 641)",
-    "store/rung_validator.py: 3-seed consensus via exact string comparison (no float arithmetic)",
-    "store/client.py: API key validated at construction, never appears in repr/str/exceptions",
-    "store/client.py: client-side RungValidator gate before any HTTP call (fail before network)",
-    "store/client.py: HTTP error mapping is fail-closed (401→PermissionError, 404→LookupError, 422→ValueError, 5xx→RuntimeError)",
-    "tests/test_store_client.py: all HTTP mocked via unittest.mock.patch (network OFF)",
-    "tests/test_store_client.py: API keys use valid hex (a-f, 0-9) to pass sw_sk_<32hex> format check",
-    "Implementation order: packager → validator → client → tests (dependency order)"
+    "admin/session_manager.py: AES-256-GCM via cryptography.hazmat.primitives.ciphers.aead.AESGCM",
+    "admin/session_manager.py: 32-byte random AES key generated at __init__ via secrets.token_bytes(32)",
+    "admin/session_manager.py: fresh 12-byte random nonce per encryption (os.urandom(12)) — same plaintext yields different ciphertext",
+    "admin/session_manager.py: keys stored as nonce+ciphertext blob in memory dict — never on disk, never in repr/str",
+    "admin/session_manager.py: __repr__() emits only (active_provider, num_keys) — zero key material",
+    "admin/session_manager.py: empty api_key raises ValueError (null != zero — never coerce empty to valid)",
+    "admin/session_manager.py: empty provider name raises ValueError (fail-closed)",
+    "admin/llm_portal.py: AuthProviderRequest Pydantic model captures provider + api_key; key encrypted immediately on receipt",
+    "admin/llm_portal.py: POST /api/providers/auth validates provider exists in config (400 if unknown)",
+    "admin/llm_portal.py: POST /api/providers/auth validates key is non-empty (400 if empty/whitespace)",
+    "admin/llm_portal.py: POST /api/providers/auth response contains ONLY {status, provider} — no key material ever returned",
+    "admin/llm_portal.py: GET /api/providers extended with authenticated (bool) + requires_api_key (bool) per provider",
+    "admin/llm_portal.py: _get_session() lazy-initializes a singleton SessionManager per process",
+    "llm_config.yaml: qwen added with dashscope compatible-mode URL (OpenAI-compatible endpoint)",
+    "llm_config.yaml: custom added as template for user-supplied endpoints",
+    "Backward compat: all existing endpoints unchanged; portal_version bumped to 1.1.0 only",
+    "Tests: 28 new tests (12 SessionManager unit + 5 ProviderAuth + 7 ProviderRouting + 4 Security)",
+    "Test isolation: all tests use offline provider or local SessionManager — no network calls"
   ],
+  "security_model": {
+    "encryption": "AES-256-GCM (NIST SP 800-38D)",
+    "key_size_bits": 256,
+    "nonce_size_bits": 96,
+    "nonce_strategy": "Random per encryption (os.urandom(12))",
+    "key_storage": "Process memory only (Python dict) — never filesystem, never logs",
+    "key_lifecycle": "Born at store_key(); dies at clear() or process exit",
+    "repr_safety": "__repr__ and __str__ emit only metadata — zero key material",
+    "error_safety": "ValueError messages never include key content",
+    "empty_key_policy": "Rejected immediately (ValueError) — null != zero, empty string != valid key",
+    "response_safety": "/api/providers/auth response contains only {status, provider} — no key echo"
+  },
+  "provider_routing": {
+    "strategy": "Active provider from LLMConfigManager (unchanged); session tracks per-provider auth state",
+    "new_providers": ["qwen (Dashscope OpenAI-compatible)", "custom (user-supplied endpoint)"],
+    "auth_flow": "POST /api/providers/auth -> SessionManager.store_key() -> encrypted in memory -> GET /api/providers shows authenticated=true",
+    "backward_compat": "All pre-Phase-3 providers (offline, claude-code, openai, claude, openrouter, togetherai, gemini, ollama) unchanged"
+  },
   "files_changed": [
-    "store/packager.py",
-    "store/rung_validator.py",
-    "store/client.py",
-    "tests/test_store_client.py",
-    "evidence/plan.json",
+    "admin/session_manager.py (NEW — 150 lines)",
+    "admin/llm_portal.py (EXTENDED — +70 lines: AuthProviderRequest, /api/providers/auth, session integration, extended /api/providers)",
+    "llm_config.yaml (EXTENDED — +22 lines: qwen + custom providers)",
+    "admin/test_llm_portal.py (EXTENDED — +245 lines: 28 new tests across 4 test classes)",
+    "evidence/plan.json (this file)",
     "evidence/tests.json"
   ],
   "non_goals": [
-    "Server-side API endpoints (solaceagi project)",
-    "Real HTTP calls in tests",
+    "Actual LLM inference (provider initialization only)",
+    "Web UI changes",
+    "Rate limiting (Phase 3.5)",
     "Production promotion (rung 274177+ is Phase 4)",
-    "Authentication with real solaceagi"
+    "Session persistence across process restarts"
   ],
   "reference": [
-    "ROADMAP.md Phase 2 (lines 95-140)",
-    "STORE.md (full file)",
-    "store/__init__.py (existing store package)",
-    "store/models.py (SkillSubmission model)"
+    "ROADMAP.md Phase 3 (lines 144-181)",
+    "llm_config.yaml (existing providers baseline)",
+    "admin/llm_portal.py (Phase 1+2 routes unchanged)",
+    "admin/test_llm_portal.py (17 pre-Phase-3 tests all pass)"
   ]
 }

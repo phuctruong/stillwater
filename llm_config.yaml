@@ -97,6 +97,29 @@ ollama:
   requires_api_key: false
   environment_variables: []
 
+# Alternative: Qwen / Dashscope (Alibaba Cloud)
+qwen:
+  name: "Qwen (Dashscope)"
+  type: "api"
+  url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+  model: "qwen-max"  # Or: qwen-plus, qwen-turbo, qwen-long
+  description: "Alibaba Qwen via Dashscope API — OpenAI-compatible endpoint"
+  requires_api_key: true
+  environment_variables:
+    - "DASHSCOPE_API_KEY"
+
+# Custom endpoint — user-supplied base URL and model
+# Fill in url and model to point at any OpenAI-compatible server
+custom:
+  name: "Custom Endpoint"
+  type: "api"
+  url: ""  # Set to your OpenAI-compatible base URL, e.g. http://localhost:1234/v1
+  model: ""  # Set to your model ID, e.g. my-model-v1
+  description: "User-supplied custom OpenAI-compatible endpoint (BYOK)"
+  requires_api_key: true
+  environment_variables:
+    - "CUSTOM_API_KEY"
+
 # Quick reference table for switching
 # ===================================
 # To use Claude Code:  provider: "claude-code" (DEFAULT - start wrapper first)
@@ -107,3 +130,5 @@ ollama:
 # To use TogetherAI:   provider: "togetherai" + export TOGETHER_API_KEY=...
 # To use Gemini:       provider: "gemini"     + export GOOGLE_API_KEY=...
 # To use Offline:      provider: "offline"    (no network, deterministic demo mode)
+# To use Qwen:         provider: "qwen"       + export DASHSCOPE_API_KEY=...
+# To use Custom:       provider: "custom"     + set url/model above + export CUSTOM_API_KEY=...

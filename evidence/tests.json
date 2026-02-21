@@ -1,68 +1,134 @@
 {
-  "test_command": "pytest tests/test_store_client.py -v -p no:httpbin",
+  "test_command": "pytest admin/test_llm_portal.py -v -p no:httpbin",
+  "regression_command": "pytest tests/ -v -p no:httpbin",
   "exit_code": 0,
-  "total": 33,
-  "passed": 33,
+  "total": 45,
+  "passed": 45,
   "failed": 0,
   "regressions": 0,
-  "baseline_before": {
-    "total": 16,
-    "passed": 16,
+  "baseline_before_phase3": {
+    "total": 17,
+    "passed": 17,
     "failed": 0,
-    "test_file": "tests/test_oauth3_enforcer.py"
+    "test_file": "admin/test_llm_portal.py (pre-Phase-3)"
   },
-  "after_full_suite": {
-    "total": 49,
-    "passed": 49,
+  "regression_suite_after": {
+    "total": 51,
+    "passed": 51,
     "failed": 0,
     "test_files": ["tests/test_oauth3_enforcer.py", "tests/test_store_client.py"]
   },
-  "red_gate_verified": true,
-  "red_gate_note": "Before implementation: all 33 new tests failed with ModuleNotFoundError (store.packager, store.rung_validator, store.client)",
+  "red_gate_note": "SessionManager tests failed before admin/session_manager.py was written (ImportError). Auth endpoint tests returned 404 before /api/providers/auth route was added. Provider field tests failed before authenticated/requires_api_key added to response.",
   "green_gate_verified": true,
-  "test_cases": [
-    "TestSkillPackager::test_packager_bundle_returns_dict",
-    "TestSkillPackager::test_packager_sha256_manifest",
-    "TestSkillPackager::test_packager_integrity_round_trip",
-    "TestSkillPackager::test_packager_tamper_detected",
-    "TestSkillPackager::test_packager_skill_name_derived_from_filename",
-    "TestSkillPackager::test_packager_missing_evidence_raises",
-    "TestSkillPackager::test_packager_invalid_rung_raises",
-    "TestRungValidator::test_validator_accepts_valid_evidence",
-    "TestRungValidator::test_validator_missing_plan_json_is_invalid",
-    "TestRungValidator::test_validator_missing_tests_json_is_invalid",
-    "TestRungValidator::test_validator_missing_behavior_hash_is_invalid",
-    "TestRungValidator::test_validator_seed_mismatch_is_invalid",
-    "TestRungValidator::test_validator_all_three_seeds_required",
-    "TestRungValidator::test_validator_null_rung_is_invalid",
-    "TestRungValidator::test_validator_invalid_rung_value_is_invalid",
-    "TestRungValidator::test_validator_invalid_json_in_plan_is_invalid",
-    "TestRungValidator::test_validator_schema_compliance_plan_requires_rung_target",
-    "TestStillwaterStoreClient::test_client_submit_happy_path",
-    "TestStillwaterStoreClient::test_client_fetch_skill_happy_path",
-    "TestStillwaterStoreClient::test_client_list_skills_happy_path",
-    "TestStillwaterStoreClient::test_client_install_skill_happy_path",
-    "TestStillwaterStoreClient::test_client_missing_api_key_raises",
-    "TestStillwaterStoreClient::test_client_invalid_api_key_format_raises",
-    "TestStillwaterStoreClient::test_client_submit_401_unauthorized",
-    "TestStillwaterStoreClient::test_client_submit_422_validation_error",
-    "TestStillwaterStoreClient::test_client_submit_500_server_error",
-    "TestStillwaterStoreClient::test_client_fetch_skill_not_found",
-    "TestStillwaterStoreClient::test_client_api_key_never_in_repr",
-    "TestStillwaterStoreClient::test_client_submit_error_message_no_api_key",
-    "TestNoCircularImports::test_import_packager",
-    "TestNoCircularImports::test_import_rung_validator",
-    "TestNoCircularImports::test_import_client",
-    "TestNoCircularImports::test_import_order_independence"
-  ],
-  "failing_before": ["all 33 test_store_client tests (ModuleNotFoundError)"],
-  "passing_after": ["all 33 test_store_client tests"],
-  "coverage_areas": {
-    "packager": ["bundle returns dict", "sha256 manifest", "integrity round-trip", "tamper detection", "skill name from filename", "missing evidence raises", "invalid rung raises"],
-    "rung_validator": ["valid evidence accepted", "missing plan.json", "missing tests.json", "missing behavior_hash", "seed mismatch", "all seeds required", "null rung", "invalid rung", "malformed JSON", "schema compliance"],
-    "client": ["submit happy path", "fetch happy path", "list happy path", "install happy path", "missing api key", "invalid key format", "401 error", "422 error", "500 error", "404 error", "key not in repr", "key not in exception"],
-    "imports": ["packager importable", "validator importable", "client importable", "order independence"]
-  },
   "rung_target": 641,
-  "status": "PASS"
+  "status": "PASS",
+  "test_classes": {
+    "Phase1_Phase2_existing": {
+      "count": 17,
+      "tests": [
+        "test_health",
+        "test_list_providers_returns_multiple",
+        "test_list_providers_have_required_fields",
+        "test_offline_provider_is_listed",
+        "test_switch_to_offline",
+        "test_switch_to_invalid_provider_returns_400",
+        "test_openai_chat_completions_offline",
+        "test_openai_chat_completions_response_shape",
+        "test_openai_models_list",
+        "test_call_history_returns_list",
+        "test_call_logged_after_completion",
+        "test_llm_client_offline_direct",
+        "test_llm_call_convenience_offline",
+        "test_llm_chat_convenience_offline",
+        "test_llm_client_test_connection_offline",
+        "test_get_call_history",
+        "test_root_returns_html"
+      ]
+    },
+    "TestSessionManager": {
+      "count": 12,
+      "coverage": "AES-256-GCM encrypt/decrypt, nonce uniqueness, repr safety, clear(), has_key(), empty key rejection, empty provider rejection, entropy, active_provider, authenticated_providers list",
+      "tests": [
+        "TestSessionManager::test_store_and_retrieve_key",
+        "TestSessionManager::test_encryption_nondeterministic",
+        "TestSessionManager::test_key_not_in_repr",
+        "TestSessionManager::test_clear_wipes_all_keys",
+        "TestSessionManager::test_get_nonexistent_key_returns_none",
+        "TestSessionManager::test_has_key_reflects_storage",
+        "TestSessionManager::test_encryption_key_entropy",
+        "TestSessionManager::test_empty_api_key_rejected",
+        "TestSessionManager::test_none_api_key_rejected",
+        "TestSessionManager::test_empty_provider_rejected",
+        "TestSessionManager::test_set_and_get_active_provider",
+        "TestSessionManager::test_authenticated_providers_list"
+      ]
+    },
+    "TestProviderAuth": {
+      "count": 5,
+      "coverage": "Valid auth, response does not echo key, invalid provider 400, empty key 400, whitespace key 400",
+      "tests": [
+        "TestProviderAuth::test_auth_valid_provider_and_key",
+        "TestProviderAuth::test_auth_response_does_not_contain_key",
+        "TestProviderAuth::test_auth_invalid_provider_returns_400",
+        "TestProviderAuth::test_auth_empty_key_returns_400",
+        "TestProviderAuth::test_auth_whitespace_only_key_returns_400"
+      ]
+    },
+    "TestProviderRoutingPhase3": {
+      "count": 7,
+      "coverage": "authenticated field, requires_api_key field, offline initial state, qwen listed, custom listed, claude backward compat, total count >= 9",
+      "tests": [
+        "TestProviderRoutingPhase3::test_providers_have_authenticated_field",
+        "TestProviderRoutingPhase3::test_providers_have_requires_api_key_field",
+        "TestProviderRoutingPhase3::test_offline_not_authenticated_initially",
+        "TestProviderRoutingPhase3::test_qwen_provider_listed",
+        "TestProviderRoutingPhase3::test_custom_provider_listed",
+        "TestProviderRoutingPhase3::test_backward_compat_claude_provider_still_works",
+        "TestProviderRoutingPhase3::test_at_least_9_providers_after_phase3"
+      ]
+    },
+    "TestAPIKeySecurity": {
+      "count": 4,
+      "coverage": "repr safe, str safe, auth endpoint does not return key, empty string not accepted",
+      "tests": [
+        "TestAPIKeySecurity::test_session_manager_repr_safe",
+        "TestAPIKeySecurity::test_session_manager_str_safe",
+        "TestAPIKeySecurity::test_auth_endpoint_does_not_return_key",
+        "TestAPIKeySecurity::test_empty_string_not_accepted_as_key"
+      ]
+    }
+  },
+  "security_checklist": {
+    "no_hardcoded_api_keys_in_code": true,
+    "no_key_in_repr": true,
+    "no_key_in_str": true,
+    "no_key_in_auth_response": true,
+    "empty_key_rejected": true,
+    "whitespace_key_rejected": true,
+    "none_key_rejected": true,
+    "empty_provider_rejected": true,
+    "aes_key_is_256_bit": true,
+    "nonce_is_random_per_encryption": true,
+    "two_sessions_have_distinct_aes_keys": true,
+    "memory_only_storage": true,
+    "no_disk_persistence": true
+  },
+  "backward_compat_checklist": {
+    "health_endpoint_unchanged": true,
+    "providers_endpoint_additive_only": true,
+    "switch_endpoint_unchanged": true,
+    "chat_completions_unchanged": true,
+    "models_endpoint_unchanged": true,
+    "history_endpoint_unchanged": true,
+    "offline_provider_still_works": true,
+    "claude_provider_still_listed": true,
+    "existing_17_tests_all_pass": true
+  },
+  "env_snapshot": {
+    "git_commit": "30bff4c",
+    "python_version": "3.10.12",
+    "pytest_version": "8.4.1",
+    "cryptography_version": "40.0.1",
+    "date": "2026-02-21"
+  }
 }

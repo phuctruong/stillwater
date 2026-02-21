@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 """
 Stillwater LLM Portal
-Auth: 65537 | Status: STABLE | Version: 1.0.0 | Port: 8788
+Auth: 65537 | Status: STABLE | Version: 1.1.0 | Port: 8788
 
 Web UI + OpenAI-compatible proxy for all LLM providers.
 Reads llm_config.yaml to discover and route to any configured backend.
+
+Phase 3 additions:
+  - POST /api/providers/auth   Accept user-supplied API key (AES-256-GCM, memory-only)
+  - GET  /api/providers        Extended: includes models[] + authenticated status
+  - SessionManager             Per-process in-memory encrypted key store
 
 Start:
     bash admin/start-llm-portal.sh
@@ -15,11 +20,18 @@ Start:
 Routes:
     GET  /                      Web UI (embedded dark-theme HTML)
     GET  /api/health            {"status": "ok", "active_provider": str}
-    GET  /api/providers         All providers + reachability status
+    GET  /api/providers         All providers + reachability + models + authenticated
     POST /api/providers/switch  Switch active provider (in-session)
+    POST /api/providers/auth    Supply API key for a provider (encrypted in session)
     GET  /api/history           Recent call log from ~/.stillwater/llm_calls.jsonl
     POST /v1/chat/completions   OpenAI-compatible proxy
     GET  /v1/models             OpenAI-compatible model list
+
+Security:
+    API keys supplied via /api/providers/auth are:
+      - Encrypted with AES-256-GCM (256-bit key, 96-bit nonce per write)
+      - Stored in process memory only (never written to disk, logs, or repr)
+      - Wiped when the process exits (no persistence)
 """
 
 from __future__ import annotations
@@ -49,6 +61,16 @@ try:
 except ImportError:
     LLMConfigManager = None  # type: ignore
 
+# Session manager import (Phase 3: encrypted key storage)
+try:
+    from admin.session_manager import SessionManager  # type: ignore
+except ImportError:
+    try:
+        # Fallback for direct uvicorn invocation from repo root
+        from session_manager import SessionManager  # type: ignore
+    except ImportError:
+        SessionManager = None  # type: ignore
+
 
 # ---------------------------------------------------------------------------
 # App
@@ -57,11 +79,21 @@ except ImportError:
 app = FastAPI(
     title="Stillwater LLM Portal",
     description="Universal LLM proxy with web UI. Auth: 65537.",
-    version="1.0.0",
+    version="1.1.0",
 )
 
 # Shared config manager (in-memory provider switching)
 _config: Optional[Any] = None
+
+# Shared session manager (Phase 3: AES-256-GCM key storage, memory-only)
+_session: Optional[Any] = None
+
+
+def _get_session() -> Optional[Any]:
+    global _session
+    if _session is None and SessionManager is not None:
+        _session = SessionManager()
+    return _session
 
 
 def _get_config() -> Optional[Any]:
@@ -92,6 +124,12 @@ class SwitchProviderRequest(BaseModel):
     provider: str
 
 
+class AuthProviderRequest(BaseModel):
+    """Phase 3: Supply an API key for a provider (stored encrypted in session)."""
+    provider: str
+    api_key: str  # plaintext key from user — encrypted immediately on receipt
+
+
 class ChatMessage(BaseModel):
     role: str
     content: str
@@ -119,21 +157,30 @@ async def index() -> HTMLResponse:
 async def health() -> dict:
     cfg = _get_config()
     active = cfg.active_provider if cfg else "offline"
-    return {"status": "ok", "active_provider": active, "portal_version": "1.0.0"}
+    return {"status": "ok", "active_provider": active, "portal_version": "1.1.0"}
 
 
 @app.get("/api/providers")
 async def list_providers() -> dict:
-    """List all configured providers with live reachability status."""
+    """
+    List all configured providers with live reachability status.
+
+    Phase 3 additions per provider entry:
+      - authenticated: bool — whether a user API key has been supplied via /api/providers/auth
+      - requires_api_key: bool — from llm_config.yaml
+    """
     cfg = _get_config()
     if cfg is None:
         return {"providers": [], "active": "offline"}
+
+    session = _get_session()
 
     providers = []
     all_providers = cfg.list_providers()
     for name, info in all_providers.items():
         is_active = name == cfg.active_provider
         provider_type = info.get("type", "")
+        requires_key = info.get("requires_api_key", False)
 
         # Quick reachability check (non-blocking, short timeout)
         reachable = None
@@ -154,6 +201,9 @@ async def list_providers() -> dict:
             except Exception:
                 reachable = False
 
+        # Phase 3: authenticated status from session
+        authenticated = session.has_key(name) if session is not None else False
+
         providers.append({
             "id": name,
             "name": info.get("name", name),
@@ -163,9 +213,60 @@ async def list_providers() -> dict:
             "active": is_active,
             "reachable": reachable,
             "latency_ms": latency_ms,
+            # Phase 3 additions
+            "requires_api_key": requires_key,
+            "authenticated": authenticated,
         })
 
     return {"providers": providers, "active": cfg.active_provider}
+
+
+@app.post("/api/providers/auth")
+async def auth_provider(req: AuthProviderRequest) -> dict:
+    """
+    Phase 3: Supply an API key for a provider.
+
+    The key is immediately encrypted with AES-256-GCM and stored in process
+    memory. It is NEVER written to disk, logged, or returned in any response.
+
+    Returns:
+        {"status": "authenticated", "provider": str}
+
+    Errors:
+        400 — unknown provider
+        400 — empty API key (null != valid key)
+        422 — missing required fields (Pydantic validation)
+        503 — session manager unavailable
+    """
+    cfg = _get_config()
+    session = _get_session()
+
+    if session is None:
+        raise HTTPException(status_code=503, detail="Session manager unavailable")
+
+    # Validate provider exists in config
+    if cfg is not None:
+        known_providers = set(cfg.list_providers().keys())
+        if req.provider not in known_providers:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Unknown provider: {req.provider!r}. Known: {sorted(known_providers)}",
+            )
+
+    # Validate key is non-empty (null != zero — never coerce)
+    if not req.api_key or not req.api_key.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="api_key must be a non-empty string",
+        )
+
+    try:
+        session.store_key(req.provider, req.api_key)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+    # Return no key material — only status
+    return {"status": "authenticated", "provider": req.provider}
 
 
 @app.post("/api/providers/switch")
