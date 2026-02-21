@@ -33,12 +33,13 @@ Phuc studied Economics at Harvard, graduating in 1998. The analytical discipline
 
 **Serial founder.**
 
-After Harvard, Phuc built multiple companies across different domains:
+After Harvard, Phuc built multiple companies. Most failed. The failures are part of the story — not something to hide:
 
-- **UpDown.com** — a social investing platform with over 100,000 users. One of the early experiments in applying network effects and social proof to financial decision-making.
-- **Citystream** — acquired. The details of the acquisition are not the headline; the lesson is in the pattern: build something real, reach a meaningful milestone, and create value that others want to own.
-- **Clinical Research IO (CRIO)** — the defining company of Phuc's career to date. Founded 2015. More on CRIO below.
-- **Phuc Labs** — e-waste recycling robotics. Winner of the MIT AMD Robotics Innovation Challenge. The jump from clinical data software to physical robotics reflects the same underlying interest: building systems that handle real-world evidence with fidelity and accountability.
+- **UpDown.com** — a social investing platform with over 100,000 users. Early experiment in social-proof investing. Did not succeed commercially.
+- **Citystream** and other ventures — failed. Each failure sharpened judgment about what matters: evidence over hope, architecture over hype, humility over narrative.
+- **Clinical Research IO (CRIO)** — the one that worked. The defining company of Phuc's career. Founded 2015 with Raymond Nomizu. More on CRIO below.
+
+Being transparent about failure builds more trust than a polished success narrative. The failures are the training data for CRIO and Stillwater.
 
 ---
 
@@ -130,7 +131,7 @@ Stillwater was built to provide it.
 | Domain | Credential |
 |---|---|
 | Education | Harvard University, A.B. Economics, Class of 1998 |
-| Founding track record | 4 companies; 2 acquisitions (Citystream, CRIO) |
+| Founding track record | Multiple companies; most failed; CRIO is the one that worked |
 | FDA regulatory experience | Clinical Research IO — 21 CFR Part 11 eSource platform, 360+ customers, live FDA audit environment |
 | Robotics recognition | MIT AMD Robotics Innovation Challenge winner (Phuc Labs) |
 | Open-source leadership | Stillwater v1.4.0 — verification OS for AI agents, open-sourced |
