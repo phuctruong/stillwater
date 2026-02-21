@@ -40,23 +40,43 @@
 | F5: deprecated asyncio pattern | S3-LOW | DEFERRED | Phase 2 (async cleanup) |
 | F6: unknown scope accepted at token creation | S2-MEDIUM | FIXED | Added validate_scopes() call in create() |
 
+## Phase 1.5 BUILD 2 — OAuth3 Consent UI (COMPLETE)
+
+| Item | Status | Rung | Date | Notes |
+|------|--------|------|------|-------|
+| consent_ui.py | done | 641 | 2026-02-21 | GET /consent, POST /oauth3/consent, GET /settings/tokens |
+| Consent page | done | 641 | 2026-02-21 | Scope list with risk badges, step-up warning, grant/deny |
+| Token management | done | 641 | 2026-02-21 | Table with revoke buttons, active/revoked status |
+| Home page badges | done | 641 | 2026-02-21 | Green "N scopes granted" / gray "click to grant" |
+| Open redirect sanitization | done | 641 | 2026-02-21 | Blocks absolute/protocol-relative/javascript: URLs |
+| Cookie security | done | 641 | 2026-02-21 | HttpOnly, SameSite=Strict |
+| tests/test_consent_ui.py | done | 641 | 2026-02-21 | 58 tests (10 test groups) |
+
 ## Metrics
 
 | Metric | Value |
 |--------|-------|
 | PM triplets with SHA256 | 6/6 verified |
 | Recipe hit rate | TBD (need prod data) |
-| OAuth3 implementation | Phase 1.5 BUILD 1 complete |
+| OAuth3 implementation | Phase 1.5 BUILD 2 complete |
 | Platforms with PM maps | 5 |
 | ROADMAP build prompts | 8 ready |
-| Tests (Phase 1.5) | 61/61 passing |
+| Tests (total) | 119/119 passing (61 oauth3 + 58 consent UI) |
 | QA findings fixed | 3/6 (3 deferred to Phase 2) |
+
+## Build Log
+
+| Build | Date | Tests | Rung | Commit |
+|-------|------|-------|------|--------|
+| Phase 1 (LinkedIn MVP) | 2026-02-21 | — | 641 | 0082fee |
+| Phase 1.5 BUILD 1 (OAuth3 Core) | 2026-02-21 | 61/61 | 641 | df3ad49 |
+| Phase 1.5 BUILD 2 (Consent UI) | 2026-02-21 | 58/58 | 641 | b593829 |
 
 ## Stillwater Evidence Bundles
 
 - PM triplet SHA256: All 6 platforms verified (see primewiki/*/sha256 files)
-- Git commits: 0082fee, 0fbf91f, df3ad49 (Phase 1.5 QA fixes)
-- OAuth3 evidence: 61 tests, null-safety gates, scope validation, step-up re-auth
+- Git commits: 0082fee, 0fbf91f, df3ad49, b593829
+- OAuth3 evidence: 119 tests, null-safety gates, scope validation, step-up re-auth, consent UI
 
 ## Key Insight
 

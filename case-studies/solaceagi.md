@@ -1,9 +1,9 @@
 # Case Study: SolaceAGI — Hosted Platform for Verified Delegated Intelligence
 
 **Tracking since**: 2026-02-21
-**Status**: Whitepaper written → Refactor planned → Build planning
-**Rung**: TBD
-**Belt**: White
+**Status**: Phase 0 DONE (refactor) → Phase 1 DONE (core backend) → Phase 2 next
+**Rung**: 641 (46/46 tests pass)
+**Belt**: Yellow
 
 ## Architecture
 
@@ -30,13 +30,17 @@ stillwater/cli (OSS)           ← base CLI, lives inside stillwater repo; anyon
 | SOLACEAGI-WHITEPAPER.md | Written |
 | NORTHSTAR.md | Updated (corrected architecture) |
 | ROADMAP.md | Created (Phase 1 includes LLM proxy endpoint) |
-| `web/` frontend | Exists (legacy) |
-| `solace/` research content | Needs → solace-books |
-| FastAPI backend | Partial (needs rebuild) |
-| LLM proxy (POST /llm/complete) | Not implemented |
-| OAuth3 vault | Not implemented |
-| Cloud twin execution | Not implemented |
-| Stillwater Store integration | Not implemented |
+| `web/` frontend | Live (login, pricing, store pages) |
+| `solace/` research content | Refactored out (user cleaned up) |
+| FastAPI backend | **COMPLETE** — 8 routers mounted |
+| Stripe billing (billing.py) | **DONE** — checkout, webhook, portal, status |
+| Firebase Auth (firebase_auth.py) | **DONE** — Google sign-in + dual auth |
+| LLM proxy (llm_proxy.py) | **DONE** — Together.ai primary, OpenRouter fallback, 20% markup |
+| OAuth3 vault (oauth3_vault.py) | **DONE** — issue/list/revoke/validate (AES-256-GCM) |
+| User BYOK keys (users.py) | **DONE** — store/list/delete, cryptographic erasure |
+| Evidence verify (verify.py) | **DONE** — POST /verify with rung checking |
+| Cloud twin execution | Not yet (Phase 2) |
+| Stillwater Store integration | Not yet (Phase 3) |
 
 ## Refactor Plan (Before Build)
 
@@ -81,11 +85,21 @@ Phase 1 (core backend) MUST include `api/llm.py`:
 - Tier check: managed_llm/pro/enterprise → allowed; free/byok → 403
 - Zero GPU infra: pure HTTP proxy
 
+## Build Log
+
+| Build | Date | Tests | Rung | Commit |
+|-------|------|-------|------|--------|
+| Stripe billing (Phase 0.5) | 2026-02-21 | 15/15 | 641 | 145e60b |
+| Firebase Auth | 2026-02-21 | 10/10 | 641 | cb912fe |
+| Phase 1: LLM proxy + OAuth3 + users + verify | 2026-02-21 | 21/21 | 641 | a8c8c32 |
+
 ## Metrics
 
 | Metric | Now | Target Q2 | Target EOY |
 |--------|-----|-----------|-----------|
+| Tests | 46 | 100+ | 200+ |
+| API endpoints | 16 | 25+ | 40+ |
+| Stripe products | 4 | 4 | 4 |
 | Paying users | 0 | growing | growing |
 | Recipe hit rate | 0% | 50% | 80% |
 | API uptime | N/A | 99% | 99.9% |
-| Managed LLM add-on users | 0 | growing | growing |
