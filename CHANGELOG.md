@@ -24,7 +24,7 @@ Ecosystem lock-in begins here.
 - **`web/start.sh`** — replaces supervisord; explicit health-wait + autorestart loop for uvicorn; Firestore fully connected on Cloud Run
 - **Bandit + pip-audit in CI** (`ci.yml` and `publish.yml`) — supply chain security gate
 - **`skills/prime-moltbot.md` v1.1.0** — FSM includes REGISTER_ACCOUNT as step 0; Store auth header in submit
-- **`web/stillwater/store.html`** — Stillwater Store skills browser at `qa.solaceagi.com/stillwater/store.html`
+- **`web/stillwater/store.html`** — Stillwater Store skills browser at `www.solaceagi.com/stillwater/store.html`
 - **Case study integrity** — 5 fabricated case studies with invented author names deleted; only 2 real ones remain
 
 ### Infrastructure

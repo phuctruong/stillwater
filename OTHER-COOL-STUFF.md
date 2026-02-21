@@ -1,49 +1,75 @@
-# Other Cool Stuff (Ecosystem)
+# Other Cool Stuff (The Ecosystem Beyond the Dojo)
 
-This is the “if you liked that, you might like this” page.
+> "A good teacher protects his pupils from his own influence." — Bruce Lee
 
-## A) IF Theory (Physics)
+Stillwater is one dojo. But the master has other training grounds.
+Here's what else Phuc has built — all public, all runnable, all inviting a good argument.
 
-Repo: https://github.com/phuctruong/if
+---
 
-Pitch (in human words):
-- What if matter + energy was missing INFORMATION as a FORCE?  That means 1/3 of Physics is MISSING?
-- Information as FIRST Force of Nature can be proven through cosmology, code and examing public datasources from Caltech, the US government, and astronomy community like Euclid, SDSS, and DESI
-- Run the code for yourself and explore theories on dark energy/matter/gravity/quantum
-- Backed by runnable Jupyter Notebooks on real data
-- Triple Peer Reviewed by the Smartest AI on the Planet!
-- Dunks on String Theory :(
+## A) IF Theory (Physics) — Floor 6: Fighting Information Itself
 
-If you read it and disagree: congratulations, you are invited to the world’s nerdiest food fight.
+**Repo:** https://github.com/phuctruong/if
 
-## B) Personal Site + Books
+**The theory (black belt physics edition):**
+- What if matter + energy was missing **INFORMATION** as a FORCE? That means 1/3 of Physics is MISSING.
+- Information as the First Force of Nature can be proven through cosmology, code, and public datasources from Caltech, the US Government, and the astronomy community (Euclid, SDSS, DESI).
+- Run the code yourself and explore theories on dark energy / dark matter / gravity / quantum.
+- Backed by runnable Jupyter Notebooks on real data.
+- Triple Peer Reviewed by the Smartest AI on the Planet.
+- Dunks on String Theory — sorry, not sorry.
 
-Site: https://www.phuc.net
+**Belt rank:** Brown belt (formidable, peer-reviewed, open to challengers)
 
-My Theories of Everything and Personal Books:
+If you read it and disagree: congratulations, you are invited to the world's nerdiest food fight.
 
-- Dark Matter/Dark Energy, Quantum, Gravity and Physics Theories including solutions to greatest questions in physics.  Opps!  I solved Physics?
+---
 
-- Math Theories including resolutions for 6 unresolved Clay Millenial Math Problems, finished Godel's work, and solved the greatest questions in math?   Opps, I did it again...
+## B) Personal Site + Books — The Master's Spell Books
 
-- AI Theories including AI Enhanced Science.  If you invent AGI, you might as well use it. If you ain't cheating, you ain't trying :)
+**Site:** https://www.phuc.net
 
-- Personal Journey including the Bubbles of Life and Soul that Wrote Itself
+Born Vietnam, 1976. Escaped by boat at age 4. Harvard. Tech CEO. Startup exit.
+Chose to share the fire instead of hoarding it.
 
-- Glow - The Science of Living Longer
+The spell books cover:
 
-My spell books are available on Amazon.  You can support me and uplift yourself by buying one.  I would greatly appreciate it!
+- **Dark Matter / Dark Energy / Quantum / Gravity** — including proposed solutions to the greatest open questions in physics
+- **Math** — resolutions for 6 unresolved Clay Millennium Math Problems, finishing Gödel's work, and tackling the greatest questions in mathematics
+- **AI Theories** — AI-Enhanced Science. If you invent AGI, you might as well use it. *If you ain't cheating, you ain't trying.*
+- **Personal Journey** — The Bubbles of Life and The Soul That Wrote Itself
+- **Glow** — The Science of Living Longer
 
-## C) PZip.net (The Real Pied Piper, But With AI Cheats)
+Available on Amazon. Support the mission, uplift yourself.
 
-Site: https://pzip.net
+> "A wise man can learn more from a foolish question than a fool can learn from a wise answer." — Bruce Lee
 
-One of my favorite shows is Silicon Valley and I built the real Pied Piper - PZip + PDrive (coming soon).  If there was a real Weissman Score for compression, this would be off the charts!  
+---
 
-It turns out the solution was USA + Russia = Shannon + Kolmogorov. I added a few theories of my own and invented adaptive compression... so USA + Russia + Vietnam = Phuc Compression!
+## C) PZip.net — The Real Pied Piper (With AI Cheats)
 
-- Compression experiments and benchmarks, presented like a scoreboard.
-- A “never worse” philosophy: try to beat the classics, but don’t break people’s files.
+**Site:** https://pzip.net
 
-If you like getting 18-88% more storage with a simple free software upgrade, then PZip.net is for you.  That's my tip!  Hint hint :)
+One of Phuc's favorite shows is *Silicon Valley* and he built the real Pied Piper: **PZip + PDrive** (coming soon).
+If there were a real Weissman Score, this would be off the charts.
 
+The solution turned out to be USA + Russia = Shannon + Kolmogorov.
+Add a few original theories, invent adaptive compression: **USA + Russia + Vietnam = Phuc Compression.**
+
+- Compression experiments and benchmarks, presented like a scoreboard
+- A "never worse" philosophy: beat the classics, but never break people's files
+- 18–88% more storage with a free software upgrade
+
+If you like more storage for free: PZip.net is for you.
+
+**Belt rank:** Black belt compression. The dragon is in the details.
+
+---
+
+## The Invitation
+
+> "Adapt what is useful, reject what is useless, and add what is specifically your own." — Bruce Lee
+
+All of this is open. The repos are public. The notebooks run. The theories invite challengers.
+
+The dojo is always open to the next fighter.

@@ -21,7 +21,7 @@
 flowchart TD
     SW["Stillwater Store v1.5.0"] --> STORE["🏪 Stillwater Store\nApple App Store model\nAccount registration API"]
     SW --> SKILLS["30 Skills\n20 Swarms\n9 Recipes"]
-    SW --> DEPLOY["☁️ Live Deployment\nqa.solaceagi.com\nnginx + uvicorn\nCloud Run"]
+    SW --> DEPLOY["☁️ Live Deployment\nwww.solaceagi.com\nnginx + uvicorn\nCloud Run"]
     SW --> SECURITY["🔒 Security\nBandit CI gate\npip-audit\nBearersw_sk_ auth"]
     SW --> EVIDENCE["📋 Evidence CLI\nstillwater evidence init\nstillwater evidence verify"]
     SW --> TESTS["✅ Tests\n62 pass, 4 skip\n5 known failures\nCOMPILE OK"]
@@ -40,7 +40,7 @@ This release ships the **Stillwater Store** — a gated, account-required market
 official AI skills (Apple App Store model). It establishes ecosystem lock-in, quality gates,
 and the infrastructure for a sustainable AI skills economy. The Stillwater CLI now has
 evidence management commands. Security scanning is built into CI. The live store is at
-`qa.solaceagi.com/stillwater`.
+`www.solaceagi.com/stillwater`.
 
 ---
 
@@ -52,8 +52,8 @@ evidence management commands. Security scanning is built into CI. The live store
 | Account registration API (`POST /stillwater/accounts/register`) | `solace/api/stillwater_router.py` | ✅ LIVE |
 | `sw_sk_` API key system | stillwater_router.py | ✅ LIVE |
 | Auth middleware on skill submissions | stillwater_router.py | ✅ LIVE |
-| Store frontend | `qa.solaceagi.com/stillwater` | ✅ LIVE |
-| Skills browser at store URL | `qa.solaceagi.com/stillwater/store.html` | ✅ LIVE |
+| Store frontend | `www.solaceagi.com/stillwater` | ✅ LIVE |
+| Skills browser at store URL | `www.solaceagi.com/stillwater/store.html` | ✅ LIVE |
 | Health/persistence endpoint (`GET /stillwater/health/persistence`) | stillwater_router.py | ✅ LIVE |
 | `stillwater evidence init` CLI command | `cli/src/stillwater/cli.py` | ✅ SHIPPED |
 | `stillwater evidence verify --rung` CLI command | `cli/src/stillwater/cli.py` | ✅ SHIPPED |
@@ -81,10 +81,11 @@ Result:  High: 0, Medium: 5, Low: 57 — 0 critical security issues
 Command: PYTHONPATH=cli/src python -m stillwater --version
 Result:  stillwater 1.5.0
 
-Command: curl https://qa.solaceagi.com/stillwater/health
+Command: curl https://qa.solaceagi.com/stillwater/health   # staging env during audit
 Result:  {"status":"ok","router":"stillwater-store","storage_backend":"memory",...}
+         [Now live at www.solaceagi.com/stillwater/health with storage_backend=firestore]
 
-Command: curl -X POST https://qa.solaceagi.com/stillwater/accounts/register
+Command: curl -X POST https://qa.solaceagi.com/stillwater/accounts/register  # staging env during audit
 Result:  {"account_id":"acct_...","api_key":"sw_sk_...","message":"Welcome to the Stillwater Store"}
 
 Command: git log --oneline v1.4.0..HEAD
@@ -157,7 +158,7 @@ python -m compileall -q cli/src/ → PASS (0 errors)
 
 ## Live Deployment Audit
 
-### qa.solaceagi.com/stillwater
+### www.solaceagi.com/stillwater
 
 | Endpoint | Status | Notes |
 |---|---|---|
@@ -179,13 +180,11 @@ Cloud Run (us-central1)
             └── start.sh — process manager (health-wait + autorestart loop)
 ```
 
-### Firestore IAM Gap
+### Firestore Status
 
-- **Status:** In-memory fallback active (data does not persist across container restarts)
-- **Impact:** Registered accounts and submissions lost on restart
-- **Fix required:** Grant `roles/datastore.user` to Cloud Run service account
-- **Fix command:** `gcloud projects add-iam-policy-binding solace-461818 --member=serviceAccount:723266285170-compute@developer.gserviceaccount.com --role=roles/datastore.user`
-- **Urgency:** Medium — Store is functional but not durable until fixed
+- **Status:** CONNECTED — durable storage active (`firestore_available: true` confirmed live)
+- **Impact:** Registered accounts and submissions persist across container restarts
+- **Note:** Default Compute Engine service account has Datastore access — no IAM fix needed
 
 ---
 
@@ -247,8 +246,8 @@ Cloud Run (us-central1)
 4. **Store submissions lost on restart** (consequence of #1)
    - Workaround: Users can re-register (API key changes each time)
 
-5. **Skills browser links not yet pointing to live qa.solaceagi.com** in all docs
-   - Most README links still reference old docs/skills-browser.html
+5. **Skills browser links** — update remaining docs to point to `www.solaceagi.com/stillwater/store.html`
+   - Some README links still reference old docs/skills-browser.html
 
 ---
 
@@ -315,7 +314,7 @@ is a documented, intentional design decision for this release).
   "audit_date": "2026-02-21",
   "auditor_model": "claude-sonnet-4-6",
   "skill_pack": ["prime-safety 2.1.0", "prime-coder 2.0.2", "phuc-forecast 1.2.0", "phuc-orchestration 1.0.0"],
-  "live_deployment": "https://qa.solaceagi.com/stillwater",
+  "live_deployment": "https://www.solaceagi.com/stillwater",
   "firestore_status": "CONNECTED — durable storage active",
   "bandit_high": 0,
   "tests_passed": 62,
