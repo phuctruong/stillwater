@@ -1,0 +1,83 @@
+name: Verify (Store + OAuth3 + Behavioral Hash)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Daily at 6 AM UTC
+    - cron: "0 6 * * *"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install \
+            pytest \
+            requests \
+            cryptography \
+            fastapi \
+            httpx \
+            uvicorn \
+            pydantic \
+            bandit \
+            semgrep
+
+      - name: Run 96 tests (store + OAuth3 + LLM portal)
+        run: |
+          python -m pytest \
+            admin/test_llm_portal.py \
+            tests/test_store_client.py \
+            tests/test_oauth3_enforcer.py \
+            -v -p no:httpbin --tb=short
+
+      - name: Security scan — bandit
+        run: |
+          bandit -r store/ admin/session_manager.py admin/llm_portal.py --skip B101
+          if [ $? -ne 0 ]; then
+            echo "bandit found security issues"
+            exit 1
+          fi
+
+      - name: Security scan — semgrep
+        run: |
+          semgrep scan --config auto store/ admin/session_manager.py admin/llm_portal.py
+          if [ $? -ne 0 ]; then
+            echo "semgrep found issues"
+            exit 1
+          fi
+
+      - name: Generate behavioral hash
+        run: |
+          python scripts/generate_behavior_hash.py
+
+      - name: Verify consensus
+        run: |
+          python -c "
+          import json, sys
+          data = json.load(open('evidence/behavior_hash.txt'))
+          if not data.get('consensus'):
+              print('ERROR: behavioral hash consensus is false')
+              sys.exit(1)
+          print('consensus hash:', data['seed_42'][:32] + '...')
+          print('generated:', data['generated'])
+          "
+
+      - name: Upload evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evidence
+          path: evidence/
+          retention-days: 90

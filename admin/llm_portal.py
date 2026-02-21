@@ -101,7 +101,7 @@ def _get_config() -> Optional[Any]:
     if _config is None and LLMConfigManager is not None:
         try:
             _config = LLMConfigManager()
-        except Exception:
+        except Exception:  # nosec B110 — intentional: config is optional, offline mode works without it
             pass
     return _config
 
