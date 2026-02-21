@@ -35,7 +35,7 @@ See `papers/99-claims-and-evidence.md`.
 - Verification framing: `papers/03-verification-ladder.md`
 - Example applications:
   - `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb`
-  - `HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb`
+  - `HOW-TO-MATH-OLYMPIAD.ipynb`
 
 ---
 

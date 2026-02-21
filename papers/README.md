@@ -1,5 +1,7 @@
 # Papers
 
+Note: Papers 13-17 are RESERVED (see `papers/00-index.md` for rationale). Papers 23-26 added in community refactor. See `papers/00-index.md` for the full index.
+
 Start here: `00-index.md`
 
 This folder is the long-form documentation for the concepts used by the runnable artifacts in repo.
@@ -15,12 +17,12 @@ flowchart TB
   IDX --> SW["papers/05-software-5.0.md"]
 
   LA --> N3["PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb"]
-  CB --> N1["HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb"]
-  VL --> N2["HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb"]
+  CB --> N1["HOW-TO-OOLONG-BENCHMARK.ipynb"]
+  VL --> N2["HOW-TO-MATH-OLYMPIAD.ipynb"]
   RG --> N3
   SW --> N3
 
-  IDX --> SWE["HOW-TO-CRUSH-SWE-BENCHMARK.ipynb"]
+  IDX --> SWE["HOW-TO-SWE-BENCHMARK.ipynb"]
 ```
 
 ## Claim Hygiene (Prime Lanes)
@@ -37,11 +39,11 @@ flowchart LR
 ## What Reviewers Can Run
 
 - Notebooks:
-  - `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`
-  - `HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb`
+  - `HOW-TO-OOLONG-BENCHMARK.ipynb`
+  - `HOW-TO-MATH-OLYMPIAD.ipynb`
   - `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb`
 - SWE guide:
-  - `HOW-TO-CRUSH-SWE-BENCHMARK.md`
+  - `HOW-TO-SWE-BENCHMARK.md`
 
 ## Update Rule
 

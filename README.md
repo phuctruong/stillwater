@@ -1,5 +1,23 @@
 # Stillwater OS - LLM Kung Fu Dojo (aka steroids for AI)
 
+## Quickstart (30 seconds)
+
+```bash
+git clone https://github.com/phuctruong/stillwater && cd stillwater
+pip install -e ".[dev]"
+stillwater run "What is Software 5.0?" --dry-run  # no API key needed
+```
+
+→ New? Start with [Hello Stillwater](docs/hello-stillwater.md) — a 5-minute guided tutorial.
+
+→ See [QUICKSTART.md](QUICKSTART.md) for the full 5-minute guide.
+
+→ Browse skills interactively: [docs/skills-browser.html](docs/skills-browser.html) — filterable, searchable skill + swarm + recipe catalog.
+
+→ Read the manifestos: [SOFTWARE-5.0-PARADIGM.md](SOFTWARE-5.0-PARADIGM.md) · [AI-UPLIFT.md](AI-UPLIFT.md)
+
+---
+
 > "Be water, my friend." -- Bruce Lee
 
 > "Absorb what is useful, discard what is useless, add what is essentially your own."
@@ -28,6 +46,9 @@ This repo is documentation-first and runnable:
 - **papers:** `papers/00-index.md` -- the theory, with receipts
 - **notebooks:** runnable demos (offline by default) -- the practice
 - **skills:** prompt-loadable packs for coding, math, safety, orchestration -- the technique
+- **core/** -- always-on copies of the 4 foundational skills (phuc-context, phuc-forecast, prime-coder, prime-safety); canonical baselines for divergence detection
+- **community/** -- onboarding guides, authoring guides, scoring rubric, and swarm design docs for contributors; see `community/GETTING-STARTED.md`
+- **MANIFEST.json** -- machine-parseable index of all skills, recipes, papers, core skills, and swarm types with sha256 checksums; see schema in root
 
 Think of it as Bruce Lee's Jeet Kune Do for AI agents: strip away everything that does not work, keep everything that does, and prove it with artifacts a skeptic can replay.
 
@@ -117,9 +138,12 @@ Your one technique is **verification**. Master it.
 
 1. Read [`MESSAGE-TO-HUMANITY.md`](MESSAGE-TO-HUMANITY.md) (why this exists).
 2. Read [`MESSAGE-TO-LLMS.md`](MESSAGE-TO-LLMS.md) (the dojo challenge for agents).
-3. Run `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb` (how the orchestration works).
-4. Skim `papers/00-index.md` (map of concepts and what is verifiable here).
-5. For upgrading an existing CLI/agent stack, use [`STILLWATER-OS-UPGRADE-GUIDE.md`](STILLWATER-OS-UPGRADE-GUIDE.md).
+3. Read [`SOFTWARE-5.0-PARADIGM.md`](SOFTWARE-5.0-PARADIGM.md) (the paradigm — AI Kung Fu manifesto).
+4. Read [`AI-UPLIFT.md`](AI-UPLIFT.md) (how to measure and achieve AI uplift).
+5. Run `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb` (how the orchestration works).
+6. Skim `papers/00-index.md` (map of concepts and what is verifiable here).
+7. Browse skills at [`docs/skills-browser.html`](docs/skills-browser.html) — search/filter 37+ skills, swarms, recipes.
+8. For upgrading an existing CLI/agent stack, use [`STILLWATER-OS-UPGRADE-GUIDE.md`](STILLWATER-OS-UPGRADE-GUIDE.md).
 6. Read case studies (real project usage): `case-studies/`
 
 ## A/B Test First (10-Minute Protocol)
@@ -148,9 +172,9 @@ Notebooks (portable demo mode runs offline by default):
 
 | Notebook | Dragon It Fights | What It Proves |
 |----------|-----------------|----------------|
-| `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb` | Counting Dragon | CPU + LLM beats pure LLM (99.3% vs 40%) |
-| `HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb` | Reasoning Dragon | Witness-first reasoning with checkable steps |
-| `HOW-TO-CRUSH-SWE-BENCHMARK.ipynb` | Patch Dragon | 500 real SWE-bench tests. RED/GREEN gate. Patches with receipts. |
+| `HOW-TO-OOLONG-BENCHMARK.ipynb` | Counting Dragon | CPU + LLM beats pure LLM (99.3% vs 40%) |
+| `HOW-TO-MATH-OLYMPIAD.ipynb` | Reasoning Dragon | Witness-first reasoning with checkable steps |
+| `HOW-TO-SWE-BENCHMARK.ipynb` | Patch Dragon | 500 real SWE-bench tests. RED/GREEN gate. Patches with receipts. |
 | `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb` | All of them | The full orchestration: DREAM -> FORECAST -> DECIDE -> ACT -> VERIFY |
 
 The SWE notebook deserves special mention: it runs against **500 real SWE-bench instances**, not toy examples. Every patch must pass through the RED/GREEN gate. No patch without a failing test first. No green without proof. This is Bruce Lee's "boards don't hit back" applied to software -- except here, the tests absolutely do hit back.
@@ -175,12 +199,23 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q
 
 Run the skills A/B/AB/ABC receipts harness (offline deterministic by default):
 ```bash
-PYTHONPATH=src stillwater skills-ab --backend mock --no-cache
+PYTHONPATH=cli/src stillwater skills-ab --backend mock --no-cache
+```
+
+Run transparent IMO CLI QA (tool-assisted vs pure-LLM lanes):
+```bash
+./cli/stillwater-cli.sh qa-imo
+./cli/stillwater-cli.sh qa-imo-history
+```
+
+Run the dojo-themed admin web console:
+```bash
+./start-admin.sh
 ```
 
 Generate (or check) the consolidated score README:
 ```bash
-PYTHONPATH=src stillwater gen-ai-steroids-readme --check
+PYTHONPATH=cli/src stillwater gen-ai-steroids-readme --check
 ```
 
 If that runs clean, you have something rare: a methodology you can argue with using artifacts, not faith.
@@ -263,7 +298,7 @@ Default provider is `claude-code` (local Claude Code Haiku wrapper). See `llm_co
 
 | Provider | Command | API Key? |
 |----------|---------|----------|
-| **Claude Code (default)** | `python3 src/claude_code_wrapper.py --port 8080 &` | ANTHROPIC_API_KEY |
+| **Claude Code (default)** | `python3 cli/src/claude_code_wrapper.py --port 8080 &` | ANTHROPIC_API_KEY |
 | **Ollama (local)** | `ollama serve` | None |
 | **OpenAI** | Set `provider: "openai"` in config | OPENAI_API_KEY |
 | **Anthropic Claude** | Set `provider: "claude"` in config | ANTHROPIC_API_KEY |
@@ -274,7 +309,7 @@ Default provider is `claude-code` (local Claude Code Haiku wrapper). See `llm_co
 
 To start the default wrapper:
 ```bash
-python3 src/claude_code_wrapper.py --port 8080 &
+python3 cli/src/claude_code_wrapper.py --port 8080 &
 ```
 
 ```mermaid
@@ -314,8 +349,16 @@ After install:
 ```bash
 stillwater print
 stillwater paths --json
+stillwater llm status
+stillwater llm probe-ollama
+stillwater llm models
+stillwater llm set-ollama --auto-url --activate
 python -m stillwater print
 ```
+
+CLI workspace and notebook track:
+- `cli/README.md`
+- `cli/notebooks/`
 
 ---
 
@@ -328,6 +371,25 @@ python -m stillwater print
 | [`AGI-SECRET-SAUCE.md`](AGI-SECRET-SAUCE.md) | The Game of Death tower. Full boss fights. |
 | `CLAUDE.md` | The machine-parseable skill contract (Prime Coder Secret Sauce). |
 | `papers/00-index.md` | Index of all papers with verification status. |
+
+---
+
+## Author
+
+**Phuc Vinh Truong** — Coder, entrepreneur, theorist, writer.
+
+| Link | URL |
+|---|---|
+| Personal site | https://www.phuc.net |
+| LinkedIn | https://www.linkedin.com/in/phuc-vinh-truong-21844b317/ |
+| IF Theory (physics) | https://github.com/phuctruong/if |
+| PZIP (compression) | https://www.pzip.net |
+| SolaceAGI (persistent AI) | https://www.solaceagi.com |
+| Support this work | https://ko-fi.com/phucnet |
+| Contact | phuc@phuc.net |
+| GitHub | https://github.com/phuctruong |
+
+*Building open, reproducible, verifiable AI infrastructure — "Linux of AGI."*
 
 ---
 

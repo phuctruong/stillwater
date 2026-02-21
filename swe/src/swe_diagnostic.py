@@ -230,7 +230,7 @@ if checks_passed == checks_total:
     print(f"\n🎉 ALL CHECKS PASSED - Ready for SWE-bench solving!")
     print(f"\n   Next steps:")
     print(f"   1. Start HTTP server: python3 src/claude_code_wrapper.py --port 8080")
-    print(f"   2. Run notebook: jupyter notebook HOW-TO-CRUSH-SWE-BENCHMARK.ipynb")
+    print(f"   2. Run notebook: jupyter notebook HOW-TO-SWE-BENCHMARK.ipynb")
     print(f"   3. Execute cells to test SWE-bench solver")
     sys.exit(0)
 else:

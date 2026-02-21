@@ -28,7 +28,7 @@ This repo includes a small executable demo and notebook. It does not claim exter
 
 ## Reproduce / Verify In This Repo
 
-1. Run: `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`
+1. Run: `HOW-TO-OOLONG-BENCHMARK.ipynb`
 2. Read:
    - `oolong/src/oolong_solver.py` (deterministic demo)
    - `oolong/src/solve-oolong.py` (runner)

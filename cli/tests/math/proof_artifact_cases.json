@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "description": "Deterministic proof-artifact checks for math claims.",
+  "cases": [
+    {
+      "id": "expr_137x241",
+      "kind": "expr_equals",
+      "expr": "137 * 241",
+      "expected": 33017
+    },
+    {
+      "id": "gcd_123456_7890",
+      "kind": "gcd",
+      "a": 123456,
+      "b": 7890,
+      "expected": 6
+    },
+    {
+      "id": "lcm_84_90",
+      "kind": "lcm",
+      "a": 84,
+      "b": 90,
+      "expected": 1260
+    },
+    {
+      "id": "modexp_7_222_1000",
+      "kind": "modexp",
+      "base": 7,
+      "exp": 222,
+      "mod": 1000,
+      "expected": 49
+    },
+    {
+      "id": "det_prompt_gcd",
+      "kind": "deterministic_prompt",
+      "prompt": "Find gcd(987654, 123456).",
+      "expected": "6"
+    },
+    {
+      "id": "det_prompt_modexp",
+      "kind": "deterministic_prompt",
+      "prompt": "Compute the remainder when 2^100 is divided by 13.",
+      "expected": "3"
+    }
+  ]
+}

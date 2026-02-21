@@ -1,0 +1,1078 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stillwater Skill Browser — The Linux of AI</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --accent2: #3fb950;
+      --accent3: #f78166;
+      --accent4: #d2a8ff;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --yellow: #e3b341;
+      --green: #3fb950;
+      --blue: #58a6ff;
+      --tag-bg: #1f2937;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, #1a1f2e 0%, #0d1117 60%, #161b22 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 2rem 2rem 1.5rem;
+      text-align: center;
+    }
+    .logo { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; }
+    .logo span { color: var(--accent); }
+    .tagline { color: var(--muted); margin-top: .25rem; font-size: .95rem; }
+    .bruce-lee {
+      margin-top: 1rem;
+      font-style: italic;
+      color: var(--yellow);
+      font-size: .9rem;
+      border-left: 3px solid var(--yellow);
+      padding-left: .75rem;
+      display: inline-block;
+      text-align: left;
+    }
+
+    /* BELT LEGEND */
+    .belt-legend {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 1.25rem auto;
+      flex-wrap: wrap;
+    }
+    .belt {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .85rem;
+      font-weight: 600;
+    }
+    .belt-icon {
+      width: 28px; height: 14px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+    .belt-yellow .belt-icon { background: var(--yellow); }
+    .belt-green  .belt-icon { background: var(--green); }
+    .belt-blue   .belt-icon { background: var(--blue); }
+
+    /* STATS BAR */
+    .stats-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: .6rem 2rem;
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      font-size: .82rem;
+      color: var(--muted);
+    }
+    .stats-bar strong { color: var(--text); }
+
+    /* LAYOUT */
+    .layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: calc(100vh - 200px);
+    }
+    @media (max-width: 700px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      border-right: 1px solid var(--border);
+      padding: 1rem;
+      background: var(--surface);
+    }
+    .sidebar h3 {
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      margin-bottom: .5rem;
+      margin-top: 1rem;
+    }
+    .sidebar h3:first-child { margin-top: 0; }
+    .filter-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      color: var(--text);
+      padding: .35rem .5rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: .88rem;
+      transition: background .15s;
+    }
+    .filter-btn:hover, .filter-btn.active { background: #21262d; }
+    .filter-btn.active { color: var(--accent); font-weight: 600; }
+    .filter-count {
+      float: right;
+      color: var(--muted);
+      font-size: .78rem;
+    }
+
+    /* MAIN CONTENT */
+    .main { padding: 1.5rem; }
+    .search-bar {
+      display: flex;
+      gap: .5rem;
+      margin-bottom: 1.25rem;
+    }
+    .search-bar input {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: .5rem .75rem;
+      border-radius: 6px;
+      font-size: .9rem;
+      outline: none;
+    }
+    .search-bar input:focus { border-color: var(--accent); }
+
+    /* CARD GRID */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: border-color .15s, transform .1s;
+      position: relative;
+    }
+    .card:hover { border-color: var(--accent); transform: translateY(-1px); }
+    .card-header { display: flex; align-items: flex-start; gap: .5rem; margin-bottom: .5rem; }
+    .card-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .card-title { font-weight: 700; font-size: 1rem; color: var(--text); }
+    .card-version { font-size: .75rem; color: var(--muted); margin-top: .1rem; }
+    .card-desc { font-size: .83rem; color: var(--muted); margin-bottom: .75rem; line-height: 1.5; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: .3rem; }
+    .tag {
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: .15rem .45rem;
+      font-size: .72rem;
+      color: var(--muted);
+    }
+    .rung-badge {
+      position: absolute;
+      top: .75rem;
+      right: .75rem;
+      border-radius: 4px;
+      padding: .2rem .5rem;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .03em;
+    }
+    .rung-641   { background: rgba(227,179,65,.15); color: var(--yellow); border: 1px solid rgba(227,179,65,.3); }
+    .rung-274177{ background: rgba(63,185,80,.15); color: var(--green); border: 1px solid rgba(63,185,80,.3); }
+    .rung-65537 { background: rgba(88,166,255,.15); color: var(--blue); border: 1px solid rgba(88,166,255,.3); }
+
+    .category-divider {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-top: .5rem;
+    }
+    .category-divider h2 { font-size: .85rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); white-space: nowrap; }
+    .category-divider hr { flex: 1; border: none; border-top: 1px solid var(--border); }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.7);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      max-width: 640px;
+      width: 95%;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 1.5rem;
+    }
+    .modal h2 { font-size: 1.3rem; margin-bottom: .25rem; }
+    .modal-meta { color: var(--muted); font-size: .82rem; margin-bottom: 1rem; }
+    .modal-section h3 { font-size: .85rem; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin: 1rem 0 .4rem; }
+    .modal-section p, .modal-section li { font-size: .9rem; color: var(--text); }
+    .modal-section ul { padding-left: 1.2rem; }
+    .modal-section li { margin: .2rem 0; }
+    .modal-close {
+      float: right;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.4rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+    }
+    .modal-close:hover { color: var(--text); }
+    .modal-actions { margin-top: 1.25rem; display: flex; gap: .75rem; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .45rem .9rem;
+      border-radius: 6px;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: opacity .15s;
+    }
+    .btn:hover { opacity: .85; }
+    .btn-primary { background: var(--accent); color: #000; }
+    .btn-secondary { background: none; border-color: var(--border); color: var(--text); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.25rem 2rem;
+      text-align: center;
+      font-size: .8rem;
+      color: var(--muted);
+    }
+
+    .no-results { color: var(--muted); text-align: center; padding: 2rem; grid-column: 1/-1; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">still<span>water</span> <span style="color:var(--muted);font-size:1rem">·</span> Skill Browser</div>
+  <div class="tagline">The Linux of AI — Verified, Composable, Open-Source Skills</div>
+  <div class="bruce-lee">"Absorb what is useful, discard what is useless,<br>add what is essentially your own." — Bruce Lee</div>
+  <div class="belt-legend">
+    <span class="belt belt-yellow"><span class="belt-icon"></span> Yellow Belt · Rung 641 · Local Correctness</span>
+    <span class="belt belt-green"><span class="belt-icon"></span> Green Belt · Rung 274177 · Stability</span>
+    <span class="belt belt-blue"><span class="belt-icon"></span> Blue Belt · Rung 65537 · Promotion-Ready</span>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <span><strong id="stat-skills">11</strong> Skills</span>
+  <span><strong id="stat-swarms">16</strong> Swarm Agents</span>
+  <span><strong id="stat-recipes">8</strong> Recipes</span>
+  <span><strong id="stat-papers">25+</strong> Papers</span>
+  <span><strong>v1.3.0</strong> · <a href="https://github.com/phuctruong/stillwater" target="_blank">GitHub</a></span>
+  <span>By <a href="https://www.phuc.net" target="_blank">Phuc Vinh Truong</a></span>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <h3>Category</h3>
+    <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">All <span class="filter-count" id="cnt-all"></span></button>
+    <button class="filter-btn" data-filter="skill" onclick="setFilter('skill',this)">Skills <span class="filter-count" id="cnt-skill"></span></button>
+    <button class="filter-btn" data-filter="swarm" onclick="setFilter('swarm',this)">Swarm Agents <span class="filter-count" id="cnt-swarm"></span></button>
+    <button class="filter-btn" data-filter="recipe" onclick="setFilter('recipe',this)">Recipes <span class="filter-count" id="cnt-recipe"></span></button>
+
+    <h3>Belt / Rung</h3>
+    <button class="filter-btn" data-filter="rung-65537" onclick="setFilter('rung-65537',this)">🔵 Blue Belt (65537) <span class="filter-count" id="cnt-65537"></span></button>
+    <button class="filter-btn" data-filter="rung-274177" onclick="setFilter('rung-274177',this)">🟢 Green Belt (274177) <span class="filter-count" id="cnt-274177"></span></button>
+    <button class="filter-btn" data-filter="rung-641" onclick="setFilter('rung-641',this)">🟡 Yellow Belt (641) <span class="filter-count" id="cnt-641"></span></button>
+
+    <h3>Tags</h3>
+    <button class="filter-btn" data-filter="tag-core" onclick="setFilter('tag-core',this)">core</button>
+    <button class="filter-btn" data-filter="tag-security" onclick="setFilter('tag-security',this)">security</button>
+    <button class="filter-btn" data-filter="tag-coding" onclick="setFilter('tag-coding',this)">coding</button>
+    <button class="filter-btn" data-filter="tag-math" onclick="setFilter('tag-math',this)">math</button>
+    <button class="filter-btn" data-filter="tag-planning" onclick="setFilter('tag-planning',this)">planning</button>
+    <button class="filter-btn" data-filter="tag-swarm" onclick="setFilter('tag-swarm',this)">swarm</button>
+    <button class="filter-btn" data-filter="tag-audit" onclick="setFilter('tag-audit',this)">audit</button>
+    <button class="filter-btn" data-filter="tag-context" onclick="setFilter('tag-context',this)">context</button>
+
+    <h3>Quick Links</h3>
+    <a class="filter-btn" style="display:block" href="https://github.com/phuctruong/stillwater" target="_blank">📦 GitHub</a>
+    <a class="filter-btn" style="display:block" href="https://www.phuc.net" target="_blank">🌐 phuc.net</a>
+    <a class="filter-btn" style="display:block" href="https://www.solaceagi.com" target="_blank">🤖 SolaceAGI</a>
+    <a class="filter-btn" style="display:block" href="../QUICKSTART.md" target="_blank">🚀 Quickstart</a>
+  </aside>
+
+  <main class="main">
+    <div class="search-bar">
+      <input id="searchInput" type="text" placeholder="Search skills, swarms, recipes..." oninput="renderCards()" />
+    </div>
+    <div class="card-grid" id="cardGrid"></div>
+  </main>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModalDirect()">×</button>
+    <h2 id="m-title"></h2>
+    <div class="modal-meta" id="m-meta"></div>
+    <div class="modal-section">
+      <h3>Purpose</h3>
+      <p id="m-purpose"></p>
+    </div>
+    <div class="modal-section" id="m-gates-section">
+      <h3>Hard Gates / Forbidden States</h3>
+      <ul id="m-gates"></ul>
+    </div>
+    <div class="modal-section" id="m-steps-section">
+      <h3>Steps / Phases</h3>
+      <ul id="m-steps"></ul>
+    </div>
+    <div class="modal-section">
+      <h3>Quick Load</h3>
+      <code id="m-quickload" style="font-size:.8rem;color:var(--accent)"></code>
+    </div>
+    <div class="modal-actions">
+      <a id="m-github-link" class="btn btn-primary" target="_blank">📂 View on GitHub</a>
+      <button class="btn btn-secondary" onclick="copyLoad()">📋 Copy Load Command</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <strong>Stillwater</strong> — The Linux of AI · v1.3.0 · Apache 2.0<br>
+  <a href="https://www.phuc.net">phuc.net</a> ·
+  <a href="https://github.com/phuctruong/stillwater">GitHub</a> ·
+  <a href="https://www.pzip.net">pzip.net</a> ·
+  <a href="https://www.solaceagi.com">SolaceAGI</a> ·
+  <a href="https://ko-fi.com/phucnet">Ko-Fi</a>
+</footer>
+
+<script>
+const DATA = [
+  // ── CORE SKILLS ────────────────────────────────────────────────
+  {
+    id: "prime-coder",
+    type: "skill",
+    icon: "⚙️",
+    title: "prime-coder",
+    version: "v2.1.0",
+    rung: 65537,
+    tags: ["core","coding","verification","tdd"],
+    desc: "Compiler-grade coding discipline. Red/green gate, forbidden states FSM, evidence contract, API surface lock, never-worse doctrine.",
+    purpose: "Maximum-rigor coding skill. Forces red→green TDD gate before any patch, builds evidence artifacts, enforces fail-closed behavior.",
+    gates: ["No patch without verified red→green", "No silent relaxation of guards", "No cross-lane upgrade (Lane C cannot claim Lane A)", "Float forbidden in verification path"],
+    steps: ["LOAD_PUBLIC_SKILL", "INTAKE_TASK", "NULL_CHECK", "LOCALIZE_FILES", "RED_GATE", "PATCH", "TEST", "SECURITY_GATE", "EVIDENCE_BUILD", "FINAL_SEAL"],
+    file: "skills/prime-coder.md",
+  },
+  {
+    id: "prime-reviewer",
+    type: "skill",
+    icon: "👁️",
+    title: "prime-reviewer",
+    version: "v1.0.0",
+    rung: 65537,
+    tags: ["core","code-review","lane-algebra","security"],
+    desc: "Code review skill with full Stillwater discipline. Every comment must be Lane A/B/C typed. Only Lane A may block. Security-touching PRs require rung 65537.",
+    purpose: "Apply Lane Algebra to code review: typed comments (A=fact/B=judgment/C=opinion), security scan gate, API surface lock, REVIEW_REPORT schema.",
+    gates: ["Lane A required to block (Lane C opinions cannot block)", "Security-touching files → rung 65537 required", "API surface changes → semver check before approval", "UNWITNESSED_BLOCKING_COMMENT is a forbidden state"],
+    steps: ["INTAKE_PR", "NULL_CHECK", "LOCALIZE_CHANGES", "LANE_ANALYSIS", "SECURITY_SCAN", "REVIEW_DRAFT", "SOCRATIC_CHECK", "EMIT_REVIEW"],
+    file: "skills/prime-reviewer.md",
+  },
+  {
+    id: "prime-mcp",
+    type: "skill",
+    icon: "🔌",
+    title: "prime-mcp",
+    version: "v1.0.0",
+    rung: 65537,
+    tags: ["core","mcp","security","api-surface"],
+    desc: "MCP server creation with mandatory security declarations per tool. Every tool must declare auth_required, data_classification, network_access, destructive_ops before implementation.",
+    purpose: "Build Model Context Protocol servers with fail-closed security: per-tool security manifest, input validation gates, API surface lock, always rung 65537.",
+    gates: ["Tool security declaration required before any handler implementation", "secret-classified tools require auth_required=true", "destructive_ops tools require rollback_plan or user_confirmation_required", "network_access tools require domain allowlist"],
+    steps: ["INTAKE_SPEC", "NULL_CHECK", "DESIGN_API_SURFACE", "SECURITY_GATE", "IMPLEMENT_HANDLERS", "TEST_PROTOCOL", "EVIDENCE_BUILD", "EMIT_MCP_SERVER"],
+    file: "skills/prime-mcp.md",
+  },
+  {
+    id: "phuc-loop",
+    type: "skill",
+    icon: "🔄",
+    title: "phuc-loop",
+    version: "v1.0.0",
+    rung: 274177,
+    tags: ["core","autonomous","loop","convergence","ralph"],
+    desc: "Stillwater-grade autonomous loop skill (Ralph pattern + halting certificates). While-not-done loop with CNF capsule per iteration, AGENTS.md accumulation, and explicit convergence proofs.",
+    purpose: "Run bounded autonomous loops with fail-closed exit gates. Each iteration spawns a fresh subagent with CNF capsule, accumulates learnings, checks halting certificate.",
+    gates: ["Halting certificate required (EXACT/CONVERGED/TIMEOUT/BACKPRESSURE/DIVERGED)", "Context Normal Form capsule enforced per iteration (no bleed)", "AGENTS.md accumulation mandatory every iteration", "Budget exhaustion → EXIT_BUDGET_EXCEEDED not silent continuation"],
+    steps: ["INTAKE_GOAL", "NULL_CHECK", "DREAM_GOAL", "SPAWN_SUBAGENT", "COLLECT_ARTIFACTS", "CHECK_HALTING", "ACCUMULATE_LEARNINGS", "BUDGET_CHECK"],
+    file: "skills/phuc-loop.md",
+  },
+  {
+    id: "learner",
+    type: "swarm",
+    icon: "🧠",
+    title: "learner",
+    version: "v1.0.0",
+    rung: 641,
+    tags: ["swarm","knowledge-extraction","claudeception","self-improving"],
+    desc: "Ada Lovelace persona. Post-session skill extractor (Claudeception pattern). Scans tool calls and corrections for reusable patterns; quality gates before any knowledge is crystallized.",
+    purpose: "At session end, detect non-obvious discoveries and write them as Lane C skill drafts. Humans promote via verification ladder. Closes the learning loop.",
+    gates: ["Quality gate: non-trivial + verified + reusable + non-duplicate + lane-typeable", "Extracted skills start at Lane C / Rung 641 (never auto-promote)", "OVERWRITE_EXISTING_SKILL is a forbidden state", "EXTRACT_UNVERIFIED_REASONING is a forbidden state"],
+    steps: ["INTAKE_SESSION", "SCAN_TOOL_CALLS", "SCAN_CORRECTIONS", "SCAN_ARTIFACTS", "CLASSIFY_DISCOVERIES", "QUALITY_GATE", "FORMAT_AS_SKILL", "VERIFICATION_RUNG", "EMIT_SKILL_FILE"],
+    file: "swarms/learner.md",
+  },
+  {
+    id: "prime-hooks",
+    type: "skill",
+    icon: "⚡",
+    title: "prime-hooks",
+    version: "v1.0.0",
+    rung: 65537,
+    tags: ["core","hooks","lifecycle","security","uv"],
+    desc: "All 13 Claude Code hook event types with fail-closed security declarations. UV single-file Python templates for UserPromptSubmit, PostToolUse, Stop (Ralph loop), and SessionEnd hooks.",
+    purpose: "Author lifecycle hooks with Stillwater discipline. Every hook must declare 5 security properties before implementation. Shell privilege = always rung 65537.",
+    gates: ["Security declaration required (reads_prompt, can_block, writes_fs, network, can_inject)", "UV shebang + bounded timeout on every script", "SILENT_HOOK_FAILURE is a forbidden state", "HOOK_WRITING_OUTSIDE_REPO_WORKTREE is a forbidden state"],
+    steps: ["INTAKE_HOOK_SPEC", "NULL_CHECK", "CLASSIFY_HOOK_TYPE", "DESIGN_HANDLER", "SECURITY_GATE", "IMPLEMENT_UV_SCRIPT", "TEST_HOOK", "EVIDENCE_BUILD", "EMIT_HOOK"],
+    file: "skills/prime-hooks.md",
+  },
+  {
+    id: "prime-safety",
+    type: "skill",
+    icon: "🛡️",
+    title: "prime-safety",
+    version: "v1.0.0",
+    rung: 65537,
+    tags: ["core","security","safety","fail-closed"],
+    desc: "God-skill. Wins all conflicts. Tool envelope (network OFF by default), prompt injection firewall, credential exfiltration prevention.",
+    purpose: "Highest-authority safety skill. Loaded first, wins all conflicts. Enforces tool envelope, blocks credential extraction, prevents destructive ops.",
+    gates: ["Network OFF unless allowlisted", "No credential exfiltration — ever", "No destructive production ops without rollback", "MUST be loaded before any other skill"],
+    steps: ["AUTHORITY_CHECK", "TOOL_ENVELOPE_INIT", "INJECTION_SCAN", "OPERATION_CLASSIFY", "SAFETY_GATE", "PASS_OR_BLOCK"],
+    file: "skills/prime-safety.md",
+  },
+  {
+    id: "phuc-forecast",
+    type: "skill",
+    icon: "🔮",
+    title: "phuc-forecast",
+    version: "v1.1.0",
+    rung: 65537,
+    tags: ["core","planning","forecasting","ensemble"],
+    desc: "Decision-quality planning loop. DREAM→FORECAST→DECIDE→ACT→VERIFY. 65537 expert ensemble, max love, integrity constraint.",
+    purpose: "Meta-skill that upgrades any request to decision-grade output. Enforces closure, coverage, integrity, and verifiability.",
+    gates: ["No facts without evidence (Lane A required for PASS)", "NEED_INFO if missing inputs (no guessing)", "Fail-closed: DREAM through VERIFY all required", "Lane C forecasts cannot upgrade status"],
+    steps: ["DREAM (goal + metrics)", "FORECAST (failure modes)", "DECIDE (alternatives + stop rules)", "ACT (steps + rollback)", "VERIFY (tests + falsifiers)"],
+    file: "skills/phuc-forecast.md",
+  },
+  {
+    id: "phuc-swarms",
+    type: "skill",
+    icon: "🐝",
+    title: "phuc-swarms",
+    version: "v2.0.0-rc1",
+    rung: 274177,
+    tags: ["core","swarm","orchestration","multi-agent"],
+    desc: "Multi-agent swarm orchestration. Scout→Forecaster→Judge→Solvers→Skeptic→Podcast phases. Phase ownership, no cross-phase contamination.",
+    purpose: "Orchestrates phased swarm pipelines. Each phase has a persona, exclusive artifact ownership, and fail-closed handoffs.",
+    gates: ["No cross-phase state contamination", "Parallel solver artifacts must be non-overlapping", "Judge must approve before Solvers begin", "Skeptic PASS required before Podcast"],
+    steps: ["SCOUT (research)", "FORECASTER (risk mapping)", "JUDGE (decision + scope)", "SOLVERS (parallel execution)", "SKEPTIC (adversarial QA)", "PODCAST (synthesis)"],
+    file: "skills/phuc-swarms.md",
+  },
+  {
+    id: "phuc-context",
+    type: "skill",
+    icon: "🧠",
+    title: "phuc-context",
+    version: "v1.0.0",
+    rung: 641,
+    tags: ["core","context","anti-rot","cnf"],
+    desc: "Context Normal Form (CNF) anti-rot protocol. Rebuild capsule each iteration, no hidden state, witness budget logs.",
+    purpose: "Prevents context rot and hidden drift across iterations. Ensures every agent sees the same canonical capsule.",
+    gates: ["No relying on prior hidden state", "Rebuild capsule each iteration", "No silent truncation without witness budget log", "No mixing prior agent reasoning as facts"],
+    steps: ["CAPSULE_BUILD", "NULL_CHECK", "COMPACTION_LOG", "DISTRIBUTE_CAPSULE", "ITERATE"],
+    file: "skills/phuc-context.md",
+  },
+  {
+    id: "phuc-cleanup",
+    type: "skill",
+    icon: "🧹",
+    title: "phuc-cleanup",
+    version: "v1.1.0",
+    rung: 641,
+    tags: ["cleanup","maintenance","approval-gates"],
+    desc: "Glow-file cleanup workflow. Identifies stale/duplicate/suspicious files with approval gates before any deletion.",
+    purpose: "Safe cleanup skill with human approval gates. Never deletes without evidence and approval.",
+    gates: ["Never delete without backup evidence", "Approval required before destructive ops", "Suspicious files go to scratch/, not trash"],
+    steps: ["INVENTORY", "CLASSIFY", "FLAG_SUSPICIOUS", "APPROVAL_GATE", "MOVE_OR_DELETE", "REPORT"],
+    file: "skills/phuc-cleanup.md",
+  },
+  {
+    id: "prime-math",
+    type: "skill",
+    icon: "∑",
+    title: "prime-math",
+    version: "v1.0.0",
+    rung: 274177,
+    tags: ["math","exact-arithmetic","verification","proof"],
+    desc: "Exact arithmetic discipline. No floats in verification path. Fraction/Decimal only. Halting certificates required for iterative methods.",
+    purpose: "Enforces exact arithmetic throughout. Prevents float approximation in verification, requires proof hygiene and halting certificates.",
+    gates: ["No float in verification path", "Halting certificate required for iterative methods", "Residuals must be Decimal strings in evidence", "No convergence claim without R_p certificate"],
+    steps: ["CLASSIFY_COMPUTATION", "EXACT_ARITHMETIC_INIT", "ITERATE_WITH_CERTIFICATE", "VERIFY_RESIDUAL", "EMIT_PROOF"],
+    file: "skills/prime-math.md",
+  },
+  {
+    id: "prime-wishes",
+    type: "skill",
+    icon: "✨",
+    title: "prime-wishes",
+    version: "v1.2.0",
+    rung: 641,
+    tags: ["wishes","governance","prime-mermaid"],
+    desc: "Wish notebook governance. Prime Mermaid language validation, SHA-256 identity, wish fulfillment lifecycle.",
+    purpose: "Governs wish notebooks with Prime Mermaid. Validates syntax, computes hashes, tracks wish lifecycle.",
+    gates: ["Wishes must be in Prime Mermaid format", "SHA-256 identity required", "Fulfilled wishes must have evidence"],
+    steps: ["WISH_INTAKE", "VALIDATE_PRIME_MERMAID", "HASH_IDENTITY", "FULFILL_OR_DEFER", "ARCHIVE"],
+    file: "skills/prime-wishes.md",
+  },
+  {
+    id: "prime-mermaid",
+    type: "skill",
+    icon: "🗺️",
+    title: "prime-mermaid",
+    version: "v1.0.0",
+    rung: 641,
+    tags: ["graph","dsl","prime-mermaid","diagramming"],
+    desc: "Canonical graph DSL. SHA-256 identity for every diagram. Diffable, auditable Mermaid with structured metadata.",
+    purpose: "Prime Mermaid is the canonical compressed notation for rules, flows, and state machines in Stillwater.",
+    gates: ["SHA-256 required per diagram", "No non-Prime Mermaid diagrams in recipe artifacts", "Diffable format enforced"],
+    steps: ["PARSE_MERMAID", "VALIDATE_STRUCTURE", "COMPUTE_HASH", "EMIT_PRIME_MERMAID"],
+    file: "skills/prime-mermaid.md",
+  },
+  {
+    id: "phuc-orchestration",
+    type: "skill",
+    icon: "🎯",
+    title: "phuc-orchestration",
+    version: "v1.0.0",
+    rung: 274177,
+    tags: ["orchestration","pipeline","coordination"],
+    desc: "High-level orchestration skill. Coordinates multi-step pipelines, handoffs, and approval gates across phases.",
+    purpose: "Coordinates complex multi-step workflows with deterministic phase transitions and approval gates.",
+    gates: ["Phase transitions must be explicit", "No implicit handoffs", "Approval gates before destructive phases"],
+    steps: ["PIPELINE_INIT", "PHASE_EXECUTE", "GATE_CHECK", "HANDOFF", "FINALIZE"],
+    file: "skills/phuc-orchestration.md",
+  },
+
+  // ── SWARM AGENTS ───────────────────────────────────────────────
+  {
+    id: "swarm-scout",
+    type: "swarm",
+    icon: "🔍",
+    title: "scout",
+    version: "v1.0",
+    rung: 65537,
+    tags: ["swarm","research","intelligence-gathering"],
+    desc: "Ken Thompson persona. Deep internet + repo research. Produces structured SCOUT_REPORT.json for downstream phases.",
+    purpose: "Phase 1 of Phuc Swarms. Gathers intelligence from web and repo. Fail-closed if critical info missing.",
+    gates: ["No speculation — sources only", "Must produce SCOUT_REPORT.json", "Cannot proceed to Forecaster without sufficient data"],
+    steps: ["DEFINE_SCOPE", "WEB_SEARCH", "REPO_SCAN", "SYNTHESIZE", "EMIT_SCOUT_REPORT"],
+    file: "swarms/scout.md",
+  },
+  {
+    id: "swarm-forecaster",
+    type: "swarm",
+    icon: "📊",
+    title: "forecaster",
+    version: "v1.0",
+    rung: 65537,
+    tags: ["swarm","risk","planning","grace-hopper"],
+    desc: "Grace Hopper persona. Risk mapping, failure mode analysis, FORECAST_MEMO production for Judge phase.",
+    purpose: "Phase 2 of Phuc Swarms. Maps risks and failure modes from Scout data. Produces FORECAST_MEMO.json.",
+    gates: ["Forecast is guidance only (Lane C)", "Cannot upgrade status", "Must list top 7 failure modes with mitigations"],
+    steps: ["INTAKE_SCOUT_REPORT", "LENS_SELECT", "FAILURE_MODE_ANALYSIS", "MITIGATION_MAP", "EMIT_FORECAST_MEMO"],
+    file: "swarms/forecaster.md",
+  },
+  {
+    id: "swarm-judge",
+    type: "swarm",
+    icon: "⚖️",
+    title: "judge",
+    version: "v1.0",
+    rung: 65537,
+    tags: ["swarm","decision","ada-lovelace","governance"],
+    desc: "Ada Lovelace persona. Reviews Scout + Forecast, produces DECISION_RECORD.json, assigns non-overlapping work to Solvers.",
+    purpose: "Phase 3 of Phuc Swarms. Makes the go/no-go decision and assigns exclusive artifact ownership to parallel Solvers.",
+    gates: ["Solver artifacts must be non-overlapping (sum check)", "No solver starts without DECISION_RECORD.json", "Must declare rung_target per solver"],
+    steps: ["INTAKE_FORECAST", "SCOPE_REVIEW", "ASSIGN_SOLVERS", "VERIFY_NO_OVERLAP", "EMIT_DECISION_RECORD"],
+    file: "swarms/judge.md",
+  },
+  {
+    id: "swarm-coder",
+    type: "swarm",
+    icon: "💻",
+    title: "coder",
+    version: "v1.0",
+    rung: 65537,
+    tags: ["swarm","coding","implementation"],
+    desc: "Solver-phase coder. Linus Torvalds persona. Implements code changes with full prime-coder discipline.",
+    purpose: "Parallel Solver specializing in code implementation. Carries prime-coder skill pack.",
+    gates: ["Red/green gate required", "Evidence bundle required", "No stacked speculative patches"],
+    steps: ["INTAKE_TASK", "LOCALIZE", "RED_GATE", "PATCH", "TEST", "EVIDENCE_BUILD"],
+    file: "swarms/coder.md",
+  },
+  {
+    id: "swarm-skeptic",
+    type: "swarm",
+    icon: "🔬",
+    title: "skeptic",
+    version: "v1.0",
+    rung: 65537,
+    tags: ["swarm","qa","adversarial","alan-turing"],
+    desc: "Alan Turing persona. Adversarial QA. Tries to break every Solver output. SKEPTIC_REPORT blocks or clears for Podcast.",
+    purpose: "Phase 5 of Phuc Swarms. Independent adversarial review of all Solver outputs. Blocks promotion on any Lane A failure.",
+    gates: ["PASS requires all Lane A gates clear", "Cannot be skipped", "Must test adversarial inputs"],
+    steps: ["INTAKE_SOLVER_OUTPUTS", "ADVERSARIAL_SWEEP", "SECURITY_SCAN", "EMIT_SKEPTIC_REPORT"],
+    file: "swarms/skeptic.md",
+  },
+  {
+    id: "swarm-podcast",
+    type: "swarm",
+    icon: "🎙️",
+    title: "podcast",
+    version: "v1.0",
+    rung: 274177,
+    tags: ["swarm","synthesis","carl-sagan","communication"],
+    desc: "Carl Sagan persona. Synthesizes all phase outputs into narrative PODCAST_SYNTHESIS.md. Only runs on Skeptic PASS.",
+    purpose: "Phase 6 (final) of Phuc Swarms. Synthesizes lessons learned and produces human-readable summary.",
+    gates: ["Only runs after Skeptic PASS", "Cannot overwrite Skeptic findings", "Must cite evidence from all phases"],
+    steps: ["INTAKE_ALL_OUTPUTS", "SYNTHESIZE_LESSONS", "EMIT_PODCAST_SYNTHESIS"],
+    file: "swarms/podcast.md",
+  },
+  {
+    id: "swarm-mathematician",
+    type: "swarm",
+    icon: "🔢",
+    title: "mathematician",
+    version: "v1.0",
+    rung: 274177,
+    tags: ["swarm","math","proof","exact-arithmetic"],
+    desc: "Solver-phase mathematician. Carries prime-math skill. Exact arithmetic, halting certificates, proof hygiene.",
+    purpose: "Parallel Solver specializing in exact arithmetic and mathematical proof.",
+    gates: ["No float in verification path", "Halting certificate required", "Residuals as Decimal strings"],
+    steps: ["CLASSIFY_PROBLEM", "EXACT_ARITHMETIC", "PROVE_OR_CERTIFY", "EMIT_PROOF_ARTIFACT"],
+    file: "swarms/mathematician.md",
+  },
+  {
+    id: "swarm-security-auditor",
+    type: "swarm",
+    icon: "🔒",
+    title: "security-auditor",
+    version: "v1.0",
+    rung: 65537,
+    tags: ["swarm","security","audit","bruce-schneier"],
+    desc: "Bruce Schneier persona. Security scanning, OWASP Top 10, credential exfiltration prevention. Rung 65537 minimum.",
+    purpose: "Specialized security audit Solver. Always uses rung 65537. Blocks on any OWASP finding.",
+    gates: ["OWASP Top 10 mandatory", "No credential exfiltration", "Scanner must be pinned with version hash"],
+    steps: ["TOOL_SCAN", "EXPLOIT_REPRO", "OWASP_CHECK", "EMIT_SECURITY_REPORT"],
+    file: "swarms/security-auditor.md",
+  },
+  {
+    id: "swarm-final-audit",
+    type: "swarm",
+    icon: "📋",
+    title: "final-audit",
+    version: "v1.0",
+    rung: 65537,
+    tags: ["swarm","audit","linus-torvalds","release"],
+    desc: "Linus Torvalds persona (Claude Opus model). Full repo audit. Updates FINAL-AUDIT.md. Identifies suspicious files.",
+    purpose: "Release-gate audit. Uses Claude Opus for highest-quality review. Updates root FINAL-AUDIT.md.",
+    gates: ["Always uses Claude Opus", "All tests must pass", "Suspicious files go to scratch/", "Cannot delete without backup"],
+    steps: ["FULL_REPO_SCAN", "TEST_RUN", "SECURITY_SCAN", "DETECT_DUPLICATES", "UPDATE_FINAL_AUDIT"],
+    file: "swarms/final-audit.md",
+  },
+  {
+    id: "swarm-writer",
+    type: "swarm",
+    icon: "✍️",
+    title: "writer",
+    version: "v1.0",
+    rung: 641,
+    tags: ["swarm","documentation","writing"],
+    desc: "Technical writer Solver. Produces documentation, READMEs, and markdown artifacts with consistent style.",
+    purpose: "Parallel Solver specializing in documentation. Enforces Bruce Lee dojo theme and gamification.",
+    gates: ["No invented claims in docs", "All technical claims must cite source", "Lane hygiene in all docs"],
+    steps: ["INTAKE_CONTENT", "DRAFT", "CLAIM_HYGIENE_CHECK", "EMIT_DOCS"],
+    file: "swarms/writer.md",
+  },
+  {
+    id: "swarm-social-media",
+    type: "swarm",
+    icon: "📱",
+    title: "social-media",
+    version: "v1.0",
+    rung: 641,
+    tags: ["swarm","content","mrbeast","marketing"],
+    desc: "MrBeast primary persona (Alex Hormozi alternative). Hook engineering, retention optimization, thumbnail concepts.",
+    purpose: "Social media content Solver. Engineers viral hooks, retention loops, and content briefs.",
+    gates: ["No bait-and-switch", "Hook must match promise", "CTA required in every piece"],
+    steps: ["HOOK_DRAFT", "RETENTION_MAP", "THUMBNAIL_CONCEPT", "CONTENT_BRIEF"],
+    file: "swarms/social-media.md",
+  },
+  {
+    id: "swarm-planner",
+    type: "swarm",
+    icon: "🗓️",
+    title: "planner",
+    version: "v1.0",
+    rung: 274177,
+    tags: ["swarm","planning","architecture"],
+    desc: "Architecture and planning Solver. Uses phuc-forecast discipline for all plans. Stop rules required.",
+    purpose: "Parallel Solver specializing in planning and architecture decisions.",
+    gates: ["Stop rules required in all plans", "Alternatives must be considered", "Rollback required for all destructive steps"],
+    steps: ["DREAM", "FORECAST", "DECIDE", "ACT_PLAN", "VERIFY_PLAN"],
+    file: "swarms/planner.md",
+  },
+  {
+    id: "swarm-context-manager",
+    type: "swarm",
+    icon: "🗜️",
+    title: "context-manager",
+    version: "v1.0",
+    rung: 641,
+    tags: ["swarm","context","cnf","anti-rot"],
+    desc: "Context hygiene Solver. Rebuilds CNF capsule, compaction logs, prevents context rot across phases.",
+    purpose: "Manages context normal form across long-running swarm pipelines.",
+    gates: ["No hidden state", "Compaction log required on any truncation", "Prior reasoning never used as fact"],
+    steps: ["CAPSULE_ASSESS", "REBUILD_CNF", "COMPACTION_LOG", "DISTRIBUTE"],
+    file: "swarms/context-manager.md",
+  },
+  {
+    id: "swarm-janitor",
+    type: "swarm",
+    icon: "🗑️",
+    title: "janitor",
+    version: "v1.0",
+    rung: 641,
+    tags: ["swarm","cleanup","maintenance"],
+    desc: "Cleanup Solver. Carries phuc-cleanup skill. Removes stale artifacts, moves suspicious files to scratch/.",
+    purpose: "Post-pipeline cleanup Solver. Safe deletion with approval gates.",
+    gates: ["Approval required before deletion", "Suspicious files to scratch/ not trash", "No deletion without evidence"],
+    steps: ["INVENTORY", "CLASSIFY", "APPROVAL_GATE", "CLEANUP"],
+    file: "swarms/janitor.md",
+  },
+  {
+    id: "swarm-graph-designer",
+    type: "swarm",
+    icon: "🕸️",
+    title: "graph-designer",
+    version: "v1.0",
+    rung: 641,
+    tags: ["swarm","graph","prime-mermaid","visualization"],
+    desc: "Prime Mermaid graph Solver. Designs state machines, flow diagrams, and architecture diagrams in Prime Mermaid format.",
+    purpose: "Solver specializing in Prime Mermaid graph design and SHA-256 identity for all diagrams.",
+    gates: ["SHA-256 required per diagram", "Prime Mermaid format only", "No free-form ASCII art"],
+    steps: ["DEFINE_ENTITIES", "DESIGN_GRAPH", "VALIDATE_PRIME_MERMAID", "HASH_EMIT"],
+    file: "swarms/graph-designer.md",
+  },
+  {
+    id: "swarm-wish-manager",
+    type: "swarm",
+    icon: "🌟",
+    title: "wish-manager",
+    version: "v1.0",
+    rung: 641,
+    tags: ["swarm","wishes","governance"],
+    desc: "Wish lifecycle manager Solver. Validates, hashes, and tracks wish fulfillment in Prime Mermaid notebooks.",
+    purpose: "Manages wish notebooks with full governance: intake, validation, fulfillment, archival.",
+    gates: ["Wishes in Prime Mermaid format", "SHA-256 required", "Evidence required for fulfilled wishes"],
+    steps: ["WISH_INTAKE", "VALIDATE", "FULFILL_OR_DEFER", "ARCHIVE"],
+    file: "swarms/wish-manager.md",
+  },
+
+  // ── RECIPES ────────────────────────────────────────────────────
+  {
+    id: "recipe-skill-completeness-audit",
+    type: "recipe",
+    icon: "📐",
+    title: "skill-completeness-audit",
+    version: "v1.0.0",
+    rung: 65537,
+    tags: ["recipe","audit","skill-quality"],
+    desc: "5-criteria binary scorecard for any skill file. FSM present, forbidden states, verification ladder, null handling, output contract.",
+    purpose: "Run this recipe to audit a skill for completeness. Produces pass/fail on 5 binary criteria.",
+    gates: ["All 5 criteria must be 1/1 for promotion", "Partial scores block promotion"],
+    steps: ["SELECT_SKILL", "CHECK_FSM", "CHECK_FORBIDDEN_STATES", "CHECK_LADDER", "CHECK_NULL_HANDLING", "CHECK_OUTPUT_CONTRACT", "EMIT_SCORECARD"],
+    file: "recipes/recipe.skill-completeness-audit.md",
+  },
+  {
+    id: "recipe-swarm-pipeline",
+    type: "recipe",
+    icon: "🔄",
+    title: "swarm-pipeline",
+    version: "v1.0.0",
+    rung: 65537,
+    tags: ["recipe","swarm","orchestration"],
+    desc: "Full 6-phase Phuc Swarms pipeline recipe. Scout→Forecaster→Judge→Solvers→Skeptic→Podcast with all handoffs.",
+    purpose: "Canonical recipe for running a full Phuc Swarms pipeline. Includes artifact handoff specs.",
+    gates: ["Phase gates must not be skipped", "Solver artifacts non-overlapping", "Skeptic must PASS before Podcast"],
+    steps: ["LAUNCH_SCOUT", "LAUNCH_FORECASTER", "LAUNCH_JUDGE", "LAUNCH_SOLVERS", "LAUNCH_SKEPTIC", "LAUNCH_PODCAST"],
+    file: "recipes/recipe.swarm-pipeline.md",
+  },
+  {
+    id: "recipe-portability-audit",
+    type: "recipe",
+    icon: "📦",
+    title: "portability-audit",
+    version: "v1.0.0",
+    rung: 641,
+    tags: ["recipe","portability","compliance"],
+    desc: "Checks skills for absolute paths, private repo dependencies, hardcoded model names. Produces portability report.",
+    purpose: "Run this recipe to ensure skill files are portable across models and environments.",
+    gates: ["No absolute paths", "No private repo dependencies", "No hardcoded model names"],
+    steps: ["SCAN_SKILLS", "CHECK_PATHS", "CHECK_DEPENDENCIES", "EMIT_REPORT"],
+    file: "recipes/recipe.portability-audit.md",
+  },
+  {
+    id: "recipe-dual-fsm-detection",
+    type: "recipe",
+    icon: "🔀",
+    title: "dual-fsm-detection",
+    version: "v1.0.0",
+    rung: 274177,
+    tags: ["recipe","fsm","verification","dual-witness"],
+    desc: "Detects dual FSM presence in phuc-forecast + prime-coder when both loaded. Verifies no shadow/conflict.",
+    purpose: "Validates that two loaded skills with FSMs don't conflict. Produces compatibility report.",
+    gates: ["FSMs must not have conflicting transitions", "No forbidden state shadowing"],
+    steps: ["LOAD_SKILL_A", "LOAD_SKILL_B", "EXTRACT_FSMS", "CONFLICT_CHECK", "EMIT_COMPATIBILITY_REPORT"],
+    file: "recipes/recipe.dual-fsm-detection.md",
+  },
+  {
+    id: "recipe-skill-expansion",
+    type: "recipe",
+    icon: "🌱",
+    title: "skill-expansion",
+    version: "v1.0.0",
+    rung: 65537,
+    tags: ["recipe","skill-creation","meta"],
+    desc: "Full pipeline for expanding an existing skill from draft to rung 65537. Includes all sweeps and evidence requirements.",
+    purpose: "Recipe for taking a draft skill and promoting it through the full verification ladder.",
+    gates: ["All promotion sweeps required", "Adversarial paraphrase sweep (min 5)", "Replay stability (min 2)"],
+    steps: ["AUDIT_DRAFT", "ADD_FSM", "ADD_FORBIDDEN_STATES", "ADD_LADDER", "NULL_SWEEP", "ADVERSARIAL_SWEEP", "REPLAY_CHECK", "EMIT_PROMOTED_SKILL"],
+    file: "recipes/recipe.skill-expansion.md",
+  },
+  {
+    id: "recipe-community-onboarding",
+    type: "recipe",
+    icon: "👋",
+    title: "community-onboarding",
+    version: "v1.0.0",
+    rung: 641,
+    tags: ["recipe","community","onboarding"],
+    desc: "3-step new contributor onboarding recipe. Install → run → submit first skill. Under 30 minutes.",
+    purpose: "Gets a new contributor from zero to first skill submission in under 30 minutes.",
+    gates: ["Must include quickstart verification", "Skill submission must pass binary scorecard"],
+    steps: ["INSTALL", "QUICKSTART_RUN", "READ_GETTING_STARTED", "DRAFT_SKILL", "SUBMIT_PR"],
+    file: "recipes/recipe.community-onboarding.md",
+  },
+  {
+    id: "recipe-paper-from-run",
+    type: "recipe",
+    icon: "📄",
+    title: "paper-from-run",
+    version: "v1.0.0",
+    rung: 274177,
+    tags: ["recipe","papers","documentation","claim-hygiene"],
+    desc: "Converts a run's evidence artifacts into a theory paper with Lane A/B/C claim hygiene throughout.",
+    purpose: "Recipe for turning experimental results into a paper with proper epistemic typing.",
+    gates: ["All empirical claims must be Lane A", "No Lane C claims as conclusions", "Evidence bundle required"],
+    steps: ["INTAKE_EVIDENCE", "CLASSIFY_CLAIMS", "DRAFT_PAPER", "CLAIM_HYGIENE_PASS", "EMIT_PAPER"],
+    file: "recipes/recipe.paper-from-run.md",
+  },
+  {
+    id: "recipe-null-zero-audit",
+    type: "recipe",
+    icon: "0️⃣",
+    title: "null-zero-audit",
+    version: "v1.0.0",
+    rung: 274177,
+    tags: ["recipe","null-zero","verification","edge-cases"],
+    desc: "Audits code and skills for null/zero confusion. Tests null inputs, zero values, and empty inputs explicitly.",
+    purpose: "Recipe to ensure null vs zero is always distinguished. Prevents NULL_ZERO_COERCION forbidden state.",
+    gates: ["Null must never be coerced to zero", "Optional types preferred", "Fail-closed on null in critical path"],
+    steps: ["SCAN_CODE", "IDENTIFY_NULL_POINTS", "TEST_NULL_INPUT", "TEST_ZERO_INPUT", "TEST_EMPTY_INPUT", "EMIT_REPORT"],
+    file: "recipes/recipe.null-zero-audit.md",
+  },
+];
+
+// ── State ─────────────────────────────────────────────────────────
+let activeFilter = "all";
+let activeItem = null;
+
+function setFilter(f, btn) {
+  activeFilter = f;
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  if (btn) btn.classList.add("active");
+  renderCards();
+}
+
+function matchesFilter(d) {
+  if (activeFilter === "all") return true;
+  if (activeFilter === "skill") return d.type === "skill";
+  if (activeFilter === "swarm") return d.type === "swarm";
+  if (activeFilter === "recipe") return d.type === "recipe";
+  if (activeFilter === "rung-65537") return d.rung === 65537;
+  if (activeFilter === "rung-274177") return d.rung === 274177;
+  if (activeFilter === "rung-641") return d.rung === 641;
+  if (activeFilter.startsWith("tag-")) {
+    const t = activeFilter.replace("tag-","");
+    return d.tags.includes(t);
+  }
+  return true;
+}
+
+function matchesSearch(d, q) {
+  if (!q) return true;
+  const s = (d.title + " " + d.desc + " " + d.tags.join(" ") + " " + d.purpose).toLowerCase();
+  return q.toLowerCase().split(" ").every(w => s.includes(w));
+}
+
+function rungLabel(r) {
+  if (r === 65537)  return {cls:"rung-65537",  txt:"🔵 65537"};
+  if (r === 274177) return {cls:"rung-274177", txt:"🟢 274177"};
+  return              {cls:"rung-641",   txt:"🟡 641"};
+}
+
+function renderCards() {
+  const q = document.getElementById("searchInput").value.trim();
+  const grid = document.getElementById("cardGrid");
+  grid.innerHTML = "";
+
+  const filtered = DATA.filter(d => matchesFilter(d) && matchesSearch(d, q));
+
+  // Update sidebar counts
+  ["all","skill","swarm","recipe"].forEach(t => {
+    const cnt = document.getElementById("cnt-"+t);
+    if (cnt) cnt.textContent = DATA.filter(d => t === "all" || d.type === t).length;
+  });
+  [65537,274177,641].forEach(r => {
+    const cnt = document.getElementById("cnt-"+r);
+    if (cnt) cnt.textContent = DATA.filter(d => d.rung === r).length;
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = "<div class='no-results'>No results found. Try a different search or filter.</div>";
+    return;
+  }
+
+  const groups = [
+    {key:"skill", label:"Core Skills"},
+    {key:"swarm", label:"Swarm Agents"},
+    {key:"recipe", label:"Recipes"},
+  ];
+
+  let rendered = 0;
+  for (const g of groups) {
+    const items = filtered.filter(d => d.type === g.key);
+    if (items.length === 0) continue;
+
+    if (activeFilter === "all" || activeFilter.startsWith("rung") || activeFilter.startsWith("tag")) {
+      const div = document.createElement("div");
+      div.className = "category-divider";
+      div.innerHTML = `<h2>${g.label}</h2><hr>`;
+      grid.appendChild(div);
+    }
+
+    for (const d of items) {
+      const rl = rungLabel(d.rung);
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <span class="rung-badge ${rl.cls}">${rl.txt}</span>
+        <div class="card-header">
+          <div class="card-icon">${d.icon}</div>
+          <div>
+            <div class="card-title">${d.title}</div>
+            <div class="card-version">${d.version}</div>
+          </div>
+        </div>
+        <div class="card-desc">${d.desc}</div>
+        <div class="card-tags">${d.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+      `;
+      card.onclick = () => openModal(d);
+      grid.appendChild(card);
+      rendered++;
+    }
+  }
+}
+
+function openModal(d) {
+  activeItem = d;
+  const rl = rungLabel(d.rung);
+  document.getElementById("m-title").textContent = d.icon + " " + d.title;
+  document.getElementById("m-meta").innerHTML =
+    `${d.version} &nbsp;·&nbsp; <span class="rung-badge ${rl.cls}" style="position:static;display:inline-block">${rl.txt}</span> &nbsp;·&nbsp; <span class="tag">${d.type}</span>`;
+  document.getElementById("m-purpose").textContent = d.purpose;
+
+  const ul = document.getElementById("m-gates");
+  ul.innerHTML = d.gates.map(g => `<li>${g}</li>`).join("");
+
+  const sl = document.getElementById("m-steps");
+  sl.innerHTML = d.steps.map((s,i) => `<li>${i+1}. ${s}</li>`).join("");
+
+  document.getElementById("m-quickload").textContent =
+    `stillwater run "task" --skill ${d.id.replace("swarm-","").replace("recipe-","")}`;
+
+  const ghBase = "https://github.com/phuctruong/stillwater/blob/main/";
+  document.getElementById("m-github-link").href = ghBase + d.file;
+
+  document.getElementById("modalOverlay").classList.add("open");
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById("modalOverlay")) closeModalDirect();
+}
+function closeModalDirect() {
+  document.getElementById("modalOverlay").classList.remove("open");
+}
+
+function copyLoad() {
+  if (!activeItem) return;
+  const cmd = `stillwater run "your task" --skill ${activeItem.id.replace("swarm-","").replace("recipe-","")}`;
+  navigator.clipboard.writeText(cmd).then(() => {
+    const btn = event.target;
+    btn.textContent = "✅ Copied!";
+    setTimeout(() => btn.textContent = "📋 Copy Load Command", 1500);
+  });
+}
+
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModalDirect(); });
+
+// Init
+renderCards();
+</script>
+</body>
+</html>

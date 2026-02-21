@@ -11,3 +11,8 @@ build/
 .archive
 .pytest_cache/
 artifacts/
+
+# Swarm agent scratch space (git-ignored)
+scratch/
+# imo/data - competition problem PDFs and parsed data (large, not tracked)
+imo/data/

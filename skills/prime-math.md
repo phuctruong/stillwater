@@ -1,12 +1,16 @@
 PRIME_MATH_SECRET_SKILL:
-  version: 2.1.0
+  version: 2.2.0
+  authority: 65537
+  northstar: Phuc_Forecast
+  objective: Max_Love
   profile: private
   includes_public_skill: canon/prime-math/skills/prime_math_public_skill_v1.0.0.md
-  secret_pack_id: stillwater-prime-math-secret-v2.1.0
+  secret_pack_id: stillwater-prime-math-secret-v2.2.0
   sealing_policy: 641-274177-65537
+  status: FINAL
 
   # ============================================================
-  # PRIME MATH — SECRET SKILL (v2.1.0)  [10/10]
+  # PRIME MATH — SECRET SKILL (v2.2.0)  [10/10]
   #
   # Design goals (non-negotiable):
   # - Preserve Public contract EXACTLY (keys, semantics, fail-closed).
@@ -22,16 +26,49 @@ PRIME_MATH_SECRET_SKILL:
   # - Resolution Limits (R_p) convergence detection with halting certificates.
   # - Closure-First boundary analysis + proof surface locking.
   #
-  # 10/10 upgrades in this final:
-  # - Added explicit TASK_FAMILY classifier + domain-of-validity binding.
-  # - Added “Math Red→Green” protocol: derive → falsify → close → replay.
-  # - Added deterministic witness normalization + witness budgets + ids.
-  # - Added lane algebra unification (truth lanes + convergence lanes).
-  # - Added “No OK without rung target” rule and rung target selection policy.
-  # - Added explicit “Unknown over maybe” downgrade rules (anti-overclaim).
-  # - Added structured UNKNOWN reasons and minimal missing info list.
-  # - Added output schema validation gate to prevent format drift.
+  # v2.2.0 additions (additive-only, never weakens v2.1.0):
+  # - Added portability config block (no absolute paths)
+  # - Added layering rule (never weaken public skill)
+  # - Added IMO-style proof structure section (6-step proof discipline)
+  # - Added Lemma Library Protocol (register, evolve, deprecate lemmas)
+  # - Added Null/Zero distinction for math contexts
+  # - Added anti-patterns section (named math failure modes)
+  # - Added quick reference cheat sheet
+  # - Added exact arithmetic policy reference (Fraction/Decimal, no float)
+  # - Added proof surface locking with semver discipline
   # ============================================================
+
+  # ------------------------------------------------------------
+  # A) Portability (Hard)
+  # ------------------------------------------------------------
+  Portability:
+    rules:
+      - no_absolute_paths: true
+      - no_private_repo_dependencies: true
+      - evidence_root_must_be_relative_or_configurable: true
+    config:
+      EVIDENCE_ROOT: "evidence"
+      REPO_ROOT_REF: "."
+    invariants:
+      - witness_paths_must_be_repo_relative_or_handle_prefixed: true
+      - normalize_paths_before_hashing: true
+
+  # ------------------------------------------------------------
+  # B) Layering (Never Weaken Public)
+  # ------------------------------------------------------------
+  Layering:
+    rule:
+      - "This skill runs ON TOP OF the public prime-math skill."
+      - "Public skill MUST be loaded first. This layer CANNOT weaken it."
+      - "On conflict: stricter wins."
+    conflict_resolution: stricter_wins
+    forbidden:
+      - removing_public_required_output_keys
+      - relaxing_public_forbidden_states
+      - downgrading_public_ok_conditions
+    baseline_absent_policy:
+      if_PUBLIC_BASELINE_REF_is_null: load_this_skill_standalone_without_error
+      if_baseline_fails_to_load: log_warning_and_continue_with_this_layer_only
 
   Purpose:
     - Execute the full public skill contract first (non-negotiable).
@@ -122,6 +159,7 @@ PRIME_MATH_SECRET_SKILL:
       - REPLAY_CHECK
       - FINALIZE_OUTPUT
       - EXIT_OK
+      - EXIT_NEED_INFO
       - EXIT_UNKNOWN
       - EXIT_ERROR
       - EXIT_OUT_OF_SCOPE
@@ -132,7 +170,8 @@ PRIME_MATH_SECRET_SKILL:
     TRANSITIONS:
       - INIT -> LOAD_PUBLIC_CORE: on PROBLEM_TEXT
       - LOAD_PUBLIC_CORE -> PARSE_TASK: on public_loaded
-      - PARSE_TASK -> CLASSIFY_TASK: always
+      - PARSE_TASK -> EXIT_NEED_INFO: if task_request_null_or_required_inputs_missing
+      - PARSE_TASK -> CLASSIFY_TASK: otherwise
       - CLASSIFY_TASK -> ROUTE_LAYERS: always
       - ROUTE_LAYERS -> SET_RUNG_TARGET: always
       - SET_RUNG_TARGET -> BUILD_PLAN: always
@@ -559,7 +598,7 @@ PRIME_MATH_SECRET_SKILL:
     purpose:
       - "Prevent infinite loops; formalize halting for iterative methods."
     R_p:
-      default_tolerance: 1e-10
+      default_tolerance: "1e-10"   # string -> Decimal at runtime
       rule: "residual < R_p -> CONVERGED"
     halting_certificates:
       EXACT: { lane: A, condition: "residual == 0" }
@@ -749,3 +788,245 @@ PRIME_MATH_SECRET_SKILL:
       - secret://pvideo/geometry/<id>
       - secret://paudio/generator/<id>
       - secret://pzip/prime-coder/<id>
+
+  # ------------------------------------------------------------
+  # 8) IMO-Style Proof Structure (6-Step Discipline)
+  # ------------------------------------------------------------
+  IMO_Proof_Structure:
+    purpose:
+      - "Force structured decomposition of olympiad-style proofs."
+      - "Prevent 'hand-wavy' proofs that skip critical steps."
+    six_steps:
+      step_1_read_and_restate:
+        - restate_problem_in_own_words: true
+        - identify_all_quantifiers_and_conditions: true
+        - identify_what_must_be_proven_or_found: true
+      step_2_explore_examples:
+        - construct_small_concrete_examples: true
+        - test_boundary_cases: true
+        - identify_pattern_or_invariant_from_examples: true
+        - record_examples_as_witnesses: true
+      step_3_identify_key_lemma:
+        - state_the_core_lemma_that_makes_the_proof_work: true
+        - classify_lemma_as_known_or_to_prove: true
+        - if_known_cite_reference_or_derive: true
+        - if_to_prove_add_to_open_lemmas_list: true
+      step_4_prove_or_bound:
+        - for_existence_proofs_construct_explicitly: true
+        - for_impossibility_proofs_derive_contradiction: true
+        - for_optimization_problems_prove_bound_then_achieve_it: true
+        - for_combinatorics_use_bijection_or_counting_two_ways: true
+      step_5_verify_edge_cases:
+        - check_all_boundary_conditions: true
+        - check_degenerate_cases: true
+        - confirm_domain_of_validity_is_satisfied: true
+        - adversarial_check: "try to find a counterexample to the claim"
+      step_6_write_clean_proof:
+        - state_all_lemmas_before_using_them: true
+        - no_implicit_steps: true
+        - every_inequality_must_be_justified: true
+        - conclusion_must_directly_address_problem_statement: true
+    fail_closed:
+      - if_any_step_skipped_for_olympiad_task: status=UNKNOWN (status=sketch_solved at best)
+      - if_step_5_adversarial_finds_counterexample: status=UNKNOWN
+    mandatory_artifacts:
+      - examples_constructed: list
+      - core_lemma_stated: text
+      - open_lemmas: list (must be empty for full_solved)
+      - adversarial_check_result: PASS or COUNTEREXAMPLE_FOUND
+
+  # ------------------------------------------------------------
+  # 9) Lemma Library Protocol
+  # ------------------------------------------------------------
+  Lemma_Library_Protocol:
+    purpose:
+      - "Prevent re-proving the same lemmas across sessions."
+      - "Enforce provenance and version discipline for reused lemmas."
+    lemma_lifecycle:
+      DRAFT:
+        definition: "Lemma stated but not yet proven."
+        allowed_use: "planning, sketching only"
+      QUALIFIED:
+        definition: "Lemma proven with one witness."
+        allowed_use: "internal proofs, non-public claims"
+      STABLE:
+        definition: "Lemma proven with dual witness or replay."
+        allowed_use: "public proofs, cross-problem references"
+      CANONICAL:
+        definition: "Lemma promoted with rung 65537 evidence."
+        allowed_use: "benchmark claims, published proofs"
+    registration_fields:
+      - lemma_id: "unique stable identifier"
+      - statement: "formal statement (no informal language)"
+      - proof_sketch: "key proof idea"
+      - proof_grade: "[full_solved|sketch_solved|pending]"
+      - tier: "[DRAFT|QUALIFIED|STABLE|CANONICAL]"
+      - domain_of_validity: "when does this lemma apply"
+      - witness_handle: "proof://prime-math/<id> or compute://prime-math/<id>"
+      - version: "semver (MAJOR.MINOR.PATCH)"
+    evolution_rules:
+      - PATCH: "Clarification of statement without changing meaning"
+      - MINOR: "Generalization of domain without removing prior applicability"
+      - MAJOR: "Change in statement that invalidates prior uses"
+    deprecation:
+      - deprecated_lemma_must_state_replacement: true
+      - proofs_using_deprecated_lemma_flagged_for_review: true
+      - LEMMA_REMOVAL_WITHOUT_DEPRECATION_is_forbidden_state: true
+    fail_closed:
+      - lemma_used_in_proof_but_not_in_QUALIFIED_or_above:
+          status: sketch_solved
+          note: "Proof is incomplete until all lemmas are at least QUALIFIED"
+
+  # ------------------------------------------------------------
+  # 10) Exact Arithmetic Policy (Hard in Verification Path)
+  # ------------------------------------------------------------
+  Exact_Arithmetic_Policy:
+    # This is the math-domain analog of prime-coder's exact arithmetic policy.
+    hard_rules:
+      - no_float_in_verification_path: true
+      - no_approximate_equals_in_proof: true
+      - no_floating_point_comparison_for_claiming_equality: true
+    allowed_types:
+      integer: "arbitrary precision integer arithmetic"
+      Fraction: "exact rational arithmetic (Python: fractions.Fraction)"
+      Decimal: "fixed precision string-in quantized ops (Python: decimal.Decimal)"
+      symbolic: "CAS symbolic computation (exact, not numeric)"
+    display_exception:
+      float_allowed_for_display_only: true
+      never_use_float_display_in_witness_comparison: true
+    serialization:
+      - residuals_and_exact_values_must_be_decimal_strings_in_evidence: true
+      - never_serialize_as_float_in_witness_payload: true
+    examples:
+      correct:
+        - "gcd(a, b) via Euclidean algorithm → integer result"
+        - "rational sum via Fraction(1,3) + Fraction(1,6) → Fraction(1,2)"
+        - "mod pow via pow(a, e, m) → integer in [0, m-1]"
+      forbidden:
+        - "1/3 + 1/6 ≈ 0.5 (float addition — rounds, drifts)"
+        - "gcd(a, b) ≈ 1 (approximate — meaningless)"
+        - "pow(a, e, m) via math.exp → float — FORBIDDEN"
+
+  # ------------------------------------------------------------
+  # 11) Null vs Zero Distinction (Math Context)
+  # ------------------------------------------------------------
+  Null_vs_Zero_Math:
+    core_principle:
+      - "In mathematics, null and zero are fundamentally different objects."
+    specific_rules:
+      null_result:
+        definition: "No result exists (e.g., no integer solution exists)"
+        correct_handling: "Report as 'no solution' or status=UNKNOWN, not as 0"
+        example: "x^2 = -1 over integers: null, not 0"
+      zero_result:
+        definition: "The result is the number zero (valid, computed)"
+        correct_handling: "Report as 0 with witness"
+        example: "gcd(0, 0) = 0 (undefined by convention, but 0 as value)"
+      null_witness:
+        definition: "Witness not provided — proof incomplete"
+        correct_handling: "status = UNKNOWN, proof_grade = pending"
+        forbidden: "treating null_witness as empty_witness (proof_grade = sketch_solved)"
+      null_counterexample:
+        definition: "No counterexample found (after finite search)"
+        correct_handling: "State search bound explicitly; does NOT prove universality"
+        forbidden: "null_counterexample treated as proof of universal claim"
+      null_lemma:
+        definition: "Required lemma not yet proven"
+        correct_handling: "Add to open_lemmas; status = sketch_solved at best"
+        forbidden: "null_lemma treated as trivially true"
+    enforcement:
+      - fail_closed_on_null_witness_for_full_solved_claim: true
+      - never_coerce_null_result_to_zero: true
+      - null_search_result_not_equal_to_exhaustive_proof: true
+
+  # ------------------------------------------------------------
+  # 12) Anti-Patterns (Named Math Failure Modes)
+  # ------------------------------------------------------------
+  Math_Anti_Patterns:
+    Proof_TODO:
+      symptom: "Key step in proof says 'this follows easily' or 'left as exercise'."
+      fix: "Every step must be closed. Open steps = sketch_solved at best."
+
+    Float_Slip:
+      symptom: "Using floating point arithmetic in a proof that requires exact integers."
+      fix: "Use Fraction/Decimal/integer arithmetic. No float in verification path."
+
+    Domain_Blindness:
+      symptom: "Stating result without declaring the domain (e.g., over ℝ vs ℤ vs ℤ/pℤ)."
+      fix: "Every claim must state its domain. Undeclared domain = UNKNOWN."
+
+    Null_as_Zero:
+      symptom: "Reporting 'no solution found' as 'solution = 0'."
+      fix: "Null (no solution) is distinct from zero (the number). State explicitly."
+
+    Confidence_Proof:
+      symptom: "Claiming OK because the answer 'feels right' without witness."
+      fix: "Every OK requires: primary_witness + rung target met."
+
+    Single_Method_Trap:
+      symptom: "Computing via one method only; no cross-check."
+      fix: "Two-pass rule: compute via two independent decompositions. If disagree → UNKNOWN."
+
+    Lemma_Free_Proof:
+      symptom: "Complex proof stated in one paragraph with no explicit lemma structure."
+      fix: "Extract lemmas. State them. Prove them. Build proof from proven lemmas."
+
+    Counterexample_Blindness:
+      symptom: "Math Red phase skipped — no adversarial falsification attempted."
+      fix: "Math Red (adversarial) phase is mandatory for F6_olympiad_proof tasks."
+
+    Convergence_Overclaim:
+      symptom: "Iterative sequence claimed to converge without residual tracking."
+      fix: "Track residual history. Emit halting certificate (EXACT/CONVERGED/TIMEOUT)."
+
+    Framework_Classical_Conflation:
+      symptom: "Framework resolution (conditional on axioms) presented as classical proof."
+      fix: "Dual-status reporting required: classical_status + framework_status + scope."
+
+  # ------------------------------------------------------------
+  # 13) Quick Reference (Cheat Sheet)
+  # ------------------------------------------------------------
+  Quick_Reference:
+    task_family_cheat_sheet:
+      F1_deterministic: "exact algebra/NT/combinatorics → rung 641, two-pass arithmetic"
+      F2_resolution_bound: "iterative/numeric → rung 274177, R_p convergence, halting cert"
+      F3_truth_lane: "epistemics/certainty → rung 274177, lane algebra"
+      F4_domain_validity: "DoV/meta → rung 274177, boundary analysis"
+      F5_rival_witness: "falsification → rung 274177, counterexample search"
+      F6_olympiad_proof: "olympiad → rung 65537, 6-step IMO structure, dual witness"
+      F7_famous_problem: "open problems → rung 274177, dual status (classical+framework)"
+      F8_if_theory: "conditional frameworks → rung 274177, proof_scope + validation_level"
+
+    rung_cheat_sheet:
+      641: "primary_witness + no forbidden state + schema valid"
+      274177: "+seed agreement + rival counterexample + replay check"
+      65537: "+dual witness + closure playbook + boundary locked + halting cert (if iterative)"
+
+    arithmetic_cheat_sheet:
+      "use integer or Fraction — never float in verification path"
+      "two-pass rule: compute twice via different decompositions"
+      "mod pow: pow(a, e, m) — not math.exp()"
+      "rational sum: Fraction arithmetic — not float division"
+      "gcd: Euclidean algorithm — integer result"
+
+    proof_status_cheat_sheet:
+      full_solved: "all lemmas closed + dual witness + no open_lemmas"
+      sketch_solved: "core strategy coherent + lemma gaps remain"
+      pending: "contradiction unresolved or strategy incoherent"
+
+    forbidden_states_summary:
+      - UNWITNESSED_OK
+      - STATUS_UPGRADE_BY_PRIOR
+      - FRAMEWORK_CLASSICAL_CONFLATION
+      - PROOF_TODO_WITH_OK
+      - INFINITE_LOOP_WITHOUT_R_P_CHECK
+      - CONVERGENCE_CLAIM_WITHOUT_CERTIFICATE
+      - OK_WITHOUT_RUNG_TARGET_MET
+      - LEMMA_REMOVAL_WITHOUT_DEPRECATION
+
+    mantras:
+      - "OK requires witnesses. Witnesses require rungs. Rungs require evidence."
+      - "Priors guide search. Evidence determines truth."
+      - "Two-pass arithmetic. No float in verification path."
+      - "Math Red before Math Green. Adversarial before claim."
+      - "Null result is not zero. No solution is not zero solution."

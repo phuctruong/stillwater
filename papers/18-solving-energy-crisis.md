@@ -17,7 +17,7 @@ Energy costs scale with repeated neural inference. A CPU-first architecture redu
 
 ## Reproduce / Verify In This Repo
 
-1. See CPU-first patterns in OOLONG: `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`
+1. See CPU-first patterns in OOLONG: `HOW-TO-OOLONG-BENCHMARK.ipynb`
 2. Read recipes framing: `papers/05-software-5.0.md`
 
 ## 1. Introduction

@@ -28,7 +28,7 @@ This repository implements Lane Algebra as operational constraints inside the sk
 
 1. Read the operational spec: `skills/prime-coder.md` (Axiomatic_Truth_Lanes + Lane_Algebra)
 2. See it used in notebooks (reporting discipline):
-   - `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`
+   - `HOW-TO-OOLONG-BENCHMARK.ipynb`
    - `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb`
 
 ## Notes On Claims
@@ -467,7 +467,7 @@ We presented **Lane Algebra**, a four-tier epistemic typing system for claims. T
 
 **Impact (honest framing):** Lane Algebra reduces a specific class of failure: *premise upgrades without evidence*. It does not, by itself, prove that a model’s claims are true; it forces systems to admit uncertainty (C/STAR) unless tool-backed evidence exists.
 
-**Availability:** This repo contains the skill-level operational constraints and runnable notebooks that demonstrate the reporting discipline: `skills/prime-coder.md`, `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`, `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb`.
+**Availability:** This repo contains the skill-level operational constraints and runnable notebooks that demonstrate the reporting discipline: `skills/prime-coder.md`, `HOW-TO-OOLONG-BENCHMARK.ipynb`, `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb`.
 
 **Auth: 65537** is a project tag used as a shorthand for “production gate reached” inside this repo’s methodology. It is not a universal correctness guarantee.
 

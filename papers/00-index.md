@@ -34,8 +34,8 @@ This index is intentionally conservative: it links only to papers that exist in 
 ## Reproducibility (What Reviewers Can Run Today)
 
 1. Root notebooks:
-   - `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`
-   - `HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb`
+   - `HOW-TO-OOLONG-BENCHMARK.ipynb`
+   - `HOW-TO-MATH-OLYMPIAD.ipynb`
    - `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb`
 2. Unit tests:
    - `tests/phuc_orchestration/`
@@ -79,3 +79,30 @@ If you use Stillwater's research, please cite:
 - **Tips:** [ko-fi.com/phucnet](https://ko-fi.com/phucnet) 🙏
 
 **I work for tips. Humanity wins.**
+
+---
+
+## Reserved Slots (Planned; Not Yet Written)
+
+Papers 13-17 are reserved for planned topics. These slots are intentionally left open for future contributors. Each stub includes a one-line rationale for why the topic belongs in this index.
+
+| Number | Status | Planned Topic | Rationale |
+|---|---|---|---|
+| 13 | RESERVED | Multi-agent coordination theory | Swarms require a formal model of coordination, conflict resolution, and phase ownership — not yet formalized beyond the operational skill. |
+| 14 | RESERVED | Skill portability across LLM families | As the community database grows, portability guarantees across model families (not just one vendor) require a formal treatment. |
+| 15 | RESERVED | Benchmark gaming and adversarial skills | A systematic account of how adversarial skill design can game benchmarks, and the countermeasures the verification ladder provides. |
+| 16 | RESERVED | Energy-efficient skill composition | Skill composition has a token-cost profile; this paper would formalize the energy/cost model for composition decisions at scale. |
+| 17 | RESERVED | Formal verification of skill FSMs | Skill FSMs are currently checked by review; a formal verification approach (model checking, type theory) would strengthen the never-worse guarantee. |
+
+---
+
+## Extension Economy Papers (Solvers C: Software 5.0 Extensions)
+
+Papers 23-26 form a cluster on the economics, quality theory, review methodology, and community governance of the Software 5.0 skill library.
+
+| Number | File | Title | Summary |
+|---|---|---|---|
+| 23 | `23-software-5.0-extension-economy.md` | The Extension Economy | Skills and recipes as compression artifacts with increasing returns; compression gain metric; community network effects; failure modes (skill rot, recipe staleness, compatibility drift). |
+| 24 | `24-skill-scoring-theory.md` | Binary Scorecards for Skill Quality | 5-criteria binary scorecard (FSM, forbidden states, verification ladder, null/zero handling, output contract); empirical results across 9 skills in this repo; model-agnosticism argument. |
+| 25 | `25-persona-based-review-protocol.md` | Persona-Based Review | Named historical personas (Turing, Lovelace, Thompson) as review agents; three case studies from swarm runs; failure modes (persona capture, override, mismatch); canonical persona assignment table. |
+| 26 | `26-community-skill-database.md` | The Stillwater Community Database | Design principles for a distributed skill library: sha256 identity + MANIFEST.json, quality gate at submission, never-worse versioning, canonical review agents; comparison to npm, PyPI, crates.io; open problems. |

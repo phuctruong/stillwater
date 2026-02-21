@@ -9,7 +9,7 @@
 # Default is an offline demo provider so the repo can be executed without any
 # external services. Switch to "claude-code" (local wrapper) or an API provider
 # when you want LLM-backed runs.
-provider: "claude-code"  # Options: "offline", "claude-code", "openai", "claude", "openrouter", "togetherai", "gemini", "ollama"
+provider: "../../etc/evil"
 
 # Offline Demo - Default
 offline:
@@ -91,8 +91,8 @@ gemini:
 ollama:
   name: "Ollama (Local)"
   type: "http"
-  url: "http://localhost:11434"
-  model: "llama3.1:8b"  # Or: mistral, qwen2.5-coder:7b, deepseek-coder:6.7b
+  url: "http://192.168.68.100:11434"
+  model: "llama3.1:8b"
   description: "Ollama local server - run open models without API keys"
   requires_api_key: false
   environment_variables: []

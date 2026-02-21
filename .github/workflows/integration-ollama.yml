@@ -32,7 +32,7 @@ jobs:
           python -m pip install -e ".[dev]"
       - name: Skills A/B (ollama backend)
         env:
-          PYTHONPATH: src
+          PYTHONPATH: cli/src
         run: |
           python -m stillwater.skills_ab \
             --backend ollama \

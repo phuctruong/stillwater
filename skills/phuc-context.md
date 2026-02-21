@@ -1,11 +1,48 @@
 # phuc-context-skill.md — Phuc Context Skill (Anti-Rot + Batched Prompts + Prime Channels)
 
-**Skill ID:** phuc-context  
-**Version:** 1.0.0  
-**Authority:** 65537  
-**Status:** STABLE (portable, prompt-loadable)  
-**Role:** Context architecture + orchestration substrate for multi-agent runs  
+**Skill ID:** phuc-context
+**Version:** 1.1.0
+**Authority:** 65537
+**Status:** STABLE (portable, prompt-loadable)
+**Role:** Context architecture + orchestration substrate for multi-agent runs
 **Tags:** context, anti-rot, batching, orchestration, channels, assets, personas, prime-coder, prime-safety
+
+---
+
+## A) Portability (Hard)
+
+```yaml
+portability:
+  rules:
+    - no_absolute_paths: true
+    - no_private_repo_dependencies: true
+    - evidence_root_must_be_relative_or_configurable: true
+  config:
+    EVIDENCE_ROOT: "evidence"
+    REPO_ROOT_REF: "."
+  invariants:
+    - context_capsule_paths_must_be_repo_relative: true
+    - never_inject_host_specific_paths_into_capsule: true
+```
+
+## B) Layering (Never Weaken)
+
+```yaml
+layering:
+  rule:
+    - "This skill layers ON TOP OF prime-safety + prime-coder."
+    - "On any conflict, stricter wins."
+    - "phuc-context adds context hygiene; it does not remove safety or coding gates."
+  conflict_resolution: stricter_wins
+  load_order:
+    1: prime-safety.md      # god-skill; wins all conflicts
+    2: prime-coder.md       # evidence discipline + red/green gate
+    3: phuc-context.md      # context hygiene + orchestration substrate
+  forbidden:
+    - relaxing_prime_safety_rules_via_context_reframing
+    - injecting_untrusted_content_into_context_capsule
+    - claiming_context_as_evidence_without_executable_backing
+```
 
 ---
 
@@ -299,3 +336,112 @@ This skill fixes it by:
 “Use phuc-context. Clear context to artifacts only. Load prime-safety + prime-coder + phuc-forecast + this skill. Run the pipeline:
 Scout(DREAM) → Grace(FORECAST) → Judge(DECIDE) → Solver(ACT) → Skeptic(VERIFY) → Grace(edgecase) → Judge(seal).
 Use prime channels and emit the typed artifacts.”
+
+---
+
+## 12) State Machine (Fail-Closed Runtime)
+
+### 12.1 States
+
+- `INIT`
+- `LOAD_PACKS` (inject prime-safety, prime-coder, phuc-context, task-relevant skills)
+- `BUILD_CAPSULE` (Context Normal Form: task + evidence + witnesses)
+- `ASSET_GATE` (check all required assets are present)
+- `DISPATCH_SCOUT`
+- `DISPATCH_FORECASTER`
+- `DISPATCH_JUDGE`
+- `DISPATCH_SOLVER`
+- `DISPATCH_SKEPTIC`
+- `DISPATCH_EDGECASE` (optional Grace post-VERIFY)
+- `FINAL_SEAL`
+- `EXIT_PASS`
+- `EXIT_NEED_INFO`
+- `EXIT_BLOCKED`
+- `EXIT_REFUSE`
+
+### 12.2 Transitions
+
+- `INIT → LOAD_PACKS`: always
+- `LOAD_PACKS → BUILD_CAPSULE`: on packs_loaded
+- `BUILD_CAPSULE → ASSET_GATE`: always
+- `ASSET_GATE → EXIT_NEED_INFO`: if required_assets_missing
+- `ASSET_GATE → DISPATCH_SCOUT`: if assets_present
+- `DISPATCH_SCOUT → DISPATCH_FORECASTER`: on SCOUT_REPORT.json received
+- `DISPATCH_FORECASTER → DISPATCH_JUDGE`: on FORECAST_MEMO.json received
+- `DISPATCH_JUDGE → EXIT_BLOCKED`: if go_no_go == NO_GO
+- `DISPATCH_JUDGE → DISPATCH_SOLVER`: if go_no_go == GO
+- `DISPATCH_SOLVER → DISPATCH_SKEPTIC`: on PATCH_PROPOSAL received
+- `DISPATCH_SKEPTIC → DISPATCH_SOLVER`: if SKEPTIC_VERDICT.status == FAIL AND budget_allows (max 1 retry)
+- `DISPATCH_SKEPTIC → DISPATCH_EDGECASE`: if SKEPTIC_VERDICT.status == PASS
+- `DISPATCH_EDGECASE → FINAL_SEAL`: always
+- `FINAL_SEAL → EXIT_PASS`: if JUDGE_SEAL.promotion_allowed == true
+- `FINAL_SEAL → EXIT_BLOCKED`: if evidence_incomplete
+
+### 12.3 Forbidden States
+
+- `CONTEXT_ROT`: agent acting on stale hidden narrative rather than explicit capsule
+- `MISSING_ASSET_ASSUMED_OK`: required asset absent but pipeline proceeds
+- `UNTYPED_CHANNEL_MESSAGE`: agent communicates via chat instead of typed artifact
+- `PERSONA_CERTIFYING`: a persona (Kernighan, Hopper, etc.) making a PASS claim
+- `UNWITNESSED_SKEPTIC_PASS`: Skeptic passes without executed evidence
+- `SOLVER_EXPANDING_SCOPE`: Solver touches files not in DECISION_RECORD
+- `JUDGE_CODING`: Judge writes or modifies code
+- `CONTEXT_SUMMARIZED_FROM_MEMORY`: capsule built from recalled summaries not artifacts
+
+---
+
+## 13) Null vs Zero Distinction (Context Context)
+
+```yaml
+null_vs_zero:
+  rules:
+    - null_asset: “Asset not provided — NEED_INFO, not assume empty.”
+    - empty_asset: “Asset provided but empty — may proceed with documented caveat.”
+    - missing_log: “Missing error log is null, not 'no errors'.”
+    - missing_test_output: “Missing test output is null, not 'tests passed'.”
+  enforcement:
+    - fail_closed_on_null_required_assets: true
+    - never_treat_absent_repro_as_no_failure: true
+```
+
+---
+
+## 14) Anti-Patterns (Named Context Failure Modes)
+
+**Context Rot**
+- Symptom: Agent confidently acts on remembered context from 5 turns ago.
+- Fix: Clear to artifacts only before each pipeline run. Re-inject explicitly.
+
+**The Chatty Channel**
+- Symptom: Agents exchange long prose messages instead of typed JSON artifacts.
+- Fix: All inter-agent communication is structured JSON via Prime Channels.
+
+**The God Agent**
+- Symptom: One agent (usually Solver) does Scout + Forecast + Decide + Code + Verify.
+- Fix: Enforce role contracts. Each agent has exactly one job and one artifact.
+
+**The Missing Grace**
+- Symptom: Pipeline is Scout → Judge → Solver → Skeptic. No premortem.
+- Fix: Forecaster (Grace) is mandatory. Skipping FORECAST means no stop rules.
+
+**The Reluctant Judge**
+- Symptom: Judge approves everything without considering alternatives.
+- Fix: Judge must document 2–3 alternatives considered and explicit stop rules.
+
+**Context Overload**
+- Symptom: Every agent receives full repo + all logs + all prior artifacts.
+- Fix: Context partitioning (L0–L5). Each agent sees only its required layers.
+
+---
+
+## 15) Quick Reference (Cheat Sheet)
+
+```
+Pipeline spine:    Scout → Forecaster → Judge → Solver → Skeptic → [Grace] → Judge(seal)
+Always-load:       prime-safety.md + prime-coder.md + phuc-context.md
+Context layers:    L0(rules) L1(task) L2(evidence) L3(witnesses) L4(patch) L5(verdicts)
+Agent artifacts:   SCOUT_REPORT | FORECAST_MEMO | DECISION_RECORD | PATCH_PROPOSAL | SKEPTIC_VERDICT | EDGECASE_REPORT | JUDGE_SEAL
+Persona rule:      Style only. Cannot certify. Only Skeptic + evidence certifies.
+Null asset rule:   Missing ≠ empty. Fail NEED_INFO, never assume.
+Anti-rot:          Clear to artifacts, re-inject packs, rebuild capsule fresh each run.
+```

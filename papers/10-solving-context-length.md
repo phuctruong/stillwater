@@ -18,7 +18,7 @@ Long-context systems fail when they treat "more tokens" as the solution. In prac
 ## Reproduce / Verify In This Repo
 
 1. See compaction rules in the coding skill: `skills/prime-coder.md` (Shannon compaction + witness lines).
-2. See the SWE guide prompt builder discussion: `HOW-TO-CRUSH-SWE-BENCHMARK.md`.
+2. See the SWE guide prompt builder discussion: `HOW-TO-SWE-BENCHMARK.md`.
 
 ## 1. Introduction
 

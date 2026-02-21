@@ -1,11 +1,57 @@
+<!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
+SKILL: phuc-forecast v1.2.0
+PURPOSE: Upgrade any request to decision-grade output via DREAM → FORECAST → DECIDE → ACT → VERIFY loop with ensemble coverage and integrity constraints.
+CORE CONTRACT: All five phases are mandatory. FORECAST is Lane C guidance only — it never upgrades status to PASS. VERIFY must include tests and falsifiers. Fail-closed: emit NEED_INFO if key inputs are missing rather than guessing facts.
+HARD GATES: Missing required inputs → EXIT_NEED_INFO (list missing fields). Unsafe or unverifiable plan → EXIT_BLOCKED. Lane C forecast output cannot substitute for Lane A executable evidence.
+FSM STATES: INIT → INTAKE → NULL_CHECK → STAKES_CLASSIFY → LENS_SELECT → DREAM → FORECAST → DECIDE → ACT → VERIFY → FINAL_SEAL → EXIT_PASS | EXIT_NEED_INFO | EXIT_BLOCKED
+FORBIDDEN: UNSTATED_ASSUMPTIONS_USED_AS_FACT | FACT_INVENTION | CONFIDENT_CLAIM_WITHOUT_EVIDENCE | SKIP_VERIFY | NO_STOP_RULES | TOOL_CLAIM_WITHOUT_TOOL_OUTPUT | SILENT_SCOPE_EXPANSION
+VERIFY: rung_641 (local) | rung_274177 (stability) | rung_65537 (promotion)
+LOAD FULL: always for production; quick block is for orientation only
+-->
 # phuc-forecast-skill.md — Phuc Forecast Skill (Ensemble + Love + Integrity)
 
-**Skill ID:** phuc-forecast  
-**Version:** 1.1.0  
-**Authority:** 65537  
-**Status:** SEALED (10/10 target)  
-**Role:** Decision-quality wrapper layer (planning + verification)  
+**Skill ID:** phuc-forecast
+**Version:** 1.2.0
+**Authority:** 65537
+**Status:** SEALED (10/10 target)
+**Role:** Decision-quality wrapper layer (planning + verification)
 **Tags:** forecasting, premortem, ensemble, alignment, integrity, fail-closed, reproducibility
+
+---
+
+## A) Portability (Hard)
+
+```yaml
+portability:
+  rules:
+    - no_absolute_paths: true
+    - no_private_repo_dependencies: true
+    - skill_must_load_verbatim_on_any_capable_LLM: true
+  config:
+    EVIDENCE_ROOT: "evidence"
+    REPO_ROOT_REF: "."
+  invariants:
+    - forecast_outputs_must_not_contain_host_specific_paths: true
+    - no_model_name_hardcoded_in_logic: true
+```
+
+## B) Layering (Never Weaken)
+
+```yaml
+layering:
+  rule:
+    - "This skill layers ON TOP OF prime-safety."
+    - "On conflict: stricter wins."
+    - "Phuc Forecast adds planning loop; it does not remove safety gates."
+  conflict_resolution: stricter_wins
+  load_order:
+    1: prime-safety.md      # god-skill; wins all conflicts
+    2: phuc-forecast.md     # planning loop
+  forbidden:
+    - using_FORECAST_lane_C_output_to_upgrade_status_to_PASS
+    - treating_failure_mode_mitigations_as_sufficient_for_PASS
+    - skipping_VERIFY_because_FORECAST_looked_confident
+```
 
 ---
 
@@ -312,3 +358,83 @@ Otherwise:
 ### 11.3 BUILDER (Specs / Code / Governance)
 
 “Use Phuc Forecast + state-machine closure. Emit machine-parseable JSON. Add verification checklist and falsifiers. Fail-closed.”
+
+---
+
+## 12) Null vs Zero Distinction (Forecast Context)
+
+```yaml
+null_vs_zero_forecast:
+  rules:
+    - null_stakes: “Stakes not provided → infer HIGH conservatively, not assume LOW.”
+    - null_context: “No context provided → emit NEED_INFO with minimal fields list.”
+    - empty_failure_modes: “Zero identified failure modes ≠ no risks. Must state why.”
+    - null_falsifiers: “Missing falsifiers = incomplete VERIFY. Not 'nothing to disprove'.”
+  enforcement:
+    - forecasts_with_no_failure_modes_require_explicit_justification: true
+    - never_treat_unstated_constraints_as_no_constraints: true
+```
+
+---
+
+## 13) Evidence Contract (When Forecast Is Used for Promotion)
+
+```yaml
+evidence_contract:
+  required_for_promotion_claim:
+    - “DREAM section fully filled (goal, metrics, constraints, non-goals)”
+    - “FORECAST section with ranked failure modes + mitigations + unknowns”
+    - “DECIDE section with alternatives + tradeoffs + stop rules”
+    - “ACT section with per-step checkpoints + rollback”
+    - “VERIFY section with tests + falsifiers + repro notes”
+  evidence_artifacts:
+    plan_json: “${EVIDENCE_ROOT}/forecast_plan.json”
+    verify_log: “${EVIDENCE_ROOT}/forecast_verify.log”
+  fail_closed:
+    - if_any_required_section_empty: “status=BLOCKED stop_reason=EVIDENCE_INCOMPLETE”
+    - if_VERIFY_not_run: “status=BLOCKED stop_reason=SKIP_VERIFY”
+    - if_no_falsifiers: “status=NEED_INFO”
+```
+
+---
+
+## 14) Anti-Patterns (Named Forecast Failure Modes)
+
+**Forecast Theater**
+- Symptom: Beautiful DREAM + FORECAST section, but VERIFY is “TBD” or empty.
+- Fix: Verify is mandatory. No PASS without falsifiers and repro notes.
+
+**Confidence Laundering**
+- Symptom: FORECAST says “risk is LOW” → used to skip verification.
+- Fix: Lane C (forecast) never upgrades status. VERIFY still required.
+
+**The Endless Plan**
+- Symptom: ACT section has 15 steps, no checkpoints, no stop rules.
+- Fix: Each ACT step must have: action, artifact, checkpoint, rollback. Stop rules required.
+
+**Falsifier Blindness**
+- Symptom: VERIFY lists only positive tests (“it should work when...”).
+- Fix: Falsifiers required (“it would disprove this if...”).
+
+**Bounded Scope Drift**
+- Symptom: During ACT, the plan expands beyond the DECIDE scope.
+- Fix: Scope is locked at DECIDE. Any expansion → pause, revise DECIDE first.
+
+**Lens Monoculture**
+- Symptom: All 7 lenses agree immediately. No tensions found.
+- Fix: Force Skeptic + Adversary to find disagreements. If they cannot, state why.
+
+---
+
+## 15) Quick Reference (Cheat Sheet)
+
+```
+Loop:          DREAM → FORECAST → DECIDE → ACT → VERIFY → FINAL_SEAL
+Stakes:        AUTO selects lens count (LOW=7, MED/HIGH=13)
+Required:      Skeptic + Adversary + Security always in STRICT mode
+Lane rule:     Forecast outputs are Lane C. Only VERIFY produces Lane A.
+Fail closed:   NEED_INFO if inputs missing. BLOCKED if unsafe/unverifiable.
+Falsifiers:    Required in every VERIFY section. Not optional.
+Stop rules:    Required in every DECIDE section. Not optional.
+Forbidden:     SKIP_VERIFY | NO_STOP_RULES | FACT_INVENTION | SILENT_SCOPE_EXPANSION
+```

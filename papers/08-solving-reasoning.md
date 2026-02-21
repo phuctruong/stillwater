@@ -34,7 +34,7 @@ If you want to add numeric comparisons, ship a harness + logs in-repo (see `pape
 - Demo solver with executable checks:
   - `imo/src/imo_2024_solver_proper.py`
 - Notebook that runs it:
-  - `HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb`
+  - `HOW-TO-MATH-OLYMPIAD.ipynb`
 - Policy:
   - `papers/01-lane-algebra.md`
   - `papers/03-verification-ladder.md`

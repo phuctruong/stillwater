@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0.0",
+  "role": "community-contribution-registry",
+  "description": "Registry of community-contributed skills, recipes, and swarm types. Maintained separately from root MANIFEST.json (which is the artifact index).",
+  "review_policy": "All submissions must score 5/5 on the binary scorecard. Review is performed by a swarm chain (Scout + Judge + Skeptic).",
+  "minimum_score": "5/5",
+  "skills_submitted": [],
+  "recipes_submitted": [],
+  "swarms_submitted": [],
+  "papers_submitted": [],
+  "submission_template": {
+    "id": "",
+    "version": "",
+    "title": "",
+    "author": "",
+    "score": "X/5",
+    "evidence_path": "",
+    "pr_url": "",
+    "submitted_at": ""
+  }
+}

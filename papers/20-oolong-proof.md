@@ -13,7 +13,7 @@ Exact aggregation (counts, top-k, uniqueness) is deterministic enumeration. Tran
 
 This repo includes a small, executable demonstration of a CPU-first aggregation pipeline (parse -> index -> dispatch with `Counter()`) and a notebook that runs it.
 
-**In-repo evidence:** `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb` executes the included demo and checks its stdout.
+**In-repo evidence:** `HOW-TO-OOLONG-BENCHMARK.ipynb` executes the included demo and checks its stdout.
 
 ---
 
@@ -30,7 +30,7 @@ For the general policy, see `papers/99-claims-and-evidence.md`.
 
 ## Reproduce In This Repo
 
-1. Run the notebook: `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`
+1. Run the notebook: `HOW-TO-OOLONG-BENCHMARK.ipynb`
 2. Read the implementation:
    - `oolong/src/oolong_solver.py` (deterministic demo)
    - `oolong/src/solve-oolong.py` (runner)
@@ -87,7 +87,7 @@ flowchart TD
 The runnable demo in this repo:
 - Implements a parse + index + dispatch pipeline in `oolong/src/oolong_solver.py`.
 - Includes a 4-case local test harness to exercise the handlers.
-- Runs via `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb` and emits a consistent, checkable stdout report.
+- Runs via `HOW-TO-OOLONG-BENCHMARK.ipynb` and emits a consistent, checkable stdout report.
 
 If you want to claim external numbers:
 - Add an in-repo harness.

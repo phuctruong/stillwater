@@ -42,7 +42,25 @@ Your agent stands before you. You have built it. You trust it. But does the worl
 
 ---
 
-## 🗼 The Tower Structure: 5 Floors, 10 Dragons
+## What Is In This Repo
+
+The tower has a foundation. Here is the structure:
+
+| Directory | What It Is |
+|-----------|-----------|
+| `skills/` | Prompt-loadable constraint packs (prime-coder, prime-safety, phuc-forecast, phuc-context) |
+| `core/` | Always-on canonical copies of the 4 foundational skills; baseline for divergence detection |
+| `recipes/` | Step-by-step replayable workflows with artifact schemas, forbidden states, and rollback steps |
+| `swarms/` | Typed agent definitions: persona + skill pack + FSM + forbidden states per agent role |
+| `papers/` | Theory papers with receipts — `papers/00-index.md` is the map |
+| `community/` | Onboarding guides, authoring guides, scoring rubric, and swarm design docs for contributors |
+| `MANIFEST.json` | Machine-parseable index of all skills, recipes, papers, core skills, and swarm types with sha256 checksums |
+
+Start at `community/GETTING-STARTED.md` if you are new. Start at `papers/00-index.md` if you want theory first.
+
+---
+
+## The Tower Structure: 5 Floors, 10 Dragons
 
 ```
                     ┌─────────────────────┐
@@ -170,7 +188,7 @@ papers/99-claims-and-evidence.md
 
 **Proof in Repo:**
 ```bash
-HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb
+HOW-TO-OOLONG-BENCHMARK.ipynb
 papers/02-counter-bypass.md
 skills/phuc-context.md
 ```
@@ -295,7 +313,7 @@ PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb
 
 **Proof in Repo:**
 ```bash
-HOW-TO-CRUSH-SWE-BENCHMARK.ipynb
+HOW-TO-SWE-BENCHMARK.ipynb
 papers/04-red-green-gate.md
 papers/05-software-5.0.md
 papers/09-solving-data-exhaustion.md
@@ -437,11 +455,11 @@ graph LR
 | # | Dragon | Difficulty | Gate | Repo Evidence |
 |---|--------|------------|------|---|
 | 1 | Hallucination | ⭐⭐⭐⭐⭐ | Lane Algebra | `papers/01-lane-algebra.md` |
-| 2 | Counting | ⭐⭐⭐⭐ | Counter Bypass | `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb` |
+| 2 | Counting | ⭐⭐⭐⭐ | Counter Bypass | `HOW-TO-OOLONG-BENCHMARK.ipynb` |
 | 3 | Context | ⭐⭐⭐⭐ | Context Normal Form | `skills/phuc-context.md` |
 | 4 | Reasoning | ⭐⭐⭐⭐⭐ | Witness-First Logic | `papers/08-solving-reasoning.md` |
 | 5 | Verification | ⭐⭐⭐⭐⭐ | Verification Ladder | `papers/03-verification-ladder.md` |
-| 6 | Patch Reliability | ⭐⭐⭐⭐ | RED/GREEN Gate | `HOW-TO-CRUSH-SWE-BENCHMARK.ipynb` |
+| 6 | Patch Reliability | ⭐⭐⭐⭐ | RED/GREEN Gate | `HOW-TO-SWE-BENCHMARK.ipynb` |
 | 7 | Generalization | ⭐⭐⭐⭐ | Replay Stability | `papers/11-solving-generalization.md` |
 | 8 | Data Exhaustion | ⭐⭐⭐ | Software 5.0 | `papers/05-software-5.0.md` |
 | 9 | Alignment | ⭐⭐⭐⭐⭐ | Fail-Closed Envelope | `skills/prime-safety.md` |
@@ -454,9 +472,9 @@ graph LR
 | # | Dragon (AGI Blocker) | Why It Stayed Hard (History) | Current Leaders / Benchmarks (Examples) | Stillwater Mechanism (100% Coverage) | Quick Proof In Repo |
 |---:|---|---|---|---|---|
 | 1 | **Hallucination:** confidence without truth | LLMs optimize plausibility; humans reward eloquence; systems rarely force evidence. | TruthfulQA + factuality evals; RAG/tool-use; labs: OpenAI/Anthropic/Google DeepMind/Meta. | **Lane Algebra + claim typing + explicit downgrades.** No evidence => no "PASS." | `papers/01-lane-algebra.md`, `papers/06-solving-hallucination.md`, `papers/99-claims-and-evidence.md` |
-| 2 | **Counting/Aggregation:** "close enough" is wrong | Attention is approximate; exact aggregation over long text is brittle in pure LLM space. | Long-context aggregation tasks; program-aided methods. | **Counter Bypass:** LLM classifies (optional), CPU enumerates (required). | `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`, `papers/02-counter-bypass.md`, `papers/20-oolong-proof.md` |
+| 2 | **Counting/Aggregation:** "close enough" is wrong | Attention is approximate; exact aggregation over long text is brittle in pure LLM space. | Long-context aggregation tasks; program-aided methods. | **Counter Bypass:** LLM classifies (optional), CPU enumerates (required). | `HOW-TO-OOLONG-BENCHMARK.ipynb`, `papers/02-counter-bypass.md`, `papers/20-oolong-proof.md` |
 | 3 | **Reasoning:** persuasive stories that can't be checked | "Reasoning" is often hidden/unverifiable; humans can't audit long chains. | GSM8K/MATH-style; search/verifiers; program-aided reasoning. | **Witness-first reasoning:** intermediates + falsifiers + checks, not vibes. | `papers/08-solving-reasoning.md`, `skills/prime-math.md` |
-| 4 | **Patch Reliability:** "looks right" code that breaks prod | Agents optimize for plausible diffs; tests are missing; review is expensive. | SWE-bench + variants; sandboxed execution; patch verification. | **Red/Green Gate + Skeptic certifier + rung targets.** | `HOW-TO-CRUSH-SWE-BENCHMARK.ipynb`, `papers/04-red-green-gate.md`, `tests/` |
+| 4 | **Patch Reliability:** "looks right" code that breaks prod | Agents optimize for plausible diffs; tests are missing; review is expensive. | SWE-bench + variants; sandboxed execution; patch verification. | **Red/Green Gate + Skeptic certifier + rung targets.** | `HOW-TO-SWE-BENCHMARK.ipynb`, `papers/04-red-green-gate.md`, `tests/` |
 | 5 | **Verification:** "how sure are we" is usually a vibe | People conflate confidence with evidence; systems rarely encode evidence-strength. | Eval suites + verifiers; multi-sampling; reproducible harnesses. | **Verification Ladder (641->274177->65537):** pick a rung, emit the right artifacts. | `papers/03-verification-ladder.md`, `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb` |
 | 6 | **Context/Memory:** window limits + context rot | More tokens cost more; long contexts drift; stale narrative becomes "truth." | LongBench/RULER/needle tasks; retrieval/summarization; long-context models. | **Context Normal Form + anti-rot:** artifacts persist; narrative dies. | `skills/phuc-context.md`, `papers/10-solving-context-length.md` |
 | 7 | **Generalization:** it works once, then faceplants | Agents overfit to the last example; hidden heuristics accumulate; replay fails. | OOD suites; robustness sweeps; decomposition methods. | **Constrain -> decompose -> verify + replay stability before "promotion."** | `papers/11-solving-generalization.md`, `skills/prime-coder.md` |

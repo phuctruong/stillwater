@@ -32,8 +32,8 @@ See `papers/99-claims-and-evidence.md`.
 - Lane typing policy: `papers/01-lane-algebra.md`
 - Claim policy: `papers/99-claims-and-evidence.md`
 - Notebooks that use rung-style reporting:
-  - `HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb`
-  - `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`
+  - `HOW-TO-MATH-OLYMPIAD.ipynb`
+  - `HOW-TO-OOLONG-BENCHMARK.ipynb`
 
 ---
 

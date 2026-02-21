@@ -1,0 +1,26 @@
+# Stillwater kernel config
+# Env vars always override these values.
+
+extension_root: "cli/extensions"
+swarm_settings_file: "cli/settings/SWARM-ORCHESTRATION.prime-mermaid.md"
+
+# Optional external skill folders (project-private overlays).
+skill_dirs:
+  - "~/projects/solace-cli/stillwater_extension/skills"
+
+# Optional external recipe folders.
+recipe_dirs:
+  - "~/projects/solace-cli/stillwater_extension/recipes"
+
+# Optional book roots for `stillwater books list/show`.
+books_dirs:
+  - "books"
+  - "~/projects/solaceagi/solace/books/bubble"
+
+# Optional paper roots for `stillwater papers list/show`.
+papers_dirs:
+  - "cli/papers"
+  - "papers"
+  - "~/projects/solace-cli/canon/cli/papers"
+  - "~/projects/solace-cli/canon/prime-mermaid/papers"
+  - "~/projects/solace-cli/canon/prime-wishes/papers"

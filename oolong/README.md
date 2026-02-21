@@ -3,7 +3,7 @@
 OOLONG is the “long context aggregation” demo in this repo.
 
 Primary runnable artifact:
-- `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`
+- `HOW-TO-OOLONG-BENCHMARK.ipynb`
 
 Code:
 - `oolong/src/oolong_solver.py` (deterministic/offline path)
@@ -29,5 +29,5 @@ flowchart LR
 ## Run
 
 ```bash
-python -m nbconvert --execute --to notebook --inplace HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb
+python -m nbconvert --execute --to notebook --inplace HOW-TO-OOLONG-BENCHMARK.ipynb
 ```

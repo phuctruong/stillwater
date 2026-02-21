@@ -1,0 +1,3 @@
+Stillwater CLI Dojo
+Absorb -> Discard -> Add -> Verify
+Kernel stable. Extensions evolve.

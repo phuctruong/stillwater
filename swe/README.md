@@ -5,7 +5,7 @@
 This folder contains SWE-bench related code and scripts.
 
 Primary runnable artifact:
-- `HOW-TO-CRUSH-SWE-BENCHMARK.ipynb` (500 real SWE-bench Verified instances, 100% RED/GREEN)
+- `HOW-TO-SWE-BENCHMARK.ipynb` (500 real SWE-bench Verified instances, 100% RED/GREEN)
 
 Code:
 - `swe/src/solve-swe.py` (runner: demo by default, optional real path)

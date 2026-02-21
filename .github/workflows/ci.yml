@@ -25,7 +25,7 @@ jobs:
           python imo/tests/test-harsh-qa-notebooks.py
       - name: Generated docs up-to-date
         run: |
-          PYTHONPATH=src python -m stillwater.gen_ai_steroids_readme --check
+          PYTHONPATH=cli/src python -m stillwater.gen_ai_steroids_readme --check
       - name: Compile check
         run: |
-          python -m compileall -q src swe imo
+          python -m compileall -q cli/src swe imo

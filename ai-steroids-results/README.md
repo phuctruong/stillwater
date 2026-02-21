@@ -49,7 +49,7 @@ Notes:
 The repo’s receipts generator for these move-cards is the skills A/B harness:
 
 ```bash
-PYTHONPATH=src STILLWATER_AB_BACKEND=mock STILLWATER_AB_CACHE=0 \
+PYTHONPATH=cli/src STILLWATER_AB_BACKEND=mock STILLWATER_AB_CACHE=0 \
   python -m stillwater.skills_ab
 ```
 

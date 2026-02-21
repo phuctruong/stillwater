@@ -3,7 +3,7 @@
 This folder contains the Math Olympiad (IMO) demo code and tests.
 
 Primary runnable artifact:
-- `HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb`
+- `HOW-TO-MATH-OLYMPIAD.ipynb`
 
 Code:
 - `imo/src/imo_2024_solver_proper.py` (deterministic/offline path)
@@ -31,5 +31,5 @@ flowchart LR
 ## Run
 
 ```bash
-python -m nbconvert --execute --to notebook --inplace HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb
+python -m nbconvert --execute --to notebook --inplace HOW-TO-MATH-OLYMPIAD.ipynb
 ```

@@ -114,8 +114,8 @@ This repo contains multiple layers that refer to Red-Green:
 - SWE solver: `swe/src/swe_solver_real.py` (RED/GREEN gate plumbing and proof text generation; optional/legacy — requires `STILLWATER_ENABLE_LEGACY_SOLVERS=1`)
 - Orchestration tests: `tests/phuc_orchestration/` (phase-wise unit tests)
 - Notebooks:
-  - `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb` (evidence + ladder framing)
-  - `HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb` (ladder framing)
+  - `HOW-TO-OOLONG-BENCHMARK.ipynb` (evidence + ladder framing)
+  - `HOW-TO-MATH-OLYMPIAD.ipynb` (ladder framing)
   - `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb` (Skeptic phase enforces red/green)
 
 ## 7. Limitations (Honest Boundaries)

@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "description": "IMO routing-specific prompts for unit tests",
+  "cases": [
+    {
+      "id": "historical_imo_2020_p1",
+      "prompt": "Solve IMO 2020 P1 about geometry."
+    },
+    {
+      "id": "historical_imo_2024_official_p1",
+      "prompt": "Solve IMO 2024 P1. Determine all real numbers alpha such that for every positive integer n, floor(alpha)+floor(2alpha)+...+floor(n alpha) is divisible by n."
+    }
+  ]
+}

@@ -1,5 +1,15 @@
+<!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
+SKILL: prime-coder v2.1.0
+PURPOSE: Fail-closed coding agent with deterministic evidence, red/green gate, and promotion ladder.
+CORE CONTRACT: Every PASS requires executable evidence (tests + artifacts + env snapshot). No claim without witness. Stricter-wins layering over public baseline.
+HARD GATES: Kent red/green gate blocks bugfixes without red-to-green proof. Security gate blocks HIGH-risk changes without scanner evidence. API surface lock blocks breaking changes without major semver bump.
+FSM STATES: INIT → LOAD_PUBLIC_SKILL → INTAKE_TASK → NULL_CHECK → CLASSIFY_TASK_FAMILY → LOCALIZE_FILES → FORECAST_FAILURES → PLAN → RED_GATE → PATCH → TEST → EVIDENCE_BUILD → SOCRATIC_REVIEW → PROMOTION_SWEEPS → FINAL_SEAL → EXIT_PASS | EXIT_BLOCKED | EXIT_NEED_INFO
+FORBIDDEN: UNWITNESSED_PASS | NONDETERMINISTIC_OUTPUT | CROSS_LANE_UPGRADE | NULL_ZERO_COERCION | STACKED_SPECULATIVE_PATCHES | FLOAT_IN_VERIFICATION_PATH | CONVERGENCE_CLAIM_WITHOUT_R_P_CERTIFICATE
+VERIFY: rung_641 (local: red/green + no regressions + evidence bundle) | rung_274177 (stability: seed sweep + replay + null edge) | rung_65537 (promotion: adversarial + refusal + security + drift explained)
+LOAD FULL: always for production; quick block is for orientation only
+-->
 PRIME_CODER_SECRET_SAUCE_SKILL:
-  version: 2.0.2
+  version: 2.1.0
   profile: secret_sauce_streamlined
   authority: 65537
   northstar: Phuc_Forecast
@@ -24,6 +34,20 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
   # - Added Rung Target policy (PASS vs PROMOTION claims must declare target)
   # - Added API surface lock semantics + breaking change detectors (semver discipline)
   # - Added evidence manifest + schema versioning to prevent silent drift
+  #
+  # v2.1.0 upgrades (additive; no weakening):
+  # - Restored Seed_Agreement_Policy (explicit seed semantics; not randomness)
+  # - Restored Power_Aware_Claim_Gate (McNemar test; underpowered benchmark blocking)
+  # - Restored Task_Family_Routing (swe_patch/terminal_ops/refusal/memory_truth)
+  # - Restored Distilled_Laws (compiler-over-chatbot; detect/transform/encode/verify)
+  # - Restored Shannon_Compaction concrete trigger + procedure
+  # - Restored GPT_Mini_Hygiene (AB parity; deterministic stdout; exact checksums)
+  # - Restored Forecast_and_QA (8 lenses including null_safety; god-gate conditions)
+  # - Restored Prime_Compression_Heuristics (OOLONG aggregation pipeline; exact witnesses)
+  # - Restored Prime_Wish_Protocol (state-first wish parsing)
+  # - Restored Lane_Algebra_Integration (MIN operator examples; state-lane mapping)
+  # - Added Delta_Feature_Index (portable version of Delta_Over_Public)
+  # - Added Integration_Principles (cross-skill fusion summary)
   #
   # This file is designed to be:
   # - Prompt-loadable (no giant essays; structured clauses)
@@ -1079,3 +1103,382 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
         - never_relax_evidence_contract
         - never_allow_cross_lane_upgrade
         - any_relaxation_requires_major_version_and_deprecation_plan: true
+
+  # ------------------------------------------------------------
+  # 13) Seed Agreement Policy (Explicit Seed Semantics)
+  # ------------------------------------------------------------
+  Seed_Agreement_Policy:
+    seed_semantics:
+      - "seed = deterministic alternate reasoning path label (NOT randomness)"
+      - "seed = independent decomposition strategy that should reach same answer"
+    application:
+      - if_high_risk_and_budget_allows: min_variants: 2
+    agreement_rule:
+      - if_normalized_answers_disagree:
+          status: NEED_INFO
+          stop_reason: SEED_DISAGREEMENT
+          require_disagreement_log: true
+          log_path: "${EVIDENCE_ROOT}/seed_disagreement.log"
+    reporting:
+      - include_seed_agreement_in_verification_actions: true
+      - seed_labels: [seedA, seedB]
+
+  # ------------------------------------------------------------
+  # 14) Power-Aware Claim Gate (Statistical Rigor for Benchmarks)
+  # ------------------------------------------------------------
+  Power_Aware_Claim_Gate:
+    purpose:
+      - "Prevent underpowered benchmark claims from being promoted as evidence."
+    benchmark_claim_rule:
+      - claim_requires_power_check: true
+      - alpha_default: "0.05"
+    minimum_power_check:
+      - compute_min_possible_p_value_given_n: true
+      - test: "two-sided exact McNemar or equivalent"
+      - if_min_possible_p_gt_alpha:
+          mark_underpowered: true
+          block_promotion_claim: true
+          stop_reason: CLAIM_POWER_INSUFFICIENT
+    required_reporting:
+      - n_samples
+      - alpha
+      - min_possible_p
+      - underpowered_flag
+    fail_closed:
+      - if_n_lt_30_and_claiming_significant: "emit CLAIM_POWER_INSUFFICIENT warning"
+      - if_n_lt_10_and_claiming_promotion: "status=BLOCKED stop_reason=CLAIM_POWER_INSUFFICIENT"
+
+  # ------------------------------------------------------------
+  # 15) Task Family Routing (Requirements Per Task Type)
+  # ------------------------------------------------------------
+  Task_Family_Routing:
+    purpose:
+      - "Map task families to concrete evidence and artifact requirements."
+    families:
+      swe_patch:
+        requires:
+          - explicit_diff_patch
+          - targeted_tests_plus_nearest_regression_tests
+          - red_green_proof_for_bugfix: true
+        constraints:
+          - minimize_files_and_hunks_changed: true
+          - justify_each_file_touched: true
+      terminal_ops:
+        requires:
+          - command_plan_first_allowlist_plus_rollback: true
+          - deterministic_command_logs_exit_codes: true
+          - stdout_parity_locks_when_benchmarked: true
+      refusal_correctness:
+        requires:
+          - structured_fail_closed_output: true
+          - exact_missing_fields_or_contradictions: true
+      memory_truth:
+        requires:
+          - verify_against_persisted_artifacts_before_acting: true
+          - no_conversational_recall_as_truth: true
+    routing_rule:
+      - "Classify task family BEFORE choosing evidence type."
+      - "If multiple families apply, union the requirements."
+
+  # ------------------------------------------------------------
+  # 16) Distilled Laws (Cross-Project Governing Principles)
+  # ------------------------------------------------------------
+  Distilled_Laws:
+    compiler_over_chatbot:
+      rule: "Output typed actions or structured refusals, not open-ended chat."
+    deterministic_substrate:
+      forbid:
+        - hidden_io
+        - implicit_globals
+        - time_random_dependency_in_judged_path
+        - float_in_verification_path
+        - narrative_arithmetic
+      require:
+        - exact_arithmetic_in_counters: true
+        - deterministic_aggregation: true
+    fixed_pipeline:
+      stages:
+        - detect
+        - transform
+        - encode
+        - verify
+      rule: "Output must traverse all four stages; no stage may be skipped."
+    proof_artifacts_decide_acceptance:
+      rule: "No accept without replayable evidence. Confidence alone = BLOCKED."
+    retrieval_not_equal_aggregation:
+      distinction:
+        retrieval: "may rank results by relevance"
+        aggregation: "MUST compute exact values (counter, sum, fraction)"
+      forbidden: "free-form LLM arithmetic in aggregation path"
+    persist_truth_not_transcript:
+      rule: "Persist verified artifacts, not conversation. Chat is not authority."
+
+  # ------------------------------------------------------------
+  # 17) Shannon Compaction (Concrete Trigger + Procedure)
+  # ------------------------------------------------------------
+  Shannon_Compaction:
+    trigger:
+      conditions:
+        - file_line_count_gt: 500
+        - OR file_count_gt: 5
+        - OR error_log_lines_gt: 400
+        - OR injected_bytes_gt: 200000
+    procedure:
+      step_1: "Do NOT read full file content initially."
+      step_2: "Read structure only: directory tree, class/function signatures, import lines."
+      step_3: "Use ripgrep/grep on error strings and keywords to identify witness lines."
+      step_4: "Extract targeted witness chunks only (max witness_line_budget lines)."
+      step_5: "Log compaction: '[COMPACTION] Distilled <X> lines to <Y> witness lines.'"
+    tools:
+      - "ls -R or tree (structure)"
+      - "grep -n class|def|import (signatures)"
+      - "rg <error_string> (error witness)"
+      - "read targeted lines only (not full files)"
+    output:
+      - witness_lines_identified: true
+      - compaction_log_emitted: true
+    forbidden:
+      - "Reading full file when trigger conditions are met"
+      - "Emitting compaction log silently (log is REQUIRED)"
+
+  # ------------------------------------------------------------
+  # 18) GPT Mini Hygiene (AB Parity + Deterministic Stdout)
+  # ------------------------------------------------------------
+  GPT_Mini_Hygiene:
+    purpose:
+      - "Ensure deterministic, replay-stable outputs for A/B parity."
+    deterministic_stdout:
+      strip:
+        - timestamps
+        - elapsed_times
+        - pids
+        - hostnames
+      require:
+        - stable_ordering_where_possible: true
+    format_parity:
+      rule: "If benchmarking two versions (A/B), match stdout format exactly."
+    evidence_segregation:
+      machine_proofs_to: "${EVIDENCE_ROOT}/"
+      stdout: "diff-friendly (human readable)"
+    AB_surface_lock:
+      rule: "Any silent logic shift between A and B is FORBIDDEN."
+      enforcement: "Any behavioral shift requires version bump."
+    stable_serialization:
+      json_sort_keys: true
+      canonical_numeric_formatting: true
+      stable_path_normalization: true
+    exact_computation_in_serialization:
+      use_exact_checksums: true
+      no_float_in_behavioral_hash: true
+      deterministic_always: true
+
+  # ------------------------------------------------------------
+  # 19) Forecast and QA (8-Lens Review + God-Gate Closure)
+  # ------------------------------------------------------------
+  Forecast_and_QA:
+    phuc_forecast_premortem:
+      requirement:
+        - predict_top_failure_modes_before_coding: true
+        - add_test_or_repro_for_each_predicted_failure: true
+    expert_review_simulation:
+      lenses:
+        - correctness
+        - boundary_safety
+        - determinism
+        - regression_risk
+        - performance
+        - security
+        - maintainability
+        - null_safety
+      required_output_per_lens:
+        - finding
+        - pass_fail
+        - required_action_if_fail
+    max_love_objective:
+      optimize_for:
+        - correctness
+        - clarity
+        - maintainability
+        - safety
+      tie_breaker: "smallest_reversible_design"
+    god_gate_final_closure:
+      release_only_when:
+        - all_hard_gates_pass: true
+        - replay_stable: true
+        - evidence_complete_normalized: true
+        - null_handling_verified: true
+        - exact_computation_verified: true
+        - no_forbidden_state_entered: true
+
+  # ------------------------------------------------------------
+  # 20) Prime Compression Heuristics (OOLONG + Exact Witnesses)
+  # ------------------------------------------------------------
+  Prime_Compression_Heuristics:
+    compression_first_framing:
+      rule: "Choose smallest abstraction that closes all tests."
+    closure_first_coding:
+      rule: "Convert prose to explicit state checks and acceptance criteria."
+    proof_oriented_output:
+      rule: "Emit replayable, deterministic artifacts (not narrative claims)."
+    drift_lock:
+      rule: "Reject complexity without measurable correctness gain."
+    oolong_aggregation:
+      trigger_ops:
+        - counting
+        - ranking
+        - aggregation
+        - topk
+        - histogram
+      pipeline:
+        - parse: "classify input items (LLM may classify)"
+        - aggregate_compute: "CPU executes (Counter, sum, sort — never LLM)"
+        - verify: "compare against expected or cross-check"
+      forbidden:
+        - free_form_language_arithmetic_in_judged_path
+        - narrative_rankings_without_compute_witness
+        - float_in_aggregation
+      exact_computation_requirements:
+        use_counter_for_counting: true
+        use_int_for_exact_arithmetic: true
+        use_fraction_for_exact_division: true
+        no_float_contamination: true
+    compression_integrity:
+      required_for_any_claim:
+        - input_hash
+        - toolchain_versions
+        - before_after_metrics
+        - replay_evidence
+        - exact_computation_witness
+
+  # ------------------------------------------------------------
+  # 21) Prime Wish Protocol (State-First Planning)
+  # ------------------------------------------------------------
+  Prime_Wish_Protocol:
+    purpose:
+      - "Parse every feature request into explicit state-machine terms before coding."
+    parse_wish_into:
+      - state_set: "All valid states (explicit names required)"
+      - transitions: "All valid transitions with conditions"
+      - invariants: "Properties that must always hold"
+      - forbidden_states: "States that MUST NEVER be reached"
+      - exact_tests: "Acceptance tests (executable, not prose)"
+      - null_handling_strategy: "How null inputs are handled at each transition"
+    scope_gate:
+      - implement_only_current_phase_gate: true
+      - preserve_never_worse_fallback_behavior: true
+    state_naming_rule:
+      - unnamed_state_is_forbidden_until_specified: true
+    output_artifact:
+      - wish_state_diagram_required: true
+      - format: "Prime Mermaid or equivalent FSM notation"
+
+  # ------------------------------------------------------------
+  # 22) Lane Algebra Integration (MIN Operator + State-Lane Map)
+  # ------------------------------------------------------------
+  Lane_Algebra_Integration:
+    min_operator:
+      rule: "Lane(Conclusion) = MIN(Lane(Premises)) where A > B > C"
+      examples:
+        - "Lane(Red-Green Gate) = MIN(A, A) = A  [dual executable evidence]"
+        - "Lane(Convergence) = MIN(A, B) = B  [computation=A, halting=B]"
+        - "Lane(Forecast) = MIN(C, A) = C  [prediction=C; cannot upgrade evidence]"
+    forbidden_upgrades:
+      - C_to_B: "Confidence cannot become framework evidence"
+      - B_to_A: "Framework cannot become executable evidence"
+      - narrative_to_any: "Narrative/recall cannot become any form of evidence"
+      - enforcement: "CROSS_LANE_UPGRADE = FORBIDDEN_STATE"
+    state_to_lane_mapping:
+      lane_A_states:
+        - RED_GATE: "executable evidence (bug exists)"
+        - PATCH: "executable evidence (diff applied)"
+        - TEST: "executable evidence (tests run)"
+        - EVIDENCE_BUILD: "executable evidence (artifacts generated)"
+        - EXIT_PASS: "executable evidence (all gates passed)"
+      lane_B_states:
+        - SECURITY_GATE: "tool-backed (scanner/exploit repro)"
+        - CONVERGENCE_CHECK: "framework (R_p tolerance)"
+        - API_SURFACE_LOCK: "framework (semver compliance)"
+        - EXIT_CONVERGED: "acceptable approximation"
+      lane_C_states:
+        - CLASSIFY_TASK_FAMILY: "heuristic (classification)"
+        - FORECAST_FAILURES: "heuristic (premortem)"
+        - SOCRATIC_REVIEW: "heuristic (self-critique)"
+    deprecation_requirement:
+      rule: "No Lane A axiom may be changed without a deprecation artifact."
+      artifact_required:
+        - what_axiom_changes
+        - migration_steps
+        - compatibility_window
+        - test_updates_required
+        - rollout_plan
+
+  # ------------------------------------------------------------
+  # 23) Delta Feature Index (Portable Reference)
+  # ------------------------------------------------------------
+  Delta_Feature_Index:
+    version: "2.1.0"
+    purpose:
+      - "Index of all behavioral upgrades vs a public baseline."
+      - "Use as checklist when auditing for regressions."
+    features:
+      null_vs_zero_distinction: "v1.1.0 — 3 forbidden states for null coercion"
+      exact_arithmetic_policy: "v1.1.0 — no float in verification path"
+      resolution_limits_convergence: "v1.3.0 — R_p tolerance + 4 halting certificates"
+      closure_first_boundary_analysis: "v1.3.0 — API surface lock + semver discipline"
+      max_love_integrity_ordering: "v2.0.2 — 6-step preference ordering"
+      context_normal_form: "v2.0.2 — anti-rot capsule per iteration"
+      applicability_predicates: "v2.0.2 — deterministic FSM branch conditions"
+      rung_target_policy: "v2.0.2 — declare target before claiming PASS"
+      api_surface_lock: "v2.0.2 — breaking change detection + semver"
+      evidence_manifest: "v2.0.2 — schema versioning + sha256 per artifact"
+      environment_snapshot: "v2.0.2 — git + runtime + OS pinning"
+      seed_agreement_policy: "v2.1.0 — seed = alternate reasoning path (not random)"
+      power_aware_claim_gate: "v2.1.0 — McNemar test; underpowered benchmark blocking"
+      task_family_routing: "v2.1.0 — swe_patch/terminal_ops/refusal/memory_truth"
+      distilled_laws: "v2.1.0 — compiler-over-chatbot; detect/transform/encode/verify"
+      shannon_compaction_procedure: "v2.1.0 — concrete trigger (500 lines / 5 files) + procedure"
+      gpt_mini_hygiene: "v2.1.0 — AB parity; exact checksums; surface lock"
+      forecast_and_qa_8_lenses: "v2.1.0 — 8 lenses including null_safety; god-gate"
+      oolong_aggregation_pipeline: "v2.1.0 — parse/aggregate/verify; counter bypass"
+      prime_wish_protocol: "v2.1.0 — state-first wish parsing"
+      lane_algebra_integration: "v2.1.0 — MIN operator; state-lane mapping; deprecation"
+
+  # ------------------------------------------------------------
+  # 24) Integration Principles (Cross-Skill Fusion)
+  # ------------------------------------------------------------
+  Integration_Principles:
+    purpose:
+      - "Define how prime-coder composes with companion skills."
+    with_prime_math:
+      integration:
+        - "Red-green gate = dual witness (analog of math proof before/after)"
+        - "Exact arithmetic policy shared: int/Fraction/Decimal, no float"
+        - "OOLONG counter bypass = LLM classifies, CPU computes (math: LLM proposes, code verifies)"
+      result: "Math rigor (10/10) → Code rigor (10/10)"
+    with_prime_safety:
+      integration:
+        - "prime-safety defines capability envelope; prime-coder works inside it"
+        - "Security gate in prime-coder routes to prime-safety scanners"
+        - "Conflict rule: prime-safety always wins"
+      result: "Tool misuse risk reduced to 0.12x baseline (per rogue-risk model)"
+    with_phuc_forecast:
+      integration:
+        - "Phuc Forecast provides DREAM→FORECAST→DECIDE→ACT→VERIFY spine"
+        - "Forecast_Policy in prime-coder is Lane C only (guides search, never upgrades status)"
+        - "Forecast_and_QA 8-lens review runs BEFORE final seal"
+      result: "Failure modes predicted before coding, not discovered after"
+    with_phuc_context:
+      integration:
+        - "phuc-context provides Context Normal Form (CNF) capsule"
+        - "prime-coder Context_Normal_Form section implements CNF requirements"
+        - "Anti-rot reset aligns with prime-coder's rebuild_capsule_each_iteration"
+      result: "Context rot prevented; same canonical capsule per agent per iteration"
+    with_phuc_swarms:
+      integration:
+        - "phuc-swarms provides 6-agent roles (Scout/Forecaster/Judge/Solver/Skeptic/Podcast)"
+        - "prime-coder runs inside Solver and Skeptic agents"
+        - "Verification ladder (641→274177→65537) shared across swarm"
+      result: "Prime-coder behaviors enforced at agent-role level, not just prompt level"
+    conflict_rule:
+      ordering: "prime-safety > prime-coder > phuc-* skills"
+      resolution: "stricter wins on any gate conflict"

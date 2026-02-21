@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "description": "IMO demo QA cases used by qa-imo and CLI IMO router tests",
+  "cases": [
+    {
+      "id": "P1",
+      "prompt": "For any positive integer n, give k so k*n has exactly 2024 prime factors.",
+      "needle": "2^(",
+      "concepts": ["2^("]
+    },
+    {
+      "id": "P2",
+      "prompt": "Find all k in [1,50] such that ab+kc, ac+kb, bc+ka, ka+kb+kc has a perfect square for all a,b,c.",
+      "needle": "empty",
+      "aliases": ["empty set", "no valid values", "none"],
+      "concepts": ["empty"]
+    },
+    {
+      "id": "P3",
+      "prompt": "In sequence 1..99, does m_n/a_n differ from median(medians)?",
+      "needle": "property holds",
+      "concepts": ["property holds"]
+    },
+    {
+      "id": "P4",
+      "prompt": "What relation between ∠YPX and ∠KIL is verified?",
+      "needle": "∠YPX + ∠KIL = 180",
+      "aliases": ["angle ypx + angle kil = 180"],
+      "concepts": ["180"]
+    },
+    {
+      "id": "P5",
+      "prompt": "In any 2-coloring of K6, what exists by R(3,3)=6?",
+      "needle": "monochromatic triangle",
+      "aliases": ["same color triangle", "single-color triangle"],
+      "concepts": ["monochromatic triangle"]
+    },
+    {
+      "id": "P6",
+      "prompt": "Between f(x)=x and f(x)=2-x, which passes demo tests?",
+      "needle": "f(x)=x",
+      "aliases": ["f(x) = x", "identity function"],
+      "concepts": ["f(x)=x"]
+    }
+  ]
+}

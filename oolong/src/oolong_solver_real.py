@@ -6,7 +6,7 @@ Status: Experimental / Optional (requires external tooling)
 
 What this file is:
 - An optional demo path that can call a local Claude Code HTTP wrapper (see
-  `src/claude_code_wrapper.py`) and combine it with deterministic CPU counting.
+  `cli/src/claude_code_wrapper.py`) and combine it with deterministic CPU counting.
 
 What this file is NOT:
 - Not a reproduced OOLONG benchmark harness.
@@ -21,9 +21,11 @@ from dataclasses import dataclass
 from collections import Counter
 import json
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+REPO_ROOT = Path(__file__).resolve().parents[2]
+CLI_SRC = REPO_ROOT / "cli" / "src"
+sys.path.insert(0, str(CLI_SRC))
 
-from src.claude_code_wrapper import ClaudeCodeWrapper
+from claude_code_wrapper import ClaudeCodeWrapper
 
 
 @dataclass
@@ -290,7 +292,7 @@ def main():
         print("✅ Claude Code server is running\n")
     else:
         print("⚠️  Claude Code server not running")
-        print("   Start the wrapper with: python3 src/claude_code_wrapper.py\n")
+        print("   Start the wrapper with: python3 cli/src/claude_code_wrapper.py\n")
         print("   (This path is optional; the notebook defaults to offline demo mode.)\n")
 
     # Run tests

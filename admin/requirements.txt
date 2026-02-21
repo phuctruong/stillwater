@@ -1,0 +1,4 @@
+# Stillwater Admin — Python dependencies
+# Core: no mandatory dependencies (stdlib only)
+# Optional: enables Ollama model listing and community sync
+requests>=2.28.0
