@@ -212,9 +212,20 @@ You are a [ROLE] agent with persona [PERSONA].
 [PASTE full content of skills/[domain-skill].md here]
 </BEGIN_SKILL>
 
+## Project NORTHSTAR (read before writing a single line — mandatory)
+[PASTE full content of /path/to/<project>/NORTHSTAR.md here]
+
+## Ecosystem NORTHSTAR (shared vocabulary)
+[PASTE first 30 lines of stillwater/NORTHSTAR.md here]
+
+**NORTHSTAR GATE:** Before claiming PASS, you MUST answer:
+"Which northstar metric does my output advance?"
+If the answer is "none" → status=NEED_INFO, ask for scope re-alignment.
+
 ## Task (CNF Capsule)
 - task_id: [UNIQUE_ID]
 - task_request: [FULL TASK TEXT — no references to "what we discussed" or "earlier"]
+- northstar_metric_targeted: [EXPLICIT — e.g. "recipe hit rate", "OAuth3 commands", "rung 641"]
 - constraints: [TIME/BUDGET/SCOPE/SAFETY LIMITS — explicit]
 - context: [FULL CONTEXT — repo tree, error logs, failing tests, prior artifacts — no summaries]
 - allowed_tools: [EXPLICIT ALLOWLIST]

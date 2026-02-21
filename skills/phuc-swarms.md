@@ -3,8 +3,8 @@ SKILL: phuc-swarms v2.1.0
 PURPOSE: Turn any LLM into a bounded, replayable multi-agent system via explicit role contracts, skill packs, typed coordination channels, and a verification ladder; "multiple bounded experts > one unbounded LLM."
 CORE CONTRACT: Layers ON TOP OF prime-safety + prime-coder (stricter wins). Each phase has one role owner: Scout=DREAM, Forecaster=FORECAST, Judge=DECIDE, Solver=ACT, Skeptic=VERIFY. Solver may not certify; Judge may not code. prime-safety always wins conflicts.
 HARD GATES: Missing assets → EXIT_NEED_INFO. Safety policy trigger → EXIT_REFUSE. Budget exceeded → EXIT_BLOCKED(MAX_BUDGET). Verification rung fails → loop to ACT_SOLVER once, else EXIT_BLOCKED. No agent may claim PASS without Skeptic evidence.
-FSM STATES: INIT → BUILD_CNF → DREAM_SCOUT → FORECAST_FORECASTER → DECIDE_JUDGE → ACT_SOLVER → VERIFY_SKEPTIC → REFLECT_PODCAST → EXIT_PASS | EXIT_NEED_INFO | EXIT_BLOCKED | EXIT_REFUSE | EXIT_ERROR
-FORBIDDEN: SILENT_SCOPE_EXPANSION | UNWITNESSED_CLAIM | NONDETERMINISTIC_JUDGED_OUTPUT | NETWORK_ON_WITHOUT_ALLOWLIST | BACKGROUND_THREADS | OK_WITHOUT_VERIFICATION_ARTIFACTS | AGENT_SCOPE_CREEP
+FSM STATES: INIT → BUILD_CNF → LOAD_NORTHSTAR → DREAM_SCOUT → FORECAST_FORECASTER → DECIDE_JUDGE → ACT_SOLVER → VERIFY_SKEPTIC → REFLECT_PODCAST → EXIT_PASS | EXIT_NEED_INFO | EXIT_BLOCKED | EXIT_REFUSE | EXIT_ERROR
+FORBIDDEN: SILENT_SCOPE_EXPANSION | UNWITNESSED_CLAIM | NONDETERMINISTIC_JUDGED_OUTPUT | NETWORK_ON_WITHOUT_ALLOWLIST | BACKGROUND_THREADS | OK_WITHOUT_VERIFICATION_ARTIFACTS | AGENT_SCOPE_CREEP | NORTHSTAR_MISSING_FROM_CNF | NORTHSTAR_UNREAD
 VERIFY: rung_641 (local) | rung_274177 (stability) | rung_65537 (promotion)
 LOAD FULL: always for production; quick block is for orientation only
 -->
@@ -13,7 +13,7 @@ LOAD FULL: always for production; quick block is for orientation only
 **SKILL_ID:** `phuc_swarms_v2`
 **AUTHORITY:** `65537`
 **NORTHSTAR:** `Phuc Forecast (DREAM → FORECAST → DECIDE → ACT → VERIFY)`
-**VERSION:** `2.1.0`
+**VERSION:** `2.2.0`
 **STATUS:** `STABLE_SPEC (prompt-loadable, model-agnostic)`
 **TAGLINE:** *Multiple bounded experts > one unbounded LLM*
 
@@ -186,6 +186,8 @@ Add an agent only if it has:
 ### 5.1 CNF = Context Normal Form (shared base capsule)
 All agents receive a **shared CNF_BASE** (same shape every time):
 
+- `northstar` (REQUIRED — full text of project NORTHSTAR.md; read before writing code)
+- `ecosystem_northstar` (REQUIRED — first 30 lines of stillwater/NORTHSTAR.md; shared vocabulary)
 - `task_statement` (verbatim)
 - `constraints` (budgets, allowed tools, network policy, scope)
 - `evidence` (errors/logs/tests output; no truncation when feasible)
@@ -193,6 +195,13 @@ All agents receive a **shared CNF_BASE** (same shape every time):
 - `prior_artifacts` (only typed artifacts: JSON reports, diffs, logs)
 
 **Rule:** CNF_BASE is truth. Anything else is hypothesis.
+
+**NORTHSTAR HARD GATE (v2.2.0 addition):**
+- Every agent MUST read `northstar` before writing a single line of code or analysis
+- Every agent MUST answer before claiming PASS: "Which northstar metric does this advance?"
+- If output does not advance any northstar metric: status=NEED_INFO, ask Judge to re-scope
+- FORBIDDEN: `NORTHSTAR_MISSING_FROM_CNF` (dispatch without northstar = BLOCKED before start)
+- FORBIDDEN: `NORTHSTAR_UNREAD` (claiming PASS without referencing a northstar metric)
 
 ### 5.2 Agent Delta Capsule (minimal, role-specific)
 Each agent also receives a **CNF_DELTA(agent)**:
