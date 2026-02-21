@@ -80,6 +80,16 @@
 - [ ] Self-verification at rung 65537 (30-day continuous — timer starts with first CI pass)
 - [ ] GitHub stars: 1,000
 
+## Stripe Billing Integration (solaceagi)
+
+| Item | Status | Rung | Date | QA Notes |
+|------|--------|------|------|----------|
+| scripts/stripe_bootstrap.py | done | 641 | 2026-02-21 | 4 products + 4 prices created in Stripe live account |
+| solace/api/billing.py | done | 641 | 2026-02-21 | ~370 lines, 4 endpoints (checkout/webhook/portal/status), fail-closed tier mapping |
+| web/stillwater/pricing.html | done | 641 | 2026-02-21 | 5-tier pricing page, dark theme, checkout integration |
+| tests/test_billing.py | done | 641 | 2026-02-21 | 15 tests, all mocked, idempotent webhooks, no float gate |
+| web/ infra patches | done | 641 | 2026-02-21 | api_server.py + nginx.conf + Dockerfile + requirements.txt |
+
 ## Build Log
 
 | Date | What | Rung | Agent | Session |
@@ -93,12 +103,13 @@
 | 2026-02-21 | QA postmortem pm-2026-02-21-003 — added 429 rate-limit test + unexpected status test (35 tests, 51/51 total) | 641 | opus (QA) | central hub |
 | 2026-02-21 | Phase 3: admin/session_manager.py + admin/llm_portal.py extended + llm_config.yaml extended (160 + 111 + 25 lines, 28 new tests, 96 total, all passing, backward compat verified) | 641 | sonnet (coder) | stillwater /build session |
 | 2026-02-21 | Phase 4: semgrep 0 + bandit 0 + behavioral hash (3-seed consensus) + GitHub Actions CI + README badge | 641 | opus (orchestrator) + sonnet (coder) | central hub |
+| 2026-02-21 | Stripe billing integration: scripts/stripe_bootstrap.py + solace/api/billing.py + web/stillwater/pricing.html + tests/test_billing.py (15 tests, idempotent webhooks, 5-tier pricing) | 641 | sonnet (coder) | solaceagi build session |
 
 ## Metrics
 
 | Metric | Value |
 |--------|-------|
-| Tests (Phase 1 + 2 + 3) | 96 (16 OAuth3 + 35 Store + 45 Portal) |
+| Tests (Phase 1 + 2 + 3 + Stripe) | 111 (16 OAuth3 + 35 Store + 45 Portal + 15 Billing) |
 | Skills in library | 15 |
 | Swarm agent types | 19 |
 | Papers | 33 (index + 32 papers) |
@@ -106,6 +117,8 @@
 | Phases complete | 4 / 4 (30-day CI timer for rung 65537 promotion) |
 | Rung of Stillwater itself | 641 (target: 65537) |
 | Community contributors | 1 (Phuc) |
-| Store API live | YES — qa.solaceagi.com/stillwater (12 endpoints, Firestore, sw_sk_ auth, store.html frontend) |
+| Store API live | YES — www.solaceagi.com/stillwater (prod) + qa.solaceagi.com/stillwater (QA). 12 endpoints, Firestore, sw_sk_ auth, store.html frontend |
 | LLM Portal providers | 9 (claude-code, offline, openai, claude, openrouter, togetherai, gemini, ollama, qwen, custom) |
 | Ecosystem projects | 9 (6 OSS + 3 private) |
+| Stripe products | 4 (student/$8 + warrior/$48 + master/$88 + grandmaster/$188) |
+| Billing endpoints | 4 (checkout/webhook/portal/status) |
