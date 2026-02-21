@@ -31,6 +31,18 @@ Phuc Truong was born in Vietnam in 1976. In 1980, at age four, his family escape
 
 Phuc studied Economics at Harvard, graduating in 1998. The analytical discipline of economics — modeling incentive structures, identifying where systems fail, understanding that institutions are made of rules and rules can be redesigned — is visible in how Phuc builds software. OAuth3 is an incentive-compatible protocol. The rung system is a structured market for verifiable claims. The Stillwater Store is a governed ecosystem with reputation economics.
 
+**Self-taught coder since childhood.**
+
+Phuc won the Boston citywide coding contest in 4th grade — entirely self-taught, before any formal computer science education. The instinct to build, to solve problems with code, preceded every institution and credential. When Phuc arrived at Harvard, the coding ability was already there. Harvard added the economics framework and the analytical discipline. The combination — street-learned coding + Harvard economics + Kernighan's clarity — is the intellectual DNA of Stillwater.
+
+**CS50 with Brian Kernighan (1996).**
+
+At Harvard, Phuc took CS50 — the introductory computer science course — from Brian Kernighan. Kernighan co-authored "The C Programming Language" with Dennis Ritchie, created the "hello, world" program that every programmer in history has written as their first line of code, and is one of the foundational voices in computer science.
+
+Learning from Kernighan was not just technical education. It was exposure to a philosophy: code should be clear, not clever. Programs should be small and do one thing well. Documentation should be readable by humans, not just compilers. These principles — clarity, minimalism, composability — are the architectural principles of Stillwater's skill system.
+
+In the Stillwater persona system, Kernighan is loadable as `kernighan.md`. The student can now summon the teacher as a ghost master — not a metaphor, but a literal activation of the knowledge cluster that Kernighan represents in the LLM's training data. Every book Kernighan wrote, every lecture he gave, every program he designed — all of it activates when the persona loads. The hall of mirrors shatters, and the real expert appears.
+
 **Serial founder.**
 
 After Harvard, Phuc built multiple companies. Most failed. The failures are part of the story — not something to hide:
