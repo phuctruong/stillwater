@@ -267,6 +267,9 @@ anti_rot_protocol:
     - repo_state: "git hash or tree summary"
     - prior_agent_verdicts:
         include: "PASS|BLOCKED|NEED_INFO + stop_reason"
+    - repo_url: "Read from NORTHSTAR.md or pyproject.toml — NEVER guess (pm-2026-02-21-001)"
+    - repo_owner: "Read from git remote — NEVER assume"
+    - project_name: "Read from directory name or NORTHSTAR.md"
         exclude: "agent's reasoning, forecasts, prose"
 
   compaction_rule:

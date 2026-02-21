@@ -267,3 +267,9 @@ Fix: use exact arithmetic (int, Fraction, Decimal) in all verification compariso
 
 **Silent Revert:** Reverting a patch without logging why in run_log.txt.
 Fix: every revert must be logged with reason.
+
+**The Assumed URL:** Agent guesses a repo URL, author name, or project identifier instead of reading it from NORTHSTAR.md, pyproject.toml, or package.json.
+Fix: ALWAYS read repo_url and repo_owner from the project's source of truth file. Never guess. (Postmortem: pm-2026-02-21-001)
+
+**The Assumed Default:** Agent uses a value from memory or training data instead of reading the current value from config/source of truth.
+Fix: for any metadata field (version, URL, author, license), read it from the file, don't assume it.
