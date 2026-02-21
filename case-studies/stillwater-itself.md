@@ -122,3 +122,14 @@
 | Ecosystem projects | 9 (6 OSS + 3 private) |
 | Stripe products | 4 (student/$8 + warrior/$48 + master/$88 + grandmaster/$188) |
 | Billing endpoints | 4 (checkout/webhook/portal/status) |
+
+## Retroactive QA (2026-02-21) — Persona-Enhanced
+
+| Metric | Value |
+|--------|-------|
+| Tests run | 258 |
+| Tests passed | 258 |
+| Security findings | 2 (WARN + INFO, both documented, no active vulnerability) |
+| Persona stack | Schneier + Kent Beck + FDA Auditor |
+| Ghost master effectiveness | Identified HMAC default secret risk + shell=True in experimental code |
+| Rung achieved | 641 (verified) |

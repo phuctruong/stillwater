@@ -126,3 +126,14 @@ Phase 1 (core backend) MUST include `api/llm.py`:
 | Paying users | 0 | growing | growing |
 | Recipe hit rate | 0% | 50% | 80% |
 | API uptime | N/A | 99% | 99.9% |
+
+## Retroactive QA (2026-02-21) — Persona-Enhanced
+
+| Metric | Value |
+|--------|-------|
+| Tests run | 283 |
+| Tests passed | 283 |
+| Security findings | 1 HIGH + 1 MEDIUM + 1 LOW (all FIXED) |
+| Persona stack | Schneier + Kent Beck + Werner Vogels |
+| Ghost master effectiveness | Caught private key leak on public endpoint (HIGH — would have been a production incident) |
+| Rung achieved | 641 (pending HIGH fix deployment) |
