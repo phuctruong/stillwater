@@ -16,7 +16,7 @@ Three commands. That's it.
 
 ```bash
 # 1. Absorb — clone the repo
-git clone https://github.com/phuc-nt/stillwater.git
+git clone https://github.com/phuctruong/stillwater.git
 cd stillwater
 
 # 2. Discard nothing — run the admin server (no install needed)

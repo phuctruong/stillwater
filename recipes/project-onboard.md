@@ -208,7 +208,37 @@ Extract from your old CLAUDE.md:
 
 Leave in CLAUDE.md: **only the ripple reference and skill QUICK LOADs**.
 
-### Step 5 — Verify
+### Step 5 — Create NORTHSTAR.md
+
+```bash
+cat > NORTHSTAR.md << 'EOF'
+# NORTHSTAR — {PROJECT_NAME}
+
+## Mission
+{One sentence: what problem this project solves and why it matters}
+
+## North Star Metric
+{The single metric that tells you the project is succeeding}
+
+## Model Strategy
+- **Main session**: haiku (coordination, dispatch only)
+- **Coder/Planner/Skeptic**: sonnet (domain work)
+- **Mathematician/Security/Audit**: opus (promotion gates)
+
+## Rung Target
+{641 | 274177 | 65537} — {why}
+
+## What aligns with this northstar
+- {example: shipping a bug-free release aligns}
+
+## What doesn't
+- {example: adding features without tests does not align}
+EOF
+```
+
+Then load it at session start with `/northstar`.
+
+### Step 6 — Verify
 
 ```bash
 # CLAUDE.md should be under 150 lines
@@ -219,6 +249,9 @@ ls skills/
 
 # Ripple file exists
 cat ripples/project.md
+
+# NORTHSTAR.md exists
+cat NORTHSTAR.md
 ```
 
 ---
@@ -362,8 +395,10 @@ Everything else: inherited from base. Never duplicated. Never drifted.
 - [ ] `ripples/project.md` exists and has rung_target, domain, key_constraints
 - [ ] `skills/` directory has at minimum prime-safety.md and prime-coder.md
 - [ ] `README.md` has mission, architecture, quick start
+- [ ] `NORTHSTAR.md` exists with mission, metric, model strategy, rung target
 - [ ] CLAUDE.md references README.md for project context
 - [ ] CLAUDE.md contains QUICK LOAD blocks for each skill (not full content)
+- [ ] CLAUDE.md has `## Phuc-Orchestration: MANDATORY` section at the top with haiku line
 - [ ] No project-specific architecture prose inside CLAUDE.md
 
 ```bash
