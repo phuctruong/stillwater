@@ -106,6 +106,6 @@
 | Phases complete | 4 / 4 (30-day CI timer for rung 65537 promotion) |
 | Rung of Stillwater itself | 641 (target: 65537) |
 | Community contributors | 1 (Phuc) |
-| Store API live | client SDK done (server in solaceagi) |
+| Store API live | YES — qa.solaceagi.com/stillwater (12 endpoints, Firestore, sw_sk_ auth, store.html frontend) |
 | LLM Portal providers | 9 (claude-code, offline, openai, claude, openrouter, togetherai, gemini, ollama, qwen, custom) |
 | Ecosystem projects | 9 (6 OSS + 3 private) |

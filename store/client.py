@@ -68,13 +68,13 @@ def _validate_api_key(api_key: str) -> None:
     if not api_key:
         raise ValueError(
             "api_key is required. "
-            "Register at https://solaceagi.com/stillwater to get a sw_sk_ key."
+            "Register at https://qa.solaceagi.com/stillwater to get a sw_sk_ key."
         )
     if not _KEY_PATTERN.match(api_key):
         raise ValueError(
             "api_key must match format: sw_sk_<32-hex-chars>. "
             "Example: sw_sk_0123456789abcdef0123456789abcdef. "
-            "Register at https://solaceagi.com/stillwater."
+            "Register at https://qa.solaceagi.com/stillwater."
         )
 
 
@@ -86,12 +86,12 @@ class StillwaterStoreClient:
         api_key:  Your sw_sk_ API key. Shown once at registration.
                   Never logs, never prints, never appears in repr().
         base_url: Base URL of the Store API.
-                  Default: https://solaceagi.com
+                  Default: https://qa.solaceagi.com
 
     Example:
         client = StillwaterStoreClient(
             api_key="sw_sk_0123456789abcdef0123456789abcdef",
-            base_url="https://solaceagi.com",
+            base_url="https://qa.solaceagi.com",
         )
         sub_id = client.submit_skill("skills/prime-coder.md", "phuc", 641, "evidence/")
     """
@@ -99,7 +99,7 @@ class StillwaterStoreClient:
     def __init__(
         self,
         api_key: str,
-        base_url: str = "https://solaceagi.com",
+        base_url: str = "https://qa.solaceagi.com",
     ) -> None:
         _validate_api_key(api_key)
         # Store key privately — never expose in repr/str
@@ -346,7 +346,7 @@ class StillwaterStoreClient:
         if code == 401:
             raise PermissionError(
                 f"HTTP 401 Unauthorized: {detail}. "
-                f"Check your API key at https://solaceagi.com/stillwater."
+                f"Check your API key at https://qa.solaceagi.com/stillwater."
             )
         if code == 404:
             raise LookupError(
