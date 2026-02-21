@@ -1,8 +1,8 @@
 # Case Study: Stillwater — Self-Verification
 
 **Tracking since**: 2026-02-21
-**Status**: v2.0.0 released → Phase 1 (OAuth3) COMPLETE → Phase 2 (Store Client) COMPLETE → Phase 3 (LLM Portal) COMPLETE → Phase 4 (Security + CI) COMPLETE
-**Rung**: 641 (verified via CI) → 30-day continuous for 65537 promotion
+**Status**: v2.0.0 released with 4 phases COMPLETE (111 tests total)
+**Rung**: 641 (verified via CI daily) → 30-day continuous for 65537 promotion
 **Belt**: Orange
 
 ## What Was Built (v2.0.0)

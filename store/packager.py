@@ -7,6 +7,9 @@ SHA-256 manifest for integrity verification.
 Class: SkillPackager
   bundle_skill(skill_path, evidence_dir, author, rung_claimed) → dict
   verify_bundle(bundle) → bool
+  package_skill(skill_path, evidence_dir=None) → dict
+  validate_frontmatter(content) → dict
+  compute_sha256_manifest(files_dict) → dict
 
 Rung target: 641 (local correctness + tests passing)
 Network: OFF — no HTTP calls; local file operations only.
@@ -18,20 +21,29 @@ Design decisions:
     behavior_hash.txt (the same three files required by RungValidator).
   - Invalid rung values fail-closed with ValueError (null != zero).
   - All file reads are UTF-8; non-UTF-8 content raises cleanly.
+  - package_skill reads YAML-style frontmatter (--- delimited) if present.
+  - validate_frontmatter: required fields are name and version (semver).
 """
 
 from __future__ import annotations
 
 import hashlib
 import json
+import re
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 # Valid rung values per stillwater verification ladder
 VALID_RUNGS = frozenset({641, 274177, 65537})
 
 # Required evidence filenames
 REQUIRED_EVIDENCE_FILES = frozenset({"plan.json", "tests.json", "behavior_hash.txt"})
+
+# Semver pattern: MAJOR.MINOR.PATCH (optionally with pre-release / build metadata)
+_SEMVER_PATTERN = re.compile(
+    r"^\d+\.\d+\.\d+(?:[-+].+)?$"
+)
 
 
 class SkillPackager:
@@ -149,6 +161,201 @@ class SkillPackager:
             return expected == bundle["manifest_sha256"]
         except (KeyError, TypeError, ValueError):
             return False
+
+    # ------------------------------------------------------------------
+    # Spec-required interface: package_skill, validate_frontmatter, compute_sha256_manifest
+    # ------------------------------------------------------------------
+
+    def package_skill(
+        self,
+        skill_path: Path,
+        evidence_dir: Optional[Path] = None,
+    ) -> Dict[str, Any]:
+        """
+        Create a submission payload dict from a skill .md file.
+
+        Reads the skill file, extracts frontmatter (name, version, rung, description,
+        scopes), optionally validates and includes evidence, computes a SHA-256 manifest
+        of all included files, and returns the payload.
+
+        Args:
+            skill_path:   Path to skill .md file.
+            evidence_dir: Optional path to evidence directory. If provided, validates
+                          the bundle and includes evidence files in the payload.
+
+        Returns:
+            dict with keys:
+              skill_content, frontmatter, evidence (or None), sha256_manifest,
+              packaged_at (ISO8601 UTC string)
+
+        Raises:
+            FileNotFoundError: skill_path does not exist.
+            ValueError:        Frontmatter validation fails (missing name or version).
+            ValueError:        evidence_dir provided but missing required evidence files.
+        """
+        skill_path = Path(skill_path)
+        if not skill_path.exists():
+            raise FileNotFoundError(f"Skill file not found: {skill_path}")
+
+        skill_content = skill_path.read_text(encoding="utf-8")
+
+        # Extract and validate frontmatter
+        fm_result = self.validate_frontmatter(skill_content)
+        if not fm_result.get("valid"):
+            raise ValueError(
+                f"Frontmatter validation failed: {fm_result.get('errors', [])}"
+            )
+        frontmatter = fm_result.get("fields", {})
+
+        # Build files dict starting with skill content
+        files_dict: Dict[str, str] = {skill_path.name: skill_content}
+
+        # Include evidence if provided
+        evidence: Optional[Dict[str, str]] = None
+        if evidence_dir is not None:
+            evidence_dir = Path(evidence_dir)
+            if not evidence_dir.exists() or not evidence_dir.is_dir():
+                raise FileNotFoundError(f"Evidence directory not found: {evidence_dir}")
+            missing = REQUIRED_EVIDENCE_FILES - {f.name for f in evidence_dir.iterdir()}
+            if missing:
+                raise ValueError(
+                    f"Evidence directory is missing required files: {sorted(missing)}. "
+                    f"Required: {sorted(REQUIRED_EVIDENCE_FILES)}"
+                )
+            evidence = {}
+            for fname in REQUIRED_EVIDENCE_FILES:
+                content = (evidence_dir / fname).read_text(encoding="utf-8")
+                evidence[fname] = content
+                files_dict[fname] = content
+
+        sha256_manifest = self.compute_sha256_manifest(files_dict)
+
+        return {
+            "skill_content":  skill_content,
+            "frontmatter":    frontmatter,
+            "evidence":       evidence,
+            "sha256_manifest": sha256_manifest,
+            "packaged_at":    datetime.now(timezone.utc).isoformat(),
+        }
+
+    def validate_frontmatter(self, content: str) -> Dict[str, Any]:
+        """
+        Parse and validate YAML-style frontmatter from skill .md content.
+
+        Frontmatter format:
+          ---
+          name: skill-name
+          version: 1.0.0
+          rung: 641
+          description: Brief description
+          scopes: [scope1, scope2]
+          author: author-name
+          depends_on: [dep1, dep2]
+          ---
+
+        Required fields: name, version (semver x.y.z format)
+        Optional fields: rung, description, scopes, author, depends_on
+
+        Args:
+            content: Full text content of the skill .md file.
+
+        Returns:
+            dict with keys:
+              valid:  bool — True if all required fields present and valid
+              fields: dict of parsed frontmatter key-value pairs (empty if none found)
+              errors: list of error strings (empty if valid)
+        """
+        errors: List[str] = []
+        fields: Dict[str, Any] = {}
+
+        # Extract frontmatter block (--- ... ---)
+        fm_match = re.match(r"^---\s*\n(.*?)\n---\s*\n", content, re.DOTALL)
+        if not fm_match:
+            # No frontmatter found — missing required fields
+            errors.append("No YAML frontmatter block found (expected --- delimited block at top of file)")
+            return {"valid": False, "fields": fields, "errors": errors}
+
+        fm_text = fm_match.group(1)
+
+        # Parse simple key: value lines (no nested YAML; covers our use case)
+        for line in fm_text.splitlines():
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if ":" not in line:
+                continue
+            key, _, value = line.partition(":")
+            key = key.strip()
+            value = value.strip()
+
+            # Handle list values: [item1, item2] or inline comma-separated
+            if value.startswith("[") and value.endswith("]"):
+                inner = value[1:-1]
+                items = [item.strip().strip("'\"") for item in inner.split(",") if item.strip()]
+                fields[key] = items
+            else:
+                # Strip inline comments and quotes
+                value = value.split("#")[0].strip().strip("'\"")
+                # Coerce numeric values
+                if value.isdigit():
+                    fields[key] = int(value)
+                else:
+                    fields[key] = value
+
+        # Validate required field: name
+        if "name" not in fields or not fields["name"]:
+            errors.append("Frontmatter missing required field: 'name'")
+
+        # Validate required field: version (must be semver)
+        if "version" not in fields or not fields["version"]:
+            errors.append("Frontmatter missing required field: 'version'")
+        elif not _SEMVER_PATTERN.match(str(fields.get("version", ""))):
+            errors.append(
+                f"Frontmatter 'version' must be semver format (x.y.z), "
+                f"got: {fields.get('version')!r}"
+            )
+
+        # Validate optional rung if present (must be a valid rung)
+        if "rung" in fields and fields["rung"] is not None:
+            rung_val = fields["rung"]
+            if isinstance(rung_val, str):
+                try:
+                    rung_val = int(rung_val)
+                    fields["rung"] = rung_val
+                except ValueError:
+                    errors.append(f"Frontmatter 'rung' must be an integer, got: {fields['rung']!r}")
+                    rung_val = None
+            if rung_val is not None and rung_val not in VALID_RUNGS:
+                errors.append(
+                    f"Frontmatter 'rung' must be one of {sorted(VALID_RUNGS)}, "
+                    f"got: {rung_val!r}"
+                )
+
+        return {
+            "valid":  len(errors) == 0,
+            "fields": fields,
+            "errors": errors,
+        }
+
+    @staticmethod
+    def compute_sha256_manifest(files_dict: Dict[str, str]) -> Dict[str, str]:
+        """
+        Compute a SHA-256 hash for each file in files_dict.
+
+        Args:
+            files_dict: {filename: file_content (str)} mapping.
+
+        Returns:
+            {filename: sha256_hex_string} for all files in files_dict.
+        """
+        manifest: Dict[str, str] = {}
+        for filename, content in files_dict.items():
+            if isinstance(content, bytes):
+                data = content
+            else:
+                data = content.encode("utf-8")
+            manifest[filename] = hashlib.sha256(data).hexdigest()
+        return manifest
 
     # ------------------------------------------------------------------
     # Private helpers

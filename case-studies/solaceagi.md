@@ -2,7 +2,7 @@
 
 **Tracking since**: 2026-02-21
 **Status**: Phase 0 DONE (refactor) → Phase 1 DONE (core backend) → Phase 2 next
-**Rung**: 641 (46/46 tests pass)
+**Rung**: 641 (46/46 tests pass, all endpoints verified)
 **Belt**: Yellow
 
 ## Architecture
@@ -92,6 +92,7 @@ Phase 1 (core backend) MUST include `api/llm.py`:
 | Stripe billing (Phase 0.5) | 2026-02-21 | 15/15 | 641 | 145e60b |
 | Firebase Auth | 2026-02-21 | 10/10 | 641 | cb912fe |
 | Phase 1: LLM proxy + OAuth3 + users + verify | 2026-02-21 | 21/21 | 641 | a8c8c32 |
+| httpx + cryptography fix (Phase 1 bugfix) | 2026-02-21 | 46/46 | 641 | 9ba6585 |
 
 ## Metrics
 

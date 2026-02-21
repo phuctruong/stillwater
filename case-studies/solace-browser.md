@@ -52,16 +52,30 @@
 | Cookie security | done | 641 | 2026-02-21 | HttpOnly, SameSite=Strict |
 | tests/test_consent_ui.py | done | 641 | 2026-02-21 | 58 tests (10 test groups) |
 
+## Phase 1.5 BUILD 3 — Step-Up Authorization (COMPLETE)
+
+| Item | Status | Rung | Date | Notes |
+|------|--------|------|------|-------|
+| step_up.py | done | 641 | 2026-02-21 | Step-up re-authentication flow, challenge+response, user re-consent |
+| tests/test_step_up.py | done | 641 | 2026-02-21 | 29 tests covering step-up workflow, re-auth challenge, scope upgrade |
+
+## Phase 1.5 BUILD 5 — HTML Snapshot Capture (COMPLETE)
+
+| Item | Status | Rung | Date | Notes |
+|------|--------|------|------|-------|
+| snapshot.py | done | 641 | 2026-02-21 | HTML snapshot capture, DOM serialization, timestamp recording |
+| tests/test_snapshot.py | done | 641 | 2026-02-21 | 18 tests covering snapshot capture, serialization, cleanup |
+
 ## Metrics
 
 | Metric | Value |
 |--------|-------|
 | PM triplets with SHA256 | 6/6 verified |
 | Recipe hit rate | TBD (need prod data) |
-| OAuth3 implementation | Phase 1.5 BUILD 2 complete |
+| OAuth3 implementation | Phase 1.5 complete (5 builds) |
 | Platforms with PM maps | 5 |
 | ROADMAP build prompts | 8 ready |
-| Tests (total) | 119/119 passing (61 oauth3 + 58 consent UI) |
+| Tests (total) | 166/166 passing (61 oauth3 + 58 consent UI + 29 step-up + 18 snapshot) |
 | QA findings fixed | 3/6 (3 deferred to Phase 2) |
 
 ## Build Log
@@ -71,6 +85,8 @@
 | Phase 1 (LinkedIn MVP) | 2026-02-21 | — | 641 | 0082fee |
 | Phase 1.5 BUILD 1 (OAuth3 Core) | 2026-02-21 | 61/61 | 641 | df3ad49 |
 | Phase 1.5 BUILD 2 (Consent UI) | 2026-02-21 | 58/58 | 641 | b593829 |
+| Phase 1.5 BUILD 3 (Step-Up Authorization) | 2026-02-21 | 29/29 | 641 | 8df920e |
+| Phase 1.5 BUILD 5 (HTML Snapshot Capture) | 2026-02-21 | 18/18 | 641 | 223ca2e |
 
 ## Stillwater Evidence Bundles
 
