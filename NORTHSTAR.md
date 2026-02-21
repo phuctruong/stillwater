@@ -2,88 +2,107 @@
 
 > "Make AI development deterministically verifiable — for any developer, on any project."
 
-## Mission
+## The Vision
 
-Stillwater is the **Software 5.0 OS** — a skills/recipes/swarms framework that elevates
-Claude Code from a smart assistant to a compiler-grade AI system.
+**Stillwater = Software 5.0 OS + Verification Layer + LLM Portal**
 
-Every skill, recipe, and swarm must produce **executable evidence**, not confident prose.
-The community grows through a **verified, gated store** (Stillwater Store) — not through
-copy-paste chaos.
+The twin OSS projects that dominate the Verified Intelligence Economy:
+1. **stillwater** (OSS) — verification + governance + skill store
+2. **solace-browser** (OSS) — OAuth3 reference implementation + browser automation
 
-## North Star Metric
+Together they power **solaceagi.com** — the hosted platform (no LLM costs).
 
-**Stillwater Reliability Seal**: Number of projects running at rung 65537 with zero
-FORBIDDEN states triggered across 30-day sessions.
+```
+SOFTWARE 5.0 PARADIGM:
+  Natural language → source code
+  AI agents → runtime
+  Evidence bundles → compiled output
+  Stillwater verification → CI/CD
 
-Secondary metrics:
-- Community skill submissions per month (via Stillwater Store)
-- Average AI uplift factor (baseline vs skill-loaded tasks)
-- Context reduction % across projects using `stillwater init project`
-- Phuc swarm dispatch rate (% of tasks going through swarms vs inline)
+MASTER EQUATION:
+  Intelligence(system) = Memory × Care × Iteration
+  Memory = skills/*.md + recipes/*.json + swarms/*.yaml
+  Care = Verification ladder (641 → 274177 → 65537)
+  Iteration = Never-Worse doctrine + git versioning
+```
 
-## How We Measure Progress
+## North Star Metrics
 
-| Metric | Current | Target |
-|--------|---------|--------|
-| Rung target (Stillwater itself) | 641 | 65537 |
-| Projects using swarms | 2/8 | 8/8 |
-| Public skills in Stillwater Store | 7 combos | 50+ skills |
-| Context reduction across projects | 91% | 95% |
+| Metric | Now | Q2 2026 | End 2026 |
+|--------|-----|---------|---------|
+| GitHub stars | ~50 | 1,000 | 10,000 |
+| Projects running at rung 65537 | 0 | 2 | 8 |
+| Stillwater Store skills | 7 combos | 25 skills | 100+ skills |
+| Recipe hit rate (across ecosystem) | 0% | 50% | 80% |
+| Community contributors | 1 | 5 | 50 |
 
-## Model Strategy
+## The Twin OSS Strategy
 
-| Model | Role | Cost |
-|-------|------|------|
-| **haiku** | Main session coordinator — reads NORTHSTAR, dispatches swarms | ~10x cheaper |
-| **sonnet** | Coder, Planner, Skeptic sub-agents (domain heavy lifting) | Standard |
-| **opus** | Mathematician, Security auditor, Final audit (promotion gates) | Premium |
+```
+TODAY (Feb 2026):
+  stillwater → Verification + LLM Portal + Skills ✅
+  solace-browser → LinkedIn MVP + OAuth3 spec ✅
+  Competitors: None have OAuth3 + Stillwater verification combo
 
-**Rule:** Main session = haiku (coordination only). Heavy work → dispatch via `/phuc-swarm`.
+END OF 2026-Q2:
+  stillwater → Stillwater Store live (skill submission + review)
+  solace-browser → 10 platforms, all OAuth3-bounded
+  Recipe hit rate → 70% (economic moat unlocks)
+  → 1,000 paying solaceagi.com users = $19K MRR
 
-## Rung Target: 65537
+END OF 2026:
+  stillwater → 100+ skills, 50 contributors
+  OAuth3 v1.0 → adopted by ≥1 external AI agent platform
+  → 5,000 paying users = $95K MRR
+  Belt: ⬛ Black — Models are commodities. Skills are capital. OAuth3 is law.
+```
 
-Stillwater must demonstrate promotion-grade quality — it cannot claim Software 5.0
-while running at rung 641. Evidence requires:
-- Adversarial sweep (min 5 paraphrases)
-- Refusal correctness check
-- Behavioral hash drift explained
-- Security gate verified
+## The Verification Ladder (Core Product)
 
-## Key Projects Powered by Stillwater
+```
+RUNG 641  → Local correctness (red/green + no regressions + evidence complete)
+RUNG 274177 → Stability (seed sweep + replay + null edge sweep)
+RUNG 65537 → Production confidence (adversarial + security + behavioral hash)
 
-Stillwater verifies the work across the entire Phuc.Net ecosystem:
+Belt System:
+  White Belt  → rung 641 achieved
+  Yellow Belt → rung 274177 achieved
+  Orange Belt → first skill in Stillwater Store
+  Green Belt  → rung 65537 achieved
+  Black Belt  → production task running at 65537 for 30 days
+```
 
-| Project | Northstar | Stillwater Role |
-|---------|-----------|----------------|
-| **SolaceBrowser** | Twin browser that works while you sleep | Recipe verification, evidence bundles, Stillwater store for recipes |
-| **SolaceAGI** | Persistent AGI with verified memory | Swarm orchestration, prime channels, phuc-context |
-| **SolaceCLI** | Semantic memory hub | Orchestration backbone, admin dashboard |
-| **PZip** | Beat LZMA with exact arithmetic proof | prime-math verification, exact arithmetic gate |
-| **IF-Theory** | Machine-checkable physics proofs | prime-math, convergence certificates |
+## The Phuc Forecast Loop
 
-Solace Browser's recipe system (70% cache hit rate, $0.01/task) and Stillwater Store
-are the clearest demonstration that Software 5.0 creates structural competitive moats.
+```
+DREAM → Every AI task produces verified, reproducible, auditable evidence
+FORECAST → Developer distrust of AI outputs grows; evidence-first wins compliance
+DECIDE → Open skill governance + OAuth3 + model neutrality + evidence-first
+ACT → Ship Store flywheel + LLM Portal + case studies per project
+VERIFY → GitHub stars + Store submissions + rung achievements + recipe hit rate
+```
 
-## What Aligns with This Northstar
+## What Stillwater Powers (Case Studies)
 
-- Adding verified skills to the Stillwater Store
-- Improving phuc-orchestration + swarm dispatch reliability
-- A/B benchmarks showing AI uplift with evidence
-- Documentation that teaches the DREAM→FORECAST→DECIDE→ACT→VERIFY loop
-- NORTHSTAR.md files in all downstream projects
+Track in case-studies/:
+- `solace-browser.md` — OAuth3 browser automation
+- `solace-cli.md` — terminal-native CLI
+- `solaceagi.md` — hosted platform
+- `stillwater-itself.md` — self-verification
 
-## What Does NOT Align
+## Key Projects + Integration
 
-- Monolithic CLAUDE.md files with copy-pasted skills
-- Inline deep work without dispatch (INLINE_DEEP_WORK forbidden state)
-- Skills without QUICK LOAD blocks
-- Promotion claims without Lane A evidence
+| Project | Role | Stillwater Provides |
+|---------|------|-------------------|
+| **solace-browser** | OAuth3 reference impl | Recipe verification, evidence bundles |
+| **solace-cli** | Terminal surface | Rung enforcement, store install/submit |
+| **solaceagi.com** | Hosted cloud | Managed skill updates, OAuth3 vault |
+| **stillwater** | The OS itself | Everything above |
 
 ## See Also
-
-- `CLAUDE.md` — loaded skills + orchestration protocol
-- `ripples/project.md` — rung target + constraints
-- `skills/phuc-forecast.md` — the Phuc_Forecast decision loop
-- `swarms/` — agent role definitions
-- `STORE.md` — Stillwater Store submission process
+- `SOFTWARE-5.0-PARADIGM.md` — paradigm manifesto
+- `STORE.md` — Stillwater Store policy
+- `ROADMAP.md` — phased build plan
+- `case-studies/` — per-project tracking
+- `skills/` — the skill library
+- `skills/prime-mermaid.md` — PM triplet standard
