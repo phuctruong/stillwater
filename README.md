@@ -1,4 +1,19 @@
 # Stillwater OS - LLM Kung Fu Dojo (aka steroids for AI)
+[![PyPI](https://img.shields.io/pypi/v/stillwater)](https://pypi.org/project/stillwater/)
+[![CI](https://github.com/phuctruong/stillwater/actions/workflows/ci.yml/badge.svg)](https://github.com/phuctruong/stillwater/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://pypi.org/project/stillwater/)
+
+## Why Stillwater? (3 Things Not Found Anywhere Else)
+
+**1. Verification Ladder (rungs 641 / 274177 / 65537)**
+The only skill system with machine-checkable correctness grades. Each rung has a precise definition and required artifacts — you do not claim a rung, you earn it with evidence. Rung 641 = local correctness (red/green gate + no regressions). Rung 274177 = stability (seed sweep + replay). Rung 65537 = promotion (adversarial sweeps + security gate + behavioral hash drift explained).
+
+**2. Lane Algebra A / B / C**
+Every claim in every skill is typed. Lane A = witnessed fact (tool output, repo line, test result). Lane B = engineering judgment (explicit tradeoff). Lane C = heuristic or forecast (guidance only, never sufficient for PASS). Cross-lane upgrade — treating a heuristic as a fact — is a forbidden state. No other framework makes this distinction explicit and machine-enforceable.
+
+**3. Fail-Closed FSM**
+Skills are closed state machines with an explicit alphabet of forbidden states (SILENT_RELAXATION, UNWITNESSED_PASS, NONDETERMINISTIC_OUTPUT, NULL_ZERO_COERCION, and more). If a forbidden state is entered, the runtime blocks — it does not guess, soften, or hallucinate past the gap. This is structural, not vibes.
 
 ## Quickstart (30 seconds)
 
@@ -144,7 +159,7 @@ Your one technique is **verification**. Master it.
 6. Skim `papers/00-index.md` (map of concepts and what is verifiable here).
 7. Browse skills at [`docs/skills-browser.html`](docs/skills-browser.html) — search/filter 37+ skills, swarms, recipes.
 8. For upgrading an existing CLI/agent stack, use [`STILLWATER-OS-UPGRADE-GUIDE.md`](STILLWATER-OS-UPGRADE-GUIDE.md).
-6. Read case studies (real project usage): `case-studies/`
+9. Read case studies (real project usage): `case-studies/`
 
 ## A/B Test First (10-Minute Protocol)
 
@@ -172,9 +187,9 @@ Notebooks (portable demo mode runs offline by default):
 
 | Notebook | Dragon It Fights | What It Proves |
 |----------|-----------------|----------------|
-| `HOW-TO-OOLONG-BENCHMARK.ipynb` | Counting Dragon | CPU + LLM beats pure LLM (99.3% vs 40%) |
-| `HOW-TO-MATH-OLYMPIAD.ipynb` | Reasoning Dragon | Witness-first reasoning with checkable steps |
-| `HOW-TO-SWE-BENCHMARK.ipynb` | Patch Dragon | 500 real SWE-bench tests. RED/GREEN gate. Patches with receipts. |
+| `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb` | Counting Dragon | CPU + LLM beats pure LLM (99.3% vs 40%) |
+| `HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb` | Reasoning Dragon | Witness-first reasoning with checkable steps |
+| `HOW-TO-CRUSH-SWE-BENCHMARK.ipynb` | Patch Dragon | 500 real SWE-bench tests. RED/GREEN gate. Patches with receipts. |
 | `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb` | All of them | The full orchestration: DREAM -> FORECAST -> DECIDE -> ACT -> VERIFY |
 
 The SWE notebook deserves special mention: it runs against **500 real SWE-bench instances**, not toy examples. Every patch must pass through the RED/GREEN gate. No patch without a failing test first. No green without proof. This is Bruce Lee's "boards don't hit back" applied to software -- except here, the tests absolutely do hit back.
@@ -210,7 +225,7 @@ Run transparent IMO CLI QA (tool-assisted vs pure-LLM lanes):
 
 Run the dojo-themed admin web console:
 ```bash
-./start-admin.sh
+bash admin/start-admin.sh
 ```
 
 Generate (or check) the consolidated score README:

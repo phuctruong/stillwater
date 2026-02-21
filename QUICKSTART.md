@@ -52,6 +52,6 @@ bash admin/start-admin.sh
 
 - Read [`cli/README.md`](cli/README.md) for the full CLI manual
 - Browse [`skills/`](skills/) for available skills
-- Browse [`cli/recipes/`](cli/recipes/) for repeatable workflows
+- Browse [`recipes/`](recipes/) for repeatable workflows
 - Read [`papers/05-software-5.0.md`](papers/05-software-5.0.md) for the theory
 - Read [`MESSAGE-TO-HUMANITY.md`](MESSAGE-TO-HUMANITY.md) for the mission

@@ -17,6 +17,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e ".[dev]"
+      - name: Lint
+        run: |
+          pip install ruff -q
+          ruff check cli/src imo swe --select E,F,W --ignore E501
+
       - name: Unit tests
         run: |
           PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q

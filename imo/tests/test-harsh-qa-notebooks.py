@@ -124,9 +124,9 @@ def check_skills_artifacts(root: Path) -> tuple[bool, str]:
 def main() -> int:
     root = repo_root()
     notebooks = [
-        root / "HOW-TO-OOLONG-BENCHMARK.ipynb",
-        root / "HOW-TO-MATH-OLYMPIAD.ipynb",
-        root / "HOW-TO-SWE-BENCHMARK.ipynb",
+        root / "HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb",
+        root / "HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb",
+        root / "HOW-TO-CRUSH-SWE-BENCHMARK.ipynb",
         root / "PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb",
         root / "PHUC-SKILLS-SECRET-SAUCE.ipynb",
     ]

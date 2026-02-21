@@ -20,7 +20,9 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Testing",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
@@ -32,7 +34,7 @@ dependencies = [
 dev = ["pytest"]
 
 [project.urls]
-Homepage = "https://www.phuc.net"
+Homepage = "https://github.com/phuctruong/stillwater"
 Repository = "https://github.com/phuctruong/stillwater"
 Documentation = "https://github.com/phuctruong/stillwater/tree/main/docs"
 "Bug Tracker" = "https://github.com/phuctruong/stillwater/issues"

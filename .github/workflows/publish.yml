@@ -20,6 +20,11 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install and test
+        run: |
+          pip install -e ".[dev]"
+          PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q
+
       - name: Build package
         run: |
           pip install build
