@@ -31,6 +31,16 @@ jobs:
       - name: Generated docs up-to-date
         run: |
           PYTHONPATH=cli/src python -m stillwater.gen_ai_steroids_readme --check
+      - name: Security scan (bandit)
+        run: |
+          pip install bandit -q
+          bandit -r cli/src --severity-level medium -q
+
+      - name: Supply chain audit (pip-audit)
+        run: |
+          pip install pip-audit -q
+          pip-audit --ignore-vuln PYSEC-2022-42969
+
       - name: Compile check
         run: |
           python -m compileall -q cli/src swe imo

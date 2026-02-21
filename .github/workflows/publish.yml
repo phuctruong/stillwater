@@ -25,6 +25,16 @@ jobs:
           pip install -e ".[dev]"
           PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q
 
+      - name: Security scan (bandit) — blocks publish on medium+ severity
+        run: |
+          pip install bandit -q
+          bandit -r cli/src --severity-level medium -q
+
+      - name: Supply chain audit (pip-audit)
+        run: |
+          pip install pip-audit -q
+          pip-audit --ignore-vuln PYSEC-2022-42969
+
       - name: Build package
         run: |
           pip install build

@@ -5772,6 +5772,29 @@ def main(argv: list[str] | None = None) -> int:
     p_run.add_argument("--run-id", default=None, help="Optional run id (default: auto-generated).")
     p_run.add_argument("--json", action="store_true", help="Machine-readable output.")
 
+    p_evidence = sub.add_parser("evidence", help="Prime-coder evidence directory management.")
+    p_evidence_sub = p_evidence.add_subparsers(dest="evidence_cmd", required=True)
+
+    p_evidence_init = p_evidence_sub.add_parser(
+        "init", help="Create evidence/ directory with required prime-coder template files."
+    )
+    p_evidence_init.add_argument(
+        "--dir", default="evidence", dest="evidence_dir",
+        help="Evidence directory path (default: evidence).",
+    )
+
+    p_evidence_verify = p_evidence_sub.add_parser(
+        "verify", help="Validate evidence directory against prime-coder evidence contract."
+    )
+    p_evidence_verify.add_argument(
+        "--dir", default="evidence", dest="evidence_dir",
+        help="Evidence directory path (default: evidence).",
+    )
+    p_evidence_verify.add_argument(
+        "--rung", type=int, default=641, choices=[641, 274177, 65537],
+        help="Verification rung target (default: 641).",
+    )
+
     ns = parser.parse_args(argv)
 
     root = _repo_root()
@@ -9562,6 +9585,357 @@ def main(argv: list[str] | None = None) -> int:
         out_path.write_text(new_text, encoding="utf-8")
         print(f"Wrote: {out_path}")
         return 0
+
+    if ns.cmd == "evidence":
+        import hashlib
+        import json as _json
+        import platform
+        import subprocess
+        from pathlib import Path as _Path
+
+        evidence_dir = _Path(ns.evidence_dir)
+
+        # ------------------------------------------------------------------ #
+        # evidence init                                                        #
+        # ------------------------------------------------------------------ #
+        if ns.evidence_cmd == "init":
+            evidence_dir.mkdir(parents=True, exist_ok=True)
+
+            # Gather env values where possible.
+            def _git(cmd):
+                try:
+                    return subprocess.check_output(
+                        cmd, stderr=subprocess.DEVNULL, text=True
+                    ).strip()
+                except Exception:
+                    return ""
+
+            git_commit = _git(["git", "rev-parse", "HEAD"]) or "UNKNOWN"
+            git_dirty_raw = _git(["git", "status", "--porcelain"])
+            git_dirty = bool(git_dirty_raw)
+
+            import datetime
+            tz_name = datetime.datetime.now(datetime.timezone.utc).astimezone().tzname() or "UTC"
+            import locale as _locale
+            try:
+                locale_str = _locale.getdefaultlocale()[0] or "en_US"
+            except Exception:
+                locale_str = "en_US"
+
+            templates = {
+                "plan.json": {
+                    "skill_version": "",
+                    "profile": "strict",
+                    "stop_reason": "",
+                    "last_known_state": "",
+                    "loop_budgets": {},
+                    "localization_summary": [],
+                    "verification_rung_target": 641,
+                    "verification_rung": 0,
+                    "seed_agreement": False,
+                    "null_checks_performed": False,
+                    "forecast_summary": [],
+                    "env_snapshot_pointer": "evidence/env_snapshot.json",
+                    "evidence_manifest_pointer": "evidence/evidence_manifest.json",
+                },
+                "tests.json": {
+                    "command": "",
+                    "exit_code": -1,
+                    "failing_tests_before": [],
+                    "passing_tests_after": [],
+                },
+                "artifacts.json": {
+                    "artifacts": [],
+                },
+                "null_checks.json": {
+                    "inputs_checked": [],
+                    "null_cases_handled": 0,
+                    "zero_cases_distinguished": 0,
+                    "coercion_violations_detected": 0,
+                },
+                "env_snapshot.json": {
+                    "git_commit": git_commit,
+                    "git_dirty": git_dirty,
+                    "repo_root": ".",
+                    "os": platform.system(),
+                    "arch": platform.machine(),
+                    "language_runtimes": {},
+                    "tool_versions": {},
+                    "timezone": tz_name,
+                    "locale": locale_str,
+                },
+                "evidence_manifest.json": {
+                    "schema_version": "1.0.0",
+                    "files": [],
+                },
+            }
+
+            plain_files = [
+                "run_log.txt",
+                "repro_red.log",
+                "repro_green.log",
+                "behavior_hash.txt",
+                "behavior_hash_verify.txt",
+            ]
+
+            created = []
+            skipped = []
+
+            for fname, tpl in templates.items():
+                fpath = evidence_dir / fname
+                if fpath.exists():
+                    print(f"  [skip] {fname} — already exists")
+                    skipped.append(fname)
+                else:
+                    fpath.write_text(
+                        _json.dumps(tpl, indent=2, sort_keys=True) + "\n",
+                        encoding="utf-8",
+                    )
+                    print(f"  [created] {fname}")
+                    created.append(fname)
+
+            for fname in plain_files:
+                fpath = evidence_dir / fname
+                if fpath.exists():
+                    print(f"  [skip] {fname} — already exists")
+                    skipped.append(fname)
+                else:
+                    header = f"# {fname} — prime-coder evidence placeholder\n"
+                    fpath.write_text(header, encoding="utf-8")
+                    print(f"  [created] {fname}")
+                    created.append(fname)
+
+            print(
+                f"\n[EVIDENCE INIT] dir={evidence_dir}  "
+                f"created={len(created)}  skipped={len(skipped)}"
+            )
+            return 0
+
+        # ------------------------------------------------------------------ #
+        # evidence verify                                                      #
+        # ------------------------------------------------------------------ #
+        if ns.evidence_cmd == "verify":
+            rung_target = ns.rung
+            print(f"[EVIDENCE VERIFY] rung_target={rung_target} dir={evidence_dir}/")
+
+            failures = []
+
+            def _ok(msg):
+                print(f"  \u2713 {msg}")
+
+            def _fail(msg, key):
+                print(f"  \u2717 {msg}")
+                failures.append(key)
+
+            # Required files.
+            required_files = [
+                "plan.json",
+                "run_log.txt",
+                "tests.json",
+                "artifacts.json",
+                "repro_red.log",
+                "repro_green.log",
+                "null_checks.json",
+                "behavior_hash.txt",
+                "behavior_hash_verify.txt",
+                "env_snapshot.json",
+                "evidence_manifest.json",
+            ]
+
+            def _load_json(fname):
+                """Return parsed JSON or None; emit pass/fail."""
+                fpath = evidence_dir / fname
+                if not fpath.exists():
+                    _fail(f"{fname} — missing", f"{fname}_missing")
+                    return None
+                try:
+                    data = _json.loads(fpath.read_text(encoding="utf-8"))
+                    return data
+                except Exception as exc:
+                    _fail(f"{fname} — not parseable: {exc}", f"{fname}_parse_error")
+                    return None
+
+            def _file_sha256(fname):
+                fpath = evidence_dir / fname
+                if not fpath.exists():
+                    return None
+                h = hashlib.sha256()
+                h.update(fpath.read_bytes())
+                return h.hexdigest()
+
+            # --- RUNG_641 checks ---
+
+            # 1. All required files exist (check presence for plain files).
+            for fname in required_files:
+                fpath = evidence_dir / fname
+                if not fpath.exists():
+                    _fail(f"{fname} — missing", f"{fname}_missing")
+
+            # 2. JSON files parseable + key checks.
+            plan = _load_json("plan.json")
+            plan_required_keys = [
+                "skill_version", "profile", "stop_reason", "last_known_state",
+                "loop_budgets", "localization_summary", "verification_rung_target",
+                "verification_rung", "seed_agreement", "null_checks_performed",
+                "forecast_summary", "env_snapshot_pointer", "evidence_manifest_pointer",
+            ]
+            if plan is not None:
+                missing_plan = [k for k in plan_required_keys if k not in plan]
+                if missing_plan:
+                    _fail(f"plan.json — missing keys: {missing_plan}", "plan_missing_keys")
+                else:
+                    _ok("plan.json — present, parseable, required keys OK")
+
+            tests = _load_json("tests.json")
+            tests_required_keys = [
+                "command", "exit_code", "failing_tests_before", "passing_tests_after"
+            ]
+            if tests is not None:
+                missing_tests = [k for k in tests_required_keys if k not in tests]
+                if missing_tests:
+                    _fail(f"tests.json — missing keys: {missing_tests}", "tests_missing_keys")
+                elif not isinstance(tests.get("exit_code"), int):
+                    _fail(
+                        f"tests.json — exit_code must be an integer, got {type(tests.get('exit_code')).__name__}",
+                        "tests_exit_code_not_int",
+                    )
+                else:
+                    _ok(f"tests.json — present, parseable, exit_code={tests['exit_code']}")
+
+            null_chk = _load_json("null_checks.json")
+            null_required_keys = [
+                "inputs_checked", "null_cases_handled",
+                "zero_cases_distinguished", "coercion_violations_detected",
+            ]
+            if null_chk is not None:
+                missing_null = [k for k in null_required_keys if k not in null_chk]
+                if missing_null:
+                    _fail(f"null_checks.json — missing keys: {missing_null}", "null_checks_missing_keys")
+                else:
+                    _ok("null_checks.json — present, parseable, required keys OK")
+
+            env_snap = _load_json("env_snapshot.json")
+            env_required_keys = [
+                "git_commit", "git_dirty", "repo_root", "os", "arch",
+                "language_runtimes", "tool_versions", "timezone", "locale",
+            ]
+            if env_snap is not None:
+                missing_env = [k for k in env_required_keys if k not in env_snap]
+                if missing_env:
+                    _fail(f"env_snapshot.json — missing keys: {missing_env}", "env_snapshot_missing_keys")
+                else:
+                    _ok("env_snapshot.json — present, parseable, required keys OK")
+
+            manifest = _load_json("evidence_manifest.json")
+            if manifest is not None:
+                if "schema_version" not in manifest:
+                    _fail("evidence_manifest.json — missing schema_version", "manifest_no_schema_version")
+                else:
+                    _ok(f"evidence_manifest.json — schema_version={manifest['schema_version']!r}")
+
+            # 3. behavior_hash files must match and be non-empty.
+            bh_path = evidence_dir / "behavior_hash.txt"
+            bhv_path = evidence_dir / "behavior_hash_verify.txt"
+            if bh_path.exists() and bhv_path.exists():
+                bh_content = bh_path.read_text(encoding="utf-8").strip()
+                bhv_content = bhv_path.read_text(encoding="utf-8").strip()
+                if not bh_content:
+                    _fail("behavior_hash.txt — empty", "behavior_hash_empty")
+                elif bh_content != bhv_content:
+                    _fail(
+                        "behavior_hash.txt — content mismatch with behavior_hash_verify.txt",
+                        "behavior_hash_mismatch",
+                    )
+                else:
+                    _ok("behavior_hash.txt — present and matches behavior_hash_verify.txt")
+
+            # 4. SHA-256 of each file in evidence_manifest.json matches actual content.
+            if manifest is not None and isinstance(manifest.get("files"), list):
+                for entry in manifest["files"]:
+                    epath = entry.get("file_path", "")
+                    expected_sha = entry.get("sha256", "")
+                    if not epath or not expected_sha:
+                        continue
+                    actual_sha = _file_sha256(epath)
+                    if actual_sha is None:
+                        _fail(
+                            f"manifest entry {epath!r} — file missing",
+                            f"manifest_file_missing_{epath}",
+                        )
+                    elif actual_sha != expected_sha:
+                        _fail(
+                            f"manifest entry {epath!r} — SHA-256 mismatch",
+                            f"manifest_sha256_mismatch_{epath}",
+                        )
+                    else:
+                        _ok(f"manifest entry {epath!r} — SHA-256 OK")
+
+            # --- RUNG_274177 checks ---
+            if rung_target >= 274177:
+                if plan is not None:
+                    vrt = plan.get("verification_rung_target")
+                    if vrt is None or not isinstance(vrt, int):
+                        _fail(
+                            "plan.json verification_rung_target must be a present integer",
+                            "plan_rung_target_invalid",
+                        )
+                    else:
+                        _ok(f"plan.json — verification_rung_target={vrt} (integer)")
+
+                artifacts_data = _load_json("artifacts.json")
+                if artifacts_data is not None:
+                    arts = artifacts_data.get("artifacts", [])
+                    if not isinstance(arts, list) or len(arts) == 0:
+                        _fail(
+                            "artifacts.json — artifacts list is empty (at least 1 required for rung 274177)",
+                            "artifacts_empty",
+                        )
+                    else:
+                        _ok(f"artifacts.json — {len(arts)} artifact(s) present")
+
+                if null_chk is not None:
+                    nch = null_chk.get("null_cases_handled", 0)
+                    if not isinstance(nch, int) or nch <= 0:
+                        _fail(
+                            f"null_checks.json null_cases_handled={nch!r} must be > 0 for rung 274177",
+                            "null_cases_handled_zero",
+                        )
+                    else:
+                        _ok(f"null_checks.json — null_cases_handled={nch}")
+
+            # --- RUNG_65537 checks ---
+            if rung_target == 65537:
+                valid_rungs = [641, 274177, 65537]
+                if plan is not None:
+                    vr = plan.get("verification_rung")
+                    if vr not in valid_rungs:
+                        _fail(
+                            f"plan.json verification_rung={vr!r} must be one of {valid_rungs}",
+                            "plan_verification_rung_invalid",
+                        )
+                    else:
+                        _ok(f"plan.json — verification_rung={vr}")
+
+                if env_snap is not None:
+                    dirty = env_snap.get("git_dirty")
+                    if dirty not in (False, "false", "False"):
+                        _fail(
+                            f"env_snapshot.json git_dirty={dirty!r} — must be false for promotion (rung 65537)",
+                            "git_dirty_on_promotion",
+                        )
+                    else:
+                        _ok("env_snapshot.json — git_dirty=false (clean for promotion)")
+
+            # Verdict.
+            print("")
+            if not failures:
+                print(f"VERDICT: PASS (rung {rung_target} achieved)")
+                return 0
+            else:
+                print(f"VERDICT: BLOCKED ({len(failures)} check(s) failed)")
+                print(f"  stop_reason: EVIDENCE_INCOMPLETE")
+                print(f"  failing_checks: {failures}")
+                return 1
 
     # Default: print quick directions.
     if ns.cmd == "print" or ns.cmd is None:
