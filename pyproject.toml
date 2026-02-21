@@ -42,3 +42,7 @@ stillwater = "stillwater.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["cli/src"]
+
+[tool.pytest.ini_options]
+testpaths = ["cli/tests", "imo/tests"]
+addopts = "-q"
