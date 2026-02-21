@@ -5298,6 +5298,31 @@ def main(argv: list[str] | None = None) -> int:
     p_init_identity.add_argument("--force", action="store_true", help="Overwrite existing files.")
     p_init_identity.add_argument("--json", action="store_true", help="Machine-readable output.")
 
+    p_init_project = p_init_sub.add_parser(
+        "project",
+        help="Install Stillwater into an existing project (lean CLAUDE.md + ripple + skills/).",
+    )
+    p_init_project.add_argument("--name", required=True, help="Project name (used in CLAUDE.md header).")
+    p_init_project.add_argument(
+        "--skills",
+        default="prime-safety,prime-coder,phuc-orchestration,phuc-forecast",
+        help="Comma-separated skills to load (default: prime-safety,prime-coder,phuc-orchestration,phuc-forecast).",
+    )
+    p_init_project.add_argument(
+        "--rung",
+        default="641",
+        choices=["641", "274177", "65537"],
+        help="Verification rung target (default: 641).",
+    )
+    p_init_project.add_argument(
+        "--domain",
+        default="",
+        help="Project domain description (e.g. 'lossless compression').",
+    )
+    p_init_project.add_argument("--dir", default=".", help="Project root directory (default: current dir).")
+    p_init_project.add_argument("--force", action="store_true", help="Overwrite existing CLAUDE.md and ripple file.")
+    p_init_project.add_argument("--json", action="store_true", help="Machine-readable output.")
+
     p_skills_ab = sub.add_parser("skills-ab", help="Run the skills A/B/AB/ABC benchmark (local-first).")
     p_skills_ab.add_argument("--backend", choices=["auto", "ollama", "mock"], default="auto")
     p_skills_ab.add_argument("--ollama-url", default=None, help="Ollama base URL (auto-detect if omitted).")
@@ -6275,6 +6300,164 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"identity_dir: {target_dir}")
                 for item in sorted(created):
                     print(f"- {item}")
+            return 0
+
+        if ns.init_cmd == "project":
+            # --------------------------------------------------------------- #
+            # stillwater init project                                           #
+            # Install Stillwater into any existing project:                    #
+            #   1. Lean CLAUDE.md with QUICK LOAD summaries (~80 lines)        #
+            #   2. ripples/project.md template (project-specific config)       #
+            #   3. skills/ directory with full skill files (for sub-agents)   #
+            # --------------------------------------------------------------- #
+            import datetime as _dt
+
+            project_dir = Path(ns.dir).expanduser().resolve()
+            project_dir.mkdir(parents=True, exist_ok=True)
+            project_name = ns.name
+            skills_requested = [s.strip() for s in ns.skills.split(",") if s.strip()]
+            rung_target = ns.rung
+            domain = ns.domain or "(fill in: e.g. compression / audio / web automation)"
+            stillwater_skills_dir = root / "skills"
+
+            created_files: list[str] = []
+            errors: list[str] = []
+
+            # --- 1. Build CLAUDE.md with QUICK LOAD blocks ---
+            claude_md_path = project_dir / "CLAUDE.md"
+            if claude_md_path.exists() and not ns.force:
+                print(f"ERROR: CLAUDE.md exists (use --force to overwrite): {claude_md_path}")
+                return 1
+
+            quick_load_blocks: list[str] = []
+            missing_skills: list[str] = []
+            for skill_name in skills_requested:
+                skill_file = stillwater_skills_dir / f"{skill_name}.md"
+                if not skill_file.exists():
+                    missing_skills.append(skill_name)
+                    continue
+                content = skill_file.read_text(encoding="utf-8")
+                # Extract QUICK LOAD comment block (between <!-- QUICK LOAD and -->)
+                ql_match = re.search(r'<!--\s*QUICK LOAD.*?-->', content, re.DOTALL)
+                if ql_match:
+                    quick_load_blocks.append(ql_match.group(0))
+                else:
+                    # Fallback: take first 15 lines as orientation
+                    quick_load_blocks.append("\n".join(content.splitlines()[:15]))
+
+            if missing_skills:
+                print(f"WARNING: skills not found in {stillwater_skills_dir}: {missing_skills}")
+
+            version_str = __version__
+            date_str = _dt.date.today().isoformat()
+            skills_list_str = ", ".join(skills_requested)
+
+            claude_md_lines = [
+                f"# CLAUDE.md — {project_name}",
+                f"# Stillwater v{version_str} | Generated: {date_str}",
+                f"# Project context, architecture, and phases: see README.md",
+                f"# Skill directory (full files for sub-agent dispatch): skills/",
+                "",
+                "## Project Ripple",
+                "# See ripples/project.md for project-specific constraints and rung target.",
+                "# Edit ripples/project.md — do NOT put project architecture here.",
+                "",
+                f"RUNG_TARGET: {rung_target}",
+                "NORTHSTAR: Phuc_Forecast",
+                f"PROJECT: {project_name}",
+                f"DOMAIN: {domain}",
+                "",
+                "## Stillwater Core Skills",
+                f"# Loaded: {skills_list_str}",
+                "# Full files in: skills/  (for sub-agent dispatch via phuc-orchestration)",
+                "",
+            ]
+            for block in quick_load_blocks:
+                claude_md_lines.append(block)
+                claude_md_lines.append("")
+
+            claude_md_content = "\n".join(claude_md_lines)
+            claude_md_path.write_text(claude_md_content, encoding="utf-8")
+            created_files.append("CLAUDE.md")
+
+            # --- 2. Create ripples/project.md ---
+            ripples_dir = project_dir / "ripples"
+            ripples_dir.mkdir(parents=True, exist_ok=True)
+            ripple_path = ripples_dir / "project.md"
+            if not ripple_path.exists() or ns.force:
+                ripple_content = "\n".join([
+                    f"# {project_name} — Stillwater Ripple",
+                    f"# Generated: {date_str} | stillwater v{version_str}",
+                    "# This file overrides base Stillwater behavior for this project.",
+                    "# Keep it under 50 lines. Everything else goes in README.md.",
+                    "",
+                    f"PROJECT: {project_name}",
+                    f"DOMAIN: {domain}",
+                    f"RUNG_TARGET: {rung_target}",
+                    "NORTHSTAR: Phuc_Forecast",
+                    "ECOSYSTEM: PUBLIC  # or PRIVATE",
+                    "LANGUAGE: Python  # or Node.js, etc.",
+                    "",
+                    "KEY_CONSTRAINTS:",
+                    "  - never-worse on standard test suite",
+                    "  - # add project-specific constraints here",
+                    "",
+                    "ENTRY_POINTS:",
+                    "  - # e.g. src/main.py",
+                    "  - # e.g. pytest -q",
+                    "",
+                    "FORBIDDEN_IN_THIS_PROJECT:",
+                    "  - # list any project-specific forbidden behaviors",
+                    "",
+                    "SEE_ALSO: README.md  # mission, architecture, phases, XP tracker",
+                ])
+                ripple_path.write_text(ripple_content, encoding="utf-8")
+                created_files.append("ripples/project.md")
+
+            # --- 3. Copy full skill files to skills/ ---
+            skills_out_dir = project_dir / "skills"
+            skills_out_dir.mkdir(parents=True, exist_ok=True)
+            for skill_name in skills_requested:
+                src = stillwater_skills_dir / f"{skill_name}.md"
+                if not src.exists():
+                    continue
+                dst = skills_out_dir / f"{skill_name}.md"
+                if not dst.exists() or ns.force:
+                    shutil.copy2(str(src), str(dst))
+                    created_files.append(f"skills/{skill_name}.md")
+
+            # --- 4. Output ---
+            payload = {
+                "ok": True,
+                "project": project_name,
+                "project_dir": str(project_dir),
+                "rung_target": rung_target,
+                "skills_loaded": skills_requested,
+                "missing_skills": missing_skills,
+                "claude_md_lines": len(claude_md_content.splitlines()),
+                "created_files": created_files,
+            }
+            if ns.json:
+                print(json.dumps(payload, indent=2, sort_keys=True))
+            else:
+                print(f"project: {project_name}")
+                print(f"dir:     {project_dir}")
+                print(f"rung:    {rung_target}")
+                print(f"skills:  {', '.join(skills_requested)}")
+                if missing_skills:
+                    print(f"WARNING: skills not found: {missing_skills}")
+                print(f"CLAUDE.md: {len(claude_md_content.splitlines())} lines (was: check git diff)")
+                print("")
+                print("Created / updated:")
+                for f in created_files:
+                    print(f"  + {f}")
+                print("")
+                print("Next steps:")
+                print("  1. Edit ripples/project.md — fill in KEY_CONSTRAINTS and ENTRY_POINTS")
+                print("  2. Move project mission/architecture/phases from CLAUDE.md → README.md")
+                print("  3. stillwater verify-project-structure  (coming in v1.6.0)")
+                print("")
+                print(f"Stillwater v{version_str} installed in {project_name}.")
             return 0
 
     if ns.cmd == "skills-ab":
