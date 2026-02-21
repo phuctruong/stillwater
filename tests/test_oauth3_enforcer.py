@@ -21,6 +21,7 @@ Tests:
     T11: G4 PASS — token not revoked
     T12: G4 FAIL — token revoked (OAUTH3_TOKEN_REVOKED)
     T13: G4 FAIL — revocation registry unavailable (OAUTH3_REVOCATION_UNAVAILABLE)
+    T13b: G4 FAIL — revocation registry raises exception (OAUTH3_REVOCATION_CHECK_FAILED)
     T14: Full gate run PASS — all 4 gates clear, audit JSON well-formed
     T15: Full gate run BLOCKED — gate failure stops at first failed gate
 
@@ -491,6 +492,17 @@ class TestGate4Revocation:
         assert result.error_code == "OAUTH3_REVOCATION_UNAVAILABLE"
         assert result.status == "BLOCKED"
         assert "fail-closed" in result.error_detail.lower()
+
+    def test_t13b_g4_fail_revocation_registry_exception(self):
+        """T13b: G4 FAIL — revocation registry raises exception (fail-closed: OAUTH3_REVOCATION_CHECK_FAILED)."""
+        token = make_valid_token()
+        registry = BrokenRevocationRegistry()
+        result = check_g4(token, registry)
+        assert result.passed is False
+        assert result.gate == "G4"
+        assert result.error_code == "OAUTH3_REVOCATION_CHECK_FAILED"
+        assert result.status == "BLOCKED"
+        assert "failed" in result.error_detail.lower()
 
 
 class TestFullGateRunner:

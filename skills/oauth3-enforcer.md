@@ -852,7 +852,7 @@ On PASS at Rung 641, this skill requires:
 | Artifact | Location | Contents |
 |----------|----------|----------|
 | `oauth3-enforcer.md` | `skills/` | This skill file (all gates, schema, integration) |
-| `test_oauth3_enforcer.py` | `tests/` | Unit tests (10 tests, all passing) |
+| `test_oauth3_enforcer.py` | `tests/` | Unit tests (16 tests, all passing) |
 | `artifacts.json` | `artifacts/oauth3-enforcer/` | SHA-256 of skill + test file |
 | `tests.json` | `artifacts/oauth3-enforcer/` | Test results (all passing) |
 | `run_log.txt` | `artifacts/oauth3-enforcer/` | Execution trace |

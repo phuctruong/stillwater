@@ -37,26 +37,23 @@ Evidence required: evidence/audit_tests.txt + updated case-studies/stillwater-it
 
 ---
 
-## Phase 1: OAuth3 Integration (Week 1–2)
+## Phase 1: OAuth3 Integration (Week 1–2) — COMPLETE
 
 **Goal**: Stillwater has a formal OAuth3 spec and an enforcement skill that solace-browser and solace-cli can import.
 
 ### Tasks
 
-- [ ] Create `papers/oauth3-spec-v0.1.md` — formal OAuth3 specification
-  - AgencyToken schema (JSON)
-  - Scope registry standard (platform.action.resource format)
+- [x] Create `papers/oauth3-spec-v0.1.md` — formal OAuth3 specification (rung 641, 2026-02-21)
+  - AgencyToken schema (JSON), 7 required + 5 optional fields
+  - Scope registry: 5 platforms, 30 scopes, step-up annotations
   - Consent flow (GET /consent → POST /consent/approve)
-  - Revocation endpoint (DELETE /tokens/{token_id})
-  - Evidence bundle requirement per token operation
-- [ ] Create `skills/oauth3-enforcer.md` — enforcement skill
-  - Gate: every recipe execution checks for valid AgencyToken
-  - Gate: scope validation (requested scope ⊆ granted scope)
-  - Gate: TTL check (token not expired)
-  - Gate: revocation check (token not in revocation list)
-  - Evidence output: `oauth3_audit.json` per run
+  - Revocation (DELETE /tokens/{id}, bulk DELETE /tokens, mid-execution halt)
+  - Evidence bundle: oauth3_audit.jsonl with SHA-256 sidecar
+- [x] Create `skills/oauth3-enforcer.md` — enforcement skill (rung 641, 2026-02-21)
+  - G1 (schema) → G2 (TTL) → G3 (scope) → G4 (revocation), fail-closed
+  - 876 lines, 11 sections, FSM with 8 forbidden states
+  - 16/16 tests pass (`tests/test_oauth3_enforcer.py`)
 - [ ] Update `STORE.md` with OAuth3 requirements for skill submissions
-  - New requirement: skills that touch external platforms must declare OAuth3 scope list
 - [ ] Update `skills/prime-browser.md` (or create if missing) — browser automation gating
 
 ### Build Prompt (Phase 1 — OAuth3 Spec)
@@ -95,48 +92,51 @@ Evidence required: skills/oauth3-enforcer.md committed with sha256
 
 ---
 
-## Phase 2: Stillwater Store API (Month 1)
+## Phase 2: Store Client SDK + Rung Validator (Month 1)
 
-**Goal**: Stillwater Store is not just a spec — it has a running API that accepts skill submissions and serves skill installs.
+**Goal**: Stillwater has a client SDK for submitting/fetching skills from the Stillwater Store. The server API lives in `solaceagi` — stillwater owns the client and the rung validation logic.
+
+### Architecture Split
+- **stillwater** (this repo): Store client SDK, rung validator, skill packaging, STORE.md spec
+- **solaceagi** (server): FastAPI endpoints (POST/GET /store/*), auth, rate limiting, review queue
 
 ### Tasks
 
-- [ ] FastAPI app: `store/api.py`
-  - `POST /store/submit` — submit a skill for review
-  - `GET /store/skills` — list accepted skills (paginated)
-  - `GET /store/skills/{skill_id}` — fetch a skill by ID
-  - `POST /store/install` — install a skill into a target repo
-- [ ] Authentication: `sw_sk_` API key validation (simple HMAC, no OAuth3 needed for v1)
-- [ ] Review queue: pending → accepted workflow
-  - `store/review.py` — manual review CLI tool for Phuc
-  - Schema: `{skill_id, author, rung_claimed, rung_verified, status: pending|accepted|rejected}`
-- [ ] Rung validation: 65537 required for production listing
-  - `store/rung_validator.py` — runs behavioral hash check + replay check
-- [ ] Rate limiting: 10 submissions/day per API key
-- [ ] Reputation scoring: submissions accepted → score += 1; rejected → score -= 0.5
+- [ ] Store client SDK: `store/client.py`
+  - `submit_skill(skill_path, author, rung_claimed)` — package + submit to solaceagi Store API
+  - `fetch_skill(skill_id)` — download a skill from the Store
+  - `list_skills(query)` — search the Store catalog
+  - `install_skill(skill_id, target_dir)` — fetch + write to local skills/
+- [ ] Rung validator: `store/rung_validator.py`
+  - Verify evidence bundle before submission (tests.json, plan.json, behavior_hash)
+  - Check rung_claimed matches evidence artifacts
+  - Run behavioral hash replay (3 seeds: 42, 137, 9001)
+- [ ] Skill packager: `store/packager.py`
+  - Bundle skill.md + tests + evidence into submission payload
+  - Validate STORE.md requirements (OAuth3 scope declaration if external platform)
+  - Compute SHA-256 manifest
+- [ ] Tests: `tests/test_store_client.py`
 
-### Build Prompt (Phase 2 — Store API)
+### Build Prompt (Phase 2 — Store Client SDK)
 
 ```
 Load prime-safety + prime-coder + phuc-forecast.
-Task: Build Stillwater Store API v1.
+Task: Build Stillwater Store client SDK.
 Location: stillwater/store/
 Files to create:
-  store/api.py (FastAPI app)
-  store/review.py (CLI review tool)
-  store/rung_validator.py (behavioral hash + replay checker)
-  store/models.py (SkillSubmission, SkillListing, ReviewRecord Pydantic models)
-  tests/test_store_api.py
+  store/client.py (Store client — submit, fetch, list, install)
+  store/rung_validator.py (evidence bundle + rung verification)
+  store/packager.py (skill packaging for submission)
+  tests/test_store_client.py
 Reference: stillwater/STORE.md
 Requirements:
-  - POST /store/submit: accepts {skill_name, skill_content, author, rung_claimed}
-  - GET /store/skills: returns list of accepted skills with metadata
-  - GET /store/skills/{skill_id}: returns full skill content
-  - Authentication: sw_sk_ prefix API keys (HMAC-SHA256 validation)
-  - Rung gate: rung_claimed must be 65537 for production listing
-  - Rate limit: 10 submissions/day per key
+  - Client calls solaceagi.com Store API (POST/GET /store/*)
+  - Rung validator checks evidence bundle integrity before submission
+  - Packager bundles skill.md + tests + evidence with SHA-256 manifest
+  - Authentication: sw_sk_ API key passed via Authorization header
+  - No server code — server lives in solaceagi project
 Rung target: 641
-Evidence required: tests/test_store_api.py passing (pytest -v)
+Evidence required: tests/test_store_client.py passing (pytest -v)
 ```
 
 ---
@@ -244,8 +244,8 @@ Evidence required: .github/workflows/rung-check.yml passing on main branch
 | Phase | Target Date | Rung Gate | Key Deliverable |
 |-------|------------|-----------|----------------|
 | Phase 0: Audit | Week 0 | 641 | Baseline audit report |
-| Phase 1: OAuth3 | Week 1–2 | 641 | `papers/oauth3-spec-v0.1.md` + `skills/oauth3-enforcer.md` |
-| Phase 2: Store API | Month 1 | 641 | `POST /store/submit` + `GET /store/skills` live |
+| Phase 1: OAuth3 | Week 1–2 | 641 | `papers/oauth3-spec-v0.1.md` + `skills/oauth3-enforcer.md` — COMPLETE |
+| Phase 2: Store Client | Month 1 | 641 | `store/client.py` + `store/rung_validator.py` (server in solaceagi) |
 | Phase 3: LLM Portal | Month 2 | 641 | Multi-provider support + session management |
 | Phase 4: Rung 65537 | Month 3 | 65537 | Self-verification badge + 30-day CI |
 
