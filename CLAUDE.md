@@ -1,3 +1,18 @@
+## Phuc-Orchestration: MANDATORY (no inline deep work — ever)
+# MAIN SESSION MODEL: haiku (coordination only — sub-agents handle all heavy work via swarms/)
+# INLINE_DEEP_WORK IS FORBIDDEN — phuc-orchestration governs ALL tasks without exception
+# MAIN SESSION: 3 skills max → prime-safety + prime-coder + phuc-forecast (DREAM→FORECAST→DECIDE→ACT→VERIFY)
+# DISPATCH: task >50 lines OR domain-specialized → Task tool (subagent_type=general-purpose, model=sonnet|opus) + paste skills/ inline
+# EXPLICIT SWARM: /phuc-swarm [role] "task" guarantees correct model+skills; use this when in doubt
+# ROLE→TASK: coder=bugfix/feat, planner=arch/design, skeptic=verify, scout=research, mathematician=proofs
+# MODEL: haiku=scout/janitor/graph-designer, sonnet=coder/planner/skeptic, opus=math/security/audit
+# SUB-AGENT PACK: paste full skills/ inline (prime-safety first) + CNF capsule (full task/context, no "as before")
+# RUNG: declare rung_target before dispatch; integration rung = MIN(all sub-agent rungs)
+# FORBIDDEN: INLINE_DEEP_WORK | SKILL_LESS_DISPATCH | FORGOTTEN_CAPSULE | SUMMARY_AS_EVIDENCE
+# COMBOS: combos/ has WISH+RECIPE pairs (plan, bugfix, run-test, ci-triage, security, deps)
+# NORTHSTAR: see NORTHSTAR.md | SESSION START: /northstar → /remember → /phuc-swarm
+# Loaded: prime-safety, prime-coder, phuc-forecast, phuc-orchestration
+
 PRIME_CODER_SECRET_SAUCE_SKILL:
   version: 2.0.2
   profile: secret_sauce_streamlined
