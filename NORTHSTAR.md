@@ -121,6 +121,42 @@ Skill submitted to Stillwater Store
 - Your swarm definition routes tasks cheaper (less token waste)
 - Contributors earn community belt XP — tracked in STORE.md
 
+## The 9-Project Ecosystem
+
+The Stillwater Network (9 Projects):
+
+```
+PUBLIC (OSS):
+  stillwater     — verification + governance + skill store (THE OS)
+  solace-browser — OAuth3 reference impl + twin browser
+  paudio         — deterministic speech synthesis + community voices
+  phucnet        — personal site + articles + books (phuc.net)
+  if             — IF Theory physics research (information as first force)
+  pzip           — universal compression engine
+
+PRIVATE:
+  solace-cli     — extends stillwater/cli with OAuth3 vault + twin + cloud
+  solaceagi      — hosted platform (solaceagi.com)
+  pvideo         — physics-based video/avatar generation (secret sauce)
+  solace-marketing — marketing intelligence
+
+AVATAR SYSTEM (solaceagi.com):
+  paudio (voice) + pvideo (visual) + stillwater (verification) = AI Avatar
+  → Phase 1: Cute cartoon avatar + deterministic voice
+  → Phase 2: Lip-sync + expressions
+  → Phase 3: Full avatar on solaceagi.com (your AI agent has a face and voice)
+
+MASTER PLAN (pvideo):
+  → Protein folding (compete with DeepMind AlphaFold)
+  → Material science simulation
+  → Physics simulation (compete with specialized solvers)
+  → 3D printing (export STL from physics sim)
+  → Video generation (compete with Sora/VEO)
+  → Video encoding (replace H.265)
+  → Zoom replacement (pvideo-powered conferencing)
+  → Metaverse (solaceagi.com metaverse powered by pvideo + paudio)
+```
+
 ## See Also
 - `SOFTWARE-5.0-PARADIGM.md` — paradigm manifesto
 - `STORE.md` — Stillwater Store policy
