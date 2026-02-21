@@ -1,0 +1,38 @@
+{
+  "task_family": "swe_patch",
+  "rung_target": 641,
+  "phase": "Phase 2 — Store Client SDK + Rung Validator",
+  "date": "2026-02-21",
+  "design_decisions": [
+    "store/packager.py: SHA-256 over canonical JSON (sorted keys) — deterministic, no float",
+    "store/rung_validator.py: fail-closed string returns (VALID/INVALID), not bool, to prevent coercion",
+    "store/rung_validator.py: null rung_target → INVALID (null != 0, null != rung 641)",
+    "store/rung_validator.py: 3-seed consensus via exact string comparison (no float arithmetic)",
+    "store/client.py: API key validated at construction, never appears in repr/str/exceptions",
+    "store/client.py: client-side RungValidator gate before any HTTP call (fail before network)",
+    "store/client.py: HTTP error mapping is fail-closed (401→PermissionError, 404→LookupError, 422→ValueError, 5xx→RuntimeError)",
+    "tests/test_store_client.py: all HTTP mocked via unittest.mock.patch (network OFF)",
+    "tests/test_store_client.py: API keys use valid hex (a-f, 0-9) to pass sw_sk_<32hex> format check",
+    "Implementation order: packager → validator → client → tests (dependency order)"
+  ],
+  "files_changed": [
+    "store/packager.py",
+    "store/rung_validator.py",
+    "store/client.py",
+    "tests/test_store_client.py",
+    "evidence/plan.json",
+    "evidence/tests.json"
+  ],
+  "non_goals": [
+    "Server-side API endpoints (solaceagi project)",
+    "Real HTTP calls in tests",
+    "Production promotion (rung 274177+ is Phase 4)",
+    "Authentication with real solaceagi"
+  ],
+  "reference": [
+    "ROADMAP.md Phase 2 (lines 95-140)",
+    "STORE.md (full file)",
+    "store/__init__.py (existing store package)",
+    "store/models.py (SkillSubmission model)"
+  ]
+}
