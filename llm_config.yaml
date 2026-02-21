@@ -9,7 +9,7 @@
 # Default is an offline demo provider so the repo can be executed without any
 # external services. Switch to "claude-code" (local wrapper) or an API provider
 # when you want LLM-backed runs.
-provider: "../../etc/evil"
+provider: "claude-code"
 
 # Offline Demo - Default
 offline:
