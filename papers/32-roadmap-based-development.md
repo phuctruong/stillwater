@@ -1,31 +1,47 @@
-# Roadmap-Based Development: The Stillwater Protocol for Multi-Session AI Coordination
+# Roadmap-Based Development: A Paradigm for AI-Coordinated Software Engineering
 
-**Paper ID:** 32
+**Paper ID:** roadmap-based-development
 **Date:** 2026-02-21
 **Status:** STABLE
-**Tags:** methodology, orchestration, multi-session, roadmap, northstar, coordination
+**Authority:** 65537
+**Tags:** methodology, orchestration, multi-session, roadmap, northstar, coordination, paradigm
+**Related:** `papers/32-roadmap-based-development.md`, `papers/33-northstar-driven-swarms.md`, `SOFTWARE-5.0-PARADIGM.md`
 
 ---
 
 ## Abstract
 
-AI coding sessions are stateless by default. Each session starts fresh, loses prior context, and optimizes locally — producing code that passes tests but diverges from project goals. When multiple parallel sessions run concurrently (haiku for volume, sonnet for logic, opus for promotion gates), the result without coordination is architectural drift, duplicated work, and conflicting implementations. This paper documents the Stillwater Protocol for multi-session AI coordination: a three-pillar methodology (NORTHSTAR + ROADMAP + CASE STUDIES) orchestrated through a hub-and-spoke architecture. The protocol ensures that every agent session, regardless of model tier, operates with shared vocabulary, shared success metrics, and a verifiable chain of progress.
+AI coding assistants operate session-by-session. Each session starts fresh, loses prior context,
+and optimizes locally — producing code that passes local tests but may diverge from project goals,
+contradict prior architectural decisions, or duplicate work already completed by other sessions.
+When multiple parallel agent sessions run concurrently, the result without coordination is
+architectural drift, duplicated work, and conflicting implementations. This paper introduces
+Roadmap-Based Development: a paradigm in which a central hub session (typically Opus-tier) acts
+as the project coordinator, a ROADMAP.md file serves as the persistent build plan, and typed
+swarm agents are dispatched with bounded Context Normal Form (CNF) capsules. The paradigm ensures
+that every agent session — regardless of model tier or start time — operates with shared vocabulary,
+shared success metrics, and a verifiable chain of progress. The result is a software development
+process where AI assistance scales to multi-session, multi-agent workflows without losing coherence.
 
 ---
 
-## 1. The Problem: Stateless Sessions in a Stateful Project
-
-Every new AI coding session begins with amnesia. The session has no memory of what was built yesterday, what architectural decisions were made last week, or what the project's north star metric is. This is not a bug — it is a design property of current AI systems. But it creates a coordination problem at scale.
+## 1. The Problem: Uncoordinated AI Development
 
 ### 1.1 The Amnesia Problem
 
-A session that builds a feature in isolation has no way to know:
+Every new AI coding session begins with amnesia. The session has no memory of what was built
+yesterday, what architectural decisions were made last week, or what the project's north star metric
+is. This is not a bug — it is a design property of current AI systems. Context windows are finite.
+Sessions end. State does not persist automatically.
 
-- Whether that feature was already built (and tested) by a prior session
-- Whether the feature conflicts with an architectural decision made three sessions ago
-- Whether the feature advances the project's north star metric or merely adds complexity
+The consequence: a session that builds a feature in isolation has no way to know whether that
+feature was already built and tested by a prior session, whether it conflicts with an architectural
+decision made three sessions ago, or whether it advances the project's north star metric or merely
+adds complexity.
 
-The result is what practitioners call "vibe coding" — sessions that feel productive, generate commits, and pass local tests, but drift systematically from the project's actual goals. Each session optimizes for local correctness (rung 641: tests pass, no regressions) while missing ecosystem alignment.
+The result is what practitioners call "vibe coding" — sessions that feel productive, generate
+commits, and pass local tests, but drift systematically from the project's actual goals. Each session
+optimizes for local correctness while missing ecosystem alignment.
 
 ### 1.2 The Parallel Session Problem
 
@@ -33,28 +49,49 @@ Modern AI workflows use multiple model tiers simultaneously:
 
 - **Haiku** for high-volume, low-cost tasks (boilerplate, scaffolding, documentation)
 - **Sonnet** for logic-intensive work (algorithms, refactors, integrations)
-- **Opus** for promotion gates and adversarial review
+- **Opus** for promotion gates, security audits, and adversarial review
 
-Without a coordination mechanism, three parallel sessions running on the same codebase will:
+Without a coordination mechanism, three parallel sessions on the same codebase will build
+conflicting implementations of the same feature, make incompatible architectural decisions
+based on different assumptions about interfaces, pass local tests while collectively breaking
+integration tests, and use inconsistent vocabulary for the same concepts.
 
-1. Build conflicting implementations of the same feature
-2. Make incompatible architectural decisions (different assumptions about interfaces)
-3. Pass local tests while collectively breaking integration tests
-4. Use inconsistent vocabulary for the same concepts
-
-The problem is not that any individual session is wrong. The problem is that correctness is local while projects require global coherence.
+The problem is not that any individual session is wrong. The problem is that correctness is local
+while projects require global coherence.
 
 ### 1.3 The Drift Problem
 
-Even a single session, running long enough, will drift from its original goal. As context fills with tool outputs, error logs, and intermediate states, the session's effective "goal representation" degrades. The session begins to optimize for "make the current error go away" rather than "advance the northstar metric."
+Even a single long-running session will drift from its original goal. As context fills with tool
+outputs, error logs, and intermediate states, the session's effective goal representation degrades.
+It begins to optimize for "make the current error go away" rather than "advance the northstar
+metric."
 
-This is context rot applied to goal representations. The longer the session runs, the more likely it is to produce technically correct but directionally wrong outputs.
+This is context rot applied to goal representations. The longer the session runs, the more likely
+it is to produce technically correct but directionally wrong outputs.
+
+### 1.4 The Tool Landscape: What Exists and What Is Missing
+
+Current AI coding tools address the correctness problem at the session level but not the
+coordination problem at the project level:
+
+| Tool | Session Correctness | Cross-Session Coordination | Multi-Agent | Persistent Plan |
+|------|--------------------|-----------------------------|-------------|-----------------|
+| GitHub Copilot | Autocomplete | None | No | No |
+| Cursor | Session-level | None | No | No |
+| Devin | Single-agent loop | Screenshots | No | Per-task |
+| Claude Code | Session-level | None | Sub-agents | No |
+| Aider | Session-level | None | No | No |
+| **Roadmap-Based Dev** | **Rung-gated** | **Hub-coordinated** | **Typed swarms** | **ROADMAP.md** |
+
+The gap is coordination: a mechanism that makes multiple sessions and multiple agents behave like
+a coherent team rather than independent contractors who happen to work on the same repository.
 
 ---
 
-## 2. The Solution: Roadmap-Based Development
+## 2. The Paradigm: Roadmap-Based Development
 
-The Stillwater Protocol addresses these problems through three coordinated pillars, each addressing a specific failure mode.
+Roadmap-Based Development addresses the coordination problem through three coordinated pillars,
+each targeting a specific failure mode.
 
 ```
 Problem                    Pillar           Solution
@@ -62,53 +99,90 @@ Problem                    Pillar           Solution
 Goal amnesia               NORTHSTAR        Shared vocabulary + success metrics
 No coordination plan       ROADMAP          Phased build with copy-paste prompts
 No progress memory         CASE STUDIES     Per-project artifact trail
+Context rot                CNF capsule      Self-contained dispatch, no "as before"
+Unverified output          Rung ladder      641 → 274177 → 65537 gates
 ```
 
-These three pillars are not independent documents. They are a system: NORTHSTAR defines what success means, ROADMAP defines how to get there phase by phase, and CASE STUDIES record what actually happened. Together they give every agent session — regardless of when it was started or what model tier it runs on — enough context to operate in the right direction.
+These pillars are not independent documents. They form a system: NORTHSTAR defines what success
+means, ROADMAP defines how to get there phase by phase, CASE STUDIES record what actually happened,
+CNF capsules prevent context rot across sessions, and the rung ladder enforces quality gates at
+every step.
 
-### 2.1 Pillar 1: NORTHSTAR
+### 2.1 Pillar 1: The NORTHSTAR Document
 
-The NORTHSTAR document is the project's north star. Every agent must read it before writing a single line of code. It answers four questions that no individual session can answer on its own:
+The NORTHSTAR document answers four questions that no individual session can answer on its own:
 
 **What are we building and why?**
-A clear statement of the project vision in two to four sentences. Not the technical specification, but the human-level goal. Why does this project exist? What problem does it solve? What world does it create?
+A clear statement of the project vision in two to four sentences. Not a technical specification,
+but the human-level goal. Why does this project exist? What problem does it solve? The Stillwater
+NORTHSTAR opens: "Make AI development deterministically verifiable — for any developer, on any
+project." This sentence is short enough to fit in any agent's context but precise enough to
+evaluate whether a given output serves it.
 
-**What does success look like (measurable)?**
-North star metrics are the quantitative signals that tell us whether we are succeeding. They must be measurable, not aspirational. "Recipe hit rate > 70%" is a north star metric. "High quality recipes" is not. Good metrics have units, baselines, and target values.
+**What does success look like, measurable?**
+North star metrics are quantitative signals that tell us whether we are succeeding. They must be
+measurable, not aspirational. "Recipe hit rate > 70%" is a north star metric. "High quality
+recipes" is not. The Stillwater NORTHSTAR contains a specific metrics table with current values,
+Q2 2026 targets, and end-2026 targets for GitHub stars, rung-65537 projects, Store skills,
+recipe hit rate, and community contributors.
 
 **What aligns with this goal?**
-A list of approaches, features, and patterns that are consistent with the vision. This is the allowlist for agent creativity. An agent that produces something on this list is probably heading in the right direction.
+A list of approaches, features, and patterns consistent with the vision. An agent that produces
+something on this list is heading in the right direction.
 
 **What does NOT align with this goal?**
-A list of tempting-but-wrong directions. This is harder to write than the allowlist, but more valuable. Every project has failure modes that are superficially attractive — features that seem useful but actually pull away from the northstar. Naming them explicitly prevents sessions from pursuing them.
+This is harder to write than the allowlist but more valuable. Every project has failure modes
+that are superficially attractive — features that seem useful but pull away from the northstar.
+Naming them explicitly prevents sessions from pursuing them.
 
-**Belt progression:**
-The NORTHSTAR also defines the belt system — the gamified rung advancement that maps project milestones to verification requirements. Belts are not cosmetic. They are the connection between individual session rungs and project-level progress.
+### 2.2 Pillar 2: The ROADMAP Document
 
-### 2.2 Pillar 2: ROADMAP
-
-The ROADMAP is a phased build plan with copy-paste prompts. It is the operational complement to the strategic NORTHSTAR. Where NORTHSTAR answers "what," ROADMAP answers "how, in what order, with what verification."
+The ROADMAP is a phased build plan with copy-paste prompts. It is the operational complement to
+the strategic NORTHSTAR. Where NORTHSTAR answers "what," ROADMAP answers "how, in what order,
+with what verification."
 
 Each phase in the ROADMAP has five required elements:
 
-**Acceptance criteria (rung target + evidence requirements):**
-Every phase specifies the minimum verification rung required to mark it complete. A phase targeting rung 641 requires: tests pass, no regressions, evidence bundle complete. A phase targeting rung 274177 additionally requires: seed sweep, replay stability, null edge sweep. A phase targeting rung 65537 is a promotion gate — full adversarial review, security scan, behavioral hash drift explained.
+**Acceptance criteria with rung target:**
+Every phase specifies the minimum verification rung required to mark it complete. Rung 641
+requires tests pass, no regressions, evidence bundle complete. Rung 274177 additionally requires
+seed sweep, replay stability, null edge sweep. Rung 65537 is a promotion gate — full adversarial
+review, security scan, behavioral hash drift explained.
 
-**A ready-to-paste prompt for a new session:**
-This is the most operationally important element. Every phase includes a fully self-contained prompt that a hub can paste into a new agent session. The prompt includes: the NORTHSTAR (full text), the specific task, the rung target, the evidence requirements, and the CNF capsule with all context the agent needs. The agent should not need to ask "what is the context?" — the prompt provides it.
+**A ready-to-paste build prompt:**
+This is the most operationally important element. Every phase includes a fully self-contained
+prompt that a hub can paste into a new agent session. The prompt includes the NORTHSTAR (full text),
+the specific task, the rung target, the evidence requirements, and the CNF capsule with all context
+the agent needs. The agent should not need to ask "what is the context?" — the prompt provides it.
 
-**Additive gates (Never-Worse):**
-Phase N gates are a superset of Phase N-1 gates. Acceptance criteria can only get stricter over time. A phase cannot remove a gate that was required in the prior phase. This is the Never-Worse Doctrine applied to roadmaps: we can add requirements, we can raise bars, but we never lower them.
+Example from `ROADMAP.md`:
+```
+Load prime-safety + prime-coder + phuc-forecast.
+Task: Write papers/oauth3-spec-v0.1.md for stillwater.
+Reference: /home/phuc/projects/solace-browser/OAUTH3-WHITEPAPER.md
+Rung target: 641
+Evidence required: papers/oauth3-spec-v0.1.md committed with sha256 in artifacts.json
+```
+
+**Additive gates (Never-Worse Doctrine):**
+Phase N gates are a superset of Phase N-1 gates. Acceptance criteria can only get stricter over
+time. A phase cannot remove a gate that was required in the prior phase. This prevents rung
+laundering — the pattern where a project accumulates technically complete phases but overall
+verification strength quietly degrades as corners are cut.
 
 **Checkboxes for tracking completion:**
-Phases are organized as markdown checkboxes. The hub checks boxes as phases complete. This creates a shared progress representation that survives context resets — the ROADMAP file is always up to date with what has been done.
+Phases are organized as markdown checkboxes. The hub checks boxes as phases complete. This creates
+a shared progress representation that survives context resets — the ROADMAP file is always current.
 
-**Dependencies:**
-Each phase declares which prior phases it depends on. A session cannot start Phase 3 if Phase 2 is incomplete. This prevents out-of-order execution, which is one of the most common sources of architectural drift in multi-session workflows.
+**Phase dependencies:**
+Each phase declares which prior phases it depends on. A session cannot start Phase 3 if Phase 2
+is incomplete. This prevents out-of-order execution, one of the most common sources of architectural
+drift in multi-session workflows.
 
-### 2.3 Pillar 3: CASE STUDIES
+### 2.3 Pillar 3: Case Studies
 
-Case studies are per-project tracking files that record what actually happened — not what was planned, but what was built, what rung was achieved, what was learned, and what is next.
+Case studies are per-project tracking files that record what actually happened — not what was
+planned, but what was built, what rung was achieved, what was learned, and what is next.
 
 A case study entry has a standard structure:
 
@@ -123,212 +197,703 @@ A case study entry has a standard structure:
 - Belt progression: [before → after]
 ```
 
-Case studies serve three functions. First, they give the hub a memory that survives context resets — the hub reads the case study before each session to understand what has happened. Second, they provide a verifiable audit trail — the case study links to artifacts, not just descriptions. Third, they accumulate project wisdom — over time, the "what worked / what broke" entries become a project-specific knowledge base that shapes how future sessions are dispatched.
+Case studies serve three functions:
+
+1. **Hub memory that survives context resets.** The hub reads the case study before each dispatch
+   to understand current project state without needing to re-examine the full codebase.
+
+2. **Verifiable audit trail.** The case study links to artifacts (commit hashes, evidence bundle
+   paths), not just descriptions. "Phase 2.1 complete" is not evidence. "Phase 2.1 complete,
+   rung 274177, recipe_hit_rate = 0.43, commit abc1234, evidence/phase-2.1.json" is evidence.
+
+3. **Accumulated project wisdom.** Over time, the "what worked / what broke" entries become a
+   project-specific knowledge base that shapes how future sessions are dispatched.
 
 ---
 
-## 3. The Hub-and-Spoke Architecture
+## 3. The Architecture: Hub-and-Spoke Model
 
-The three pillars are coordinated through a hub-and-spoke architecture. The hub is typically an Opus-tier session running the phuc-orchestration skill. Spokes are haiku or sonnet sessions dispatched with specific skill packs and CNF capsules.
+The three pillars are coordinated through a hub-and-spoke architecture. The hub is typically an
+Opus-tier session running the phuc-orchestration skill. Spokes are haiku or sonnet sessions
+dispatched with specific skill packs and CNF capsules.
 
-```
-Claude Opus (Central Hub)
-  ├── Reads: ~/.claude/CLAUDE.md (ecosystem state)
-  ├── Reads: stillwater/case-studies/*.md (per-project progress)
-  ├── Runs: ./launch-swarm.sh <project> <phase>
-  ├── Gets: copy-paste prompt (with NORTHSTAR injected)
-  └── Dispatches: haiku/sonnet sessions (spokes)
-         Each spoke:
-         ├── Receives: NORTHSTAR + task prompt + rung target
-         ├── Loads: prime-safety + prime-coder + domain skills
-         ├── Builds: artifact → evidence bundle → commit
-         └── Reports: rung achieved back to hub
+```mermaid
+graph TD
+    Hub["Claude Opus<br/>Central Hub<br/>(phuc-orchestration)"]
 
-Hub always: integrates artifacts, updates case-studies, decides next phase
-Spoke always: isolated, full CNF capsule, never "as discussed before"
+    Hub -->|reads| NorthStar["NORTHSTAR.md<br/>(project vision + metrics)"]
+    Hub -->|reads| RoadMap["ROADMAP.md<br/>(phased build plan)"]
+    Hub -->|reads| CaseStudy["case-studies/*.md<br/>(project progress)"]
+    Hub -->|generates| BuildPrompt["Build Prompt<br/>(CNF capsule)"]
+
+    BuildPrompt -->|dispatches| Scout["Scout Agent<br/>(haiku)<br/>DREAM phase"]
+    BuildPrompt -->|dispatches| Coder["Coder Agent<br/>(sonnet)<br/>ACT phase"]
+    BuildPrompt -->|dispatches| Skeptic["Skeptic Agent<br/>(sonnet/opus)<br/>VERIFY phase"]
+
+    Scout -->|SCOUT_REPORT.json| Hub
+    Coder -->|PATCH_DIFF + tests.json| Hub
+    Skeptic -->|SKEPTIC_VERDICT.json| Hub
+
+    Hub -->|verifies rung| EvidenceCheck{"Rung achieved?"}
+    EvidenceCheck -->|yes| Advance["Check ROADMAP box<br/>Update case study<br/>Advance belt if warranted"]
+    EvidenceCheck -->|no| Loop["Return to Coder<br/>one revision allowed"]
+
+    style Hub fill:#2d3748,color:#fff
+    style EvidenceCheck fill:#744210,color:#fff
+    style Advance fill:#276749,color:#fff
 ```
 
 ### 3.1 Hub Responsibilities
 
-The hub is the project coordinator. It never does deep coding work — that is dispatched to spokes. The hub's responsibilities are:
+The hub is the project coordinator. It never does deep coding work — that is dispatched to spokes.
+The hub's responsibilities are:
 
-1. **Read state:** Before each dispatch, read the case study and ROADMAP to understand current project state
-2. **Select phase:** Determine which ROADMAP phase is next based on completed checkboxes
-3. **Build CNF capsule:** Construct the full context capsule for the spoke (task + NORTHSTAR + evidence requirements)
-4. **Dispatch spoke:** Paste the prompt into a new haiku/sonnet session
-5. **Integrate artifacts:** Receive the spoke's artifacts (PATCH_DIFF, tests.json, evidence bundle)
-6. **Verify rung:** Confirm the spoke achieved the required rung
-7. **Update state:** Check the ROADMAP box, update the case study, advance the belt if warranted
-8. **Decide next:** Determine whether to dispatch the next phase or escalate to review
+1. **Read state.** Before each dispatch, read the case study and ROADMAP to understand current
+   project state. The hub knows which phases are complete and which are next.
 
-The hub maintains project coherence across sessions. It is the entity that knows the full history — not through memory, but through the case study file.
+2. **Select phase.** Determine which ROADMAP phase is next based on completed checkboxes and
+   phase dependencies.
+
+3. **Build CNF capsule.** Construct the full context capsule for the spoke: task, NORTHSTAR,
+   rung target, evidence requirements, relevant artifacts from prior phases.
+
+4. **Dispatch spoke.** Paste the prompt into a new haiku/sonnet session via the appropriate
+   mechanism (Claude Code sub-agent, manual copy-paste, `launch-swarm.sh`).
+
+5. **Integrate artifacts.** Receive the spoke's artifacts (PATCH_DIFF, tests.json, evidence bundle,
+   SKEPTIC_VERDICT.json).
+
+6. **Verify rung.** Confirm the spoke achieved the required rung. A spoke that claims rung 274177
+   must provide: seed sweep results, replay stability logs, null edge sweep. No unwitnessed PASS.
+
+7. **Update state.** Check the ROADMAP box, update the case study, advance the belt if warranted.
+
+8. **Decide next.** Determine whether to dispatch the next phase or escalate to review.
+
+The hub maintains project coherence across sessions — not through memory (which resets), but
+through the case study file (which persists).
 
 ### 3.2 Spoke Responsibilities
 
-Each spoke is an isolated, context-complete agent session. It receives a full CNF capsule and is expected to produce artifacts. It does not know about other spokes. It does not know about previous sessions. It knows exactly one thing: what is in its CNF capsule.
+Each spoke is an isolated, context-complete agent session. It receives a full CNF capsule and
+produces artifacts. It does not know about other spokes. It does not know about previous sessions.
+It knows exactly one thing: what is in its CNF capsule.
 
 The spoke's responsibilities are:
 
-1. **Read NORTHSTAR first:** Before writing code, read the northstar and confirm the task aligns
-2. **Execute the task:** Apply prime-coder methodology (red-green gate, evidence building)
-3. **Verify rung target:** Confirm the required rung is achieved
-4. **Report artifacts:** Produce the declared artifact schema (PATCH_DIFF, tests.json, evidence bundle)
-5. **State northstar alignment:** Explicitly state which northstar metric this work advances
+1. **Read NORTHSTAR first.** Before writing code, read the northstar and confirm task alignment.
+   State explicitly: "This task aligns with the northstar because [reason]. It advances [metric]
+   toward [target]."
 
-The key property of spokes is isolation. Spokes do not share context with each other. They share only the NORTHSTAR (injected by the hub into each CNF capsule) and the artifact schema (declared in the dispatch prompt). This prevents conflicting assumptions while maintaining directional coherence.
+2. **Execute the task.** Apply prime-coder methodology: red-green gate, evidence building, no
+   unwitnessed PASS.
 
-### 3.3 The Integration Rung
+3. **Verify rung target.** Confirm the required rung is achieved. For rung 641: tests pass, no
+   regressions, evidence bundle complete. For rung 274177: additionally seed sweep + replay.
 
-When the hub integrates artifacts from multiple spokes, the integrated rung is the minimum of all spoke rungs:
+4. **Report artifacts.** Produce the declared artifact schema: PATCH_DIFF, tests.json, evidence
+   bundle, SKEPTIC_VERDICT.json (if Skeptic role).
+
+5. **State northstar alignment.** Explicitly state which northstar metric this work advances and
+   by how much. This is not a formality — it is evidence.
+
+### 3.3 Model Selection by Role
+
+```
+Role         Model Tier    Rationale
+-----------  ----------    -------------------------------------------------------
+Scout        haiku         High-volume, low-cost localization + asset collection
+Coder        sonnet        Logic-intensive implementation + red-green gate
+Planner      sonnet        Architecture, design, phase planning
+Forecaster   sonnet        Premortem, edge cases, risk classification
+Skeptic      sonnet/opus   Adversarial falsification — must be independent of Coder
+Security     opus          Security gates require highest epistemic integrity
+Math/Proofs  opus          Exact arithmetic, formal verification
+Hub          opus          Coordination, integration, promotion gates
+
+Cost heuristic: haiku ≈ 1x, sonnet ≈ 5x, opus ≈ 15x per token
+Use the cheapest model that can reliably achieve the target rung.
+Upgrade to opus only when rung 65537 or security gates require it.
+```
+
+### 3.4 The Integration Rung
+
+When the hub integrates artifacts from multiple spokes, the integrated rung is the minimum of all
+spoke rungs:
 
 ```
 integrated_rung = MIN(rung(spoke_1), rung(spoke_2), ..., rung(spoke_n))
 ```
 
-This is not a policy choice — it is a mathematical necessity. If spoke_1 achieves rung 65537 but spoke_2 achieves rung 641, the integrated output is rung 641. The weakest link determines the system's verification strength. The hub cannot claim a higher rung than what was actually verified.
+This is not a policy choice — it is a mathematical necessity. If spoke_1 achieves rung 65537 but
+spoke_2 achieves rung 641, the integrated output is rung 641. The weakest link determines the
+system's verification strength. The hub cannot claim a higher rung than what was actually verified.
 
 ---
 
-## 4. Why NORTHSTAR Must Be Injected Into Every Agent
+## 4. The CNF Capsule: Preventing Context Rot
 
-This is the most common failure mode in multi-session AI workflows: agents that have skills but no northstar. An agent with prime-coder but no northstar can produce technically correct code that is architecturally wrong for the project.
+The Context Normal Form (CNF) capsule is the mechanism that makes spokes self-contained.
+Every dispatch includes a full capsule — no "as before," no "you know the context," no references
+to previous sessions.
 
-### 4.1 Without Northstar Injection
+### 4.1 CNF Capsule Schema
 
-Without northstar injection:
-
-- The agent optimizes for local correctness (rung 641: tests pass, no regressions) but misses ecosystem alignment
-- The agent builds features not on the roadmap — scope creep is the default behavior of an agent without direction
-- Multiple agents build conflicting implementations because they have no shared vocabulary for success
-- There is no way to verify directional correctness — "tests pass" is necessary but not sufficient
-
-An agent that builds a perfectly tested, zero-regression feature that is orthogonal to the project's north star metric has wasted resources and added complexity. This is the core problem that northstar injection solves.
-
-### 4.2 With Northstar Injection
-
-With northstar injection:
-
-- Every agent knows: "This is what success looks like for the whole project"
-- Agents can self-check: "Does my approach align with the northstar?"
-- Consistent belt progression across all sessions — all sessions use the same belt vocabulary
-- The hub can compare agent output against northstar metrics — not just "did tests pass" but "did this advance recipe hit rate toward 70%?"
-
-Northstar injection is the difference between a session that builds the right thing and a session that builds something.
-
-### 4.3 The Verification Question
-
-Before claiming PASS, every northstar-injected agent must answer three questions:
-
-1. "Does this output align with the northstar?"
-2. "Which northstar metric does this advance?"
-3. "What northstar metric would FAIL if this implementation is wrong?"
-
-The third question is the most powerful. It forces the agent to specify the falsifier — the observable consequence of the implementation being wrong. This transforms verification from "tests pass" (backward-looking) to "this moves the metric toward its target" (forward-looking).
-
----
-
-## 5. The Never-Worse Doctrine Applied to Roadmaps
-
-The Never-Worse Doctrine is one of the core invariants of the Stillwater protocol. It states: hard gates and forbidden states are strictly additive over time. Applied to roadmaps, this means:
-
-- **Phase N gates are a superset of Phase N-1 gates.** A later phase cannot have fewer requirements than an earlier phase. The only valid direction is stricter.
-- **Acceptance criteria can only get stricter over time.** If Phase 1 requires rung 641, Phase 2 must require at least rung 641. Phase 2 may require rung 274177. It cannot require rung 0.
-- **A merged artifact's rung = MIN(rung of all contributing agents).** The system's strength is bounded by its weakest verified component.
-- **Rolling back a phase requires explicit decision + documentation.** If a phase is reverted, the case study must record why and what gates were temporarily relaxed. This is a deliberate exception, not a silent relaxation.
-
-The Never-Worse Doctrine prevents rung laundering — the pattern where a project accumulates technically complete phases but the overall verification strength quietly degrades as corners are cut.
-
----
-
-## 6. Claude Code Commands Integration
-
-The Stillwater Protocol provides a set of Claude Code commands that operationalize the methodology:
-
-**`/swarm <project> <phase>`**
-Generates the copy-paste prompt for a new agent session targeting a specific project phase. The prompt includes: the full NORTHSTAR, the specific task, the rung target, the evidence requirements, the CNF capsule template, and the expected artifact schema.
-
-**`/status`**
-Displays all project statuses at a glance: project name, current belt, last completed phase, northstar metrics current vs. target, and next phase.
-
-**`/northstar <project>`**
-Displays the project's NORTHSTAR and prompts the hub to confirm whether the current task aligns. This is the alignment check gate that runs before any dispatch.
-
-**`/build <project> <task>`**
-Generates an ad-hoc build prompt for a task that is not a formal ROADMAP phase. Injects NORTHSTAR and requires northstar alignment statement before proceeding.
-
-**`/update-case-study <project> <rung> <what>`**
-Records a case study entry: what was built, what rung was achieved, which northstar metric was advanced. This is the memory update that makes the case study useful for future sessions.
-
----
-
-## 7. The Belt System as Progress Tracker
-
-The belt system is the project-level equivalent of the verification rung. Where rungs measure individual session quality, belts measure project-level progress.
-
-### 7.1 Belts Are Evidence, Not Motivation
-
-Gamification is a side effect, not the purpose. Belts are verification signals: a project at Yellow Belt has satisfied the evidence requirements for Yellow Belt. A project at Green Belt has satisfied stricter requirements. The progression is not cosmetic — it is auditable.
-
-Belt advancement requires Lane A evidence: not "it feels done" but "here are the artifacts, here are the northstar metrics, here is the rung achieved." A hub that claims a belt without evidence enters the UNWITNESSED_PASS forbidden state.
-
-### 7.2 Belts Survive Context Resets
-
-Because belts are recorded in case studies (not in session memory), they survive context resets. A new hub session can read the case study and immediately know: "solace-browser is at Yellow Belt, which means Phase 1.5 is the next target." No session history is required to reconstruct the project's progress state.
-
-### 7.3 Hub-Level Belt Tracking
-
-The hub tracks belt progression across all projects simultaneously. At any point, the hub can answer: "Which projects are at which belt?" and "What is the next phase required for each project to advance?" This is the project portfolio view that enables resource allocation decisions — which sessions to dispatch next, which model tier to use, which phases are blocked.
-
----
-
-## 8. A Complete Example: One Phase of One Project
-
-To make this concrete, here is what one phase of one project looks like in the Stillwater Protocol.
-
-**Project:** solace-browser (recipe recommendation engine)
-**Current belt:** White Belt (scaffolding complete)
-**Target:** Yellow Belt (core algorithm working)
-**NORTHSTAR metric:** Recipe hit rate > 40%
-
-**ROADMAP Phase 2.1 (excerpt):**
-```
-- [ ] Phase 2.1: Core Recommendation Algorithm
-  Target: rung 274177
-  Metric: recipe_hit_rate > 0.40 on test set
-  Prompt: [full CNF capsule with NORTHSTAR injected]
-  Acceptance: tests.json (pass), evidence/convergence.json, recipe_hit_rate logged
-  Never-Worse: must not regress Phase 1 scaffolding tests
+```yaml
+CNF_BASE:
+  northstar: "[full text of NORTHSTAR.md — not summarized]"
+  ecosystem_northstar: "[first 30 lines of stillwater/NORTHSTAR.md — shared vocabulary]"
+  task_statement: "[verbatim task, not paraphrase]"
+  rung_target: 641 | 274177 | 65537
+  constraints:
+    network: "OFF unless explicitly listed: [domains]"
+    write_scope: "repo worktree only"
+    max_files_touched: 12
+    max_swarm_passes: 2
+  evidence:
+    prior_artifacts: "[typed artifacts: JSON reports, diffs, logs — no prose summaries]"
+    error_logs: "[full, untruncated where feasible]"
+  repo_index: "[tree + key entrypoints]"
+  evidence_requirements:
+    rung_641: ["tests pass", "no regressions", "evidence bundle complete"]
+    rung_274177: ["+ seed sweep", "+ replay stability", "+ null edge sweep"]
+    rung_65537: ["+ adversarial sweep", "+ security gate", "+ behavioral hash"]
+  artifact_schema:
+    required: ["PATCH_DIFF", "tests.json", "SKEPTIC_VERDICT.json"]
+    optional: ["LESSONS.md", "SKILL_DELTA.md"]
 ```
 
-**Hub action:** Reads ROADMAP, sees Phase 2.1 unchecked. Reads case study to confirm Phase 1 completed. Generates CNF capsule. Dispatches sonnet session with full prompt.
+### 4.2 Why "No Summary" Is a Hard Rule
 
-**Spoke action:** Reads NORTHSTAR first (recipe hit rate > 70% is the long-term target; 40% is Phase 2.1 target). Builds recommendation algorithm. Runs red-green gate. Achieves rung 274177. Reports: tests.json (pass), convergence.json, recipe_hit_rate = 0.43 on test set.
+A hub that summarizes the northstar or prior artifacts before injecting them into the spoke
+introduces ambiguity. Summaries omit details. Details that seem minor to the hub may be critical
+to the spoke's alignment check or implementation.
 
-**Hub integration:** Receives artifacts. Verifies rung 274177. Confirms recipe_hit_rate = 0.43 > 0.40 (acceptance criterion met). Checks ROADMAP Phase 2.1 box. Updates case study: "Phase 2.1 complete, rung 274177, recipe_hit_rate = 0.43". Evaluates belt: Yellow Belt criteria met. Advances belt. Decides next: Phase 2.2.
+The canonical rule from `skills/phuc-swarms.md`:
+> "CNF_BASE is truth. Anything else is hypothesis."
 
-**Total context shared between hub and spoke:** Only the CNF capsule and the artifact schema. The hub did not need to explain project history to the spoke. The spoke did not need to ask what success looks like — the NORTHSTAR told it.
+If a prior artifact cannot be included verbatim (size constraints), include the artifact's sha256
+hash and the path to retrieve it. The spoke can read the artifact via tool call. Never substitute
+a prose summary for a typed artifact.
+
+### 4.3 The Anti-Rot Reset Protocol
+
+Before each agent call:
+1. Hard reset — no reliance on hidden chain-of-thought from prior turns
+2. Inject CNF_BASE
+3. Inject CNF_DELTA(agent) — role-specific context delta
+4. Inject role contract + skill pack (prime-safety always first)
+5. If ambiguity remains: emit blocker on Channel [11] and stop
+
+Forbidden: "context summarized from memory when sources exist."
 
 ---
 
-## 9. Conclusion
+## 5. The Verification Layer: The Rung Ladder
 
-The core insight of Roadmap-Based Development is that session-level correctness (rung 641: tests pass) is necessary but not sufficient for project-level progress. Projects require directional correctness — agents moving in the same direction, toward the same measurable goal, with a shared vocabulary for what success means.
+Every phase of a ROADMAP produces evidence. The rung ladder specifies what evidence is required
+at each tier.
 
-The Stillwater Protocol achieves this through three pillars and a coordination architecture:
+### 5.1 Rung 641: Local Correctness
+
+The minimum gate for any commit. Named after the prime 641 (the smallest prime with interesting
+verification properties in the Stillwater system).
+
+**Required evidence:**
+- Red/green gate: repro_red.log (failure before patch) + repro_green.log (pass after patch)
+- No regressions: full test suite passing
+- Evidence bundle: tests.json, plan.json
+- Schema validity: all output schemas valid
+
+**Interpretation:** "This patch does what it says it does, and it does not break what was working."
+Necessary for any merge. Not sufficient for production.
+
+### 5.2 Rung 274177: Stability
+
+Named after 274177, a factor of the sixth Fermat number (a number with deep mathematical structure).
+Added requirements beyond rung 641:
+
+**Required evidence:**
+- Seed sweep: at least 3 distinct random seeds, all passing
+- Replay stability: at least 2 independent replays producing identical results
+- Null edge sweep: explicit tests for null/empty/zero inputs
+- Behavioral hash tracked: output hash stable across replays
+
+**Interpretation:** "This is not a lucky pass. It is stable across conditions."
+Required for features that will be relied upon by other components.
+
+### 5.3 Rung 65537: Production Confidence
+
+Named after 65537, the largest known Fermat prime and commonly the public exponent in RSA. Used
+in cryptographic contexts because its bit pattern (1000000000000001 in binary) is computationally
+efficient to multiply. In the Stillwater system, it represents the highest gate.
+
+**Required evidence:**
+- Everything from rung 274177, plus:
+- Adversarial paraphrase sweep: at least 5 rephrased inputs, all handled correctly
+- Refusal correctness: out-of-scope inputs rejected appropriately
+- Security gate: if security-sensitive files touched, security scan required
+- Behavioral hash drift explained: any hash drift from prior run documented
+- Judge seal + Skeptic proof: two independent reviewers
+
+**Interpretation:** "This is ready for production use. We have actively tried to break it."
+Required for skills submitted to the Stillwater Store, for production features, and for
+security-sensitive changes.
+
+### 5.4 The Verification State Machine
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> BUILD_CNF : task received
+    BUILD_CNF --> LOAD_NORTHSTAR : capsule built
+    LOAD_NORTHSTAR --> DREAM_SCOUT : northstar injected
+    DREAM_SCOUT --> FORECAST_GRACE : SCOUT_REPORT.json complete
+    FORECAST_GRACE --> DECIDE_JUDGE : FORECAST_MEMO.json complete
+    DECIDE_JUDGE --> ACT_SOLVER : DECISION_RECORD.json, GO
+    DECIDE_JUDGE --> EXIT_NEED_INFO : DECISION_RECORD.json, NO_GO
+    ACT_SOLVER --> VERIFY_SKEPTIC : PATCH_DIFF + tests.json
+    VERIFY_SKEPTIC --> EXIT_PASS : rung_achieved >= required AND northstar_aligned
+    VERIFY_SKEPTIC --> ACT_SOLVER : rung_failed, first revision
+    VERIFY_SKEPTIC --> EXIT_BLOCKED : rung_failed, revision exhausted
+    EXIT_PASS --> [*]
+    EXIT_NEED_INFO --> [*]
+    EXIT_BLOCKED --> [*]
+```
+
+### 5.5 Evidence Lanes
+
+All claims in evidence bundles must be typed by epistemic lane (from `papers/01-lane-algebra.md`):
+
+```
+Lane A: witnessed by executable artifact (test logs, tool output, diff)
+Lane B: derivable from stated axioms (framework principles, CS theory)
+Lane C: heuristic or reasoned forecast (useful, not proven)
+Lane *: honest unknown (insufficient evidence to type higher)
+```
+
+**The MIN rule:** the strength of any chain of reasoning is the strength of its weakest lane.
+A Lane C premise cannot produce a Lane A conclusion. A hub that upgrades a Lane C claim to
+Lane A without executable evidence has entered the SILENT_RELAXATION forbidden state.
+
+---
+
+## 6. Why This Is Foolproof: The Protocol Guarantee
+
+The core claim of Roadmap-Based Development is that the protocol prevents specific classes of
+failures that plague uncoordinated AI development. Here is the mechanism for each:
+
+### 6.1 Sub-agents Cannot Skip Verification
+
+Skills are loaded verbatim into the spoke's context. The prime-safety skill defines forbidden
+states that are machine-checkable: `UNWITNESSED_PASS`, `SILENT_RELAXATION`, `NULL_ZERO_COERCION`.
+A spoke that claims PASS without evidence has violated its own skill contract — and the hub's
+integration step checks for the required artifacts before accepting the output.
+
+If the artifact is missing, the hub does not proceed. `NULL_ARTIFACT != EMPTY_ARTIFACT`:
+a missing SKEPTIC_VERDICT.json is not "no issues found" — it is `EXIT_NEED_INFO`.
+
+### 6.2 Sub-agents Cannot Expand Scope
+
+The CNF capsule declares explicit scope bounds: `max_files_touched: 12`, `write_scope: repo
+worktree only`, `network: OFF unless explicitly listed`. The task statement is verbatim from the
+ROADMAP phase — not a paraphrase, not a summary. The spoke cannot interpret "Phase 2.1: core
+recommendation algorithm" as license to also refactor the authentication layer.
+
+The forbidden state `SILENT_SCOPE_EXPANSION` covers this: any scope expansion requires emitting
+a blocker on Channel [11] and stopping. The hub is notified. The scope is not expanded silently.
+
+### 6.3 Sub-agents Cannot Claim PASS Without Evidence
+
+The `UNWITNESSED_PASS` forbidden state is the hardest invariant in the protocol. A spoke that
+writes "tests pass" without the repro_green.log to prove it has violated prime-coder's fundamental
+contract. The hub's integration step looks for the artifact, not the prose claim.
+
+This is the red-green gate applied at the system level: the hub cannot advance a ROADMAP phase
+without the evidence bundle. "Seems done" is not a ROADMAP checkbox.
+
+### 6.4 Drift Is Impossible at the Protocol Level
+
+Each dispatch is fresh. The spoke receives a complete CNF capsule for its specific phase. It does
+not inherit accumulated context from previous sessions. It cannot drift because it starts from
+a known state (the capsule) and produces artifacts against a known spec (the ROADMAP phase).
+
+The hub, reading the case study and ROADMAP before each dispatch, knows exactly what was done
+and what is next. It does not rely on session memory. The project state is in the files, not in
+the conversation.
+
+---
+
+## 7. Case Study: Coordinating Four Projects Toward One Vision
+
+The Phuc ecosystem coordinates four projects through a single hub, each with its own ROADMAP,
+all aligned to a shared ecosystem NORTHSTAR.
+
+### 7.1 The Four-Project Architecture
+
+```
+solaceagi.com (PAID hosted platform)
+  ├── stillwater (OSS) — verification OS + skill store
+  │   └── stillwater/cli (OSS) — base CLI
+  ├── solace-browser (OSS) — OAuth3 + browser automation
+  └── solace-cli (PRIVATE) — extends stillwater/cli with OAuth3 vault + twin
+```
+
+### 7.2 Coordinated ROADMAP Execution
+
+```mermaid
+graph LR
+    Hub["Opus Hub<br/>(coordinator)"]
+
+    SW["stillwater ROADMAP<br/>Phase 1: OAuth3 spec<br/>Phase 2: Store API<br/>Phase 3: 65537 rungs"]
+    SB["solace-browser ROADMAP<br/>Phase 1: LinkedIn PM<br/>Phase 2: OAuth3 module<br/>Phase 3: 10 platforms"]
+    SC["solace-cli ROADMAP<br/>Phase 1: OAuth3 commands<br/>Phase 2: Twin orchestration<br/>Phase 3: Cloud API"]
+    SA["solaceagi ROADMAP<br/>Phase 1: Refactor<br/>Phase 2: FastAPI + LLM proxy<br/>Phase 3: Cloud twin"]
+
+    Hub -->|dispatches| SW
+    Hub -->|dispatches| SB
+    Hub -->|dispatches| SC
+    Hub -->|dispatches| SA
+
+    SW -->|OAuth3 spec| SB
+    SW -->|enforcement skill| SC
+    SB -->|recipes| SA
+    SC -->|auth commands| SA
+```
+
+### 7.3 Phase-by-Phase Coordination
+
+The hub session reads the ecosystem NORTHSTAR plus each project's NORTHSTAR and case study before
+dispatching. Coordination happens through artifact dependencies:
+
+- `stillwater` Phase 1 produces `papers/oauth3-spec-v0.1.md` — the formal OAuth3 specification
+- `solace-browser` Phase 2 imports the oauth3 spec — builds the reference implementation
+- `solace-cli` Phase 1 imports both — builds CLI commands against the spec
+- `solaceagi` Phase 2 imports all — builds the hosted API layer
+
+The hub enforces: no Phase 2 dispatch for solace-browser until `papers/oauth3-spec-v0.1.md`
+exists and is at rung 641. The ROADMAP phase dependency declares this explicitly.
+
+### 7.4 What the Hub Knows at Any Point
+
+The hub's knowledge state at any moment is precisely:
+- What each case study says happened (artifact-linked, not prose-summarized)
+- What each ROADMAP says is next (checkboxes)
+- What each NORTHSTAR says success looks like (shared vocabulary)
+
+The hub does not need to remember the content of previous sessions. It reads the files.
+This is why the protocol scales to arbitrary numbers of sessions and agents — the coordination
+state is externalized into files, not held in any single session's context.
+
+---
+
+## 8. The Never-Worse Doctrine Applied to Roadmaps
+
+The Never-Worse Doctrine is a core invariant of the Stillwater protocol: hard gates and forbidden
+states are strictly additive over time. Applied to roadmaps:
+
+**Phase N gates are a superset of Phase N-1 gates.**
+A later phase cannot have fewer requirements than an earlier phase. The only valid direction is
+stricter.
+
+**Rolling back a phase requires explicit decision and documentation.**
+If a phase is reverted, the case study must record why and what gates were temporarily relaxed.
+This is a deliberate exception, not a silent relaxation.
+
+**The rung of a merged artifact is the MIN of contributing agents.**
+The system's strength is bounded by its weakest verified component. You cannot average rungs.
+
+**Why this prevents rung laundering:**
+Rung laundering is the pattern where a project accumulates technically complete phases but
+verification strength quietly degrades as corners are cut. Phase 3 is at rung 641 because "we
+ran out of time" for the seed sweep. Phase 5 is at rung 641 because "it was a small change."
+By Phase 10, the project is nominally complete but has a rung 641 ceiling across most of its
+components — not because rung 641 is the right target, but because corners were cut.
+
+The Never-Worse Doctrine prevents this: rung targets can only go up, never down, across phases.
+If Phase 1 targets rung 641, Phase 2 must target at least rung 641. It can target 274177. It
+cannot target 0.
+
+---
+
+## 9. The Master Equation
+
+Software 5.0 provides the theoretical framework for why Roadmap-Based Development works:
+
+```
+Intelligence(system) = Memory × Care × Iteration
+
+where:
+  Memory    = skills/*.md + recipes/*.json + ROADMAP.md + NORTHSTAR.md + case-studies/
+              (externalized, diffable, auditable — NOT model weights)
+
+  Care      = Verification ladder
+              Rung 641 → 274177 → 65537
+              "You cannot claim a belt you have not earned."
+
+  Iteration = Never-Worse Doctrine + git versioning + case study accumulation
+              The system only gets smarter. Knowledge is additive, not lossy.
+```
+
+Roadmap-Based Development maximizes all three terms:
+
+- **Memory:** ROADMAP + NORTHSTAR + case studies are the Memory layer for the development process
+  itself, not just the code. The accumulated project knowledge is as important as the code.
+
+- **Care:** The rung ladder applies to every phase of every ROADMAP. There is no phase without
+  a rung target. There is no completion without evidence.
+
+- **Iteration:** Each completed phase is a new data point in the case study. Each data point
+  shapes how the next phase is dispatched. The project gets smarter about itself over time.
+
+---
+
+## 10. Comparison with Existing Approaches
+
+### 10.1 Feature Matrix
+
+| Approach | Coordination | Verification | Multi-Agent | Persistent Plan | Rung Gates | NORTHSTAR |
+|----------|-------------|--------------|-------------|-----------------|------------|-----------|
+| GitHub Copilot | None | None | No | No | No | No |
+| Cursor | Session-level | None | No | No | No | No |
+| Devin | Single agent | Screenshots | No | Per-task | No | No |
+| Claude Code | Session-level | None | Sub-agents | No | No | No |
+| LangGraph | Graph-level | Manual | Yes | Graph definition | No | No |
+| AutoGen | Agent-level | Manual | Yes | Ad hoc | No | No |
+| **Roadmap-Based Dev** | **Hub-coordinated** | **Rung ladder** | **Typed swarms** | **ROADMAP.md** | **641/274177/65537** | **Yes** |
+
+### 10.2 The Key Differentiator: Persistent Build Plan
+
+Every other approach treats coordination as something that happens within a session. LangGraph
+has graph definitions. AutoGen has agent conversations. But neither persists a build plan that
+survives context resets, accumulates project wisdom across sessions, and provides copy-paste
+prompts for future sessions.
+
+The ROADMAP.md is what makes Roadmap-Based Development different. It is the externalized build
+plan — the project's memory of what needs to be done, what has been done, and how to do it.
+A new hub session reading the ROADMAP knows exactly where the project is and what to do next.
+
+### 10.3 The Key Differentiator: Typed Swarms
+
+Most multi-agent frameworks dispatch agents by capability. Roadmap-Based Development dispatches
+agents by role in the verification pipeline:
+
+```
+Scout (DREAM)        → finds the problem, collects assets
+Forecaster (FORECAST) → identifies failure modes, writes test plan
+Judge (DECIDE)       → selects approach, locks scope, GO/NO-GO
+Solver (ACT)         → implements smallest valid change
+Skeptic (VERIFY)     → falsifies, replays, confirms rung
+Podcast (REFLECT)    → extracts lessons → tests → skill deltas
+```
+
+Each role has one artifact, one phase, one failure mode it catches. No role can claim PASS for
+another role's artifact. No role can expand into another role's phase. The typing is what makes
+the pipeline reliable — not the cleverness of any individual agent.
+
+---
+
+## 11. The `launch-swarm.sh` System
+
+The Stillwater ecosystem provides a concrete implementation of ROADMAP-based dispatch:
+
+```bash
+# From /home/phuc/projects/stillwater/
+./launch-swarm.sh solace-browser oauth3-core      # OAuth3 token module
+./launch-swarm.sh solace-browser oauth3-consent   # Consent UI
+./launch-swarm.sh solace-cli oauth3-commands      # CLI auth commands
+./launch-swarm.sh stillwater oauth3-spec          # OAuth3 formal spec
+./launch-swarm.sh solaceagi api-backend           # FastAPI backend + LLM proxy
+```
+
+Each command generates a complete copy-paste prompt that includes: the project's NORTHSTAR (full
+text), the specific phase task, the rung target, the evidence requirements, the CNF capsule with
+prior artifacts, and the skill pack declaration.
+
+The output is a prompt ready to paste into any Claude Code session or haiku/sonnet API call.
+No hub session needs to understand the ROADMAP structure to dispatch correctly — the
+`launch-swarm.sh` script reads the ROADMAP and generates the correct prompt automatically.
+
+---
+
+## 12. Anti-Patterns: What Roadmap-Based Development Prevents
+
+The following are named failure modes in traditional AI coding workflows that the protocol
+explicitly blocks:
+
+**Vibe Coding**
+Symptom: Sessions produce commits and pass tests but don't advance the project's goals.
+Prevention: Every dispatch requires northstar alignment before PASS. Hub tracks metric advancement.
+
+**Context Flooding**
+Symptom: All agents receive the full repo, full history, all prior reasoning.
+Prevention: CNF_BASE + CNF_DELTA(agent). Each agent gets only what it needs for its role.
+
+**Rung Inflation**
+Symptom: Team claims rung 65537 without replay stable, adversarial, or security checks.
+Prevention: Rung requirements are mechanical checklists. No shortcuts. Hub rejects unsigned claims.
+
+**The Friendly Skeptic**
+Symptom: Skeptic passes everything because "the Solver did a good job."
+Prevention: Skeptic must attempt to falsify. No pass without executed repro evidence. Skeptic is
+independent of Solver — different session, different model tier if needed.
+
+**Phase Bleed**
+Symptom: Solver starts forecasting; Scout starts implementing.
+Prevention: Hard role contracts. Each agent has one phase, one artifact, one constraint boundary.
+
+**Context Rot**
+Symptom: Session drifts from goal as context fills with error messages and intermediate states.
+Prevention: Fresh CNF capsule on each dispatch. No session runs too long. Hub tracks progress
+externally, not in session memory.
+
+**Silent Scope Expansion**
+Symptom: Agent adds features not in the ROADMAP phase "because it would be useful."
+Prevention: CNF capsule declares exact scope. Scope expansion requires Channel [11] blocker and
+hub authorization. `SILENT_SCOPE_EXPANSION` is a forbidden state.
+
+---
+
+## 13. Implementation Guide: Starting a Project with Roadmap-Based Development
+
+### Step 1: Create NORTHSTAR.md
+
+```markdown
+# NORTHSTAR: [Project Name]
+
+> "[1-sentence vision]"
+
+## North Star Metrics
+
+| Metric | Now | Q2 Target | End Target |
+|--------|-----|-----------|------------|
+| [metric_1] | [baseline] | [q2] | [end] |
+| [metric_2] | [baseline] | [q2] | [end] |
+
+## What Aligns
+- [approach A: why it serves the metric]
+- [approach B: why it serves the metric]
+
+## What Does NOT Align
+- [temptation X: why it doesn't serve the metric]
+- [temptation Y: why it doesn't serve the metric]
+
+## Belt Progression
+- White: [initial milestone]
+- Yellow: [metric_1 > threshold]
+- Green: rung 65537 achieved
+```
+
+### Step 2: Create ROADMAP.md
+
+```markdown
+# ROADMAP: [Project Name]
+> Northstar: NORTHSTAR.md
+
+## Phase 1: [Name]
+Goal: [1 sentence]
+Rung target: 641
+
+### Tasks
+- [ ] [specific deliverable]
+- [ ] [specific deliverable]
+
+### Build Prompt
+[Ready-to-paste prompt with NORTHSTAR injected, CNF capsule, rung target, evidence requirements]
+
+### Acceptance criteria
+- tests.json: all pass
+- evidence/phase-1.json: complete
+- No regressions from baseline
+```
+
+### Step 3: Create case-studies/[project].md
+
+```markdown
+# Case Study: [Project Name]
+
+## Current State
+- Belt: White (just started)
+- Last phase completed: None
+- NORTHSTAR metrics: [baseline values]
+
+## Session Log
+[First entry will go here after Phase 1 completes]
+```
+
+### Step 4: Dispatch Phase 1
+
+Read ROADMAP, extract the Phase 1 build prompt, inject the full NORTHSTAR text, add the CNF
+capsule fields, and dispatch to a sonnet session. Hub waits for artifacts.
+
+### Step 5: Integrate and Advance
+
+Receive artifacts. Verify rung. Check ROADMAP checkbox. Update case study. If rung achieved,
+proceed to Phase 2. If not, feed Skeptic's fail_reasons back to Solver for one revision.
+
+---
+
+## 14. Conclusion
+
+The core insight of Roadmap-Based Development is that session-level correctness (rung 641:
+tests pass) is necessary but not sufficient for project-level progress. Projects require
+directional correctness — agents moving in the same direction, toward the same measurable goal,
+with a shared vocabulary for what success means.
+
+The protocol achieves this through five elements:
 
 - **NORTHSTAR** provides shared direction: what success means, measurable
 - **ROADMAP** provides shared plan: how to get there, phase by phase, with copy-paste prompts
 - **CASE STUDIES** provide shared memory: what happened, what was learned, what is next
-- **Hub-and-spoke** provides coordination: one hub integrates, many spokes specialize
+- **CNF capsules** prevent context rot: every dispatch is self-contained, no "as before"
+- **Rung ladder** enforces quality: 641 → 274177 → 65537, strictly additive over phases
 
-The protocol is not a heavy process. It is a minimal set of documents and disciplines that transform stateless sessions into a coordinated, goal-directed system. Every session starts fresh — but every session starts with the NORTHSTAR, the current phase, and the evidence requirements. That is enough to make progress coherent.
+The protocol is not a heavy process. It is a minimal set of documents and disciplines that
+transform stateless sessions into a coordinated, goal-directed system. Every session starts fresh
+— but every session starts with the NORTHSTAR, the current phase, and the evidence requirements.
 
-Roadmap-Based Development is the answer to: "How do you coordinate multiple AI coding sessions without losing coherence?"
+That is enough to make progress coherent.
 
-NORTHSTAR (what) + ROADMAP (how) + CASE STUDIES (what happened) + HUB (who coordinates).
+Roadmap-Based Development answers the question: "How do you coordinate multiple AI coding sessions
+without losing coherence?"
 
-This is the Stillwater Protocol for multi-session AI development.
+NORTHSTAR (what) + ROADMAP (how) + CASE STUDIES (what happened) + HUB (who coordinates) +
+CNF (no rot) + RUNGS (what quality means).
+
+This is the Stillwater Protocol for multi-session AI development. It is not magic. It is
+externalized state + typed roles + fail-closed gates. Three file types and a discipline.
+
+---
+
+## References
+
+All referenced files exist in this repository:
+
+- `/home/phuc/projects/stillwater/NORTHSTAR.md` — ecosystem NORTHSTAR (canonical example)
+- `/home/phuc/projects/stillwater/ROADMAP.md` — Stillwater's own ROADMAP (canonical example)
+- `/home/phuc/projects/stillwater/SOFTWARE-5.0-PARADIGM.md` — paradigm manifesto
+- `/home/phuc/projects/stillwater/skills/phuc-swarms.md` — swarm orchestration skill v2.2.0
+- `/home/phuc/projects/stillwater/skills/phuc-orchestration.md` — orchestration discipline
+- `/home/phuc/projects/stillwater/skills/prime-safety.md` — god-skill, always first
+- `/home/phuc/projects/stillwater/skills/prime-coder.md` — evidence discipline
+- `/home/phuc/projects/stillwater/papers/01-lane-algebra.md` — epistemic typing system
+- `/home/phuc/projects/stillwater/papers/03-verification-ladder.md` — rung gates
+- `/home/phuc/projects/stillwater/papers/04-red-green-gate.md` — dual-witness verification
+- `/home/phuc/projects/stillwater/papers/32-roadmap-based-development.md` — companion paper
+- `/home/phuc/projects/stillwater/case-studies/` — per-project tracking files
+- `/home/phuc/projects/stillwater/launch-swarm.sh` — swarm dispatch implementation
+
+```bibtex
+@software{stillwater2026_roadmap,
+  author = {Truong, Phuc Vinh},
+  title  = {Roadmap-Based Development: A Paradigm for AI-Coordinated Software Engineering},
+  year   = {2026},
+  url    = {https://github.com/phuctruong/stillwater/papers/roadmap-based-development.md},
+  note   = {Auth: 65537 — Stillwater Reference Implementation}
+}
+```
 
 ---
 
 *Written by the Stillwater ecosystem. Part of the Software 5.0 paradigm documentation series.*
+*Auth: 65537 | Status: STABLE | Never-Worse Doctrine: this document may be extended, not weakened.*

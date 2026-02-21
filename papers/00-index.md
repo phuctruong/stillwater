@@ -119,3 +119,12 @@ Papers 23-26 form a cluster on the economics, quality theory, review methodology
 | 29 | `29-software-5-0-in-one-session.md` | Software 5.0 in One Session | Case study: building a verification-grade software system in a single AI-orchestrated session; artifacts, rungs, and lessons. |
 | 30 | `30-moltbot-community-platform.md` | The AI-Native Community Platform | Design and launch of the Stillwater Store: Apple App Store model for AI skills; account-gated submissions; human review queue; ecosystem lock-in via verification standards. |
 | 31 | `31-universal-math-solver-architecture.md` | The Universal Math Solver Architecture | 5-phase PHUC pipeline (Scout→Forecast→Judge→Solver→Skeptic); CPU deterministic lane + LLM-only lane; self-learning oracle memory; 395/396 IMO corpus cold-start convergence in 2 iterations on llama3.1:8b. |
+
+---
+
+## Paradigm Papers (Development Methodology)
+
+| Number | File | Title | Summary |
+|---|---|---|---|
+| 32 | `32-roadmap-based-development.md` | Roadmap-Based Development | Central Opus hub coordinates multi-session AI development via ROADMAP.md build plans + phuc swarm dispatch + verification ladder. Ensures foolproof protocol adherence through bounded CNF capsules + skill packs. Comparison with Copilot/Cursor/Devin/Claude Code. |
+| 33 | `33-northstar-driven-swarms.md` | NORTHSTAR-Driven Swarms | Aligning multi-agent AI systems through shared NORTHSTAR.md vision documents. Every agent reads NORTHSTAR before producing output, states which metric it advances. Solves the cold start + scope creep + quality calibration problems in multi-agent systems. |

@@ -45,6 +45,13 @@ Every sub-agent gets this structure injected:
 ```
 You are a [ROLE] agent (model: [MODEL]).
 
+## NORTHSTAR (Read before any work — MANDATORY)
+northstar: [FULL CONTENT of project NORTHSTAR.md]
+ecosystem_northstar: [FIRST 30 LINES of stillwater/NORTHSTAR.md]
+
+Before starting, state: "Which NORTHSTAR metric does this work advance?"
+If output does not advance any NORTHSTAR metric → status=NEED_INFO, stop.
+
 ## Loaded Skills
 <BEGIN_SKILL name="prime-safety">
 [FULL CONTENT of skills/prime-safety.md]
@@ -117,6 +124,8 @@ Evidence: evidence/repro_green.log, evidence/tests.json
 - `INLINE_DEEP_WORK` — you (main session) doing the coding instead of dispatching
 - `SUMMARY_AS_EVIDENCE` — accepting prose "it works" instead of artifact
 - `WRONG_MODEL` — using opus for scout tasks, or haiku for promotion gates
+- `NORTHSTAR_MISSING_FROM_CNF` — dispatching without northstar + ecosystem_northstar fields in capsule
+- `NORTHSTAR_UNREAD` — agent claiming PASS without stating which NORTHSTAR metric it advances
 
 ## Swarm Rung = MIN(all agent rungs)
 
