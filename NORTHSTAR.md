@@ -320,6 +320,168 @@ At 10,000 BYOK users with average 3% tip rate:
 
 ---
 
+## The Persona Engine: Domain Expert Voices for Every Task
+
+Stillwater's Persona Engine loads domain expert voices into agent skill packs at dispatch time. When dispatching a sub-agent, the hub selects the matching persona based on task domain. The persona adds voice, style, and domain expertise — without touching prime-safety gates.
+
+```
+PERSONA REGISTRY (12 built-in personas):
+
+  linus         — OSS kernel architecture, systems programming (CLI, store governance)
+  mr-beast      — Viral content, audience growth (launch posts, YouTube)
+  brunson       — Hook+Story+Offer, conversion (pricing, landing pages, funnels)
+  bruce-lee     — Martial arts philosophy, dojo training (gamification, belt system)
+  brendan-eich  — Browser architecture, JavaScript (solace-browser, frontend)
+  codd          — Relational theory, normalization (schema design, audit trails)
+  knuth         — Algorithms, formal proofs (math verification, prime-math tasks)
+  schneier      — Applied cryptography, security (OAuth3, security audits)
+  fda-auditor   — 21 CFR Part 11, ALCOA (evidence bundles, Part 11 compliance)
+  torvalds      — Linux governance, OSS community (Stillwater Store review)
+  pg            — Startup strategy, first principles (positioning, business model)
+  sifu          — Kung fu master, training discipline (belt culture, motivation)
+
+LAYERING RULE:
+  prime-safety > prime-coder > persona-engine
+  Persona is style only. It NEVER overrides prime-safety gates.
+  Persona cannot expand capability envelope or grant authority.
+
+FULL SKILL: skills/persona-engine.md
+```
+
+"Absorb what is useful, discard what is useless." — Bruce Lee
+
+The Persona Engine applies this to agent dispatch: absorb the security expert's threat-model lens for OAuth3 tasks. Discard it for gamification tasks. Load the dojo master for belt design. Load the FDA auditor for evidence bundle architecture.
+
+---
+
+## The GLOW Score: Gamification for Roadmap-Based Development
+
+GLOW = Growth + Learning + Output + Wins. Every session, every commit, every phase gets a GLOW score.
+
+```
+G — Growth (0-25): New capabilities added
+    25: Major new module at rung 274177+ with evidence
+    20: Complete feature at rung 641 with tests
+    15: Significant enhancement
+     5: Minor addition
+     0: No new capabilities
+
+L — Learning (0-25): New knowledge captured
+    25: Skill published to Store at rung 65537
+    20: New skill or paper committed
+    10: New persona or recipe captured
+     5: Case study updated
+     0: No knowledge captured
+
+O — Output (0-25): Measurable deliverables
+    25: Multiple files, all tests, rung 274177+ evidence
+    20: Files committed with tests.json + plan.json (rung 641)
+    10: Single file with passing tests
+     5: Any commit
+     0: No commit
+
+W — Wins (0-25): Strategic victories
+    25: First-mover advantage established
+    20: Competitive moat deepened
+    15: NORTHSTAR metric measurably advanced
+    10: ROADMAP phase completed (checkbox checked)
+     5: Sub-task unblocking next phase
+     0: No strategic progress
+
+TOTAL GLOW = G + L + O + W (0-100)
+
+COMMIT FORMAT:
+  feat: {description}
+  GLOW {total} [G:{g} L:{l} O:{o} W:{w}]
+  Northstar: {metric advanced}
+  Rung: {rung}
+
+PACE TARGETS:
+  Warrior: 60+ GLOW/day
+  Master:  70+ GLOW/week average
+  Steady:  40+ GLOW/day
+```
+
+GLOW is cheat-resistant: O requires a git commit, W requires NORTHSTAR metric advancement, G requires tests. A developer who produced insights but no commits earns at most GLOW 20. The artifacts score the session, not the vibes.
+
+**Belt Integration:**
+```
+White  (0-20/session):  Learning basics
+Yellow (21-40/session): First tasks delegated
+Orange (41-60/session): Contributing to store
+Green  (61-80/session): Rung 65537 achieved
+Blue   (81-90/session): Cloud execution 24/7
+Black  (91-100/session): Models=commodities. Skills=capital. OAuth3=law.
+```
+
+FULL SKILL: `skills/glow-score.md`
+
+---
+
+## Content Syndication: From papers/ to Audience
+
+Every paper in `papers/` is a potential content asset. The syndication pipeline converts technical papers into multi-platform content that builds audience and advances NORTHSTAR metrics.
+
+```
+CONTENT PIPELINE:
+  1. CANONICAL HOME: phuc.net/articles/{slug} (SEO ownership, publish first)
+  2. PROFESSIONAL: LinkedIn article (full text + canonical link)
+  3. LONG-FORM: Substack "Stillwater Dispatch" (bi-weekly newsletter)
+  4. DEVELOPER: Hacker News (concrete claims + evidence — manual only)
+  5. COMMUNITY: Reddit (r/LocalLLaMA, r/programming, r/startups) + DEV.to
+  6. SOCIAL: X/Twitter thread (10-20 bullets + link)
+  7. VIDEO: YouTube (2-6 minute talk, script from paper intro + 3 claims)
+
+BRUNSON TREATMENT (required for every piece):
+  Hook:  First 3 lines. Specific + counterintuitive + promise.
+  Story: Harvard → CRIO → "FDA clinical trials taught me this" → Stillwater
+  Offer: One action. Low friction. ("Star on GitHub" or "Free account at solaceagi.com")
+
+RECIPE AUTOMATION:
+  Phase 1 (available): LinkedIn recipe (solace-browser, BUILT)
+  Phase 2 (build):     Substack recipe, dev.to recipe
+  Phase 3 (build):     Twitter thread recipe, Reddit post recipe
+  Phase 4 (planned):   YouTube upload with paudio narration + pvideo avatar
+
+CONTENT NORTHSTAR METRICS:
+  GitHub stars:        50 → 1,000 (Q2) → 10,000 (end 2026)
+  Substack subscribers: 0 → 500 (Q2) → 5,000 (end 2026)
+  Monthly LinkedIn reactions: 0 → 5,000 (Q2)
+
+FULL PAPER: papers/35-syndication-strategy.md
+```
+
+---
+
+## The Dojo: Bruce Lee + Kung Fu Theme Integration
+
+Stillwater is a dojo. Every developer is a practitioner. Every session earns XP. Every rung achieved earns a belt.
+
+```
+DOJO MAPPING:
+  The sensei     = prime-safety (always present, always correct)
+  The kata       = evidence bundle (the form that must be executed correctly)
+  The belt       = GLOW belt progression (earned through artifacts)
+  The dojo floor = Stillwater Store (where skills are submitted and judged)
+  Training partners = swarm agents (each has a role, each serves the training)
+  The fight      = production deployment at rung 65537
+
+BRUCE LEE PRINCIPLES IN THE SYSTEM:
+  "Be water"     → Persona Engine adapts to task domain without losing discipline
+  "Absorb what is useful" → Persona Registry: right expert for right task
+  "10,000 kicks" → Recipe at 70% hit rate = competitive moat (not lucky passes)
+  "Empty mind"   → CNF capsule: each session starts fresh, no context rot
+  "Simplicity"   → Economy of motion: smallest patch that achieves the goal
+
+"Still water runs deep." — The Stillwater brand is not accidental.
+Still water is calm, carries weight, and reflects clearly.
+That is the design goal: calm methodology with production weight.
+```
+
+**FULL PAPER:** `papers/34-persona-glow-paradigm.md`
+
+---
+
 ## See Also
 - `SOFTWARE-5.0-PARADIGM.md` — paradigm manifesto
 - `STORE.md` — Stillwater Store policy
@@ -327,3 +489,8 @@ At 10,000 BYOK users with average 3% tip rate:
 - `case-studies/` — per-project tracking
 - `skills/` — the skill library
 - `skills/prime-mermaid.md` — PM triplet standard
+- `skills/persona-engine.md` — Persona Engine (12 domain expert voices)
+- `skills/glow-score.md` — GLOW Score gamification system
+- `swarms/persona-coder.md` — Persona-enhanced coder swarm agent
+- `papers/34-persona-glow-paradigm.md` — The Dojo Protocol
+- `papers/35-syndication-strategy.md` — Content Syndication Strategy

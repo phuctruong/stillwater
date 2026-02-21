@@ -283,6 +283,89 @@ Evidence required: .github/workflows/rung-check.yml passing on main branch
 
 ---
 
+## Phase 5: Persona Engine + GLOW Gamification (Month 2–3)
+
+**Goal**: Add domain expert personas and GLOW score gamification to Stillwater, enabling persona-enhanced swarm agents and transparent progress tracking with belt progression.
+
+### Tasks
+
+- [x] Create `skills/persona-engine.md` — 12 domain expert personas with voice rules, domain expertise, and dispatch protocol (rung 641, 2026-02-21)
+  - linus, mr-beast, brunson, bruce-lee, brendan-eich, codd, knuth, schneier, fda-auditor, torvalds, pg, sifu
+  - Persona loading protocol: task domain → persona match → inject into skill pack
+  - Layering rule: persona NEVER overrides prime-safety
+  - Multi-persona support for complex tasks
+- [x] Create `skills/glow-score.md` — GLOW Score gamification system (rung 641, 2026-02-21)
+  - GLOW = Growth + Learning + Output + Wins (0-25 each, total 0-100)
+  - Belt integration: White/Yellow/Orange/Green/Blue/Black
+  - Session tracking: start/per-commit/end format
+  - Pace targets: warrior (60+/day), master (70+/week), steady (40+/day)
+  - Anti-patterns: GLOW_INFLATED, GLOW_WITHOUT_NORTHSTAR_ALIGNMENT, WINS_BY_NARRATIVE
+- [x] Create `swarms/persona-coder.md` — Persona-enhanced coder swarm agent (rung 641, 2026-02-21)
+  - Extends base Coder with automatic persona selection based on task domain
+  - GLOW score calculation + `glow_score.json` as required artifact
+  - Commit message format: GLOW {total} [G:{g} L:{l} O:{o} W:{w}]
+- [x] Create `papers/34-persona-glow-paradigm.md` — The Dojo Protocol (rung 641, 2026-02-21)
+  - Full paper on persona-enhanced agents + GLOW gamification
+  - Bruce Lee / kung fu / dojo theme throughout
+  - Extended master equation: Intelligence = Memory × Care × Iteration × Expertise × Motivation
+- [x] Create `papers/35-syndication-strategy.md` — Content Syndication Strategy (rung 641, 2026-02-21)
+  - Brunson Hook + Story + Offer treatment for all content
+  - 7-stage pipeline: canonical → LinkedIn → Substack → HN → Reddit → X → YouTube
+  - solace-browser recipe integration for automation
+  - Content NORTHSTAR metrics: stars, Substack subscribers, LinkedIn reactions
+- [x] Update `NORTHSTAR.md` — Add Persona Engine, GLOW Score, Content Syndication, and Dojo theme sections
+- [ ] Update `skills/phuc-orchestration.md` — Add persona-coder to dispatch decision matrix
+- [ ] Update `launch-swarm.sh` — Add persona + glow-score to swarm dispatch templates
+- [ ] Update `STORE.md` — Add GLOW score requirements for Store submissions (skill must include GLOW metadata)
+
+### Build Prompt (Phase 5 — Persona Engine Update to Orchestration)
+
+```
+Load prime-safety + prime-coder + phuc-orchestration + persona-engine.
+Task: Update skills/phuc-orchestration.md dispatch decision matrix to include persona-coder agent type.
+Reference: skills/persona-engine.md (persona registry + loading protocol)
+Reference: swarms/persona-coder.md (agent definition)
+Requirements:
+  - Add persona-coder row to dispatch matrix with correct trigger conditions
+  - Add GLOW score reporting to sub-agent artifact schema
+  - Add persona hint field to CNF capsule template
+  - No breaking changes to existing dispatch patterns
+Rung target: 641
+Evidence required: skills/phuc-orchestration.md updated + no regression in existing dispatch patterns
+```
+
+### Build Prompt (Phase 5 — Launch Swarm Integration)
+
+```
+Load prime-safety + prime-coder + persona-engine + glow-score.
+Task: Update launch-swarm.sh to inject persona + glow-score into swarm dispatch prompts.
+Reference: skills/persona-engine.md, skills/glow-score.md, swarms/persona-coder.md
+Requirements:
+  - For each swarm target, auto-detect task domain → select matching persona
+  - Inject persona voice rules into generated prompt
+  - Add GLOW target (default: 60) to generated prompt
+  - Add glow_score.json to required artifacts list in generated prompt
+  - Backward compatible: existing launch-swarm.sh calls unchanged
+Rung target: 641
+Evidence required: launch-swarm.sh generates prompts with persona + GLOW for each project
+```
+
+---
+
+## Milestone Summary
+
+| Phase | Target Date | Rung Gate | Key Deliverable |
+|-------|------------|-----------|----------------|
+| Phase 0: Audit | Week 0 | 641 | Baseline audit report |
+| Phase 1: OAuth3 | Week 1–2 | 641 | `papers/oauth3-spec-v0.1.md` + `skills/oauth3-enforcer.md` — COMPLETE |
+| Phase 2: Store Client | Month 1 | 641 | `store/client.py` + `store/rung_validator.py` (server in solaceagi) |
+| Phase 2.5: Dragon Tip Hooks | Month 1 | 641 | `tip_callback` in llm_call/llm_chat + `usage_tracker` module |
+| Phase 3: LLM Portal | Month 2 | 641 | Multi-provider support + session management |
+| Phase 4: Rung 65537 | Month 3 | 65537 | Self-verification badge + 30-day CI |
+| Phase 5: Persona + GLOW | Month 2–3 | 641 | `skills/persona-engine.md` + `skills/glow-score.md` + `swarms/persona-coder.md` — COMPLETE |
+
+---
+
 ## Build Discipline
 
 All phases follow the prime-coder protocol:
@@ -290,9 +373,20 @@ All phases follow the prime-coder protocol:
 2. Implement minimum code to pass (Green Gate)
 3. Run full test suite — no regressions
 4. Produce evidence bundle (`evidence/plan.json`, `evidence/tests.json`)
-5. Commit with `feat:` or `fix:` prefix + evidence pointer
+5. Commit with `feat:` or `fix:` prefix + evidence pointer + GLOW score
+
+GLOW target per commit: 60+ (warrior pace)
+Commit format: `feat: {description}\n\nGLOW {total} [G:{g} L:{l} O:{o} W:{w}]`
 
 Model selection guidance:
 - `haiku` — volume tasks (listing, formatting, boilerplate)
 - `sonnet` — complex logic (API design, skill authoring)
 - `opus` — promotion gate (adversarial sweep, security audit, rung 65537 seal)
+
+Persona selection guidance:
+- `linus` — CLI, systems, OSS architecture
+- `schneier` — security, OAuth3, cryptography
+- `knuth` — algorithms, formal proofs, verification math
+- `bruce-lee` — gamification, belt system, dojo design
+- `brunson` — pricing, conversion, launch copy
+- (full registry: `skills/persona-engine.md`)
