@@ -1,0 +1,363 @@
+#!/usr/bin/env bash
+# launch-swarm.sh — Phuc Swarm Launcher
+# Usage: ./launch-swarm.sh <project> <phase>
+# Example: ./launch-swarm.sh solace-browser oauth3-core
+#
+# This script generates the copy-paste prompt for a haiku/sonnet session
+# that builds the specified project phase using phuc swarms.
+#
+# Run this in your main claude opus session to get the prompt.
+# Then paste the prompt into a NEW haiku/sonnet claude session.
+# Report back results here for integration + case-study tracking.
+
+set -euo pipefail
+
+PROJECTS_ROOT="$HOME/projects"
+STILLWATER="$PROJECTS_ROOT/stillwater"
+
+show_prompt() {
+  local project="$1"
+  local phase="$2"
+  local project_path="$PROJECTS_ROOT/$project"
+
+  echo ""
+  echo "═══════════════════════════════════════════════════════"
+  echo "  PHUC SWARM LAUNCH PROMPT"
+  echo "  Project: $project | Phase: $phase"
+  echo "═══════════════════════════════════════════════════════"
+  echo ""
+  echo "Copy everything between the ─── lines into a new haiku/sonnet Claude session:"
+  echo ""
+  echo "────────────────────────────────────────────────────────"
+  echo ""
+}
+
+usage() {
+  echo "Usage: $0 <project> <phase>"
+  echo ""
+  echo "Projects + Phases:"
+  echo "  solace-browser  oauth3-core       Build OAuth3 token/scope/enforcement module"
+  echo "  solace-browser  oauth3-consent     Build consent UI + step-up auth"
+  echo "  solace-browser  gmail-recipes      Build Gmail automation recipes"
+  echo "  solace-browser  substack-recipes   Build Substack automation recipes (first-mover)"
+  echo "  solace-browser  twitter-recipes    Build Twitter/X automation recipes"
+  echo "  solace-browser  solaceagi-mvp      Build solaceagi.com FastAPI MVP"
+  echo "  solace-cli      oauth3-commands    Build solace auth grant/revoke/list"
+  echo "  solace-cli      rung-execution     Build rung-gated solace run command"
+  echo "  solace-cli      store-commands     Build solace store install/submit/browse"
+  echo "  solaceagi       api-backend        Build FastAPI backend (oauth3 vault + recipes)"
+  echo "  solaceagi       cloud-twin         Build headless browser cloud twin"
+  echo "  stillwater      oauth3-spec        Write oauth3-spec-v0.1.md + oauth3-enforcer skill"
+  echo "  stillwater      store-api          Build Stillwater Store FastAPI endpoints"
+  echo ""
+  echo "Example: $0 solace-browser oauth3-core"
+  exit 1
+}
+
+if [ $# -lt 2 ]; then
+  usage
+fi
+
+PROJECT="$1"
+PHASE="$2"
+
+case "$PROJECT/$PHASE" in
+
+  "solace-browser/oauth3-core")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Coder agent with Prime Coder + Prime Safety skills loaded.
+
+## Task
+Build the OAuth3 core module for solace-browser.
+Location: /home/phuc/projects/solace-browser/oauth3/
+Reference: /home/phuc/projects/solace-browser/OAUTH3-WHITEPAPER.md (Sections 1-5)
+Reference: /home/phuc/projects/solace-browser/ROADMAP.md (Build Prompt 1)
+Rung target: 641
+
+## Files to create:
+1. `oauth3/__init__.py` — AgencyToken dataclass + exports
+2. `oauth3/token.py` — Token creation/storage (AES-256-GCM encrypted vault)
+3. `oauth3/scopes.py` — Scope registry (linkedin.*, gmail.*, hackernews.*, reddit.*, notion.*)
+4. `oauth3/enforcement.py` — Check token before recipe execution; reject if scope mismatch
+5. `oauth3/revocation.py` — Instant token kill + vault clear
+6. `tests/test_oauth3.py` — Tests for grant, list, revoke, enforcement gate
+
+## AgencyToken Schema (from whitepaper):
+{
+  "token_id": str (uuid4),
+  "scopes": list[str],  # e.g. ["linkedin.read_messages", "linkedin.comment"]
+  "issued_at": int (unix timestamp),
+  "expires_at": int (unix timestamp),
+  "encrypted": bool,
+  "revoked": bool
+}
+
+## Scope Registry (build these):
+- linkedin.read_messages, linkedin.comment, linkedin.post_create, linkedin.connect
+- gmail.read_inbox, gmail.send_email, gmail.search, gmail.label
+- hackernews.submit, hackernews.comment, hackernews.vote
+- reddit.post_create, reddit.comment, reddit.vote
+- notion.read_page, notion.write_page, notion.search
+
+## Evidence required:
+- tests/test_oauth3.py passing (red→green gate)
+- tests.json showing grant + revoke + enforcement gate working
+- Token stored encrypted; revoked token blocked by enforcement
+
+Read OAUTH3-WHITEPAPER.md first, then implement. Rung 641 minimum.
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  "solace-browser/oauth3-consent")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Coder agent with Prime Coder + Prime Safety skills.
+
+## Task
+Build the OAuth3 consent UI for solace-browser.
+Location: /home/phuc/projects/solace-browser/
+Reference: /home/phuc/projects/solace-browser/OAUTH3-WHITEPAPER.md (Section 6)
+Reference: /home/phuc/projects/solace-browser/ROADMAP.md (Build Prompt 2)
+Rung target: 641
+
+## Files to create/update:
+1. `web/consent.html` — OAuth3 consent dialog at GET /consent?scopes=linkedin.read_messages,linkedin.comment
+2. `web/settings_tokens.html` — Token management page: list active tokens, revoke button per token
+3. `web/index.html` — Update home page: show OAuth3 scope badges per site (locked/unlocked)
+4. `api/consent_routes.py` — FastAPI: GET /consent, POST /consent/grant, DELETE /consent/revoke/{token_id}
+
+## Consent Dialog Requirements:
+- Show: requested scopes in plain English ("Read your LinkedIn messages")
+- Show: expiry (1h, 8h, 24h, 7d options)
+- Show: what each scope allows (not technical jargon)
+- Buttons: "Grant" | "Deny"
+- Step-up auth: for destructive scopes (*.delete, *.send_email) show extra warning
+
+Read OAUTH3-WHITEPAPER.md Section 6 first, then implement. Vanilla HTML/CSS/JS only.
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  "solace-browser/gmail-recipes")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Coder agent with Prime Coder + Prime Safety skills.
+
+## Task
+Build Gmail automation recipes for solace-browser.
+Location: /home/phuc/projects/solace-browser/recipes/
+Reference: /home/phuc/projects/solace-browser/primewiki/gmail/gmail-page-flow.prime-mermaid.md
+Reference: /home/phuc/projects/solace-browser/primewiki/gmail/gmail-oauth2.prime-mermaid.md
+Rung target: 641
+
+## Recipes to create (JSON format matching existing LinkedIn recipes):
+1. `gmail-read-inbox.recipe.json` — List unread messages (subject, from, snippet)
+2. `gmail-search.recipe.json` — Search messages by query string
+3. `gmail-send-email.recipe.json` — Compose + send (requires step-up OAuth3 auth)
+4. `gmail-label.recipe.json` — Apply/remove label on message
+
+## CRITICAL: Bot detection bypass (from primewiki):
+- Char-by-char typing: 80-200ms per character (NEVER use .fill() or .type() with fast speed)
+- Selectors: [data-testid="compose-button"], [data-tooltip="Send"]
+- Wait for: [role="dialog"] before composing
+- Check: SID/HSID/SSID/APISID cookies present before starting
+
+## OAuth3 scopes required:
+- gmail.read_inbox → for read-inbox, search, label
+- gmail.send_email → for send (step-up auth required)
+
+Read both primewiki files first. Implement char-by-char typing for ALL text input.
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  "solace-browser/substack-recipes")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Coder agent + Scout agent with Prime Coder + Prime Safety skills.
+
+## Task
+Build Substack automation recipes for solace-browser.
+THIS IS A FIRST-MOVER OPPORTUNITY. No competitor has working Substack automation.
+
+Location: /home/phuc/projects/solace-browser/
+Steps:
+1. SCOUT: Navigate to substack.com and map the page states using Prime Mermaid format
+2. CREATE primewiki/substack/ directory with PM triplet
+3. BUILD recipes
+
+## Phase 1 - Scout (do this first):
+Use browser automation to explore substack.com:
+- Login page: selectors, cookie names, session storage keys
+- Dashboard: post list, create button, draft list
+- Editor: how compose works (rich text editor type? TipTap? Quill?)
+- Publish flow: draft → preview → publish
+
+## Phase 2 - PM Triplet:
+Create:
+- primewiki/substack/substack-page-flow.mmd (Mermaid state machine)
+- primewiki/substack/substack-page-flow.sha256 (sha256sum of .mmd)
+- primewiki/substack/substack-page-flow.prime-mermaid.md (human spec)
+
+## Phase 3 - Recipes:
+- substack-read-posts.recipe.json — List published posts
+- substack-create-draft.recipe.json — Create new draft
+- substack-publish.recipe.json — Publish existing draft (step-up OAuth3 auth)
+
+Reference /home/phuc/projects/solace-browser/primewiki/PRIMEWIKI_STANDARDS.md for PM format.
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  "solace-cli/oauth3-commands")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Coder agent with Prime Coder + Prime Safety skills.
+
+## Task
+Implement OAuth3 commands for solace-cli.
+Location: /home/phuc/projects/solace-cli/
+Reference: /home/phuc/projects/solace-cli/SOLACE-CLI-WHITEPAPER.md (Section 5)
+Reference: /home/phuc/projects/solace-browser/OAUTH3-WHITEPAPER.md
+Rung target: 641
+
+## Commands to implement:
+1. `solace auth grant --scope github.create_issue --ttl 1h`
+   → Create agency token, store encrypted in ~/.solace/vault.enc
+   → Print: [Lane A] Token granted: scope=github.create_issue ttl=1h expires=2026-02-21T10:00:00Z
+
+2. `solace auth revoke`
+   → Kill ALL active tokens, clear vault
+   → Print: [Lane A] All tokens revoked. Vault cleared.
+
+3. `solace auth list`
+   → Show active tokens with expiry + scopes
+   → Print table: token_id | scopes | expires_at | status
+
+## Lane algebra (from whitepaper):
+Every output must be prefixed with [Lane A], [Lane B], or [Lane C]:
+- [Lane A] = executable evidence (test results, token grants, file hashes)
+- [Lane B] = derived reasoning
+- [Lane C] = heuristic (forecasts, estimates)
+
+## Token vault:
+- Store at ~/.solace/vault.enc
+- Encrypted with AES-256-GCM
+- Key derived from user passphrase (PBKDF2, 100k iterations)
+- On first run: prompt to set vault password
+
+## Evidence required:
+- tests showing grant → list → revoke cycle
+- Token encrypted at rest (verify vault file is not plaintext JSON)
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  "stillwater/oauth3-spec")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Writer agent with Software 5.0 Paradigm + Prime Safety skills.
+
+## Task
+Write two documents for the Stillwater project:
+1. /home/phuc/projects/stillwater/papers/oauth3-spec-v0.1.md
+2. /home/phuc/projects/stillwater/skills/oauth3-enforcer.md
+
+Reference: /home/phuc/projects/solace-browser/OAUTH3-WHITEPAPER.md (read this first)
+
+## Document 1: oauth3-spec-v0.1.md
+A formal specification (not marketing). Audience: other developers implementing OAuth3.
+Sections:
+- Abstract (3 sentences)
+- 1. Problem Statement (delegation without consent)
+- 2. Core Definitions (Agency Token, Scope, Step-Up Auth, Revocation)
+- 3. Token Schema (JSON schema, required fields)
+- 4. Scope Naming Convention (platform.action format)
+- 5. Consent Protocol (flow: request → display → grant → store → enforce)
+- 6. Revocation Protocol (immediate, fail-closed, vault clear)
+- 7. Evidence Requirements (every delegated action must produce evidence bundle)
+- 8. Platform Respect Mode (rate limiting, human-like behavior)
+- 9. Reference Implementation (solace-browser)
+
+## Document 2: oauth3-enforcer.md
+A Stillwater skill that can be loaded to enforce OAuth3 compliance in any project.
+Format: same as other skills in /home/phuc/projects/stillwater/skills/
+Include:
+- Scope validation (reject execution if scope not granted)
+- Step-up auth trigger (destructive actions)
+- Revocation check (token not expired/revoked)
+- Evidence bundle requirement (every action must produce evidence)
+- Forbidden states: SCOPE_MISMATCH, EXPIRED_TOKEN, REVOKED_TOKEN, MISSING_EVIDENCE
+
+Read OAUTH3-WHITEPAPER.md before writing. This becomes the official spec.
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  "solaceagi/api-backend")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Coder agent with Prime Coder + Prime Safety skills.
+
+## Task
+Build the FastAPI backend for solaceagi.com.
+Location: /home/phuc/projects/solaceagi/api/
+Reference: /home/phuc/projects/solaceagi/SOLACEAGI-WHITEPAPER.md
+Reference: /home/phuc/projects/solaceagi/ROADMAP.md
+Rung target: 641
+
+## Architecture:
+Clean rebuild from first principles. The hosted platform provides:
+1. OAuth3 vault management (user's agency tokens, encrypted)
+2. User API key management (user brings own Anthropic/OpenAI key)
+3. Recipe execution endpoint (trigger cloud twin)
+4. Stillwater Store access (browse/install skills)
+5. Evidence bundle storage (90-day history for Pro users)
+
+## Files to create:
+- api/__init__.py
+- api/main.py — FastAPI app, routes
+- api/oauth3.py — Agency token vault (AES-256-GCM, zero-knowledge)
+- api/users.py — User management (API key storage, tier enforcement)
+- api/recipes.py — Recipe execution dispatch
+- api/store.py — Stillwater Store proxy
+- tests/test_api.py — Tests for each endpoint
+
+## Critical constraints:
+- ZERO LLM cost to us: user provides own Anthropic/OpenAI API key
+- Store it encrypted: never log API keys
+- Haiku for recipe replay ($0.001/task); sonnet for new recipe creation
+- Evidence bundle generated per execution
+
+## Business tier enforcement:
+- Free: local execution only (no cloud twin calls)
+- Pro ($19/mo): cloud twin, 90-day evidence, OAuth3 vault
+- Enterprise ($99/mo): audit mode, team tokens, private store
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  *)
+    echo "Unknown project/phase: $PROJECT/$PHASE"
+    echo ""
+    usage
+    ;;
+esac
+
+echo ""
+echo "═══════════════════════════════════════════════════════"
+echo "  After the session completes:"
+echo "  1. Report the rung achieved back here"
+echo "  2. Update: $STILLWATER/case-studies/${PROJECT}.md"
+echo "  3. Commit: cd $PROJECTS_ROOT/$PROJECT && git add -A && git commit"
+echo "═══════════════════════════════════════════════════════"
+echo ""
