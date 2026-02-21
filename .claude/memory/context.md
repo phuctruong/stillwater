@@ -40,6 +40,20 @@ stillwater_store_status: plan file exists (glittery-sprouting-key.md), not yet i
 ideas_md: scratch/IDEAS.md has 26 sections including 16 TWiST-sourced ideas (section 26)
 commands_created: remember.md, distill.md, phuc-swarm.md, northstar.md
 
+## GOALS [3] — SolaceBrowser Vision
+solace_browser_vision: twin browser (local Electron + cloud AGI 24/7)
+solace_browser_moat_1: deep anti-detection (canvas/WebGL/JA3/Bezier/inertia)
+solace_browser_moat_2: recipe system (70% cache hit → $0.01/task vs $0.20 competitors)
+solace_browser_moat_3: twin architecture (local browse + cloud delegate)
+solace_browser_moat_4: fingerprint sync (cloud = identical to user local browser)
+solace_browser_moat_5: Stillwater verification (evidence bundles, not just screenshots)
+solace_browser_phase0: validate storage_state transfer for 8+ of top 10 sites BEFORE Electron
+solace_browser_mvp_effort: ~3K lines new code; reuse 16K+ existing browser infra
+solace_browser_economics: 70% recipe hit → $5.75 COGS, 70% gross margin at $19/mo
+solace_browser_target: 5K paying users = $1.14M ARR
+solace_browser_cloud_model: haiku=recipe replay, sonnet=new task planning
+solace_browser_northstar_metric: recipe hit rate + cloud task success rate
+
 ## BLOCKERS [11]
 blocker_store: Stillwater Store (account registration API) awaits user go-ahead
 blocker_haiku_test: user will manually test by opening fresh haiku session + asking questions

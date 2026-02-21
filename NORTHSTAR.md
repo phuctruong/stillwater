@@ -50,6 +50,21 @@ while running at rung 641. Evidence requires:
 - Behavioral hash drift explained
 - Security gate verified
 
+## Key Projects Powered by Stillwater
+
+Stillwater verifies the work across the entire Phuc.Net ecosystem:
+
+| Project | Northstar | Stillwater Role |
+|---------|-----------|----------------|
+| **SolaceBrowser** | Twin browser that works while you sleep | Recipe verification, evidence bundles, Stillwater store for recipes |
+| **SolaceAGI** | Persistent AGI with verified memory | Swarm orchestration, prime channels, phuc-context |
+| **SolaceCLI** | Semantic memory hub | Orchestration backbone, admin dashboard |
+| **PZip** | Beat LZMA with exact arithmetic proof | prime-math verification, exact arithmetic gate |
+| **IF-Theory** | Machine-checkable physics proofs | prime-math, convergence certificates |
+
+Solace Browser's recipe system (70% cache hit rate, $0.01/task) and Stillwater Store
+are the clearest demonstration that Software 5.0 creates structural competitive moats.
+
 ## What Aligns with This Northstar
 
 - Adding verified skills to the Stillwater Store

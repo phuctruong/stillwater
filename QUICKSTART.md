@@ -49,10 +49,15 @@ Stillwater ships 4 slash commands in `.claude/commands/`:
 |---------|-------------|
 | `/remember` | Persistent key=value memory (DISTILL-compressed, 100% recall) |
 | `/distill [dir]` | Compress docs → QUICK LOAD CLAUDE.md generators |
-| `/phuc-swarm [role] "[task]"` | Dispatch typed sub-agent (haiku/sonnet/opus + full skill pack) |
+| `/phuc-swarm [role] "[task]"` | **Guarantees** swarm dispatch — correct model+skills+CNF capsule. Use when natural language alone might not trigger dispatch. |
 | `/northstar` | Load NORTHSTAR.md — the guiding mission for this project |
 
 Run `/remember` at the end of every session to save key decisions before context resets.
+
+> **When to use `/phuc-swarm` explicitly:** If you make a natural language request and
+> Claude starts writing code inline instead of dispatching a swarm — that's the
+> `INLINE_DEEP_WORK` forbidden state. Use `/phuc-swarm coder "..."` to force correct dispatch.
+> The CLAUDE.md will try to auto-dispatch, but `/phuc-swarm` is the guaranteed path.
 
 ## 4. Browse skills
 
