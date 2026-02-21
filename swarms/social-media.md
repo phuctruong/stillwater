@@ -5,6 +5,7 @@ authority: 65537
 skill_pack:
   - prime-safety   # ALWAYS first
   - phuc-forecast
+  - persona-engine  # optional persona loading layer
 persona:
   primary: MrBeast
   alternatives:
@@ -67,6 +68,25 @@ Load in order (never skip; never weaken):
    premortem surfaces retention failure modes before production begins
 
 Conflict rule: prime-safety wins over all. phuc-forecast wins over gut-feel content decisions.
+
+---
+
+## 1.5) Persona Loading (RECOMMENDED)
+
+This swarm benefits from persona loading via `skills/persona-engine.md`.
+
+Default persona(s): **mr-beast** — viral hook architecture, stakes-first framing, retention engineering
+Secondary: **seth-godin** (optional) — permission marketing, tribe building, smallest-viable-audience thinking
+
+Persona selection by task domain:
+- If task involves YouTube/TikTok video content: load **mr-beast** (hook, stakes, re-hooks, thumbnail)
+- If task involves community building and permission marketing: load **seth-godin**
+- If task involves niche community and product virality: load **greg-isenberg** (community-led growth)
+- If task involves technical content for builders: load **mkbhd** (credibility through clarity)
+- If task involves value-dense short-form content: load **hormozi** (value equation, cut the filler)
+
+Note: Persona is style and expertise only — it NEVER overrides prime-safety gates.
+Load order: prime-safety > phuc-forecast > persona-engine (persona always last).
 
 ---
 

@@ -7,6 +7,7 @@ skill_pack:
   - prime-safety
   - prime-coder
   - phuc-forecast
+  - persona-engine  # optional persona loading layer
 persona:
   primary: Linus Torvalds
   alternatives:
@@ -65,6 +66,23 @@ Load in order (never skip; never weaken):
 3. `skills/phuc-forecast.md` — 13-lens ensemble; premortem on release risk
 
 Conflict rule: prime-safety wins all. prime-coder wins over audit heuristics.
+
+---
+
+## 1.5) Persona Loading (RECOMMENDED)
+
+This swarm benefits from persona loading via `skills/persona-engine.md`.
+
+Default persona(s): **linus** — no excuses, show the evidence, every file must justify its existence
+Secondary: **schneier** (optional) — security-first lens for credential exposure and attack surface audit
+
+Persona selection by task domain:
+- If task involves release readiness and OSS quality: load **linus** (evidence-first, no shipping without tests)
+- If task involves security scan and vulnerability review: load **schneier** (adversarial audit lens)
+- If task involves systematic completeness verification: load **lovelace** (every module has a test, every test has expected output)
+
+Note: Persona is style and expertise only — it NEVER overrides prime-safety gates.
+Load order: prime-safety > prime-coder > persona-engine (persona always last).
 
 ---
 

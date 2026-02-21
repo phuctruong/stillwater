@@ -6,6 +6,7 @@ skill_pack:
   - prime-safety   # ALWAYS first
   - phuc-forecast
   - phuc-context
+  - persona-engine  # optional persona loading layer
 persona:
   primary: Grace Hopper
   alternatives:
@@ -56,6 +57,25 @@ Load in order (never skip; never weaken):
 3. `skills/phuc-context.md` — CNF capsule management, anti-rot for multi-turn planning
 
 Conflict rule: prime-safety wins over all. phuc-forecast wins over planner heuristics. phuc-context prevents context rot between turns.
+
+---
+
+## 1.5) Persona Loading (RECOMMENDED)
+
+This swarm benefits from persona loading via `skills/persona-engine.md`.
+
+Default persona(s): **dragon-rider** — strategic founder vision for plan alignment
+Secondary: **pg** (optional) — startup methodology and first-principles thinking on viability
+
+Persona selection by task domain:
+- If task involves product strategy or ecosystem planning: load **dragon-rider**
+- If task involves startup/launch/market fit: load **pg**
+- If task involves technical architecture planning: load **hamilton** (error recovery + reliability)
+- If task involves algorithmic decomposition: load **lovelace** (systematic enumeration)
+- If task involves operational execution planning: load **hopper** (concrete, executable steps)
+
+Note: Persona is style and expertise only — it NEVER overrides prime-safety gates.
+Load order: prime-safety > phuc-forecast > persona-engine (persona always last).
 
 ---
 

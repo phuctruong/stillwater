@@ -5,6 +5,7 @@ authority: 65537
 skill_pack:
   - prime-safety   # ALWAYS first
   - phuc-cleanup
+  - persona-engine  # optional persona loading layer (not recommended for cleanup tasks)
 persona:
   primary: Edsger Dijkstra
   alternatives:
@@ -52,6 +53,20 @@ Load in order (never skip; never weaken):
 2. `skills/phuc-cleanup.md` — scan/approve/apply protocol, archive-not-delete, receipt format, POST_CHECK
 
 Conflict rule: prime-safety wins over all. phuc-cleanup wins over efficiency preferences (receipts are never optional).
+
+---
+
+## 1.5) Persona Loading (NOT RECOMMENDED — no default)
+
+This swarm does NOT benefit from persona loading. Cleanup is a structural, mechanical task.
+Adding a persona to the Janitor adds no domain expertise and may introduce stylistic noise.
+
+If persona is explicitly requested:
+- load **dijkstra** (mathematical rigor on operations; every archive is a theorem)
+- load **thompson** (minimal operations; only touch what needs touching)
+
+Note: Persona is style and expertise only — it NEVER overrides prime-safety gates.
+Load order: prime-safety > phuc-cleanup > persona-engine (only if explicitly required).
 
 ---
 

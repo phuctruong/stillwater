@@ -5,6 +5,7 @@ authority: 65537
 skill_pack:
   - prime-safety   # ALWAYS first
   - software5.0-paradigm
+  - persona-engine  # optional persona loading layer
 persona:
   primary: Carl Sagan
   alternatives:
@@ -55,6 +56,24 @@ Load in order (never skip; never weaken):
 2. `skills/software5.0-paradigm.md` — recipe extraction, convention density, lesson synthesis, skill delta protocol
 
 Conflict rule: prime-safety wins over all. software5.0-paradigm wins over podcast heuristics.
+
+---
+
+## 1.5) Persona Loading (RECOMMENDED)
+
+This swarm benefits from persona loading via `skills/persona-engine.md`.
+
+Default persona(s): **lex-fridman** — long-form depth, intellectual curiosity, connecting specific episodes to bigger ideas
+Secondary: **mr-beast** (optional) — viral hooks and re-hook architecture for high-retention structure
+
+Persona selection by task domain:
+- If task involves synthesizing a complex technical swarm run: load **lex-fridman** (depth + accessibility)
+- If task involves building an engaging narrative for broad audiences: load **mr-beast** (hooks, stakes, re-hooks)
+- If task involves extracting surprising discoveries: load **feynman** (wonder, first-principles explanation)
+- If task involves long-arc pattern recognition: load **dyson** (what does this run teach about the field?)
+
+Note: Persona is style and expertise only — it NEVER overrides prime-safety gates.
+Load order: prime-safety > software5.0-paradigm > persona-engine (persona always last).
 
 ---
 

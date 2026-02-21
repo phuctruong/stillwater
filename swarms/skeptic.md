@@ -6,6 +6,7 @@ skill_pack:
   - prime-safety   # ALWAYS first
   - prime-coder
   - phuc-forecast
+  - persona-engine  # optional persona loading layer
 persona:
   primary: Alan Turing
   alternatives:
@@ -56,6 +57,25 @@ Load in order (never skip; never weaken):
 3. `skills/phuc-forecast.md` — VERIFY step; falsifiers; adversarial sweep; null edge cases
 
 Conflict rule: prime-safety wins over all. prime-coder wins over phuc-forecast where they conflict on evidence requirements.
+
+---
+
+## 1.5) Persona Loading (RECOMMENDED)
+
+This swarm benefits from persona loading via `skills/persona-engine.md`.
+
+Default persona(s): **schneier** — adversarial security thinking; find the attack before the attacker does
+Secondary: **kent-beck** (optional) — test discipline, quality culture, falsifier mindset
+
+Persona selection by task domain:
+- If task involves security review or threat modeling: load **schneier**
+- If task involves test quality and coverage: load **kent-beck**
+- If task involves algorithm correctness: load **knuth** (boundary analysis, worst-case inputs)
+- If task involves interface contracts: load **liskov** (substitution principle, behavioral contracts)
+- If task involves finding counterexamples: load **turing** (seek the falsifier)
+
+Note: Persona is style and expertise only — it NEVER overrides prime-safety gates.
+Load order: prime-safety > prime-coder > persona-engine (persona always last).
 
 ---
 

@@ -5,6 +5,7 @@ authority: 65537
 skill_pack:
   - prime-safety   # ALWAYS first
   - prime-mermaid
+  - persona-engine  # optional persona loading layer
 persona:
   primary: Grace Hopper
   alternatives:
@@ -55,6 +56,24 @@ Load in order (never skip; never weaken):
 2. `skills/prime-mermaid.md` — canonical format, normalization, sha256 contract, node/edge types, forbidden states
 
 Conflict rule: prime-safety wins over all. prime-mermaid wins over aesthetic preferences.
+
+---
+
+## 1.5) Persona Loading (RECOMMENDED)
+
+This swarm benefits from persona loading via `skills/persona-engine.md`.
+
+Default persona(s): **hopper** — systematic, complete documentation; every state named, every transition labeled
+Secondary: **lovelace** (optional) — algorithmic precision; unused nodes are bugs; unnamed paths are hidden behaviors
+
+Persona selection by task domain:
+- If task involves FSM documentation for agents/swarms: load **hopper** (systematic completeness)
+- If task involves architecture diagrams: load **lovelace** (algorithmic decomposition, explicit structure)
+- If task involves minimal, information-dense graphs: load **thompson** (remove every node that adds no information)
+- If task involves distributed system diagrams: load **lamport** (message ordering, state consistency)
+
+Note: Persona is style and expertise only — it NEVER overrides prime-safety gates.
+Load order: prime-safety > prime-mermaid > persona-engine (persona always last).
 
 ---
 

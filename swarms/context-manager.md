@@ -5,6 +5,7 @@ authority: 65537
 skill_pack:
   - prime-safety   # ALWAYS first
   - phuc-context
+  - persona-engine  # optional persona loading layer (not recommended — context management is structural)
 persona:
   primary: Barbara Liskov
   alternatives:
@@ -54,6 +55,20 @@ Load in order (never skip; never weaken):
 2. `skills/phuc-context.md` — CNF capsule format, anti-rot protocol, compaction log requirement, forbidden states
 
 Conflict rule: prime-safety wins over all. phuc-context wins over convenience (compaction log is never optional).
+
+---
+
+## 1.5) Persona Loading (NOT RECOMMENDED — no default)
+
+This swarm does NOT benefit from persona loading. Context management is structural, not stylistic.
+Adding a persona does not improve CNF capsule quality or compaction accuracy.
+
+If persona is explicitly requested:
+- load **liskov** (type discipline; capsule as interface; consumers depend only on the canonical form)
+- load **hopper** (documentation discipline; every compaction event must be logged)
+
+Note: Persona is style and expertise only — it NEVER overrides prime-safety gates.
+Load order: prime-safety > phuc-context > persona-engine (only if explicitly required).
 
 ---
 

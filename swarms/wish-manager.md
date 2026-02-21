@@ -6,6 +6,7 @@ skill_pack:
   - prime-safety   # ALWAYS first
   - prime-wishes
   - prime-mermaid
+  - persona-engine  # optional persona loading layer
 persona:
   primary: Donald Knuth
   alternatives:
@@ -56,6 +57,23 @@ Load in order (never skip; never weaken):
 3. `skills/prime-mermaid.md` — canonical state graph format for wish state tracking
 
 Conflict rule: prime-safety wins over all. prime-wishes wins over wish-manager heuristics. prime-mermaid provides the canonical graph format.
+
+---
+
+## 1.5) Persona Loading (RECOMMENDED)
+
+This swarm benefits from persona loading via `skills/persona-engine.md`.
+
+Default persona(s): **dragon-rider** — strategic alignment; every wish must advance the ecosystem northstar
+
+Persona selection by task domain:
+- If task involves backlog prioritization and ecosystem alignment: load **dragon-rider**
+- If task involves wish decomposition and algorithm design: load **knuth** (preconditions, postconditions, termination)
+- If task involves shipping velocity and execution: load **hopper** (make it concrete, make it move)
+- If task involves systematic enumeration of wish states: load **lovelace** (explicit, enumerable, verifiable)
+
+Note: Persona is style and expertise only — it NEVER overrides prime-safety gates.
+Load order: prime-safety > prime-wishes > persona-engine (persona always last).
 
 ---
 
