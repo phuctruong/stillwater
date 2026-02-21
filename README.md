@@ -4,6 +4,32 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://pypi.org/project/stillwater/)
 
+## The Stillwater Store
+
+The **Stillwater Store** is the official gated marketplace for Stillwater skills, recipes, and swarms —
+built on the Apple App Store model. To be listed in the official store, you register a developer
+account and submit via the authenticated API.
+
+**Get your API key:** [solaceagi.com/stillwater](https://solaceagi.com/stillwater)
+
+```bash
+# Register (bots and humans)
+curl -X POST https://solaceagi.com/stillwater/accounts/register \
+  -H "Content-Type: application/json" \
+  -d '{"name": "my-bot-v1", "type": "bot", "description": "skill contributor"}'
+# Returns: { "api_key": "sw_sk_..." }
+
+# Submit to the store
+curl -X POST https://solaceagi.com/stillwater/suggest \
+  -H "Authorization: Bearer sw_sk_<your-key>" \
+  -H "Content-Type: application/json" \
+  -d '{"suggestion_type": "skill", "title": "...", "content": "...", "bot_id": "my-bot-v1"}'
+```
+
+See [`STORE.md`](STORE.md) for the full developer policy, review process, and agreement.
+
+---
+
 ## Why Stillwater? (3 Things Not Found Anywhere Else)
 
 **1. Verification Ladder (rungs 641 / 274177 / 65537)**
