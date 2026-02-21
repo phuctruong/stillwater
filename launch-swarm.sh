@@ -34,6 +34,25 @@ show_prompt() {
   echo ""
   echo "────────────────────────────────────────────────────────"
   echo ""
+  echo "## NORTHSTAR — Read this first. All work must align with it."
+  echo ""
+  if [ -f "$project_path/NORTHSTAR.md" ]; then
+    cat "$project_path/NORTHSTAR.md"
+  else
+    echo "(No NORTHSTAR.md found at $project_path/NORTHSTAR.md)"
+  fi
+  echo ""
+  echo "---"
+  echo ""
+  echo "## STILLWATER NORTHSTAR (ecosystem-level)"
+  if [ -f "$STILLWATER/NORTHSTAR.md" ]; then
+    head -30 "$STILLWATER/NORTHSTAR.md"
+  else
+    echo "(No NORTHSTAR.md found at $STILLWATER/NORTHSTAR.md)"
+  fi
+  echo ""
+  echo "---"
+  echo ""
 }
 
 usage() {
@@ -219,6 +238,61 @@ PROMPT
     echo "────────────────────────────────────────────────────────"
     ;;
 
+  "solace-browser/twitter-recipes")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Coder agent with Prime Coder + Prime Safety skills.
+
+## Task
+Build Twitter/X automation recipes for solace-browser.
+Location: /home/phuc/projects/solace-browser/recipes/
+Rung target: 641
+
+## Recipes to create:
+1. `twitter-read-feed.recipe.json` — Read timeline (home feed, no auth wall bypass)
+2. `twitter-post-tweet.recipe.json` — Post tweet (requires step-up OAuth3 auth)
+3. `twitter-reply.recipe.json` — Reply to a tweet by URL
+
+## OAuth3 scopes required:
+- twitter.read_feed → read timeline
+- twitter.post_tweet → create tweet (step-up auth)
+- twitter.reply → reply to tweet (step-up auth)
+
+## Bot detection: char-by-char typing at 80-200ms; no rapid automation.
+
+Reference existing recipes in /home/phuc/projects/solace-browser/recipes/ for format.
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  "solace-browser/solaceagi-mvp")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Coder agent with Prime Coder + Prime Safety skills.
+
+## Task
+Build the solaceagi.com FastAPI MVP wired to solace-browser.
+Location: /home/phuc/projects/solace-browser/api/
+Reference: /home/phuc/projects/solaceagi/SOLACEAGI-WHITEPAPER.md
+Rung target: 641
+
+## Goal: Minimal viable hosted platform endpoint
+- POST /run-recipe — accepts {recipe_name, params, api_key (BYOK)}
+- GET /recipes — list available recipes
+- POST /tokens/grant — agency token grant
+- DELETE /tokens/revoke — agency token revoke
+
+## The hosted platform (day 1):
+- BYOK only at launch (user provides Anthropic/OpenAI key — zero markup)
+- Managed LLM ($3/mo) added in phase 2
+
+Read SOLACEAGI-WHITEPAPER.md for full architecture before coding.
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
   "solace-cli/oauth3-commands")
     show_prompt "$PROJECT" "$PHASE"
     cat << 'PROMPT'
@@ -264,43 +338,59 @@ PROMPT
     echo "────────────────────────────────────────────────────────"
     ;;
 
-  "stillwater/oauth3-spec")
+  "solace-cli/rung-execution")
     show_prompt "$PROJECT" "$PHASE"
     cat << 'PROMPT'
-You are a Writer agent with Software 5.0 Paradigm + Prime Safety skills.
+You are a Coder agent with Prime Coder + Prime Safety skills.
 
 ## Task
-Write two documents for the Stillwater project:
-1. /home/phuc/projects/stillwater/papers/oauth3-spec-v0.1.md
-2. /home/phuc/projects/stillwater/skills/oauth3-enforcer.md
+Build rung-gated execution for solace-cli.
+Location: /home/phuc/projects/solace-cli/
+Rung target: 641
 
-Reference: /home/phuc/projects/solace-browser/OAUTH3-WHITEPAPER.md (read this first)
+## Command to implement:
+`solace run <recipe> [args...]`
+- Check OAuth3 scope BEFORE executing recipe
+- If scope missing: prompt for grant (step-up auth)
+- Run recipe and produce evidence bundle
+- Print: [Lane A] Recipe complete. Evidence: evidence/<recipe>/<timestamp>/
 
-## Document 1: oauth3-spec-v0.1.md
-A formal specification (not marketing). Audience: other developers implementing OAuth3.
-Sections:
-- Abstract (3 sentences)
-- 1. Problem Statement (delegation without consent)
-- 2. Core Definitions (Agency Token, Scope, Step-Up Auth, Revocation)
-- 3. Token Schema (JSON schema, required fields)
-- 4. Scope Naming Convention (platform.action format)
-- 5. Consent Protocol (flow: request → display → grant → store → enforce)
-- 6. Revocation Protocol (immediate, fail-closed, vault clear)
-- 7. Evidence Requirements (every delegated action must produce evidence bundle)
-- 8. Platform Respect Mode (rate limiting, human-like behavior)
-- 9. Reference Implementation (solace-browser)
+## Gate enforcement:
+- Rung 641: scope check + evidence bundle
+- Rung 274177: scope check + seed replay (run twice, compare outputs)
+- Rung 65537: scope check + adversarial check + security scan
 
-## Document 2: oauth3-enforcer.md
-A Stillwater skill that can be loaded to enforce OAuth3 compliance in any project.
-Format: same as other skills in /home/phuc/projects/stillwater/skills/
-Include:
-- Scope validation (reject execution if scope not granted)
-- Step-up auth trigger (destructive actions)
-- Revocation check (token not expired/revoked)
-- Evidence bundle requirement (every action must produce evidence)
-- Forbidden states: SCOPE_MISMATCH, EXPIRED_TOKEN, REVOKED_TOKEN, MISSING_EVIDENCE
+Read /home/phuc/projects/solace-cli/SOLACE-CLI-WHITEPAPER.md first.
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
 
-Read OAUTH3-WHITEPAPER.md before writing. This becomes the official spec.
+  "solace-cli/store-commands")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Coder agent with Prime Coder + Prime Safety skills.
+
+## Task
+Build Stillwater Store commands for solace-cli.
+Location: /home/phuc/projects/solace-cli/
+Reference: /home/phuc/projects/stillwater/NORTHSTAR.md (Store section)
+Rung target: 641
+
+## Commands to implement:
+1. `solace store browse [--tag oauth3] [--tag recipe]`
+   → List available skills/recipes from stillwater store API
+2. `solace store install <skill-id>`
+   → Download skill to ~/.solace/skills/<id>.md
+3. `solace store submit <skill-file>`
+   → Submit a skill for community review (POST to store API)
+
+## Evidence required:
+- browse returns JSON list
+- install creates file at correct path
+- submit returns submission ID
+
+Read NORTHSTAR.md for store architecture context.
 PROMPT
     echo ""
     echo "────────────────────────────────────────────────────────"
@@ -352,6 +442,121 @@ Never store API keys in plaintext. BYOK keys: AES-256-GCM encrypted per user.
 - Managed LLM (+$3/mo): hosted LLM passthrough via Together.ai/OpenRouter
 - Pro ($19/mo): cloud twin + OAuth3 vault + 90-day evidence + managed LLM included
 - Enterprise ($99/mo): SOC2 audit mode, team tokens, private store, dedicated nodes
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  "solaceagi/cloud-twin")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Coder agent with Prime Coder + Prime Safety skills.
+
+## Task
+Build the headless browser cloud twin for solaceagi.com.
+Location: /home/phuc/projects/solaceagi/twin/
+Reference: /home/phuc/projects/solaceagi/SOLACEAGI-WHITEPAPER.md (Cloud Twin section)
+Rung target: 641
+
+## Goal: Cloud twin = headless browser that executes recipes on behalf of the user
+- Receives: {recipe_name, params, agency_token}
+- Validates: agency token scope before execution
+- Executes: recipe using playwright/puppeteer
+- Returns: evidence bundle {screenshots, output, lane_typing}
+
+## Files to create:
+- twin/__init__.py
+- twin/executor.py — Recipe executor (loads recipe JSON, runs steps)
+- twin/oauth3_gate.py — Scope validation before execution
+- twin/evidence.py — Evidence bundle builder
+- tests/test_twin.py — Test executor with mock browser
+
+Read SOLACEAGI-WHITEPAPER.md Cloud Twin section first.
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  "stillwater/oauth3-spec")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Writer agent with Software 5.0 Paradigm + Prime Safety skills.
+
+## Task
+Write two documents for the Stillwater project:
+1. /home/phuc/projects/stillwater/papers/oauth3-spec-v0.1.md
+2. /home/phuc/projects/stillwater/skills/oauth3-enforcer.md
+
+Reference: /home/phuc/projects/solace-browser/OAUTH3-WHITEPAPER.md (read this first)
+
+## Document 1: oauth3-spec-v0.1.md
+A formal specification (not marketing). Audience: other developers implementing OAuth3.
+Sections:
+- Abstract (3 sentences)
+- 1. Problem Statement (delegation without consent)
+- 2. Core Definitions (Agency Token, Scope, Step-Up Auth, Revocation)
+- 3. Token Schema (JSON schema, required fields)
+- 4. Scope Naming Convention (platform.action format)
+- 5. Consent Protocol (flow: request → display → grant → store → enforce)
+- 6. Revocation Protocol (immediate, fail-closed, vault clear)
+- 7. Evidence Requirements (every delegated action must produce evidence bundle)
+- 8. Platform Respect Mode (rate limiting, human-like behavior)
+- 9. Reference Implementation (solace-browser)
+
+## Document 2: oauth3-enforcer.md
+A Stillwater skill that can be loaded to enforce OAuth3 compliance in any project.
+Format: same as other skills in /home/phuc/projects/stillwater/skills/
+Include:
+- Scope validation (reject execution if scope not granted)
+- Step-up auth trigger (destructive actions)
+- Revocation check (token not expired/revoked)
+- Evidence bundle requirement (every action must produce evidence)
+- Forbidden states: SCOPE_MISMATCH, EXPIRED_TOKEN, REVOKED_TOKEN, MISSING_EVIDENCE
+
+Read OAUTH3-WHITEPAPER.md before writing. This becomes the official spec.
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  "stillwater/store-api")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Coder agent with Prime Coder + Prime Safety skills.
+
+## Task
+Build Stillwater Store FastAPI endpoints.
+Location: /home/phuc/projects/stillwater/store/
+Reference: /home/phuc/projects/stillwater/NORTHSTAR.md (Store section)
+Rung target: 641
+
+## Endpoints to implement:
+- GET /store/skills — list all published skills (filtered by tag, author, rung)
+- GET /store/skills/{id} — get skill detail + download URL
+- POST /store/skills — submit a skill (requires API key)
+- GET /store/recipes — list all published recipes
+- GET /store/recipes/{id} — get recipe detail
+- POST /store/recipes — submit a recipe
+
+## Skill/Recipe metadata schema:
+{
+  "id": str,
+  "name": str,
+  "version": str,
+  "author": str,
+  "tags": list[str],
+  "rung_certified": int,  # 641, 274177, or 65537
+  "description": str,
+  "download_url": str,
+  "sha256": str
+}
+
+## Evidence required:
+- tests/test_store.py passing
+- GET /store/skills returns list
+- POST /store/skills creates entry
+
+Read NORTHSTAR.md for store vision before coding.
 PROMPT
     echo ""
     echo "────────────────────────────────────────────────────────"
