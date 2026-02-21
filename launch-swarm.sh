@@ -3,12 +3,16 @@
 # Usage: ./launch-swarm.sh <project> <phase>
 # Example: ./launch-swarm.sh solace-browser oauth3-core
 #
-# This script generates the copy-paste prompt for a haiku/sonnet session
-# that builds the specified project phase using phuc swarms.
+# ARCHITECTURE REMINDER:
+#   stillwater/cli  = OSS (this repo — base CLI anyone can use)
+#   solace-cli      = PRIVATE extension of stillwater/cli (powers solaceagi.com)
+#   solace-browser  = OSS OAuth3 reference implementation
+#   solaceagi.com   = Integration layer (solace-cli + twin browser + hosted LLM)
+#                     → BYOK: users bring own API key (zero markup)
+#                     → Managed LLM: Together.ai/OpenRouter +$3/mo (20% margin)
 #
-# Run this in your main claude opus session to get the prompt.
-# Then paste the prompt into a NEW haiku/sonnet claude session.
-# Report back results here for integration + case-study tracking.
+# This script generates the copy-paste prompt for a haiku/sonnet session.
+# Run this, paste the output into a new Claude session, report results back here.
 
 set -euo pipefail
 
@@ -314,10 +318,16 @@ Reference: /home/phuc/projects/solaceagi/SOLACEAGI-WHITEPAPER.md
 Reference: /home/phuc/projects/solaceagi/ROADMAP.md
 Rung target: 641
 
-## Architecture:
-Clean rebuild from first principles. The hosted platform provides:
+## Architecture (CORRECT):
+- stillwater/cli = OSS base CLI
+- solace-cli = PRIVATE extension of stillwater/cli → this is the backend
+- solaceagi.com = integration layer (solace-cli + twin browser + hosted LLM)
+
+The hosted platform provides:
 1. OAuth3 vault management (user's agency tokens, encrypted)
-2. User API key management (user brings own Anthropic/OpenAI key)
+2. LLM routing — TWO modes:
+   a. BYOK: user provides own Anthropic/OpenAI/Llama key → zero markup, stored encrypted
+   b. Managed LLM: we route to Together.ai/OpenRouter → charge 20% markup (flat ~$3/month)
 3. Recipe execution endpoint (trigger cloud twin)
 4. Stillwater Store access (browse/install skills)
 5. Evidence bundle storage (90-day history for Pro users)
@@ -326,21 +336,22 @@ Clean rebuild from first principles. The hosted platform provides:
 - api/__init__.py
 - api/main.py — FastAPI app, routes
 - api/oauth3.py — Agency token vault (AES-256-GCM, zero-knowledge)
-- api/users.py — User management (API key storage, tier enforcement)
+- api/users.py — User management (BYOK key storage, tier enforcement)
+- api/llm_proxy.py — LLM router: BYOK passthrough OR Together.ai/OpenRouter managed
 - api/recipes.py — Recipe execution dispatch
 - api/store.py — Stillwater Store proxy
 - tests/test_api.py — Tests for each endpoint
 
-## Critical constraints:
-- ZERO LLM cost to us: user provides own Anthropic/OpenAI API key
-- Store it encrypted: never log API keys
-- Haiku for recipe replay ($0.001/task); sonnet for new recipe creation
-- Evidence bundle generated per execution
+## LLM proxy (day-one strategy):
+Together.ai primary (Llama 3.3 70B: $0.59/M tokens), OpenRouter fallback.
+At 70% recipe hit rate: avg $0.0005/task LLM cost. Managed tier = $3/mo flat.
+Never store API keys in plaintext. BYOK keys: AES-256-GCM encrypted per user.
 
 ## Business tier enforcement:
-- Free: local execution only (no cloud twin calls)
-- Pro ($19/mo): cloud twin, 90-day evidence, OAuth3 vault
-- Enterprise ($99/mo): audit mode, team tokens, private store
+- Free: local execution only, BYOK only
+- Managed LLM (+$3/mo): hosted LLM passthrough via Together.ai/OpenRouter
+- Pro ($19/mo): cloud twin + OAuth3 vault + 90-day evidence + managed LLM included
+- Enterprise ($99/mo): SOC2 audit mode, team tokens, private store, dedicated nodes
 PROMPT
     echo ""
     echo "────────────────────────────────────────────────────────"
