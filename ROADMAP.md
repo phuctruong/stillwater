@@ -141,6 +141,37 @@ Evidence required: tests/test_store_client.py passing (pytest -v)
 
 ---
 
+## Phase 2.5: Dragon Tip Integration in LLM Client Library
+
+**Goal**: Stillwater's LLM client library (`stillwater.llm_client`) includes hooks for the Dragon Tip Program so that solaceagi.com can calculate tips on BYOK API calls routed through the Stillwater stack.
+
+### Tasks
+
+- [ ] Add `tip_callback` parameter to `llm_call()` and `llm_chat()` — optional callback invoked after each API call with `{model, input_tokens, output_tokens, estimated_cost_usd}`
+- [ ] Add `usage_tracker` module: accumulates per-session token usage, recipe hit/miss counts, and estimated savings
+- [ ] Ensure cost estimation uses exact Decimal arithmetic (no float in any cost path)
+- [ ] `tip_callback` is a no-op by default — only solaceagi.com sets it to route to `tip/engine.py`
+- [ ] Tests: `tests/test_llm_tip_hooks.py` — callback invocation, cost estimation accuracy, Decimal-only arithmetic
+
+### Build Prompt (Phase 2.5 — Tip Hooks)
+
+```
+Load prime-safety + prime-coder.
+Task: Add Dragon Tip callback hooks to stillwater LLM client library.
+Location: stillwater/ (llm_client module)
+Requirements:
+  - llm_call() and llm_chat() accept optional tip_callback(cost_report: dict)
+  - cost_report: {model, input_tokens, output_tokens, estimated_cost_usd: Decimal}
+  - usage_tracker module: accumulate session stats (total calls, recipe hits, tokens saved)
+  - All cost estimates: exact Decimal — no float
+  - Callback is no-op by default (zero overhead for non-solaceagi users)
+  - Zero breaking changes to existing llm_call/llm_chat signatures
+Rung target: 641
+Evidence required: tests/test_llm_tip_hooks.py passing
+```
+
+---
+
 ## Phase 3: LLM Portal Polish (Month 2)
 
 **Goal**: Stillwater's LLM Portal supports multiple providers, users bring own API keys, session management is clean.
@@ -246,6 +277,7 @@ Evidence required: .github/workflows/rung-check.yml passing on main branch
 | Phase 0: Audit | Week 0 | 641 | Baseline audit report |
 | Phase 1: OAuth3 | Week 1–2 | 641 | `papers/oauth3-spec-v0.1.md` + `skills/oauth3-enforcer.md` — COMPLETE |
 | Phase 2: Store Client | Month 1 | 641 | `store/client.py` + `store/rung_validator.py` (server in solaceagi) |
+| Phase 2.5: Dragon Tip Hooks | Month 1 | 641 | `tip_callback` in llm_call/llm_chat + `usage_tracker` module |
 | Phase 3: LLM Portal | Month 2 | 641 | Multi-provider support + session management |
 | Phase 4: Rung 65537 | Month 3 | 65537 | Self-verification badge + 30-day CI |
 

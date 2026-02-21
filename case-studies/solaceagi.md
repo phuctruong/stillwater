@@ -76,6 +76,28 @@ Content to move:
 - Recipe replay drives COGS down dramatically at scale
 - Recipe replay → sub-cent per task. LLM cost = $0 (user's key).
 
+### Dragon Tip Program (NEW — BYOK OSS Funding)
+
+Turns free-tier BYOK users into voluntary OSS contributors. After each API call, a user-chosen percentage of the API credit cost flows to the open-source fund.
+
+| Dragon Tier | Tip % | Motto |
+|-------------|-------|-------|
+| Dragon Contributor | 2% | "Every drop fills the river" |
+| Super Dragon | 5% | "The river that gives, grows" |
+| Elder Dragon | 8% | "Ancient wisdom funds the future" |
+| Legendary Dragon | 9%+ | "Your generosity builds the dojo" |
+
+**Key design decisions:**
+- Opt-in only (default = 0%). User must explicitly choose a Dragon tier.
+- Full Part 11 transparency: every tip is hash-chained (SHA-256, append-only, publicly verifiable).
+- Savings dashboard shows recipe hit rate + tokens saved + money saved — creates natural conversion to tipping.
+- Dragon badges appear on Stillwater Store profile. Tip XP stacks with belt progression.
+- Tips fund: paudio, pvideo, stillwater, solace-browser, pzip, and community bounties.
+
+**Revenue projection:** 10K BYOK users at avg 3% tip = ~$4,500/month OSS fund ($54K/year).
+
+**Implementation:** Phase 2.7 in ROADMAP.md — `tip/engine.py`, `tip/transparency.py`, `tip/tiers.py`, `tracking/usage.py`, `api/tips.py`, `api/usage_api.py`.
+
 ## Phase 1 Priority: LLM Proxy
 
 The first concrete revenue unlock is the Managed LLM add-on.
