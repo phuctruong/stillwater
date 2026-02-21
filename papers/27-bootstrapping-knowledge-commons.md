@@ -356,7 +356,7 @@ The 85 can be reached in hours instead of years. The 15 cannot be accelerated.
 
 ### 7.1 The Paradigm Eating Its Own Tail
 
-**[A]** The paper you are reading was written by an AI swarm, operating under the `prime-coder` and `phuc-forecast` skills, as part of the bootstrapping process it documents. This is not a theoretical claim — it is a witnessed fact. The file `/home/phuc/projects/stillwater/papers/27-bootstrapping-knowledge-commons.md` was produced in this session, using the same process described in Section 3.
+**[A]** The paper you are reading was written by an AI swarm, operating under the `prime-coder` and `phuc-forecast` skills, as part of the bootstrapping process it documents. This is not a theoretical claim — it is a witnessed fact. The file `papers/27-bootstrapping-knowledge-commons.md` was produced in this session, using the same process described in Section 3.
 
 **[B]** This is Software 5.0 instantiating itself: the paradigm in which intelligence is externalized into versioned, verifiable artifacts is being used to produce the artifacts that document the paradigm. The skills used to build Stillwater are stored in Stillwater and loaded during the sessions that expand Stillwater. The loop is closed.
 

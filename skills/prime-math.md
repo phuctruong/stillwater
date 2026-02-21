@@ -784,10 +784,9 @@ PRIME_MATH_SECRET_SKILL:
       - public_artifacts_may_include_derived_conclusions_not_raw_private_corpora
     private_witness_handles:
       - secret://stillwater/prime-math/<id>
-      - secret://solaceagi/prime-math/<id>
-      - secret://pvideo/geometry/<id>
-      - secret://paudio/generator/<id>
-      - secret://pzip/prime-coder/<id>
+      - secret://example/geometry/<id>
+      - secret://example/generator/<id>
+      - secret://example/prime-coder/<id>
 
   # ------------------------------------------------------------
   # 8) IMO-Style Proof Structure (6-Step Discipline)

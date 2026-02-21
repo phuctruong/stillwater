@@ -167,7 +167,7 @@ Plain text list of files moved to scratch/ with one-line rationale per file.
 
 ```
 TASK: <verbatim audit request>
-REPO_ROOT: /home/phuc/projects/stillwater
+REPO_ROOT: <path to stillwater repo>
 RELEASE_TARGET: v<version>
 RUNG_TARGET: 65537
 PRIOR_AUDIT: <path to previous FINAL-AUDIT.md section>

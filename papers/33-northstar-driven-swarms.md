@@ -150,7 +150,7 @@ A well-formed NORTHSTAR document contains:
 
 ### 2.3 The Stillwater NORTHSTAR as Canonical Example
 
-The Stillwater NORTHSTAR (`/home/phuc/projects/stillwater/NORTHSTAR.md`) demonstrates the form:
+The Stillwater NORTHSTAR (`./NORTHSTAR.md`) demonstrates the form:
 
 **Vision:** "Make AI development deterministically verifiable — for any developer, on any project."
 
@@ -884,17 +884,17 @@ The LLM is not the master. The recipe is the master. The NORTHSTAR is what the r
 
 All referenced files exist in this repository:
 
-- `/home/phuc/projects/stillwater/NORTHSTAR.md` — canonical NORTHSTAR example
-- `/home/phuc/projects/stillwater/skills/phuc-swarms.md` — NORTHSTAR hard gate (v2.2.0)
-- `/home/phuc/projects/stillwater/skills/prime-safety.md` — god-skill, Layer 1
-- `/home/phuc/projects/stillwater/skills/prime-coder.md` — execution discipline, Layer 2
-- `/home/phuc/projects/stillwater/SOFTWARE-5.0-PARADIGM.md` — master equation + belt system
-- `/home/phuc/projects/stillwater/papers/01-lane-algebra.md` — epistemic typing (A/B/C/STAR)
-- `/home/phuc/projects/stillwater/papers/03-verification-ladder.md` — rung gates
-- `/home/phuc/projects/stillwater/papers/12-solving-alignment.md` — alignment theory
-- `/home/phuc/projects/stillwater/papers/33-northstar-driven-swarms.md` — companion paper
-- `/home/phuc/projects/stillwater/case-studies/` — metric tracking in practice
-- `/home/phuc/projects/stillwater/ROADMAP.md` — metric-tied phase acceptance criteria
+- `./NORTHSTAR.md` — canonical NORTHSTAR example
+- `./skills/phuc-swarms.md` — NORTHSTAR hard gate (v2.2.0)
+- `./skills/prime-safety.md` — god-skill, Layer 1
+- `./skills/prime-coder.md` — execution discipline, Layer 2
+- `./SOFTWARE-5.0-PARADIGM.md` — master equation + belt system
+- `./papers/01-lane-algebra.md` — epistemic typing (A/B/C/STAR)
+- `./papers/03-verification-ladder.md` — rung gates
+- `./papers/12-solving-alignment.md` — alignment theory
+- `./papers/33-northstar-driven-swarms.md` — companion paper
+- `./case-studies/` — metric tracking in practice
+- `./ROADMAP.md` — metric-tied phase acceptance criteria
 
 ```bibtex
 @software{stillwater2026_northstar,

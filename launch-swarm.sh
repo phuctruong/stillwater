@@ -9,7 +9,7 @@
 #   solace-browser  = OSS OAuth3 reference implementation
 #   solaceagi.com   = Integration layer (solace-cli + twin browser + hosted LLM)
 #                     → BYOK: users bring own API key (zero markup)
-#                     → Managed LLM: Together.ai/OpenRouter +$3/mo (20% margin)
+#                     → Managed LLM: hosted LLM routing (no API key needed)
 #
 # This script generates the copy-paste prompt for a haiku/sonnet session.
 # Run this, paste the output into a new Claude session, report results back here.
@@ -72,6 +72,15 @@ usage() {
   echo "  solaceagi       cloud-twin         Build headless browser cloud twin"
   echo "  stillwater      oauth3-spec        Write oauth3-spec-v0.1.md + oauth3-enforcer skill"
   echo "  stillwater      store-api          Build Stillwater Store FastAPI endpoints"
+  echo "  paudio          audit              Phase 0: Audit & baseline (gap analysis)"
+  echo "  paudio          engine-harden      Phase 1: Core engine hardening (100% determinism)"
+  echo "  paudio          compute-grid       Phase 2: Volunteer compute network (PAudio Grid)"
+  echo "  paudio          voice-arena        Phase 3: Voice Arena (AI singing competition)"
+  echo "  paudio          karaoke            Phase 4: Karaoke learning sessions"
+  echo "  paudio          stt-pipeline       Phase 5: STT pipeline (Whisper fine-tuning)"
+  echo "  paudio          integration        Phase 6: Platform integration (solaceagi+cli+browser)"
+  echo "  paudio          multilingual       Phase 7: Multilingual expansion (17 languages)"
+  echo "  paudio          production         Phase 8: Production promotion (rung 65537)"
   echo ""
   echo "Example: $0 solace-browser oauth3-core"
   exit 1
@@ -93,9 +102,9 @@ You are a Coder agent with Prime Coder + Prime Safety skills loaded.
 
 ## Task
 Build the OAuth3 core module for solace-browser.
-Location: /home/phuc/projects/solace-browser/oauth3/
-Reference: /home/phuc/projects/solace-browser/OAUTH3-WHITEPAPER.md (Sections 1-5)
-Reference: /home/phuc/projects/solace-browser/ROADMAP.md (Build Prompt 1)
+Location: solace-browser/oauth3/
+Reference: solace-browser/OAUTH3-WHITEPAPER.md (Sections 1-5)
+Reference: solace-browser/ROADMAP.md (Build Prompt 1)
 Rung target: 641
 
 ## Files to create:
@@ -141,9 +150,9 @@ You are a Coder agent with Prime Coder + Prime Safety skills.
 
 ## Task
 Build the OAuth3 consent UI for solace-browser.
-Location: /home/phuc/projects/solace-browser/
-Reference: /home/phuc/projects/solace-browser/OAUTH3-WHITEPAPER.md (Section 6)
-Reference: /home/phuc/projects/solace-browser/ROADMAP.md (Build Prompt 2)
+Location: solace-browser/
+Reference: solace-browser/OAUTH3-WHITEPAPER.md (Section 6)
+Reference: solace-browser/ROADMAP.md (Build Prompt 2)
 Rung target: 641
 
 ## Files to create/update:
@@ -172,9 +181,9 @@ You are a Coder agent with Prime Coder + Prime Safety skills.
 
 ## Task
 Build Gmail automation recipes for solace-browser.
-Location: /home/phuc/projects/solace-browser/recipes/
-Reference: /home/phuc/projects/solace-browser/primewiki/gmail/gmail-page-flow.prime-mermaid.md
-Reference: /home/phuc/projects/solace-browser/primewiki/gmail/gmail-oauth2.prime-mermaid.md
+Location: solace-browser/recipes/
+Reference: solace-browser/primewiki/gmail/gmail-page-flow.prime-mermaid.md
+Reference: solace-browser/primewiki/gmail/gmail-oauth2.prime-mermaid.md
 Rung target: 641
 
 ## Recipes to create (JSON format matching existing LinkedIn recipes):
@@ -208,7 +217,7 @@ You are a Coder agent + Scout agent with Prime Coder + Prime Safety skills.
 Build Substack automation recipes for solace-browser.
 THIS IS A FIRST-MOVER OPPORTUNITY. No competitor has working Substack automation.
 
-Location: /home/phuc/projects/solace-browser/
+Location: solace-browser/
 Steps:
 1. SCOUT: Navigate to substack.com and map the page states using Prime Mermaid format
 2. CREATE primewiki/substack/ directory with PM triplet
@@ -232,7 +241,7 @@ Create:
 - substack-create-draft.recipe.json — Create new draft
 - substack-publish.recipe.json — Publish existing draft (step-up OAuth3 auth)
 
-Reference /home/phuc/projects/solace-browser/primewiki/PRIMEWIKI_STANDARDS.md for PM format.
+Reference solace-browser/primewiki/PRIMEWIKI_STANDARDS.md for PM format.
 PROMPT
     echo ""
     echo "────────────────────────────────────────────────────────"
@@ -245,7 +254,7 @@ You are a Coder agent with Prime Coder + Prime Safety skills.
 
 ## Task
 Build Twitter/X automation recipes for solace-browser.
-Location: /home/phuc/projects/solace-browser/recipes/
+Location: solace-browser/recipes/
 Rung target: 641
 
 ## Recipes to create:
@@ -260,7 +269,7 @@ Rung target: 641
 
 ## Bot detection: char-by-char typing at 80-200ms; no rapid automation.
 
-Reference existing recipes in /home/phuc/projects/solace-browser/recipes/ for format.
+Reference existing recipes in solace-browser/recipes/ for format.
 PROMPT
     echo ""
     echo "────────────────────────────────────────────────────────"
@@ -273,8 +282,8 @@ You are a Coder agent with Prime Coder + Prime Safety skills.
 
 ## Task
 Build the solaceagi.com FastAPI MVP wired to solace-browser.
-Location: /home/phuc/projects/solace-browser/api/
-Reference: /home/phuc/projects/solaceagi/SOLACEAGI-WHITEPAPER.md
+Location: solace-browser/api/
+Reference: solaceagi/SOLACEAGI-WHITEPAPER.md
 Rung target: 641
 
 ## Goal: Minimal viable hosted platform endpoint
@@ -300,9 +309,9 @@ You are a Coder agent with Prime Coder + Prime Safety skills.
 
 ## Task
 Implement OAuth3 commands for solace-cli.
-Location: /home/phuc/projects/solace-cli/
-Reference: /home/phuc/projects/solace-cli/SOLACE-CLI-WHITEPAPER.md (Section 5)
-Reference: /home/phuc/projects/solace-browser/OAUTH3-WHITEPAPER.md
+Location: solace-cli/
+Reference: solace-cli/SOLACE-CLI-WHITEPAPER.md (Section 5)
+Reference: solace-browser/OAUTH3-WHITEPAPER.md
 Rung target: 641
 
 ## Commands to implement:
@@ -345,7 +354,7 @@ You are a Coder agent with Prime Coder + Prime Safety skills.
 
 ## Task
 Build rung-gated execution for solace-cli.
-Location: /home/phuc/projects/solace-cli/
+Location: solace-cli/
 Rung target: 641
 
 ## Command to implement:
@@ -360,7 +369,7 @@ Rung target: 641
 - Rung 274177: scope check + seed replay (run twice, compare outputs)
 - Rung 65537: scope check + adversarial check + security scan
 
-Read /home/phuc/projects/solace-cli/SOLACE-CLI-WHITEPAPER.md first.
+Read solace-cli/SOLACE-CLI-WHITEPAPER.md first.
 PROMPT
     echo ""
     echo "────────────────────────────────────────────────────────"
@@ -373,8 +382,8 @@ You are a Coder agent with Prime Coder + Prime Safety skills.
 
 ## Task
 Build Stillwater Store commands for solace-cli.
-Location: /home/phuc/projects/solace-cli/
-Reference: /home/phuc/projects/stillwater/NORTHSTAR.md (Store section)
+Location: solace-cli/
+Reference: stillwater/NORTHSTAR.md (Store section)
 Rung target: 641
 
 ## Commands to implement:
@@ -403,9 +412,9 @@ You are a Coder agent with Prime Coder + Prime Safety skills.
 
 ## Task
 Build the FastAPI backend for solaceagi.com.
-Location: /home/phuc/projects/solaceagi/api/
-Reference: /home/phuc/projects/solaceagi/SOLACEAGI-WHITEPAPER.md
-Reference: /home/phuc/projects/solaceagi/ROADMAP.md
+Location: solaceagi/api/
+Reference: solaceagi/SOLACEAGI-WHITEPAPER.md
+Reference: solaceagi/ROADMAP.md
 Rung target: 641
 
 ## Architecture (CORRECT):
@@ -417,7 +426,7 @@ The hosted platform provides:
 1. OAuth3 vault management (user's agency tokens, encrypted)
 2. LLM routing — TWO modes:
    a. BYOK: user provides own Anthropic/OpenAI/Llama key → zero markup, stored encrypted
-   b. Managed LLM: we route to Together.ai/OpenRouter → charge 20% markup (flat ~$3/month)
+   b. Managed LLM: we route to upstream LLM providers → markup applied (flat monthly add-on)
 3. Recipe execution endpoint (trigger cloud twin)
 4. Stillwater Store access (browse/install skills)
 5. Evidence bundle storage (90-day history for Pro users)
@@ -427,21 +436,20 @@ The hosted platform provides:
 - api/main.py — FastAPI app, routes
 - api/oauth3.py — Agency token vault (AES-256-GCM, zero-knowledge)
 - api/users.py — User management (BYOK key storage, tier enforcement)
-- api/llm_proxy.py — LLM router: BYOK passthrough OR Together.ai/OpenRouter managed
+- api/llm_proxy.py — LLM router: BYOK passthrough OR managed upstream routing
 - api/recipes.py — Recipe execution dispatch
 - api/store.py — Stillwater Store proxy
 - tests/test_api.py — Tests for each endpoint
 
 ## LLM proxy (day-one strategy):
-Together.ai primary (Llama 3.3 70B: $0.59/M tokens), OpenRouter fallback.
-At 70% recipe hit rate: avg $0.0005/task LLM cost. Managed tier = $3/mo flat.
+Route to upstream LLM providers (primary and fallback). Zero GPU infra.
 Never store API keys in plaintext. BYOK keys: AES-256-GCM encrypted per user.
 
 ## Business tier enforcement:
 - Free: local execution only, BYOK only
-- Managed LLM (+$3/mo): hosted LLM passthrough via Together.ai/OpenRouter
-- Pro ($19/mo): cloud twin + OAuth3 vault + 90-day evidence + managed LLM included
-- Enterprise ($99/mo): SOC2 audit mode, team tokens, private store, dedicated nodes
+- Managed LLM (add-on): hosted LLM passthrough (no API key needed)
+- Pro (paid tier): cloud twin + OAuth3 vault + 90-day evidence + managed LLM included
+- Enterprise (paid tier): SOC2 audit mode, team tokens, private store, dedicated nodes
 PROMPT
     echo ""
     echo "────────────────────────────────────────────────────────"
@@ -454,8 +462,8 @@ You are a Coder agent with Prime Coder + Prime Safety skills.
 
 ## Task
 Build the headless browser cloud twin for solaceagi.com.
-Location: /home/phuc/projects/solaceagi/twin/
-Reference: /home/phuc/projects/solaceagi/SOLACEAGI-WHITEPAPER.md (Cloud Twin section)
+Location: solaceagi/twin/
+Reference: solaceagi/SOLACEAGI-WHITEPAPER.md (Cloud Twin section)
 Rung target: 641
 
 ## Goal: Cloud twin = headless browser that executes recipes on behalf of the user
@@ -484,10 +492,10 @@ You are a Writer agent with Software 5.0 Paradigm + Prime Safety skills.
 
 ## Task
 Write two documents for the Stillwater project:
-1. /home/phuc/projects/stillwater/papers/oauth3-spec-v0.1.md
-2. /home/phuc/projects/stillwater/skills/oauth3-enforcer.md
+1. stillwater/papers/oauth3-spec-v0.1.md
+2. stillwater/skills/oauth3-enforcer.md
 
-Reference: /home/phuc/projects/solace-browser/OAUTH3-WHITEPAPER.md (read this first)
+Reference: solace-browser/OAUTH3-WHITEPAPER.md (read this first)
 
 ## Document 1: oauth3-spec-v0.1.md
 A formal specification (not marketing). Audience: other developers implementing OAuth3.
@@ -505,7 +513,7 @@ Sections:
 
 ## Document 2: oauth3-enforcer.md
 A Stillwater skill that can be loaded to enforce OAuth3 compliance in any project.
-Format: same as other skills in /home/phuc/projects/stillwater/skills/
+Format: same as other skills in stillwater/skills/
 Include:
 - Scope validation (reject execution if scope not granted)
 - Step-up auth trigger (destructive actions)
@@ -526,8 +534,8 @@ You are a Coder agent with Prime Coder + Prime Safety skills.
 
 ## Task
 Build Stillwater Store FastAPI endpoints.
-Location: /home/phuc/projects/stillwater/store/
-Reference: /home/phuc/projects/stillwater/NORTHSTAR.md (Store section)
+Location: stillwater/store/
+Reference: stillwater/NORTHSTAR.md (Store section)
 Rung target: 641
 
 ## Endpoints to implement:
@@ -557,6 +565,248 @@ Rung target: 641
 - POST /store/skills creates entry
 
 Read NORTHSTAR.md for store vision before coding.
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  "paudio/audit")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Scout agent with Prime Safety + Prime Coder skills loaded.
+
+## Task
+Run comprehensive audit of PAudio project.
+Location: paudio/
+Reference: paudio/ROADMAP.md (Phase 0)
+Rung target: 641
+
+## Steps:
+1. Run test suite: pytest -q tests/ — record pass/fail
+2. Run determinism sweep: 3 seeds (42, 137, 9001) × 2 replays for existing words
+3. Inventory phoneme coverage (IPA symbols with working generators)
+4. Inventory word database (verified words with STT QA pass)
+5. Assess STT QA gate (faster-whisper integration)
+6. Document MOS baseline
+
+## Evidence required:
+- audit-report.json (phoneme count, word count, test results, determinism %)
+- gap-analysis.md (missing for Phase 1)
+
+Read-only. Do not modify source code. Rung 641 minimum.
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  "paudio/engine-harden")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Coder agent (Donald Knuth) with Prime Safety + Prime Coder + Prime Math skills.
+
+## Task
+Achieve 100% determinism score. Expand phoneme coverage to 120 IPA symbols.
+Location: paudio/
+Reference: paudio/ROADMAP.md (Phase 1)
+Rung target: 274177
+
+## Steps:
+1. Fix non-deterministic paths (seed all RNG, exact arithmetic for freq/pitch)
+2. Expand Universal Phoneme Atlas to 120 IPA symbols
+3. Implement seed sweep CI: 3 seeds × 3 platforms × 2 replays
+4. Add null edge cases: silence, single phoneme, max-length
+5. Establish behavioral hash registry
+
+## Evidence required:
+- tests/test_determinism_sweep.py (3 seeds × 2 replays)
+- evidence/determinism-report.json (100% pass)
+- No float in verification paths (prime-math enforced)
+
+Never-worse doctrine. All existing tests must pass. Rung 274177.
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  "paudio/compute-grid")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Coder agent (Linus Torvalds) with Prime Safety + Prime Coder skills.
+
+## Task
+Build PAudio Grid — volunteer compute network for phoneme processing.
+Location: paudio/
+Reference: paudio/ROADMAP.md (Phase 2)
+Reference: paudio/skills/paudio-worker.md
+Rung target: 641
+
+## Components:
+1. Coordinator API (FastAPI): register workers, distribute work, collect results
+2. Worker daemon: polls for work, runs synthesis, returns hash + trace
+3. Deterministic validator: 2+ workers must agree on audio hash
+4. Credit system: complexity_score-based credits after verification
+
+## API pattern: Follow solaceagi Stillwater Store API (sw_sk_ keys, rate limiting)
+## Key constraint: CPU-only, deterministic verification, no audio exfiltration
+
+Evidence: tests/test_coordinator.py + tests/test_worker.py passing. Rung 641.
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  "paudio/voice-arena")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Coder agent (Shigeru Miyamoto) with Prime Safety + Prime Coder + Phuc Forecast skills.
+
+## Task
+Build Voice Arena — gamified AI singing competition for community MOS evaluation.
+Location: paudio/
+Reference: paudio/ROADMAP.md (Phase 3)
+Reference: paudio/skills/paudio-judge.md
+Rung target: 641
+
+## Components:
+1. Head-to-head arena (2 audio clips, pick the better one)
+2. ELO rating system for voice models (Decimal only, no float)
+3. XP + leaderboard + badges (10 XP per judgment, streaks, titles)
+4. Phoneme Unlock Campaigns (community votes elect canonical generators)
+
+## Key: Fun-first, no dark patterns. Inspired by LMSYS Arena + FoldIt + Duolingo.
+## Free tier gate: 10 judgments/week required for free TTS access.
+
+Evidence: tests/test_arena.py passing. ELO deterministic. Rung 641.
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  "paudio/karaoke")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Coder agent with Prime Safety + Prime Coder skills.
+
+## Task
+Build karaoke learning session system with consent-gated pronunciation harvesting.
+Location: paudio/
+Reference: paudio/ROADMAP.md (Phase 4)
+Rung target: 641
+
+## Components:
+1. Session management (play target audio, record user)
+2. Pronunciation scoring (pitch via YIN/PYIN, timing, formants)
+3. OAuth3 consent gate (paudio.record_audio scope required)
+4. Data harvesting pipeline (opt-in contributions → phoneme database)
+5. Song curriculum (difficulty levels, language paths)
+
+## Critical: NO recording without explicit OAuth3 consent. GDPR-compatible.
+
+Evidence: tests/test_karaoke.py passing. Consent flow verified. Rung 641.
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  "paudio/stt-pipeline")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Coder agent (Geoffrey Hinton) with Prime Safety + Prime Coder + Prime Math skills.
+
+## Task
+Build community-trained STT pipeline with Whisper fine-tuning.
+Location: paudio/
+Reference: paudio/ROADMAP.md (Phase 5)
+Rung target: 274177
+
+## Components:
+1. Dataset pipeline: community audio → Common Voice format
+2. Whisper fine-tuning via LoRA (reproducible with seed)
+3. STT API endpoint: POST /api/v1/stt/transcribe
+4. Round-trip verification: TTS→STT→text must match
+5. Phoneme-level accuracy (not just word-level)
+
+## Evidence: tests/test_stt_pipeline.py + evidence/stt-baseline-vs-finetuned.json
+## Constraint: Reproducible fine-tuning (seeded), Decimal WER, consent-only data.
+
+Rung 274177 (seed sweep on fine-tuning).
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  "paudio/integration")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Coder agent (Rob Pike) with Prime Safety + Prime Coder skills.
+
+## Task
+Integrate PAudio with stillwater + solaceagi + solace-cli + solace-browser.
+Location: paudio/ (+ cross-project files)
+Reference: paudio/ROADMAP.md (Phase 6)
+Rung target: 274177
+
+## Integration points:
+1. solaceagi API: POST /api/v1/tts/synthesize, POST /api/v1/stt/transcribe
+2. solace-cli: solace tts, solace stt, solace judge, solace compute
+3. stillwater: publish paudio-judge + paudio-worker skills to Store
+4. solace-browser: karaoke UI + Voice Arena UI
+5. Free tier: 10 judgments/week → free TTS access
+
+## Evidence: end-to-end TTS/STT via solaceagi API, CLI commands working. Rung 274177.
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  "paudio/multilingual")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Coder agent (Noam Chomsky) with Prime Safety + Prime Coder + Prime Math skills.
+
+## Task
+Expand PAudio to 5+ languages with cross-language phoneme transfer.
+Location: paudio/
+Reference: paudio/ROADMAP.md (Phase 7)
+Rung target: 274177
+
+## Priority languages: Spanish, French, German, Japanese, Mandarin
+## Components:
+1. Cross-language phoneme transfer (shared generators for /a/, /i/, /u/)
+2. Language-specific phoneme sets (unique sounds per language)
+3. Tonal phoneme system (Mandarin 4 tones + neutral)
+4. Karaoke curriculum per language
+5. Community Phoneme Unlock Campaigns per language
+
+## Constraint: English must not regress. Exact arithmetic for tonal system.
+
+Evidence: tests/test_multilingual.py (5 languages × determinism sweep). Rung 274177.
+PROMPT
+    echo ""
+    echo "────────────────────────────────────────────────────────"
+    ;;
+
+  "paudio/production")
+    show_prompt "$PROJECT" "$PHASE"
+    cat << 'PROMPT'
+You are a Skeptic agent (Bruce Schneier) with Prime Safety + Prime Coder + Phuc Forecast skills.
+
+## Task
+Promote PAudio to rung 65537 (production). Full adversarial + security audit.
+Location: paudio/
+Reference: paudio/ROADMAP.md (Phase 8)
+Rung target: 65537
+
+## Sweeps:
+1. Adversarial audio: noise injection, accent edge cases, adversarial phonemes
+2. Security: compute worker tampering, OAuth3 bypass, API abuse
+3. Behavioral hash: 30 daily builds, document all drift
+4. Skeptic review: 5 paraphrases per skill
+5. Stress test: 100 concurrent judges, 50 concurrent workers
+
+## Assume attacker has read all source code. Every vulnerability = repro script.
+
+Evidence: evidence/promotion-certificate.json (65537 seal). Rung 65537.
 PROMPT
     echo ""
     echo "────────────────────────────────────────────────────────"

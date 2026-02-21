@@ -21,7 +21,7 @@ Ecosystem lock-in begins here.
 - **`GET /stillwater/health/persistence`** — distinguishes Firestore vs in-memory mode
 - **`stillwater evidence init [--dir]`** — scaffold all 11 prime-coder evidence template files
 - **`stillwater evidence verify [--dir] [--rung]`** — validate evidence bundle at rung 641/274177/65537
-- **`web/start.sh`** — replaces supervisord; explicit health-wait + autorestart loop for uvicorn; Firestore fully connected on Cloud Run
+- **`web/start.sh`** — replaces supervisord; explicit health-wait + autorestart loop for uvicorn; storage backend fully connected on deployment
 - **Bandit + pip-audit in CI** (`ci.yml` and `publish.yml`) — supply chain security gate
 - **`skills/prime-moltbot.md` v1.1.0** — FSM includes REGISTER_ACCOUNT as step 0; Store auth header in submit
 - **`web/stillwater/store.html`** — Stillwater Store skills browser at `www.solaceagi.com/stillwater/store.html`
@@ -29,14 +29,14 @@ Ecosystem lock-in begins here.
 
 ### Infrastructure
 
-- Single-container nginx + uvicorn deployment on Cloud Run (us-central1)
+- Single-container nginx + uvicorn deployment
 - Build context changed from `web/` to repo root (enables COPY from `solace/api/`)
-- Cloud Build trigger fixed: uses `web/Dockerfile`, deploys on port 80
-- `--min-instances 1` + `--cpu-boost` for reduced cold-start latency
+- Container uses `web/Dockerfile`, deploys on port 80
+- Min-instances configured for reduced cold-start latency
 
 ### Fixed
 
-- uvicorn single-worker mode (removed `--workers 2` which caused Cloud Run instability)
+- uvicorn single-worker mode (removed `--workers 2` which caused instability)
 - api_server.py import path bug (`stillwater_router` is in `/app/`, not `/solace/api/`)
 - Fake case studies with invented author names (violated editorial integrity)
 

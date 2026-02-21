@@ -159,7 +159,7 @@ Example from `ROADMAP.md`:
 ```
 Load prime-safety + prime-coder + phuc-forecast.
 Task: Write papers/oauth3-spec-v0.1.md for stillwater.
-Reference: /home/phuc/projects/solace-browser/OAUTH3-WHITEPAPER.md
+Reference: solace-browser/OAUTH3-WHITEPAPER.md
 Rung target: 641
 Evidence required: papers/oauth3-spec-v0.1.md committed with sha256 in artifacts.json
 ```
@@ -698,7 +698,7 @@ the pipeline reliable — not the cleverness of any individual agent.
 The Stillwater ecosystem provides a concrete implementation of ROADMAP-based dispatch:
 
 ```bash
-# From /home/phuc/projects/stillwater/
+# From the stillwater repo root
 ./launch-swarm.sh solace-browser oauth3-core      # OAuth3 token module
 ./launch-swarm.sh solace-browser oauth3-consent   # Consent UI
 ./launch-swarm.sh solace-cli oauth3-commands      # CLI auth commands
@@ -869,19 +869,19 @@ externalized state + typed roles + fail-closed gates. Three file types and a dis
 
 All referenced files exist in this repository:
 
-- `/home/phuc/projects/stillwater/NORTHSTAR.md` — ecosystem NORTHSTAR (canonical example)
-- `/home/phuc/projects/stillwater/ROADMAP.md` — Stillwater's own ROADMAP (canonical example)
-- `/home/phuc/projects/stillwater/SOFTWARE-5.0-PARADIGM.md` — paradigm manifesto
-- `/home/phuc/projects/stillwater/skills/phuc-swarms.md` — swarm orchestration skill v2.2.0
-- `/home/phuc/projects/stillwater/skills/phuc-orchestration.md` — orchestration discipline
-- `/home/phuc/projects/stillwater/skills/prime-safety.md` — god-skill, always first
-- `/home/phuc/projects/stillwater/skills/prime-coder.md` — evidence discipline
-- `/home/phuc/projects/stillwater/papers/01-lane-algebra.md` — epistemic typing system
-- `/home/phuc/projects/stillwater/papers/03-verification-ladder.md` — rung gates
-- `/home/phuc/projects/stillwater/papers/04-red-green-gate.md` — dual-witness verification
-- `/home/phuc/projects/stillwater/papers/32-roadmap-based-development.md` — companion paper
-- `/home/phuc/projects/stillwater/case-studies/` — per-project tracking files
-- `/home/phuc/projects/stillwater/launch-swarm.sh` — swarm dispatch implementation
+- `./NORTHSTAR.md` — ecosystem NORTHSTAR (canonical example)
+- `./ROADMAP.md` — Stillwater's own ROADMAP (canonical example)
+- `./SOFTWARE-5.0-PARADIGM.md` — paradigm manifesto
+- `./skills/phuc-swarms.md` — swarm orchestration skill v2.2.0
+- `./skills/phuc-orchestration.md` — orchestration discipline
+- `./skills/prime-safety.md` — god-skill, always first
+- `./skills/prime-coder.md` — evidence discipline
+- `./papers/01-lane-algebra.md` — epistemic typing system
+- `./papers/03-verification-ladder.md` — rung gates
+- `./papers/04-red-green-gate.md` — dual-witness verification
+- `./papers/32-roadmap-based-development.md` — companion paper
+- `./case-studies/` — per-project tracking files
+- `./launch-swarm.sh` — swarm dispatch implementation
 
 ```bibtex
 @software{stillwater2026_roadmap,

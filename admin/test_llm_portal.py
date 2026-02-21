@@ -3,7 +3,6 @@ Tests for the Stillwater LLM Portal.
 Auth: 65537 | Rung target: 641 (local correctness; offline provider, zero network)
 
 Run:
-    cd /home/phuc/projects/stillwater
     pytest admin/test_llm_portal.py -v
 
 All tests use the "offline" provider — no network calls required.

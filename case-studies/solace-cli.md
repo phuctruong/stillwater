@@ -73,10 +73,10 @@ Note: solace-cli is a PRIVATE extension of stillwater/cli (OSS).
       stillwater/cli handles rung-gated execution and Store commands.
       solace-cli adds OAuth3 vault, twin browser, solaceagi.com connectivity.
 
-Location: /home/phuc/projects/solace-cli/solace_cli/oauth3/
+Location: solace-cli/solace_cli/oauth3/
 Files to create: token.py, scopes.py, enforcement.py, revocation.py
-Reference: /home/phuc/projects/solace-cli/SOLACE-CLI-WHITEPAPER.md (Section 5)
-Reference: /home/phuc/projects/solace-browser/OAUTH3-WHITEPAPER.md
+Reference: solace-cli/SOLACE-CLI-WHITEPAPER.md (Section 5)
+Reference: solace-browser/OAUTH3-WHITEPAPER.md
 Rung target: 641
 Evidence required: tests.json showing auth grant + revoke working
 ```

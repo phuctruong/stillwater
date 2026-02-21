@@ -81,11 +81,11 @@ Result:  High: 0, Medium: 5, Low: 57 — 0 critical security issues
 Command: PYTHONPATH=cli/src python -m stillwater --version
 Result:  stillwater 1.5.0
 
-Command: curl https://qa.solaceagi.com/stillwater/health   # staging env during audit
+Command: curl https://[STAGING_URL]/stillwater/health   # staging env during audit
 Result:  {"status":"ok","router":"stillwater-store","storage_backend":"memory",...}
          [Now live at www.solaceagi.com/stillwater/health with storage_backend=firestore]
 
-Command: curl -X POST https://qa.solaceagi.com/stillwater/accounts/register  # staging env during audit
+Command: curl -X POST https://[STAGING_URL]/stillwater/accounts/register  # staging env during audit
 Result:  {"account_id":"acct_...","api_key":"sw_sk_...","message":"Welcome to the Stillwater Store"}
 
 Command: git log --oneline v1.4.0..HEAD
@@ -172,19 +172,18 @@ python -m compileall -q cli/src/ → PASS (0 errors)
 ### Architecture
 
 ```
-Cloud Run (us-central1)
-  └── solaceagi-qa service (port 80, min-instances=1, 1Gi RAM)
+Cloud deployment
+  └── Container (port 80)
        └── python:3.12-slim container
             ├── nginx:80 — static files + reverse proxy
             ├── uvicorn:8000 — FastAPI (stillwater_router.py)
             └── start.sh — process manager (health-wait + autorestart loop)
 ```
 
-### Firestore Status
+### Storage Status
 
-- **Status:** CONNECTED — durable storage active (`firestore_available: true` confirmed live)
+- **Status:** CONNECTED — durable storage active (confirmed live)
 - **Impact:** Registered accounts and submissions persist across container restarts
-- **Note:** Default Compute Engine service account has Datastore access — no IAM fix needed
 
 ---
 
@@ -307,15 +306,14 @@ is a documented, intentional design decision for this release).
 {
   "git_commit": "252d4d6",
   "git_tag": "v1.5.0",
-  "repo_root": "/home/phuc/projects/stillwater",
-  "os": "Linux 6.8.0-90-generic x86_64",
+  "os": "Linux x86_64",
   "python": "3.10.12",
   "pyproject_version": "1.5.0",
   "audit_date": "2026-02-21",
   "auditor_model": "claude-sonnet-4-6",
   "skill_pack": ["prime-safety 2.1.0", "prime-coder 2.0.2", "phuc-forecast 1.2.0", "phuc-orchestration 1.0.0"],
   "live_deployment": "https://www.solaceagi.com/stillwater",
-  "firestore_status": "CONNECTED — durable storage active",
+  "storage_status": "CONNECTED — durable storage active",
   "bandit_high": 0,
   "tests_passed": 62,
   "tests_failed": 5,
@@ -329,7 +327,7 @@ is a documented, intentional design decision for this release).
 
 1. **Fix 5 pre-existing test failures** — clean up test expectations
 3. **First external Store submission** — show HN post, MoltBot outreach
-4. **www.solaceagi.com Stillwater page** — currently on qa; promote to prod
+4. **www.solaceagi.com Stillwater page** — promote staging to prod
 5. **Upgrade pyproject.toml version**: already set to 1.5.0 ✓
 
 ---

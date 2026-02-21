@@ -24,7 +24,7 @@
 ```
 Load prime-safety + prime-coder + phuc-forecast.
 Task: Audit the stillwater repository for rung baseline.
-Repo: /home/phuc/projects/stillwater/
+Repo: stillwater/
 Steps:
   1. Run: pytest tests/ -v > evidence/audit_tests.txt 2>&1
   2. List all files in skills/ with line counts
@@ -64,8 +64,8 @@ Evidence required: evidence/audit_tests.txt + updated case-studies/stillwater-it
 ```
 Load prime-safety + prime-coder + phuc-forecast.
 Task: Write papers/oauth3-spec-v0.1.md for stillwater.
-Reference: /home/phuc/projects/solace-browser/OAUTH3-WHITEPAPER.md
-Location: /home/phuc/projects/stillwater/papers/oauth3-spec-v0.1.md
+Reference: solace-browser/OAUTH3-WHITEPAPER.md
+Location: stillwater/papers/oauth3-spec-v0.1.md
 Requirements:
   - AgencyToken JSON schema (id, issued_at, expires_at, scopes, issuer, subject, signature_stub)
   - Scope format: platform.action.resource (e.g., linkedin.post.text, gmail.read.inbox)
@@ -81,8 +81,8 @@ Evidence required: papers/oauth3-spec-v0.1.md committed with sha256 in artifacts
 ```
 Load prime-safety + prime-coder.
 Task: Write skills/oauth3-enforcer.md for stillwater.
-Reference: /home/phuc/projects/stillwater/papers/oauth3-spec-v0.1.md (must exist first)
-Location: /home/phuc/projects/stillwater/skills/oauth3-enforcer.md
+Reference: stillwater/papers/oauth3-spec-v0.1.md (must exist first)
+Location: stillwater/skills/oauth3-enforcer.md
 Requirements:
   - Skill that any agent can load to enforce OAuth3 gates
   - Four gate checks: valid token, scope match, TTL, revocation
@@ -120,14 +120,14 @@ Evidence required: skills/oauth3-enforcer.md committed with sha256
 ```
 Load prime-safety + prime-coder + phuc-forecast.
 Task: Build Stillwater Store API v1.
-Location: /home/phuc/projects/stillwater/store/
+Location: stillwater/store/
 Files to create:
   store/api.py (FastAPI app)
   store/review.py (CLI review tool)
   store/rung_validator.py (behavioral hash + replay checker)
   store/models.py (SkillSubmission, SkillListing, ReviewRecord Pydantic models)
   tests/test_store_api.py
-Reference: /home/phuc/projects/stillwater/STORE.md
+Reference: stillwater/STORE.md
 Requirements:
   - POST /store/submit: accepts {skill_name, skill_content, author, rung_claimed}
   - GET /store/skills: returns list of accepted skills with metadata
@@ -168,7 +168,7 @@ Evidence required: tests/test_store_api.py passing (pytest -v)
 ```
 Load prime-safety + prime-coder.
 Task: Add multi-LLM provider support to stillwater LLM Portal.
-Location: /home/phuc/projects/stillwater/
+Location: stillwater/
 Reference: existing stillwater.py (read first)
 Requirements:
   - Providers: anthropic, openai, ollama (local), dashscope (qwen), custom
@@ -209,7 +209,7 @@ Evidence required: tests showing each provider can be initialized (mock or live 
 ```
 Load prime-safety + prime-coder + phuc-forecast.
 Task: Run security gate for stillwater (rung 65537 requirement).
-Repo: /home/phuc/projects/stillwater/
+Repo: stillwater/
 Steps:
   1. Install semgrep if not present: pip install semgrep
   2. Run: semgrep --config=p/python stillwater.py store/ --json > evidence/semgrep_results.json
@@ -226,7 +226,7 @@ Evidence required: evidence/security_scan.json with status=PASS
 ```
 Load prime-safety + prime-coder.
 Task: Add GitHub Actions workflow for daily rung 641 verification + behavior hash check.
-Location: /home/phuc/projects/stillwater/.github/workflows/rung-check.yml
+Location: stillwater/.github/workflows/rung-check.yml
 Requirements:
   - Trigger: daily cron (00:00 UTC) + push to main
   - Steps: pip install -e . → pytest tests/ -v → python scripts/behavior_hash.py → compare hashes
