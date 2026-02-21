@@ -4,6 +4,40 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://pypi.org/project/stillwater/)
 
+---
+
+## Software 5.0 — The Northstar
+
+> *"Be water, my friend."* — Bruce Lee
+
+**Software 5.0 is not a tool. It is a paradigm shift.**
+
+| Layer | What It Means |
+|-------|--------------|
+| **Source code** | Natural language — human intent, not syntax |
+| **Runtime** | AI agents — LLM + tool loop + swarm orchestration |
+| **Compiled output** | Evidence bundles — gated, verified, reproducible artifacts |
+| **CI/CD** | Stillwater verification — rung ladder: 641 → 274177 → 65537 |
+
+Every task flows through one loop: **DREAM → FORECAST → DECIDE → ACT → VERIFY**
+
+```mermaid
+stateDiagram-v2
+  [*] --> DREAM: Human intent
+  DREAM --> FORECAST: What will fail?
+  FORECAST --> DECIDE: Choose approach
+  DECIDE --> ACT: Execute with tools
+  ACT --> VERIFY: Gate the evidence
+  VERIFY --> [*]: Artifact with receipts
+```
+
+The LLM session is not the product. The **verified, gated recipe** is the product.
+Intelligence does not live in the weights. It lives in the artifact that persists after the session ends.
+
+> *"LLMs DISCOVER. CPUs ANCHOR. Recipes PERSIST."* — Stillwater Central Thesis
+
+---
+
 ## The Stillwater Store
 
 The **Stillwater Store** is the official gated marketplace for Stillwater skills, recipes, and swarms —

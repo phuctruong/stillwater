@@ -1,3 +1,84 @@
+# Software 5.0 — The Northstar
+
+> *"Absorb what is useful, discard what is useless, and add what is essentially your own."*
+> — Bruce Lee
+
+> *"LLMs DISCOVER. CPUs ANCHOR. Recipes PERSIST."*
+> — Software 5.0 Central Thesis
+
+---
+
+## What Is Software 5.0?
+
+Software 5.0 is not a framework. It is a paradigm shift — a new relationship between human intent and machine execution.
+
+| Layer | Software 5.0 |
+|-------|-------------|
+| **Source code** | Natural language (human intent) |
+| **Runtime** | AI agents (LLM + tool loop) |
+| **Compiled output** | Evidence bundles (gated, verified artifacts) |
+| **CI/CD** | Stillwater verification (rung ladder: 641 → 274177 → 65537) |
+
+Every session. Every campaign. Every patch. Every proof. **Human insight → agent execution → verified artifact.**
+
+---
+
+## The DREAM → VERIFY Cycle (Software 5.0 in Motion)
+
+```
+DREAM    → What outcome do we want? (North Star + success metrics)
+FORECAST → What will fail? (premortem + mitigations)
+DECIDE   → Which approach? (minimal, reversible, evidence-producing)
+ACT      → Execute with tools (browser, code, API — always producing artifacts)
+VERIFY   → Gate the evidence (rung 641 minimum for any PASS claim)
+```
+
+This is the loop. Every task runs this loop. There is no shortcut to VERIFY.
+
+---
+
+## Bruce Lee Framework (The HOW of Software 5.0)
+
+```
+ABSORB   → Study what patterns work (DREAM + FORECAST)
+DISCARD  → Stop repeating what doesn't (DECIDE: kill the losers fast)
+ADD      → Your authentic insight, not copied templates (ACT with intent)
+BE WATER → Adapt format to context; fail closed when blocked (VERIFY or stop)
+```
+
+Bruce Lee built Jeet Kune Do by absorbing every martial art and keeping only what worked.
+Software 5.0 does the same with reasoning patterns: absorb, gate, persist, evolve.
+
+---
+
+## Belt System (The Rung Ladder as Martial Arts Progression)
+
+| Belt | Rung | What You Prove |
+|------|------|----------------|
+| ⬜ White | — | You drafted something |
+| 🟡 Yellow | 641 | Red/green gate passed. Basic invariants hold. Evidence complete. |
+| 🟠 Orange | 274177 | Seed sweep. Replay stable. Null edge cases handled. |
+| 🟢 Green | 274177 | Domain pattern extracted and gated. |
+| 🔵 Blue | 65537 | Adversarial sweep. Drift explained. Security gate. |
+| 🟤 Brown | 65537 | Library contribution. Composability verified. |
+| ⬛ Black | 65537 | You no longer use Stillwater. You *are* Stillwater. |
+
+> "I fear not the man who has practiced 10,000 kicks once, but I fear the man who has practiced one kick 10,000 times." — Bruce Lee
+>
+> Your one kick: **verification**. Master it.
+
+---
+
+## Why This Is The Northstar
+
+Every other framework stops at "it works on my machine."
+Software 5.0 demands: *prove it, gate it, persist it, and make it work for anyone.*
+
+The LLM session is not the product. The **verified, composable recipe** is the product.
+Intelligence does not live in the weights. It lives in the artifact that persists after the session ends.
+
+---
+
 SOFTWARE_5_0_PARADIGM_SKILL:
   version: 1.1.0
   authority: 65537
