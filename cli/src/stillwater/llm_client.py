@@ -40,7 +40,7 @@ import threading
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
 from .providers.base import LLMResponse
 from .providers.pricing import estimate_cost as _estimate_cost
@@ -114,6 +114,48 @@ def get_call_history(n: int = 100) -> list[dict]:
         return entries[-n:]
     except Exception:
         return []
+
+
+# ---------------------------------------------------------------------------
+# Callback dispatch helper
+# ---------------------------------------------------------------------------
+
+
+def _fire_callbacks(
+    response: LLMResponse,
+    tip_callback: Optional[Callable] = None,
+    usage_tracker: Any = None,
+) -> None:
+    """
+    Invoke optional post-call hooks after a successful LLM call.
+
+    Both hooks receive a plain dict extracted from the LLMResponse so they
+    have no dependency on the LLMResponse type.
+
+    Args:
+        response:      Completed LLMResponse.
+        tip_callback:  Optional callable(dict) — Dragon Tip hook.
+        usage_tracker: Optional SessionUsageTracker (or any object with a
+                       usage_callback(dict) method).
+    """
+    if tip_callback is None and usage_tracker is None:
+        return
+
+    result_dict = response.to_dict()
+
+    if tip_callback is not None:
+        try:
+            tip_callback(result_dict)
+        except Exception:
+            pass  # Never let tip callbacks crash the caller
+
+    if usage_tracker is not None:
+        callback = getattr(usage_tracker, "usage_callback", None)
+        if callable(callback):
+            try:
+                callback(result_dict)
+            except Exception:
+                pass  # Never let tracker crashes affect callers
 
 
 # ---------------------------------------------------------------------------
@@ -219,6 +261,8 @@ class LLMClient:
         max_tokens: int = 1024,
         temperature: float = 0.7,
         timeout: Optional[float] = None,
+        tip_callback: Optional[Callable] = None,
+        usage_tracker: Any = None,
     ) -> LLMResponse:
         """
         Send a single prompt to an LLM provider.
@@ -230,6 +274,10 @@ class LLMClient:
             max_tokens: Maximum tokens in response.
             temperature: Sampling temperature.
             timeout: Request timeout in seconds (default: 30).
+            tip_callback: Optional callable(dict) — Dragon Tip hook. Called
+                         after each successful response with the result dict.
+            usage_tracker: Optional SessionUsageTracker — usage hook. Called
+                          after each successful response via usage_callback(dict).
 
         Returns:
             LLMResponse with text, tokens, cost, latency, etc.
@@ -243,6 +291,7 @@ class LLMClient:
                 prompt_chars=len(prompt), response_chars=len(response.text),
                 latency_ms=response.latency_ms,
             )
+            _fire_callbacks(response, tip_callback=tip_callback, usage_tracker=usage_tracker)
             return response
 
         resolved_provider = self._resolve_provider(provider)
@@ -278,6 +327,7 @@ class LLMClient:
             cost_hundredths_cent=response.cost_hundredths_cent,
             request_id=response.request_id,
         )
+        _fire_callbacks(response, tip_callback=tip_callback, usage_tracker=usage_tracker)
         return response
 
     def chat(
@@ -288,6 +338,8 @@ class LLMClient:
         max_tokens: int = 1024,
         temperature: float = 0.7,
         timeout: Optional[float] = None,
+        tip_callback: Optional[Callable] = None,
+        usage_tracker: Any = None,
     ) -> LLMResponse:
         """
         Send chat messages (OpenAI format) to an LLM provider.
@@ -299,6 +351,10 @@ class LLMClient:
             max_tokens: Maximum tokens in response.
             temperature: Sampling temperature.
             timeout: Request timeout in seconds (default: 30).
+            tip_callback: Optional callable(dict) — Dragon Tip hook. Called
+                         after each successful response with the result dict.
+            usage_tracker: Optional SessionUsageTracker — usage hook. Called
+                          after each successful response via usage_callback(dict).
 
         Returns:
             LLMResponse with text, tokens, cost, latency, etc.
@@ -314,6 +370,7 @@ class LLMClient:
                 prompt_chars=len(prompt_text), response_chars=len(response.text),
                 latency_ms=response.latency_ms,
             )
+            _fire_callbacks(response, tip_callback=tip_callback, usage_tracker=usage_tracker)
             return response
 
         resolved_provider = self._resolve_provider(provider)
@@ -349,6 +406,7 @@ class LLMClient:
             cost_hundredths_cent=response.cost_hundredths_cent,
             request_id=response.request_id,
         )
+        _fire_callbacks(response, tip_callback=tip_callback, usage_tracker=usage_tracker)
         return response
 
     def available_providers(self) -> list[str]:
@@ -439,6 +497,8 @@ def llm_call(
     provider: Optional[str] = None,
     model: Optional[str] = None,
     system: Optional[str] = None,
+    tip_callback: Optional[Callable] = None,
+    usage_tracker: Any = None,
 ) -> str:
     """
     One-liner LLM call. Returns response text string.
@@ -448,6 +508,11 @@ def llm_call(
         provider: Override provider (e.g. "anthropic", "openai", "offline").
         model: Override model name.
         system: Optional system prompt.
+        tip_callback: Optional callable(dict) — Dragon Tip hook. Called after
+                     each successful response with the result dict. Use with
+                     SessionTipAccumulator.tip_callback for session tip tracking.
+        usage_tracker: Optional SessionUsageTracker instance. Called after each
+                      successful response via usage_callback(dict).
 
     Returns:
         Response text string.
@@ -456,9 +521,43 @@ def llm_call(
         from stillwater.llm_client import llm_call
         answer = llm_call("What is the capital of France?")
         offline = llm_call("test", provider="offline")
+
+        # With tip tracking:
+        from stillwater.tip_hooks import TipConfig, SessionTipAccumulator
+        acc = SessionTipAccumulator(TipConfig(tip_pct=5))
+        answer = llm_call("hello", tip_callback=acc.tip_callback)
     """
     client = LLMClient(provider=provider)
-    return client.call(prompt, system=system, model=model)
+
+    # For offline mode, use v1.x path (no HTTP) — still fire callbacks via chat()
+    if provider == "offline":
+        messages: list[dict[str, str]] = []
+        if system:
+            messages.append({"role": "system", "content": system})
+        messages.append({"role": "user", "content": prompt})
+        try:
+            response = client.chat(
+                messages, model=model or "auto",
+                tip_callback=tip_callback, usage_tracker=usage_tracker,
+            )
+            return response.text
+        except Exception:
+            # Fallback to v1.x call() for pure offline echo
+            return client.call(prompt, system=system, model=model)
+
+    messages = []
+    if system:
+        messages.append({"role": "system", "content": system})
+    messages.append({"role": "user", "content": prompt})
+
+    try:
+        response = client.chat(
+            messages, model=model or "auto",
+            tip_callback=tip_callback, usage_tracker=usage_tracker,
+        )
+        return response.text
+    except Exception as exc:
+        raise RuntimeError(f"LLM call failed: {exc}") from exc
 
 
 def llm_chat(
@@ -466,6 +565,8 @@ def llm_chat(
     *,
     provider: Optional[str] = None,
     model: Optional[str] = None,
+    tip_callback: Optional[Callable] = None,
+    usage_tracker: Any = None,
 ) -> str:
     """
     Chat with any LLM using OpenAI messages format. Returns response text.
@@ -474,6 +575,10 @@ def llm_chat(
         messages: List of {"role": "user"|"assistant"|"system", "content": str}.
         provider: Override provider.
         model: Override model name.
+        tip_callback: Optional callable(dict) — Dragon Tip hook. Called after
+                     each successful response with the result dict.
+        usage_tracker: Optional SessionUsageTracker instance. Called after each
+                      successful response via usage_callback(dict).
 
     Returns:
         Response text string.
@@ -491,10 +596,21 @@ def llm_chat(
         # For offline mode, use v1.x compatible .call()
         if provider == "offline":
             prompt_text = " ".join(m.get("content", "") for m in messages)
-            return client.call(prompt_text, model=model)
+            # Fire callbacks via chat() which handles offline internally
+            try:
+                response = client.chat(
+                    messages, model=model or "auto",
+                    tip_callback=tip_callback, usage_tracker=usage_tracker,
+                )
+                return response.text
+            except Exception:
+                return client.call(prompt_text, model=model)
 
     try:
-        response = client.chat(messages, model=model or "auto")
+        response = client.chat(
+            messages, model=model or "auto",
+            tip_callback=tip_callback, usage_tracker=usage_tracker,
+        )
         return response.text
     except Exception as exc:
         raise RuntimeError(f"LLM chat failed: {exc}") from exc
