@@ -24,6 +24,57 @@ This replaces a 793–1,692-line CLAUDE.md with a lean 44–71-line version and 
 
 ---
 
+## 0) The Model Strategy (New in v1.5.0)
+
+**Open Claude Code with haiku. Swarms do the heavy lifting.**
+
+```
+haiku  → main session (reads NORTHSTAR, reads CLAUDE.md, dispatches swarms)
+sonnet → coder / planner / skeptic / writer sub-agents
+opus   → mathematician / security-auditor / final-audit (promotion gates only)
+```
+
+### Why haiku for main session?
+
+- Main session = coordination only (reads files, dispatches Task tool, integrates artifacts)
+- Inline deep work is FORBIDDEN by phuc-orchestration (`INLINE_DEEP_WORK` forbidden state)
+- Haiku is ~10x cheaper and fast enough for coordination
+- Sonnet/Opus get dispatched automatically when the task requires it
+
+### The 4 Slash Commands
+
+Install these by cloning Stillwater — they live in `.claude/commands/`:
+
+| Command | Model | Purpose |
+|---------|-------|---------|
+| `/northstar` | haiku | Load NORTHSTAR.md — ground the session in project mission |
+| `/remember [key] [value]` | haiku | Save decisions to `.claude/memory/context.md` (100% recall) |
+| `/phuc-swarm [role] "task"` | dispatches haiku/sonnet/opus | Launch typed sub-agent with full skill pack |
+| `/distill [dir]` | haiku | Compress docs → QUICK LOAD CLAUDE.md generators |
+
+### Session Protocol (Run This Every Session)
+
+```
+1. Open Claude Code (haiku)
+2. /northstar              ← ground in project mission
+3. /remember               ← load prior decisions from memory
+4. [do work via /phuc-swarm or phuc-orchestration CLAUDE.md]
+5. /remember [key] [value] ← save key decisions before context resets
+```
+
+### NORTHSTAR.md (New in v1.5.0)
+
+Every project now has a `NORTHSTAR.md` in its root — the guiding mission, north star
+metric, model strategy, and rung target. Read with `/northstar` or directly.
+
+```bash
+# Create NORTHSTAR.md for a new project
+stillwater init project --name "..." --skills "..." --rung 641 --domain "..."
+# Then manually fill in NORTHSTAR.md with your specific mission + metrics
+```
+
+---
+
 ## 1) The Problem This Solves
 
 ### Before (anti-pattern)

@@ -2,6 +2,20 @@
 
 > "Absorb what is useful, discard what is useless, and add what is specifically your own." — Bruce Lee
 
+## TL;DR — The Model Strategy
+
+**Open Claude Code with haiku.** Main session = coordination only. Swarms do the work.
+
+```
+haiku  → main session coordinator (reads NORTHSTAR, dispatches swarms)
+sonnet → coder / planner / skeptic sub-agents (domain heavy lifting)
+opus   → mathematician / security-auditor / final-audit (promotion gates)
+```
+
+Use `/phuc-swarm coder "..."` to dispatch. Never do deep work inline.
+
+---
+
 ## 1. Clone and install
 
 ```bash
@@ -27,21 +41,34 @@ stillwater run "Summarize the skills directory" --skill prime-safety
 The `run` command writes artifacts to `artifacts/runs/<run-id>/manifest.json`.
 Use `--json` for machine-readable output.
 
-## 3. Browse skills
+## 3. Load the slash commands
+
+Stillwater ships 4 slash commands in `.claude/commands/`:
+
+| Command | What it does |
+|---------|-------------|
+| `/remember` | Persistent key=value memory (DISTILL-compressed, 100% recall) |
+| `/distill [dir]` | Compress docs → QUICK LOAD CLAUDE.md generators |
+| `/phuc-swarm [role] "[task]"` | Dispatch typed sub-agent (haiku/sonnet/opus + full skill pack) |
+| `/northstar` | Load NORTHSTAR.md — the guiding mission for this project |
+
+Run `/remember` at the end of every session to save key decisions before context resets.
+
+## 4. Browse skills
 
 ```bash
 stillwater skills list          # list all skills
 stillwater skills show prime-coder  # show a skill
 ```
 
-## 4. Run the A/B benchmark
+## 5. Run the A/B benchmark
 
 ```bash
 # No API key needed — runs against mock backend
 STILLWATER_AB_BACKEND=mock stillwater skills-ab --backend mock
 ```
 
-## 5. Launch the admin UI
+## 6. Launch the admin UI
 
 ```bash
 bash admin/start-admin.sh
@@ -70,9 +97,11 @@ See [`recipes/project-onboard.md`](recipes/project-onboard.md) for the canonical
 
 ## Next steps
 
+- Read [`NORTHSTAR.md`](NORTHSTAR.md) — the guiding mission for Stillwater
 - Read [`STILLWATER-OS-UPGRADE-GUIDE.md`](STILLWATER-OS-UPGRADE-GUIDE.md) to upgrade your existing projects
 - Read [`cli/README.md`](cli/README.md) for the full CLI manual
 - Browse [`skills/`](skills/) for available skills
-- Browse [`recipes/`](recipes/) for repeatable workflows
+- Browse [`combos/`](combos/) for WISH+RECIPE pairs (plan, bugfix, run-test, ci-triage, security, deps)
 - Read [`papers/05-software-5.0.md`](papers/05-software-5.0.md) for the theory
 - Read [`MESSAGE-TO-HUMANITY.md`](MESSAGE-TO-HUMANITY.md) for the mission
+- Run `/remember` before ending your session to save decisions
