@@ -73,6 +73,82 @@ cd admin && bash start-admin.sh
 
 ---
 
+## LLM Portal (port 8788)
+
+The **Stillwater LLM Portal** is a separate service: an OpenAI-compatible proxy + web UI for configuring and testing any LLM provider.
+
+```bash
+# Start LLM Portal
+bash admin/start-llm-portal.sh
+
+# Open in browser
+open http://localhost:8788
+
+# Dev mode (auto-reload)
+bash admin/start-llm-portal.sh --dev
+
+# Stop
+bash admin/stop-llm-portal.sh
+
+# Status
+bash admin/llm-portal-status.sh
+```
+
+**Requirements:** `pip install "fastapi[standard]" uvicorn httpx`
+
+### LLM Portal endpoints
+
+| Endpoint | Description |
+|---|---|
+| `GET /` | Web UI (dark theme, provider cards, chat test, call log) |
+| `GET /api/health` | Health check + active provider |
+| `GET /api/providers` | All configured providers + reachability |
+| `POST /api/providers/switch` | Switch active provider (session-local) |
+| `GET /api/history` | Call history from `~/.stillwater/llm_calls.jsonl` |
+| `POST /v1/chat/completions` | OpenAI-compatible proxy |
+| `GET /v1/models` | Model listing |
+
+### Universal LLM Client
+
+All Python code across all projects can use the standard library:
+
+```python
+from stillwater.llm_client import llm_call, llm_chat, LLMClient
+
+# One-liner (uses active provider from llm_config.yaml)
+answer = llm_call("What is 2+2?")
+
+# With provider override
+answer = llm_call("ping", provider="offline")   # instant, no network
+answer = llm_call("explain this", provider="ollama", model="llama3.1:8b")
+
+# Chat format (OpenAI messages)
+response = llm_chat([
+    {"role": "system", "content": "You are helpful."},
+    {"role": "user", "content": "Hello!"},
+])
+
+# Call history
+from stillwater.llm_client import get_call_history
+history = get_call_history(n=20)  # reads ~/.stillwater/llm_calls.jsonl
+```
+
+### Configure LLM Provider
+
+Edit `llm_config.yaml` in the repo root:
+```yaml
+provider: "claude-code"   # currently active
+
+claude-code:              # local Claude CLI wrapper (port 8080)
+  url: "http://localhost:8080"
+ollama:                   # remote Ollama
+  url: "http://192.168.68.100:11434"
+claude:                   # Anthropic API direct
+  url: "https://api.anthropic.com/v1"
+```
+
+---
+
 ## Security Notes
 
 - **Localhost only by default.** The server binds to `127.0.0.1`. Do not expose it to a network interface without understanding the risks.

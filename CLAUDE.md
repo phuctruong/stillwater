@@ -223,6 +223,13 @@ END_SKILL
 #   skills/prime-mermaid.md       — Graph Designer agent
 #   skills/phuc-orchestration.md  — Full orchestration skill (reference)
 #
+# LLM PORTAL: http://localhost:8788 (start: bash admin/start-llm-portal.sh)
+#   Providers: ollama (192.168.68.100:11434), claude-code (localhost:8080),
+#              claude API, openai, openrouter, gemini, togetherai
+#   Universal LLM client: from stillwater.llm_client import llm_call, llm_chat
+#   Example: llm_call("ping", provider="offline")  # works immediately
+#   Call log: ~/.stillwater/llm_calls.jsonl
+#
 # Swarm agent types (in swarms/ directory):
 #   swarms/coder.md, swarms/mathematician.md, swarms/planner.md,
 #   swarms/graph-designer.md, swarms/skeptic.md, swarms/scout.md,
