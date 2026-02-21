@@ -86,7 +86,7 @@ VERIFY → GitHub stars + Store submissions + rung achievements + recipe hit rat
 
 Track in case-studies/:
 - `solace-browser.md` — OAuth3 browser automation
-- `solace-cli.md` — terminal-native CLI
+- `solace-cli.md` — solace-cli (PRIVATE extension of stillwater/cli OSS)
 - `solaceagi.md` — hosted platform
 - `stillwater-itself.md` — self-verification
 
@@ -95,7 +95,7 @@ Track in case-studies/:
 | Project | Role | Stillwater Provides |
 |---------|------|-------------------|
 | **solace-browser** | OAuth3 reference impl | Recipe verification, evidence bundles |
-| **solace-cli** | Terminal surface | Rung enforcement, store install/submit |
+| **stillwater/cli** (OSS) + **solace-cli** (PRIVATE) | Terminal surface | stillwater/cli: rung enforcement, store commands (OSS). solace-cli: OAuth3 vault, twin, cloud (PRIVATE). |
 | **solaceagi.com** | Hosted cloud | Managed skill updates, OAuth3 vault |
 | **stillwater** | The OS itself | Everything above |
 
