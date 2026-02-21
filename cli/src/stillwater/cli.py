@@ -6367,9 +6367,15 @@ def main(argv: list[str] | None = None) -> int:
                 f"PROJECT: {project_name}",
                 f"DOMAIN: {domain}",
                 "",
-                "## Stillwater Core Skills",
+                "## Dispatch Protocol (Mandatory)",
+                "# MAIN SESSION: prime-safety + prime-coder + phuc-forecast (read skills/phuc-forecast.md for planning)",
+                "# PLANNING: DREAM→FORECAST→DECIDE→ACT→VERIFY for any non-trivial decision (phuc-forecast FSM)",
+                "# DISPATCH (>50 lines): read swarms/<role>.md → Task tool with full skills/ files pasted inline",
+                "# SUB-AGENTS: prime-safety ALWAYS first; CNF capsule = full task + context, never \"as before\"",
+                "# SWARMS: scout=KenT, forecaster=Grace, coder, skeptic, mathematician — see swarms/ dir",
+                "# ANTI-ROT: phuc-swarms handles full skill injection + context isolation for sub-agents",
+                "# RUNG: declare rung_target before dispatch; integration rung = MIN(all sub-agent rungs)",
                 f"# Loaded: {skills_list_str}",
-                "# Full files in: skills/  (for sub-agent dispatch via phuc-orchestration)",
                 "",
             ]
             for block in quick_load_blocks:
