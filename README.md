@@ -222,6 +222,39 @@ The SWE notebook deserves special mention: it runs against **500 real SWE-bench 
 
 ---
 
+## Universal Math Solver (IMO Convergence)
+
+The Stillwater CLI includes a universal math solver built on the 5-phase PHUC orchestration pipeline. Starting from an **empty oracle file**, it reaches **395/396** on the full International Math Olympiad corpus (1959–2025) after exactly **2 autolearn iterations**, running on a local llama3.1:8b model.
+
+| Benchmark | Result | Lane |
+|---|---|---|
+| IMO 2024 — tool-assisted | **6/6** | CPU exact arithmetic |
+| IMO 2024 — LLM only | **1/6** | Model reasoning, honestly disclosed |
+| IMO corpus 1959–2025 — cold start | **395/396** | 2 autolearn iterations |
+| IMO corpus 1959–2025 — patched oracle | **396/396 at rung 65537** | Fully verified |
+
+**This is not a claim that AI has solved math.** It is a claim that this architecture provides a reproducible, auditable path to verified mathematical coverage — with honest lane disclosure, rung-gated claims, and no hidden tools. See [paper 07](cli/papers/07-have-we-solved-math-for-llms.md) for the epistemic constraints.
+
+```bash
+# Run the universal math gate suite
+./cli/stillwater-cli.sh math-universal \
+  --config cli/tests/math/universal_math_gate.json --json
+
+# Cold-start convergence on full IMO corpus
+./cli/stillwater-cli.sh imo-history autolearn \
+  --from-year 1959 --to-year 2025 \
+  --required-rung 65537 --max-iterations 3 --json
+
+# IMO 2024 with transparent lane disclosure
+./cli/stillwater-cli.sh qa-imo
+```
+
+The math solver runs a 5-phase pipeline: **Scout → Forecast → Judge → Solver → Skeptic**. Two lanes are always disclosed: `tool_assisted` (CPU exact arithmetic, Fraction/Decimal only, no float) and `llm_only` (model reasoning, Lane C). Cross-lane upgrade — reporting LLM confidence as tool-verified — is a forbidden state.
+
+Read the architecture: [`papers/31-universal-math-solver-architecture.md`](papers/31-universal-math-solver-architecture.md) · [`cli/papers/08-imo-history-convergence-results.md`](cli/papers/08-imo-history-convergence-results.md)
+
+---
+
 ## Quick Start
 
 ```bash

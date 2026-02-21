@@ -107,3 +107,15 @@ Papers 23-26 form a cluster on the economics, quality theory, review methodology
 | 24 | `24-skill-scoring-theory.md` | Binary Scorecards for Skill Quality | 5-criteria binary scorecard (FSM, forbidden states, verification ladder, null/zero handling, output contract); empirical results across 9 skills in this repo; model-agnosticism argument. |
 | 25 | `25-persona-based-review-protocol.md` | Persona-Based Review | Named historical personas (Turing, Lovelace, Thompson) as review agents; three case studies from swarm runs; failure modes (persona capture, override, mismatch); canonical persona assignment table. |
 | 26 | `26-community-skill-database.md` | The Stillwater Community Database | Design principles for a distributed skill library: sha256 identity + MANIFEST.json, quality gate at submission, never-worse versioning, canonical review agents; comparison to npm, PyPI, crates.io; open problems. |
+
+---
+
+## Community + Ecosystem Papers
+
+| Number | File | Title | Summary |
+|---|---|---|---|
+| 27 | `27-bootstrapping-knowledge-commons.md` | Bootstrapping a Knowledge Commons with AI | How AI-bootstrapped content + human curation creates a self-reinforcing community knowledge base; MoltBot integration; submission quality gates. |
+| 28 | `28-the-cheating-theorem.md` | The Cheating Theorem | Formal account of how verification-free AI systems structurally reward hallucination; the Stillwater claim hygiene policy as a countermeasure. |
+| 29 | `29-software-5-0-in-one-session.md` | Software 5.0 in One Session | Case study: building a verification-grade software system in a single AI-orchestrated session; artifacts, rungs, and lessons. |
+| 30 | `30-moltbot-community-platform.md` | The AI-Native Community Platform | Design and launch of the Stillwater Store: Apple App Store model for AI skills; account-gated submissions; human review queue; ecosystem lock-in via verification standards. |
+| 31 | `31-universal-math-solver-architecture.md` | The Universal Math Solver Architecture | 5-phase PHUC pipeline (Scout→Forecast→Judge→Solver→Skeptic); CPU deterministic lane + LLM-only lane; self-learning oracle memory; 395/396 IMO corpus cold-start convergence in 2 iterations on llama3.1:8b. |
