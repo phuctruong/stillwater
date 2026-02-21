@@ -91,6 +91,55 @@
 - **Evidence bundles**: screenshots, HTML snapshots, action logs, agency_token, selector_matches
 - **308 tests across 13 test classes**: TestRecipeFileExistence, TestRecipeSchema, TestOAuth3Scopes, TestStepSequence, TestSelectorFormat, TestNoHardcodedCredentials, TestEvidenceBundle, TestPMTriplet, TestCrossRecipeConsistency, TestAntiDetection, TestInputOutputSchema, TestMetadata, TestErrorHandling
 
+## Phase 3 — Universal Portal (PLANNED: Month 2)
+
+**Strategic pivot**: Solace Browser transforms from web-only OAuth3 browser into a universal AI agent portal — web + machine + tunnel in a single consent-governed application.
+
+**Why this is the next milestone after Phase 2 platforms**:
+- Phase 2 establishes web automation on 3+ platforms (Gmail, Substack, Twitter)
+- Phase 3 turns Solace Browser into infrastructure that no competitor can match
+- Machine access is rung 274177 (irreversible) — higher bar than web layer (rung 641)
+- Tunnel is rung 65537 (security-critical) — highest bar in the codebase
+
+| Build | Target | Rung | Competitive Differentiator |
+|-------|--------|------|---------------------------|
+| BUILD 11: Machine Access Layer | Month 2 | 274177 | First OAuth3-gated file + terminal access |
+| BUILD 12: Tunnel Engine | Month 2 | 65537 | Built-in reverse proxy — no ngrok needed |
+| BUILD 13: Home Page + Dashboard | Month 2 | 641 | Universal portal command center |
+| BUILD 14: Cross-Platform Distribution | Month 2 | 641 | DMG + DEB + MSI — one download |
+
+**Machine Access competitive gap**:
+
+| Competitor | Web | Machine | OAuth3 Machine |
+|-----------|-----|---------|---------------|
+| Browser-Use | Chrome only | No | No |
+| Bardeen | Extension only | No | No |
+| OpenClaw | Yes (512 vulns) | No | No |
+| **Solace Browser** | **Yes** | **Yes (planned)** | **Yes (planned)** |
+
+**The 13 machine scopes** (all require OAuth3 token, 4 require step-up):
+- `machine.file.read/write/delete/list` — file system access
+- `machine.terminal.read/execute/allowlist` — terminal access
+- `machine.system.info/env` — system information
+- `machine.process.list/kill` — process management
+- `machine.tunnel` — reverse tunnel (step-up required)
+- `machine.clipboard` — clipboard read/write
+
+**Security invariants** (non-negotiable):
+1. ALL machine operations require valid OAuth3 agency token
+2. Path traversal: ANY `../` or absolute path outside allowed_roots → 403, no exceptions
+3. Blocklisted commands checked BEFORE token validation (fail-closed)
+4. Step-up required for: file.delete, terminal.execute, process.kill, tunnel
+
+**Tunnel architecture**:
+```
+Solace Browser (local)
+  ↕ wss://tunnel.solaceagi.com (TLS, OAuth3-pinned WebSocket)
+tunnel.solaceagi.com relay
+  ↕ HTTP proxy
+{user_id}.tunnel.solaceagi.com (public internet access)
+```
+
 ## Metrics
 
 | Metric | Value |
@@ -124,6 +173,22 @@
 - OAuth3 evidence: 119 tests, null-safety gates, scope validation, step-up re-auth, consent UI
 - Gmail BUILD 7 evidence: 308 tests, 6 recipes, 3 PM JSON files, OAuth3 scope enforcement, anti-detection patterns verified
 
+## Next Actions
+
+1. Phase 2: BUILD 8 (Substack recipes) + BUILD 9 (Twitter recipes) → complete 3-platform web layer
+2. Phase 3: BUILD 11 (Machine Access) → rung 274177 gate
+3. Phase 3: BUILD 12 (Tunnel Engine) → rung 65537 gate (security-critical)
+4. Phase 3: BUILD 13 (Home Page + Dashboard) + BUILD 14 (Distribution)
+5. solaceagi.com tunnel server (Phase 5 in solaceagi ROADMAP) — server-side relay
+
+Launch command when ready:
+```bash
+./launch-swarm.sh solace-browser machine-access   # BUILD 11 (rung 274177)
+./launch-swarm.sh solace-browser tunnel-engine    # BUILD 12 (rung 65537)
+./launch-swarm.sh solace-browser portal-dashboard # BUILD 13
+./launch-swarm.sh solace-browser distribution     # BUILD 14
+```
+
 ## Key Insight
 
-"We are not building a browser automation tool. We are publishing the consent standard for AI agents — OAuth3 — and solace-browser is the reference implementation." — NORTHSTAR.md
+"We are not building a browser automation tool. We are publishing the consent standard for AI agents — OAuth3 — and solace-browser is the reference implementation. With the machine layer, that standard now governs not just web browsing but every digital resource a user has: files, terminal, system. Solace Browser is the universal portal." — NORTHSTAR.md

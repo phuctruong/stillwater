@@ -92,13 +92,48 @@ Track in case-studies/:
 - `solaceagi.md` — hosted platform
 - `stillwater-itself.md` — self-verification
 
+## Solace Browser: Universal Portal + Stillwater Skills
+
+**The Universal Portal vision expands Stillwater's role.** When Solace Browser gains a machine access layer (Phase 3), Stillwater skills can now control not just web resources but local files, terminal, and system — all governed by OAuth3 and verified by Stillwater evidence bundles.
+
+```
+Before Universal Portal:
+  Stillwater skills → web automation → LinkedIn, Gmail, Substack, Twitter
+
+After Universal Portal:
+  Stillwater skills → web + machine
+    ├── Web:     LinkedIn, Gmail, Substack, Twitter (OAuth3 web scopes)
+    ├── Files:   read/write/list/delete local files (OAuth3 machine.file.* scopes)
+    ├── Terminal: execute allowlisted commands (OAuth3 machine.terminal.* scopes)
+    └── System:  CPU, memory, disk, process management (OAuth3 machine.system.* scopes)
+```
+
+**What this means for skill authors:**
+- Recipes can now combine web + machine actions in a single task
+- Example: "Search LinkedIn for job postings → save results to ~/Documents/jobs.json"
+- Example: "Run test suite → post results as a GitHub comment"
+- OAuth3 governs both sides of the action — web scope + machine scope both required
+
+**Stillwater's verification role expands:**
+- Machine evidence bundles: same rung system (641/274177/65537) applied to machine operations
+- Machine actions are rung 274177 minimum (irreversible — files can be deleted)
+- Tunnel actions are rung 65537 (security-critical — public internet exposure)
+- The evidence bundle now carries: web snapshots + machine operation logs + tunnel sessions
+
+**Rung semantics for machine layer:**
+```
+Rung 641    — machine.file.read, machine.file.list (non-destructive, local only)
+Rung 274177 — machine.file.write, machine.terminal.allowlist (irreversible writes)
+Rung 65537  — machine.file.delete, machine.terminal.execute, machine.tunnel (security-critical)
+```
+
 ## Key Projects + Integration
 
 | Project | Role | Stillwater Provides |
 |---------|------|-------------------|
-| **solace-browser** | OAuth3 reference impl | Recipe verification, evidence bundles |
+| **solace-browser** | Universal portal (web + machine + tunnel) | Recipe verification, evidence bundles, rung gating for all layers |
 | **stillwater/cli** (OSS) + **solace-cli** (PRIVATE) | Terminal surface | stillwater/cli: rung enforcement, store commands (OSS). solace-cli: OAuth3 vault, twin, cloud (PRIVATE). |
-| **solaceagi.com** | Hosted cloud | Managed skill updates, OAuth3 vault |
+| **solaceagi.com** | Hosted cloud + tunnel server | Managed skill updates, OAuth3 vault, tunnel relay (Phase 5) |
 | **stillwater** | The OS itself | Everything above |
 
 ## Competitive Position
