@@ -101,6 +101,34 @@ Track in case-studies/:
 | **solaceagi.com** | Hosted cloud | Managed skill updates, OAuth3 vault |
 | **stillwater** | The OS itself | Everything above |
 
+## Competitive Position
+
+### FDA 21 CFR Part 11 — The Regulatory Moat
+
+SolaceAGI is the first AI agent platform architected for FDA 21 CFR Part 11 compliance:
+- Hash-chained audit trails (tamper-evident, append-only)
+- ALCOA+ data integrity (Attributable, Legible, Contemporaneous, Original, Accurate)
+- OAuth3 = electronic signature for AI delegation
+- PZip HTML snapshots = Original records (what the agent actually saw)
+- Rung system = Phase gates (like clinical trial Phase I/II/III)
+
+No competitor has this. OpenClaw has 512 security vulnerabilities and 824 malicious skills.
+Token-revenue vendors (OpenAI) cannot implement OAuth3 — it reduces token consumption.
+
+---
+
+## Founder
+
+Phuc Truong (Harvard '98). Serial founder.
+- Co-founded Clinical Research IO (CRIO) — #1 eSource in FDA-regulated clinical trials
+- 360+ customers, 40% higher enrollment, 70% FDA audit risk reduction
+- Built software that survives real FDA audits — that experience is in the architecture
+- "In clinical trials, 'trust me' is not evidence. Only the original, timestamped, attributable record is evidence."
+- Previously: UpDown.com (100K users), Citystream (acquired), Phuc Labs (MIT AMD winner)
+- Harvard University, A.B. Economics, Class of 1998
+
+---
+
 ## Community Flywheel (Stillwater's Role)
 
 Stillwater is the governance layer that makes the flywheel self-sustaining:
