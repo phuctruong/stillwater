@@ -493,6 +493,39 @@ class TestStillwaterStoreClient:
             except PermissionError as exc:
                 assert key not in str(exc), "API key leaked in exception message"
 
+    def test_client_submit_429_rate_limited(self, tmp_path):
+        """submit_skill() → raises RuntimeError on HTTP 429 (rate limited)."""
+        from store.client import StillwaterStoreClient
+        skill_file = _write_skill(tmp_path)
+        ev = _make_evidence_dir(tmp_path)
+
+        fake_response = MagicMock()
+        fake_response.status_code = 429
+        fake_response.json.return_value = {"detail": "Rate limit exceeded"}
+
+        with patch("store.client.requests.post", return_value=fake_response):
+            client = StillwaterStoreClient(
+                api_key="sw_sk_" + "3" * 32,
+                base_url="https://solaceagi.com",
+            )
+            with pytest.raises(RuntimeError, match="429"):
+                client.submit_skill(skill_file, author="test", rung_claimed=641, evidence_dir=ev)
+
+    def test_client_unexpected_status_code_raises(self, tmp_path):
+        """Unexpected HTTP status (e.g. 418) → raises RuntimeError."""
+        from store.client import StillwaterStoreClient
+        fake_response = MagicMock()
+        fake_response.status_code = 418
+        fake_response.json.return_value = {"detail": "I'm a teapot"}
+
+        with patch("store.client.requests.get", return_value=fake_response):
+            client = StillwaterStoreClient(
+                api_key="sw_sk_" + "4" * 32,
+                base_url="https://solaceagi.com",
+            )
+            with pytest.raises(RuntimeError, match="418"):
+                client.fetch_skill("some_id")
+
 
 # ===========================================================================
 # CHECKPOINT 4: No circular imports
