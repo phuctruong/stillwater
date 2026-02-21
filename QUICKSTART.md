@@ -48,8 +48,29 @@ bash admin/start-admin.sh
 # Opens http://127.0.0.1:8787 in your browser
 ```
 
+## 6. Install Stillwater into your own project
+
+```bash
+cd ~/projects/your-project
+stillwater init project \
+  --name "Your Project" \
+  --skills prime-safety,prime-coder,phuc-forecast \
+  --rung 641 \
+  --domain "your project domain" \
+  --force
+```
+
+This replaces a bloated CLAUDE.md with a lean 44–71-line version and creates:
+- `ripples/project.md` — fill in your project-specific constraints
+- `skills/` — full skill files for sub-agent dispatch
+
+See [`STILLWATER-OS-UPGRADE-GUIDE.md`](STILLWATER-OS-UPGRADE-GUIDE.md) for the full upgrade guide including per-project skill pack recommendations and a 91% context reduction case study.
+
+See [`recipes/project-onboard.md`](recipes/project-onboard.md) for the canonical recipe and verification checklist.
+
 ## Next steps
 
+- Read [`STILLWATER-OS-UPGRADE-GUIDE.md`](STILLWATER-OS-UPGRADE-GUIDE.md) to upgrade your existing projects
 - Read [`cli/README.md`](cli/README.md) for the full CLI manual
 - Browse [`skills/`](skills/) for available skills
 - Browse [`recipes/`](recipes/) for repeatable workflows
