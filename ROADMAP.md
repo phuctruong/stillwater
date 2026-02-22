@@ -272,19 +272,6 @@ Evidence required: .github/workflows/rung-check.yml passing on main branch
 
 ---
 
-## Milestone Summary
-
-| Phase | Target Date | Rung Gate | Key Deliverable |
-|-------|------------|-----------|----------------|
-| Phase 0: Audit | Week 0 | 641 | Baseline audit report — DONE (258 tests, security scan clean) |
-| Phase 1: OAuth3 | Week 1–2 | 641 | `papers/oauth3-spec-v0.1.md` + `skills/oauth3-enforcer.md` — DONE |
-| Phase 2: Store Client | Month 1 | 641 | `store/client.py` + `store/rung_validator.py` (server in solaceagi) |
-| Phase 2.5: Dragon Tip Hooks | Month 1 | 641 | `tip_callback` in llm_call/llm_chat + `usage_tracker` module |
-| Phase 3: LLM Portal | Month 2 | 641 | Multi-provider support + session management |
-| Phase 4: Rung 65537 | Month 3 | 65537 | Self-verification badge + 30-day CI |
-
----
-
 ## Phase 5: Persona System (Month 2–3) — DONE
 
 **Goal**: Add domain expert personas and GLOW score gamification to Stillwater, enabling persona-enhanced swarm agents and transparent progress tracking with belt progression.
@@ -363,6 +350,41 @@ Evidence required: launch-swarm.sh generates prompts with persona + GLOW for eac
 
 ---
 
+## Phase 6: Hackathon System (NEW)
+
+**Goal**: Layer hackathon sprint methodology on top of the persona system for structured, time-boxed development. Every ROADMAP phase becomes an explicit, executable hackathon with phases, scope locks, and GLOW at the end.
+
+### Delivered
+
+- [x] skills/hackathon.md — hackathon execution protocol (8 phases, timing templates)
+- [x] swarms/hackathon-lead.md — hackathon coordinator agent
+- [x] personas/marketing-business/hackathon-master.md — sprint execution persona
+- [x] papers/40-hackathon-paradigm.md — hackathon methodology paper
+- [x] combos/hackathon-sprint.md — standard hackathon combo (4-hour sprint)
+- [x] combos/hackathon-lightning.md — 2-hour lightning sprint
+- [x] combos/hackathon-marathon.md — 8-hour marathon sprint
+
+### Key Insight
+
+Every ROADMAP phase IS a hackathon. The hackathon is not a special event — it is the development methodology. Personas give you the right experts. Hackathons give you the right workflow. Together: structured sprint + domain experts + evidence gates + GLOW scoring = the Stillwater development cycle.
+
+The hackathon system makes this explicit and executable: Scout discovers (20%), Plan locks scope (10%), Build ships (45%), Verify gates evidence (15%), Demo proves it happened (10%). Time box is law. Demo or fail.
+
+### Build Prompt (Phase 6)
+
+```
+Load prime-safety + prime-coder + phuc-orchestration + persona-engine + hackathon-master.
+Task: Run a hackathon sprint to deliver Phase 6 of the Stillwater ROADMAP.
+Repo: stillwater/
+Sprint type: standard (4-hour)
+Demo target: all 7 Phase 6 deliverables committed and documented in demo.md
+Rung target: 641
+Evidence required: evidence/sprint.json + evidence/demo.md + evidence/glow_score.json
+GLOW target: 60+ (warrior pace)
+```
+
+---
+
 ## Milestone Summary
 
 | Phase | Target Date | Rung Gate | Key Deliverable |
@@ -374,6 +396,7 @@ Evidence required: launch-swarm.sh generates prompts with persona + GLOW for eac
 | Phase 3: LLM Portal | Month 2 | 641 | Multi-provider support + session management |
 | Phase 4: Rung 65537 | Month 3 | 65537 | Self-verification badge + 30-day CI |
 | Phase 5: Persona System | Month 2–3 | 641 | 50 personas, 11 categories, persona-engine.md v1.3.0, all 19 swarms enhanced, papers 34-39, +27% A/B avg — DONE |
+| Phase 6: Hackathon System | Month 3 | 641 | hackathon-sprint + lightning + marathon combos, hackathon-master persona, hackathon skill + swarm |
 
 ---
 
