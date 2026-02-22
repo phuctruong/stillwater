@@ -94,9 +94,13 @@ Evidence required: skills/oauth3-enforcer.md committed with sha256
 
 ---
 
-## Phase 2: Store Client SDK + Rung Validator (Month 1)
+## Phase 2: Store Client SDK + Rung Validator (Month 1) — DONE
 
 **Goal**: Stillwater has a client SDK for submitting/fetching skills from the Stillwater Store. The server API lives in `solaceagi` — stillwater owns the client and the rung validation logic.
+
+**Result**: 66 tests pass. Module-level convenience functions added. `StillwaterStoreClient` with rung validation + SHA-256 manifest verification. Rung 641 achieved.
+
+**Test count**: 258 total (includes 66 store client tests in `tests/test_store_client.py`)
 
 ### Architecture Split
 - **stillwater** (this repo): Store client SDK, rung validator, skill packaging, STORE.md spec
@@ -104,20 +108,20 @@ Evidence required: skills/oauth3-enforcer.md committed with sha256
 
 ### Tasks
 
-- [ ] Store client SDK: `store/client.py`
+- [x] Store client SDK: `store/client.py`
   - `submit_skill(skill_path, author, rung_claimed)` — package + submit to solaceagi Store API
   - `fetch_skill(skill_id)` — download a skill from the Store
   - `list_skills(query)` — search the Store catalog
   - `install_skill(skill_id, target_dir)` — fetch + write to local skills/
-- [ ] Rung validator: `store/rung_validator.py`
+- [x] Rung validator: `store/rung_validator.py`
   - Verify evidence bundle before submission (tests.json, plan.json, behavior_hash)
   - Check rung_claimed matches evidence artifacts
   - Run behavioral hash replay (3 seeds: 42, 137, 9001)
-- [ ] Skill packager: `store/packager.py`
+- [x] Skill packager: `store/packager.py`
   - Bundle skill.md + tests + evidence into submission payload
   - Validate STORE.md requirements (OAuth3 scope declaration if external platform)
   - Compute SHA-256 manifest
-- [ ] Tests: `tests/test_store_client.py`
+- [x] Tests: `tests/test_store_client.py` — 66 tests pass
 
 ### Build Prompt (Phase 2 — Store Client SDK)
 
@@ -143,17 +147,19 @@ Evidence required: tests/test_store_client.py passing (pytest -v)
 
 ---
 
-## Phase 2.5: Dragon Tip Integration in LLM Client Library
+## Phase 2.5: Dragon Tip Integration in LLM Client Library — DONE
 
 **Goal**: Stillwater's LLM client library (`stillwater.llm_client`) includes hooks for the Dragon Tip Program so that solaceagi.com can calculate tips on BYOK API calls routed through the Stillwater stack.
 
+**Result**: 55 tests pass (test_llm_tip_hooks.py). `tip_callback` and `usage_tracker` parameters integrated into `llm_call()`, `llm_chat()`, `LLMClient.complete()`, and `LLMClient.chat()`. All cost math uses exact Decimal arithmetic — no float in any cost path. `SessionTipAccumulator`, `TipConfig`, `SessionUsageTracker` delivered. Rung 641 achieved.
+
 ### Tasks
 
-- [ ] Add `tip_callback` parameter to `llm_call()` and `llm_chat()` — optional callback invoked after each API call with `{model, input_tokens, output_tokens, estimated_cost_usd}`
-- [ ] Add `usage_tracker` module: accumulates per-session token usage, recipe hit/miss counts, and estimated savings
-- [ ] Ensure cost estimation uses exact Decimal arithmetic (no float in any cost path)
-- [ ] `tip_callback` is a no-op by default — only solaceagi.com sets it to route to `tip/engine.py`
-- [ ] Tests: `tests/test_llm_tip_hooks.py` — callback invocation, cost estimation accuracy, Decimal-only arithmetic
+- [x] Add `tip_callback` parameter to `llm_call()` and `llm_chat()` — optional callback invoked after each API call with `{model, input_tokens, output_tokens, cost_hundredths_cent}`
+- [x] Add `usage_tracker` module (`stillwater/usage_tracker.py`): accumulates per-session token usage, recipe hit/miss counts, and estimated savings
+- [x] Ensure cost estimation uses exact Decimal arithmetic (no float in any cost path)
+- [x] `tip_callback` is a no-op by default — only solaceagi.com sets it to route to `tip/engine.py`
+- [x] Tests: `tests/test_llm_tip_hooks.py` — 55 tests: callback invocation, cost estimation accuracy, Decimal-only arithmetic, backward compat
 
 ### Build Prompt (Phase 2.5 — Tip Hooks)
 
@@ -391,8 +397,8 @@ GLOW target: 60+ (warrior pace)
 |-------|------------|-----------|----------------|
 | Phase 0: Audit | Week 0 | 641 | Baseline audit report — DONE (258 tests, security scan clean) |
 | Phase 1: OAuth3 | Week 1–2 | 641 | `papers/oauth3-spec-v0.1.md` + `skills/oauth3-enforcer.md` — DONE |
-| Phase 2: Store Client | Month 1 | 641 | `store/client.py` + `store/rung_validator.py` (server in solaceagi) |
-| Phase 2.5: Dragon Tip Hooks | Month 1 | 641 | `tip_callback` in llm_call/llm_chat + `usage_tracker` module |
+| Phase 2: Store Client | Month 1 | 641 | `store/client.py` + `store/rung_validator.py` — DONE (66 tests, 258 total) |
+| Phase 2.5: Dragon Tip Hooks | Month 1 | 641 | `tip_callback` in llm_call/llm_chat + `usage_tracker` module — DONE (55 tests) |
 | Phase 3: LLM Portal | Month 2 | 641 | Multi-provider support + session management |
 | Phase 4: Rung 65537 | Month 3 | 65537 | Self-verification badge + 30-day CI |
 | Phase 5: Persona System | Month 2–3 | 641 | 50 personas, 11 categories, persona-engine.md v1.3.0, all 19 swarms enhanced, papers 34-39, +27% A/B avg — DONE |
