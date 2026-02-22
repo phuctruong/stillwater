@@ -119,24 +119,41 @@ def _make_client(provider: Optional[str] = None) -> LLMClient:
     """Create an LLMClient using the current active provider with config URLs."""
     cfg = _get_config()
 
-    # Build config dict keyed by provider name (as LLMClient expects)
+    # Build config dict keyed by provider type (as LLMClient expects)
     config_dict = {}
-    if cfg:
-        for provider_name, provider_config in cfg.config.items():
-            if isinstance(provider_config, dict):
-                provider_dict = {}
-                if "url" in provider_config and provider_config["url"]:
-                    provider_dict["url"] = provider_config["url"]
-                if provider_dict:
-                    config_dict[provider_name] = provider_dict
+    resolved_provider = provider
 
-    # If provider specified, use it
-    if provider:
-        return LLMClient(provider=provider, config=config_dict)
-
-    # Use active provider from config
     if cfg:
-        return LLMClient(provider=cfg.active_provider, config=config_dict)
+        # If provider is specified, find its config
+        if provider and provider in cfg.config:
+            prov_config = cfg.config[provider]
+            if isinstance(prov_config, dict):
+                prov_type = prov_config.get("type", "")
+                if prov_type == "http" and "url" in prov_config:
+                    # For HTTP providers, use "http" as the provider type
+                    resolved_provider = "http"
+                    config_dict["http"] = {"url": prov_config["url"]}
+                elif "url" in prov_config:
+                    config_dict[provider] = {"url": prov_config["url"]}
+
+        # If no provider specified, use active provider from config
+        if not provider:
+            active = cfg.active_provider
+            resolved_provider = active
+            if active in cfg.config:
+                prov_config = cfg.config[active]
+                if isinstance(prov_config, dict):
+                    prov_type = prov_config.get("type", "")
+                    if prov_type == "http" and "url" in prov_config:
+                        # For HTTP providers, use "http" as the provider type
+                        resolved_provider = "http"
+                        config_dict["http"] = {"url": prov_config["url"]}
+                    elif "url" in prov_config:
+                        config_dict[active] = {"url": prov_config["url"]}
+
+    # Create client with resolved provider
+    if resolved_provider:
+        return LLMClient(provider=resolved_provider, config=config_dict)
 
     logger.warning("Using offline provider (config not available)")
     return LLMClient(provider="offline", config=config_dict)
@@ -612,7 +629,9 @@ async def context_chat(req: ContextChatRequest) -> dict:
     try:
         client = _make_client(provider=provider)
         start = time.monotonic()
-        result = client.chat(messages)
+        # Increase timeout for context injection (large system prompts take longer)
+        # Use 120 seconds (2 minutes) instead of default 30 seconds
+        result = client.chat(messages, timeout=120.0)
         latency_ms = int((time.monotonic() - start) * 1000)
         content = result.text if hasattr(result, "text") else str(result)
     except Exception as exc:
