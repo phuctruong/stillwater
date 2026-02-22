@@ -109,6 +109,74 @@ This recipe targets rung 641 (local correctness) because perspective generation 
 
 ---
 
+## Consultation Flow (Mermaid Diagram)
+
+```mermaid
+flowchart TD
+    A[Step 1: FRAME QUESTION\nconsultation_frame.json\nframed_question + domain + stakes] --> B[Step 2: SCORE CITIZENS\nconsultation_scores.json\n10 citizens ranked by domain + lens divergence]
+    B --> C[Step 3: SELECT CITIZENS\nconsultation_selection.json\n3-5 citizens with tradition diversity]
+    C --> D[Step 4: SUMMON PERSPECTIVES\nconsultation_perspectives.json\ncore_insight + key_risk + recommended_action per citizen]
+    D --> E[Step 5: DETECT SYNTHETIC CONSENSUS\nconsultation_consensus_check.json\nsynthetic_consensus_detected flag]
+    E -->|synthetic consensus| REPLACE[Replace citizen\nmaximum 2 replacement rounds]
+    REPLACE --> D
+    E -->|genuine divergence| F[Step 6: TRIANGULATE\nconsultation_triangulation.json\npoints_of_agreement + points_of_disagreement]
+    F --> G[Step 7: SYNTHESIZE\nconsultation_synthesis.json\nsynthesis_claim + falsifier + recommended_action]
+    G --> H[council_transcript.json\nfull assembly of all 7 artifacts]
+
+    A -->|ambiguous query| NEED_INFO[NEED_INFO\nlist clarification needed]
+    C -->|all top 3 same tradition| SWAP[Force-swap for tradition diversity]
+    G -->|incommensurable| LOW_CONF[confidence=LOW\nreport triangulation as output]
+    H --> PASS[PASS\nfalsifier non-trivial + action concrete]
+```
+
+---
+
+## FSM: Citizen Consultation State Machine
+
+```
+States: FRAME | SCORE | SELECT | SUMMON | CONSENSUS_CHECK |
+        REPLACE_CITIZEN | TRIANGULATE | SYNTHESIZE | PASS | BLOCKED | NEED_INFO
+
+Transitions:
+  [*] → FRAME: raw query received
+  FRAME → NEED_INFO: query too ambiguous to frame as answerable question
+  FRAME → SCORE: consultation_frame.json with framed_question + domain + stakes
+  SCORE → SELECT: all 10 citizens scored, sorted by combined_score
+  SELECT → SELECT (SWAP): top 3 all from same tradition — force-swap 3rd
+  SELECT → SUMMON: tradition_diversity_check = passed, 3-5 citizens selected
+  SUMMON → CONSENSUS_CHECK: all perspectives with core_insight + key_risk + action
+  SUMMON → BLOCKED: citizen perspective indistinguishable from prior — replace
+  CONSENSUS_CHECK → SUMMON (REPLACE): synthetic_consensus_detected = true (max 2 rounds)
+  CONSENSUS_CHECK → TRIANGULATE: genuine divergence present (divergence_count >= 1)
+  TRIANGULATE → SYNTHESIZE: points_of_disagreement has >= 1 entry with tension_type
+  SYNTHESIZE → PASS: falsifier non-trivial AND recommended_action concrete
+  SYNTHESIZE → PASS (LOW_CONF): perspectives genuinely incommensurable → triangulation as output
+
+  Forbidden state transitions:
+  SELECT → BLOCKED: fewer than 3 citizens available (COUNCIL_BELOW_MINIMUM)
+  CONSENSUS_CHECK → BLOCKED: synthetic consensus persists after 2 replacement rounds + warning logged
+
+Exit conditions:
+  PASS: falsifier non-trivial, recommended_action concrete, council_transcript.json complete
+  BLOCKED: council below 3 members (geometric constraint); registry unreadable
+  NEED_INFO: query not frameable; citizen registry file not readable
+```
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | Lens divergence scoring improves per run — tradition combination heuristics accumulate into better citizen selection for this domain | +5 per consultation where at least 1 citizen pair produces a genuine Lane A-level disagreement |
+| **L** (Love/Quality) | Falsifier is non-trivial; synthesis emerges FROM tension not despite it; synthetic consensus detected and replaced | +5 when synthesis_claim references >= 1 tension from triangulation |
+| **O** (Output) | council_transcript.json with all 7 artifact layers; consultation_synthesis.json with falsifier | +5 per successful consultation |
+| **W** (Wisdom) | Northstar advances (recipe_hit_rate) when the falsifiable recommendation is tested and validated in a subsequent run | +5 when falsifier_test produces a definitive result |
+
+**Northstar Metric:** `recipe_hit_rate` — citizen consultation produces falsifiable recommendations. When the recommended_action is implemented and the falsifier test is run, the outcome feeds back into future consultation quality. High-quality synthesis + validated falsifiers = a reusable advisory recipe.
+
+---
+
 ## Three Pillars of Software 5.0 Kung Fu
 
 | Pillar | How This Recipe Applies It |

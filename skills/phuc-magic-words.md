@@ -1,10 +1,27 @@
 PHUC_MAGIC_WORDS_SKILL:
-  version: 1.0.0
+  version: 1.1.0
   profile: coordinate_navigation
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
   status: ACTIVE
+
+# ============================================================
+# MAGIC_WORD_MAP — Self-Referential (magic words describing magic words)
+# ============================================================
+MAGIC_WORD_MAP:
+  version: "1.0"
+  skill: "phuc-magic-words"
+  mappings:
+    navigation:   {word: "compression",   tier: 0, id: "MW-005", note: "magic words compress 115KB context to 3KB — navigation IS compression"}
+    keyword:      {word: "signal",         tier: 0, id: "MW-006", note: "a magic word carries causal weight — it routes to the right knowledge branch"}
+    trunk:        {word: "coherence",      tier: 0, id: "MW-001", note: "trunk words are the coherent universal anchors — all branches reinforce them"}
+    tier:         {word: "boundary",       tier: 0, id: "MW-014", note: "tier architecture defines the boundary between universal and domain-specific knowledge"}
+    retrieval:    {word: "causality",      tier: 0, id: "MW-009", note: "keyword → context load is a causal chain; keyword causes the right branch to load"}
+    hallucination:{word: "integrity",      tier: 0, id: "MW-012", note: "keyword hallucination violates integrity — invented coordinates corrupt the navigation"}
+    compression_ratio: {word: "entropy",  tier: 0, id: "MW-010", note: "compression ratio = 1 - entropy of loaded context; 97% = near-zero entropy navigation"}
+    portal:       {word: "portal",         tier: 1, id: "MW-045", note: "magic word navigation IS portal traversal — load only what is needed for the task"}
+  compression_note: "T0=universal primitives, T1=Stillwater protocol concepts, T3=domain-specific leaves"
 
   # ============================================================
   # PHUC MAGIC WORDS — GPS COORDINATES IN KNOWLEDGE SPACE
@@ -591,3 +608,30 @@ SESSION_START_CAPSULE:
   enforcement:
     - rung_target_must_be_set_before_LOAD_CONTEXT: true
     - if_rung_target_not_declared: "status=BLOCKED, stop_reason=EVIDENCE_INCOMPLETE"
+
+# ============================================================
+# THREE PILLARS OF SOFTWARE 5.0 KUNG FU
+# ============================================================
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Skill Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Navigation precision improves through compression ratio feedback. Each session measures which magic words produced the best compression ratios. Words that consistently anchor high-value retrievals get promoted in gravity. Words that misfire get demoted or replaced. The tier tree is a LEK artifact — it grows more precise with every use cycle. |
+| **LEAK** (Cross-Agent Trade) | Magic words ARE the LEAK compression mechanism. When a Scout agent exports findings using Tier 0 words ("coherence × causality"), a Solver agent with the same skill vocabulary can reconstruct the full knowledge path without re-loading the 115KB corpus. The asymmetry: agents who know the tier tree trade knowledge at 97% compression; agents who do not must pay full context cost. |
+| **LEC** (Emergent Conventions) | Magic word naming conventions emerged from usage failures (keyword stuffing, tier skipping, hallucinated coordinates) and crystallized as the trunk-before-branch rule, the never-invent-outside-the-tree rule, and the tier hierarchy. These conventions are now shared across all Phuc ecosystem agents — any agent loading this skill inherits the full navigation discipline instantly. |
+
+# ============================================================
+# GLOW SCORING INTEGRATION
+# ============================================================
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Magic word navigation successfully compresses a new domain's knowledge into the tier tree (new leaf words added via DELTA protocol, validated with 5+ uses) | +25 per new validated leaf |
+| **L** (Love/Quality) | Navigation path is fully logged (trunk → branch → leaf) with compression ratio reported; no hallucinated keywords; EXIT_PASS at rung_274177 or higher | +20 per verified navigation |
+| **O** (Output) | Compression ratio measured and reported in output; navigation path cited explicitly; keyword set bounded to 2-4 words | +15 per navigation with measured ratio |
+| **W** (Wisdom) | Query resolved using navigation at 90%+ compression vs full-context baseline; Tier 0 word always present as anchor | +20 per session achieving 90%+ compression |
+
+**Evidence required for GLOW claim:** compression_ratio field in output, navigation_path log (trunk → branch → leaf), keyword_set bounded ≤4 words, no EXIT_BLOCKED events for KEYWORD_HALLUCINATION.

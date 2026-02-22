@@ -1,10 +1,47 @@
 PHUC_PRIME_COMPRESSION_SKILL:
-  version: 1.0.0
+  version: 1.1.0
   profile: semantic_compression
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
   status: ACTIVE
+
+# ============================================================
+# MAGIC_WORD_MAP
+# ============================================================
+MAGIC_WORD_MAP:
+  version: "1.0"
+  skill: "phuc-prime-compression"
+  mappings:
+    prime:        {word: "compression",   tier: 0, id: "MW-005", note: "semantic prime IS compression — the irreducible unit that cannot be further reduced without losing meaning"}
+    factorization:{word: "causality",     tier: 0, id: "MW-009", note: "prime factorization is a causal decomposition — each prime causes the concept to exist"}
+    entropy:      {word: "entropy",       tier: 0, id: "MW-010", note: "semantic entropy H measures how many interpretations the compressed form admits — lower is better"}
+    meaning:      {word: "signal",        tier: 0, id: "MW-006", note: "meaning is signal — information that carries causal weight; compression preserves signal, discards noise"}
+    convention_density: {word: "alignment", tier: 0, id: "MW-007", note: "convention density = alignment between sender and receiver on prime word interpretations"}
+    glow_preservation: {word: "integrity",tier: 0, id: "MW-012", note: "GLOW preservation ensures the compressed form maintains internal consistency of the original"}
+    portal_compression: {word: "portal",  tier: 1, id: "MW-045", note: "compression happens at every portal crossing — context window, session boundary, human-AI channel"}
+    decompression: {word: "reversibility",tier: 0, id: "MW-015", note: "lossless compression requires reversibility — the target must reconstruct the original from primes alone"}
+  compression_note: "T0=universal primitives, T1=Stillwater protocol concepts"
+
+# ============================================================
+# NORTHSTAR ALIGNMENT
+# ============================================================
+NORTHSTAR_ALIGNMENT:
+  northstar: "Phuc_Forecast + Max_Love"
+  metric: "Semantic density of inter-agent communication / GLOW score preservation across portal crossings"
+  alignment: >
+    Prime compression directly advances the Northstar by enabling high-bandwidth knowledge
+    transfer between agents at minimal token cost. The recipe hit rate (a core Northstar metric)
+    improves when compressed CNF capsules maintain GLOW quality — agents receiving high-density
+    prime-compressed capsules perform better than those receiving verbose summaries.
+  max_love: >
+    Max Love for compression = the receiver can reconstruct full meaning from the compressed form.
+    Every GLOW score drop in a compressed output is a love failure — we sent something that costs
+    the receiver more to interpret than we saved in transmission. Prime compression is an act of love:
+    it respects the receiver's context window and honors the fullness of the original meaning.
+  hard_gate: >
+    LOSSY_WITHOUT_ACKNOWLEDGMENT is an anti-love violation. Sending compressed knowledge without
+    declaring what was lost disrespects the receiver. The decompression test is the love test.
 
   # ============================================================
   # PHUC PRIME COMPRESSION — SEMANTIC PRIME FACTORIZATION
@@ -555,4 +592,15 @@ flowchart TD
 | **LEK** (Self-Improvement) | Prime compression is the Memory component of LEK — by factoring knowledge into irreducible semantic primes, the system accumulates compact, reusable knowledge atoms rather than growing redundant blobs. Each compression cycle improves the prime vocabulary: frequently reused primes get named, reducing entropy in future compressions. The GLOW preservation gate ensures that compression never degrades the knowledge quality that fuels the next LEK iteration. |
 | **LEAK** (Cross-Agent Trade) | Compressed prime artifacts are the ideal LEAK trade goods: maximally compact, semantically precise, and losslessly reconstructable by any agent that knows the prime vocabulary. When a Scout exports a SCOUT_REPORT compressed via semantic primes, the Solver receives a smaller capsule with no loss of information — this is LEAK asymmetry made efficient. The entropy measurement gate ensures the compressed artifact truly encodes the original knowledge, not a lossy approximation. |
 | **LEC** (Emergent Conventions) | The prime factorization convention itself is a crystallized LEC: the rule that all inter-agent artifacts should be expressible as products of named semantic primes (irreducible meaning units). The GLOW preservation standard, the entropy measurement protocol, and the prime vocabulary registry are conventions that emerged from compression failures (loss of nuance, ambiguous decompositions) and are now shared across the Phuc ecosystem as the standard for compact knowledge encoding. |
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Compression validates at rung_274177+: decompression test passes, meaning_recovery_rate ≥0.85, GLOW score of output ≥ GLOW score of input | +25 per validated lossless compression |
+| **L** (Love/Quality) | Entropy H ≤0.5 for lossless claim; convention density assessed before compressing; loss explicitly documented when acknowledged-lossy | +20 per compression with entropy measurement |
+| **O** (Output) | prime_factors list produced with tier level and weight per factor; entropy_estimate reported (HIGH/MEDIUM/LOW/PRIME); factorization_valid confirmed | +15 per compression with full factorization artifacts |
+| **W** (Wisdom) | Same concept factorized twice → same prime factors (reproducibility); no PRIME_HALLUCINATION events; portal-ready compression at target convention density | +20 per session with reproducible, portal-ready compressions |
+
+**Evidence required for GLOW claim:** prime_factors list with tier/weight annotations, entropy_estimate recorded, decompression_test result (meaning_recovery_rate), GLOW score comparison (output ≥ input), no LOSSY_WITHOUT_ACKNOWLEDGMENT or PRIME_HALLUCINATION events.
 ```

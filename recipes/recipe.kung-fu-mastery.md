@@ -479,6 +479,82 @@ Fix: Dragon Rider requires Black Belt first. The title sequence is enforced. Tea
 
 ---
 
+## Skill Pack
+
+Load these skills before executing this recipe:
+- `skills/prime-safety.md` (always first)
+- `skills/phuc-orchestration.md` (for dispatch discipline)
+- `skills/phuc-forecast.md` (DREAM→FORECAST→DECIDE→ACT→VERIFY on each belt stage)
+
+Dragon Rider agent: `swarms/dragon-rider.md`
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | New belt level achieved; new pillar capability demonstrated | +25 per belt milestone |
+| **L** (Love/Quality) | Evidence artifacts produced with halting certificate | +25 per stage pass |
+| **O** (Output) | PATCH_DIFFs, surplus_proof.json, convention cards committed | +25 per completed stage |
+| **W** (Wisdom) | NORTHSTAR metric (skill_quality_avg) visibly advanced | +25 when belt awarded |
+
+**Northstar Metric:** `skill_quality_avg` — average skill score across the corpus rises each time a White Belt completes their first LEK loop and each time a Dragon Rider's convention is adopted.
+
+**Full GLOW by belt:**
+
+| Belt | G | L | O | W | Total |
+|------|---|---|---|---|-------|
+| White | 5 | 5 | 5 | 5 | 20 |
+| Yellow | 10 | 10 | 10 | 10 | 40 |
+| Orange | 15 | 15 | 15 | 15 | 60 |
+| Green | 19 | 19 | 18 | 19 | 75 |
+| Blue | 21 | 22 | 21 | 21 | 85 |
+| Black | 24 | 23 | 24 | 24 | 95 |
+| Dragon Rider | 25 | 25 | 25 | 25 | 100 |
+
+---
+
+## FSM: Belt Progression State Machine
+
+```
+States: WHITE | YELLOW | ORANGE | GREEN | BLUE | BLACK | DRAGON_RIDER
+        STAGE_GATE | BLOCKED | NEED_INFO
+
+Transitions:
+  WHITE → STAGE_GATE: kata_log.json + PATCH_DIFF + halting_certificate submitted
+  STAGE_GATE → WHITE: GLOW < 20 or rung < 641
+  STAGE_GATE → YELLOW: GLOW >= 20, rung 641, LEK >= 4
+  YELLOW → STAGE_GATE: 3x kata_log + magic_word_usage.json + swarm_dispatch.json
+  STAGE_GATE → ORANGE: GLOW >= 40, rung 641, LEK >= 5, LEAK >= 4, LEC >= 3
+  ORANGE → STAGE_GATE: stability_report + surplus_proof + adoption_evidence
+  STAGE_GATE → GREEN: GLOW >= 60, rung 274177, all pillars >= 6
+  GREEN → STAGE_GATE: cross_pillar_spar.json + final_assessment.json
+  STAGE_GATE → BLUE: GLOW >= 75, rung 274177, all pillars >= 7
+  BLUE → STAGE_GATE: leak_prediction.json + 3 conventions adopted
+  STAGE_GATE → BLACK: GLOW >= 85, rung 274177, all pillars >= 8
+  BLACK → STAGE_GATE: tournament evidence bundle, rung 65537 on all artifacts
+  STAGE_GATE → DRAGON_RIDER: GLOW >= 95, rung 65537, all pillars >= 9
+  ANY → BLOCKED: pillar floor = 0 after 3 sessions
+  ANY → NEED_INFO: evidence gate fails (missing halting_certificate or artifact)
+
+Exit conditions:
+  DRAGON_RIDER: teaching_reflection.md + student reaches Yellow Belt
+  BLOCKED: consult Dragon Rider before any state transition
+  NEED_INFO: emit missing field list; wait for artifact submission
+```
+
+---
+
+## Northstar Alignment
+
+This recipe directly advances:
+- **skill_quality_avg**: every LEK loop patches a skill file upward
+- **recipe_hit_rate**: conventions adopted by others = recipes being replayed
+- **community_contributors**: Dragon Rider graduates become contributors
+
+---
+
 ## Integration with Stillwater Ecosystem
 
 This recipe connects to:

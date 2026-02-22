@@ -2180,3 +2180,20 @@ EXIT_NEED_INFO --> [*]
       4 phases (P0/P1/P2/P3) + rung=MIN + coverage=all-modules + decoupled-verification
       + LEK=rung_advance | LEAK=integration_probes | LEC=sha256_stability.
       phuc-qa IS the VERIFY vertex — without it, all three pillars run blind.
+
+---
+
+## GLOW Scoring Integration
+
+This skill contributes to GLOW score across these dimensions:
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Question quality improvement — each session where qa_scorecard.json shows higher adversarial question coverage than prior session. P0 discovery producing a gap not caught in prior QA = G≥15. New gap_report.json entries with root cause = G≥10. | +5 to +20 |
+| **L** (Love/Quality) | Falsifier coverage — every QA session where EVERY module has ≥1 falsifying question in P1, ≥1 red→green test in P2, and ≥1 diagram with closed state space in P3. Zero PILLAR_SKIPPED or UNCOVERED_MODULE forbidden states triggered = L≥20. | +10 to +20 |
+| **O** (Output) | QA scorecards committed — qa_scorecard.json + question_set.json + test_results.json + diagrams/*.sha256 all committed to git. Integration rung = MIN(P0, P1, P2, P3) declared. HEAVY mode with independent repro = O≥25. | +10 to +25 |
+| **W** (Wisdom) | Question pattern library growth — each new question pattern added to questions/project.jsonl that catches a gap not covered by prior patterns. Also: new named forbidden state or anti-pattern drawn from a real QA failure in this session. | +5 to +15 |
+
+**Session GLOW target:** Any QA session using phuc-qa should achieve GLOW ≥ 60. P0 gap discovery complete = base floor. All four pillars producing artifacts = O≥15. Zero PILLAR_SKIPPED = required for any L claim.
+
+**Evidence required for GLOW claim:** git commit hash + qa_scorecard.json (with rung = MIN(all pillars) declared) + question_set.json + test_results.json. For O≥20: diagrams/*.sha256 must be present. For L points: coverage matrix must show P1=true + P2=true + P3=true for every module. For G points: diff between prior and current qa_scorecard.json must show new gap signals discovered (not just re-coverage of known gaps).

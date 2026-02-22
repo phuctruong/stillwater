@@ -139,6 +139,63 @@ Rung 641 would be insufficient for a repair plan used in promotion decisions.
 
 ---
 
+## Audit Flow (Mermaid Diagram)
+
+```mermaid
+flowchart TD
+    A[Step 1: ENUMERATE\ntriangle_audit_contracts.json\ninterface + spec + skill + ci_rule] --> B[Step 2: REMIND CHECK\ntriangle_audit_remind.json\ngrep Purpose/Input/Pre-condition]
+    B --> C[Step 3: VERIFY CHECK\ntriangle_audit_verify.json\ngrep checkpoint/assert/RUNG_]
+    C --> D[Step 4: ACKNOWLEDGE CHECK\ntriangle_audit_acknowledge.json\ngrep PASS/stop_reason/status]
+    D --> E[Step 5: FLAG MISSING\ntriangle_audit_flags.json\nCOMPLETE 3/3 | PARTIAL 1-2/3 | BROKEN 0/3]
+    E --> F[Step 6: REPAIR PLAN\ntriangle_audit_repair_plan.json\nBROKEN-first ordering]
+    F --> G[Step 7: SUMMARY\ntriangle_audit_summary.json\nHEALTHY >= 80% | NEEDS_REPAIR | CRITICAL]
+
+    A -->|all categories empty| H[NEED_INFO\nverify repo_root]
+    C -->|zero verify contracts| I[BLOCKED\nZERO_VERIFICATION_CONTRACTS]
+```
+
+---
+
+## FSM: Triangle Audit State Machine
+
+```
+States: ENUMERATE | REMIND_CHECK | VERIFY_CHECK | ACKNOWLEDGE_CHECK |
+        FLAG_MISSING | REPAIR_PLAN | SUMMARY | PASS | BLOCKED | NEED_INFO
+
+Transitions:
+  [*] → ENUMERATE: repo_root provided
+  ENUMERATE → NEED_INFO: all categories empty (no contracts found)
+  ENUMERATE → REMIND_CHECK: contracts list non-empty
+  REMIND_CHECK → VERIFY_CHECK: all contracts have remind_pass entry (true or false)
+  VERIFY_CHECK → BLOCKED: zero verify contracts across entire codebase
+  VERIFY_CHECK → ACKNOWLEDGE_CHECK: all contracts have verify_pass entry
+  ACKNOWLEDGE_CHECK → FLAG_MISSING: all contracts have acknowledge_pass entry
+  FLAG_MISSING → REPAIR_PLAN: triangle_score computed for every contract
+  REPAIR_PLAN → SUMMARY: BROKEN-first ordering confirmed
+  SUMMARY → BLOCKED: total_broken > 0 AND overall_verdict = CRITICAL (emit but do not PASS)
+  SUMMARY → PASS: triangle_health_pct computed, overall_verdict set
+
+Exit conditions:
+  PASS: python3 verification script exits 0 (total_contracts = complete + partial + broken)
+  BLOCKED: ZERO_VERIFICATION_CONTRACTS or CRITICAL with unresolved BROKEN contracts
+  NEED_INFO: no contracts found; re-check glob patterns
+```
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | Triangle health score rises from CRITICAL toward HEALTHY across successive audits | +6 per run where health_pct improves vs prior run |
+| **L** (Love/Quality) | Repair plan correctly orders BROKEN before PARTIAL with minimal fix per contract | +6 when repair plan fully formed |
+| **O** (Output) | triangle_audit_summary.json emitted with correct health_pct and counts | +6 per complete audit |
+| **W** (Wisdom) | Northstar metric (skill_quality_avg) advanced as BROKEN skills become COMPLETE | +6 when >= 1 BROKEN contract resolved |
+
+**Northstar Metric:** `skill_quality_avg` — as BROKEN skill contracts are repaired (adding REMIND/VERIFY/ACKNOWLEDGE vertices), average skill score rises directly.
+
+---
+
 ## Three Pillars of Software 5.0 Kung Fu
 
 | Pillar | How This Recipe Applies It |

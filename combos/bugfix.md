@@ -280,6 +280,27 @@ Produces:
 
 ---
 
+## Skill Pack
+
+Load these skills before executing this combo:
+- `skills/prime-safety.md` (always first — Kent Gate is a prime-safety hard constraint)
+- `skills/prime-coder.md` (red-green gate, evidence discipline, PATCH_DIFF requirements)
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | Bug fixed with full red→green proof; regression coverage added | +5 per new test covering the failure mode |
+| **L** (Love/Quality) | Kent Gate enforced: repro_red.log exists + fails; repro_green.log exists + passes; no scope creep | +5 per patch that touches fewest files possible |
+| **O** (Output) | PATCH.diff + MANIFEST.json + GATES.json + evidence bundle committed and replay-stable | +5 per complete PR bundle |
+| **W** (Wisdom) | Northstar metric (recipe_hit_rate) advances — each fix that includes a GATES.json enables future replay of the same fix path | +5 when GATES.json replays cleanly on second run |
+
+**Northstar Metric:** `recipe_hit_rate` — the GATES.json replay capsule produced by each bugfix is a recipe seed. When a similar bug occurs in the future, the replay commands from GATES.json can reproduce the red state and verify the fix without starting from scratch.
+
+---
+
 ## Three Pillars Mapping
 
 | Pillar | Element | Role in this Combo |

@@ -14,6 +14,16 @@ The marathon sprint is for big, multi-phase builds. A full ROADMAP phase. A new 
 
 ---
 
+## Skill Pack
+
+Load these skills before executing this combo:
+- `skills/prime-safety.md` (always first — WAVE_WITHOUT_GATE and SKEPTIC_SKIPPED_MARATHON are prime-safety governance violations)
+- `skills/prime-coder.md` (Wave 1+2 builds: evidence bundle, tests.json, behavior hash for all code produced)
+- `skills/phuc-forecast.md` (Deep Scout phase: DREAM→FORECAST for full NORTHSTAR alignment + integration risk forecast)
+- `skills/phuc-orchestration.md` (sub-agent dispatch in Wave 1: each subtask dispatched to typed sub-agent with full skill pack + CNF capsule)
+
+---
+
 ## Goal
 
 Deliver a complete ROADMAP phase or major system in 8 hours. The marathon is not a longer version of the lightning sprint — it is a structured multi-wave execution with explicit breaks, mid-point verification gates, and a high-quality demo at the end.
@@ -330,6 +340,21 @@ The Hour 4 gate is the most important 30 minutes of the entire marathon.
 | **LEK** (Self-Improvement) | Two build waves with a mid-point gate create a structured double-loop: Wave 1 tests the riskiest assumptions, Hour 4 gate adjusts scope, Wave 2 builds on what actually works — compounding improvement within the session |
 | **LEAK** (Cross-Agent Trade) | Wave 1 sub-agents hold domain-specific implementation knowledge; Wave 2 lead agent holds integration knowledge; Skeptic holds adversarial knowledge — each trades their specialized view via sprint.json and skeptic_verdict.json |
 | **LEC** (Emergent Conventions) | Wave structure + mandatory Skeptic + GLOW >= 65 become marathon conventions: any 8-hour session that skips the Hour 4 gate or the Skeptic pass is structurally not a marathon, regardless of output |
+
+---
+
+## GLOW Scoring Summary
+
+| Dimension | Contribution | Marathon Target |
+|-----------|-------------|----------------|
+| **G** (Growth) | Primary system committed (+10); secondary deliverables delivered (+5); tests pass (+5); rung 274177+ (+5) | 0-25 |
+| **L** (Love/Quality) | Riskiest assumption tested from Scout (+10); mid-point gate documented (+5); integration discovery logged (+5); scope cuts with lessons (+5) | 0-25 |
+| **O** (Output) | All Wave 1 deliverables done (+10); Wave 2 delivered (+5); evidence bundle complete (+5); Skeptic PASS (+5) | 0-25 |
+| **W** (Wisdom) | NORTHSTAR alignment confirmed by Skeptic (+10); ROADMAP phase advanced (+5); case-study updated (+5); marathon GLOW >= 65 (+5) | 0-25 |
+
+**Minimum to PASS:** 65 | **Marathon warrior pace target:** 70+
+
+**Northstar Metric:** `skill_quality_avg` + `recipe_hit_rate` — a marathon sprint is the highest-leverage NORTHSTAR event in the system. Wave 1 builds the core system (directly raises `skill_quality_avg` if a skill is the deliverable); Wave 2 integrates and builds evidence (raises `recipe_hit_rate` via complete evidence bundles that enable recipe replay). The Hour 4 gate is a hard NORTHSTAR alignment check: any misalignment found at mid-point triggers a pivot or abort, preventing 4 more hours of NORTHSTAR-misaligned work.
 
 ---
 

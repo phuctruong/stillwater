@@ -317,6 +317,71 @@ The result is a scorecard that can be trusted because the bias has been removed 
 
 ---
 
+## Skill Pack
+
+Load these skills before executing this combo:
+- `skills/prime-safety.md` (always first — SELF_CONFIRMED_GREEN is a prime-safety violation; decoupling is a safety constraint)
+- `skills/phuc-qa.md` (question generation, scoring, falsifier discipline, integration probe protocol)
+- `skills/prime-coder.md` (evidence gate: verdicts require executable evidence, not prose)
+
+For integration boundary probes (rung 274177+):
+- `skills/phuc-orchestration.md` (dispatching qa-questioner and qa-scorer as separate agents)
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | Gap report becomes input for next audit — GREEN/YELLOW/RED counts improve over time as REDs are fixed via Bugfix PR and re-audited; measurable quality trajectory | +6 per audit where RED_count decreases vs prior audit on same project |
+| **L** (Love/Quality) | Decoupling gate enforced (generated_by != scored_by); every GREEN has falsifier tested (rung 274177+); integration probes run with real commands | +6 per audit where ScorecardIntegrityReport.integrity_verdict = PASS |
+| **O** (Output) | qa_questions.json + qa_scorecard.json + qa_falsifiers.json + qa_gap_report.md all committed; AuditVerdict.json complete | +6 per complete audit bundle |
+| **W** (Wisdom) | Northstar metric (projects_running_at_rung_65537) advances — a project with GREEN verdicts, tested falsifiers, and integration probes is demonstrating rung 274177+ confidence | +6 when audit achieves rung_achieved >= 274177 with all GREENs falsifier-tested |
+
+**Northstar Metric:** `projects_running_at_rung_65537` — QA audit is the mechanism that distinguishes claimed rung from achieved rung. A project that can demonstrate decoupled QA with falsifier-tested GREEN verdicts and real integration probes is on the path to 65537. The gap report is the roadmap from current state to production confidence.
+
+---
+
+## FSM: QA Audit State Machine (Strengthened)
+
+```
+States: SCOPE_INTAKE | QUESTIONS_GENERATED | DECOUPLING_GATE |
+        EVIDENCE_GATHERED | VERDICTS_ASSIGNED | FALSIFIERS_DEFINED |
+        FALSIFIERS_TESTED | INTEGRATION_PROBED | GAP_REPORT_WRITTEN |
+        INTEGRITY_CHECK | AUDIT_SEALED | PASS | BLOCKED | NEED_INFO
+
+Transitions:
+  [*] → SCOPE_INTAKE: project + NORTHSTAR.md provided
+  SCOPE_INTAKE → NEED_INFO: NORTHSTAR.md absent or project unknown
+  SCOPE_INTAKE → QUESTIONS_GENERATED: AuditScope.json ready
+  QUESTIONS_GENERATED → DECOUPLING_GATE: qa_questions.json with generated_by field
+  DECOUPLING_GATE → QUESTIONS_GENERATED: questions rejected (< 2 per GLOW dimension)
+  DECOUPLING_GATE → EVIDENCE_GATHERED: questions approved
+  EVIDENCE_GATHERED → BLOCKED: scorer_id == questioner_id (EXIT_BLOCKED immediately)
+  EVIDENCE_GATHERED → VERDICTS_ASSIGNED: commands run, files checked per question
+  VERDICTS_ASSIGNED → FALSIFIERS_DEFINED: GREEN/YELLOW/RED assigned with evidence citations
+  FALSIFIERS_DEFINED → FALSIFIERS_TESTED: rung_target >= 274177 (required)
+  FALSIFIERS_DEFINED → INTEGRATION_PROBED: rung_target = 641 (falsifier test optional)
+  FALSIFIERS_TESTED → INTEGRATION_PROBED: all GREENs have falsifier_status != UNTESTED
+  INTEGRATION_PROBED → GAP_REPORT_WRITTEN: cross-boundary probes run (empty if no boundaries)
+  GAP_REPORT_WRITTEN → INTEGRITY_CHECK: qa_gap_report.md with all 6 section headers
+  INTEGRITY_CHECK → EVIDENCE_GATHERED: integrity BLOCKED (one retry)
+  INTEGRITY_CHECK → AUDIT_SEALED: decoupling + falsifier coverage + format pass
+  AUDIT_SEALED → PASS: AuditVerdict.json complete with rung_achieved
+
+  Forbidden state transitions (hard):
+  VERDICTS_ASSIGNED → BLOCKED: GREEN verdict with no falsifier defined (GREEN_WITHOUT_FALSIFIER)
+  EVIDENCE_GATHERED → BLOCKED: mock output as sole evidence (MOCK_AS_ONLY_EVIDENCE)
+  AUDIT_SEALED → BLOCKED: claiming rung 274177 when evidence is only rung 641 quality (RUNG_INFLATION)
+
+Exit conditions:
+  PASS: AuditVerdict.json status=PASS, decoupling_verified=true, falsifier_coverage=complete
+  BLOCKED: scorer==questioner; GREEN without falsifier; rung inflation attempt
+  NEED_INFO: NORTHSTAR.md absent; project unknown to scope intake
+```
+
+---
+
 ## Three Pillars Mapping
 
 | Pillar | How This Combo Applies It |

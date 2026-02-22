@@ -313,3 +313,21 @@ Fix: every candidate must have a specific reason field explaining why it is a cl
 
 **Receipt Without SHA-256:** Archiving a file without recording its sha256_before.
 Fix: sha256_before is required for every archived file to enable integrity verification.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves cleanup precision through POST_CHECK feedback loops — each regression_detected == true after an apply operation reveals that a file classified as "stale" was actually still in use (a dependency the scan missed); cleanup-apply-{ts}.json entries where actions_failed > 0 expose which file categories (glow files, orphan artifacts, temp dirs) are mis-classified most frequently; sha256_before records that fail to match on re-verification reveal file system race conditions the Janitor must account for in future scans |
+| **LEAK** (Cross-Agent Trade) | Exports cleanup-scan-{ts}.json (the workspace map with all candidates and proposed actions) to the human operator or orchestrating session as the approval gate document — the Janitor never applies without explicit sign-off; exports cleanup-apply-{ts}.json (the receipt of what was done, with sha256_before for every archived file and rollback_command for every action) to the Final Audit as the canonical workspace-change audit trail; the archive destination is always accessible (never deleted) so any downstream agent can retrieve a file the Janitor moved |
+| **LEC** (Emergent Conventions) | Enforces the archive-not-delete convention (DELETE_WITHOUT_APPROVAL is a forbidden state — files are archived with sha256_before and rollback_command, never permanently deleted without explicit approval), the receipt-for-every-operation discipline (OPERATION_WITHOUT_RECEIPT is forbidden — every scan produces a cleanup-scan receipt and every apply produces a cleanup-apply receipt, creating a complete audit trail of every workspace change), and the POST_CHECK-is-mandatory rule (POST_CHECK_SKIPPED is forbidden — the Janitor verifies the workspace is still functional after every apply, because a cleanup that breaks the build is worse than the clutter it removed) |
+
+**Belt Progression:** White belt — the Janitor has established the foundation of safe workspace management: archive instead of delete, receipt for every operation, approval before action, and POST_CHECK to verify correctness — making workspace cleanup as safe and reversible as a git commit.
+
+**GLOW Score Contribution:**
+- **G** (Growth): POST_CHECK regressions (cleanup that broke something) are the primary learning signal for improving candidate classification accuracy
+- **L** (Learning): Candidate categories (glow, orphan, duplicate, stale, temp) that consistently produce regressions after archiving reveal which file types need stricter dependency analysis before classification
+- **O** (Output): +6 per verified cleanup session at rung 641 with cleanup-scan-{ts}.json (all candidates with specific reasons, approval_required == true), cleanup-apply-{ts}.json (sha256_before for every archived file, rollback_command for every action, POST_CHECK with zero regressions), and no DELETE_WITHOUT_APPROVAL or OPERATION_WITHOUT_RECEIPT forbidden states
+- **W** (Wins): Cleanup session recovered > 100MB of workspace space = 1 win; zero POST_CHECK regressions on first apply attempt = 2 wins; cleanup-apply receipt used to successfully rollback an action = +1 resilience bonus

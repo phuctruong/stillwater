@@ -127,6 +127,76 @@ A rung 641 (local correctness) is insufficient for portal traversal — you need
 
 ---
 
+## Portal Lifecycle Flow (Mermaid Diagram)
+
+```mermaid
+flowchart TD
+    A[Step 1: IDENTIFY BUBBLES\nportal_bubbles.json\nsource + target boundary paths] --> B[Step 2: OVERLAP CHECK\nportal_overlap.json\nBayesian overlap_score in 0.0-1.0]
+    B -->|overlap < 0.1 AND no authorization| BLOCKED[BLOCKED\nbubbles incompatible]
+    B -->|overlap >= 0.1 OR authorized| C[Step 3: REMIND\nportal_remind.json\nUUID + remind_summary before transfer]
+    C --> D[Step 4: OPEN PORTAL\nportal_manifest.json\nportal_opened=true, portal_closed=false]
+    D --> E[Step 5: COMPRESS\nportal_compressed_payload.json\ncompression_ratio > 1.0 + meaning_preservation_test]
+    E -->|meaning_preservation=false| E
+    E -->|ratio > 1.0 + match=true| F[Step 6: VERIFY\nportal_verify.json\nparse_successful=true + received_token_count]
+    F -->|parse fails| F
+    F --> G[Step 7: VALIDATE\nportal_validation.json\nsemantic_match=true]
+    G -->|semantic_match=false retry <= 2| E
+    G -->|match confirmed| H[Step 8: CLOSE PORTAL\nportal_manifest.json updated\nportal_closed=true]
+    H --> I[Step 9: ACKNOWLEDGE\nportal_acknowledge.json\nhandshake_receipt.json triangle_complete=true]
+
+    I -->|any vertex missing| BLOCKED2[BLOCKED\nTRIANGLE_INCOMPLETE]
+    I -->|all 3 vertices present| PASS[PASS\ntriangle_complete=true\nmeaning_preserved=true]
+```
+
+---
+
+## FSM: Portal Traversal State Machine
+
+```
+States: IDENTIFY_BUBBLES | OVERLAP_CHECK | REMIND | OPEN_PORTAL |
+        COMPRESS | VERIFY | VALIDATE | CLOSE_PORTAL | ACKNOWLEDGE |
+        PASS | BLOCKED | NEED_INFO
+
+Transitions:
+  [*] → IDENTIFY_BUBBLES: CNF capsule with SOURCE_BUBBLE + TARGET_BUBBLE provided
+  IDENTIFY_BUBBLES → NEED_INFO: either bubble undefined or boundary file missing
+  IDENTIFY_BUBBLES → OVERLAP_CHECK: both boundary paths exist and readable
+  OVERLAP_CHECK → BLOCKED: overlap_score < 0.1 AND no explicit authorization
+  OVERLAP_CHECK → REMIND: transfer_authorized = true
+  REMIND → OPEN_PORTAL: portal_remind.json with UUID + non-empty remind_summary
+  OPEN_PORTAL → COMPRESS: portal_manifest.json with portal_opened=true
+  COMPRESS → COMPRESS (RETRY 1): meaning_preservation_test.match = false (try different prime words)
+  COMPRESS → VERIFY: compression_ratio > 1.0 AND meaning_preservation = true
+  VERIFY → BLOCKED: parse fails after re-send of uncompressed payload
+  VERIFY → VALIDATE: parse_successful = true
+  VALIDATE → COMPRESS (RETRY): semantic_match = false, retry <= 2
+  VALIDATE → BLOCKED: semantic_match = false after 3 failures
+  VALIDATE → CLOSE_PORTAL: semantic_match = true
+  CLOSE_PORTAL → ACKNOWLEDGE: portal_closed = true in manifest
+  ACKNOWLEDGE → BLOCKED: any triangle vertex missing (TRIANGLE_INCOMPLETE)
+  ACKNOWLEDGE → PASS: handshake_receipt.json triangle_complete = true, meaning_preserved = true
+
+Exit conditions:
+  PASS: portal_opened=true, portal_closed=true, triangle_complete=true, meaning_preserved=true
+  BLOCKED: Bayesian overlap failure, parse failure, semantic mismatch after 3 retries, or triangle incomplete
+  NEED_INFO: bubble boundary files missing
+```
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | Source bubble agent's boundary understanding deepens through overlap computation; prime word coverage increases when new words compress reliably | +7 per traversal where compression_ratio > 2.0 |
+| **L** (Love/Quality) | All three triangle vertices present; meaning preserved end-to-end; no secrets transmitted in payload | +7 when handshake_receipt.json triangle_complete=true AND meaning_preserved=true |
+| **O** (Output) | portal_manifest.json with both portal_opened and portal_closed; handshake_receipt.json committed | +7 per successful traversal |
+| **W** (Wisdom) | Northstar metric (recipe_hit_rate) advances when cross-project knowledge is transferred and applied; Bayesian overlap score informs future portal routing | +7 when transferred knowledge is reused in target bubble |
+
+**Northstar Metric:** `recipe_hit_rate` — portal traversal transfers compressed knowledge between projects. When the target bubble reuses a recipe learned via portal transfer, that replay counts toward hit rate.
+
+---
+
 ## Three Pillars of Software 5.0 Kung Fu
 
 | Pillar | How This Recipe Applies It |

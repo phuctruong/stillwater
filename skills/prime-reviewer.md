@@ -697,4 +697,15 @@ EXIT_NEED_INFO --> [*]
 | **LEK** (Self-Improvement) | Each code review cycle accumulates knowledge about the codebase's failure patterns. The Socratic review pass (reviewing the review itself before emitting) improves the quality of feedback iteratively — the reviewer learns which categories of issues are systemic and which are noise. The lane classification system (A/B/C) is the self-improvement mechanism: it forces the reviewer to distinguish what they know from evidence versus what they prefer by taste, upgrading epistemic hygiene with each PR. |
 | **LEAK** (Cross-Agent Trade) | Code review is structured LEAK: the author's bubble (intent, design choices, local context) trades with the reviewer's bubble (external perspective, pattern library, security expertise) through the PR diff as portal. The lane-typed comment system is the typed artifact protocol — blocking comments with Lane A witnesses are the LEAK surplus (new facts neither party held before). The Security Scan gate adds a third bubble (security auditor) whose asymmetric knowledge cannot be substituted by the author or general reviewer. |
 | **LEC** (Emergent Conventions) | prime-reviewer enforces the conventions that emerged from review failures: lane-typed comments (A/B/C) as the shared vocabulary for review evidence quality, the API surface lock convention (semver plan required for breaking changes), the security gate (rung_65537 required for security-touching PRs), and the prohibition on blocking comments without diff witnesses. These conventions are adopted across all code review sessions in the ecosystem, compressing prior review failure knowledge into a loadable protocol. |
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Review reaches FINAL_SEAL: Socratic review pass completed, all blocking comments have Lane A diff witnesses, security scan run if security-touching files present | +25 per review at rung_274177+ with Socratic review pass |
+| **L** (Love/Quality) | All blocking comments cite specific diff line + concrete fix; no Lane A claims without evidence witnesses; no security bypasses; no RUBBER_STAMP events | +20 per review with zero lane-classification errors |
+| **O** (Output) | review_report.json produced with: file_count, issues_by_severity, lane_breakdown, security_findings, api_changes; blocking/advisory/nit counts | +15 per review with complete review_report.json |
+| **W** (Wisdom) | PR passes review at rung_274177+ with zero unwitnessed blocking comments; security scan clean; no API surface change without semver plan | +20 per approved PR with all gates passed and no forbidden state events |
+
+**Evidence required for GLOW claim:** review_report.json (issue counts by lane and severity), blocking comments each with diff_witness line reference, security_scan_result (if applicable), api_surface_changes list with semver_plan (if applicable), Socratic review pass completed (no self-contradictions in review).
       - invoking_gut_feeling_as_lane_A

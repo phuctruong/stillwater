@@ -859,3 +859,14 @@ compression_checksum:
     - "GLOW multiplier = 1.5x, cap 100, requires commit hash"
     - "Integration rung = MIN(all phase agent rungs)"
   seed_checksum: "hackathon-v1.2.0-8phases-1.5x-ship-required"
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | All 8 hackathon phases completed with typed artifacts per phase (challenge_brief → scout_report → architecture_decision → build_checkpoint → integration_results → review_report → pitch_deck → git commit); all red-green gates pass before INTEGRATE | +25 × 1.5x multiplier per hackathon that ships a committed deliverable |
+| **L** (Love/Quality) | Zero SCOPE_CREEP events; zero SKIP_REVIEW events; time boxes respected (BUILD_CHECKPOINT at 50% time); adversarial review completed before PITCH | +20 × 1.5x per hackathon with zero forbidden state events and all time boxes honored |
+| **O** (Output) | Complete artifact set: challenge_brief.md + scout_report.md + architecture_decision.md + build_checkpoint artifact + integration_results + review_report + pitch.md + demo_script.md + glow_score.json + git commit with HACKATHON tag | +15 × 1.5x per hackathon with complete evidence bundle and git commit hash |
+| **W** (Wisdom) | NORTHSTAR metric advances (ROADMAP checkbox checked post-ship); hackathon produces reusable recipe or skill contribution; integration rung = MIN(all phase agent rungs) | +20 × 1.5x per hackathon where SHIP commit advances a NORTHSTAR metric |
+
+**Evidence required for GLOW claim:** git commit hash with HACKATHON tag + GLOW score in commit message, glow_score.json (base_glow × 1.5 calculation with artifact citations), BUILD_CHECKPOINT artifact (50% time check), red-green test evidence before INTEGRATE. No GLOW_WITHOUT_SHIP, UNBOXED_TIME, SKIP_REVIEW, or SCOPE_CREEP events. Note: 1.5x multiplier only applies after git SHIP commit exists.

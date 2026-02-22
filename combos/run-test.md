@@ -225,6 +225,27 @@ Emit `GATES.json`:
 
 ---
 
+## Skill Pack
+
+Load these skills before executing this combo:
+- `skills/prime-safety.md` (always first — io_boundary + offline enforcement are prime-safety rules)
+- `skills/prime-coder.md` (PASS_WITHOUT_TEST_EXECUTION is a prime-coder forbidden state)
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | GATES.json produced — a replayable capsule that enables future runs to verify the same behavior without re-running the full test suite from scratch | +5 per GATES.json committed with >= 1 gate command |
+| **L** (Love/Quality) | Claim Gate (Node 5): all gate commands exit 0; all required evidence files present; no nondeterministic log fields; io_boundary respected | +5 per ExecutionVerdict.json with status=PASS and all evidence present |
+| **O** (Output) | GATES.json + evidence/tests.json + evidence/run_log.txt + evidence/artifacts.json committed | +5 per complete evidence bundle |
+| **W** (Wisdom) | Northstar metric (recipe_hit_rate) advances — GATES.json replay commands are the foundation for all recipe verification; deterministic test harness enables trusted recipe replays | +5 when behavior_hash from second replay matches first |
+
+**Northstar Metric:** `recipe_hit_rate` — the GATES.json + behavior hash is the test harness that validates recipe replays. Without deterministic test execution, recipe_hit_rate cannot be measured. This combo is the verification backbone for all other recipes and combos.
+
+---
+
 ## Three Pillars Mapping
 
 | Pillar | Element | Role in this Combo |

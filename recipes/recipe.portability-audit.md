@@ -83,6 +83,72 @@ Sweep all skill, recipe, and core files for portability violations: absolute pat
 
 ---
 
+## Audit Flow (Mermaid Diagram)
+
+```mermaid
+flowchart TD
+    A[Step 1: SCAN absolute paths\nportability_abs_paths.txt\n/home/ /Users/ /root/ /opt/ /var/] --> B[Step 2: SCAN private deps\nportability_private_deps.txt\ngit+ssh:// .corp .internal hardcoded IPs]
+    B --> C[Step 3: SCAN host env refs\nportability_host_env.txt\n$HOME $USER $HOSTNAME os.environ HOME]
+    C --> D[Step 4: SCAN float in verification\nportability_float_verification.txt\n== 0.0 math.isclose np.allclose pytest.approx]
+    D --> E[Step 5: MERGE + CLASSIFY\nportability_report.json\nBLOCK | WARN | INFO per hit]
+    E --> F[Step 6: SUMMARY\nportability_summary.txt\ncounts per category + BLOCK fixes]
+
+    A -->|grep unavailable| A2[FALLBACK: Read manual scan\nlog in portability_run.log]
+    E -->|duplicate file+line| E2[DEDUP: keep highest severity]
+    F -->|zero BLOCK| PASS[PASS\nportable skill set confirmed]
+    F -->|BLOCK violations| FIX[FIX required\nbefore community submission]
+```
+
+---
+
+## FSM: Portability Audit State Machine
+
+```
+States: SCAN_ABS_PATHS | SCAN_PRIVATE_DEPS | SCAN_HOST_ENV |
+        SCAN_FLOAT_VERIFY | MERGE_CLASSIFY | SUMMARY | PASS | BLOCKED
+
+Transitions:
+  [*] → SCAN_ABS_PATHS: audit invoked on skills/ and recipes/
+  SCAN_ABS_PATHS → SCAN_PRIVATE_DEPS: portability_abs_paths.txt written (may be empty)
+  SCAN_PRIVATE_DEPS → SCAN_HOST_ENV: portability_private_deps.txt written
+  SCAN_HOST_ENV → SCAN_FLOAT_VERIFY: portability_host_env.txt written
+  SCAN_FLOAT_VERIFY → MERGE_CLASSIFY: portability_float_verification.txt written
+  MERGE_CLASSIFY → SUMMARY: portability_report.json with all hits classified
+  SUMMARY → PASS: zero BLOCK violations in portability_report.json
+  SUMMARY → BLOCKED: BLOCK violations present (must fix before community submission)
+
+  Fallback branch:
+  ANY_SCAN → FALLBACK_READ: grep unavailable; Read + manual scan; log fallback
+
+Exit conditions:
+  PASS: python3 verification exits 0; BLOCK violations: 0
+  BLOCKED: any BLOCK violation confirmed; skill/recipe not portable
+```
+
+---
+
+## When a BLOCK Violation Is Found
+
+| Violation | Example | Fix |
+|-----------|---------|-----|
+| Absolute path | `/home/phuc/projects/...` | Replace with `EVIDENCE_ROOT`-relative path |
+| Private repo dep | `git+ssh://git@github.com/...` | Remove or replace with published package |
+| Host-specific env | `$HOSTNAME` as literal config | Use `PORTABILITY_ENV_VAR` from project spec |
+| Float in verification | `assert result == 0.0` | Replace with `assert result == 0` (exact int) |
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | New portability violation type discovered (e.g., novel host-specific env var) added to grep pattern set for future sweeps | +3 per new pattern type identified |
+| **L** (Love/Quality) | Zero BLOCK violations confirmed after sweep; float in verification eliminated; paths repo-relative only | +3 per clean audit run |
+| **O** (Output) | portability_report.json emitted with all violations classified; portability_summary.txt with BLOCK fix guidance | +3 per complete audit run |
+| **W** (Wisdom) | Northstar metric (community_contributors + recipe_hit_rate) advanced — portable skills can be submitted to the Stillwater Store and replayed by anyone | +3 when BLOCK violations resolved and skill submitted to Store |
+
+**Northstar Metric:** `community_contributors` + `recipe_hit_rate` — portability is the baseline requirement for community participation. A skill with zero BLOCK violations can be submitted to the Stillwater Store, enabling other contributors to replay it. Each Store submission increases recipe_hit_rate across the ecosystem.
+
+---
+
 ## Three Pillars of Software 5.0 Kung Fu
 
 | Pillar | How This Recipe Applies It |

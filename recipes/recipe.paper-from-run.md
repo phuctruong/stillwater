@@ -99,6 +99,71 @@ Every key claim in the paper must be typed:
 
 ---
 
+## Paper Extraction Flow (Mermaid Diagram)
+
+```mermaid
+flowchart TD
+    A[Step 1: VERIFY SOURCES\nsource_artifacts.json\nLESSONS.md + RECIPE.md present + non-empty] --> B[Step 2: EXTRACT INSIGHT\ncore_insight.txt\none sentence, non-obvious, typed A/B/C]
+    B --> C[Step 3: DRAFT ABSTRACT + HYPOTHESIS\nabstract_hypothesis.md\n<= 150 words + falsifiable hypothesis]
+    C --> D[Step 4: WRITE PAPER BODY\npaper_draft.md\nSections 1-5 with A/B/C typed claims]
+    D --> E[Step 5: ASSIGN NUMBER\npaper_number.txt\nhighest existing + 1, no conflicts]
+    E --> F[Step 6: FINALIZE PAPER\npapers/N-slug.md\nYAML frontmatter + typed claims + bibliography]
+    F --> G[Step 7: UPDATE INDEX\npapers/00-index.md\nnew entry in ascending order]
+
+    A -->|LESSONS.md missing| A2[Re-run swarm-pipeline\nstep 7 Podcast first]
+    B -->|no single insight| B2[NEED_INFO\nlist top 3 candidates for human selection]
+    C -->|hypothesis not falsifiable| C2[Downgrade to Observation\nlabel clearly]
+    D -->|claim untyped| D2[Remove claim\nno unsourced claims published]
+    E -->|numbering conflict| E2[Skip conflict number\ntake next available]
+    G --> PASS[PASS\npaper at correct path + index entry]
+```
+
+---
+
+## FSM: Paper Extraction State Machine
+
+```
+States: VERIFY_SOURCES | EXTRACT_INSIGHT | DRAFT_ABSTRACT |
+        WRITE_BODY | ASSIGN_NUMBER | FINALIZE | UPDATE_INDEX |
+        PASS | BLOCKED | NEED_INFO
+
+Transitions:
+  [*] → VERIFY_SOURCES: completed swarm run artifacts provided
+  VERIFY_SOURCES → NEED_INFO: LESSONS.md or RECIPE.md missing (re-run Podcast step first)
+  VERIFY_SOURCES → EXTRACT_INSIGHT: both source artifacts exist and non-empty
+  EXTRACT_INSIGHT → NEED_INFO: no single generalizable insight (emit top 3 candidates)
+  EXTRACT_INSIGHT → DRAFT_ABSTRACT: core_insight.txt with typed lane annotation
+  DRAFT_ABSTRACT → DRAFT_ABSTRACT (DOWNGRADE): hypothesis not falsifiable → label as Observation
+  DRAFT_ABSTRACT → WRITE_BODY: abstract <= 150 words + hypothesis/observation stated
+  WRITE_BODY → WRITE_BODY (REMOVE): claim cannot be typed → remove, do not publish unsourced
+  WRITE_BODY → ASSIGN_NUMBER: all claims typed [A/B/C], all numbers sourced to artifacts
+  ASSIGN_NUMBER → ASSIGN_NUMBER (SKIP): numbering conflict → take next available
+  ASSIGN_NUMBER → FINALIZE: number confirmed unique
+  FINALIZE → BLOCKED: YAML frontmatter breaks file parsing (simplify, flag parse issue)
+  FINALIZE → UPDATE_INDEX: paper at correct path, frontmatter parses
+  UPDATE_INDEX → PASS: index entry present, ascending order maintained
+
+Exit conditions:
+  PASS: paper exists at papers/N-slug.md; YAML parses; >= 3 typed claims; index entry correct
+  BLOCKED: YAML parse failure unresolvable
+  NEED_INFO: source artifacts missing; no single generalizable insight
+```
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | Paper extracts a non-obvious generalizable insight from swarm artifacts; typed Lane A claim (invariant) discovered | +6 per paper with at least 1 Lane A [A] claim |
+| **L** (Love/Quality) | All claims typed [A/B/C]; all figures sourced to run artifacts; hypothesis is falsifiable (not forced consensus) | +6 when python3 grep for [A][B][C] confirms >= 3 annotations |
+| **O** (Output) | Paper committed at papers/N-slug.md; index updated in ascending order; frontmatter parses | +6 per published paper |
+| **W** (Wisdom) | Northstar metric (skill_quality_avg + recipe_hit_rate) advanced because paper formalizes a new convention or invariant | +6 when paper documents a new Lane A invariant adopted by others |
+
+**Northstar Metric:** `skill_quality_avg` + `recipe_hit_rate` — papers that document Lane A invariants (discovered during swarm runs) directly improve both: the invariant becomes a skill constraint (raising quality score) and the RECIPE.md section becomes a replayable recipe (raising hit rate).
+
+---
+
 ## Three Pillars of Software 5.0 Kung Fu
 
 | Pillar | How This Recipe Applies It |

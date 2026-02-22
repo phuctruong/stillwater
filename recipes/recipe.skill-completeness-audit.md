@@ -94,6 +94,67 @@ Run a deterministic, automated 5-criterion binary scorecard across every skill f
 
 ---
 
+## Audit Flow (Mermaid Diagram)
+
+```mermaid
+flowchart TD
+    A[Step 1: ENUMERATE\nskill_audit_filelist.txt\nglob skills/*.md] --> B[Step 2: C1 CHECK\nskill_audit_c1.json\nState_Machine / STATE_SET present?]
+    B --> C[Step 3: C2 CHECK\nskill_audit_c2.json\nFORBIDDEN_STATES present?]
+    C --> D[Step 4: C3 CHECK\nskill_audit_c3.json\nVerification_Ladder / RUNG_ present?]
+    D --> E[Step 5: C4 CHECK\nskill_audit_c4.json\nNull_vs_Zero / null_handling present?]
+    E --> F[Step 6: C5 CHECK\nskill_audit_c5.json\nOutput_Contract / required_on_success?]
+    F --> G[Step 7: MERGE + SCORE\nskill_audit_scorecard.json\ntotal = C1+C2+C3+C4+C5, pass = total==5]
+    G --> H[Step 8: FLAG FAILURES\nskill_audit_failures.txt\nX/Y skills passed 5/5]
+
+    A -->|empty glob| I[NEED_INFO\ncheck skills/ directory]
+    B -->|grep unavailable| J[FALLBACK\nRead + manual scan\nlog in skill_audit_run.log]
+```
+
+---
+
+## FSM: Skill Completeness Audit State Machine
+
+```
+States: ENUMERATE | C1_CHECK | C2_CHECK | C3_CHECK | C4_CHECK |
+        C5_CHECK | MERGE_SCORE | FLAG_FAILURES | PASS | BLOCKED | NEED_INFO
+
+Transitions:
+  [*] → ENUMERATE: audit invoked on skills/ directory
+  ENUMERATE → NEED_INFO: glob returns empty (widen to *.yaml; if still empty → NEED_INFO)
+  ENUMERATE → C1_CHECK: file list non-empty
+  C1_CHECK → C2_CHECK: all files have c1_pass entry (true or false)
+  C2_CHECK → C3_CHECK: all files have c2_pass entry
+  C3_CHECK → C4_CHECK: all files have c3_pass entry
+  C4_CHECK → C5_CHECK: all files have c4_pass entry
+  C5_CHECK → MERGE_SCORE: all files have c5_pass entry
+  MERGE_SCORE → FLAG_FAILURES: scorecard.json parses, all total == sum(c1..c5)
+  FLAG_FAILURES → PASS: summary line printed, failure file written
+
+  Fallback branch:
+  ANY_CHECK → FALLBACK_READ: grep tool unavailable
+  FALLBACK_READ → NEXT_CHECK: manual scan complete, tool fallback logged
+
+Exit conditions:
+  PASS: scorecard.json complete, summary line "X/Y skills passed 5/5" printed
+  NEED_INFO: skills/ directory empty or inaccessible
+  BLOCKED: not used (audit never blocks; it reports findings)
+```
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | Audit run reveals which criteria are most commonly missing — pattern accumulates into better expansion heuristics | +3 per run that identifies a previously unknown failure pattern |
+| **L** (Love/Quality) | Scorecard is machine-parseable; total == sum(C1..C5) verified by Python assertion | +3 per run where verification script exits 0 |
+| **O** (Output) | skill_audit_scorecard.json + skill_audit_failures.txt committed with complete file coverage | +3 per complete audit run |
+| **W** (Wisdom) | Northstar metric (skill_quality_avg) measurably rises when failing skills are fixed after audit | +3 when re-audit shows X/Y improved vs prior run |
+
+**Northstar Metric:** `skill_quality_avg` — the audit directly measures this metric. Each run produces the ground truth on how many skills are 5/5 complete. The delta between consecutive runs shows whether skill_quality_avg is improving.
+
+---
+
 ## Three Pillars of Software 5.0 Kung Fu
 
 | Pillar | How This Recipe Applies It |

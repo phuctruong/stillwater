@@ -257,6 +257,44 @@ Outputs:
 
 ---
 
+## Skill Pack
+
+Load these skills before executing this combo:
+- `skills/prime-safety.md` (always first — Never-Worse doctrine + rollback-determinism are prime-safety invariants)
+- `skills/prime-coder.md` (replay stability, behavior hash, evidence gate)
+
+For HIGH_RISK bumps (crypto/auth/parsers):
+- `skills/prime-coder.md` (security gate included)
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | DEPENDENCY_LOCK.json + REPLAY_REPORT.json accumulate versioning knowledge — each bump attempt (pass or rollback) improves the baseline for future bumps | +5 per bump with REPLAY_REPORT.json showing match=true |
+| **L** (Love/Quality) | Never-Worse invariant enforced: tests pass AND replay match AND (if HIGH_RISK) security scan passes; rollback patch applies cleanly to GREEN state | +5 per PASS verdict with two-run replay parity confirmed |
+| **O** (Output) | DEPENDENCY_LOCK.json + TESTS_BEFORE.json + TESTS_AFTER.json + REPLAY_REPORT.json + VERDICT.json committed; ROLLBACK.diff present if rollback occurred | +5 per complete DEP_BUMP_BUNDLE committed |
+| **W** (Wisdom) | Northstar metric (projects_running_at_rung_65537) advances — dependency freshness + two-run stability is a rung 274177 requirement for production-confident projects | +5 when bump achieves PASS on first attempt (no rollback needed) |
+
+**Northstar Metric:** `projects_running_at_rung_65537` — dependency management is one of the gates that separates rung 641 (local correctness) from rung 274177 (stability). Projects that maintain dependency hygiene with replay-stable evidence are prerequisites for 65537 certification.
+
+---
+
+## Evidence Gates — Strengthened
+
+The standard evidence gate for dependency bumps requires more than tests passing once:
+
+| Gate | Requirement | Why |
+|------|------------|-----|
+| Baseline snapshot | BASELINE.json with commit + dep files + gate commands | Rollback needs a known GREEN state |
+| Resolution pinned | DEPENDENCY_LOCK.json with exact versions + hashes | "Works on my machine" is not portable evidence |
+| Two-run replay | REPLAY_REPORT.json with match=true | One test pass is not stability |
+| Never-worse check | TESTS_BEFORE.json vs TESTS_AFTER.json | New failures must not be introduced |
+| Rollback verified | TESTS_ROLLBACK.json shows GREEN after revert | Rollback itself must be tested |
+
+---
+
 ## Three Pillars Mapping
 
 | Pillar | Element | Role in this Combo |

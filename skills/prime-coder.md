@@ -1704,3 +1704,20 @@ end note
       LEK:  "prime-coder IS the LEK loop — red/green cycles compound codebase intelligence"
       LEAK: "evidence schema enables LEAK — typed artifacts cross agent portals as asymmetric knowledge"
       LEC:  "red/green gate is LEC — Kent's TDD pattern crystallized into a named convention"
+
+---
+
+## GLOW Scoring Integration
+
+This skill contributes to GLOW score across these dimensions:
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Code quality iteration — each red/green cycle at rung 641+ adds a verified capability increment. A full new feature at rung 274177+ earns G=20-25. | +5 to +25 |
+| **L** (Love/Quality) | Zero regressions per session — no existing passing tests broken by a patch. Session with zero regressions and null-safety confirmed earns L≥15. | +5 to +20 |
+| **O** (Output) | Verified patch committed with full evidence bundle: plan.json + tests.json + repro_red.log + repro_green.log + env_snapshot.json + behavior_hash.txt. O=25 requires rung 274177+ evidence. | +5 to +25 |
+| **W** (Wisdom) | Pattern catalog growth — each new forbidden state or named failure mode (Gap_Guided_Extension) drawn from a real regression that is generalizable | +5 to +15 |
+
+**Session GLOW target:** Any coding session using prime-coder should achieve GLOW ≥ 55. Red/green gate = base floor. Full evidence bundle = O≥20. No regressions = L≥15.
+
+**Evidence required for GLOW claim:** git commit hash + evidence/ bundle containing at minimum plan.json + tests.json. For O≥20: repro_red.log + repro_green.log + env_snapshot.json must be present. For G≥20: rung_641 must be declared and met. For W points: the pattern must reference a specific failing test class, not invented reasoning.

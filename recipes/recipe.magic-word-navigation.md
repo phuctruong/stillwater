@@ -106,6 +106,71 @@ The compression ratio gate (>= 2.0) ensures the navigation was efficient:
 
 ---
 
+## Navigation Flow (Mermaid Diagram)
+
+```mermaid
+flowchart TD
+    A[Step 1: EXTRACT MAGIC WORDS\nnavigation_keywords.json\nquery → tier + anchor per word] --> B{Any magic words\nextracted?}
+    B -->|No| NEED_INFO[NEED_INFO\nlist unmatched terms]
+    B -->|Yes| C[Step 2: MAP TO TIERS\nnavigation_tier_map.json\ntrunk | branch | leaf sorted]
+    C --> D[Step 3: TRUNK TRAVERSAL\nnavigation_trunk_hits.json\ntop-level entry points only]
+    D --> E{Query resolved\nby trunk?}
+    E -->|Yes| F[Step 5: SKIP BRANCH\nbranch_hits empty — valid]
+    E -->|No| G[Step 5: BRANCH TRAVERSAL\nnavigation_branch_hits.json\nunresolved facets only]
+    G --> F
+    F --> H[Step 6: COMPRESSION RATIO\nnavigation_compression.json\nratio = query_tokens / context_loaded_tokens]
+    H --> I[Step 7: RESPOND\ncontext_load_receipt.json\nevery claim has file_path + line ref]
+
+    D -->|no trunk files found| G
+    H -->|ratio < 1.0| WARN[WARN: context > query\nlog in notes, do not block at 641]
+    I -->|context does not answer query| NEED_INFO2[NEED_INFO\nlist missing information]
+```
+
+---
+
+## FSM: Magic Word Navigation State Machine
+
+```
+States: EXTRACT_WORDS | MAP_TIERS | TRUNK_TRAVERSE | RESOLUTION_CHECK |
+        BRANCH_TRAVERSE | COMPRESSION_GATE | RESPOND | PASS | NEED_INFO | BLOCKED
+
+Transitions:
+  [*] → EXTRACT_WORDS: query received
+  EXTRACT_WORDS → NEED_INFO: no magic words extracted AND no MAGIC_WORDS_HINT
+  EXTRACT_WORDS → MAP_TIERS: extracted_words list non-empty
+  MAP_TIERS → TRUNK_TRAVERSE: traversal_order sorted trunk-first
+  MAP_TIERS → NEED_INFO: ALL words fail to map to any tier
+  TRUNK_TRAVERSE → RESOLUTION_CHECK: trunk_hits.json with >= 1 file
+  TRUNK_TRAVERSE → BRANCH_TRAVERSE: trunk miss (no files found at trunk tier)
+  RESOLUTION_CHECK → RESPOND: query_resolved_by_trunk = true
+  RESOLUTION_CHECK → BRANCH_TRAVERSE: query_resolved_by_trunk = false
+  BRANCH_TRAVERSE → COMPRESSION_GATE: branch_hits.json with files (or empty if trunk resolved)
+  COMPRESSION_GATE → RESPOND: ratio computed (gate_passed logged; not blocked at 641)
+  COMPRESSION_GATE → BLOCKED: context_loaded_tokens > 5x query_tokens without justification
+  RESPOND → PASS: context_load_receipt.json with all claims having file_path + line ref
+  RESPOND → NEED_INFO: context does not answer query after full traversal
+
+Exit conditions:
+  PASS: compression_ratio computed, gate_passed set, every claim has file_path + line reference
+  NEED_INFO: no magic words extracted; or full traversal does not answer query
+  BLOCKED: context > 5x query tokens without justification
+```
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | Unmatched terms from navigation_keywords.json are candidates for new tier registry entries — expanding magic word coverage | +3 per new candidate term identified |
+| **L** (Love/Quality) | Trunk-first discipline maintained; every claim in response backed by file_path + line reference; no CLAIM_WITHOUT_FILE_WITNESS | +3 per run where all claims are file-witnessed |
+| **O** (Output) | context_load_receipt.json committed; compression_ratio computed; gate_passed set | +3 per complete navigation run |
+| **W** (Wisdom) | Northstar metric (recipe_hit_rate) advances when magic word navigation enables faster recipe replay on similar queries | +3 when compression_ratio >= 10.0 (Shannon-optimal) |
+
+**Northstar Metric:** `recipe_hit_rate` — magic word navigation enables recipe replays to load exactly the right context with minimum tokens, directly improving the efficiency and hit rate of recipe execution.
+
+---
+
 ## Three Pillars of Software 5.0 Kung Fu
 
 | Pillar | How This Recipe Applies It |

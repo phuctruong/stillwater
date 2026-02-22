@@ -13,6 +13,16 @@ This combo is the **time-boxed build loop**: structured sprint execution with pe
 
 ---
 
+## Skill Pack
+
+Load these skills before executing this combo:
+- `skills/prime-safety.md` (always first — NORTHSTAR_MISALIGNED and EVIDENCE_SKIPPED are prime-safety governance issues)
+- `skills/prime-coder.md` (Verify phase: minimum test suite, evidence bundle, forbidden PASS_WITHOUT_TEST_EXECUTION)
+- `skills/phuc-forecast.md` (Scout phase: DREAM→FORECAST for riskiest assumption identification)
+- `skills/phuc-orchestration.md` (persona dispatch: hackathon-master + domain persona + skeptic)
+
+---
+
 ## Goal
 
 Run a hackathon sprint to build `[feature]` with strict time-box enforcement, persona-powered phases, and a working demo as the only valid exit condition.
@@ -325,13 +335,28 @@ Every ROADMAP phase in stillwater is a hackathon. This combo makes that explicit
 
 ---
 
+## GLOW Scoring Summary
+
+| Dimension | Contribution | Sprint Target |
+|-----------|-------------|--------------|
+| **G** (Growth) | New skill/recipe/paper committed (+10); existing artifact upgraded (+5); rung 274177+ (+5); new test coverage (+5) | 0-25 |
+| **L** (Love/Quality) | Riskiest assumption tested (+10); scope cut documented (+5); unexpected blocker logged (+5); prior art cited (+5) | 0-25 |
+| **O** (Output) | Artifact committed + demo-able (+10); evidence bundle complete (+5); tests pass (+5); commit format correct (+5) | 0-25 |
+| **W** (Wisdom) | NORTHSTAR alignment confirmed by Skeptic (+10); case-study updated (+5); ROADMAP phase advanced (+5); persona voice evident (+5) | 0-25 |
+
+**Minimum to PASS:** 50 | **Warrior pace target:** 60+
+
+**Northstar Metric:** `skill_quality_avg` + `recipe_hit_rate` — each sprint produces an artifact that either raises average skill quality (if a skill file is the artifact) or advances recipe reuse (if a recipe or combo is the artifact). NORTHSTAR alignment check in Scout phase gates that every sprint contributes to one of these metrics.
+
+---
+
 ## Three Pillars Mapping
 
 | Pillar | How This Combo Applies It |
 |--------|--------------------------|
-| **LEK** (Self-Improvement) | GLOW score at close is a self-assessment loop: Growth + Learning + Output + Wins measured explicitly, so each sprint teaches the team what to do more of and what to cut next time |
-| **LEAK** (Cross-Agent Trade) | Scout agent (dragon-rider) holds discovery knowledge asymmetrically; Builder agent (domain persona) holds implementation knowledge; Skeptic (kent-beck/schneier) holds adversarial knowledge — each role stays in its lane, trading via SprintPlan.json and SkepticVerdict.json |
-| **LEC** (Emergent Conventions) | Demo-or-fail and scope-cut-never-the-clock become project conventions that apply to every ROADMAP phase — any agent that proposes scope expansion mid-sprint is violating a team-wide rule, not just a local policy |
+| **LEK** (Self-Improvement) | GLOW score at close is a self-assessment loop: Growth + Learning + Output + Wins measured explicitly, so each sprint teaches the team what to do more of and what to cut next time. The riskiest assumption (from Scout) is tested in Build — this is the LEK hypothesis → test → update cycle compressed into 45% of the sprint time. |
+| **LEAK** (Cross-Agent Trade) | Scout agent (dragon-rider) holds discovery knowledge asymmetrically; Builder agent (domain persona) holds implementation knowledge; Skeptic (kent-beck/schneier) holds adversarial knowledge — each role stays in its lane, trading via SprintPlan.json and SkepticVerdict.json. The SprintPlan.json is the minimal sufficient handoff: Scout's full discovery compressed into demo_target + scope_cuts + persona_pack. |
+| **LEC** (Emergent Conventions) | Demo-or-fail and scope-cut-never-the-clock become project conventions that apply to every ROADMAP phase — any agent that proposes scope expansion mid-sprint is violating a team-wide rule, not just a local policy. The commit message format (`feat: {name} — hackathon sprint {date}` with GLOW breakdown) becomes the canonical evidence token that any reader can parse to assess sprint quality. |
 
 ---
 

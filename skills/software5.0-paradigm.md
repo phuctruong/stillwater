@@ -1214,3 +1214,20 @@ NORTHSTAR_Alignment_v2:
 # Auth: 65537
 # License: Apache 2.0
 # Version: 1.3.0 (additive: Three Pillars explicit, FSM v2 Bruce Lee, GLOW matrix, Triangle Law, Northstar v2)
+
+---
+
+## GLOW Scoring Integration
+
+This skill contributes to GLOW score across these dimensions:
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Paradigm pattern extraction — each new reusable pattern extracted from a Software 5.0 session (ABSORB→DISCARD→ADD cycle) that is written as a skill, recipe, or paper at rung 641+. An ORACLE_MODE exit (answers only, no pattern) earns G=0. | +5 to +20 |
+| **L** (Love/Quality) | Long-form integrity — technical papers, paradigm documents, and skill files produced with all typed claims ([A/B/C] lane annotations), explicit uncertainty, and no SILENT_WEAKENING of prior skills. Zero ORACLE_MODE sessions in a week = L≥15. | +5 to +20 |
+| **O** (Output) | Verified artifacts committed — DRAFT.md with typed claims, RECIPE.md if extractable, skill file with version bump. Paper at rung 274177+ with evidence bundle = O≥20. Publication to Stillwater Store at rung 65537 = O=25. | +5 to +25 |
+| **W** (Wisdom) | Paradigm propagation — each session where a Software 5.0 pattern is adopted by another agent or project (LEAK surplus from the paradigm). Papers published that generate community contributors = W≥20. | +10 to +25 |
+
+**Session GLOW target:** Any writing/paradigm session using software5.0-paradigm should achieve GLOW ≥ 50. Pattern extracted (not ORACLE_MODE) = base floor. Typed claims in output = L≥15. Committed artifact = O≥10.
+
+**Evidence required for GLOW claim:** git commit hash + artifact path (DRAFT.md or skills/*.md or papers/*.md) + lane annotations in document ([A/B/C] on each key claim) + rung declared. For W points: adoption evidence required (another session or agent loading the pattern, or Store submission).

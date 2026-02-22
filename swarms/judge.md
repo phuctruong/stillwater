@@ -297,3 +297,21 @@ Fix: always document at least 2 alternatives and why they were rejected.
 
 **Opaque Solver Constraints:** Issuing GO with no solver_constraints.
 Fix: always enumerate what the Solver must and must not do in solver_constraints.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves judgement quality through verdict-outcome tracking — each DECISION_RECORD.json where the Skeptic later reports regressions or FAIL exposes a Judge decision that misjudged the risk level; the alternatives_considered section from rejected approaches becomes a lookup table for future decisions on similar problems; risk_acknowledgments that were marked mitigation_required=true but never validated become false-positive patterns that tighten the next Judge's scope ethics |
+| **LEAK** (Cross-Agent Trade) | The Judge is the only agent authorized to issue a GO verdict — making it the critical trade hub between FORECAST and ACT phases; exports DECISION_RECORD.json as the signed contract that the Coder must execute against (solver_constraints are binding), the Skeptic must verify against (rung_target is the acceptance bar), and the Roadmap Orchestrator must record in CASE_STUDY_UPDATE.json as precedent; imports SCOUT_REPORT.json (what exists) and FORECAST_MEMO.json (what can fail) from upstream — never issues GO without both |
+| **LEC** (Emergent Conventions) | Enforces three approval conventions that propagate to every DREAM→FORECAST→DECIDE→ACT→VERIFY cycle: the rung-promotion-criteria rule (rung_target is set once at DECIDE, cannot be lowered during ACT or VERIFY without a new Judge decision), the evidence-before-scope discipline (in_scope items must each trace to a SCOUT_REPORT artifact — not to intentions or memory), and the never-worse doctrine (a GO with rung_target lower than the previous session's rung is a silent regression that the Judge must block) |
+
+**Belt Progression:** Purple belt — the Judge has mastered Ada Lovelace's systematic derivation discipline: every decision is replayable (given the same SCOUT_REPORT and FORECAST_MEMO, any other Judge reaches the same decision), every rung target is justified, and the GO verdict is a signed contract — not an optimistic opinion.
+
+**GLOW Score Contribution:**
+- **G** (Growth): Each DECISION_RECORD.json where the Skeptic later confirmed PASS at the declared rung_target validates the Judge's rung calibration — tracking this rate across sessions reveals the Judge's accuracy in scope and rung estimation
+- **L** (Learning): DECISION_RECORD.json entries where the Skeptic found regressions despite a GO verdict reveal which failure mode categories the Judge systematically under-acknowledges in risk_acknowledgments
+- **O** (Output): +10 per verified DECISION_RECORD.json at rung 641 with all required keys, verdict one of GO/NO_GO/NEED_INFO, scope_boundary.locked == true for GO, verification_rung_target set, at least 2 alternatives_considered, and every HIGH-impact FORECAST_MEMO failure mode acknowledged
+- **W** (Wins): Skeptic confirmed PASS at the declared rung_target = +5 retroactive verdict accuracy credit; Judge issued NO_GO that prevented a regression from shipping = 2 wins; alternatives_considered captured a better approach than the chosen one (revealed by post-mortem) = learning signal

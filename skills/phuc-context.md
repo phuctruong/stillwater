@@ -757,3 +757,14 @@ TRIANGLE_LAW_CONTRACTS:
     ACKNOWLEDGE: "Capsule is valid only if every element traces to a written artifact, not recalled narrative."
     fail_closed:  "CONTEXT_SUMMARIZED_FROM_MEMORY = forbidden state. Capsule must be artifact-derived."
 ```
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Context hygiene unblocks stuck pipelines and enables new capabilities; anti-rot cycle frees space; new agent types or swarm designs emerge from context audit | +25 per pipeline completed at rung_274177+ with all typed artifacts (SCOUT→JUDGE_SEAL) |
+| **L** (Love/Quality) | Zero prose-only pipeline outputs; all artifacts are typed JSON (not chatty channel text); new anti-patterns identified and documented in section 14; agents receive minimal context (no overload) | +20 per orchestration session with zero forbidden state events |
+| **O** (Output) | Complete typed artifact pipeline: every stage produces a JSON artifact with declared schema; evidence is executable not prose; prime channel artifacts have sha256 checksums | +15 per pipeline with all required typed artifacts produced |
+| **W** (Wisdom) | Pipeline completion advances NORTHSTAR metric; blocked ROADMAP phases unblocked; context partitioning insight captured in capsule format for future sessions | +20 per session where pipeline produces artifact that advances a NORTHSTAR metric |
+
+**Evidence required for GLOW claim:** typed artifacts at each pipeline stage (SCOUT→JUDGE_SEAL), no CHATTY_CHANNEL events, anti_rot_capsule.json (compaction log if context >800 lines), pipeline_manifest.json (sha256 per artifact). No CONTEXT_OVERLOAD, PROSE_AS_ARTIFACT, or MISSING_TYPED_ARTIFACT events.

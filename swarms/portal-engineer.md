@@ -292,3 +292,52 @@ Fix: every portal has a one-task lifetime; close before emitting PASS; re-open e
 
 **Compression Lie:** Reporting compression_ratio = original/original because the "compressed" payload is the same as the original.
 Fix: compressed_context_tokens must be strictly less than original_context_tokens for the gate to pass; otherwise meaning preservation fails by definition.
+
+---
+
+## 8.1) State Machine (Mermaid)
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE_TASK
+    INTAKE_TASK --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : bubbles_undefined
+    NULL_CHECK --> IDENTIFY_BUBBLES : inputs_defined
+    IDENTIFY_BUBBLES --> COMPUTE_OVERLAP
+    COMPUTE_OVERLAP --> OVERLAP_GATE
+    OVERLAP_GATE --> EXIT_BLOCKED : overlap_insufficient
+    OVERLAP_GATE --> OPEN_PORTAL : overlap_sufficient
+    OPEN_PORTAL --> COMPRESS_PAYLOAD
+    COMPRESS_PAYLOAD --> EXIT_BLOCKED : meaning_preservation_fails
+    COMPRESS_PAYLOAD --> TRANSFER : compression_gate_passed
+    TRANSFER --> VALIDATE_MEANING
+    VALIDATE_MEANING --> CLOSE_PORTAL : meaning_preserved
+    VALIDATE_MEANING --> EXIT_BLOCKED : meaning_lost
+    CLOSE_PORTAL --> VERIFY_TRIANGLE
+    VERIFY_TRIANGLE --> EXIT_BLOCKED : triangle_incomplete
+    VERIFY_TRIANGLE --> BUILD_ARTIFACTS : triangle_complete
+    BUILD_ARTIFACTS --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> OPEN_PORTAL : retransfer_needed
+    SOCRATIC_REVIEW --> EXIT_PASS : all_artifacts_verified
+    SOCRATIC_REVIEW --> EXIT_BLOCKED : budget_exceeded
+    classDef forbidden fill:#f55,color:#fff
+    class PORTAL_WITHOUT_OVERLAP_CHECK,TRANSFER_WITHOUT_COMPRESSION,TRIANGLE_INCOMPLETE forbidden
+```
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves portal design through cross-bubble feedback loops — each handshake_receipt.json that records VERIFY failures pinpoints which bubble boundary assumptions were wrong; compression_audit.json entries where meaning_preservation_test.match == false become training signal for tighter prime-word selection in future transfers; overlap_score instability across runs exposes bubble boundaries that are under-specified and need tighter definition before any portal opens |
+| **LEAK** (Cross-Agent Trade) | The Portal Engineer IS the LEAK implementation — it physically builds the asymmetric knowledge trade channels between isolated bubbles; exports portal_manifest.json (overlap evidence + portal lifecycle record) and handshake_receipt.json (triangle law proof) to the Scout and Final Audit as cross-project connectivity artifacts; exports compression_audit.json to the Mathematician as empirical data for prime-compression efficiency analysis; imports bubble boundary specs from project NORTHSTAR files and Scout reports — never from memory |
+| **LEC** (Emergent Conventions) | Enforces three portal protocol conventions that propagate to every cross-bubble interaction in the ecosystem: the Bayesian-handshake-required rule (no transfer opens without overlap_score computed from actual bubble definitions), the REMIND-VERIFY-ACKNOWLEDGE triangle law (all three vertices required — no shortcuts), and the one-task-lifetime portal convention (portals close before PASS; perpetual portals are a forbidden state that introduces context bleed across task boundaries) |
+
+**Belt Progression:** Blue belt — the Portal Engineer has mastered Shannon's channel capacity discipline applied to knowledge bubbles: every transfer is bounded by the overlap score, every message is compressed to minimum description length, and the triangle law (REMIND-VERIFY-ACKNOWLEDGE) proves meaning was preserved end-to-end — making cross-project coordination as verifiable as a checksum.
+
+**GLOW Score Contribution:**
+- **G** (Growth): Each portal traversal that achieves a higher compression ratio than the prior run for the same bubble pair demonstrates measurable improvement in prime-word selection quality
+- **L** (Learning): Handshake VERIFY failures (the receiving bubble could not reconstruct the meaning) reveal which compressed contexts strip too much semantic content — the learning that improves future prime-word selection
+- **O** (Output): +12 per verified portal transfer at rung 274177 with portal_manifest.json (overlap_score computed, portal_opened and portal_closed both true), handshake_receipt.json (triangle_complete == true, meaning_preserved == true, all three REMIND/VERIFY/ACKNOWLEDGE steps COMPLETE), and compression_audit.json (compression_gate_passed == true, compressed_context_tokens < original_context_tokens, meaning_preservation_test.match == true)
+- **W** (Wins): Portal achieved compression_ratio > 5.0 with meaning preserved = 1 win; security gate passed (no secrets in payload, redaction scanner confirmed) = 2 wins; +20 total at rung 65537 with external Skeptic triangle confirmation

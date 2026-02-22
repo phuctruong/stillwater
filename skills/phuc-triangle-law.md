@@ -1,10 +1,27 @@
 PHUC_TRIANGLE_LAW_SKILL:
-  version: 1.0.0
+  version: 1.1.0
   profile: contract_stability
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
   status: ACTIVE
+
+# ============================================================
+# MAGIC_WORD_MAP
+# ============================================================
+MAGIC_WORD_MAP:
+  version: "1.0"
+  skill: "phuc-triangle-law"
+  mappings:
+    contract:     {word: "constraint",    tier: 0, id: "MW-004", note: "a contract is a constraint on future behavior — the Triangle enforces it remains active"}
+    drift:        {word: "drift",         tier: 3, id: "MW-182", note: "drift = gradual deviation from contract; the default state when any vertex is missing"}
+    remind:       {word: "signal",        tier: 0, id: "MW-006", note: "REMIND is the signal that declares the contract — findable, unambiguous documentation"}
+    verify:       {word: "verification",  tier: 1, id: "MW-031", note: "VERIFY is the executable enforcement mechanism — not prose, but artifact evidence"}
+    acknowledge:  {word: "governance",    tier: 1, id: "MW-032", note: "ACKNOWLEDGE is the governance closure — the responsible party confirms receipt of verification"}
+    theater:      {word: "integrity",     tier: 0, id: "MW-012", note: "theater of compliance violates integrity — it creates the appearance of verification without the substance"}
+    stability:    {word: "stability",     tier: 1, id: "MW-025", note: "Triangle completion = contract stability; any missing vertex creates instability"}
+    native:       {word: "reversibility", tier: 0, id: "MW-015", note: "native verification is reversible — built-in checks make drift detectable and correctable early"}
+  compression_note: "T0=universal primitives, T1=Stillwater protocol concepts, T3=domain leaves"
 
   # ============================================================
   # PHUC TRIANGLE LAW — REMIND → VERIFY → ACKNOWLEDGE
@@ -512,3 +529,50 @@ flowchart TD
     style DRIFT_DETECTED_A fill:#f4a261,color:#000
     style TRIANGLE_COMPLETE fill:#457b9d,color:#fff
 ```
+
+# ============================================================
+# NORTHSTAR ALIGNMENT
+# ============================================================
+NORTHSTAR_ALIGNMENT:
+  northstar: "Phuc_Forecast + Max_Love"
+  metric: "Recipe hit rate / System reliability over time"
+  alignment: >
+    Triangle Law directly advances the Northstar by preventing the silent contract decay
+    that causes recipe failures. When skills define contracts and those contracts have all
+    three vertices (REMIND + VERIFY + ACKNOWLEDGE), recipe hit rates remain high because
+    the recipe's assumptions about the environment are verified to still hold. The most
+    common recipe failure is THEATER_OF_COMPLIANCE — the contract was acknowledged but
+    never verified, and the system silently drifted.
+  max_love: >
+    Max Love for Triangle Law = no one discovers drift through a production failure.
+    Building all three vertices into every contract is an act of love for future users
+    and contributors. VERIFY is the hardest vertex to build and the most loving — it
+    means we care enough about the contract to enforce it automatically, not just declare it.
+  hard_gate: >
+    DRIFT_TOLERATED is an anti-love violation. Accepting a known gap in the triangle
+    means accepting that future contributors will inherit a degrading system. Triangle
+    completion is mandatory, not aspirational.
+
+# ============================================================
+# THREE PILLARS OF SOFTWARE 5.0 KUNG FU
+# ============================================================
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Skill Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | The Triangle Law itself was discovered through LEK — by analyzing contract failures and finding the pattern (VERIFY is almost always the missing vertex). The drift detection protocol is a LEK feedback loop: drift is detected, the missing vertex is identified, the triangle is repaired, and the lesson is encoded as a named pattern (THEATER_OF_COMPLIANCE, DRIFT_TOLERATED). Each repair strengthens the system for next time. |
+| **LEAK** (Cross-Agent Trade) | Triangle contracts are LEAK artifacts. When one agent completes a triangle (documents the contract + builds the verification + confirms acknowledgment), every other agent working in the same system benefits — they can rely on the verified contract without re-building trust. This is asymmetric knowledge: an agent who knows the Triangle Law can detect drift instantly; an agent who does not may work in a drifted system for weeks without knowing. |
+| **LEC** (Emergent Conventions) | The Triangle Law crystallized from a recurring failure pattern: documentation and sign-off exist, but no automated verification. The REMIND → VERIFY → ACKNOWLEDGE convention, the most-skipped-vertex heuristic (VERIFY), and the theater-of-compliance anti-pattern are all LEC conventions that prevent rediscovering this lesson. Any agent loading this skill inherits the full triangle discipline immediately. |
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Triangle completed at rung_274177+: VERIFY runs automatically, ACKNOWLEDGE references VERIFY output, no skip patterns present | +25 per triangle completed at rung_274177+ |
+| **L** (Love/Quality) | All three vertices identified with concrete artifacts (not beliefs); no THEATER_OF_COMPLIANCE; drift detected and repair plan produced | +20 per triangle audit with all artifacts present |
+| **O** (Output) | Contract statement written; verify_artifact named (test file / CI job / audit); acknowledge_artifact named (PR approval / rung declaration) | +15 per triangle with complete artifact chain |
+| **W** (Wisdom) | Native triangle achieved: VERIFY cannot be bypassed in normal workflow; drift_detection_automated alert configured | +25 per native triangle (rung_65537) |
+
+**Evidence required for GLOW claim:** contract_statement artifact (link to doc/spec), verify_artifact (test file or CI config), acknowledge_artifact (PR approval or rung declaration) — all three with actual file paths, not prose claims. No DRIFT_TOLERATED events.
+

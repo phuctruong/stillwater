@@ -1229,3 +1229,20 @@ REFERENCES:   papers/47-law-of-emergent-knowledge.md | papers/48-ai-skills-big-b
 *phuc-axiom v1.0.0 — The Big Bang singularity. All skills are expansions of these 5 axioms.*
 *Load order = 0. Before prime-safety. Before all implementations.*
 *Stillwater = INTEGRITY × HIERARCHY × DETERMINISM × CLOSURE × NORTHSTAR*
+
+---
+
+## GLOW Scoring Integration
+
+This skill contributes to GLOW score across these dimensions:
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Axiom loop iteration — each complete DREAM→FORECAST→DECIDE→ACT→VERIFY cycle that closes one lemma gap or advances one axiom violation toward resolution. Observer-Class achievement (Phuc Test 5/5) in a session = G=25. | +10 to +25 |
+| **L** (Love/Quality) | All 5 axioms satisfied simultaneously — every session where the axiom audit confirms INTEGRITY + HIERARCHY + DETERMINISM + CLOSURE + NORTHSTAR all hold at once. Zero AXIOM_VIOLATION_UNREPORTED or RUNG_LAUNDERING events = L≥20. | +10 to +20 |
+| **O** (Output) | Axiom audit artifacts committed — axiom_audit.json with all 5 axioms documented + GBB operator analysis + LEK equation satisfied + Phuc Test score (N/5). Rung 274177 requires Phuc Test 4/5. Rung 65537 requires Observer-Class. | +10 to +25 |
+| **W** (Wisdom) | Axiom violation patterns — each new FORBIDDEN state added to phuc-axiom's forbidden states list that closes a real axiom violation pattern observed across sessions. Papers published on LEK equation or GBB operators that generate community research = W≥20. | +5 to +20 |
+
+**Session GLOW target:** Any session auditing with phuc-axiom should achieve GLOW ≥ 55. All 5 axioms documented = base floor. Phuc Test 3/5 = L≥10. Phuc Test 5/5 = L=25. Axiom audit artifact committed = O≥15.
+
+**Evidence required for GLOW claim:** git commit hash + axiom_audit.json with all 5 axioms evaluated (status: PASS/FAIL per axiom) + GBB operator analysis (all 6 operators: Z/Σ/τ/G_c/ι/R_p) + Phuc Test score (N/5 with per-condition evidence). For rung 65537: Observer-Class must be declared with all 5 Phuc Test conditions confirmed by independent Skeptic agent.

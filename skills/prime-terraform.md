@@ -375,3 +375,18 @@ stateDiagram-v2
         plan-before-destroy approval, and pinned provider versions are now Lane A gates."
       emerging_conventions: [remote_state_as_default, plan_file_required_for_apply,
         destroy_approval_artifact, pinned_module_and_provider_versions]
+
+# ============================================================
+# GLOW SCORING INTEGRATION
+# ============================================================
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Terraform module passes all gates at rung_274177+: remote state with locking, plan file saved before apply, blast radius analyzed, mandatory tags applied | +25 per module validated at rung_274177+ |
+| **L** (Love/Quality) | No hardcoded credentials in .tfvars; no wildcard IAM (Action: * or Resource: *); no apply without saved plan file; provider versions pinned | +20 per configuration with zero security gate violations |
+| **O** (Output) | plan_artifact.json produced; blast_radius analysis documented; credential scan results; tagging compliance report | +15 per deployment with complete plan artifacts |
+| **W** (Wisdom) | Destroy operations have explicit approval artifact; state backend uses locking; no HARDCODED_CREDENTIALS or WILDCARD_IAM or APPLY_WITHOUT_PLAN events | +20 per session with zero forbidden state events and state integrity confirmed |
+
+**Evidence required for GLOW claim:** plan_artifact.json (saved plan file), credential_scan results (no secrets found), blast_radius analysis, tagging compliance report, no HARDCODED_CREDENTIALS or WILDCARD_IAM or LOCAL_STATE_IN_PRODUCTION events.

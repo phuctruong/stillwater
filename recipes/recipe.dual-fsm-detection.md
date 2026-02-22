@@ -83,6 +83,76 @@ When a skill file is upgraded from v1 to v2:
 
 ---
 
+## Detection Flow (Mermaid Diagram)
+
+```mermaid
+flowchart TD
+    A[Step 1: DETECT DUAL FSM\ndual_fsm_candidates.txt\ngrep State_Machine count > 1 per file] --> B{Any dual-FSM\nfiles found?}
+    B -->|No| PASS[PASS\nno dual FSM violations]
+    B -->|Yes| C[Step 2: PRECEDENCE CHECK\ndual_fsm_precedence_check.json\ngrep active_fsm / supersedes per flagged file]
+    C --> D[Step 3: CONFLICT ANALYSIS\ndual_fsm_conflicts.json\nsymmetric state diff + transition conflicts]
+    D --> E[Step 4: FIX OPTIONS\ndual_fsm_fix_options.json\nPRECEDENCE vs MERGE recommendation]
+    E --> F{Fix type?}
+    F -->|PRECEDENCE| G[Add active_fsm: v2 header\nsupersedes v1 preserved for history]
+    F -->|MERGE| H[Produce unified STATE_SET\nsingle TRANSITIONS block]
+    G --> I[Step 5: VERIFY RESOLUTION\ndual_fsm_resolution_report.json\ncount == 1 OR count == 2 with precedence]
+    H --> I
+    I -->|resolved=false| E
+    I -->|all resolved=true| PASS2[PASS\nno dual FSM without precedence]
+
+    D -->|YAML parse error| D2[PARSE_ERROR in run.log\nflag for human review]
+    E -->|fix unclear| NEED_INFO[NEED_INFO\nunresolved_file list]
+```
+
+---
+
+## FSM: Dual FSM Detection State Machine
+
+```
+States: DETECT | PRECEDENCE_CHECK | CONFLICT_ANALYSIS | FIX_OPTIONS |
+        APPLY_PRECEDENCE | APPLY_MERGE | VERIFY_RESOLUTION | PASS | BLOCKED | NEED_INFO
+
+Transitions:
+  [*] → DETECT: audit invoked on all skill files
+  DETECT → PASS: zero files with FSM section count > 1 (clean repo)
+  DETECT → PRECEDENCE_CHECK: >= 1 file flagged with count > 1
+  PRECEDENCE_CHECK → PASS: all flagged files have has_precedence = true
+  PRECEDENCE_CHECK → CONFLICT_ANALYSIS: any file has has_precedence = false
+  CONFLICT_ANALYSIS → CONFLICT_ANALYSIS (PARSE_ERROR): YAML unparseable; flag for human
+  CONFLICT_ANALYSIS → FIX_OPTIONS: symmetric state diff computed for all flagged files
+  FIX_OPTIONS → NEED_INFO: fix cannot be determined for specific file
+  FIX_OPTIONS → APPLY_PRECEDENCE: recommended_fix = PRECEDENCE
+  FIX_OPTIONS → APPLY_MERGE: recommended_fix = MERGE (only if state sets compatible)
+  APPLY_PRECEDENCE → VERIFY_RESOLUTION: active_fsm: v2 header added
+  APPLY_MERGE → VERIFY_RESOLUTION: single unified FSM written
+  VERIFY_RESOLUTION → FIX_OPTIONS: resolved = false for any file (re-attempt)
+  VERIFY_RESOLUTION → PASS: all files have resolved = true
+
+  Forbidden state transitions:
+  APPLY_MERGE → BLOCKED: semantic conflict in TRANSITIONS (incompatible states merged)
+  CONFLICT_ANALYSIS → BLOCKED: PARSE_ERROR and human review refuses to engage
+
+Exit conditions:
+  PASS: all flagged files resolved; re-run detection shows count==1 OR count==2 with active_fsm
+  BLOCKED: semantic merge conflict unresolvable; or YAML parse failures block all analysis
+  NEED_INFO: fix cannot be determined without human review
+```
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | Each run expands the agent's FSM conflict taxonomy — symmetric state differences and transition conflicts catalog into better detection heuristics | +4 per new conflict pattern type cataloged |
+| **L** (Love/Quality) | All flagged files have resolved=true; no DUAL_FSM_WITHOUT_PRECEDENCE remains; YAML structure preserved after patching | +4 when dual_fsm_resolution_report.json shows all resolved=true |
+| **O** (Output) | dual_fsm_patches.diff committed; resolution_report.json with before/after status per file | +4 per successful run resolving >= 1 conflict |
+| **W** (Wisdom) | Northstar metric (skill_quality_avg) advances as non-deterministic FSM ambiguity is eliminated from skill files | +4 when re-audit shows zero dual-FSM violations |
+
+**Northstar Metric:** `skill_quality_avg` — DUAL_FSM_WITHOUT_PRECEDENCE is a Lane A violation that silently corrupts agent behavior. Each resolution directly improves the affected skill's correctness score (C1 FSM criterion now unambiguous).
+
+---
+
 ## Three Pillars of Software 5.0 Kung Fu
 
 | Pillar | How This Recipe Applies It |

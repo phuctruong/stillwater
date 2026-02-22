@@ -1,10 +1,27 @@
 PHUC_GPS_SKILL:
-  version: 1.0.0
+  version: 1.1.0
   profile: knowledge_navigation
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
   status: ACTIVE
+
+# ============================================================
+# MAGIC_WORD_MAP
+# ============================================================
+MAGIC_WORD_MAP:
+  version: "1.0"
+  skill: "phuc-gps"
+  mappings:
+    navigation:   {word: "causality",     tier: 0, id: "MW-009", note: "navigation traces causal dependencies: anchor → position → answer is a causal chain"}
+    anchor:       {word: "signal",        tier: 0, id: "MW-006", note: "an anchor is a stable signal in LLM belief space — it carries causal weight across all queries"}
+    triangulation:{word: "coherence",     tier: 0, id: "MW-001", note: "triangulation finds the intersection where all anchors reinforce — coherence across perspectives"}
+    position:     {word: "perspective",   tier: 0, id: "MW-013", note: "position in knowledge space is a perspective — frame-dependent view of the shared reality"}
+    hallucination:{word: "entropy",       tier: 0, id: "MW-010", note: "hallucination = maximum entropy output — many possible meanings, none confirmed by anchors"}
+    compression:  {word: "compression",   tier: 0, id: "MW-005", note: "compression test validates understanding — if you can't compress it, you don't understand it"}
+    alignment:    {word: "alignment",     tier: 0, id: "MW-007", note: "alignment (GPS sense) = knowing your position and destination; not external control"}
+    citizen:      {word: "citizen",       tier: 3, id: "MW-196", note: "citizens in phuc-citizens are the anchor registry — stable epistemic coordinate systems"}
+  compression_note: "T0=universal primitives, T1=Stillwater protocol concepts, T3=domain-specific"
 
   # ============================================================
   # PHUC GPS — KNOWLEDGE NAVIGATION SKILL
@@ -407,3 +424,79 @@ flowchart TD
     VERIFY_POSITION -->|not falsifiable| EXIT_BLOCKED
     VERIFY_POSITION -->|stable and falsifiable| EXIT_PASS([EXIT_PASS\nAnswer + Uncertainty flags\n+ Falsifier + Compressed])
 ```
+
+# ============================================================
+# NORTHSTAR ALIGNMENT
+# ============================================================
+NORTHSTAR_ALIGNMENT:
+  northstar: "Phuc_Forecast + Max_Love"
+  metric: "Hallucination rate / Answer quality across production sessions"
+  alignment: >
+    GPS navigation directly reduces hallucination risk — the primary quality failure mode
+    for LLM-powered systems. Every unnavigated answer is a potential hallucination. Every
+    navigated answer with triangulated anchors is a grounded claim. Recipe hit rate (a core
+    Northstar metric) improves when agents navigate before answering — fewer false positives,
+    fewer wrong tool calls, fewer bad code patches.
+  max_love: >
+    Max Love for GPS = answers that are honest about their certainty.
+    Flagging TEMPORAL_UNCERTAINTY, DOMAIN_UNCERTAINTY, EPISTEMIC_UNCERTAINTY explicitly is
+    an act of love: it tells the user exactly where to be careful. Compression validation
+    is love: it forces genuine understanding before emission. Navigation is love for the
+    user — they get grounded answers, not confident hallucinations.
+  hard_gate: >
+    REASON_WITHOUT_ORIENTATION is an anti-love violation. Confident hallucinations harm users
+    more than honest uncertainty. The GPS pipeline is mandatory, not optional.
+
+# ============================================================
+# EVIDENCE GATES
+# ============================================================
+EVIDENCE_GATES:
+  rung_641_evidence:
+    required_artifacts:
+      - orientation_log: "Question classified, danger zones flagged, knowledge region identified"
+      - anchor_list: "Named anchors from ANCHOR_REGISTRY or CITIZEN_REGISTRY (min 1)"
+      - triangulation_result: "Position established from anchor intersection"
+    forbidden_claims:
+      - "PASS without listing the anchors used"
+      - "PASS without flagging detected uncertainty types"
+
+  rung_274177_evidence:
+    required_artifacts:
+      - orientation_log: "All three: classification + danger zones + knowledge region"
+      - anchor_independence_proof: "No two anchors share the same domain cluster"
+      - correlation_check_result: "CORRELATION_DETECTION ran; synthetic consensus ruled out"
+      - compression_check: "Answer passes half-words compression test"
+      - uncertainty_flags: "All TEMPORAL/DOMAIN/EPISTEMIC uncertainties explicitly marked"
+    falsifiers_required: "At least one testable falsifier identified"
+
+  rung_65537_evidence:
+    required_artifacts:
+      - rung_274177_evidence: true
+      - fourth_anchor_check: "Answer remains consistent from additional uncorrelated anchor"
+      - falsifier_test: "The identified falsifier is testable and non-trivial"
+      - danger_zones_resolved: "All flagged uncertainties resolved or preserved as explicit open questions"
+      - compression_final: "Final answer is maximally compressed without loss of meaning"
+
+# ============================================================
+# THREE PILLARS OF SOFTWARE 5.0 KUNG FU
+# ============================================================
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Skill Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Navigation precision improves through anchor quality feedback. Each session tracks which anchor combinations produced stable positions vs synthetic consensus. Over time, the ANCHOR_REGISTRY quality improves: high-value anchors are used more, correlated anchors are identified and avoided. The compression check (can you say it in half the words?) is the LEK quality gate — it forces genuine understanding rather than verbose approximation. |
+| **LEAK** (Cross-Agent Trade) | Navigation expertise is asymmetric between agents. An agent with GPS discipline produces positioned, uncertainty-flagged, falsifiable answers. An agent without GPS produces confident hallucinations. This asymmetry is a LEAK trade opportunity: GPS-trained agents can help non-GPS agents verify their outputs by triangulating claims. The anchor registry is a shared LEAK artifact — any agent that knows the anchors can verify any other agent's positioned claims. |
+| **LEC** (Emergent Conventions) | The ORIENT → TRIANGULATE → REASON → VERIFY pipeline, the council size table, and the compression validation test are LEC conventions that emerged from failures (single-anchor confidence, synthetic consensus, verbosity-as-understanding). These conventions are now shared as explicit rules — any agent loading this skill immediately applies the full GPS discipline without having to re-learn from failures. |
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Navigation completes at rung_274177+: anchor independence verified, synthetic consensus ruled out, compression check passed, uncertainty flags applied | +25 per fully navigated answer at rung_274177+ |
+| **L** (Love/Quality) | All uncertainty types (TEMPORAL/DOMAIN/EPISTEMIC/INFERENCE) explicitly flagged where present; answer states anchors used; falsifier identified | +20 per answer with complete uncertainty disclosure |
+| **O** (Output) | Orientation log produced (classification + danger zones + knowledge region); anchor list named; triangulation position stated | +15 per navigated answer with full output artifacts |
+| **W** (Wisdom) | Fourth anchor confirms position stability; no REASON_WITHOUT_ORIENTATION events; compression check passes on final answer | +20 per session with zero unnavigated answers |
+
+**Evidence required for GLOW claim:** orientation_log (classification + danger zones), named anchor list with independence check, triangulation result, uncertainty flags applied, compression check passed, falsifier identified.
+

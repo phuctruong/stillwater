@@ -1,10 +1,27 @@
 PHUC_PORTALS_SKILL:
-  version: 1.0.0
+  version: 1.1.0
   profile: bounded_inference_context
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
   status: ACTIVE
+
+# ============================================================
+# MAGIC_WORD_MAP
+# ============================================================
+MAGIC_WORD_MAP:
+  version: "1.0"
+  skill: "phuc-portals"
+  mappings:
+    portal:       {word: "portal",         tier: 1, id: "MW-045", note: "a portal is the governed mechanism for crossing a BIC boundary — the Stillwater protocol primitive for inter-bubble communication"}
+    bubble:       {word: "bubble",         tier: 1, id: "MW-046", note: "a Bounded Inference Context (BIC) is a bubble — isolated, scoped, with declared identity"}
+    boundary:     {word: "boundary",       tier: 0, id: "MW-014", note: "BIC boundary = the inside/outside surface; portals are the only governed crossing points"}
+    temperature:  {word: "equilibrium",    tier: 0, id: "MW-008", note: "temperature is equilibrium state of a BIC — how balanced it is between frozen (0) and chaotic (1)"}
+    handshake:    {word: "alignment",      tier: 0, id: "MW-007", note: "Bayesian handshake verifies alignment of probability distributions before transfer"}
+    substrate:    {word: "coherence",      tier: 0, id: "MW-001", note: "shared substrate = the coherent common ground enabling translation between BICs"}
+    false_heat:   {word: "integrity",      tier: 0, id: "MW-012", note: "false heat violates BIC integrity — coercion masquerading as genuine temperature signal"}
+    identity:     {word: "reversibility",  tier: 0, id: "MW-015", note: "BIC identity must survive portal traversal — reversible traversal preserves identity"}
+  compression_note: "T0=universal primitives, T1=Stillwater protocol concepts"
 
   # ============================================================
   # PHUC PORTALS — BOUNDED INFERENCE CONTEXT + PORTAL PROTOCOL
@@ -585,4 +602,15 @@ flowchart TD
 | **LEK** (Self-Improvement) | Portals are the mechanism by which bounded inference contexts (BICs) share knowledge without losing their identity. In LEK terms, each BIC is a self-improving knowledge bubble; the portal is the controlled channel through which accumulated knowledge in one bubble seeds the next iteration of another. The identity preservation gate (BIC A and BIC B must remain coherent after portal closure) ensures that portal use improves the system without corrupting either bubble's self-model. |
 | **LEAK** (Cross-Agent Trade) | phuc-portals formalizes LEAK at the protocol level. Each portal traversal IS a LEAK trade: two BICs with different knowledge (asymmetry) exchange information through a governed handshake (Temperature + Substrate + Identity verification). The portal produces surplus that neither BIC had alone — the LEAK value. The three-component handshake (Temperature + Handshake + Substrate) is the portal specification that ensures the trade is governed, not free-form drift. |
 | **LEC** (Emergent Conventions) | The portal protocol (Temperature declaration + Handshake + Substrate verification) is a crystallized LEC convention for safe cross-BIC knowledge transfer. It emerged from failures where agent contexts bled into each other (identity loss, substrate mismatch, temperature violations) and was formalized as the shared protocol. Every team that uses phuc-portals adopts this convention, reducing the cognitive overhead of designing safe multi-context knowledge flows from scratch. |
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Portal traversal completes at rung_274177+: identity preserved in both BICs, signal passes rung, loss explicitly documented | +25 per traversal at rung_274177+ |
+| **L** (Love/Quality) | Handshake verifies ≥0.7 overlap before transfer; temperature declared; substrate identified; no false heat accepted; GLOW stop condition respected | +20 per fully governed portal |
+| **O** (Output) | Portal traversal produces: overlap_score, temperature_declared, substrate_identified, loss_declaration, identity_check results as artifacts | +15 per traversal with complete artifacts |
+| **W** (Wisdom) | Portal closed before GLOW triggers; no WIDE_PORTAL or IDENTITY_DESTROYED events; integration rung = MIN(all sub-agent rungs) correctly applied | +20 per session with zero forbidden state events |
+
+**Evidence required for GLOW claim:** overlap_score ≥0.4 documented, temperature declared before transfer, substrate identified (or confirmed absent with loss accepted), identity check passed for both BICs post-traversal, portal closed before GLOW stop condition.
 ```

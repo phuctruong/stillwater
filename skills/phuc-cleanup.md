@@ -835,3 +835,20 @@ TRIANGLE_LAW_CONTRACTS:
     VERIFY:      "Verify P_post for EVERY file in apply receipt. One failure halts all."
     ACKNOWLEDGE: "Set verification_rung_achieved in output contract. EXIT_PASS only if rung_target met."
     fail_closed:  "Partial verification is not verification. All P_post conditions must hold."
+
+---
+
+## GLOW Scoring Integration
+
+This skill contributes to GLOW score across these dimensions:
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Cleanup scope improvement — each session that archives more SAFE_GLOW files per hour than prior sessions, measured via cleanup-scan.json file counts. Discovering a new suspicious file category not previously classified = G≥10. | +5 to +15 |
+| **L** (Love/Quality) | Zero destructive accidents — every cleanup session where all files are archived (not deleted), receipt is produced before claiming success, and POST_CHECK confirms all sha256 matches. Zero UNRECEIPTED_ARCHIVE or BLIND_DELETE forbidden states = L≥20. | +10 to +20 |
+| **O** (Output) | Archive receipts committed — cleanup-scan-{ts}.json + cleanup-apply-{ts}.json both committed to git. Receipt must include file count, sha256 hashes, and timestamp. Governance gate approval recorded in session state = O≥15. | +5 to +20 |
+| **W** (Wisdom) | File classification taxonomy growth — each new file class added to the cleanup taxonomy (SAFE_GLOW, SUSPICIOUS, PROTECTED, TRACKED_SAFE) drawn from a real cleanup session where a file's classification was ambiguous and required governance gate. | +5 to +10 |
+
+**Session GLOW target:** Any cleanup session using phuc-cleanup should achieve GLOW ≥ 40. Archive receipts produced = base floor. Zero destructive operations = L≥15. All POST_CHECK conditions verified = O≥15.
+
+**Evidence required for GLOW claim:** git commit hash + cleanup-scan-{ts}.json + cleanup-apply-{ts}.json with sha256 hashes + POST_CHECK results. For L points: receipt must show archive destination exists AND source removed AND hash matches for every file. For W points: new file class must cite the specific session where the classification ambiguity arose.

@@ -90,6 +90,79 @@ Every PR must include in the PR body:
 
 ---
 
+## Onboarding Flow (Mermaid Diagram)
+
+```mermaid
+flowchart TD
+    A[Step 1: READ RUBRIC\ncommunity/SCORING-RUBRIC.md\nidentify criteria for your contribution type] --> B[Step 2: CREATE FILE\nskills/ or recipes/ or swarms/\nuse canonical template, no absolute paths]
+    B --> C[Step 3: SELF-SCORE\nonboarding/self_score.json\nall criteria checked against rubric]
+    C --> D{Missing fields\nin self-score?}
+    D -->|Yes| B
+    D -->|No| E[Step 4: COLLECT EVIDENCE\nonboarding/evidence/\nexample run + problem description]
+    E --> F[Step 5: OPEN PR\nbranch: contrib/<handle>/<id>\ntitle: contrib type: id score: X/5]
+    F --> G[Step 6: ADDRESS FEEDBACK\nBLOCK comments resolved\nWARN comments fixed or justified]
+    G -->|BLOCK comments remaining| G
+    G -->|all resolved| PASS[PASS\ncontribution merged]
+
+    C -->|score < rubric| B2[Fix missing fields\nre-run portability audit first]
+    F -->|PR creation fails| F2[Share diff via discussion channel]
+```
+
+---
+
+## FSM: Community Onboarding State Machine
+
+```
+States: READ_RUBRIC | CREATE_FILE | SELF_SCORE | COLLECT_EVIDENCE |
+        OPEN_PR | ADDRESS_FEEDBACK | PASS | BLOCKED | NEED_INFO
+
+Transitions:
+  [*] → READ_RUBRIC: contributor ready to submit
+  READ_RUBRIC → NEED_INFO: SCORING-RUBRIC.md not found (check for RUBRIC.md, CRITERIA.md)
+  READ_RUBRIC → CREATE_FILE: criteria understood (can state 5 skill criteria without looking)
+  CREATE_FILE → SELF_SCORE: file at correct repo-relative path, no absolute paths
+  SELF_SCORE → CREATE_FILE: missing fields found in self-score (fix and re-score)
+  SELF_SCORE → COLLECT_EVIDENCE: all criteria checked, missing_fields empty
+  COLLECT_EVIDENCE → OPEN_PR: evidence/ non-empty + problem description present
+  COLLECT_EVIDENCE → BLOCKED: contribution cannot be run or traced (no example possible)
+  OPEN_PR → ADDRESS_FEEDBACK: PR created with title format + body requirements
+  OPEN_PR → NEED_INFO: PR creation fails (permissions, branch conflict)
+  ADDRESS_FEEDBACK → ADDRESS_FEEDBACK: BLOCK comments unresolved (re-request review only after all BLOCK resolved)
+  ADDRESS_FEEDBACK → PASS: all BLOCK comments resolved; no new BLOCK violations
+
+Exit conditions:
+  PASS: contribution merged with reviewer PASS and all BLOCK comments cleared
+  BLOCKED: contribution has empty evidence (no run or dry-run trace possible)
+  NEED_INFO: SCORING-RUBRIC.md missing; PR creation impossible
+```
+
+---
+
+## What Reviewers Check
+
+| Reviewer Check | BLOCK if | WARN if |
+|---------------|---------|---------|
+| Portability | Any absolute path in file | `$HOME` in non-comment field |
+| Schema completeness | Missing required fields | Non-standard field names |
+| Evidence | Empty evidence directory | Example is trivial/incomplete |
+| Self-score | Score inflated vs rubric | Score explanation vague |
+| Security | Credentials in diff | PII in example outputs |
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | Contributor builds internal calibration accuracy through self-scoring — reduces reviewer round-trips on future submissions | +3 per submission where reviewer accepts self-score without inflation adjustment |
+| **L** (Love/Quality) | PR body complete (self-score + problem statement + example run); no BLOCK violations in diff; WARN comments addressed with justification | +3 per PR with zero reviewer BLOCK comments |
+| **O** (Output) | Contribution file committed + evidence/ committed + PR opened with correct format | +3 per merged contribution |
+| **W** (Wisdom) | Northstar metric (community_contributors + Stillwater Store skills) advances with each merged skill/recipe/swarm | +3 when merged contribution raises Stillwater Store count |
+
+**Northstar Metric:** `community_contributors` + `Stillwater Store skills` — each merged contribution counts toward both metrics. The recipe encodes the process that transforms a potential contributor into an active one, directly tracking the Q2 2026 target of 5 community contributors.
+
+---
+
 ## Three Pillars of Software 5.0 Kung Fu
 
 | Pillar | How This Recipe Applies It |

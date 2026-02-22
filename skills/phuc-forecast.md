@@ -661,3 +661,20 @@ three_pillars_integration:
     LEAK: "13 lenses = 13 LEAK portals — ensemble coverage emerges from asymmetric trades"
     LEC:  "five-phase loop is LEC — decision science crystallized as a named universal convention"
 ```
+
+---
+
+## GLOW Scoring Integration
+
+This skill contributes to GLOW score across these dimensions:
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Forecast accuracy improvement — each session where a predicted failure mode was caught before it materialized in production. Track: predicted failures that were real vs. total predicted. | +10 to +20 |
+| **L** (Love/Quality) | Decision quality — DECIDE section includes 2+ genuine alternatives with explicit tradeoffs, and VERIFY includes falsifiers (not just positive tests). Full DREAM→VERIFY with falsifiers = L≥15. | +10 to +20 |
+| **O** (Output) | DREAM→VERIFY artifacts committed: forecast_plan.json + forecast_verify.log in evidence/. All five sections complete (DREAM, FORECAST, DECIDE, ACT, VERIFY) with no forbidden state triggered. | +5 to +25 |
+| **W** (Wisdom) | Risk pattern library growth — each new named anti-pattern (Forecast Theater, Confidence Laundering, etc.) drawn from a real decision failure, documented in the skill and reusable across sessions. | +5 to +15 |
+
+**Session GLOW target:** Any planning session using phuc-forecast should achieve GLOW ≥ 55. Completed DREAM→VERIFY loop = base floor. Falsifiers present = L≥15. Forecast artifacts committed = O≥15.
+
+**Evidence required for GLOW claim:** git commit hash + evidence/forecast_plan.json (all five phases filled) + evidence/forecast_verify.log. For L points: VERIFY section must have at least one falsifier ("it would disprove this if..."). For W points: new anti-pattern must cite a real decision failure, not a hypothetical.

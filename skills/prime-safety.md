@@ -696,3 +696,20 @@ three_pillars_integration:
     D_avg = deep (authority: 65537, covers all domains)
     A_rate = universal (every agent in every swarm loads prime-safety first)
     LEC_strength = |C| × D_avg × A_rate → MAXIMUM
+
+---
+
+## GLOW Scoring Integration
+
+This skill contributes to GLOW score across these dimensions:
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Each new stop_condition, anti-pattern, or forbidden state added (additive-only upgrades) that closes a real incident gap | +5 to +15 |
+| **L** (Love/Quality) | Zero safety incidents per session — no credential leaks, no scope violations, no injection breaches. Session with zero incident triggers L≥15. | +5 to +20 |
+| **O** (Output) | Safety audit reports committed to evidence/: commands_run_summary + files_changed + verification_performed + residual_risk | +10 to +25 |
+| **W** (Wisdom) | Threat pattern library growth — each new anti-pattern in section 16 that is drawn from a real incident and generalizable across agents | +5 to +20 |
+
+**Session GLOW target:** Any session loading prime-safety should achieve GLOW ≥ 50 at minimum. Zero incidents = base floor. Safety audit artifact = O≥15.
+
+**Evidence required for GLOW claim:** git commit hash + evidence/ bundle with stop_reason, risk_level, envelope_used, verification_actions, residual_risk. For W points: anti-pattern must reference a real incident (not invented). For L points: session must have zero EXIT_REFUSE events triggered by avoidable inputs.

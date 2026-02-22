@@ -470,3 +470,14 @@ stateDiagram-v2
       The seed is the minimal compression payload: no-float-in-finance + run-twice-idempotency
       + null-semantics-per-field + schema-version + 274177 rung — sufficient to apply the
       discipline without re-reading the full protocol.
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Every pipeline write has idempotency strategy declared and tested by run-twice protocol; idempotency_test.txt shows run_1_checksum == run_2_checksum at rung_274177+ | +25 per pipeline validated at rung_274177+ |
+| **L** (Love/Quality) | Zero float/double types in any financial SUM/AVG/comparison path; ≥95% of nullable fields have documented null_semantic; no silent null drops or coercions to zero | +20 per pipeline review with zero Lane A violations |
+| **O** (Output) | Complete evidence bundle: idempotency_test.txt + financial_type_check.txt + null_analysis.txt + migration_plan.txt + schema_version bump | +15 per pipeline with complete review artifacts |
+| **W** (Wisdom) | Schema changes tracked with migration paths; no breaking schema drift without migration plan; pipeline behavior predictable and auditable for Phuc_Forecast | +20 per session with zero SCHEMA_DRIFT_WITHOUT_MIGRATION or FLOAT_IN_FINANCIAL_AGGREGATION events |
+
+**Evidence required for GLOW claim:** idempotency_test.txt (run_1_checksum == run_2_checksum), financial_type_check.txt (forbidden_types_found=0), null_analysis.txt (null_semantic coverage ≥95%), migration_plan.txt (for schema changes). No FLOAT_IN_FINANCIAL_AGGREGATION, SILENT_NULL_DROP, or SCHEMA_DRIFT_WITHOUT_MIGRATION events.

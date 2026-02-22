@@ -338,3 +338,18 @@ stateDiagram-v2
         and secret scanning in CI started as team choices; they are now Lane A gates."
       emerging_conventions: [conventional_commits_as_standard, branch_protection_as_default,
         secret_scan_in_CI_pipeline, four_eyes_review_for_all_merges]
+
+# ============================================================
+# GLOW SCORING INTEGRATION
+# ============================================================
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Git workflow passes all gates at rung_274177+: conventional commits enforced, branch protection active, non-author review required, secret scan clean | +25 per repository with all gates active at rung_274177+ |
+| **L** (Love/Quality) | No force pushes to main; no secrets in commit history; no WIP commit messages; non-author review for all merges; squash/rebase changelog maintained | +20 per workflow audit with zero discipline violations |
+| **O** (Output) | git_hygiene_report produced (branch_protection status, conventional_commits compliance, secret_scan results, review_coverage); changelog updated | +15 per workflow audit with complete report artifacts |
+| **W** (Wisdom) | Secret scan runs in CI before merge; LFS used for binary assets; no FORCE_PUSH_TO_MAIN or SECRET_IN_COMMIT or WIP_ON_MAIN events | +20 per session with zero forbidden state events and full branch protection confirmed |
+
+**Evidence required for GLOW claim:** git_hygiene_report (branch protection confirmed, conventional commits rate, secret scan result), no FORCE_PUSH_TO_MAIN or SECRET_IN_COMMIT events, non-author review confirmed for merges to main.

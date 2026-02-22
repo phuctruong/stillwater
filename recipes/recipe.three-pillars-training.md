@@ -358,6 +358,86 @@ completing intermediate kata. The belt system mirrors the rung ladder:
 
 ---
 
+## Skill Pack
+
+Load these skills before executing this recipe:
+- `skills/prime-safety.md` (always first)
+- `skills/phuc-orchestration.md` (dispatch protocol for Dragon Rider agent)
+- `skills/phuc-forecast.md` (DREAM→VERIFY framing per step)
+
+Dragon Rider agent: `swarms/dragon-rider.md`
+
+---
+
+## Training Flow (9-Step Mermaid Diagram)
+
+```mermaid
+flowchart TD
+    A[Step 1: ASSESS\nBaseline scoring\nstudent_assessment.json] --> B[Step 2: LEK KATA\nphuc-loop iteration\nPATCH_DIFF + halting cert]
+    B --> C[Step 3: LEK TEST\nAdversarial self-review\nskeptic_review.md]
+    C --> D[Step 4: LEAK SPAR\nSwarm dispatch\nsurplus_proof.json]
+    D --> E[Step 5: LEAK TEST\nIrreducibility proof\nirreducibility_proof.md]
+    E --> F[Step 6: LEC STYLE\nPattern survey\nconvention_card.md]
+    F --> G[Step 7: LEC TEST\nConvention in the wild\ntriangle_check.json]
+    G --> H[Step 8: FINAL ASSESSMENT\nRe-score all pillars\nbelt_progress.json]
+    H --> I[Step 9: DRAGON RIDER\nTeach another\nstudent_belt_progress.json]
+
+    B -->|delta < 2| B
+    C -->|no revision triggered| C
+    D -->|SURPLUS <= 0| D
+    H -->|belt criteria not met| B
+    I -->|student < Yellow Belt| I
+```
+
+---
+
+## FSM: Three Pillars Training State Machine
+
+```
+States: ASSESS | LEK_KATA | LEK_TEST | LEAK_SPAR | LEAK_TEST |
+        LEC_STYLE | LEC_TEST | FINAL_ASSESSMENT | GRADUATION |
+        BLOCKED | NEED_INFO | STEP_REPEAT
+
+Transitions:
+  [*] → ASSESS: student_assessment.json initialized
+  ASSESS → LEK_KATA: all 3 pillars scored with concrete justifications
+  ASSESS → NEED_INFO: any pillar score lacks justification
+  LEK_KATA → LEK_KATA (STEP_REPEAT): score delta < 2
+  LEK_KATA → LEK_TEST: delta >= 2, halting_certificate present
+  LEK_TEST → LEK_TEST (STEP_REPEAT): no critique triggered revision
+  LEK_TEST → LEAK_SPAR: at least 1 critique triggered revision
+  LEAK_SPAR → LEAK_SPAR (STEP_REPEAT): SURPLUS <= 0
+  LEAK_SPAR → LEAK_TEST: SURPLUS > 0, surplus_proof.json present
+  LEAK_TEST → LEC_STYLE: irreducibility_proof.md with formal claim
+  LEC_STYLE → LEC_TEST: convention_card.md + >= 3 implicit adoptions
+  LEC_TEST → FINAL_ASSESSMENT: triangle_check.json passes
+  FINAL_ASSESSMENT → STEP_REPEAT: belt criteria not met → return to weakest pillar
+  FINAL_ASSESSMENT → GRADUATION: all belt criteria met per belt table
+  GRADUATION → [*]: student reaches Yellow Belt minimum
+  ANY → BLOCKED: student refuses to produce artifacts (verbal only)
+  ANY → NEED_INFO: required evidence missing after step
+
+Exit conditions:
+  BLOCKED: Dragon Rider emits EXIT_BLOCKED; dojo does not award certificates for conversations
+  GRADUATION: teacher's own pillar scores must improve through teaching (recursive test)
+  Budget stop: 12 sessions without Yellow Belt → review teaching approach
+```
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | New pillar capability unlocked per step (delta >= 2 on LEK, SURPLUS > 0 on LEAK, convention_card on LEC) | +25 when all three pillars improve |
+| **L** (Love/Quality) | Halting certificates, skeptic_review.md, irreducibility_proof.md, triangle_check.json all present | +25 for complete evidence bundle |
+| **O** (Output) | PATCH_DIFFs committed, surplus_proof.json with numeric values, magic-words/ PR merged | +25 for committed artifacts |
+| **W** (Wisdom) | NORTHSTAR metric (skill_quality_avg) advances; convention adopted by others | +25 when belt is awarded |
+
+**Northstar Metric:** `skill_quality_avg` — each LEK kata that patches a skill file upward raises the aggregate score directly.
+
+---
+
 ## Notes
 
 This recipe is the canonical Three Pillars training protocol. It should be followed

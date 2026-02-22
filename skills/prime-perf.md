@@ -470,3 +470,14 @@ stateDiagram-v2
       Load full file for production performance optimization work.
       The seed is the minimal compression payload: profiler gate + N>=30 + p50/p95/p99 + Decimal regression
       + 274177 rung — sufficient to apply the discipline without re-reading the full protocol.
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Every optimization targets the single highest-leverage hotspot identified by profiler; profiler_output.txt present for every optimization attempt at rung_274177+ | +25 per optimization validated at rung_274177+ |
+| **L** (Love/Quality) | Zero improvement claims without numeric before/after comparison; benchmarks use N≥30 runs with p50/p95/p99 reported; no float in regression arithmetic (Decimal only) | +20 per optimization review with zero Lane A violations |
+| **O** (Output) | Complete evidence bundle: profiler_output.txt + baseline_benchmark.json + after_benchmark.json + regression_report.txt (Decimal arithmetic, percentage change computed) | +15 per optimization with complete evidence artifacts |
+| **W** (Wisdom) | Zero performance regressions shipped beyond 5% threshold without documented intentional tradeoff; system throughput/latency claims are falsifiable Lane A artifacts | +20 per session with regression_report.txt clean and zero CLAIM_IMPROVEMENT_WITHOUT_NUMBERS events |
+
+**Evidence required for GLOW claim:** profiler_output.txt (top-1 hotspot confirmed as optimization target), baseline_benchmark.json + after_benchmark.json (run_count ≥30, p50/p95/p99 present), regression_report.txt (Decimal arithmetic, degradation field vs threshold). No OPTIMIZE_WITHOUT_PROFILING, BENCHMARK_N_LESS_THAN_30, or CLAIM_IMPROVEMENT_WITHOUT_NUMBERS events.

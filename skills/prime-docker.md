@@ -351,3 +351,18 @@ stateDiagram-v2
         and compose secrets-block started as recommendations; they are now Lane A gates."
       emerging_conventions: [non_root_as_default, distroless_or_alpine_final_stage,
         secrets_block_over_environment, healthcheck_mandatory_in_prod]
+
+# ============================================================
+# GLOW SCORING INTEGRATION
+# ============================================================
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Dockerfile passes all gates at rung_274177+: non-root USER confirmed, no secrets in ENV/ARG, pinned digest tags, multi-stage build, HEALTHCHECK present | +25 per Dockerfile validated at rung_274177+ |
+| **L** (Love/Quality) | No root in final stage; no secrets in any layer; no ADD when COPY suffices; no mutable :latest tags in production | +20 per Dockerfile with zero security gate violations |
+| **O** (Output) | dockerfile_review artifact produced; CVE scan results (rung_65537); layer count and image size reported; HEALTHCHECK endpoint documented | +15 per Dockerfile with complete review artifact |
+| **W** (Wisdom) | CVE scan clean (no critical/high vulnerabilities); privilege escalation check passes; secret leak audit clean; no ROOT_IN_FINAL_STAGE or SECRET_IN_LAYER events | +20 per image with zero forbidden state events and CVE scan clean |
+
+**Evidence required for GLOW claim:** dockerfile_review.json (non_root confirmed, no secrets, pinned tags, healthcheck), CVE_scan_results (for rung_65537), no SECRET_IN_LAYER or ROOT_IN_FINAL_STAGE or UNPINNED_BASE_TAG forbidden state events.

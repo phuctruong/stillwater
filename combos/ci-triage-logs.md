@@ -284,6 +284,28 @@ The recipe must output a stable “replay capsule”:
 
 ---
 
+## Skill Pack
+
+Load these skills before executing this combo:
+- `skills/prime-safety.md` (always first — no hallucinated stack traces, fail-closed on ambiguous root cause)
+- `skills/prime-coder.md` (repro-first discipline, deterministic extraction, evidence gate)
+- `skills/phuc-forecast.md` (DREAM→FORECAST for branching ambiguous root causes)
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | CI failure becomes structured knowledge (FailureSignature + replay capsule) that improves the next triage cycle | +5 per run where FailureSignature.json is reused in a subsequent session |
+| **L** (Love/Quality) | Repro-first enforced: TriageVerdict status=PASS only with FailureSignature + LocalizationReport + repro_red evidence | +5 per triage where repro command fails deterministically before fix |
+| **O** (Output) | FailureSignature.json + LocalizationReport.json + replay capsule committed; repro_red.log present | +5 per complete triage bundle |
+| **W** (Wisdom) | Northstar metric (recipe_hit_rate) advances — replay capsule enables future CI failures of the same class to be triaged in minutes not hours | +5 when replay capsule successfully re-triggers failure on second run |
+
+**Northstar Metric:** `recipe_hit_rate` — the replay capsule is the recipe artifact of this combo. When CI fails again with the same signature, the existing capsule (repro command + green gate commands) enables instant reproduction without starting the triage process over.
+
+---
+
 ## Three Pillars Mapping
 
 | Pillar | Element | Role in this Combo |

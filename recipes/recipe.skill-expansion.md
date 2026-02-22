@@ -95,6 +95,76 @@ The 5 criteria should be added in this order when multiple are missing:
 
 ---
 
+## Expansion Flow (Mermaid Diagram)
+
+```mermaid
+flowchart TD
+    A[Step 1: SCORE BASELINE\nbaseline_score.json\nC1-C5 binary pass/fail] --> B{Score == 5?}
+    B -->|Yes| Z[EXIT PASS\nno expansion needed]
+    B -->|No| C[Step 2: ADD FSM\ndraft_fsm.yaml\nSTATE_SET >= 9 states + TRANSITIONS]
+    C --> D[Step 3: ADD FORBIDDEN STATES\ndraft_forbidden_states.yaml\n>= 5 forbidden states]
+    D --> E[Step 4: ADD VERIFICATION LADDER\nVerification_Rung_Target_Policy\n641 or 274177 or 65537]
+    E --> F[Step 5: ADD NULL/ZERO POLICY\nNull_vs_Zero_Policy\nfail_closed_on_null = true]
+    F --> G[Step 6: ADD OUTPUT CONTRACT\nOutput_Contract block\nrequired_on_success + required_on_failure]
+    G --> H[Step 7: RESCORE\nfinal_score.json\nfinal_score.total must == 5]
+    H -->|any criterion regressed| C
+    H -->|total == 5| I[Step 8: EXPANSION REPORT\nexpansion_report.json\nbaseline vs final + steps taken]
+
+    C -->|YAML parse error| C
+    D -->|< 5 natural forbidden states| D
+```
+
+---
+
+## FSM: Skill Expansion State Machine
+
+```
+States: SCORE_BASELINE | ADD_FSM | ADD_FORBIDDEN_STATES |
+        ADD_VERIFICATION_LADDER | ADD_NULL_ZERO_POLICY |
+        ADD_OUTPUT_CONTRACT | RESCORE | EXPANSION_REPORT |
+        PASS | BLOCKED | NEED_INFO
+
+Transitions:
+  [*] → SCORE_BASELINE: target skill file provided
+  SCORE_BASELINE → PASS: total == 5 (idempotent exit)
+  SCORE_BASELINE → ADD_FSM: C1 missing
+  SCORE_BASELINE → ADD_FORBIDDEN_STATES: C1 present, C2 missing
+  SCORE_BASELINE → ADD_VERIFICATION_LADDER: C1+C2 present, C3 missing
+  SCORE_BASELINE → ADD_NULL_ZERO_POLICY: C1+C2+C3 present, C4 missing
+  SCORE_BASELINE → ADD_OUTPUT_CONTRACT: C1-C4 present, C5 missing
+  ADD_FSM → ADD_FSM (RETRY): YAML parse error after insertion
+  ADD_FSM → ADD_FORBIDDEN_STATES: STATE_SET >= 9, TRANSITIONS complete, no orphan states
+  ADD_FORBIDDEN_STATES → ADD_FORBIDDEN_STATES (RETRY): fewer than 5 natural states
+  ADD_FORBIDDEN_STATES → ADD_VERIFICATION_LADDER: >= 5 forbidden states with names + descriptions
+  ADD_VERIFICATION_LADDER → ADD_NULL_ZERO_POLICY: rung_target declared with >= 3 requirements
+  ADD_NULL_ZERO_POLICY → ADD_OUTPUT_CONTRACT: fail_closed_on_null = true
+  ADD_OUTPUT_CONTRACT → RESCORE: block added with required_on_success + required_on_failure
+  RESCORE → BLOCKED: any criterion regressed from baseline
+  RESCORE → ADD_FSM: total < 5 (re-check missing criterion)
+  RESCORE → EXPANSION_REPORT: total == 5, no regressions
+  EXPANSION_REPORT → PASS: expansion_report.json well-formed
+
+Exit conditions:
+  PASS: final_score.total == 5, improvement == (5 - baseline), no regressions
+  BLOCKED: criterion regressed (expansion was not additive)
+  NEED_INFO: skill file inaccessible or scoring tool unavailable
+```
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | Skill moves from partial (< 5) to full 5/5 completeness; FSM + forbidden states + output contract now present | +5 per successful expansion |
+| **L** (Love/Quality) | No regressions introduced; orphan states eliminated; null policy enforced with fail-closed rule | +5 when BLOCKED states never entered |
+| **O** (Output) | expansion_report.json with baseline, final_score, steps_taken committed; skill file updated | +5 per committed expansion |
+| **W** (Wisdom) | Northstar metric (skill_quality_avg) rises directly as skill scores improve from < 5 to 5/5 | +5 per confirmed re-audit pass |
+
+**Northstar Metric:** `skill_quality_avg` — each skill expanded from below 5/5 to exactly 5/5 raises the average score across the corpus. With 9 skills needing expansion (motivated the recipe), one full expansion session raises the average by approximately 0.5 points.
+
+---
+
 ## Three Pillars of Software 5.0 Kung Fu
 
 | Pillar | How This Recipe Applies It |

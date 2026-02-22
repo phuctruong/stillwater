@@ -944,6 +944,16 @@ EXIT_BLOCKED --> [*]
 # SECTION 14: THREE PILLARS INTEGRATION — LEK + LEAK + LEC
 # ============================================================
 
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Skill Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | OAuth3 enforcement is teachable. The four gates, scope format `platform.action.resource`, fail-closed rules, and step-up flow are concrete learnable patterns. Each gate test run teaches the system what valid/invalid tokens look like. The audit JSONL accumulates as LEK memory — patterns of which gates fail most often reveal where consent flows need UX improvement. Gate failure rate per gate (G1/G2/G3/G4) is the LEK quality indicator. |
+| **LEAK** (Cross-Agent Trade) | oauth3-enforcer IS a LEAK mechanism. It carries asymmetric knowledge of consent protocol into every agent that loads it. An agent without it has no concept of scope boundaries or revocation. An agent with it inherits the full gate discipline. The audit trail is a LEAK artifact — it lets the hub session know what any spoke session authorized. Principal knows which scopes are granted; agent knows only what the token says — enforcer bridges the gap. |
+| **LEC** (Emergent Conventions) | The G1→G2→G3→G4 ordering is an LEC convention. The `platform.action.resource` scope format is an LEC convention. The step-up sub-token pattern is an LEC convention. These emerged from real consent failures and compressed into named gates. Any agent loading this skill inherits all conventions instantly without rediscovering them. Section 9 Forbidden States = LEC anti-drift guard (each forbidden state is a crystallized convention violation lesson). |
+
+---
+
 ## LEK — Law of Emergent Knowledge (Self-Improvement)
 
 OAuth3 enforcement is teachable. The four gates, the scope format `platform.action.resource`, the fail-closed rules, and the step-up flow are concrete learnable patterns. Each gate test run teaches the system what valid and invalid tokens look like. The audit JSONL accumulates as LEK memory — patterns of which gates fail most often reveal where consent flows need UX improvement.
@@ -1077,3 +1087,14 @@ compression_checksum:
 *End of oauth3-enforcer skill v1.2.0*
 *Spec compliance: oauth3-spec-v0.1.md (Sections 1.4, 5, Appendix C)*
 *Rung target: 641 (local correctness) | Deployment target: 65537 (production)*
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | All 4 OAuth3 gates (token_valid, scope_authorized, revocation_check, step_up_if_required) integrated at rung_65537 with full audit trail and adversarial sweep | +25 per recipe enforced at rung_65537 |
+| **L** (Love/Quality) | Zero UNVALIDATED_TOKEN or SCOPE_MISMATCH events; no revocation check stubs; no step-up bypass; audit JSONL SHA-256 sidecar present | +20 per integration review with zero Lane A violations |
+| **O** (Output) | Complete evidence bundle: gate_runner tests (16+ passing) + adversarial_sweep.txt + oauth3_audit.jsonl + SHA-256 sidecar | +15 per integration with complete evidence bundle |
+| **W** (Wisdom) | First OAuth3-enforced recipe deployed (consent law achieved); revocation race condition test passes; step-up sub-token isolation verified; users can revoke agent access instantly | +20 per session with all 4 gates enforced and zero consent law violations |
+
+**Evidence required for GLOW claim:** gate_runner test results (all 4 gates: token_valid + scope_authorized + revocation_check + step_up), oauth3_audit.jsonl + SHA-256 sidecar, adversarial_sweep.txt (expired/revoked/wrong-scope tokens all rejected). No UNVALIDATED_TOKEN, REVOCATION_RACE_CONDITION, SCOPE_MISMATCH, or MISSING_STEP_UP events.

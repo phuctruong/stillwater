@@ -363,3 +363,18 @@ stateDiagram-v2
         and active-voice instructions started as style choices; they are now Lane A gates."
       emerging_conventions: [dated_tutorial_as_standard, code_verification_in_CI,
         active_voice_in_procedures_as_law, alt_text_for_accessibility]
+
+# ============================================================
+# GLOW SCORING INTEGRATION
+# ============================================================
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Documentation passes all gates at rung_274177+: code blocks verified as runnable, all links valid (curl check), doc type classified (Diataxis), freshness date on tutorials | +25 per doc set validated at rung_274177+ |
+| **L** (Love/Quality) | No passive voice in numbered steps; no unverified code examples; no jargon without definition; all tutorials dated with version info | +20 per doc review with zero Lane A violations |
+| **O** (Output) | docs_review.json produced with: code_block_verification results, link_check results, passive_voice_violations, doc_type classification per section | +15 per doc with complete review artifacts |
+| **W** (Wisdom) | CI link check catches broken links before merge; code verification in CI catches stale examples; no UNVERIFIED_CODE or STALE_TUTORIAL events | +20 per session with docs CI passing and zero forbidden state events |
+
+**Evidence required for GLOW claim:** docs_review.json (code_block_verification, link_check, passive_voice count), no UNVERIFIED_CODE_EXAMPLE or STALE_TUTORIAL or BROKEN_LINK events, doc type classification (tutorial/how-to/reference/explanation) applied.

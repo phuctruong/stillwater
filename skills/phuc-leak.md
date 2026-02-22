@@ -910,6 +910,53 @@ INTEGRATION: Load: prime-safety (1) + phuc-portals (2) + phuc-loop (3) + phuc-le
 
 ---
 
+## Northstar Alignment
+
+```yaml
+NORTHSTAR_ALIGNMENT:
+  primary_northstar: "Phuc Forecast (DREAM → FORECAST → DECIDE → ACT → VERIFY)"
+  secondary_northstar: "Max Love (benefit-maximizing, harm-minimizing)"
+
+  phuc_forecast_mapping:
+    DREAM:    "What knowledge asymmetry exists between the two agents? What surplus is the expected output?"
+    FORECAST: "What failure modes can corrupt the trade? (SYMMETRIC_TRADE, SUMMARY_AS_TRADE, CONVENTION_DESTRUCTION)"
+    DECIDE:   "Which portal temperature best preserves asymmetry while enabling exchange? What rung target?"
+    ACT:      "Execute 5-step Portal Protocol: IDENTIFY_ASYMMETRY → SET_PORTAL → HANDSHAKE → TRADE → VERIFY_SURPLUS"
+    VERIFY:   "surplus_report.json with surplus_value > 0. Convention preservation confirmed. Both agents enriched."
+
+  max_love_meaning:
+    statement: >
+      Max Love for a LEAK trade = maximizing genuine knowledge surplus (not just data transfer) +
+      preserving both agents' existing conventions (never destroys knowledge) +
+      honest failure when no real asymmetry exists (EXIT_NO_SURPLUS > fake surplus).
+    manifestations:
+      - "Typed artifact portals = Max Love for the trade (no information dumping)"
+      - "Bayesian Handshake = Max Love for honesty (measure overlap before trading)"
+      - "CONVENTION_DESTRUCTION = Max Love violation (trades cannot delete existing knowledge)"
+      - "EXIT_NO_SURPLUS = Max Love for integrity (false surplus worse than no trade)"
+
+  forbidden_northstar_violations:
+    - SYMMETRIC_TRADE: "Trading identical knowledge = zero surplus = Phuc_Forecast DREAM not met"
+    - CONVENTION_DESTRUCTION: "Destroying existing conventions = Max_Love violation + negative surplus"
+    - SUMMARY_AS_TRADE: "Trading summaries instead of artifacts = unverifiable = Phuc_Forecast VERIFY fails"
+    - FAKE_ASYMMETRY: "Pretending asymmetry exists = Phuc_Forecast integrity violation"
+```
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Asymmetry discovery — each session where IDENTIFY_ASYMMETRY finds genuine new asymmetry between agent pairs (not previously documented), with asymmetry_map.json committed. Discovering a new asymmetry type (Skill/Convention/Temporal/Resolution) = G≥20. | +10 to +25 |
+| **L** (Love/Quality) | Trade integrity — every LEAK trade where convention_preservation_check.json confirms zero CONVENTION_DESTRUCTION events AND surplus_report.json shows surplus_value > 0 (not just "surplus claimed"). Sessions where EXIT_NO_SURPLUS is correctly issued (honest failure) = L≥15. | +10 to +20 |
+| **O** (Output) | LEAK artifacts committed — all four required artifacts present: asymmetry_map.json + trade_artifacts.json (actual evidence bundles, not summaries) + surplus_report.json with numeric surplus_value + convention_preservation_check.json. All four = O=25. | +5 to +25 |
+| **W** (Wisdom) | Asymmetry pattern library growth — each session where a new swarm design principle is extracted from the LEAK trade and added to the ecosystem pattern library (e.g., "Coder+Mathematician asymmetry produces verified proofs; Scout+Forecaster asymmetry produces grounded risk analysis"). Pattern cited in NORTHSTAR. | +5 to +20 |
+
+**Session GLOW target:** Any LEAK trade session should achieve GLOW ≥ 50. Asymmetry identified + artifacts traded = base floor. surplus_value > 0 numerically measured = L≥15, O≥15. Convention preservation confirmed = W≥10.
+
+**Evidence required for GLOW claim:** git commit hash + all four LEAK artifacts (asymmetry_map.json, trade_artifacts.json, surplus_report.json with numeric surplus_value, convention_preservation_check.json). For G points: evidence that asymmetry was NEW (not previously documented). For W points: pattern library entry with specific agent pair and surplus type identified.
+
+---
+
 *phuc-leak v1.0.0 — Law of Emergent Asymmetric Knowledge.*
 *Layers on prime-safety + phuc-portals + phuc-loop. Stricter always wins.*
 *LEAK = ASYMMETRY × COMPRESSION × PORTAL × SURPLUS.*

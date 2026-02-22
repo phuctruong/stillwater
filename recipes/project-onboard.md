@@ -406,5 +406,91 @@ stillwater verify --project-structure
 
 ---
 
+---
+
+## Skill Pack
+
+Load these skills before executing this recipe:
+- `skills/prime-safety.md` (always first — write_default: repo worktree only)
+- `skills/prime-coder.md` (for generating lean CLAUDE.md and verifying structure)
+- `skills/phuc-orchestration.md` (for dispatch discipline when sub-agents needed)
+
+---
+
+## Onboarding Flow (Mermaid Diagram)
+
+```mermaid
+flowchart TD
+    A[Step 1: COPY CORE SKILLS\nskills/ from stillwater package\nprime-safety + prime-coder + phuc-orchestration] --> B[Step 2: CREATE RIPPLE\nripples/project.md\ndomain + rung_target + key_constraints]
+    B --> C[Step 3: GENERATE LEAN CLAUDE.md\nstillwater init or manual\n60-100 lines with QUICK LOAD blocks]
+    C --> D[Step 4: MOVE PROJECT IDENTITY\nfrom CLAUDE.md → README.md\nmission + architecture + phase tracker]
+    D --> E[Step 5: CREATE NORTHSTAR.md\nnorthstar metric + model strategy\nalignment rules]
+    E --> F[Step 6: VERIFY STRUCTURE\nwc -l CLAUDE.md < 150\nls skills/ ripples/ README.md NORTHSTAR.md]
+
+    F -->|CLAUDE.md > 150 lines| C
+    F -->|skills/ missing| A
+    F -->|ripples/ missing| B
+    F -->|NORTHSTAR.md missing| E
+    F -->|all checks pass| PASS[PASS\nstillwater verify --project-structure]
+```
+
+---
+
+## FSM: Project Onboarding State Machine
+
+```
+States: COPY_SKILLS | CREATE_RIPPLE | GENERATE_CLAUDE_MD |
+        MOVE_IDENTITY | CREATE_NORTHSTAR | VERIFY | PASS | BLOCKED | NEED_INFO
+
+Transitions:
+  [*] → COPY_SKILLS: project directory identified
+  COPY_SKILLS → NEED_INFO: stillwater package not installed and repo not found
+  COPY_SKILLS → CREATE_RIPPLE: prime-safety.md + prime-coder.md in skills/
+  CREATE_RIPPLE → GENERATE_CLAUDE_MD: ripples/project.md with rung_target + domain + key_constraints
+  GENERATE_CLAUDE_MD → MOVE_IDENTITY: CLAUDE.md <= 150 lines with QUICK LOAD blocks
+  GENERATE_CLAUDE_MD → BLOCKED: stillwater init fails and manual CLAUDE.md > 300 lines
+  MOVE_IDENTITY → CREATE_NORTHSTAR: README.md has mission + architecture + quick start
+  CREATE_NORTHSTAR → VERIFY: NORTHSTAR.md with metric + model strategy + rung target
+  VERIFY → COPY_SKILLS: skills/ directory empty
+  VERIFY → CREATE_RIPPLE: ripples/ directory or ripples/project.md missing
+  VERIFY → GENERATE_CLAUDE_MD: CLAUDE.md > 150 lines
+  VERIFY → CREATE_NORTHSTAR: NORTHSTAR.md missing
+  VERIFY → PASS: all 9 checklist items pass
+
+  Anti-pattern transitions (blocked):
+  [*] → BLOCKED: attempting to create project-specific content in CLAUDE.md directly
+  ANY → BLOCKED: writing absolute paths in ripples/project.md
+
+Exit conditions:
+  PASS: wc -l CLAUDE.md < 150, skills/ has prime-safety + prime-coder, NORTHSTAR.md exists
+  BLOCKED: CLAUDE.md cannot be reduced without destroying essential project-specific constraints
+  NEED_INFO: stillwater not installed; project root ambiguous
+```
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | Project gains lean CLAUDE.md + skills/ directory enabling proper sub-agent dispatch; context available for actual work increases | +5 when CLAUDE.md reduces from > 300 lines to < 150 |
+| **L** (Love/Quality) | NORTHSTAR.md present with falsifiable metric; README.md is the canonical project reference; ripple file has concrete key_constraints | +5 when all 9 verification checklist items pass |
+| **O** (Output) | skills/ directory with core skill files; ripples/project.md; lean CLAUDE.md committed | +5 per successfully onboarded project |
+| **W** (Wisdom) | Northstar metric (recipe_hit_rate) advances — stillwater sync enables automatic skill updates across all onboarded projects | +5 when `stillwater sync` can propagate updates without drift |
+
+**Northstar Metric:** `recipe_hit_rate` — every project onboarded with the correct structure can receive skill updates via `stillwater sync`. Correct onboarding prevents skill drift, which is one of the primary causes of recipe replay failure (a recipe that assumes a certain skill version fails if the skill has drifted).
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Recipe Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | The ripple file + lean CLAUDE.md pattern enables `stillwater sync` — each update to Stillwater's core skills propagates automatically to all onboarded projects without manual copy-paste, creating a self-improving skill corpus across the ecosystem |
+| **LEAK** (Cross-Agent Trade) | Lean CLAUDE.md + skills/ directory enables clean sub-agent dispatch: main session loads QUICK LOAD summaries, sub-agents receive full skill content from skills/ — knowledge traded asymmetrically between session types without context bloat |
+| **LEC** (Emergent Conventions) | The lean CLAUDE.md + ripple + README separation becomes a universal project structure convention — any agent that inspects a Stillwater-onboarded project can immediately locate the rung target, key constraints, and full skill files without reading monolithic documentation dumps |
+
+---
+
 *Recipe: project-onboard | v1.0.0 | Stillwater v1.5.0*
 *The right structure makes skills load faster, context rot impossible, and drift automatic to detect.*

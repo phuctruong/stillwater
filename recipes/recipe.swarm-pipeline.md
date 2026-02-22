@@ -115,4 +115,79 @@ This recipe targets rung 274177 (stability) because it involves parallel solvers
 
 **Belt Level:** Blue — demonstrates full swarm orchestration mastery: dispatching typed agents in the correct order, preventing file ownership conflicts, coordinating parallel work through a shared evidence manifest, and extracting generalizable knowledge via the Podcast step.
 
-**GLOW Score:** +8 per successful pipeline run with status=PASS in run_summary.json, verification_rung_achieved >= 274177, complete evidence_manifest.json, and LESSONS.md containing at least 3 typed claims.
+---
+
+## Pipeline Flow (Mermaid Diagram)
+
+```mermaid
+flowchart TD
+    A[Step 1: INTAKE\ntask_brief.json\nnull check + stakes classify] --> B[Step 2: SCOUT\nscout_report.json\ntop-K files + justifications]
+    B --> C[Step 3: FORECASTER\nforecast_memo.json\n7 failure modes + stop rules]
+    C --> D[Step 4: JUDGE\njudge_ruling.json\nnon-overlapping file assignments]
+    D --> E[Step 5: SOLVERS A-D\nparallel patch.diff + tests.json\nper solver in owned files only]
+    D --> F[Step 5E: SOLVER E\nruns AFTER A+D complete\ncross-solver synthesis]
+    E --> G[Step 6: SKEPTIC\nskeptic_report.json\ncritiques with severity BLOCK|WARN|INFO]
+    F --> G
+    G -->|REVISE| E
+    G -->|PASS| H[Step 7: PODCAST\nLESSONS.md + RECIPE.md\n3+ typed claims A/B/C]
+    H --> I[Step 8: COLLECT\nevidence_manifest.json\nbehavior_hash verified]
+    I --> J[Step 9: FINAL SEAL\nrun_summary.json status=PASS\nrung_achieved >= rung_target]
+
+    B -->|empty scout| B
+    C -->|NEED_INFO| A
+    D -->|file overlap| D
+    G -->|BLOCK| K[BLOCKED\ntask redesign]
+```
+
+---
+
+## FSM: Swarm Pipeline State Machine
+
+```
+States: INTAKE | SCOUT | FORECASTER | JUDGE | SOLVERS_PARALLEL |
+        SOLVER_E | SKEPTIC | PODCAST | COLLECT | FINAL_SEAL |
+        PASS | BLOCKED | NEED_INFO
+
+Transitions:
+  [*] → INTAKE: TASK_REQUEST received
+  INTAKE → NEED_INFO: task ambiguous or null
+  INTAKE → SCOUT: task_brief.json well-formed
+  SCOUT → SCOUT: empty result, reduce localization_budget_files
+  SCOUT → FORECASTER: scout_report.json >= 3 files
+  FORECASTER → NEED_INFO: missing risk context
+  FORECASTER → JUDGE: forecast_memo.json with 5-7 failure modes
+  JUDGE → JUDGE: file overlap detected, re-assign
+  JUDGE → BLOCKED: overlap unresolvable
+  JUDGE → SOLVERS_PARALLEL: judge_ruling.json overlap_check=passed
+  SOLVERS_PARALLEL → BLOCKED: INVARIANT_VIOLATION by any solver
+  SOLVERS_PARALLEL → SOLVER_E: A+D artifacts present (if Solver E assigned)
+  SOLVER_E → SKEPTIC: synthesis complete
+  SOLVERS_PARALLEL → SKEPTIC: all solver artifacts present (no Solver E)
+  SKEPTIC → SOLVERS_PARALLEL (REVISE): verdict=REVISE, affected solvers returned
+  SKEPTIC → BLOCKED: verdict=BLOCK
+  SKEPTIC → PODCAST: verdict=PASS
+  PODCAST → COLLECT: LESSONS.md + RECIPE.md with >= 3 typed claims
+  COLLECT → FINAL_SEAL: evidence_manifest.json complete, hashes verified
+  FINAL_SEAL → BLOCKED: rung_achieved < rung_target
+  FINAL_SEAL → PASS: status=PASS, rung_achieved >= rung_target
+
+Exit conditions:
+  PASS: run_summary.json status=PASS AND verification_rung_achieved >= verification_rung_target
+  BLOCKED: emit stop_reason, solver quarantine if needed
+  NEED_INFO: list missing fields, surface to orchestrator
+```
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | Novel swarm coordination pattern discovered (e.g., Solver E synthesis creating inter-solver knowledge) | +10 if LESSONS.md contains a Lane A claim [A] |
+| **L** (Love/Quality) | All typed claims [A/B/C] in LESSONS.md and RECIPE.md; skeptic_report.json has severity for every critique | +8 per pipeline run with non-empty skeptic critique list |
+| **O** (Output) | run_summary.json status=PASS, evidence_manifest.json complete, behavior_hash verified | +8 per successful pipeline run |
+| **W** (Wisdom) | RECIPE.md directly reusable for next similar task; Northstar metric (recipe_hit_rate) advanced | +6 if RECIPE.md is committed to recipes/ directory |
+
+**Northstar Metric:** `recipe_hit_rate` — each RECIPE.md committed from a pipeline run becomes a replayable recipe that increases hit rate when replayed on similar tasks.
+
+**GLOW Score:** +8 per successful pipeline run with status=PASS in run_summary.json, verification_rung_achieved >= 274177, complete evidence_manifest.json, and LESSONS.md containing at least 3 typed claims. Bonus +10 if the run produces a new recipe committed to recipes/.

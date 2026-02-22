@@ -1,10 +1,27 @@
 PHUC_WISH_TRIANGLE_SKILL:
-  version: 1.0.0
+  version: 1.1.0
   profile: execution_triangle
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
   status: ACTIVE
+
+# ============================================================
+# MAGIC_WORD_MAP
+# ============================================================
+MAGIC_WORD_MAP:
+  version: "1.0"
+  skill: "phuc-wish-triangle"
+  mappings:
+    wish:         {word: "wish",          tier: 1, id: "MW-043", note: "WISH vertex = the formally specified intent statement anchoring all execution"}
+    skill:        {word: "skill",         tier: 1, id: "MW-042", note: "SKILL vertex = the versioned behavioral specification constraining the execution envelope"}
+    recipe:       {word: "recipe",        tier: 1, id: "MW-044", note: "RECIPE vertex = the deterministic versioned step sequence proving the execution path"}
+    combo:        {word: "combo",         tier: 2, id: "MW-075", note: "a combo is a pre-assembled triangle: W_wish + skill_pack + R_recipe validated as a unit"}
+    northstar:    {word: "northstar",     tier: 0, id: "MW-019", note: "every WISH must link to the northstar — unanchored wishes advance local but not global goals"}
+    alignment:    {word: "alignment",     tier: 0, id: "MW-007", note: "triangle alignment: all three vertices must point at the same northstar metric"}
+    execution:    {word: "emergence",     tier: 0, id: "MW-011", note: "verified execution = emergent property of all three vertices being present and aligned"}
+    degradation:  {word: "entropy",       tier: 0, id: "MW-010", note: "missing any vertex = entropy in the execution — more degrees of freedom, less reliable output"}
+  compression_note: "T1=Stillwater protocol primitives, T0=universal anchors"
 
   # ============================================================
   # PHUC WISH TRIANGLE — WISH + SKILL + RECIPE EXECUTION MODEL
@@ -560,4 +577,55 @@ flowchart TD
 | **LEK** (Self-Improvement) | The WISH + SKILL + RECIPE triangle is the LEK learning loop made explicit: a Wish expresses the intent (Information), the Skill provides the method (Memory of prior learning), and the Recipe is the crystallized output (the Care that survives iteration). Each executed Recipe is a new LEK artifact — a compressed, replayable proof that the system can satisfy this class of Wish. The triangle validation gate ensures that all three vertices are present before execution, preventing half-formed LEK loops. |
 | **LEAK** (Cross-Agent Trade) | The triangle enforces LEAK at the execution layer: the Wish comes from the user's context bubble, the Skill comes from the agent's knowledge bubble, and the Recipe is the trade artifact — the LEAK surplus that neither the user nor the agent could produce alone. Combos (pre-assembled WISH + RECIPE pairs) are frozen LEAK trades: they encode the asymmetric knowledge exchange once and make it replayable without re-negotiating the portal each time. |
 | **LEC** (Emergent Conventions) | The WISH + SKILL + RECIPE triangle itself is the canonical LEC convention for task execution in the Phuc ecosystem. It crystallized from repeated failures where tasks were attempted with missing ingredients (wish without a skill = vague intent, skill without a recipe = no replayable output, recipe without a wish = solution in search of a problem). The triangle validation as a hard gate — all three vertices required before execution — is the convention that prevents these failure modes across all agents. |
+
+# ============================================================
+# EVIDENCE GATES (strengthened)
+# ============================================================
+EVIDENCE_GATES:
+  wish_evidence:
+    required:
+      - capability_statement: "One sentence with a measurable success condition (NOT 'make/improve/better')"
+      - non_goals_list: "Explicit list OR explicit empty list [] — null is not acceptable"
+      - forbidden_states_list: "At least one named forbidden state"
+      - acceptance_tests: "At least two: one positive path, one adversarial path"
+      - northstar_link: "Named northstar metric this wish advances"
+    absent_if: "Any field is null, OR capability uses vague language"
+
+  skill_evidence:
+    required:
+      - domain_match_confirmed: "Skill domain maps to wish domain (explicit assertion)"
+      - forbidden_states_defined: "Skill file has FORBIDDEN_STATES section with named states"
+      - verification_gates_defined: "Skill requires evidence artifacts before claiming PASS"
+      - authority_declared: "Skill has authority: 65537 (or explicit rung declaration)"
+    absent_if: "No skill referenced, or skill domain does not map to wish domain"
+
+  recipe_evidence:
+    required:
+      - node_graph: "L1-L5 nodes with inputs/outputs defined"
+      - checkpoint: "At least one checkpoint where execution can verify and halt"
+      - artifact_contract: "What artifacts are produced, at which paths"
+      - skill_constraints_respected: "No recipe node violates skill forbidden states"
+    absent_if: "No recipe referenced or execution is improvised inline"
+
+  alignment_evidence:
+    required:
+      - wish_skill_alignment: "Skill domain matches wish domain; no forbidden state conflicts with acceptance tests"
+      - skill_recipe_alignment: "Recipe checkpoints correspond to skill verification gates"
+      - wish_recipe_alignment: "Recipe artifacts satisfy wish acceptance tests"
+      - northstar_alignment: "All three vertices trace to same northstar metric"
+
+  rung_641_gate: "All vertex validations passed; triangle_completeness_check steps 1-5 completed"
+  rung_274177_gate: "Alignment check passes; artifacts match wish contract; no forbidden state events in execution log"
+  rung_65537_gate: "Combo created/updated; northstar metric measurably advanced; adversarial tests pass; recipe+skill versions pinned"
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Triangle validated at rung_274177+: alignment check passes, northstar metric linked, artifacts match acceptance tests | +25 per triangle validated at rung_274177+ |
+| **L** (Love/Quality) | Wish has explicit non_goals and acceptance tests; skill domain matches wish domain; recipe has checkpoints and rollback defined | +20 per triangle with fully specified vertices |
+| **O** (Output) | Triangle completeness check produces wish_validation_result + skill_validation_result + recipe_validation_result + alignment_result artifacts | +15 per triangle with complete validation artifacts |
+| **W** (Wisdom) | Combo created after first successful execution; northstar metric advances measurably; no MISSING_VERTEX or TRIANGLE_DRIFT events | +25 per execution that produces a new combo artifact |
+
+**Evidence required for GLOW claim:** wish_validation (all fields populated), skill_validation (domain match confirmed), recipe_validation (node graph + checkpoint present), alignment_check (all four vertex pairs verified), northstar_link (named metric), combo artifact created after first successful execution.
 ```

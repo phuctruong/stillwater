@@ -95,6 +95,70 @@ Treating null as zero (or `[]` as absent) creates hidden state bugs where an emp
 
 ---
 
+## Audit Flow (Mermaid Diagram — SCAN→CLASSIFY→FLAG→FIX→VERIFY)
+
+```mermaid
+flowchart TD
+    A[SCAN: Step 1\nImplicit None defaults\nnull_audit_implicit_defaults.txt] --> B[SCAN: Step 2\nlen without null guard\nnull_audit_len_comparisons.txt]
+    B --> C[SCAN: Step 3\n== 0 masking null\nnull_audit_zero_comparisons.txt]
+    C --> D[SCAN: Step 4\nEmpty string coercion\nnull_audit_empty_string.txt]
+    D --> E[SCAN: Step 5\nYAML [] vs null\nnull_audit_yaml_list_null.txt]
+    E --> F[CLASSIFY: Step 6\nnull_checks.json\nBLOCK | WARN | INFO per hit]
+    F --> FLAG[FLAG: BLOCK violations listed\nnull_audit_summary.txt\nwith fix suggestions]
+    FLAG --> FIX[FIX: Apply fix suggestions\nfor all BLOCK violations]
+    FIX --> VERIFY[VERIFY: Re-sweep\nconfirm zero new coercions\nclean re-run of all 5 sweeps]
+
+    A -->|grep unavailable| A2[FALLBACK: Read + manual scan]
+    F -->|duplicate file+line| F2[DEDUP: keep highest severity]
+    VERIFY -->|new coercions found| FIX
+    VERIFY -->|zero BLOCK after fix| PASS[PASS\nnull_checks.json all BLOCKs resolved]
+```
+
+---
+
+## FSM: Null/Zero Audit State Machine
+
+```
+States: SCAN_IMPLICIT | SCAN_LEN | SCAN_ZERO | SCAN_EMPTY_STRING |
+        SCAN_YAML | CLASSIFY | FLAG | FIX | VERIFY | PASS | BLOCKED
+
+Transitions:
+  [*] → SCAN_IMPLICIT: audit invoked on repo
+  SCAN_IMPLICIT → SCAN_LEN: null_audit_implicit_defaults.txt written (may be empty — valid)
+  SCAN_LEN → SCAN_ZERO: null_audit_len_comparisons.txt written
+  SCAN_ZERO → SCAN_EMPTY_STRING: null_audit_zero_comparisons.txt written
+  SCAN_EMPTY_STRING → SCAN_YAML: null_audit_empty_string.txt written
+  SCAN_YAML → CLASSIFY: null_audit_yaml_list_null.txt written
+  CLASSIFY → FLAG: null_checks.json with BLOCK|WARN|INFO per hit, deduped by severity
+  FLAG → PASS: zero BLOCK violations (clean audit)
+  FLAG → FIX: BLOCK violations present with fix suggestions
+  FIX → VERIFY: fix suggestions applied to all BLOCK items
+  VERIFY → FIX: new coercions introduced by fix (re-check BLOCK list)
+  VERIFY → PASS: zero BLOCK violations after fix, re-sweep clean
+
+  Forbidden state transitions:
+  ANY → BLOCKED: not used (audit never blocks on its own; only FIX can introduce new violations)
+
+Exit conditions:
+  PASS: python3 verification script exits 0; all BLOCK violations resolved
+  BLOCKED: FIX introduces new BLOCK coercions and cannot converge after 3 iterations
+```
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | New null/zero coercion pattern discovered in one sweep (e.g., novel YAML [] pattern) added to grep pattern set for future runs | +4 per new pattern type discovered |
+| **L** (Love/Quality) | All BLOCK violations have concrete fix suggestions; no severity downgrades without explicit justification; YAML skill files get special attention | +4 when all BLOCK fixes are concrete (no MANUAL_REVIEW_REQUIRED) |
+| **O** (Output) | null_checks.json emitted with all hits; null_audit_summary.txt with BLOCK violation list; re-sweep clean | +4 per complete audit run with zero BLOCKs after fix |
+| **W** (Wisdom) | Northstar metric (skill_quality_avg) advances as [] vs null confusion in skill files is eliminated | +4 when YAML skill file BLOCKs are resolved |
+
+**Northstar Metric:** `skill_quality_avg` — null/zero coercions in skill YAML (the `forbidden_states: []` pattern) directly degrade skill correctness. Eliminating BLOCK-level coercions in skill files raises the quality score for each affected file.
+
+---
+
 ## Three Pillars of Software 5.0 Kung Fu
 
 | Pillar | How This Recipe Applies It |

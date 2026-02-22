@@ -939,7 +939,28 @@ companion_skills:
 
 ---
 
-## 14) Quick Reference (Cheat Sheet) [signal, compression]
+## 14) Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Skill Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | The backward chain is the LEK learning loop for strategic planning. Each run from Northstar → current state reveals gaps and broken links that were not visible from a forward planning perspective. The VALIDATE phase checks every link — gaps found and bridged are LEK improvements to the plan's quality. When the same chain is re-run after milestones are achieved, the chain shortens (fewer levels to bridge), which is measurable evidence that the system is improving toward its Northstar. |
+| **LEAK** (Cross-Agent Trade) | The northstar-reverse-plan.json artifact is a LEAK trade: it encodes the full strategic path from current state to Northstar in a form that any agent can consume without re-reading the full NORTHSTAR.md or session history. A Planner agent running northstar-reverse produces asymmetric knowledge — the backward chain that a forward-planning agent cannot produce efficiently. Every dispatched spoke agent can load the forward_plan section as their mandate without needing to understand the full backward chain. |
+| **LEC** (Emergent Conventions) | The "start from the exit" principle is an LEC convention that crystallized from a founder insight: forward planning wastes time on dead ends; backward chaining collapses the solution space to a single path. The ANCHOR → LAST_3 → BRIDGE_BACK → CONNECT → VALIDATE → EMIT protocol, the 3-steps-per-level grouping, the 7-level max recursion cap, and the CHAIN_WITHOUT_ARTIFACT gate are all conventions that prevent the common backward-chaining failure modes. These conventions are now shared across all planning sessions. |
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Complete backward chain at rung_274177+: all links logically sound, gaps bridged, forward_plan emitted and committed to ROADMAP.md as phases | +25 per northstar-reverse run that updates ROADMAP.md |
+| **L** (Love/Quality) | NORTHSTAR.md read verbatim (not summarized); all steps have testable completion criteria; no VAGUE_STEP events; VALIDATE phase ran and confirmed all links | +20 per chain with full validation and concrete criteria |
+| **O** (Output) | northstar-reverse-plan.json written to evidence/ with valid schema: backward_chain + forward_plan + gaps + current_state_verified + northstar_alignment_confirmed | +15 per run with complete artifact at evidence/northstar-reverse-plan.json |
+| **W** (Wisdom) | Chain grounded in current state at level N ≤5 (efficient backward chain); northstar metric advances after next forward_plan step executed; no NORTHSTAR_DRIFT or FLOATING_CHAIN events | +20 per plan where the first forward_plan step actually unblocks measurable northstar progress |
+
+**Evidence required for GLOW claim:** evidence/northstar-reverse-plan.json (complete schema), NORTHSTAR.md sha256 logged, all backward_chain levels have completion_criteria, forward_plan has rung_suggestion per step, current_state_verified = true, all_links_valid = true.
+
+---
+
+## 15) Quick Reference (Cheat Sheet) [signal, compression]
 
 ```
 Epigraph:  "Start from the end of the maze. The path back is straight."

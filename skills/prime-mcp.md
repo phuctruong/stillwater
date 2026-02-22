@@ -907,3 +907,14 @@ EXIT_NEED_INFO --> [*]
       - "API surface lock: breaking changes require MAJOR semver bump"
       - "Security scan required at rung 65537"
     seed_checksum: "prime-mcp-v1.2.0-declare-first-security-gate-null-check-api-lock"
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | MCP server passes all gates at rung_65537: security manifest complete, security scanner PASS, adversarial input sweep done, API surface snapshot taken | +25 per server validated at rung_65537 |
+| **L** (Love/Quality) | Zero tools without security declarations; no destructive tool missing rollback_plan; no secret-classified tool missing auth_required=true; no user input reaching subprocess/eval unvalidated | +20 per server review with zero Lane A violations |
+| **O** (Output) | Complete evidence bundle produced: security_manifest.json + scan results + null_edge_cases.txt + api_surface.json + test_results.txt | +15 per server with complete evidence bundle |
+| **W** (Wisdom) | NORTHSTAR metric advanced (recipe hit rate / tool coverage); security scan identifies and resolves a HIGH severity finding before deploy; network isolation test passes | +20 per session with security scan clean and zero forbidden state events |
+
+**Evidence required for GLOW claim:** security_manifest.json (all tools with auth_required, data_classification, network_access, destructive_ops fields), security_scan_results.txt, null_edge_cases.txt, api_surface.json, test_results.txt. No UNVALIDATED_TOOL_INPUT, SECRET_IN_SCHEMA, or CAPABILITY_EXPANSION_WITHOUT_DECLARATION events.

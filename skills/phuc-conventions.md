@@ -620,3 +620,14 @@ stateDiagram-v2
 #                               3 contracts), updated QUICK_REFERENCE with pillars summary,
 #                               replaced flowchart mermaid with stateDiagram-v2 + Tree of
 #                               Solace topology diagram.
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Convention coverage rate = 1.0 (100% of defined conventions have an enforcement layer); every Trunk convention has enforcement at rung_65537 | +25 per audit with 100% convention enforcement coverage |
+| **L** (Love/Quality) | Zero drift recurrence: same violation never appears twice; zero ENFORCEMENT_SKIPPED events for Trunk conventions; zero orphaned files outside convention-compliant paths | +20 per audit session with zero forbidden state events |
+| **O** (Output) | Complete convention_audit artifact: all schema fields populated (path + type + convention_violated + enforcement_layer + fix_applied) | +15 per audit with complete evidence artifacts |
+| **W** (Wisdom) | System structure self-enforces: scripts/audit-structure.sh reports 0 orphaned files; convention violations auto-escalate to postmortem loop on second occurrence | +20 per session with audit-structure.sh passing and zero ENFORCEMENT_SKIPPED violations |
+
+**Evidence required for GLOW claim:** convention_audit artifact (all schema fields populated), scripts/audit-structure.sh output (orphaned_files_count=0), enforcement coverage audit (conventions_with_enforcement / total_conventions = 1.0). No ENFORCEMENT_SKIPPED, SAME_VIOLATION_TWICE, or SUMMARY_AS_EVIDENCE events.

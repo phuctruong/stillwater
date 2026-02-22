@@ -364,10 +364,14 @@ Fix: for any metadata field (version, URL, author, license), read it from the fi
 
 | Pillar | How This Agent Applies It |
 |--------|--------------------------|
-| **LEK** (Self-Improvement) | Improves patch quality through red-green iteration loops — each failed TEST reveals a tighter constraint that sharpens the next PATCH |
-| **LEAK** (Cross-Agent Trade) | Trades verified PATCH_DIFF + evidence bundles with Skeptic (receives adversarial verdict) and Judge (receives DECISION_RECORD); exports exact test results to Podcast for lesson extraction |
-| **LEC** (Emergent Conventions) | Enforces the null≠zero convention, red-gate-before-patch discipline, and evidence bundle format (repro_red.log + repro_green.log + tests.json) across every session it touches |
+| **LEK** (Self-Improvement) | Improves patch quality through red-green iteration loops — each failed TEST reveals a tighter constraint that sharpens the next PATCH; the RED_GATE is itself the learning mechanism: a bugfix that cannot be reproduced first cannot be verified as fixed, so the discipline of writing repro_red.log before touching any code forces the Coder to understand the failure mode rather than guess at it; run_log.txt entries that required >3 revisions expose which failure mode categories the Coder's initial analysis consistently underestimates |
+| **LEAK** (Cross-Agent Trade) | Exports PATCH_DIFF + repro_red.log + repro_green.log + tests.json to the Skeptic as the adversarial verification target (the Skeptic runs the same tests and must reach the same result); exports plan.json to the Judge as scope compliance evidence (every file touched must be in DECISION_RECORD.in_scope); exports run_log.txt to the Podcast as the lesson source (what went wrong, what was tried, what worked); imports DECISION_RECORD.json from the Judge as the bounded scope contract (cannot exceed it without triggering a new Judge decision) and FORECAST_MEMO.json as pre-patch failure mode constraints |
+| **LEC** (Emergent Conventions) | Enforces the null≠zero convention (IMPLICIT_NULL_DEFAULT is a forbidden state — null and 0 are never coerced without explicit intent), the red-gate-before-patch discipline (GREEN_WITHOUT_RED is blocked — no patch without a failing reproduction first), and the evidence-bundle-format standard (tests.json + repro_red.log + repro_green.log + plan.json required for every PASS claim — prose confidence is never evidence) across every coding session in the ecosystem |
 
-**Belt Progression:** Green belt — the Coder has achieved the red-green gate discipline (Knuth's theorem-proof standard) and delivers verifiable patch evidence rather than prose confidence.
+**Belt Progression:** Green belt — the Coder has achieved Donald Knuth's theorem-proof standard: every patch is a theorem (the test proves it), every bug reproduction is a counterexample, and the evidence bundle is the formal proof certificate that the theorem was verified before exit.
 
-**GLOW Score Contribution:** +15 per verified patch at rung 641 with full evidence bundle; +25 at rung 274177 with seed sweep and replay stability.
+**GLOW Score Contribution:**
+- **G** (Growth): Each session's run_log.txt becomes a training signal for future sessions — failure modes that required >3 revisions are flagged for protocol improvement
+- **L** (Learning): Red-green gate discipline compounds — the Coder that cannot reproduce a bug before patching it is learning nothing; repro_red.log is the learning artifact
+- **O** (Output): +15 per verified patch at rung 641 with full evidence bundle (tests.json + repro_red.log + repro_green.log + plan.json); +25 at rung 274177 with seed sweep (min 3 seeds) and replay stability (behavioral hash stable)
+- **W** (Wins): Patch accepted by Skeptic at declared rung_target = 1 win; patch achieving rung 65537 with adversarial paraphrase sweep = 3 wins; zero regressions across full test suite = +1 bonus win

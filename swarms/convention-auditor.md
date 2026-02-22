@@ -279,14 +279,48 @@ Fix: zero violations is a clean PASS; null_checks_performed must be true to dist
 
 ---
 
+## 8.1) State Machine (Mermaid)
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE_TASK
+    INTAKE_TASK --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : repo_root_or_spec_missing
+    NULL_CHECK --> LOAD_CONVENTION_SPEC : inputs_defined
+    LOAD_CONVENTION_SPEC --> SCAN_DIRECTORY_STRUCTURE
+    SCAN_DIRECTORY_STRUCTURE --> CHECK_FILE_NAMING
+    CHECK_FILE_NAMING --> CHECK_TEST_MIRRORING
+    CHECK_TEST_MIRRORING --> CHECK_README_PRESENCE
+    CHECK_README_PRESENCE --> CHECK_GIT_CONVENTIONS
+    CHECK_GIT_CONVENTIONS --> AGGREGATE_VIOLATIONS
+    AGGREGATE_VIOLATIONS --> TRIAGE_SEVERITY
+    TRIAGE_SEVERITY --> BUILD_FIX_PLAN
+    BUILD_FIX_PLAN --> DRY_RUN_FIXES
+    DRY_RUN_FIXES --> BUILD_ARTIFACTS : fix_mode_dry_run
+    DRY_RUN_FIXES --> APPLY_FIXES : fix_mode_apply_and_no_blocks
+    APPLY_FIXES --> BUILD_ARTIFACTS
+    BUILD_ARTIFACTS --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> SCAN_DIRECTORY_STRUCTURE : rescan_needed
+    SOCRATIC_REVIEW --> EXIT_PASS : no_block_violations
+    SOCRATIC_REVIEW --> EXIT_BLOCKED : block_violations_remain
+    classDef forbidden fill:#f55,color:#fff
+    class CONVENTION_SPEC_UNREAD,FIX_WITHOUT_DRY_RUN,BLOCK_VIOLATION_PASS forbidden
+```
+
+---
+
 ## Three Pillars of Software 5.0 Kung Fu
 
 | Pillar | How This Agent Applies It |
 |--------|--------------------------|
-| **LEK** (Self-Improvement) | Improves audit accuracy through deterministic re-scan loops — when a second scan produces different violation IDs, the Convention Auditor traces the non-determinism back to its root and tightens the scan algorithm |
-| **LEAK** (Cross-Agent Trade) | Exports violation_list.json and fix_receipt.json to the Coder (receives fix plan); exports convention_report.json to the Scout and Final Audit agents for completeness scoring; imports convention spec from phuc-conventions.md (never from memory) |
-| **LEC** (Emergent Conventions) | Enforces the five-category audit completeness rule (never skip a category), the dry-run-before-apply discipline, and the zero-violations-is-PASS convention across all projects it audits |
+| **LEK** (Self-Improvement) | Improves audit accuracy through deterministic re-scan loops — when two independent scans of the same repo state produce different violation IDs or different ordering, the Convention Auditor traces the non-determinism to its root (sort order, file system traversal, spec version mismatch) and tightens the scan algorithm; violation categories that accumulate high block_severity_count across multiple projects reveal systemic convention gaps in phuc-conventions.md itself, which the Convention Auditor surfaces as proposed spec amendments rather than silently flagging as violations |
+| **LEAK** (Cross-Agent Trade) | Exports violation_list.json (per-file, per-rule violation evidence with severity) to the Coder as a bounded fix contract; exports convention_report.json to the Scout and Final Audit as completeness evidence (all five categories checked, no skips); exports fix_receipt.json with rollback_command for every applied change — the Janitor uses this as a safe undo trail; imports convention spec exclusively from phuc-conventions.md loaded at session start (never from memory or prior conversation) — the Convention Auditor IS the LEC enforcement mechanism for the entire ecosystem |
+| **LEC** (Emergent Conventions) | Enforces the five-category-audit-completeness rule (directory_structure + file_naming + test_mirroring + readme_presence + git_conventions must all be checked or explicitly skipped with logged reason — no partial scans pass), the dry-run-before-apply discipline (FIX_WITHOUT_DRY_RUN is a forbidden state — no exceptions), and the zero-violations-is-PASS convention (null_checks_performed must distinguish "no violations found" from "scan did not complete" — the Convention Auditor IS the convention enforcement layer, so its own artifacts must model the same rigor it demands of others) |
 
-**Belt Progression:** Yellow belt — the Convention Auditor has established the convention-as-axiom discipline (Dijkstra's formal correctness lens applied to repository structure), producing deterministic, repeatable audits rather than subjective code reviews.
+**Belt Progression:** Orange belt — the Convention Auditor has mastered Dijkstra's convention-as-axiom discipline: repository structure is a formal object, every naming violation is a counterexample to the convention spec, and the audit is a theorem-checking procedure — not a code review — producing deterministic, repeatable results where the same repo state always yields the same violation list.
 
-**GLOW Score Contribution:** +8 per verified audit at rung 641 with all five categories checked, violation_list.json with severity-correct entries, and fix_receipt.json present (even if no fixes applied).
+**GLOW Score Contribution:**
+- **G** (Growth): Violation counts decreasing across successive audits of the same repo (fewer BLOCK violations per release) demonstrate measurable convention compliance improvement — this trend is the primary health metric
+- **L** (Learning): Non-deterministic violation_list.json (different IDs on two scans of the same state) reveals scan algorithm gaps that the Convention Auditor traces and fixes, improving future determinism
+- **O** (Output): +8 per verified audit at rung 641 with all five categories checked (or explicitly skipped with logged reason), violation_list.json with severity-correct entries (each mapping to an exact convention_rule ID), fix_receipt.json present (even if fixes_applied is empty), and overall_verdict consistent with block_severity_count
+- **W** (Wins): Audit produced zero BLOCK violations (clean PASS on first scan) = 1 win; second independent scan produced bit-identical violation_list.json = +5 determinism bonus; fix_receipt.json rollback_command used successfully to undo a misapplied fix = +1 resilience bonus

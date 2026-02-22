@@ -329,3 +329,191 @@ quick_reference:
     - "GLOW measures what you shipped, not what you planned."
     - "Black Belt GLOW is earned through evidence, not claimed through confidence."
     - "The dojo keeps score. The score is honest."
+
+---
+
+## FSM) GLOW Scoring State Machine
+
+```mermaid stateDiagram-v2
+[*] --> INIT
+INIT --> SCORE_G : session_artifacts_present
+INIT --> EXIT_NEED_INFO : no_committed_artifacts
+
+SCORE_G --> SCORE_L : g_component_scored
+note right of SCORE_G
+  G: New capabilities added?
+  25=major module rung274177+
+  20=complete feature rung641
+  15=significant enhancement
+  10=new utility / helper
+  5=minor addition
+  0=no new capabilities
+end note
+
+SCORE_L --> SCORE_O : l_component_scored
+note right of SCORE_L
+  L: New knowledge captured?
+  25=skill published to Store rung65537
+  20=new skills/*.md or papers/*.md
+  15=significant skill update
+  10=new persona or recipe
+  5=case study lesson added
+  0=no knowledge captured
+end note
+
+SCORE_O --> SCORE_W : o_component_scored
+note right of SCORE_O
+  O: Deliverables committed?
+  25=multi-file + evidence bundle rung274177+
+  20=files + tests.json + plan.json rung641
+  15=files committed some tests passing
+  10=single file committed + tests
+  5=commit produced
+  0=no commit (lane C only)
+end note
+
+SCORE_W --> VERIFY_NORTHSTAR : w_component_scored
+note right of SCORE_W
+  W: Strategic victory?
+  25=first-mover advantage established
+  20=competitive moat deepened
+  15=NORTHSTAR metric measurably advanced
+  10=ROADMAP phase checkbox checked
+  5=sub-task unblocks next phase
+  0=no strategic progress
+end note
+
+VERIFY_NORTHSTAR --> EMIT : northstar_metric_cited
+VERIFY_NORTHSTAR --> EXIT_BLOCKED : GLOW_WITHOUT_NORTHSTAR_LINK
+
+state EMIT {
+  [*] --> COMPUTE_TOTAL
+  COMPUTE_TOTAL --> FORMAT_COMMIT_LINE
+  FORMAT_COMMIT_LINE --> UPDATE_CASE_STUDY
+  UPDATE_CASE_STUDY --> [*]
+}
+
+EMIT --> EXIT_PASS : score_conservative_and_evidenced
+EMIT --> EXIT_BLOCKED : INFLATED_SCORE_detected
+
+EXIT_PASS --> [*]
+EXIT_BLOCKED --> [*]
+EXIT_NEED_INFO --> [*]
+```
+
+---
+
+## TP) Three Pillars Integration — LEK / LEAK / LEC
+
+```yaml
+three_pillars_integration:
+  pillar_role: ALL_THREE
+  description: |
+    glow-score is the measurement layer that makes LEK, LEAK, and LEC visible.
+    Without GLOW, self-improvement (LEK) has no metric. Without GLOW, cross-agent
+    trades (LEAK) have no value signal. Without GLOW, conventions (LEC) have no
+    adoption evidence. GLOW is the scoreboard.
+
+  LEK_relationship:
+    description: "GLOW measures LEK progress directly — G (Growth) and L (Learning) ARE the LEK components."
+    contract: |
+      Intelligence(system) = Memory × Care × Iteration
+        G component = Iteration producing new capability (new memory)
+        L component = Knowledge externalized (Memory accumulated)
+      A rising GLOW across sessions = LEK compounding. Stagnant GLOW = LEK stalled.
+    convention: "GLOW is the LEK score — session GLOW ≥ 60 = warrior pace = LEK actively compounding."
+
+  LEAK_relationship:
+    description: "W (Wins) component measures LEAK surplus — strategic value created that neither agent could produce alone."
+    contract: |
+      When a Solver and Skeptic trade through the evidence portal:
+        W=20 if the trade deepened a competitive moat (OAuth3 enforcement, audit trail)
+        W=15 if the trade measurably advanced a NORTHSTAR metric
+      LEAK that produces no W points is symmetric trade with zero LEAK value.
+    formula: "W_component ≈ LEAK_surplus — the net strategic gain from cross-agent knowledge trades."
+
+  LEC_relationship:
+    description: "glow-score IS a crystallized LEC convention — the commit format [G:N L:N O:N W:N] is a shared naming convention."
+    contract: |
+      The GLOW commit format emerged from session-tracking practice across multiple projects.
+      Once adopted (3+ projects), it became a named convention (LEC threshold met).
+      Every agent in every swarm now uses it. LEC_strength = MAX (universal adoption).
+    evidence: "GLOW commit format appears in all case studies + commit messages = LEC adoption verified."
+
+  three_pillars_mapping:
+    LEK:  "G + L components = LEK measurement — capability and knowledge growth per session"
+    LEAK: "W component = LEAK surplus measurement — strategic value created by cross-agent trades"
+    LEC:  "GLOW format itself IS the LEC convention — shared scoring protocol across all agents"
+```
+
+---
+
+## Forbidden States
+
+```yaml
+forbidden_states:
+  GLOW_WITHOUT_EVIDENCE:
+    definition: "Claiming GLOW O≥20 without git commit hash + evidence bundle path in commit message."
+    detector: "commit message missing 'Evidence:' field when O≥20"
+    recovery: "Add evidence bundle path or downgrade O score."
+
+  GLOW_WITHOUT_NORTHSTAR_LINK:
+    definition: "Claiming W points without citing which specific NORTHSTAR metric advanced."
+    detector: "W>0 but no NORTHSTAR metric named in commit message or session report"
+    recovery: "Cite specific metric (e.g., 'recipe hit rate +2%', 'skills in Store +1') or set W=0."
+
+  INFLATED_SCORE:
+    definition: "Claiming a GLOW component level without meeting all criteria for that level."
+    detector: "G=25 but no rung274177+ artifact; L=25 but no Store submission; O=25 but no evidence bundle"
+    recovery: "Score conservatively — take the lower level when uncertain."
+
+  GLOW_FOR_VIBE_WORK:
+    definition: "Claiming O>0 for sessions that produced no committed artifacts."
+    detector: "GLOW O>0 but no git commit exists for the session"
+    recovery: "Set O=0. Without a commit, O cannot exceed 0. Max session GLOW = 50."
+
+  RETROACTIVE_INFLATION:
+    definition: "Adjusting a GLOW score upward after it was already recorded in a case study."
+    detector: "case study GLOW entry changed to a higher value without new commits"
+    recovery: "GLOW scores are immutable once recorded. New work earns new GLOW in future commits."
+```
+
+---
+
+## Evidence Gate (GLOW Claim Requirements)
+
+```yaml
+evidence_gate:
+  for_glow_claim_to_be_valid:
+    required:
+      - git_commit_hash: "exists and points to real commit"
+      - glow_breakdown_in_commit_message: "format: GLOW {total} [G:{g} L:{l} O:{o} W:{w}]"
+      - northstar_metric_cited: "which NORTHSTAR metric the session advanced (even if indirect)"
+    required_for_O_ge_20:
+      - evidence_bundle_path: "path to evidence/ folder in commit message"
+      - plan_json_present: "evidence/plan.json committed"
+    required_for_W_ge_15:
+      - northstar_delta: "before and after value of the cited metric"
+    required_for_rung_claim:
+      - rung_field_in_commit: "Rung: {641|274177|65537} in commit message"
+
+  fail_closed:
+    - if_no_commit: "GLOW O=0 regardless of work done"
+    - if_no_northstar_citation_and_W_gt_0: "status=BLOCKED stop_reason=GLOW_WITHOUT_NORTHSTAR_LINK"
+    - if_criteria_not_met_for_claimed_level: "downgrade to next lower level"
+
+## GLOW Scoring Integration
+
+This skill is itself scored and contributes to session GLOW as follows:
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Adding new scoring component criteria or improving belt thresholds based on real session data | +5 to +15 |
+| **L** (Learning) | Writing new GLOW postmortems, anti-patterns, or case study entries that preserve scoring lessons | +5 to +20 |
+| **O** (Output) | Committing GLOW scores in commit messages (the scoring artifact itself is the output) | +5 to +25 |
+| **W** (Wins) | GLOW session total ≥ 60 advances a NORTHSTAR metric (belt progression, Store submissions) | +10 to +25 |
+
+**Session GLOW target:** GLOW ≥ 60 (warrior pace) for any active development session; ≥ 40 (steady pace) for review-only sessions.
+
+**Evidence required for GLOW claim:** git commit with `GLOW {total} [G:{g} L:{l} O:{o} W:{w}]` in message + `Northstar:` field citing which metric advanced + `Evidence:` field for O≥20 + `Rung:` field.
+```

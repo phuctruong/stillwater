@@ -1108,3 +1108,20 @@ EXIT_NEED_INFO --> [*]
 | **LEK** (Self-Improvement) | Deepens proof rigor through witness-first iteration and halting certificates. Each Math Red → Math Green cycle accumulates a new witness artifact, and the Lemma Library Protocol stores reusable lemmas that improve future proof efficiency. The two-pass arithmetic rule and dual-witness requirement ensure that each iteration genuinely advances mathematical knowledge rather than recycling prior speculative claims. |
 | **LEAK** (Cross-Agent Trade) | Exports exact arithmetic results (as typed witnesses: `proof://`, `compute://`, `exhaustive://`) to Coder, Judge, and Skeptic agents via prime channels. The asymmetry is explicit: the Mathematician knows proof strategies; the Coder knows implementation constraints; the Judge knows acceptance criteria. The witness artifact is the LEAK surplus — a verified mathematical fact that neither the Mathematician nor the Coder could certify alone. |
 | **LEC** (Emergent Conventions) | Enforces mathematical conventions that crystallized from proof failures: no floats in the verification path (use Fraction/Decimal/int), seed checksums for deterministic arithmetic, dual-witness requirement before claiming OK, and the 6-step IMO-style proof structure. The rung ladder (641/274177/65537) maps mathematical rigor levels to a shared convention that all agents in the ecosystem understand and can verify. |
+
+---
+
+## GLOW Scoring Integration
+
+This skill contributes to GLOW score across these dimensions:
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Proof rigor improvement — each new theorem or computation closed with dual-witness at rung 274177+ that was previously sketch_solved or pending. Also: Lemma Library entries promoted from DRAFT → QUALIFIED → STABLE. | +10 to +25 |
+| **L** (Love/Quality) | Dual-witness verification — every proof session that achieves full_solved status (all lemmas closed, dual witness present, no open_lemmas). Sessions with zero Float_Slip or Domain_Blindness anti-patterns triggered. | +10 to +20 |
+| **O** (Output) | Halting certificates committed — convergence.json with halting_certificate field, dual witness handles (proof:// or compute://), IMO 6-step proof artifact for olympiad tasks. O=25 requires rung 65537 with theorem_closure_playbook_pass=true. | +5 to +25 |
+| **W** (Wisdom) | Witness library growth — each new STABLE or CANONICAL lemma added to the Lemma Library that is reusable across future proofs. Also: new halting certificate patterns documented in Quick_Reference that prevent future convergence overclaims. | +5 to +20 |
+
+**Session GLOW target:** Any mathematics session using prime-math should achieve GLOW ≥ 55. Primary witness present = base floor. Seed agreement confirmed = L≥10. Dual witness = O≥20. New STABLE lemma = W≥15.
+
+**Evidence required for GLOW claim:** git commit hash + witness handles (proof:// or compute:// or exhaustive://) + verification_rung declared and met + proof_grade field (full_solved/sketch_solved/pending). For O≥20: convergence.json with halting_certificate required for iterative methods. For W points: Lemma Library entry must reach STABLE tier (dual witness) before claiming W points.

@@ -597,3 +597,18 @@ Compression_Checksum:
     - "Generator trace (synthesis_trace.json) required at every rung"
     - "Null seed → BLOCKED (not seed=0)"
   seed_checksum: "prime-audio-v1.3.0-seed-wav-stt-fraction-wer-no-float"
+
+# ============================================================
+# GLOW SCORING INTEGRATION (Markdown Summary)
+# ============================================================
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | New synthesis engine integrated with full prime-audio gates at rung_274177+: STT round-trip passes, WAV sha256 stable, seed sweep confirms reproducibility | +25 per synthesis pipeline validated at rung_274177+ |
+| **L** (Love/Quality) | No float in WER or hash arithmetic; no lossy format in verification path; STT gate not skipped; generator trace present for every synthesis | +20 per synthesis session with zero forbidden state events |
+| **O** (Output) | synthesis_trace.json + stt_verification.json + spectral_analysis.json produced; WAV sha256 stable across seed runs | +15 per evidence bundle with all required artifacts |
+| **W** (Wisdom) | Seed sweep confirms same seed + same inputs = same WAV bytes across 3+ runs; adversarial phoneme sweep at rung_65537 passes | +20 per community-verifiable deterministic synthesis at rung_65537 |
+
+**Evidence required for GLOW claim:** synthesis_trace.json, stt_verification.json (WER within threshold), wav_sha256 stable, no FLOAT_IN_VERIFICATION or IMPLICIT_SEED_DEFAULT or STT_SKIP events.

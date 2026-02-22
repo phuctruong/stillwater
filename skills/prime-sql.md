@@ -475,3 +475,14 @@ stateDiagram-v2
       The seed is the minimal compression payload: no-float-in-finance + null-semantics-per-column
       + EXPLAIN-for-large-tables + no-cartesian-without-intent + parameterized-user-input
       + 641 rung default (65537 for security-sensitive queries).
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Every query touching >1000 rows has EXPLAIN ANALYZE output in evidence; query behavior is observable and auditable at rung_274177+ | +25 per query set validated at rung_274177+ |
+| **L** (Love/Quality) | Zero FLOAT/DOUBLE/REAL types in any financial SUM/AVG/comparison path; all nullable columns have documented null_semantic; no user input concatenated into SQL strings | +20 per review with zero Lane A violations |
+| **O** (Output) | Complete evidence bundle: explain_plan.txt + financial_type_check.txt + null_analysis.txt + parameterization_proof.txt + test_results.txt | +15 per query set with complete review artifacts |
+| **W** (Wisdom) | Zero cartesian joins without documented intent; no SQL injection surface; financial data integrity verified; security-sensitive queries at rung_65537 | +20 per session with zero forbidden state events and injection surface = 0 |
+
+**Evidence required for GLOW claim:** explain_plan.txt (EXPLAIN ANALYZE for all large-table queries), financial_type_check.txt (forbidden_types_found=0), null_analysis.txt (null_semantic coverage rate), parameterization_proof.txt. No FLOAT_IN_FINANCIAL_PATH, CARTESIAN_JOIN_WITHOUT_INTENT, or UNPARAMETERIZED_USER_INPUT events.

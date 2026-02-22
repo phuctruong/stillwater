@@ -369,3 +369,18 @@ stateDiagram-v2
         and test pyramid proportions started as XP wisdom; they are now Lane A gates."
       emerging_conventions: [kents_red_gate_as_mandatory, five_replay_as_stability_standard,
         clock_injection_as_default, no_real_network_in_unit_as_law]
+
+# ============================================================
+# GLOW SCORING INTEGRATION
+# ============================================================
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Bugfix achieves red-green gate: repro_red.log confirms failure before patch, repro_green.log confirms pass after; rung_641 evidence bundle complete | +25 per bugfix with red-green evidence |
+| **L** (Love/Quality) | No float equality in assertions; no datetime.now() without time freeze; no real network calls in unit tests; five-replay confirms no flakiness | +20 per test suite passing all discipline gates |
+| **O** (Output) | test_results.txt + coverage_report.txt produced; for bugfixes: repro_red.log + repro_green.log present at evidence path | +15 per evidence bundle with all required files |
+| **W** (Wisdom) | Coverage meets threshold for critical paths; test pyramid proportions respected (unit > integration > e2e); no RED_GATE_SKIP events | +20 per session with zero forbidden state events and coverage gate met |
+
+**Evidence required for GLOW claim:** test_results.txt (all passing), coverage_report.txt (threshold met), repro_red.log + repro_green.log (for bugfixes), five_replay confirmation (no flakiness), no FLOAT_COMPARISON or TIME_DEPENDENCY or REAL_NETWORK forbidden states triggered.

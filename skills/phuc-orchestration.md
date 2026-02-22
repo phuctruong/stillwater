@@ -826,3 +826,20 @@ three_pillars_integration:
     LEAK: "every dispatch IS LEAK — asymmetric knowledge trade between main and sub bubbles"
     LEC:  "CNF capsule + dispatch matrix + compaction = crystallized LEC conventions"
 ```
+
+---
+
+## GLOW Scoring Integration
+
+This skill contributes to GLOW score across these dimensions:
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Dispatch efficiency improvement — measured by: (tasks dispatched to correct role / total tasks) improving across sessions. Reduction in SKILL_LESS_DISPATCH or FORGOTTEN_CAPSULE incidents. | +5 to +20 |
+| **L** (Love/Quality) | Context isolation quality — zero CONTEXT_ACCUMULATION events in session (main context never exceeded 800 lines without [COMPACTION] log), zero SUMMARY_AS_EVIDENCE forbidden states triggered. | +10 to +20 |
+| **O** (Output) | Orchestrated deliverables committed: all sub-agent artifacts received (JSON/diff/log), integrated, and committed. Integration rung = MIN(all agent rungs) correctly calculated and declared. | +10 to +25 |
+| **W** (Wisdom) | Dispatch pattern library growth — each new forbidden state or anti-pattern added to section 6/10 drawn from a real orchestration failure (context rot, skill anemia, rung laundering incident). | +5 to +15 |
+
+**Session GLOW target:** Any orchestration session using phuc-orchestration should achieve GLOW ≥ 60. Zero forbidden states triggered = base floor. All sub-agents returned typed artifacts = O≥15. Correct rung integration = required for any O claim.
+
+**Evidence required for GLOW claim:** git commit hash + list of sub-agent artifacts received with sha256 + integration rung calculation showing MIN(all agent rungs) + [COMPACTION] log if triggered. For L points: session log must show zero CONTEXT_ACCUMULATION or SUMMARY_AS_EVIDENCE events. For G points: dispatch matrix coverage must have improved (new agent role added, or existing role's dispatch accuracy measurably improved).

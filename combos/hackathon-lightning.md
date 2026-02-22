@@ -71,6 +71,15 @@ Phase 4 — Demo + Close  (1:50 – 2:00)   8%    — 10 min; demo.md + GLOW + c
 
 ---
 
+## Skill Pack
+
+Load these skills before executing this combo:
+- `skills/prime-safety.md` (always first — scope expansion mid-sprint is a prime-safety governance issue)
+- `skills/prime-coder.md` (for the Verify phase: minimum test suite, evidence files)
+- `skills/phuc-forecast.md` (NORTHSTAR check in Scout phase: aligns Goal + Constraints before build)
+
+---
+
 ## Phase 1 — Scout + Plan (15 minutes hard cap)
 
 **Model**: haiku (speed) or sonnet (if NORTHSTAR check needed)
@@ -204,9 +213,24 @@ The 75-minute build phase only works if the scope is locked before it starts. Sc
 
 | Pillar | How This Combo Applies It |
 |--------|--------------------------|
-| **LEK** (Self-Improvement) | Each lightning sprint produces a committed artifact + demo.md + GLOW score — the artifact immediately improves the skill graph, and the GLOW score feeds the next sprint's calibration |
-| **LEAK** (Cross-Agent Trade) | Scout agent (haiku) holds discovery knowledge; Builder agent (sonnet) holds implementation knowledge; they trade via LightningSprint.json — scout caps at 15 minutes so builder gets maximum time |
-| **LEC** (Emergent Conventions) | One-artifact-only and 15-minute scout cap become team conventions: lightning sprints are recognizable, bounded, and predictable — every participant knows the rules before the clock starts |
+| **LEK** (Self-Improvement) | The GLOW score (G+L+O+W) is the self-measurement loop: each lightning sprint's score calibrates the next. A G=8 score on a committed artifact says "new capability gained." A W=3 score on NORTHSTAR advance says "this sprint was aligned but low-impact." The scores accumulate into sprint calibration data that improves scope selection and time-boxing accuracy over successive sprints. |
+| **LEAK** (Cross-Agent Trade) | Scout agent (haiku, 15-min cap) produces LightningSprint.json containing demo_target + scope_cuts — this is the full knowledge transfer to the Builder agent (sonnet, 75-min allocation). Builder never re-investigates scope; Scout never implements. The time asymmetry (15 min vs 75 min) is the LEAK signal: Scout's 15-minute compressed output is worth 75 minutes of focused build time to the Builder. |
+| **LEC** (Emergent Conventions) | Three conventions enforced by this combo become recognizable across all sprint contexts: (1) one-artifact-only as bounded deliverable, (2) 15-minute scout cap as discovery discipline, (3) demo.md as the universal proof of shipment. Any participant who sees a `LightningSprint.json` knows the scope is locked; any participant who sees `demo.md` knows something actually shipped. |
+
+---
+
+## GLOW Scoring Summary
+
+| Dimension | Contribution | Lightning Target |
+|-----------|-------------|-----------------|
+| **G** (Growth) | Artifact committed (+8); existing artifact upgraded (+4); rung 274177+ (+3) | 0-15 |
+| **L** (Love/Quality) | Blocker or discovery logged (+8); scope cut documented with reason (+4); prior art cited (+3) | 0-15 |
+| **O** (Output) | Artifact committed and demo-able (+8); evidence bundle complete (+4); tests pass (+3) | 0-15 |
+| **W** (Wisdom) | NORTHSTAR alignment confirmed (+8); case-study updated (+4); ROADMAP phase advanced (+3) | 0-15 |
+
+**Minimum to PASS:** 45 | **Lightning pace target:** 50+
+
+**Northstar Metric:** `skill_quality_avg` + `recipe_hit_rate` — every lightning sprint produces one committed artifact that either raises average skill quality (if the artifact is a skill file) or advances recipe reuse (if the artifact is a recipe, combo, or demo). The 15-minute Scout cap enforces that the sprint is aligned to one of these metrics before the first line is written.
 
 ---
 

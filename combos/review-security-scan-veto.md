@@ -241,6 +241,30 @@ Consumes:
 
 ---
 
+## Skill Pack
+
+Load these skills before executing this combo:
+- `skills/prime-safety.md` (always first — scanner-veto-is-absolute is a prime-safety invariant; secrets handling and injection surfaces are prime-safety concerns)
+- `skills/prime-coder.md` (evidence-anchored review, PatchSummary classification, deterministic output)
+
+For HIGH_RISK patches (auth/crypto/deserialization):
+- Consider loading `skills/phuc-forecast.md` for risk-level forecasting before scan
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | SECURITY_REVIEW.json with evidence-anchored findings builds a corpus of what PASS and FAIL look like for this codebase — improving future review accuracy | +5 per review where >= 1 finding has a specific diff_hunk_ref |
+| **L** (Love/Quality) | Veto gate enforced: no HIGH/CRITICAL scanner finding bypassed; every FAIL cites exact evidence (not "looks risky"); no APPROVE_WITH_FAILED_SCAN | +5 per GOVERNANCE_VERDICT.json with status=PASS and all 10 checklist items answered |
+| **O** (Output) | SECURITY_REVIEW.json + SECURITY_SCAN.json + GOVERNANCE_VERDICT.json committed; scanner tool versions pinned | +5 per complete governance verdict bundle |
+| **W** (Wisdom) | Northstar metric (projects_running_at_rung_65537) advances — security gate is a hard requirement for rung 65537 certification | +5 when security scan passes on a HIGH_RISK patch (crypto/auth/deserialization) |
+
+**Northstar Metric:** `projects_running_at_rung_65537` — the security scan veto is one of the mandatory gates for rung 65537 (production confidence). A project that can demonstrate automated security veto with evidence-anchored review has structural security culture, not aspirational security theater.
+
+---
+
 ## Three Pillars Mapping
 
 | Pillar | How This Combo Applies It |

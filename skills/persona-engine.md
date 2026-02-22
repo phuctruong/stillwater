@@ -2031,3 +2031,20 @@ compression_checksum:
     - "Safety conflicts logged in PERSONA_SAFETY_CONFLICT field"
     - "Dispatch matrix is the LEC convention for persona-task routing"
   seed_checksum: "persona-engine-v1.7.0-domain-match-safety-first-no-certifying"
+
+---
+
+## GLOW Scoring Integration
+
+This skill contributes to GLOW score across these dimensions:
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Persona registry expansion — each new verified persona added to the registry with documented domain, voice rules, and evidence of improved output quality vs. no-persona baseline. Multi-persona loading producing measurably better output than single-persona = G≥15. | +5 to +15 |
+| **L** (Love/Quality) | Zero safety overrides — every session where persona-engine is used and zero PERSONA_GRANTING_CAPABILITIES or PERSONA_OVERRIDING_SAFETY forbidden states are triggered. Dragon-rider tiebreaker resolving a previously deadlocked decision = L≥15. | +10 to +20 |
+| **O** (Output) | Persona-enhanced artifacts committed — coded patches, papers, or plans produced with named persona active, with glow_score.json showing +5 W bonus for strategic dragon-rider use. Evidence that the persona improved output quality (A/B comparison) = O≥15. | +5 to +20 |
+| **W** (Wisdom) | Strategic persona matches — each session where the domain-matched persona produced a non-obvious insight that a generic agent would have missed (documented in glow_score.json or session postmortem). Dragon-rider resolving 3+ deadlocks in one session = W≥20. | +5 to +20 |
+
+**Session GLOW target:** Any session using persona-engine should achieve GLOW ≥ 45. Correct domain match = base floor. Zero safety conflicts = L≥10. Committed persona-enhanced artifact = O≥10. Strategic dragon-rider use adds +5 W automatically.
+
+**Evidence required for GLOW claim:** git commit hash + persona_name declared in session + domain_match justification (why this persona for this task). For W points: glow_score.json with dragon_rider_bonus: true OR postmortem noting a non-obvious insight from the persona match. For L points: PERSONA_SAFETY_CONFLICT field must be null or empty in session record.

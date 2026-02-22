@@ -1645,3 +1645,20 @@ INTEGRATION: Load: prime-safety (1) + prime-coder (2) + phuc-swarms (3) + phuc-l
 | **LEK** (Self-Improvement) | phuc-loop IS the LEK engine — each iteration accumulates learnings into AGENTS.md, advances GLOW score, and must pass the Phuc Test (5 conditions) before claiming self-improvement. The while-not-done loop with halting certificates is the mechanized form of Recursion(Information + Memory + Care). |
 | **LEAK** (Cross-Agent Trade) | Each spawned sub-agent is a LEAK portal: the main loop holds task context, the sub-agent holds domain skills, and the CNF capsule is the typed handshake. Learnings flow back as lane-typed artifacts (EXACT/CONVERGED halting certificates), not prose. The GBB operators (Good/Better/Best) enforce asymmetric knowledge surplus — never worse than prior iteration. |
 | **LEC** (Emergent Conventions) | The loop enforces conventions that emerged from failure: halting certificates required before iteration 0; AGENTS.md accumulation mandatory; GLOW scoring with W=0 three-consecutive = EXIT_BLOCKED; Phuc Test as the self-improvement gate. These conventions are additive-only (Never-Worse doctrine) and compress all prior loop failures into the forbidden states list. |
+
+---
+
+## GLOW Scoring Integration
+
+This skill contributes to GLOW score across these dimensions:
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Loop convergence speed — each loop session that reaches EXIT_CONVERGED in fewer iterations than the prior session on a comparable task, measured via halting certificate iteration count. A loop that achieves EXACT halting certificate (residual=0) = G≥20. | +5 to +20 |
+| **L** (Love/Quality) | Halting certificate quality — every loop session that produces a valid halting certificate (EXACT or CONVERGED) before claiming EXIT_PASS. Sessions where Phuc Test all 5 conditions pass = L≥20. Sessions with zero GLOW_WITHOUT_NORTHSTAR_ALIGNMENT or LEARNINGS_NOT_ACCUMULATED forbidden states = L≥15. | +10 to +20 |
+| **O** (Output) | Improvement deltas committed — AGENTS.md updated with new learnings + halting certificate in evidence/ + GLOW score declared with Northstar alignment certificate. Each loop session that produces a GLOW score ≥ 60 = O≥15. Loop producing rung 274177 with convergence certificate = O≥20. | +5 to +25 |
+| **W** (Wisdom) | AGENTS.md entries that are reusable — each learning added to AGENTS.md that is typed (EXACT lane A, CONVERGED lane B, TIMEOUT lane C) and generalizable to future loop sessions. New Phuc Test extension drawn from a real loop failure = W≥15. | +5 to +20 |
+
+**Session GLOW target:** Any loop session using phuc-loop should achieve GLOW ≥ 55 per loop cycle. Halting certificate produced = base floor. Phuc Test 4/5 conditions met = L≥15. AGENTS.md updated with typed learnings = W≥10. For EXIT_CONVERGED: loop GLOW target ≥ 65.
+
+**Evidence required for GLOW claim:** git commit hash + AGENTS.md diff showing new learnings + halting certificate (convergence.json with halting_certificate field = EXACT/CONVERGED/TIMEOUT/DIVERGED) + Northstar alignment certificate (northstar_metric cited + delta declared) + GLOW score breakdown. For O≥20: loop must have run rung 274177 checks (seed agreement + replay stability). For W points: AGENTS.md entries must include lane classification (A/B/C) and a reuse condition ("applies when...").

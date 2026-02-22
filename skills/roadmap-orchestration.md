@@ -1320,3 +1320,20 @@ compression_checksum:
 *Auth: 65537 | Status: SEALED | Never-Worse Doctrine: this file may be extended, never weakened.*
 *Part of the Stillwater protocol for multi-session AI development.*
 *Companion paper: papers/32-roadmap-based-development.md*
+
+---
+
+## GLOW Scoring Integration
+
+This skill contributes to GLOW score across these dimensions:
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Phase advancement — each ROADMAP phase checkbox checked after spoke artifacts are verified and case-study is updated. Phase N completed at MIN rung = 641+ earns G≥15. Phase N completed at rung 274177+ earns G≥20. | +10 to +25 |
+| **L** (Love/Quality) | Context isolation quality — zero SPOKE_ROADMAP_WRITE, HUB_INLINE_DEEP_WORK, or NORTHSTAR_SUMMARY_INJECTION forbidden states in a session. NORTHSTAR injected verbatim (not summarized) in every CNF capsule = L≥15. | +10 to +20 |
+| **O** (Output) | Integrated artifacts committed — spoke artifacts (PATCH_DIFF, FORECAST_MEMO, etc.) integrated and committed by hub + case-study updated + ROADMAP checkbox checked + integration rung = MIN(all spoke rungs) declared. Full multi-phase cycle = O≥20. | +10 to +25 |
+| **W** (Wisdom) | Dispatch pattern library growth — each new hub orchestration pattern added (e.g., new phase dependency rule, new CNF capsule field) drawn from a real spoke coordination failure observed during a roadmap session. | +5 to +15 |
+
+**Session GLOW target:** Any roadmap orchestration session should achieve GLOW ≥ 60. Phase checkbox checked = base floor. Case-study updated before ROADMAP = L≥15. Spoke artifacts committed = O≥15. MIN rung calculation declared = required.
+
+**Evidence required for GLOW claim:** git commit hash + case-study diff showing new phase entry + ROADMAP diff showing checkbox checked + integration rung calculation (MIN of all spoke rungs listed explicitly). For O≥20: multiple spoke artifacts (from distinct agents) must be present. For L points: session log must show NORTHSTAR verbatim injection in each CNF capsule (not summarized). For W points: new orchestration rule must cite the spoke failure it prevents.

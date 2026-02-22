@@ -167,35 +167,72 @@ cnf_capsule_required_fields:
 
 ## 4) State Machine [T1: verification + causality]
 
+### 4.1 States and Transitions
+
 ```
 States:
-  INIT → INTAKE_FINDINGS → CLASSIFY → ROOT_CAUSE → PLAN_IMPROVEMENTS →
-  APPLY_IMPROVEMENTS → VERIFY_FIXES → REGISTER → EXIT_IMPROVED
+  INIT
+  INTAKE_FINDINGS
+  CLASSIFY
+  ROOT_CAUSE
+  PLAN_IMPROVEMENTS
+  APPLY_IMPROVEMENTS
+  VERIFY_FIXES
+  REGISTER
+  EXIT_IMPROVED       ← success path
+  EXIT_NEED_INFO      ← findings list empty or context insufficient
+  EXIT_BLOCKED        ← recurrence detected or fix cannot be verified
 
 Transitions:
-  INTAKE_FINDINGS → CLASSIFY:
-    guard: findings_list.length > 0
-  CLASSIFY → ROOT_CAUSE:
-    guard: all findings have severity + category
-  ROOT_CAUSE → PLAN_IMPROVEMENTS:
-    guard: all findings have root_cause
-  PLAN_IMPROVEMENTS → APPLY_IMPROVEMENTS:
-    guard: each finding has >= 1 planned improvement
-  APPLY_IMPROVEMENTS → VERIFY_FIXES:
-    guard: all planned improvements applied to files
-  VERIFY_FIXES → REGISTER:
-    guard: re-check confirms fix works
-  REGISTER → EXIT_IMPROVED:
-    guard: postmortem_registry.jsonl updated
+  INIT → INTAKE_FINDINGS: always
+  INTAKE_FINDINGS → EXIT_NEED_INFO: if findings_list.length == 0
+  INTAKE_FINDINGS → CLASSIFY: if findings_list.length > 0
 
-Forbidden States:
-  - FINDING_WITHOUT_IMPROVEMENT: Every finding MUST produce >= 1 improvement
-  - IMPROVEMENT_WITHOUT_VERIFY: Every improvement MUST be verified
-  - UNREGISTERED_POSTMORTEM: Every QA round MUST be logged to registry
-  - SAME_FINDING_TWICE: If a finding recurs, the previous fix was insufficient → escalate severity
-  - PROSE_ONLY_FIX: "We'll be more careful" is NOT a fix. Code/config/skill change required.
-  - BLAME_THE_MODEL: "The model hallucinated" is NOT a root cause. Missing gate is.
+  CLASSIFY → EXIT_NEED_INFO: if any finding lacks severity or category
+  CLASSIFY → ROOT_CAUSE: if all findings have severity + category
+
+  ROOT_CAUSE → EXIT_NEED_INFO: if any finding has root_cause == null
+  ROOT_CAUSE → PLAN_IMPROVEMENTS: if all findings have root_cause
+
+  PLAN_IMPROVEMENTS → EXIT_BLOCKED: if any finding has zero planned improvements (FINDING_WITHOUT_IMPROVEMENT)
+  PLAN_IMPROVEMENTS → EXIT_BLOCKED: if any planned improvement is prose-only (PROSE_ONLY_FIX)
+  PLAN_IMPROVEMENTS → APPLY_IMPROVEMENTS: if each finding has >= 1 executable improvement
+
+  APPLY_IMPROVEMENTS → EXIT_BLOCKED: if any improvement cannot be applied to its target file
+  APPLY_IMPROVEMENTS → VERIFY_FIXES: if all improvements applied
+
+  VERIFY_FIXES → APPLY_IMPROVEMENTS: if re-check fails (loop back to fix)
+  VERIFY_FIXES → EXIT_BLOCKED: if same finding recurs after fix (SAME_FINDING_TWICE)
+  VERIFY_FIXES → REGISTER: if re-check confirms fix works
+
+  REGISTER → EXIT_BLOCKED: if postmortem_registry.jsonl write fails
+  REGISTER → EXIT_IMPROVED: if registry updated successfully
+
+Exit Conditions:
+  EXIT_IMPROVED:
+    requires: postmortem_registry.jsonl updated, all findings have verified=true,
+              recurrence_count tracked, system_improvements_count > 0
+  EXIT_NEED_INFO:
+    trigger: empty findings, missing severity/category, null root_cause
+    action: list missing fields; request clarification before proceeding
+  EXIT_BLOCKED:
+    trigger: FINDING_WITHOUT_IMPROVEMENT, PROSE_ONLY_FIX, SAME_FINDING_TWICE,
+             improvement application failure, registry write failure
+    action: report specific blocked finding; do NOT claim postmortem complete
 ```
+
+### 4.2 Forbidden States
+
+| Forbidden State | Definition | Recovery |
+|----------------|-----------|---------|
+| `FINDING_WITHOUT_IMPROVEMENT` | Finding exists with zero planned improvements | Add ≥1 executable improvement (forbidden_state/gate/recipe/skill/checklist) |
+| `IMPROVEMENT_WITHOUT_VERIFY` | Improvement claimed but re-check not run | Run re-check; confirm fix works before REGISTER |
+| `UNREGISTERED_POSTMORTEM` | QA round completed without writing to postmortem_registry.jsonl | Write registry entry before claiming EXIT_IMPROVED |
+| `SAME_FINDING_TWICE` | Same finding appears in two consecutive QA rounds | Escalate severity; root cause was wrong; fix the fix |
+| `PROSE_ONLY_FIX` | "We'll be more careful" accepted as an improvement | Require code/config/skill change with a specific target file |
+| `BLAME_THE_MODEL` | "The model hallucinated" accepted as a root_cause | Missing gate is the root cause; identify which gate should have caught this |
+| `ROOT_CAUSE_NULL` | Finding registered without root_cause assigned | Block PLAN_IMPROVEMENTS until root_cause is identified |
+| `SEVERITY_ASSUMED` | Severity assigned without explicit reasoning | All severity assignments require a sentence explaining the rating |
 
 ---
 
@@ -425,14 +462,33 @@ Three Pillars: LEK=learning_loop | LEAK=improvements_propagate_to_all | LEC=post
 stateDiagram-v2
     [*] --> INIT
     INIT --> INTAKE_FINDINGS : QA_round_complete
-    INTAKE_FINDINGS --> CLASSIFY : findings_list_gt_zero
-    CLASSIFY --> ROOT_CAUSE : all_findings_have_severity_and_category
-    ROOT_CAUSE --> PLAN_IMPROVEMENTS : all_findings_have_root_cause
-    PLAN_IMPROVEMENTS --> APPLY_IMPROVEMENTS : each_finding_has_improvement
-    APPLY_IMPROVEMENTS --> VERIFY_FIXES : all_improvements_applied
+
+    INTAKE_FINDINGS --> EXIT_NEED_INFO : findings_empty
+    INTAKE_FINDINGS --> CLASSIFY : findings_present
+
+    CLASSIFY --> EXIT_NEED_INFO : missing_severity_or_category
+    CLASSIFY --> ROOT_CAUSE : all_classified
+
+    ROOT_CAUSE --> EXIT_NEED_INFO : root_cause_null
+    ROOT_CAUSE --> PLAN_IMPROVEMENTS : all_have_root_cause
+
+    PLAN_IMPROVEMENTS --> EXIT_BLOCKED : FINDING_WITHOUT_IMPROVEMENT
+    PLAN_IMPROVEMENTS --> EXIT_BLOCKED : PROSE_ONLY_FIX
+    PLAN_IMPROVEMENTS --> APPLY_IMPROVEMENTS : all_improvements_executable
+
+    APPLY_IMPROVEMENTS --> EXIT_BLOCKED : improvement_cannot_be_applied
+    APPLY_IMPROVEMENTS --> VERIFY_FIXES : all_applied
+
+    VERIFY_FIXES --> APPLY_IMPROVEMENTS : re_check_fails_retry
+    VERIFY_FIXES --> EXIT_BLOCKED : SAME_FINDING_TWICE
     VERIFY_FIXES --> REGISTER : re_check_passes
+
+    REGISTER --> EXIT_BLOCKED : registry_write_fails
     REGISTER --> EXIT_IMPROVED : registry_updated
+
     EXIT_IMPROVED --> [*]
+    EXIT_NEED_INFO --> [*]
+    EXIT_BLOCKED --> [*]
 
     state "GLOW Loop" as GLOW {
         Growth_improvements_per_round
@@ -447,6 +503,8 @@ stateDiagram-v2
         BLAME_THE_MODEL
         SAME_FINDING_TWICE
         UNREGISTERED_POSTMORTEM
+        ROOT_CAUSE_NULL
+        SEVERITY_ASSUMED
     }
 ```
 
@@ -459,3 +517,14 @@ stateDiagram-v2
 | 1.0.0 | 2026-02-21 | Initial skill. Born from OAuth3 spec QA finding (wrong repo URL). |
 | 1.1.0 | 2026-02-22 | Added MAGIC_WORD_MAP (postmortem→verification, root_cause→causality, lesson→learning, action→act). Added T0/T1 section tags. |
 | 1.2.0 | 2026-02-22 | Added QUICK LOAD block (with GLOW/Northstar/Three Pillars fields), Three Pillars section (LEK/LEAK/LEC), GLOW matrix (section 9) with belt progression, Northstar alignment section (Max_Love application), Triangle Law (section 11, REMIND→VERIFY→ACKNOWLEDGE for 3 contracts), mermaid stateDiagram-v2 of postmortem loop, updated MAGIC_WORD_MAP with LEK/LEAK/LEC, bumped version. |
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Every finding has at least 1 concrete improvement (never-worse doctrine); postmortem_registry.jsonl grows monotonically; improvements/findings ratio ≥ 1.0 | +25 per QA round with all findings mapped to concrete improvements |
+| **L** (Love/Quality) | Zero SAME_FINDING_TWICE events; recurrence rate <5% in last 30 days; zero PROSE_ONLY_FIX events — all fixes are code/config/skill/gate changes | +20 per postmortem session with zero S1-HIGH violations |
+| **O** (Output) | Complete postmortem_registry.jsonl entry: all schema fields populated (finding + root_cause + severity + improvement + verify_command + recurrence_count) | +15 per QA round with complete registry artifact |
+| **W** (Wisdom) | System intelligence advances permanently: new gates prevent same mistake class; CNF capsules enriched with anti-patterns; recipe hit rate improves without retraining | +20 per session where improvements advance NORTHSTAR metric (recipe hit rate / system quality) |
+
+**Evidence required for GLOW claim:** postmortem_registry.jsonl (1 entry per round with all fields, monotonically growing), improvement.type ∈ {forbidden_state, gate, recipe, swarm, checklist, cnf_capsule} for every finding. No FINDING_WITHOUT_IMPROVEMENT, SAME_FINDING_TWICE, PROSE_ONLY_FIX, or UNREGISTERED_POSTMORTEM events.

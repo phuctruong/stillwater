@@ -1753,3 +1753,14 @@ stateDiagram-v2
       Load the full file for production hook authoring.
       The seed above is the minimal context-compression payload — sufficient to reconstruct
       which gates apply to which hook types without re-reading the full catalog.
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Every hook emitted has all 5 security declaration fields populated (non-null); hook_security_manifest.json present at rung_65537; security declaration complete before implementation | +25 per hook validated at rung_65537 |
+| **L** (Love/Quality) | Zero hooks without security declarations; no Stop hook missing halt_criterion; no injection hook without sanitization; no UV shebang missing from line 1 | +20 per hook review with zero Lane A violations |
+| **O** (Output) | Complete evidence bundle: hook_security_manifest.json + test_results.txt + config_patch (if applicable) + evidence_manifest.json (sha256 completeness check) | +15 per hook with complete evidence bundle |
+| **W** (Wisdom) | Zero security regressions across hook versions; no version upgrade weakens a security gate or declaration requirement; agent privilege surface fully audited and visible | +20 per session with Anti_Optimization_Clause audit passing and zero HOOK_WITHOUT_SECURITY_DECLARATION events |
+
+**Evidence required for GLOW claim:** hook_security_manifest.json (all 5 security declaration fields per hook), test_results.txt (all hook tests pass), evidence_manifest.json (sha256 completeness). No HOOK_WITHOUT_SECURITY_DECLARATION, SILENT_HOOK_FAILURE, MISSING_HALT_CRITERION, or INJECTION_WITHOUT_SANITIZATION events.

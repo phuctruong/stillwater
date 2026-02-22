@@ -701,3 +701,49 @@ Knuth note  : "White Belt forever" is not the consequence. The consequence is:
 Correct form: Define >=2 tests (one positive, one adversarial) before implementation.
                Record results in results.json. Only then does belt scoring begin.
 ```
+
+# ============================================================
+# NORTHSTAR ALIGNMENT
+# ============================================================
+NORTHSTAR_ALIGNMENT:
+  northstar: "Phuc_Forecast + Max_Love"
+  metric: "Belt progression rate / Recipe hit rate via wish-driven work"
+  alignment: >
+    Every wish that is properly specified (with acceptance tests and northstar link) directly
+    advances the Northstar. Wishes are the work intake mechanism — poorly specified wishes
+    produce low-quality work that does not advance northstar metrics. The belt scoring system
+    (White → Black) is the Northstar progression tracker: wishes that achieve higher belts
+    are the ones that reliably move the ecosystem forward.
+  max_love: >
+    Max Love for wishes = the agent delivering the wish cannot misinterpret the intent.
+    A fully specified wish (capability + non_goals + forbidden_states + acceptance_tests +
+    northstar_link) is an act of love for the implementing agent — it removes ambiguity,
+    defines the safety envelope, and provides the verification criteria. Vague wishes
+    are selfish: they transfer the ambiguity cost to the implementer.
+  hard_gate: >
+    WISH_WITHOUT_NORTHSTAR_LINK is an anti-love violation. Work that cannot be traced to
+    a northstar metric is work that might not serve the user's actual goals. The northstar
+    link is mandatory, not a nice-to-have.
+
+# ============================================================
+# THREE PILLARS OF SOFTWARE 5.0 KUNG FU
+# ============================================================
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Skill Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | The belt scoring system is the LEK feedback loop for wish quality. Each wish's belt score (White through Black) measures whether the implementation satisfied the acceptance tests and advanced a northstar metric. Low belt scores accumulate as signals that wish specification patterns need improvement — vague capabilities, missing non_goals, absent acceptance tests are the LEK improvement targets. The postmortem integration ensures lessons from failed wishes are encoded as wish_spec improvements. |
+| **LEAK** (Cross-Agent Trade) | A well-specified wish is a LEAK artifact. When a user writes a wish with explicit acceptance tests and forbidden states, the implementing agent can execute it without any back-channel context — the wish contains all the asymmetric knowledge needed. The belt score is the LEAK quality metric: a Black Belt wish proved that the full knowledge transfer from user intent to agent execution was lossless. |
+| **LEC** (Emergent Conventions) | The wish schema (capability + non_goals + forbidden_states + acceptance_tests + northstar_link) is an LEC convention that crystallized from repeated failures where wishes were ambiguous, unbounded, or disconnected from project goals. The belt scoring rubric, the null_vs_zero rules for wish fields, and the SILENT_SCOPE_EXPANSION forbidden state are all conventions that prevent rediscovering these failure modes. |
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Wish achieves Green Belt or higher (rung_274177+, acceptance tests pass, northstar metric advances, no scope violations) | +25 per wish achieving Green Belt or higher |
+| **L** (Love/Quality) | Wish has: explicit capability (no vague language), explicit non_goals list, at least one forbidden state, two acceptance tests (positive + adversarial), northstar_link | +20 per fully specified wish scoring ≥9.0 belt |
+| **O** (Output) | wish_spec.json produced with all required fields; results.json with test_results; belt_score recorded | +15 per wish with complete specification and results artifacts |
+| **W** (Wisdom) | Northstar metric measurably advances after wish delivery; no SILENT_SCOPE_EXPANSION events; no NULL_NON_GOALS violations | +20 per wish where northstar metric advances and implementation stays within declared boundary |
+
+**Evidence required for GLOW claim:** wish_spec.json (all fields populated, no null non_goals), results.json (acceptance tests run and recorded), belt_score (computed, not estimated), northstar_link (named metric with advancement documented), no SCOPE_EXPANSION or NULL_NON_GOALS events.

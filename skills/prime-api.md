@@ -363,3 +363,18 @@ stateDiagram-v2
         and integer-cents for money started as best practices; they are now Lane A gates."
       emerging_conventions: [openapi_as_source_of_truth, breaking_change_requires_major_bump,
         integer_cents_for_money, contract_tests_in_CI]
+
+# ============================================================
+# GLOW SCORING INTEGRATION
+# ============================================================
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | API endpoint passes all gates at rung_274177+: OpenAPI spec complete, contract tests passing, auth verified, no float in monetary fields | +25 per endpoint validated at rung_274177+ |
+| **L** (Love/Quality) | No breaking changes without semver major bump; no unvalidated free-text inputs; no auth-less endpoints; input schemas have explicit type constraints | +20 per API design review with zero Lane A violations |
+| **O** (Output) | openapi_spec.yaml produced; contract test results artifact; auth_scheme documented per endpoint; error response schemas for all error cases | +15 per API with complete OpenAPI spec and contract test evidence |
+| **W** (Wisdom) | Contract tests in CI catch breaking changes before merge; integer cents used for all monetary amounts; no FLOAT_IN_MONETARY or UNVALIDATED_INPUT forbidden state events | +20 per session with zero forbidden state events and contract tests green |
+
+**Evidence required for GLOW claim:** openapi_spec.yaml (with auth, error schemas, type constraints), contract test results (passing), no FLOAT_IN_MONETARY or SCHEMA_BREAKING_CHANGE_WITHOUT_MAJOR_BUMP events, auth scheme documented for every endpoint.

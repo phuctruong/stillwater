@@ -297,13 +297,17 @@ Fix: core_insight is one paragraph max; key_risk and recommended_action are one 
 
 | Pillar | How This Agent Applies It |
 |--------|--------------------------|
-| **LEK** (Self-Improvement) | Improves triangulation quality through divergence-forced reselection — when synthetic consensus is detected, the council rebuilds itself with a more orthogonal citizen set |
-| **LEAK** (Cross-Agent Trade) | Exports synthesis.json (multi-lens insight) to Planner and Forecaster agents; imports domain context from Scout reports to calibrate citizen selection scores |
-| **LEC** (Emergent Conventions) | Enforces the no-averaging convention (synthesis from tension, not mean), the minimum-3-citizens rule, and the falsifier-required discipline across all advisory outputs |
+| **LEK** (Self-Improvement) | Improves triangulation quality through divergence-forced reselection loops — when synthetic consensus is detected (all citizens agree), the council rebuilds with a more orthogonal citizen set (recompute divergence scores, select at least one citizen from a different tradition); synthesis.json entries where the falsifier was later triggered (the recommended action failed) become the highest-value learning signals, revealing which citizen combinations systematically over-agree on a question class; council runs where the downstream Planner rejected the synthesis reveal which recommendations were too abstract to execute |
+| **LEAK** (Cross-Agent Trade) | Exports synthesis.json (the insight that emerges from citizen tension, with a testable falsifier) to the Planner (concrete action recommendation) and to the Forecaster (failure mode hypotheses extracted from citizen disagreements become Lane C failure modes); exports council_transcript.json to the Podcast for lesson extraction (multi-lens disagreements are the richest lesson sources); imports domain context from Scout reports to calibrate citizen selection scores — the Scout's completeness_matrix.json exposes which knowledge domains are best-covered in the codebase, guiding which citizen lens will add the most new information |
+| **LEC** (Emergent Conventions) | Enforces the no-averaging convention (synthesis must emerge from tension between perspectives, not from averaging them — FORCED_CONSENSUS is a forbidden state), the minimum-3-citizens rule (COUNCIL_BELOW_MINIMUM is forbidden because triangulation requires at least 3 points — 2 citizens produce a debate, not a triangulation), and the falsifier-required discipline (synthesis.json without a falsifier field is an unfalsifiable prophecy, not an advisory insight — SKIP_FALSIFIER is a forbidden state that blocks EXIT_PASS) |
 
-**Belt Progression:** Orange belt — the Citizen Council has learned to assemble genuinely divergent panels rather than comfortable consensus groups, producing falsifiable insights instead of averaged opinions.
+**Belt Progression:** Orange belt — the Citizen Council has learned to assemble genuinely divergent panels rather than comfortable consensus groups, producing falsifiable insights instead of averaged opinions by exploiting the tension between orthogonal intellectual traditions.
 
-**GLOW Score Contribution:** +10 per verified council run with council_transcript.json + triangulation_report.json + synthesis.json, minimum 3 citizens, and a non-null falsifier.
+**GLOW Score Contribution:**
+- **G** (Growth): Each synthesis.json where the falsifier was later triggered (the recommendation failed) teaches the Council which citizen combination patterns are prone to collective blind spots
+- **L** (Learning): Synthetic consensus detections (all citizens agreed on first selection) reveal which question domains compress into single-tradition agreement, requiring more aggressive divergence scoring
+- **O** (Output): +10 per verified council run at rung 641 with council_transcript.json (at least 3 citizens, per-citizen perspectives, synthetic_consensus_detected explicitly set), triangulation_report.json (at least 1 disagreement), and synthesis.json (non-null falsifier, concrete recommended_action)
+- **W** (Wins): Downstream Planner adopted synthesis recommended_action verbatim = 1 win; synthesis falsifier was not triggered (recommendation held) = 2 wins; council reselected citizens due to synthetic consensus detection (showed genuine adversarial quality control) = +1 bonus
 
 ---
 

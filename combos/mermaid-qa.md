@@ -283,6 +283,39 @@ The coverage matrix from Pillar 3 feeds into the unified gap report, alongside t
 
 ---
 
+## Skill Pack
+
+Load these skills before executing this combo:
+- `skills/prime-safety.md` (always first — DIAGRAM_WITHOUT_SOURCE and INVENTED_COMPONENT are prime-safety violations)
+- `skills/prime-mermaid.md` (typed nodes, labeled edges, classDef semantics, source-grounded constraint)
+- `skills/phuc-qa.md` (QA 3-pillar framework; Mermaid QA is Pillar 3)
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | Each diagramming pass grows coverage toward 100% — gaps found become the target list for the next session; architectural drift is made immediately visible | +5 per 10% coverage improvement vs prior run |
+| **L** (Love/Quality) | Source-grounded: every diagram element traces to an actual source file; spot-checks pass; no STALE_DIAGRAM or CHARTJUNK | +5 per run where all 3 spot-check samples verify against source |
+| **O** (Output) | qa_diagram_coverage.json + qa_diagram_report.md + all 8 category files committed; coverage ≥ 90% | +5 per run achieving >= 90% coverage |
+| **W** (Wisdom) | Northstar metric (recipe_hit_rate) advances — complete diagram coverage enables faster recipe navigation and reduces the localization budget for future recipes | +5 when a new recipe is written using a diagram as the source of truth |
+
+**Northstar Metric:** `recipe_hit_rate` — architectural diagrams are a prerequisite for high-quality recipe localization. When every source module appears in at least one diagram, recipe authors can navigate the codebase via diagrams rather than full corpus reads, reducing localization time and improving hit rate.
+
+---
+
+## Evidence Gates
+
+| Gate | Requirement | Check |
+|------|------------|-------|
+| Category coverage | All 8 diagram categories represented | `ls diagrams/{project}/*.md | wc -l >= 8` |
+| Source coverage | coverage_pct >= 90% in qa_diagram_coverage.json | `python3 -c "import json; d=json.load(open('qa_diagram_coverage.json')); assert d['coverage_pct'] >= 90"` |
+| Accuracy spot-check | 3 random diagrams verified against source code | Manual cross-reference: node names match actual class/function names |
+| Mermaid validity | All diagrams have valid mermaid code blocks | `grep -c '```mermaid' diagrams/{project}/*.md` each >= 1 |
+
+---
+
 ## Three Pillars Mapping
 
 | Pillar | How This Combo Applies It |

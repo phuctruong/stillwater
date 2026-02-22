@@ -1012,3 +1012,20 @@ INTEGRATION:  Load with: prime-safety (1) + phuc-axiom (0) + phuc-loop (4)
 *Conventions are not designed — they crystallize from repeated patterns.*
 *Every convention is compression. Without compression, it is not a convention.*
 *LEC_strength = |C_active| × D_avg × A_rate*
+
+---
+
+## GLOW Scoring Integration
+
+This skill contributes to GLOW score across these dimensions:
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Convention crystallization — each new convention that crosses the LEC threshold (3+ independent usages, named, documented, adoption > 50% of relevant agents). A convention promoted from CRYSTALLIZE to STABILIZE = G≥20. | +10 to +20 |
+| **L** (Love/Quality) | Convention adoption measurement — every session that actively measures A_rate for existing conventions (not just declares them). Sessions where ORPHAN_CONVENTION or CONVENTION_CONFLICT_UNRESOLVED is detected and resolved = L≥15. | +10 to +20 |
+| **O** (Output) | LEC audit artifacts committed — convention_registry.json with LEC_strength measurements (|C| × D_avg × A_rate per convention) + drift detection results + deprecation plans for any changed conventions. | +5 to +20 |
+| **W** (Wisdom) | Compression verification — each session where a convention is proven to reduce description length (measured: tokens before convention vs. after convention for the same concept). New compression gain documented in convention entry = W≥15. | +5 to +20 |
+
+**Session GLOW target:** Any LEC audit session should achieve GLOW ≥ 50. Convention name + documentation = base floor. Adoption measurement done = L≥10. LEC_strength computed = O≥10. Compression verified = W≥10.
+
+**Evidence required for GLOW claim:** git commit hash + convention_registry.json with LEC_strength calculation showing |C|, D_avg, A_rate values. For G points: evidence of 3+ independent usages (file paths / commit hashes). For W points: compression ratio calculation (tokens saved per usage × adoption rate). For O≥20: drift detection must have been run (comparing current convention usage to documented convention).

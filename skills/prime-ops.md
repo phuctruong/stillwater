@@ -514,3 +514,14 @@ EXIT_NEED_INFO --> [*]
       - "Blameless PIR — no individual blame"
       - "Golden signals monitored for every service"
     seed_checksum: "prime-ops-v1.3.0-rollback-runbook-canary-pir-blameless"
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | New service fully instrumented with golden signals + runbook per alert + canary deploy strategy; every deploy at rung_65537 with rollback tested in staging | +25 per service validated at rung_65537 |
+| **L** (Love/Quality) | Zero deploys without change ticket; zero alerts without runbook links; no silent rollbacks; PIR published for every SEV1/SEV2 within 48 hours | +20 per ops session with zero Lane A violations |
+| **O** (Output) | Complete evidence bundle: change_ticket + rollback_test_result.txt + canary_metrics.txt + runbook links + PIR (if SEV1/SEV2) | +15 per deploy with complete gate artifacts |
+| **W** (Wisdom) | Production incident resolved with automatic rollback; PIR root cause prevents recurrence class; canary limits blast radius to ≤5% of traffic | +20 per session with golden signals monitored and zero blameless PIR violations |
+
+**Evidence required for GLOW claim:** change_ticket (linked), rollback_test_result.txt (PASS in staging), canary_metrics.txt (5% minimum, 15-minute bake), runbook_links.txt (per alert), PIR.md (for SEV1/SEV2 within 48h). No DEPLOY_WITHOUT_CHANGE_TICKET, SILENT_ROLLBACK, or INCIDENT_CLOSED_WITHOUT_PIR events.

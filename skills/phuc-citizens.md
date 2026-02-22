@@ -643,3 +643,14 @@ stateDiagram-v2
 #   3+ uncorrelated citizens + triangulation_summary artifact + citizens-advise-human-decides
 #   + HALLUCINATED_CITIZEN = BLOCKED + 641 rung minimum.
 #   LEK = session artifacts accumulate | LEAK = citizens ARE asymmetric knowledge | LEC = council conventions.
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Each council session reveals at least 1 structural tension not identified by single-agent forecasting; citizen frames validated against domain strengths with <5% HALLUCINATED_CITIZEN rate | +25 per council session with ≥1 new structural tension identified and triangulation_summary complete |
+| **L** (Love/Quality) | Zero CITIZEN_OVERRULE_HUMAN events; 100% of unresolved tensions routed to Phuc Prime with EXIT_NEED_INFO; zero CORRELATED_FRAMES anti-pattern (3+ consecutive sessions with zero tensions) | +20 per council session with zero S1-HIGH violations |
+| **O** (Output) | Complete triangulation_summary artifact: all schema fields populated (perspectives + tensions + recommendations + human_decision_required flag) | +15 per council session with complete evidence artifact |
+| **W** (Wisdom) | Multi-frame council advances Phuc_Forecast FORECAST phase quality; council catches failure modes single-agent forecasting misses; adversarial check satisfied by structured epistemic disagreement | +20 per session where council triangulation improves decision quality vs single-agent baseline |
+
+**Evidence required for GLOW claim:** triangulation_summary.json (all schema fields: perspectives + structural_tensions + recommendations + human_decision_required), citizen_frames_validated (HALLUCINATED_CITIZEN rate tracked), EXIT_NEED_INFO used for all unresolved tensions. No CITIZEN_OVERRULE_HUMAN, CORRELATED_FRAMES, or SUMMARY_AS_EVIDENCE events.

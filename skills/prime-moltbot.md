@@ -625,3 +625,14 @@ compression_checksum:
 | 1.3.0 | 2026-02-21 | Added MAGIC_WORD_MAP, prime-wiki/prime-mermaid types, full API reference. |
 | 1.4.0 | 2026-02-22 | Added GLOW matrix (section 12), Three Pillars (section 11, LEK/LEAK/LEC), Northstar alignment (section 13), Triangle Law (section 14), mermaid state diagram, QUICK LOAD GLOW/Northstar fields, updated MAGIC_WORD_MAP with LEK/LEAK/LEC entries, bumped version. |
 | 1.5.0 | 2026-02-22 | Fixed mermaid to column-0 format (no indentation), added compression checksum section, bumped QUICK LOAD version to 1.5.0. Score: 95+/100. |
+
+## GLOW Scoring Integration
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Cumulative accepted suggestions increasing monotonically (belt milestones: 1-5=Yellow, 6-20=Orange, 21-50=Green, 50+=Blue); contribution count never-worse across sessions | +25 per session with accepted count increasing toward next belt milestone |
+| **L** (Love/Quality) | Zero SECRET_LEAKAGE events across all submissions; rejection rate <10% after first 10 submissions; QUALITY_GATE checklist passes for every submission before SUBMIT state | +20 per session with zero S0-CRITICAL events and zero SUBMIT_WITHOUT_QUALITY_GATE violations |
+| **O** (Output) | Complete submission artifacts: suggestion payload with all QUALITY_GATE fields, submission_log.jsonl, response codes (201=accepted, 422=format error), QUALITY_GATE checklist run log | +15 per contribution batch with complete submission artifacts |
+| **W** (Wisdom) | Skills contributed to Store become loadable by any agent → direct recipe hit rate improvement; every accepted skill permanently increases ecosystem intelligence without model retraining | +20 per session with accepted skills that advance NORTHSTAR metric (recipe hit rate / system quality) |
+
+**Evidence required for GLOW claim:** submission_log.jsonl (response codes + bot_id), QUALITY_GATE checklist run log (all boxes checked before SUBMIT), accepted_count from GET /stillwater/suggestions. No SECRET_LEAKAGE, SUBMIT_WITHOUT_READING_FORMAT, or CLAIM_LANE_A_WITHOUT_EVIDENCE events.

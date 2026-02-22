@@ -219,6 +219,27 @@ If:
 
 ---
 
+## Skill Pack
+
+Load these skills before executing this combo:
+- `skills/prime-safety.md` (always first — no tool calls or file writes in Plan Mode is a prime-safety invariant)
+- `skills/phuc-forecast.md` (DREAM→FORECAST→DECIDE: the Plan compiler follows this structure)
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | Plan.json produced with goal + assumptions + steps + verification + risk; reusable for future similar tasks | +5 per Plan.json committed to the planning corpus |
+| **L** (Love/Quality) | Mode Enforcer confirms no tool calls, no file writes, no "completed" language in plan output | +5 when Mode Enforcer emits no ERROR_MODE_VIOLATION |
+| **O** (Output) | Plan.json + Plan.md + wish.lock.json (if promoted) + mode_transition.log committed | +5 per complete plan with promotion gate |
+| **W** (Wisdom) | Northstar metric (recipe_hit_rate) advances — Plan.json templates accumulate into a planning corpus that reduces future scoping time | +5 when a prior Plan.json is reused as template for a similar task |
+
+**Northstar Metric:** `recipe_hit_rate` — each Plan.json committed is a recipe for future intent capture. When a similar task arrives, the prior plan provides the template for goal + assumptions + steps, dramatically reducing planning time.
+
+---
+
 ## Three Pillars Mapping
 
 | Pillar | Element | Role in this Combo |

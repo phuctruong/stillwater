@@ -171,6 +171,28 @@ If you want, next I can produce the **canon file layout** for this meta-recipe:
 
 ---
 
+## Skill Pack
+
+Load these skills before executing this combo:
+- `skills/prime-safety.md` (always first — ABI match rule is fail-closed: missing capability_tags → BLOCKED)
+- `skills/prime-coder.md` (verification gate, evidence discipline, replay hooks)
+- `skills/phuc-orchestration.md` (task routing, dispatch matrix, CNF capsule rules)
+
+---
+
+## GLOW Scoring
+
+| Dimension | Contribution | Points |
+|-----------|-------------|--------|
+| **G** (Growth) | Meta-recipe routes new combo types by adding capability_tags to the ABI — each new combo extends the routing graph without breaking existing wish/recipe pairs | +5 per new capability_tag added to ABI that enables routing a previously unroutable task class |
+| **L** (Love/Quality) | ABI match rule enforced: requirements.capability_tags ⊆ recipe.satisfies.capability_tags; proof_requirements.required_artifacts ⊆ recipe.artifacts.will_emit | +5 per DevLoop run that routes correctly without BLOCKED on ABI mismatch |
+| **O** (Output) | Verified PATCH bundle + governance verdict artifacts; DevLoop meta-recipe flowchart maintained with all 6 combos represented | +5 per complete verified patch routed through the meta-recipe |
+| **W** (Wisdom) | Northstar metric (recipe_hit_rate) advances — the meta-recipe is the composition of all 6 combos into a single deterministic router that maximizes recipe reuse | +5 when a task is correctly routed without human intervention using the ABI classification |
+
+**Northstar Metric:** `recipe_hit_rate` — the meta-recipe is the orchestration layer that maximizes hit rate. By routing tasks to the correct combo (bugfix, dep_bump, ci_triage, etc.) automatically via ABI capability_tags, it eliminates the planning overhead that causes recipe mismatches.
+
+---
+
 ## Three Pillars Mapping
 
 | Pillar | How This Combo Applies It |

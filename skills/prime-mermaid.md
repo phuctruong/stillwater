@@ -904,3 +904,20 @@ PRIME_MERMAID_SKILL:
 | **LEAK** (Cross-Agent Trade) | Mermaid diagrams are the visual trade goods of the LEAK protocol — a Graph Designer sub-agent receives a state machine description from the main session (asymmetric knowledge: main session has task context, graph designer has visual encoding rules) and returns a canonical *.prime-mermaid.md + *.mmd + *.sha256 triple. This triple is the LEAK surplus: neither the main session nor the designer could produce it alone. OOLONG integration exports diagrams across project boundaries. |
 | **LEC** (Emergent Conventions) | prime-mermaid enforces the canonical format convention (*.prime-mermaid.md + *.mmd + *.sha256), the forbidden-states-as-red-nodes convention, and the multi-channel encoding rule (color + shape + label + edge = four independent signals). These conventions crystallized from repeated diagram failures (ambiguous graphs, undeclared forbidden states, sha256 instability) and are now the shared graph design protocol across the entire Phuc ecosystem. |
       - "If it will be loaded by a machine: Prime Mermaid is always better."
+
+---
+
+## GLOW Scoring Integration
+
+This skill contributes to GLOW score across these dimensions:
+
+| Dimension | How This Skill Earns Points | Points |
+|-----------|---------------------------|--------|
+| **G** (Growth) | Diagram coverage improvement — each new *.prime-mermaid.md + *.mmd + *.sha256 triple added to a skill or recipe that previously had no structural diagram. Closed state space with all forbidden states marked = G≥15. | +5 to +20 |
+| **L** (Love/Quality) | SHA-256 stability — every sealed diagram (sha256 stable across two independent normalizations) produced in a session. Sessions where DRIFT_WITHOUT_VERSION_BUMP or UNLABELED_BRANCH_FROM_DECISION_NODE anti-patterns are zero. | +10 to +20 |
+| **O** (Output) | Sealed diagrams committed — each session producing *.prime-mermaid.md + *.mmd + *.sha256 triple committed to git with closed state space and all forbidden states marked with classDef. OOLONG counting results with integer output = O≥15. | +5 to +25 |
+| **W** (Wisdom) | Canonical node taxonomy growth — each new node type or edge semantic added to the node/edge type systems (sections G and G) that crystallized from a real graph failure (open state creep, channel mixing, etc.). | +5 to +15 |
+
+**Session GLOW target:** Any graph design session using prime-mermaid should achieve GLOW ≥ 50. Closed state space + labeled branches = base floor. SHA-256 computed and stable = L≥15. Triple committed = O≥15.
+
+**Evidence required for GLOW claim:** git commit hash + *.sha256 file path (proving sha256 was computed) + node_count + edge_count + forbidden_states_defined list. For O≥20: sha256 must be stable across two independent normalizations (recomputed and matches). For L points: Socratic review must have been run (all 7-12 questions answered and passed). For W points: new taxonomy entry must cite the specific graph failure it closes.
