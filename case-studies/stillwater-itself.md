@@ -145,7 +145,7 @@
 
 | Date | What | Rung | Agent | Session |
 |------|------|------|-------|---------|
-| 2026-02-21 | v2.0.0 release: ecosystem upgrade, roadmap orchestration, belt pricing, PZip GAR, NORTHSTAR injection, OSS redaction | 641 | opus (orchestrator) | central hub |
+| 2026-02-21 | v2.0.0 release: ecosystem upgrade, roadmap orchestration, belt pricing, PZip integration, NORTHSTAR injection, OSS redaction | 641 | opus (orchestrator) | central hub |
 | 2026-02-21 | papers/oauth3-spec-v0.1.md — AgencyToken schema, scope registry (5 platforms, 30 scopes), consent flow, revocation, evidence bundle | 641 | sonnet (coder) | stillwater /build session |
 | 2026-02-21 | skills/oauth3-enforcer.md — G1-G4 gates, fail-closed contract, FSM, audit schema, integration pattern (876 lines) | 641 | sonnet (coder) | stillwater /build session |
 | 2026-02-21 | tests/test_oauth3_enforcer.py — 16 tests (G1:5, G2:2, G3:3, G4:4, integration:2), reference implementation | 641 | sonnet (coder) | stillwater /build session |

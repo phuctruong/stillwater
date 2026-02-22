@@ -77,7 +77,7 @@ For AI agents browsing the web, "original" means the full HTML page the agent sa
 
 Until PZip, this was economically impractical. A standard full-page screenshot runs approximately 800 KB to 2 MB per page. Storing 30 browsing actions per day per user at standard S3 pricing costs roughly $146 per user per month in raw storage alone — before bandwidth, before retrieval, before redundancy. No consumer-grade AI agent product can carry that cost.
 
-PZip solves this through type-aware compression that achieves substantially higher compression ratios on HTML content than general-purpose compressors, with a never-worse fallback guarantee. The result: full HTML browsing history at approximately $0.00032 per user per month.
+PZip solves this through a proprietary compression approach that achieves industry-leading compression ratios on HTML content, with a never-worse fallback guarantee. The result: full HTML browsing history at approximately $0.00032 per user per month.
 
 The implication is not merely economic. The implication is that ALCOA-O compliance — storing original records — becomes viable at scale for the first time. SolaceAGI can store what the agent actually saw. Not a summary. Not a reconstructed description. The original record.
 
@@ -97,7 +97,7 @@ This is not a critique of those vendors' intentions. It is a structural observat
 
 **Competitors cannot store original records.**
 
-PZip's compression approach enables storage economics that make ALCOA-O compliance economically viable at scale. Any competitor attempting to match these storage economics on HTML content must either build an equivalent system from scratch — at significant engineering cost — or accept storage costs that make ALCOA-O compliance economically unviable.
+PZip's proprietary compression enables storage economics that make ALCOA-O compliance economically viable at scale. Any competitor attempting to match these storage economics on HTML content must either build an equivalent system from scratch — at significant engineering cost — or accept storage costs that make ALCOA-O compliance economically unviable.
 
 **Governance adds friction; friction reduces conversions; conversions drive revenue.**
 

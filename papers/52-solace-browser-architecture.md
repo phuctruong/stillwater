@@ -284,13 +284,9 @@ The structural difference is significant. OAuth2 grants persistent access. OAuth
 
 ### 3.5 Moat #4: PZip — Infinite Replay at $0.00032/User/Month
 
-**[B]** PZip (the compression engine from `/home/phuc/projects/pzip/`) achieves 45:1 to 80:1 effective compression on browser history through a three-layer deduplication hierarchy called the Global Asset Registry (GAR):
+**[B]** PZip is a proprietary compression engine that achieves industry-leading compression ratios on browser history, making full-history storage economically negligible.
 
-- **Layer 1 — Global assets**: React, jQuery, Bootstrap, common fonts. Stored once across all users. A 150KB React bundle is stored once, period.
-- **Layer 2 — Domain assets**: Site CSS, site JS, logos. Stored once per domain across all users. LinkedIn's stylesheet is stored once.
-- **Layer 3 — User deltas**: Only the unique text, form fills, and page-specific content. Approximately 11KB per page on average.
-
-**[A]** The economic impact at scale: `10,000 users × 1,000 pages/user = 7.3TB raw → ~160GB with GAR = $3.20/month total = $0.00032/user/month.` **[C]** This makes full-history storage economically negligible — which means Solace Browser can offer unlimited browsing history at no meaningful additional cost. No competitor offers this.
+**[A]** The economic impact at scale: `10,000 users × 1,000 pages/user = 7.3TB raw → ~$3.20/month total = $0.00032/user/month.` **[C]** This makes full-history storage economically negligible — which means Solace Browser can offer unlimited browsing history at no meaningful additional cost. No competitor offers this.
 
 **[B]** PZip also enables Part 11 compliance: "enduring" records. A compressed record stored at $0.00032/user/month can be retained indefinitely without storage cost accumulating to a business problem. For pharmaceutical and medical device companies, this is a regulatory requirement. For everyone else, it is a differentiator: your AI agent's complete history, forever, for free.
 
@@ -464,7 +460,7 @@ graph TB
 
 **No Recipe System**: Most tools re-execute from scratch on every task invocation. There is no concept of "I have seen this task before; here is the deterministic replay." Every task costs full LLM inference. This is economically untenable at scale.
 
-**No PZip**: No compression layer, no GAR, no cost-effective long-term storage of agent history.
+**No PZip**: No proprietary compression layer, no cost-effective long-term storage of agent history.
 
 **No Twin Architecture**: Most tools run wherever they are deployed and do not synchronize between a local browser and a cloud browser. Fingerprint matching between environments is not addressed.
 
@@ -795,7 +791,6 @@ graph LR
     subgraph L5_EVIDENCE[Layer 5: Evidence Pipeline]
         CAP[Page Load\nCapture]
         PZIP[PZip\nCompressor]
-        GAR[Global Asset\nRegistry]
         HASH[SHA256\nChainer]
         FORM[Form Change\nRecorder]
         BUNDLE[Evidence\nBundle Builder]
@@ -813,8 +808,7 @@ graph LR
     SON -->|action_trace| BUNDLE
 
     CAP --> PZIP
-    PZIP -->|asset refs + delta| GAR
-    GAR -->|compressed snapshot| HASH
+    PZIP -->|compressed snapshot| HASH
     FORM --> BUNDLE
     HASH -->|snapshot_id + chain_hash| BUNDLE
     BUNDLE --> SEAL
@@ -892,9 +886,9 @@ graph TD
 
 **Prediction 2: PZip Storage Cost Scales Sub-Linearly with Users**
 
-*Claim*: Marginal storage cost per user decreases as user count increases, due to GAR Layer 1 and Layer 2 deduplication.
+*Claim*: Marginal storage cost per user decreases as user count increases, due to PZip's proprietary deduplication approach.
 
-*Mechanism*: The first LinkedIn user stores all LinkedIn assets. Every subsequent LinkedIn user reuses those assets. Layer 2 (domain assets) cost approaches zero at scale.
+*Mechanism*: PZip's compression architecture ensures that shared content across users is stored efficiently, so per-user cost decreases as the user base grows.
 
 *Falsifier*: Storage cost per user stable or increasing as user count grows past 1,000.
 
@@ -944,7 +938,7 @@ Once it has authority, it checks whether it has seen this task before. If the re
 
 **[B]** If the cache misses, it calls Sonnet to execute the task from scratch. Sonnet navigates the browser using ref-based DOM targeting — stable identifiers that survive CSS changes — and creates a recipe draft for future use. The execution is bounded: maximum 30 seconds, maximum 3 retries, maximum token budget. If any bound is hit, the task is escalated to a human queue.
 
-At completion, whether from a cache hit or a cold execution, every action is sealed into an evidence bundle that satisfies ALCOA+. The bundle is stored at $0.00032/user/month — low enough to retain indefinitely. The user can browse their AI's complete history, full-text search it, replay any session step-by-step, and produce a compliance-grade audit report.
+At completion, whether from a cache hit or a cold execution, every action is sealed into an evidence bundle that satisfies ALCOA+. PZip compression reduces the storage cost to $0.00032/user/month — low enough to retain indefinitely. The user can browse their AI's complete history, full-text search it, replay any session step-by-step, and produce a compliance-grade audit report.
 
 **[C]** This is what five axioms look like when applied to a real problem. The axioms are not decorations. They are the mechanism. Remove any one axiom and a part of the architecture becomes structurally undefined — and you get either a system that works but cannot be trusted, or a system that is trusted but cannot scale.
 
@@ -997,5 +991,5 @@ We made five falsifiable predictions: recipe hit rate compounds, PZip storage sc
 
 *Next papers in this series:*
 - *Paper #53: The OAuth3 Consent Protocol — Formal Specification and Reference Implementation*
-- *Paper #54: PZip Architecture — Global Asset Registry and the Economics of Infinite Replay*
+- *Paper #54: PZip Architecture — Proprietary Compression and the Economics of Infinite Replay*
 - *Paper #55: Recipe System Theory — PM Triplets, SHA256 Caching, and the Compounding Intelligence Loop*

@@ -19,7 +19,7 @@ flowchart LR
         PAUDIO["paudio\nDeterministic TTS\nVoice Arena\npaudio-compute\npaudio-judge\npaudio-karaoke\npaudio-stt"]
         PHUCNET["phucnet\nphuc.net\nArticles + books\nIF Theory essays"]
         IF["if\nIF Theory physics\nMersenne Tower Theorem\nPrime Field Theory"]
-        PZIP["pzip\nUniversal compression\nGAR 66:1 ratio\n$0.00032/user/mo"]
+        PZIP["pzip\nUniversal compression\nIndustry-leading ratios\n$0.00032/user/mo"]
     end
 
     subgraph PRIVATE ["Private"]

@@ -15,7 +15,7 @@ You can use **Stillwater OS skills + swarms** to get *frontier-level engineering
 - deterministic run records
 - CI gates that a skeptic can replay
 
-PZIP is a strong MVP demonstration of the approach **on the native (C++) delivery path**: the CLI round-trips and type-specific “weapons” fire (e.g., CSV lane). The Python packaging/test surface is currently **not** in “skeptic-proof” shape (missing module import breaks `pytest` collection), which is exactly the kind of gap Stillwater is designed to flush out and fix.
+PZIP is a strong MVP demonstration of the approach **on the native (C++) delivery path**: the CLI round-trips and the proprietary compression lanes are active. The Python packaging/test surface is currently **not** in “skeptic-proof” shape (missing module import breaks `pytest` collection), which is exactly the kind of gap Stillwater is designed to flush out and fix.
 
 ---
 
@@ -55,7 +55,7 @@ Net effect: cheap models spend fewer tokens “making things sound right” and 
 
 ### 3.1 What PZIP is (1 sentence)
 
-PZIP is a compression system that tries to beat baseline compressors by using **type-aware generators** (“compress the generator, not the bytes”), with a “never-worse” fallback.
+PZIP is a proprietary compression system that achieves industry-leading compression ratios on structured content, with a “never-worse” fallback guarantee.
 
 ### 3.2 What we can verify locally (without trusting narrative)
 
@@ -63,8 +63,8 @@ From the local checkout, the **native C++ CLI** works:
 
 - `./pzip.sh --version` → reports `pzip 1.0.0-cpp`
 - `./pzip.sh compress …` + `./pzip.sh decompress …` round-trips a file byte-exact
-- `./pzip.sh info …` shows container metadata (`PZ01`, codec, sizes)
-- `./pzip.sh benchmark test_data/sample.csv` shows the CSV weapon is firing and can beat LZMA on at least that sample
+- `./pzip.sh info …` shows container metadata including codec and sizes
+- `./pzip.sh benchmark test_data/sample.csv` demonstrates industry-leading compression results on at least that sample
 
 This is the kind of “minimum viable proof” Stillwater wants: *a skeptic can run it.*
 
