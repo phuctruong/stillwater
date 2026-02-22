@@ -2,7 +2,7 @@
 
 **Tracking since**: 2026-02-21
 **Status**: Phase 1 DONE → Phase 1.5 DONE (1,466 tests) → Phase 2 DONE (805 tests) → Phase 3 DONE (Machine Access: 100, Dashboard: 70, Distribution: 94, Tunnel Engine: 80 tests)
-**Tests**: 2,615 total
+**Tests**: 2,807 total
 **Rung**: 65537 (tunnel engine — security-critical)
 **Belt**: Orange
 
@@ -163,7 +163,7 @@ tunnel.solaceagi.com relay
 | Platforms with PM maps | 6 (LinkedIn, Gmail, Reddit, Notion, HackerNews + more) |
 | Platforms with recipes | 5 (LinkedIn: 6, Gmail: 6, Reddit: ~4, Notion: ~4, HackerNews: ~4) |
 | ROADMAP build prompts | 14 (8 Phase 1.5 + BUILD 11-14) |
-| Tests (total) | 2,615/2,615 passing |
+| Tests (total) | 2,807/2,807 passing |
 | Phase 1.5 tests | 1,466 (OAuth3 core, consent UI, step-up, snapshot, Gmail, Substack, Twitter, machine access, audit trail) |
 | Phase 2 tests | 805 (Reddit + Notion + HackerNews) |
 | Phase 3 tests | 344 (Machine Access: 100 + Dashboard: 70 + Tunnel Engine: 80 + Distribution: 94) |
