@@ -1,0 +1,32 @@
+{
+  "haiku": {
+    "syntax_rate": 1.0,
+    "functional_rate": 1.0,
+    "quality_avg": 0.5875,
+    "context_rate": 1.0,
+    "evidence_completeness": 6.875,
+    "hallucination_rate": 0.1,
+    "rung_avg": 480.75,
+    "total_tests": 4
+  },
+  "sonnet": {
+    "syntax_rate": 1.0,
+    "functional_rate": 1.0,
+    "quality_avg": 0.5875,
+    "context_rate": 1.0,
+    "evidence_completeness": 6.875,
+    "hallucination_rate": 0.1,
+    "rung_avg": 480.75,
+    "total_tests": 4
+  },
+  "opus": {
+    "syntax_rate": 1.0,
+    "functional_rate": 1.0,
+    "quality_avg": 0.5875,
+    "context_rate": 1.0,
+    "evidence_completeness": 6.875,
+    "hallucination_rate": 0.1,
+    "rung_avg": 480.75,
+    "total_tests": 4
+  }
+}

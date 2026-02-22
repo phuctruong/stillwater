@@ -1,0 +1,11 @@
+{
+  "model": "haiku",
+  "task_name": "thread_safe_queue",
+  "syntax_valid": true,
+  "functional_pass": false,
+  "complexity_score": 0.65,
+  "edge_cases_score": 0.6499999999999999,
+  "code_length": 8655,
+  "timestamp": "2026-02-22T17:51:38.878382",
+  "baseline": true
+}

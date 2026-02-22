@@ -1,0 +1,10 @@
+{
+  "model": "haiku",
+  "task_name": "task_3_fibonacci",
+  "syntax_valid": true,
+  "functional_pass": true,
+  "quality_score": 0.4,
+  "timestamp": "2026-02-22T17:36:27.345526",
+  "code": "def fibonacci(n: int) -> list[int]:\n    \"\"\"\n    Generate the first n Fibonacci numbers.\n    \n    Args:\n        n: Number of Fibonacci numbers to generate\n        \n    Returns:\n        List of the first n Fibonacci numbers\n        \n    Raises:\n        ValueError: If n is negative\n        TypeError: If n is not an integer\n        \n    Examples:\n        >>> fibonacci(5)\n        [0, 1, 1, 2, 3]\n        >>> fibonacci(0)\n        []\n        >>> fibonacci(1)\n        [0]\n        >>> fibonacci(2)\n        [0, 1]\n    \"\"\"\n    # Error handling for invalid input\n    if not isinstance(n, int):\n        raise TypeError(f\"n must be an integer, got {type(n).__name__}\")\n    \n    if n < 0:\n        raise ValueError(\"n must be non-negative\")\n    \n    # Handle edge cases\n    if n == 0:\n        return []\n    if n == 1:\n        return [0]\n    \n    # Generate Fibonacci sequence\n    fib_list: list[int] = [0, 1]\n    for i in range(2, n):\n        fib_list.append(fib_list[i - 1] + fib_list[i - 2])\n    \n    return fib_list",
+  "baseline": true
+}

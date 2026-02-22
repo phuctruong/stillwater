@@ -1,0 +1,11 @@
+{
+  "model": "sonnet",
+  "task_name": "async_rate_limiter",
+  "syntax_valid": true,
+  "functional_pass": true,
+  "complexity_score": 0.7,
+  "edge_cases_score": 0.6,
+  "code_length": 9213,
+  "timestamp": "2026-02-22T17:55:42.308734",
+  "baseline": true
+}

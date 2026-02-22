@@ -1,0 +1,10 @@
+{
+  "model": "sonnet",
+  "task_name": "task_3_fibonacci",
+  "syntax_valid": true,
+  "functional_pass": true,
+  "quality_score": 0.4,
+  "timestamp": "2026-02-22T17:36:56.654279",
+  "code": "def fibonacci(n: int) -> list[int]:\n    \"\"\"\n    Generate the first n Fibonacci numbers.\n    \n    Args:\n        n: Number of Fibonacci numbers to generate. Must be non-negative.\n    \n    Returns:\n        A list containing the first n Fibonacci numbers.\n    \n    Raises:\n        ValueError: If n is negative.\n        TypeError: If n is not an integer.\n    \n    Examples:\n        >>> fibonacci(5)\n        [0, 1, 1, 2, 3]\n        >>> fibonacci(0)\n        []\n        >>> fibonacci(1)\n        [0]\n        >>> fibonacci(2)\n        [0, 1]\n    \"\"\"\n    if not isinstance(n, int):\n        raise TypeError(f\"n must be an integer, not {type(n).__name__}\")\n    \n    if n < 0:\n        raise ValueError(\"n must be non-negative\")\n    \n    if n == 0:\n        return []\n    \n    if n == 1:\n        return [0]\n    \n    fib = [0, 1]\n    for i in range(2, n):\n        fib.append(fib[-1] + fib[-2])\n    \n    return fib",
+  "baseline": true
+}

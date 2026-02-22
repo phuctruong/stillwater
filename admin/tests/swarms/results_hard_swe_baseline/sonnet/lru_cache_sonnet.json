@@ -1,0 +1,11 @@
+{
+  "model": "sonnet",
+  "task_name": "lru_cache",
+  "syntax_valid": true,
+  "functional_pass": true,
+  "complexity_score": 0.7,
+  "edge_cases_score": 0.8,
+  "code_length": 6180,
+  "timestamp": "2026-02-22T17:53:38.958491",
+  "baseline": true
+}

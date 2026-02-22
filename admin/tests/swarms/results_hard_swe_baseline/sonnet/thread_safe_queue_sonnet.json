@@ -1,0 +1,11 @@
+{
+  "model": "sonnet",
+  "task_name": "thread_safe_queue",
+  "syntax_valid": true,
+  "functional_pass": true,
+  "complexity_score": 0.7999999999999999,
+  "edge_cases_score": 0.8,
+  "code_length": 9856,
+  "timestamp": "2026-02-22T17:54:06.281759",
+  "baseline": true
+}

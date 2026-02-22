@@ -1,0 +1,23 @@
+{
+  "opus": {
+    "evidence_completeness": 6.875,
+    "hallucination_rate": 0.1,
+    "rung_achieved": 480.75,
+    "token_efficiency": 1.16,
+    "total_tests": 4
+  },
+  "sonnet": {
+    "evidence_completeness": 6.875,
+    "hallucination_rate": 0.1,
+    "rung_achieved": 480.75,
+    "token_efficiency": 1.16,
+    "total_tests": 4
+  },
+  "haiku": {
+    "evidence_completeness": 6.875,
+    "hallucination_rate": 0.1,
+    "rung_achieved": 480.75,
+    "token_efficiency": 1.16,
+    "total_tests": 4
+  }
+}
