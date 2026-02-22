@@ -1,0 +1,48 @@
+name: Rung Verification
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 0 * * *'  # daily at midnight UTC
+
+jobs:
+  rung-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+          pip install pytest
+
+      - name: Run full test suite
+        run: |
+          PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest tests/ -v --tb=short
+
+      - name: Security scan
+        run: |
+          python scripts/security_scan.py
+
+      - name: Compute behavior hash
+        run: |
+          python scripts/behavior_hash.py
+
+      - name: Verify hash consistency
+        run: |
+          python scripts/verify_hash.py
+
+      - name: Upload evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rung-evidence
+          path: evidence/
+          retention-days: 90

@@ -2,6 +2,7 @@
 [![PyPI](https://img.shields.io/pypi/v/stillwater)](https://pypi.org/project/stillwater/)
 [![CI](https://github.com/phuctruong/stillwater/actions/workflows/ci.yml/badge.svg)](https://github.com/phuctruong/stillwater/actions/workflows/ci.yml)
 [![Verification](https://github.com/phuctruong/stillwater/actions/workflows/verify.yml/badge.svg)](https://github.com/phuctruong/stillwater/actions/workflows/verify.yml)
+[![Rung Check](https://github.com/phuctruong/stillwater/actions/workflows/rung-check.yml/badge.svg)](https://github.com/phuctruong/stillwater/actions/workflows/rung-check.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://pypi.org/project/stillwater/)
 
