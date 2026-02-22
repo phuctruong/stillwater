@@ -62,6 +62,9 @@ This index is intentionally conservative: it links only to papers that exist in 
 27. `49-three-pillars-software-5-kung-fu.md` — **The Three Pillars of Software 5.0 Kung Fu** (LEK × LEAK × LEC = Mastery; Bruce Lee + Dragon Rider teaching; gamification belt system; martial arts metaphor)
 28. `50-triple-twin-cli-architecture.md` — **The Triple-Twin CLI Architecture** (Three layers: CPU Twin < 300ms + Intent Twin < 1s + Execution Twin 1-5s; rule-based merge layer; extends to browser automation via solace-browser; OAuth3 as Layer 2 gate; GLOW 36/40)
 29. `51-optimal-sw5-workflow-forecast.md` — **The Optimal Software 5.0 Workflow: A Phuc-Forecast Analysis** (Triple-Twin CLI Architecture; 65537-expert lens; 23 failure modes ranked by severity × probability; four invariants: EQ-First Rule, Complexity Threshold Rule, Rung Floor Rule, Latency Budget Rule; six use-case workflows; EQ state capsule schema; 8 falsifiable predictions; GLOW 89/100)
+30. `52-solace-browser-architecture.md` — **The Solace Browser Architecture** (5-axiom derivation of browser automation; five moats: OAuth3, twin browser, custom engine, PZip, recipe system; 5-layer latency model; Part 11 compliance mapping)
+31. `53-enterprise-browser-paradigm.md` — **Enterprise-Grade AI Browser Automation** (Five Pillars: OAuth3 + Evidence Bundles + PZip Replay + Twin Architecture + Recipe Determinism; FDA 21 CFR Part 11 mapping; ALCOA+; beyond FDA: FINRA, HIPAA, FRE)
+32. `54-webservice-first-architecture.md` — **Webservice-First Architecture** (Every recipe node = a web service; admin as mandatory gateway + service registry; 7 service types on ports 8787-9222; CLI as thin orchestrator; self-host → solaceagi.com gateway)
 
 ## Reproducibility (What Reviewers Can Run Today)
 

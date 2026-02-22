@@ -22,6 +22,14 @@ try:
 except Exception:  # pragma: no cover
     requests = None  # type: ignore
 
+try:
+    from services.registry import ServiceRegistry
+    from services.models import ServiceRegistration, ServiceType
+    _SERVICE_REGISTRY = ServiceRegistry()
+    _SERVICE_REGISTRY.load()
+except Exception:  # pragma: no cover
+    _SERVICE_REGISTRY = None  # type: ignore
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CLI_SRC = REPO_ROOT / "cli" / "src"
@@ -565,6 +573,26 @@ class AdminHandler(BaseHTTPRequestHandler):
             self._send_json({"ok": True, "commands": list(SAFE_CLI_COMMANDS.keys())})
             return
 
+        # Service registry GET routes
+        if _SERVICE_REGISTRY is not None:
+            if path == "/api/services":
+                services = [s.model_dump() for s in _SERVICE_REGISTRY.list_all()]
+                self._send_json({"ok": True, "services": services})
+                return
+            if path.startswith("/api/services/") and "/health" in path:
+                sid = path.split("/api/services/")[1].split("/health")[0]
+                health = _SERVICE_REGISTRY.health_check(sid)
+                self._send_json({"ok": True, "health": health.model_dump()})
+                return
+            if path.startswith("/api/services/"):
+                sid = path.split("/api/services/")[1].rstrip("/")
+                desc = _SERVICE_REGISTRY.get(sid)
+                if desc:
+                    self._send_json({"ok": True, "service": desc.model_dump()})
+                else:
+                    self._send_json({"ok": False, "error": "service not found"}, status=404)
+                return
+
         self._send_json({"ok": False, "error": "not found"}, status=404)
 
     def do_POST(self) -> None:  # noqa: N802
@@ -621,6 +649,26 @@ class AdminHandler(BaseHTTPRequestHandler):
                 result = _run_cli_command(command)
                 self._send_json({"ok": result["ok"], "result": result})
                 return
+
+            # Service registry POST routes
+            if _SERVICE_REGISTRY is not None:
+                if path == "/api/services/register":
+                    try:
+                        reg = ServiceRegistration(**payload)
+                        desc = _SERVICE_REGISTRY.register(reg)
+                        self._send_json({"ok": True, "service": desc.model_dump()})
+                    except Exception as ex:
+                        self._send_json({"ok": False, "error": str(ex)}, status=400)
+                    return
+                if path == "/api/services/deregister":
+                    sid = str(payload.get("service_id", "")).strip()
+                    removed = _SERVICE_REGISTRY.deregister(sid)
+                    self._send_json({"ok": removed})
+                    return
+                if path == "/api/services/discover":
+                    result = _SERVICE_REGISTRY.discover()
+                    self._send_json({"ok": True, "discovery": result.model_dump()})
+                    return
         except Exception as ex:
             self._send_json({"ok": False, "error": str(ex)}, status=400)
             return
