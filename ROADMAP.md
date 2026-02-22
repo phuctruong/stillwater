@@ -71,8 +71,8 @@ Evidence required: evidence/audit_tests.txt + updated case-studies/stillwater-it
   - G1 (schema) → G2 (TTL) → G3 (scope) → G4 (revocation), fail-closed
   - 876 lines, 11 sections, FSM with 8 forbidden states
   - 16/16 tests pass (`tests/test_oauth3_enforcer.py`)
-- [ ] Update `STORE.md` with OAuth3 requirements for skill submissions
-- [ ] Update `skills/prime-browser.md` (or create if missing) — browser automation gating
+- [x] Update `STORE.md` with OAuth3 requirements for skill submissions
+- [ ] Update `skills/prime-browser.md` (or create if missing) — browser automation gating (deferred — browser skills managed in solace-browser repo)
 
 ### Build Prompt (Phase 1 — OAuth3 Spec)
 
