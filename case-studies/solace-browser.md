@@ -1,10 +1,10 @@
 # Case Study: SolaceBrowser — OAuth3 Reference Implementation
 
 **Tracking since**: 2026-02-21
-**Status**: Phase 1 DONE → Phase 1.5 DONE (1,466 tests) → Phase 2 DONE (805 tests) → Phase 3 IN PROGRESS (Machine Access: 100 tests, Dashboard: 70 tests)
-**Tests**: 2,441 total
+**Status**: Phase 1 DONE → Phase 1.5 DONE (1,466 tests) → Phase 2 DONE (805 tests) → Phase 3 DONE (Machine Access: 100, Dashboard: 70, Distribution: 94 tests)
+**Tests**: 2,535 total
 **Rung**: 274177 (machine access layer reviewed)
-**Belt**: Yellow
+**Belt**: Orange
 
 ## What Was Built
 
