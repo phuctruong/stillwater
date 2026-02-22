@@ -116,30 +116,14 @@ def _get_config() -> Optional[Any]:
 
 
 def _make_client(provider: Optional[str] = None) -> LLMClient:
-    """Create an LLMClient using the current active provider with config URLs."""
+    """Create an LLMClient using the current active provider."""
     cfg = _get_config()
-
-    # Build config dict keyed by provider name (as LLMClient expects)
-    config_dict = {}
-    if cfg:
-        for provider_name, provider_config in cfg.config.items():
-            if isinstance(provider_config, dict):
-                provider_dict = {}
-                if "url" in provider_config and provider_config["url"]:
-                    provider_dict["url"] = provider_config["url"]
-                if provider_dict:
-                    config_dict[provider_name] = provider_dict
-
-    # If provider specified, use it
     if provider:
-        return LLMClient(provider=provider, config=config_dict)
-
-    # Use active provider from config
+        return LLMClient(provider=provider)
     if cfg:
-        return LLMClient(provider=cfg.active_provider, config=config_dict)
-
+        return LLMClient(provider=cfg.active_provider)
     logger.warning("Using offline provider (config not available)")
-    return LLMClient(provider="offline", config=config_dict)
+    return LLMClient(provider="offline")
 
 
 # ============================================================
@@ -174,25 +158,6 @@ class ChatCompletionRequest(BaseModel):
     stream: bool = False
 
 
-class ContextSource(BaseModel):
-    """SW5.0 construct to inject as context (skill, recipe, swarm, persona, or raw)."""
-    type: str                  # "skill" | "recipe" | "swarm" | "persona" | "raw"
-    name: str = ""
-    mode: str = "quick"        # "quick" (QUICK LOAD block only) | "full" (entire file)
-    content: str = ""          # used when type="raw"
-
-
-class ContextChatRequest(BaseModel):
-    """Chat request with SW5.0 context injection."""
-    model: str = "auto"
-    messages: list[ChatMessage]
-    context_sources: list[ContextSource] = []
-    cnf_capsule: dict = {}     # optional: {task, constraints, rung_target, etc.}
-    rung_target: int = 641     # explicit rung declaration
-    temperature: float = 0.0
-    max_tokens: int = 4096
-
-
 # ============================================================
 # Startup + Shutdown
 # ============================================================
@@ -219,102 +184,6 @@ async def startup_event():
             logger.warning(f"Could not check provider availability: {e}")
 
     logger.info("=" * 60)
-
-
-# ============================================================
-# Context Loader: SW5.0 Construct Loading
-# ============================================================
-
-class ContextLoader:
-    """Loads SW5.0 constructs (skills, recipes, swarms, personas) from filesystem."""
-
-    TYPE_PATHS = {
-        "skill":   ("skills", "{name}.md"),
-        "recipe":  ("recipes", "recipe.{name}.md"),
-        "swarm":   ("swarms", "{name}.md"),
-        "persona": ("personas", "**/{name}.md"),
-    }
-
-    def __init__(self, project_root: Path):
-        self.root = project_root
-
-    def load(self, source: ContextSource) -> str:
-        """Load content for one context source."""
-        if source.type == "raw":
-            return source.content
-        path = self._resolve_path(source.type, source.name)
-        if not path:
-            return f"[CONTEXT NOT FOUND: {source.type}/{source.name}]"
-        try:
-            text = path.read_text(encoding="utf-8")
-            if source.mode == "quick":
-                extracted = self._extract_quick_load(text)
-                return extracted if extracted else text[:800]
-            return text
-        except Exception as e:
-            logger.warning(f"Failed to load {source.type}/{source.name}: {e}")
-            return f"[ERROR LOADING: {source.type}/{source.name}]"
-
-    def build_system_prompt(self, sources: list[ContextSource], cnf: dict) -> str:
-        """Build full system prompt from all context sources."""
-        if not sources and not cnf:
-            return ""
-        parts = []
-        for src in sources:
-            content = self.load(src)
-            parts.append(f"## {src.type.upper()}: {src.name}\n{content}")
-        if cnf:
-            cnf_text = "\n".join(f"{k}: {v}" for k, v in cnf.items())
-            parts.append(f"## CNF CAPSULE\n{cnf_text}")
-        return "\n\n---\n\n".join(parts)
-
-    def catalog(self) -> dict:
-        """Return all available constructs by type."""
-        return {
-            "skills": self._list("skills", "*.md", exclude=["SKILL-FORMAT", "README"]),
-            "recipes": [f.stem.replace("recipe.", "") for f in (self.root/"recipes").glob("recipe.*.md")],
-            "swarms": self._list("swarms", "*.md", exclude=["README"]),
-            "personas": [f.stem for f in (self.root/"personas").rglob("*.md") if "README" not in f.stem and "index" not in f.stem.lower()],
-        }
-
-    def _resolve_path(self, type_: str, name: str) -> Optional[Path]:
-        """Resolve filesystem path for a context source."""
-        if type_ == "persona":
-            matches = list((self.root / "personas").rglob(f"{name}.md"))
-            return matches[0] if matches else None
-        dir_, pattern = self.TYPE_PATHS[type_]
-        p = self.root / dir_ / pattern.format(name=name)
-        if p.exists():
-            return p
-        # fallback for recipes without "recipe." prefix
-        if type_ == "recipe":
-            fallback = self.root / dir_ / f"{name}.md"
-            if fallback.exists():
-                return fallback
-        return None
-
-    def _extract_quick_load(self, text: str) -> str:
-        """Extract <!-- QUICK LOAD ... --> block from skill/swarm files."""
-        start = text.find("<!-- QUICK LOAD")
-        end = text.find("-->", start)
-        if start != -1 and end != -1:
-            return text[start:end+3].strip()
-        return ""
-
-    def _list(self, dir_: str, glob_pattern: str, exclude: list[str]) -> list[str]:
-        """List files in a directory, excluding patterns."""
-        try:
-            return sorted([
-                f.stem for f in (self.root / dir_).glob(glob_pattern)
-                if not any(ex in f.stem for ex in exclude)
-            ])
-        except Exception as e:
-            logger.warning(f"Failed to list {dir_}: {e}")
-            return []
-
-
-# Singleton context loader instance
-_ctx_loader = ContextLoader(Path(__file__).parent.parent)
 
 
 # ============================================================
@@ -365,21 +234,14 @@ async def list_providers() -> dict:
         if provider_type == "offline":
             reachable = True
             latency_ms = 0
-        elif provider_type == "http":
-            # Check ALL http providers (local and remote)
+        elif provider_type == "http" and ("localhost" in info.get("url", "") or "127.0.0.1" in info.get("url", "")):
             try:
-                import urllib.request
+                import httpx
                 start = time.monotonic()
-                request = urllib.request.Request(f"{info['url']}/", method='GET')
-                request.add_header('User-Agent', 'Stillwater-Portal/2.0')
-                try:
-                    with urllib.request.urlopen(request, timeout=2.0) as response:
-                        reachable = response.status in (200, 404, 405)
-                except urllib.error.HTTPError as e:
-                    reachable = e.code in (200, 404, 405)
-                except (urllib.error.URLError, TimeoutError):
-                    reachable = False
-                latency_ms = int((time.monotonic() - start) * 1000)
+                with httpx.Client(timeout=2.0) as client:
+                    r = client.get(f"{info['url']}/")
+                    reachable = r.status_code in (200, 404, 405)
+                    latency_ms = int((time.monotonic() - start) * 1000)
             except Exception as e:
                 logger.debug(f"Reachability check failed for {name}: {e}")
                 reachable = False
@@ -387,13 +249,12 @@ async def list_providers() -> dict:
             # Try to fetch models for Ollama
             if reachable and name == "ollama":
                 try:
-                    import urllib.request
-                    import json
-                    request = urllib.request.Request(f"{info['url']}/api/tags", method='GET')
-                    request.add_header('User-Agent', 'Stillwater-Portal/2.0')
-                    with urllib.request.urlopen(request, timeout=2.0) as response:
-                        data = json.loads(response.read().decode('utf-8'))
-                        models_list = [m["name"] for m in data.get("models", []) if isinstance(m, dict) and "name" in m]
+                    import httpx
+                    with httpx.Client(timeout=2.0) as client:
+                        r = client.get(f"{info['url']}/api/tags")
+                        if r.status_code == 200:
+                            data = r.json()
+                            models_list = [m["name"] for m in data.get("models", []) if isinstance(m, dict)]
                 except Exception as e:
                     logger.debug(f"Could not fetch Ollama models: {e}")
 
@@ -578,77 +439,6 @@ async def openai_chat_completions(req: ChatCompletionRequest) -> dict:
     }
 
 
-@app.get("/api/context/catalog")
-async def context_catalog() -> dict:
-    """List all available SW5.0 context sources (skills, recipes, swarms, personas)."""
-    return _ctx_loader.catalog()
-
-
-@app.get("/api/context/preview/{type_}/{name}")
-async def context_preview(type_: str, name: str, mode: str = "quick") -> dict:
-    """Preview what context would be injected for a given construct."""
-    src = ContextSource(type=type_, name=name, mode=mode)
-    content = _ctx_loader.load(src)
-    return {"type": type_, "name": name, "mode": mode, "content": content}
-
-
-@app.post("/v1/context/chat")
-async def context_chat(req: ContextChatRequest) -> dict:
-    """Chat with SW5.0 context injection. Injects skills, recipes, swarms, personas as system prompt."""
-    # 1. Build system prompt from context sources
-    system_prompt = _ctx_loader.build_system_prompt(req.context_sources, req.cnf_capsule)
-
-    # 2. Construct messages with system prompt prepended
-    messages = [{"role": m.role, "content": m.content} for m in req.messages]
-    if system_prompt:
-        messages = [{"role": "system", "content": system_prompt}] + messages
-
-    # 3. Route to LLM
-    cfg = _get_config()
-    provider = None
-    if cfg and req.model in cfg.config:
-        provider = req.model
-
-    try:
-        client = _make_client(provider=provider)
-        start = time.monotonic()
-        result = client.chat(messages)
-        latency_ms = int((time.monotonic() - start) * 1000)
-        content = result.text if hasattr(result, "text") else str(result)
-    except Exception as exc:
-        logger.error(f"Context chat failed: {exc}")
-        raise HTTPException(status_code=502, detail=str(exc))
-
-    # 4. Return OpenAI-compatible response + evidence metadata
-    response_id = f"sw-ctx-{uuid.uuid4().hex[:12]}"
-    return {
-        "id": response_id,
-        "object": "chat.completion",
-        "created": int(time.time()),
-        "model": req.model,
-        "choices": [
-            {
-                "index": 0,
-                "message": {"role": "assistant", "content": content},
-                "finish_reason": "stop",
-            }
-        ],
-        "usage": {
-            "prompt_tokens": sum(len(m["content"]) // 4 for m in messages),
-            "completion_tokens": len(content) // 4,
-            "total_tokens": (sum(len(m["content"]) for m in messages) + len(content)) // 4,
-        },
-        "_meta": {
-            "latency_ms": latency_ms,
-            "provider": client.provider_name,
-            "rung_target": req.rung_target,
-            "context_sources": [{"type": s.type, "name": s.name, "mode": s.mode} for s in req.context_sources],
-            "cnf_capsule_keys": list(req.cnf_capsule.keys()),
-            "system_prompt_chars": len(system_prompt),
-        },
-    }
-
-
 @app.get("/v1/models")
 async def list_models() -> dict:
     """OpenAI-compatible model list."""
@@ -715,19 +505,6 @@ _HTML_UI = """<!DOCTYPE html>
   .chat-meta { font-size: 0.72rem; color: var(--muted); }
   .spinner { display: none; width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .context-builder { padding: 16px; display: grid; gap: 12px; }
-  .context-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: end; }
-  .context-field { display: grid; gap: 4px; }
-  .context-field label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; }
-  .context-field select, .context-field input { width: 100%; padding: 6px; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 4px; font-size: 0.8rem; }
-  .context-field select:focus, .context-field input:focus { outline: none; border-color: var(--accent); }
-  .context-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-  .context-tag { background: #1a3a2a; border: 1px solid var(--accent2); color: var(--accent2); padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; display: flex; gap: 6px; align-items: center; }
-  .context-tag .remove { cursor: pointer; font-weight: bold; }
-  .rung-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .rung-radio { display: none; }
-  .rung-label { padding: 6px; border: 1px solid var(--border); border-radius: 4px; text-align: center; cursor: pointer; font-size: 0.75rem; }
-  .rung-radio:checked + .rung-label { background: var(--accent2); color: #000; border-color: var(--accent2); }
 </style>
 </head>
 <body>
@@ -746,71 +523,15 @@ _HTML_UI = """<!DOCTYPE html>
   </section>
 
   <section>
-    <h2>Context Builder (Optional)</h2>
-    <div class="context-builder">
-      <div class="context-row">
-        <div class="context-field">
-          <label>Skills</label>
-          <select id="skill-select" onchange="addContextSource('skill')">
-            <option value="">+ Add skill...</option>
-          </select>
-        </div>
-        <div class="context-field">
-          <label>Recipes</label>
-          <select id="recipe-select" onchange="addContextSource('recipe')">
-            <option value="">+ Add recipe...</option>
-          </select>
-        </div>
-      </div>
-      <div class="context-row">
-        <div class="context-field">
-          <label>Swarms</label>
-          <select id="swarm-select" onchange="addContextSource('swarm')">
-            <option value="">+ Add swarm...</option>
-          </select>
-        </div>
-        <div class="context-field">
-          <label>Personas</label>
-          <select id="persona-select" onchange="addContextSource('persona')">
-            <option value="">+ Add persona...</option>
-          </select>
-        </div>
-      </div>
-      <div class="context-field">
-        <label>Rung Target</label>
-        <div class="rung-selector">
-          <input type="radio" id="rung641" name="rung" value="641" class="rung-radio" checked>
-          <label for="rung641" class="rung-label">641 (Local)</label>
-          <input type="radio" id="rung274177" name="rung" value="274177" class="rung-radio">
-          <label for="rung274177" class="rung-label">274177 (Stable)</label>
-          <input type="radio" id="rung65537" name="rung" value="65537" class="rung-radio">
-          <label for="rung65537" class="rung-label">65537 (Prod)</label>
-        </div>
-      </div>
-      <div class="context-field">
-        <label>Selected Context</label>
-        <div class="context-tags" id="context-tags"></div>
-      </div>
-      <div class="context-field">
-        <button class="btn" onclick="clearContext()">Clear All Context</button>
-      </div>
-    </div>
-  </section>
-
-  <section>
     <h2>Chat Test</h2>
     <div class="chat-panel">
       <div class="chat-row">
         <textarea id="chat-input" placeholder="Type a message...">Tell me what you can do!</textarea>
-        <button class="btn" onclick="sendChat(false)" id="chat-btn">
+        <button class="btn" onclick="sendChat()" id="chat-btn">
           <span class="spinner" id="chat-spinner"></span>
           Send
         </button>
       </div>
-      <button class="btn" style="width:100%" onclick="sendChat(true)" id="chat-ctx-btn">
-        <span class="spinner" id="chat-ctx-spinner" style="display:none"></span>
-        Send with Context
-      </button>
       <div class="chat-resp" id="chat-resp">Response will appear here.</div>
       <div class="chat-meta" id="chat-meta"></div>
     </div>
@@ -821,12 +542,7 @@ _HTML_UI = """<!DOCTYPE html>
 async function refreshProviders() {
   try {
     const res = await fetch('/api/providers');
-    if (!res.ok) {
-      console.error('Failed to fetch providers:', res.status, res.statusText);
-      return;
-    }
     const data = await res.json();
-    console.log('Providers data:', data);
     document.getElementById('active-label').textContent = '🔴 ' + data.active.toUpperCase();
 
     const grid = document.getElementById('providers-grid');
@@ -898,67 +614,12 @@ async function setModel(provider, model) {
   }
 }
 
-// Context management (global state)
-let contextSources = [];
-
-async function loadContextCatalog() {
-  try {
-    const res = await fetch('/api/context/catalog');
-    if (!res.ok) return;
-    const catalog = await res.json();
-
-    // Populate selects
-    document.getElementById('skill-select').innerHTML = '<option value="">+ Add skill...</option>' +
-      (catalog.skills || []).map(s => `<option value="${s}">${s}</option>`).join('');
-    document.getElementById('recipe-select').innerHTML = '<option value="">+ Add recipe...</option>' +
-      (catalog.recipes || []).map(r => `<option value="${r}">${r}</option>`).join('');
-    document.getElementById('swarm-select').innerHTML = '<option value="">+ Add swarm...</option>' +
-      (catalog.swarms || []).map(s => `<option value="${s}">${s}</option>`).join('');
-    document.getElementById('persona-select').innerHTML = '<option value="">+ Add persona...</option>' +
-      (catalog.personas || []).map(p => `<option value="${p}">${p}</option>`).join('');
-  } catch (e) {
-    console.error('Failed to load context catalog:', e);
-  }
-}
-
-function addContextSource(type) {
-  const selects = {skill: 'skill-select', recipe: 'recipe-select', swarm: 'swarm-select', persona: 'persona-select'};
-  const select = document.getElementById(selects[type]);
-  const name = select.value;
-  if (!name) return;
-
-  contextSources.push({type, name, mode: 'quick'});
-  select.value = '';
-  renderContextTags();
-}
-
-function removeContextSource(idx) {
-  contextSources.splice(idx, 1);
-  renderContextTags();
-}
-
-function clearContext() {
-  contextSources = [];
-  renderContextTags();
-}
-
-function renderContextTags() {
-  const container = document.getElementById('context-tags');
-  if (contextSources.length === 0) {
-    container.innerHTML = '<span style="color:var(--muted);font-size:0.8rem">(no context selected)</span>';
-  } else {
-    container.innerHTML = contextSources.map((s, i) =>
-      `<div class="context-tag">${s.type}/${s.name} <span class="remove" onclick="removeContextSource(${i})">×</span></div>`
-    ).join('');
-  }
-}
-
-async function sendChat(useContext) {
+async function sendChat() {
   const input = document.getElementById('chat-input');
   const resp = document.getElementById('chat-resp');
   const meta = document.getElementById('chat-meta');
-  const btn = useContext ? document.getElementById('chat-ctx-btn') : document.getElementById('chat-btn');
-  const spinner = useContext ? document.getElementById('chat-ctx-spinner') : document.getElementById('chat-spinner');
+  const btn = document.getElementById('chat-btn');
+  const spinner = document.getElementById('chat-spinner');
 
   if (!input.value.trim()) return;
 
@@ -967,60 +628,24 @@ async function sendChat(useContext) {
   resp.textContent = 'Thinking...';
 
   try {
-    // Get active provider info first
-    const provRes = await fetch('/api/providers');
-    if (!provRes.ok) {
-      throw new Error(`Failed to get providers: ${provRes.status}`);
-    }
-    const provData = await provRes.json();
-    console.log('Active provider data:', provData);
-    const activeProvider = provData.providers.find(p => p.active);
-    const model = activeProvider?.model || 'auto';
-    console.log('Using model:', model, 'from provider:', activeProvider?.name);
-
-    const endpoint = useContext ? '/v1/context/chat' : '/v1/chat/completions';
-    const rungVal = document.querySelector('input[name="rung"]:checked')?.value || '641';
-
-    const reqBody = {
-      model: model,
-      messages: [{role: 'user', content: input.value}],
-      temperature: 0
-    };
-
-    if (useContext) {
-      reqBody.context_sources = contextSources;
-      reqBody.rung_target = parseInt(rungVal);
-    }
-
-    console.log('Sending request to', endpoint, ':', reqBody);
-
-    const res = await fetch(endpoint, {
+    const res = await fetch('/v1/chat/completions', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(reqBody)
+      body: JSON.stringify({
+        messages: [{role: 'user', content: input.value}],
+        temperature: 0
+      })
     });
 
-    console.log('Response status:', res.status);
     if (!res.ok) {
-      const errorText = await res.text();
-      console.error('API error:', errorText);
-      resp.textContent = 'Error: ' + errorText;
-      meta.textContent = '';
+      resp.textContent = 'Error: ' + await res.text();
     } else {
       const data = await res.json();
-      console.log('Response data:', data);
       resp.textContent = data.choices[0].message.content;
-      const metaParts = [`Provider: ${data._meta.provider}`, `Latency: ${data._meta.latency_ms}ms`];
-      if (useContext) {
-        metaParts.push(`Rung: ${data._meta.rung_target}`);
-        metaParts.push(`Context: ${data._meta.system_prompt_chars} chars`);
-      }
-      meta.textContent = metaParts.join(' | ');
+      meta.textContent = `Provider: ${data._meta.provider} | Latency: ${data._meta.latency_ms}ms`;
     }
   } catch (e) {
-    console.error('Chat error:', e);
-    resp.textContent = 'Error: ' + e.message;
-    meta.textContent = '';
+    resp.textContent = 'Error: ' + e;
   } finally {
     btn.disabled = false;
     spinner.style.display = 'none';
@@ -1028,9 +653,7 @@ async function sendChat(useContext) {
 }
 
 // Load on page load
-loadContextCatalog();
 refreshProviders();
-renderContextTags();
 setInterval(refreshProviders, 5000);
 </script>
 </body>

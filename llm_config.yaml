@@ -1,134 +1,99 @@
-# Stillwater OS - LLM Configuration
-# Auth: 65537
-# Purpose: Centralized LLM endpoint configuration for all notebooks and solvers
-#
-# Switch between providers by setting `provider:` and updating the URL/API key below
-
-# Current active provider
-#
-# Default is an offline demo provider so the repo can be executed without any
-# external services. Switch to "claude-code" (local wrapper) or an API provider
-# when you want LLM-backed runs.
-provider: "claude-code"
-
-# Offline Demo - Default
+provider: ollama
 offline:
-  name: "Offline (Demo Mode)"
-  type: "offline"
-  url: ""
-  description: "No network calls. Notebooks and demos run deterministically."
+  name: Offline (Demo Mode)
+  type: offline
+  url: ''
+  description: No network calls. Notebooks and demos run deterministically.
   requires_api_key: false
   environment_variables: []
-
-# Claude Code (Local Server) - Default Provider
-# Start with: python3 src/claude_code_wrapper.py --port 8080 &
+claude-code-cli:
+  name: Claude Code CLI (haiku/sonnet/opus)
+  type: cli
+  url: ''
+  model: haiku
+  description: Local Claude Code CLI - no API key needed, just shells out to 'claude-code'
+    command
+  requires_api_key: false
+  environment_variables: []
+  editable: true
 claude-code:
-  name: "Claude Code Haiku (Local Server)"
-  type: "http"
-  url: "http://localhost:8080"
-  model: "claude-haiku-4-5-20251001"  # Fast + cheap; change to claude-sonnet-4-6 or claude-opus-4-6
-  description: "Local Claude Code wrapper on localhost:8080 (Ollama-compatible API). Default provider."
+  name: Claude Code Haiku (Legacy Server)
+  type: http
+  url: http://localhost:8080
+  model: claude-haiku-4-5-20251001
+  description: Local Claude Code wrapper on localhost:8080 (Ollama-compatible API)
   requires_api_key: false
   environment_variables:
-    - "ANTHROPIC_API_KEY"  # Required to run claude-code server
-
-# Alternative: OpenAI API
+  - ANTHROPIC_API_KEY
 openai:
-  name: "OpenAI"
-  type: "api"
-  url: "https://api.openai.com/v1"
-  model: "gpt-4o-mini"  # Change to gpt-4 for full GPT-4, gpt-5 for GPT-5 when available
-  description: "OpenAI API endpoint"
+  name: OpenAI
+  type: api
+  url: https://api.openai.com/v1
+  model: gpt-4o-mini
+  description: OpenAI API endpoint
   requires_api_key: true
   environment_variables:
-    - "OPENAI_API_KEY"
-
-# Alternative: Anthropic Claude (Direct API)
+  - OPENAI_API_KEY
 claude:
-  name: "Anthropic Claude"
-  type: "api"
-  url: "https://api.anthropic.com/v1"
-  model: "claude-haiku-4-5-20251001"  # Or: claude-sonnet-4-6, claude-opus-4-6
-  description: "Anthropic Claude API endpoint"
+  name: Anthropic Claude
+  type: api
+  url: https://api.anthropic.com/v1
+  model: claude-haiku-4-5-20251001
+  description: Anthropic Claude API endpoint
   requires_api_key: true
   environment_variables:
-    - "ANTHROPIC_API_KEY"
-
-# Alternative: OpenRouter (Proxy for multiple models)
+  - ANTHROPIC_API_KEY
 openrouter:
-  name: "OpenRouter"
-  type: "api"
-  url: "https://openrouter.ai/api/v1"
-  model: "openai/gpt-4o"  # Can use any model available on OpenRouter
-  description: "OpenRouter proxy - supports 100+ models"
+  name: OpenRouter
+  type: api
+  url: https://openrouter.ai/api/v1
+  model: openai/gpt-4o
+  description: OpenRouter proxy - supports 100+ models
   requires_api_key: true
   environment_variables:
-    - "OPENROUTER_API_KEY"
-
-# Alternative: TogetherAI
+  - OPENROUTER_API_KEY
 togetherai:
-  name: "TogetherAI"
-  type: "api"
-  url: "https://api.together.xyz"
-  model: "meta-llama/Llama-3-70b-chat-hf"
-  description: "TogetherAI endpoint - optimized for open models"
+  name: TogetherAI
+  type: api
+  url: https://api.together.xyz
+  model: meta-llama/Llama-3-70b-chat-hf
+  description: TogetherAI endpoint - optimized for open models
   requires_api_key: true
   environment_variables:
-    - "TOGETHER_API_KEY"
-
-# Alternative: Google Gemini
+  - TOGETHER_API_KEY
 gemini:
-  name: "Google Gemini"
-  type: "api"
-  url: "https://generativelanguage.googleapis.com/v1beta/openai"
-  model: "gemini-2-0-pro"
-  description: "Google Gemini API endpoint"
+  name: Google Gemini
+  type: api
+  url: https://generativelanguage.googleapis.com/v1beta/openai
+  model: gemini-2-0-pro
+  description: Google Gemini API endpoint
   requires_api_key: true
   environment_variables:
-    - "GOOGLE_API_KEY"
-
-# Alternative: Ollama (Local, open models)
+  - GOOGLE_API_KEY
 ollama:
-  name: "Ollama (Local)"
-  type: "http"
-  url: "http://192.168.68.100:11434"
-  model: "llama3.1:8b"
-  description: "Ollama local server - run open models without API keys"
+  name: Ollama (Remote 8B)
+  type: http
+  url: http://192.168.68.100:11434
+  model: llama3.2:3b
+  description: Remote Ollama server - run open models without API keys
   requires_api_key: false
   environment_variables: []
-
-# Alternative: Qwen / Dashscope (Alibaba Cloud)
+  editable: true
 qwen:
-  name: "Qwen (Dashscope)"
-  type: "api"
-  url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
-  model: "qwen-max"  # Or: qwen-plus, qwen-turbo, qwen-long
-  description: "Alibaba Qwen via Dashscope API — OpenAI-compatible endpoint"
+  name: Qwen (Dashscope)
+  type: api
+  url: https://dashscope.aliyuncs.com/compatible-mode/v1
+  model: qwen-max
+  description: "Alibaba Qwen via Dashscope API \u2014 OpenAI-compatible endpoint"
   requires_api_key: true
   environment_variables:
-    - "DASHSCOPE_API_KEY"
-
-# Custom endpoint — user-supplied base URL and model
-# Fill in url and model to point at any OpenAI-compatible server
+  - DASHSCOPE_API_KEY
 custom:
-  name: "Custom Endpoint"
-  type: "api"
-  url: ""  # Set to your OpenAI-compatible base URL, e.g. http://localhost:1234/v1
-  model: ""  # Set to your model ID, e.g. my-model-v1
-  description: "User-supplied custom OpenAI-compatible endpoint (BYOK)"
+  name: Custom Endpoint
+  type: api
+  url: ''
+  model: ''
+  description: User-supplied custom OpenAI-compatible endpoint (BYOK)
   requires_api_key: true
   environment_variables:
-    - "CUSTOM_API_KEY"
-
-# Quick reference table for switching
-# ===================================
-# To use Claude Code:  provider: "claude-code" (DEFAULT - start wrapper first)
-# To use Ollama:       provider: "ollama"     (start ollama serve first)
-# To use OpenAI:       provider: "openai"     + export OPENAI_API_KEY=sk-...
-# To use Claude:       provider: "claude"     + export ANTHROPIC_API_KEY=sk-ant-...
-# To use OpenRouter:   provider: "openrouter" + export OPENROUTER_API_KEY=sk-or-...
-# To use TogetherAI:   provider: "togetherai" + export TOGETHER_API_KEY=...
-# To use Gemini:       provider: "gemini"     + export GOOGLE_API_KEY=...
-# To use Offline:      provider: "offline"    (no network, deterministic demo mode)
-# To use Qwen:         provider: "qwen"       + export DASHSCOPE_API_KEY=...
-# To use Custom:       provider: "custom"     + set url/model above + export CUSTOM_API_KEY=...
+  - CUSTOM_API_KEY

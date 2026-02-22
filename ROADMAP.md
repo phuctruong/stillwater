@@ -4,7 +4,7 @@
 > Northstar: `NORTHSTAR.md`
 > See also: `case-studies/stillwater-itself.md`
 
-## Status Summary (2026-02-21)
+## Status Summary (2026-02-22)
 
 | Phase | Status | Tests |
 |-------|--------|-------|
@@ -17,7 +17,8 @@
 | Phase 5: Persona System | DONE | 50 |
 | Phase 6: Hackathon System | DONE | — |
 | Phase 7: EQ + Triple-Twin CLI | DONE | — |
-| **Total** | **ALL DONE** | **445** |
+| Phase 8: Webservice-First Architecture | DONE | 372 |
+| **Total** | **ALL DONE** | **1,439** |
 
 **Rung 65537 CI badge deployed. All phases complete.**
 
@@ -388,6 +389,83 @@ The Triple-Twin architecture extends the double-twin concept with a critical mid
 
 ---
 
+## Phase 8: Webservice-First Architecture (v3.0.0) — DONE
+
+**Goal**: Decompose the monolithic admin server into independent microservices behind a mandatory gateway, enabling self-host and enterprise-grade deployment. [A]
+
+**Result**: 372 new tests pass across 8 test files. Total repo tests: 1,439. [A] Ten service modules delivered across six ports. Two research papers committed. Rung 641 achieved. [A]
+
+### Key Insight
+
+The monolith works fine for a single operator. It becomes a liability the moment you want to let a third party self-host one component (say, the OAuth3 authority) without handing them the entire stack. [B] The webservice-first design gives each domain its own process, its own port, and its own health contract — so you can deploy just the piece you need, or all of them behind the gateway, without touching the others. [B]
+
+The CPU Service is the verification anchor: all hash computations and rung checks are isolated to one process using exact `Fraction` arithmetic — no float ever enters the verification path. [A]
+
+### Sub-phases Delivered
+
+1. **Service Registry + Paper #54 + Diagrams** — `admin/services/registry.py`, `admin/services/models.py`, architectural diagrams, `papers/54-webservice-first-architecture.md`
+2. **Service Base Class + LLM Portal Self-Registration** — `admin/services/base.py` (StillwaterService ABC), LLM Portal registers itself on startup
+3. **CPU Service + Evidence Pipeline** — `admin/services/cpu_service.py` (port 8792), `admin/services/evidence_pipeline.py` (port 8790)
+4. **OAuth3 Authority Service** — `admin/services/oauth3_service.py` (port 8791)
+5. **Recipe Engine Service** — `admin/services/recipe_engine.py` (port 8789), `admin/services/recipe_models.py`
+6. **CLI Orchestrator Refactor** — CLI updated to route via gateway; no direct service calls from user layer
+7. **Tunnel Service** — `admin/services/tunnel_service.py` (port 8793): expose local services remotely
+8. **Cloud Bridge + Paper #55** — `admin/services/cloud_bridge.py` (port 8794): solaceagi.com API bridge with tier enforcement; `papers/55-custom-browser-competitive-moat.md`
+
+### Delivered [A]
+
+| File | Port | Responsibility |
+|------|------|----------------|
+| `admin/services/models.py` | — | `ServiceDescriptor`, `ServiceHealth`, `ServiceRegistration` (Pydantic schemas) |
+| `admin/services/registry.py` | — | `ServiceRegistry`: register, deregister, discover, health check |
+| `admin/services/base.py` | — | `StillwaterService` ABC — base class for all services |
+| `admin/services/recipe_engine.py` | 8789 | Recipe cache, routing, PM triplets |
+| `admin/services/recipe_models.py` | — | Recipe Pydantic models |
+| `admin/services/evidence_pipeline.py` | 8790 | SHA-256 chain, ALCOA+ validation |
+| `admin/services/oauth3_service.py` | 8791 | Token CRUD, ScopeGate G1–G4, consent tracking |
+| `admin/services/cpu_service.py` | 8792 | Hash, rung validation, exact math (`Fraction`, not `float`) |
+| `admin/services/tunnel_service.py` | 8793 | Expose services remotely |
+| `admin/services/cloud_bridge.py` | 8794 | solaceagi.com API bridge, tier enforcement |
+| `papers/54-webservice-first-architecture.md` | — | Architecture rationale + diagrams |
+| `papers/55-custom-browser-competitive-moat.md` | — | Competitive moat analysis |
+
+**Test count**: 372 new tests across 8 test files (all pass). [A]
+**Total repo tests**: 1,439. [A]
+
+### Design Rules That Were Not Negotiated [B]
+
+- **No float in the verification path.** The CPU Service uses `Fraction` for all rung math. `float` is permitted only for non-verification display values (latency labels, progress bars). Violating this silently inflates verification claims. [A, B]
+- **Registry is the single source of truth.** Services do not call each other directly. All inter-service traffic flows through discovery → endpoint lookup → HTTP call. This makes the graph auditable. [B]
+- **Fail-closed health.** A service that cannot reach the registry at startup emits `REGISTRY_UNREACHABLE` and refuses to serve requests. Silent degradation is not a valid state. [B]
+- **Tier enforcement at the bridge.** The Cloud Bridge is the only component that knows about solaceagi.com subscription tiers. No other service checks tiers. If the bridge is down, cloud-tier features are unavailable — not quietly downgraded. [B]
+
+### Build Prompt (Phase 8)
+
+```
+Load prime-safety + prime-coder + phuc-forecast.
+Task: Deliver Phase 8 (Webservice-First Architecture) of the Stillwater ROADMAP.
+Repo: stillwater/
+Sub-phases: Registry → Base → CPU+Evidence → OAuth3 → Recipe → CLI Refactor → Tunnel → Cloud Bridge
+Port assignments:
+  8789: recipe_engine
+  8790: evidence_pipeline
+  8791: oauth3_service
+  8792: cpu_service (exact Fraction math only — no float)
+  8793: tunnel_service
+  8794: cloud_bridge
+Requirements:
+  - StillwaterService ABC in admin/services/base.py
+  - ServiceRegistry with register/deregister/discover/health_check
+  - No float in any rung validation or hash computation
+  - All services fail-closed (REGISTRY_UNREACHABLE on startup failure)
+  - Tier enforcement only at cloud_bridge — not scattered across services
+  - papers/54 + papers/55 committed
+Rung target: 641
+Evidence required: pytest tests/ -v (372 new tests pass, 1,439 total)
+```
+
+---
+
 ## Milestone Summary
 
 | Phase | Target Date | Rung Gate | Key Deliverable |
@@ -401,6 +479,7 @@ The Triple-Twin architecture extends the double-twin concept with a critical mid
 | Phase 5: Persona System | Month 2–3 | 641 | 50 personas, 11 categories, persona-engine.md v1.3.0, all 19 swarms enhanced, papers 34-39, +27% A/B avg — DONE (50 tests) |
 | Phase 6: Hackathon System | Month 3 | 641 | hackathon-sprint + lightning + marathon combos, hackathon-master persona, hackathon skill + swarm — DONE |
 | Phase 7: EQ + Triple-Twin | Month 3 | 641 | 6 personas, 5 skills, 4 swarms, 8 recipes, 4 combos, 6 diagrams, 2 papers — DONE |
+| Phase 8: Webservice-First | Month 4 | 641 | 10 service modules (ports 8789–8794), `ServiceRegistry`, `StillwaterService` ABC, papers 54–55 — DONE (372 tests, 1,439 total) |
 
 ---
 

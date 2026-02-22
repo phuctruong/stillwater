@@ -23,6 +23,7 @@ from .openai_provider import OpenAIProvider
 from .together_provider import TogetherProvider
 from .openrouter_provider import OpenRouterProvider
 from .ollama_provider import OllamaProvider
+from .claude_code_cli_provider import ClaudeCodeCLIProvider
 
 
 # Registry of all provider classes, keyed by name
@@ -32,15 +33,17 @@ _PROVIDER_CLASSES: dict[str, type[LLMProvider]] = {
     "together": TogetherProvider,
     "openrouter": OpenRouterProvider,
     "ollama": OllamaProvider,
+    "claude-code-cli": ClaudeCodeCLIProvider,
 }
 
 # Provider priority for auto-selection (cheapest first)
 PROVIDER_PRIORITY: list[str] = [
-    "ollama",       # free (local)
-    "together",     # market rate
-    "openai",       # gpt-4o-mini: $0.15/M input
-    "openrouter",   # variable
-    "anthropic",    # haiku: $0.80/M input
+    "claude-code-cli",  # free (local, no API key)
+    "ollama",           # free (local)
+    "together",         # market rate
+    "openai",           # gpt-4o-mini: $0.15/M input
+    "openrouter",       # variable
+    "anthropic",        # haiku: $0.80/M input
 ]
 
 
@@ -96,6 +99,7 @@ __all__ = [
     "TogetherProvider",
     "OpenRouterProvider",
     "OllamaProvider",
+    "ClaudeCodeCLIProvider",
     "get_provider",
     "list_available_providers",
     "get_cheapest_provider",
