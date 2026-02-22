@@ -306,8 +306,10 @@ async def openai_chat_completions(req: ChatCompletionRequest) -> dict:
     try:
         client = _make_client(provider=provider)
         start = time.monotonic()
-        content = client.chat(messages)
+        result = client.chat(messages)
         latency_ms = int((time.monotonic() - start) * 1000)
+        # v2.x returns LLMResponse; extract text. v1.x returned str.
+        content = result.text if hasattr(result, "text") else str(result)
     except Exception as exc:
         raise HTTPException(status_code=502, detail=str(exc))
 
