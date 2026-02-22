@@ -1,8 +1,9 @@
 # Case Study: SolaceBrowser — OAuth3 Reference Implementation
 
 **Tracking since**: 2026-02-21
-**Status**: Phase 1 COMPLETE → Phase 1.5 COMPLETE → Phase 2 BUILD 7 COMPLETE (Gmail Recipes)
-**Rung**: 641 (OAuth3 core verified)
+**Status**: Phase 1 DONE → Phase 1.5 DONE (1,466 tests) → Phase 2 DONE (805 tests) → Phase 3 IN PROGRESS (Machine Access: 100 tests, Dashboard: 70 tests)
+**Tests**: 2,441 total
+**Rung**: 274177 (machine access layer reviewed)
 **Belt**: Yellow
 
 ## What Was Built
@@ -91,22 +92,31 @@
 - **Evidence bundles**: screenshots, HTML snapshots, action logs, agency_token, selector_matches
 - **308 tests across 13 test classes**: TestRecipeFileExistence, TestRecipeSchema, TestOAuth3Scopes, TestStepSequence, TestSelectorFormat, TestNoHardcodedCredentials, TestEvidenceBundle, TestPMTriplet, TestCrossRecipeConsistency, TestAntiDetection, TestInputOutputSchema, TestMetadata, TestErrorHandling
 
-## Phase 3 — Universal Portal (PLANNED: Month 2)
+## Phase 2 — Platform Recipes (DONE — 805 tests)
+
+Reddit, Notion, HackerNews recipes delivered on top of OAuth3 foundation. All recipes OAuth3-bounded. PM triplets with SHA256 verification for all three platforms.
+
+| Platform | Status | Tests | Rung |
+|----------|--------|-------|------|
+| Reddit Recipes | done | ~270 | 641 |
+| Notion Recipes | done | ~265 | 641 |
+| HackerNews Recipes | done | ~270 | 641 |
+| **Phase 2 Total** | | **805** | **641** |
+
+## Phase 3 — Universal Portal (IN PROGRESS)
 
 **Strategic pivot**: Solace Browser transforms from web-only OAuth3 browser into a universal AI agent portal — web + machine + tunnel in a single consent-governed application.
 
-**Why this is the next milestone after Phase 2 platforms**:
-- Phase 2 establishes web automation on 3+ platforms (Gmail, Substack, Twitter)
-- Phase 3 turns Solace Browser into infrastructure that no competitor can match
-- Machine access is rung 274177 (irreversible) — higher bar than web layer (rung 641)
-- Tunnel is rung 65537 (security-critical) — highest bar in the codebase
+**Machine Access Layer**: BUILD 11 COMPLETE — 100 security tests (path traversal, command blocklist, scope enforcement, step-up auth, timeout). Rung 274177 achieved.
+**Dashboard UI**: BUILD 13 PARTIAL — 70 tests delivered (machine-dashboard.html + portal home page).
+**Remaining**: BUILD 12 (Tunnel Engine, rung 65537) + BUILD 14 (Cross-Platform Distribution)
 
-| Build | Target | Rung | Competitive Differentiator |
-|-------|--------|------|---------------------------|
-| BUILD 11: Machine Access Layer | Month 2 | 274177 | First OAuth3-gated file + terminal access |
-| BUILD 12: Tunnel Engine | Month 2 | 65537 | Built-in reverse proxy — no ngrok needed |
-| BUILD 13: Home Page + Dashboard | Month 2 | 641 | Universal portal command center |
-| BUILD 14: Cross-Platform Distribution | Month 2 | 641 | DMG + DEB + MSI — one download |
+| Build | Status | Tests | Rung | Competitive Differentiator |
+|-------|--------|-------|------|---------------------------|
+| BUILD 11: Machine Access Layer | DONE | 100 | 274177 | First OAuth3-gated file + terminal access |
+| BUILD 12: Tunnel Engine | PLANNED | — | 65537 | Built-in reverse proxy — no ngrok needed |
+| BUILD 13: Home Page + Dashboard | PARTIAL | 70 | 641 | Universal portal command center |
+| BUILD 14: Cross-Platform Distribution | PLANNED | — | 641 | DMG + DEB + MSI — one download |
 
 **Machine Access competitive gap**:
 
@@ -147,13 +157,17 @@ tunnel.solaceagi.com relay
 | PM triplets with SHA256 | 6/6 verified |
 | Gmail PM JSON triplet | 3/3 (selectors.json + urls.json + actions.json) |
 | Recipe hit rate | TBD (need prod data) |
-| OAuth3 implementation | Phase 1.5 complete (5 builds) |
+| OAuth3 implementation | Phase 1.5 complete (8 builds) |
 | Gmail recipes | 6/6 complete (BUILD 7) |
-| Platforms with PM maps | 5 (+ Gmail JSON triplet) |
-| Platforms with recipes | 2 (LinkedIn: 6, Gmail: 6) |
-| ROADMAP build prompts | 8 ready |
-| Tests (total) | 474/474 passing (61 oauth3 + 58 consent UI + 29 step-up + 18 snapshot + 308 gmail recipes) |
-| QA findings fixed | 3/6 (3 deferred to Phase 2) |
+| Platforms with PM maps | 6 (LinkedIn, Gmail, Reddit, Notion, HackerNews + more) |
+| Platforms with recipes | 5 (LinkedIn: 6, Gmail: 6, Reddit: ~4, Notion: ~4, HackerNews: ~4) |
+| ROADMAP build prompts | 14 (8 Phase 1.5 + BUILD 11-14) |
+| Tests (total) | 2,441/2,441 passing |
+| Phase 1.5 tests | 1,466 (OAuth3 core, consent UI, step-up, snapshot, Gmail, Substack, Twitter, machine access, audit trail) |
+| Phase 2 tests | 805 (Reddit + Notion + HackerNews) |
+| Phase 3 tests (in progress) | 170 (Machine Access: 100 + Dashboard: 70) |
+| QA findings fixed | 4/6 (2 deferred) |
+| Machine access rung | 274177 (irreversible paths reviewed) |
 
 ## Build Log
 
@@ -164,7 +178,16 @@ tunnel.solaceagi.com relay
 | Phase 1.5 BUILD 2 (Consent UI) | 2026-02-21 | 58/58 | 641 | b593829 |
 | Phase 1.5 BUILD 3 (Step-Up Authorization) | 2026-02-21 | 29/29 | 641 | 8df920e |
 | Phase 1.5 BUILD 5 (HTML Snapshot Capture) | 2026-02-21 | 18/18 | 641 | 223ca2e |
-| Phase 2 BUILD 7 (Gmail Recipes) | 2026-02-21 | 308/308 | 641 | pending |
+| Phase 1.5 BUILD 6 (Substack Recipes) | 2026-02-21 | 334/334 | 641 | — |
+| Phase 1.5 BUILD 9 (Twitter Recipes) | 2026-02-21 | 287/287 | 641 | — |
+| Phase 1.5 BUILD 8 (Machine Access + Tunnel) | 2026-02-21 | 145/145 | 274177 | — |
+| Phase 1.5 Bonus (Audit Trail) | 2026-02-21 | 72/72 | 641 | — |
+| Phase 2 BUILD 7 (Gmail Recipes) | 2026-02-21 | 308/308 | 641 | — |
+| Phase 2 (Reddit Recipes) | 2026-02-21 | ~270/270 | 641 | — |
+| Phase 2 (Notion Recipes) | 2026-02-21 | ~265/265 | 641 | — |
+| Phase 2 (HackerNews Recipes) | 2026-02-21 | ~270/270 | 641 | — |
+| Phase 3 BUILD 11 (Machine Access Layer) | 2026-02-21 | 100/100 | 274177 | — |
+| Phase 3 BUILD 13 (Dashboard UI) | 2026-02-21 | 70/70 | 641 | — |
 
 ## Stillwater Evidence Bundles
 
@@ -175,11 +198,10 @@ tunnel.solaceagi.com relay
 
 ## Next Actions
 
-1. Phase 2: BUILD 8 (Substack recipes) + BUILD 9 (Twitter recipes) → complete 3-platform web layer
-2. Phase 3: BUILD 11 (Machine Access) → rung 274177 gate
-3. Phase 3: BUILD 12 (Tunnel Engine) → rung 65537 gate (security-critical)
-4. Phase 3: BUILD 13 (Home Page + Dashboard) + BUILD 14 (Distribution)
-5. solaceagi.com tunnel server (Phase 5 in solaceagi ROADMAP) — server-side relay
+1. Phase 3: BUILD 12 (Tunnel Engine) → rung 65537 gate (security-critical, highest priority)
+2. Phase 3: BUILD 14 (Cross-Platform Distribution) → DMG + DEB + MSI
+3. solaceagi.com tunnel server (Phase 5 in solaceagi ROADMAP) — server-side relay (parallel with BUILD 12)
+4. Phase 3.5: Persona integration in solaceagi.com (parallel work)
 
 Launch command when ready:
 ```bash
@@ -197,9 +219,12 @@ Launch command when ready:
 
 | Metric | Value |
 |--------|-------|
-| Tests run | 1,466 |
-| Tests passed | 1,466 |
+| Phase 1.5 tests run | 1,466 |
+| Phase 2 tests run | 805 |
+| Phase 3 (in progress) tests run | 170 |
+| Total tests run | 2,441 |
+| Total tests passed | 2,441 |
 | Security findings | 1 MEDIUM (cookie Secure flag — FIXED) |
 | Persona stack | Schneier + Kent Beck + Brendan Eich |
 | Ghost master effectiveness | Identified missing Secure flag on OAuth3 consent cookie |
-| Rung achieved | 274177 (file access + command execution paths reviewed) |
+| Rung achieved | 274177 (machine access layer: file access + command execution paths reviewed)

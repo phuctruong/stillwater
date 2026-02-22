@@ -1,8 +1,8 @@
 # Case Study: SolaceAGI — Hosted Platform for Verified Delegated Intelligence
 
 **Tracking since**: 2026-02-21
-**Status**: Phase 0 DONE (refactor) → Phase 1 DONE (core backend) → Phase 2 next
-**Rung**: 641 (46/46 tests pass, all endpoints verified)
+**Status**: Phase 0–3 DONE → Phase 3.5 + Phase 4 IN PROGRESS — 671+ tests total
+**Rung**: 641 (671+ tests passing)
 **Belt**: Yellow
 
 ## Architecture
@@ -25,22 +25,26 @@ stillwater/cli (OSS)           ← base CLI, lives inside stillwater repo; anyon
 
 ## What Exists
 
-| Component | Status |
-|-----------|--------|
-| SOLACEAGI-WHITEPAPER.md | Written |
-| NORTHSTAR.md | Updated (corrected architecture) |
-| ROADMAP.md | Created (Phase 1 includes LLM proxy endpoint) |
-| `web/` frontend | Live (login, pricing, store pages) |
-| `solace/` research content | Refactored out (user cleaned up) |
-| FastAPI backend | **COMPLETE** — 8 routers mounted |
-| Stripe billing (billing.py) | **DONE** — checkout, webhook, portal, status |
-| Firebase Auth (firebase_auth.py) | **DONE** — Google sign-in + dual auth |
-| LLM proxy (llm_proxy.py) | **DONE** — Together.ai primary, OpenRouter fallback, 20% markup |
-| OAuth3 vault (oauth3_vault.py) | **DONE** — issue/list/revoke/validate (AES-256-GCM) |
-| User BYOK keys (users.py) | **DONE** — store/list/delete, cryptographic erasure |
-| Evidence verify (verify.py) | **DONE** — POST /verify with rung checking |
-| Cloud twin execution | Not yet (Phase 2) |
-| Stillwater Store integration | Not yet (Phase 3) |
+| Component | Status | Phase | Tests |
+|-----------|--------|-------|-------|
+| SOLACEAGI-WHITEPAPER.md | Written | — | — |
+| NORTHSTAR.md | Updated (corrected architecture) | — | — |
+| ROADMAP.md | Created (all phases documented) | — | — |
+| `web/` frontend | Live (login, pricing, store, history pages) | — | — |
+| `solace/` research content | Refactored out (user cleaned up) | 0 | — |
+| FastAPI backend | **COMPLETE** — 8 routers mounted | 1 | 76 |
+| Stripe billing (billing.py) | **DONE** — checkout, webhook, portal, status | 1 | 15 |
+| Firebase Auth (firebase_auth.py) | **DONE** — Google sign-in + dual auth | 1 | 10 |
+| LLM proxy (llm_proxy.py) | **DONE** — Together.ai primary, OpenRouter fallback, 20% markup | 1 | 21 |
+| OAuth3 vault (oauth3_vault.py) | **DONE** — issue/list/revoke/validate (AES-256-GCM) | 1 | — |
+| User BYOK keys (users.py) | **DONE** — store/list/delete, cryptographic erasure | 1 | — |
+| Evidence verify (verify.py) | **DONE** — POST /verify with rung checking | 1 | — |
+| Cloud twin (twin/) | **DONE** — CloudBrowser + RecipeExecutor + EvidenceBuilder + SessionSync | 2 | 83 |
+| PZip storage layer | **DONE** — snapshot.py + history.py + compression.py + history API + Kanban UI | 2.5 | 81 |
+| Dragon Tip Program | **DONE** — tip/engine.py + transparency.py + tiers.py + tracking/usage.py + api/tips.py | 2.7 | 83 |
+| Stillwater Store frontend | **DONE** — store/api.py + publish.py + attribution.py + registry.py | 3 | 71 |
+| Persona System integration | IN PROGRESS — POST /persona/select + LLM proxy persona_hint | 3.5 | — |
+| Launch (billing tiers + rate limits + GDPR) | IN PROGRESS | 4 | — |
 
 ## Refactor Plan (Before Build)
 
@@ -115,17 +119,25 @@ Phase 1 (core backend) MUST include `api/llm.py`:
 | Firebase Auth | 2026-02-21 | 10/10 | 641 | cb912fe |
 | Phase 1: LLM proxy + OAuth3 + users + verify | 2026-02-21 | 21/21 | 641 | a8c8c32 |
 | httpx + cryptography fix (Phase 1 bugfix) | 2026-02-21 | 46/46 | 641 | 9ba6585 |
+| Phase 2: Cloud Twin (twin/ package) | 2026-02-21 | 83/83 | 641 | — |
+| Phase 2.5: PZip Storage Layer | 2026-02-21 | 81/81 | 641 | — |
+| Phase 2.7: Dragon Tip Program | 2026-02-21 | 83/83 | 641 | — |
+| Phase 3: Stillwater Store Frontend | 2026-02-21 | 71/71 | 641 | — |
 
 ## Metrics
 
 | Metric | Now | Target Q2 | Target EOY |
 |--------|-----|-----------|-----------|
-| Tests | 46 | 100+ | 200+ |
-| API endpoints | 16 | 25+ | 40+ |
+| Tests | 671+ | 800+ | 1,000+ |
+| Phases complete | 6/8 (0–3 done, 3.5+4 in progress) | 8/8 | 8/8 |
+| API endpoints | 35+ | 50+ | 70+ |
 | Stripe products | 4 | 4 | 4 |
 | Paying users | 0 | growing | growing |
 | Recipe hit rate | 0% | 50% | 80% |
 | API uptime | N/A | 99% | 99.9% |
+| Cloud twin | DONE (83 tests) | live | 99.9% uptime |
+| PZip compression ratio | > 2:1 (verified) | > 4:1 with GAR | > 10:1 |
+| Dragon Tip hash chain | 100-record integrity verified | live | public |
 
 ## Retroactive QA (2026-02-21) — Persona-Enhanced
 

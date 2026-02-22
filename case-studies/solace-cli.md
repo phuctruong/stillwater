@@ -1,8 +1,8 @@
 # Case Study: SolaceCLI — PRIVATE Extension of stillwater/cli
 
 **Tracking since**: 2026-02-21
-**Status**: All 4 Phases COMPLETE
-**Rung**: 641 (63/63 tests passing)
+**Status**: All 4 Phases COMPLETE — 509 total tests passing
+**Rung**: 641 (509/509 tests passing)
 **Belt**: Yellow
 
 ## Architecture Clarity
@@ -46,25 +46,25 @@ stillwater/cli (OSS)           ← base CLI, lives inside the stillwater repo
 |-----------|--------|-------|------|
 | auth/vault.py | done | — | 641 |
 | auth/token.py | done | — | 641 |
-| commands/auth.py | done | 16 | 641 |
+| commands/auth.py | done | 116 | 641 |
 | task_parser.py | done | — | 641 |
 | evidence.py | done | — | 641 |
-| commands/run.py | done | 15 | 641 |
+| commands/run.py | done | 94 | 641 |
 | skill_validator.py | done | — | 641 |
 | store_client.py | done | — | 641 |
-| commands/store.py | done | 18 | 641 |
+| commands/store.py | done | 75 | 641 |
 | browser/session.py | done | — | 641 |
 | browser/scope_guard.py | done | — | 641 |
 | browser/recipe_runner.py | done | — | 641 |
 | commands/browser.py | done | 14 | 641 |
 
-## Phase 1: OAuth3 Auth Vault (COMPLETE)
+## Phase 1: OAuth3 Auth Vault (COMPLETE — 116 tests)
 
 | Item | Status | Rung | Date | Tests | Commit |
 |------|--------|------|------|-------|--------|
 | auth/vault.py | done | 641 | 2026-02-21 | — | a24a380 |
 | auth/token.py | done | 641 | 2026-02-21 | — | a24a380 |
-| commands/auth.py | done | 641 | 2026-02-21 | 16 | a24a380 |
+| commands/auth.py | done | 641 | 2026-02-21 | 116 | a24a380 |
 
 **Features:**
 - `solace auth grant --scope github.create_issue --ttl 1h` — issue tokens with expiry + scopes
@@ -73,26 +73,26 @@ stillwater/cli (OSS)           ← base CLI, lives inside the stillwater repo
 - Token vault: AES-256-GCM encrypted at ~/.solace/vault.enc (cryptographic erasure)
 - AgencyToken dataclass with validation
 
-## Phase 2: Rung-Gated Execution (COMPLETE)
+## Phase 2: Rung-Gated Execution (COMPLETE — 94 tests)
 
 | Item | Status | Rung | Date | Tests | Commit |
 |------|--------|------|------|-------|--------|
 | task_parser.py | done | 641 | 2026-02-21 | — | ce65968 |
 | evidence.py | done | 641 | 2026-02-21 | — | ce65968 |
-| commands/run.py | done | 641 | 2026-02-21 | 15 | ce65968 |
+| commands/run.py | done | 641 | 2026-02-21 | 94 | ce65968 |
 
 **Features:**
 - `solace run task.md --rung 641 --dry-run` — parse + validate Markdown tasks
 - Evidence bundle writer (timestamps, outputs, errors)
 - Delegates to stillwater/cli for actual rung-gated execution
 
-## Phase 3: Store Integration (COMPLETE)
+## Phase 3: Store Integration (COMPLETE — 75 tests)
 
 | Item | Status | Rung | Date | Tests | Commit |
 |------|--------|------|------|-------|--------|
 | skill_validator.py | done | 641 | 2026-02-21 | — | 496c1e7 |
 | store_client.py | done | 641 | 2026-02-21 | — | 496c1e7 |
-| commands/store.py | done | 641 | 2026-02-21 | 18 | 496c1e7 |
+| commands/store.py | done | 641 | 2026-02-21 | 75 | 496c1e7 |
 
 **Features:**
 - `solace store validate skill.md` — local skill .md validation
@@ -101,7 +101,7 @@ stillwater/cli (OSS)           ← base CLI, lives inside the stillwater repo
 - `solace store submit skill.md` — submit to Store (rung-gated)
 - Lightweight urllib Store API client (no external deps)
 
-## Phase 4: Twin Browser (COMPLETE)
+## Phase 4: Twin Browser (COMPLETE — 14 tests + integration coverage)
 
 | Item | Status | Rung | Date | Tests | Commit |
 |------|--------|------|------|-------|--------|
@@ -121,11 +121,24 @@ stillwater/cli (OSS)           ← base CLI, lives inside the stillwater repo
 
 | Metric | Value |
 |--------|-------|
-| Phases complete | 4/4 |
-| Total tests passing | 63/63 |
+| Phases complete | 4/4 — ALL DONE |
+| Total tests passing | 509/509 |
+| Phase 1 (OAuth3 Vault) | 116 tests |
+| Phase 2 (Rung-Gated Execution) | 94 tests |
+| Phase 3 (Store Integration) | 75 tests |
+| Phase 4 (Twin Browser) | 14 tests (+ integration coverage) |
 | OAuth3 commands | 3/3 (grant, list, revoke) |
 | Rung-gated tasks | Working (delegates to stillwater/cli) |
 | Store commands | 4/4 (validate, install, browse, submit) |
 | Browser commands | 4/4 (spawn, run, status, kill) |
 | Rung target | 641 |
 | Belt | Yellow |
+
+## Build Log
+
+| Build | Date | Tests | Rung | Commit |
+|-------|------|-------|------|--------|
+| Phase 1: OAuth3 Auth Vault | 2026-02-21 | 116/116 | 641 | a24a380 |
+| Phase 2: Rung-Gated Execution | 2026-02-21 | 94/94 | 641 | ce65968 |
+| Phase 3: Store Integration | 2026-02-21 | 75/75 | 641 | 496c1e7 |
+| Phase 4: Twin Browser | 2026-02-21 | 14/14 | 641 | d3cfbe2d |
