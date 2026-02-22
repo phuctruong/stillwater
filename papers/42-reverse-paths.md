@@ -286,7 +286,7 @@ At least one external AI agent platform — not built by Phuc — has implemente
 | -4 (spec is complete enough) | OAuth3 spec v1.0 published with reference implementation + conformance test suite | Upgrade from v0.1 (794 lines, 5 sections) to v1.0 with: implementation guide, error codes, conformance tests, and a reference implementation in Python |
 | -5 (reference impl public) | solace-browser oauth3/ module published as standalone pip package | Extract solace-browser's oauth3/ directory into `pip install oauth3-agency`; this makes adoption trivially easy |
 | -6 (spec published at stable URL) | oauth3.dev or oauth3.solaceagi.com serves the spec | Register a domain; publish the spec as a static site (GitHub Pages minimum); include Brunson-treated explainer |
-| -7 (competitive claim documented) | "OpenClaw has 512 vulnerabilities; Browser-Use has no consent; OAuth3 solves this" is a published, citable claim | papers/competitive-analysis-openclaw-2026-02.md already exists — syndicate it |
+| -7 (consent gap documented) | "Existing browser automation tools have no consent model; OAuth3 solves this" is a published, citable claim | papers/oauth3-spec-v0.1.md already exists — syndicate the consent gap analysis |
 | -8 (today) | spec exists as a paper; not yet published at a stable URL | Publish oauth3 spec to a dedicated URL; extract oauth3/ as a pip package |
 
 ### Critical Path

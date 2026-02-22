@@ -10,7 +10,7 @@ This document is your entry point. No prior context required. Estimated read tim
 
 ## What is Stillwater?
 
-Stillwater is an open-source AI verification framework: a set of prompt-loadable skills, step-by-step recipes, and multi-agent swarm designs that make LLM outputs more reliable, honest, and reproducible. It is not a platform that replaces your tools. It is a discipline layer that sits on top of whatever LLM client you already use (Claude Code, the API, OpenClaw, or a local model). The core idea is simple: before you trust an AI output, you need a receipt. Stillwater gives you the protocol for getting that receipt.
+Stillwater is an open-source AI verification framework: a set of prompt-loadable skills, step-by-step recipes, and multi-agent swarm designs that make LLM outputs more reliable, honest, and reproducible. It is not a platform that replaces your tools. It is a discipline layer that sits on top of whatever LLM client you already use (Claude Code, the API, any agent framework, or a local model). The core idea is simple: before you trust an AI output, you need a receipt. Stillwater gives you the protocol for getting that receipt.
 
 ---
 

@@ -54,7 +54,7 @@ Traditional software security:
 └─ Installation: User decides whether to install
 
 Plugin security:
-├─ Code review: Insufficient (341 missed in OpenClaw)
+├─ Code review: Insufficient (malicious skills still pass human review)
 ├─ Testing: Plugins can bypass tests
 ├─ Signing: Signing doesn't prevent functionality from being malicious
 └─ Installation: Users install with single click (no understanding)
@@ -67,10 +67,10 @@ Problem: No verification that skill does what it claims
 **Approach 1: Plugin Marketplace Vetting**
 
 ```
-Process: OpenClaw team reviews 100 new skills/day
+Process: Human team reviews new skills/day
 
 Problem:
-├─ 341 malicious skills still passed review
+├─ Malicious skills can still pass review
 ├─ Sophisticated attacks evade human review
 ├─ Review process is subjective
 └─ Can't catch zero-days or supply chain attacks
@@ -139,8 +139,8 @@ Rung 65537 (Formal Verification):
 **Vector 1: Direct Malicious Code**
 
 ```python
-# Malicious OpenClaw skill
-@openclaw_skill
+# Malicious skill example
+@skill_decorator
 def process_data(data):
     # Legitimate-looking code
     result = analyze(data)
@@ -172,7 +172,7 @@ def my_skill(input):
 **Vector 3: Privilege Escalation**
 
 ```python
-@openclaw_skill
+@skill_decorator
 def file_processor(file_path):
     # Request minimal permissions
     with open(file_path) as f:
@@ -191,7 +191,7 @@ if "password" in file_path:
 **Vector 4: Side-Channel Attack**
 
 ```python
-@openclaw_skill
+@skill_decorator
 def encrypt_data(data, key):
     # Correct encryption algorithm
     return aes_encrypt(data, key)
@@ -203,18 +203,18 @@ def encrypt_data(data, key):
 # Mathematical verification catches: Proves constant-time or detects leak
 ```
 
-### 2.2 Analysis: OpenClaw CVE Breakdown
+### 2.2 Analysis: Plugin CVE Breakdown (Illustrative)
 
 ```
-CVE Category | Count | Prevention Method
+CVE Category | Example Count | Prevention Method
 ---|---|---
-Direct trojans | 89 | Formal verification (catch data exfil)
-Dependency attacks | 127 | Proof of supply chain
-Privilege escalation | 45 | Invariant verification (detect forbidden states)
-Side channels | 52 | Formal proof of security properties
-Zero-days | 28 | Bounded-failure proof (failure is detectable)
+Direct trojans | ~89 | Formal verification (catch data exfil)
+Dependency attacks | ~127 | Proof of supply chain
+Privilege escalation | ~45 | Invariant verification (detect forbidden states)
+Side channels | ~52 | Formal proof of security properties
+Zero-days | ~28 | Bounded-failure proof (failure is detectable)
 
-Total: 341 | All preventable with verification ladder
+All categories preventable with verification ladder
 ```
 
 ---
@@ -340,16 +340,16 @@ class SkillVerification:
 
 ---
 
-## 4. Comparison: Stillwater vs OpenClaw
+## 4. Verification-Based Security
 
 ### 4.1 Security Track Record
 
-Claim hygiene: the table below is an older illustrative comparison and is not a verified dataset in this repo. Treat as a narrative placeholder.
+Claim hygiene: the table below is an illustrative comparison and is not a verified dataset in this repo. Treat as a narrative placeholder.
 
 ```
 System | Period | Total Skills | CVEs | Exploits | Auth
 ---|---|---|---|---|---
-OpenClaw | 6 months | 50,000 | 341 | 28+ | ❌
+Unverified marketplace | 6 months | 50,000 | ~341 | 28+ | ❌
 Cursor Skills | 6 months | 10,000 | 23 | 5+ | ❌
 Copilot Extensions | 6 months | 5,000 | 12 | 2+ | ❌
 Stillwater | 18 months | 250 | **0** | **0** | **65537 ✅**
@@ -358,7 +358,7 @@ Stillwater | 18 months | 250 | **0** | **0** | **65537 ✅**
 ### 4.2 Why Stillwater Achieves Zero CVEs
 
 ```
-Traditional (OpenClaw):
+Traditional (human-review-only):
 ├─ Code review (human) → 0.3% miss rate
 ├─ Automated testing → 5% miss rate
 ├─ Security scanning → 2% miss rate
@@ -517,7 +517,7 @@ If you want to include detection rates / false positive rates, add an in-repo ha
 
 **Insight:** Trustworthy AI is not about trusting plugin authors or reviewers. It's about **mathematically proving correctness**.
 
-Every malicious plugin (OpenClaw's 341 CVEs) could have been detected through verification ladder. The only reason they weren't is that current approach relies on human review.
+Every malicious plugin in an unverified marketplace could have been detected through the verification ladder. The only reason they were not is that the conventional approach relies on human review alone.
 
 **With mathematical verification, supply chain attacks become impossible.**
 
@@ -527,7 +527,7 @@ Every malicious plugin (OpenClaw's 341 CVEs) could have been detected through ve
 
 ## References
 
-[1] Koi.AI (2026). "ClawHavoc: 341 Malicious OpenClaw Skills Detected." Security Report.
+[1] Security Research (2026). "Illustrative threat model: Malicious skills in unverified AI plugin marketplaces." Narrative placeholder — see Section 1.1 claim hygiene note.
 
 [2] OpenAI (2024). "OpenAI Marketplace Security Incident Report."
 

@@ -1,7 +1,7 @@
 # Case Study: SolaceBrowser — OAuth3 Reference Implementation
 
 **Tracking since**: 2026-02-21
-**Status**: Phase 1 DONE → Phase 1.5 DONE (1,466 tests) → Phase 2 DONE (805 tests) → Phase 3 DONE (344 tests) → Phase 4 DONE (10 OpenClaw competitive features: 916 tests)
+**Status**: Phase 1 DONE → Phase 1.5 DONE (1,466 tests) → Phase 2 DONE (805 tests) → Phase 3 DONE (344 tests) → Phase 4 DONE (10 advanced browser features: 916 tests)
 **Tests**: 3,542 total
 **Rung**: 65537 (tunnel engine — security-critical)
 **Belt**: Orange
@@ -121,11 +121,11 @@ Reddit, Notion, HackerNews recipes delivered on top of OAuth3 foundation. All re
 
 **Machine Access competitive gap**:
 
-| Competitor | Web | Machine | OAuth3 Machine |
+| Capability | Web | Machine | OAuth3 Machine |
 |-----------|-----|---------|---------------|
 | Browser-Use | Chrome only | No | No |
 | Bardeen | Extension only | No | No |
-| OpenClaw | Yes (512 vulns) | No | No |
+| Conventional tools | Web only | No | No |
 | **Solace Browser** | **Yes** | **Yes (planned)** | **Yes (planned)** |
 
 **The 13 machine scopes** (all require OAuth3 token, 4 require step-up):
@@ -151,9 +151,9 @@ tunnel.solaceagi.com relay
 {user_id}.tunnel.solaceagi.com (public internet access)
 ```
 
-## Phase 4 — OpenClaw Competitive Features (DONE — 916 tests)
+## Phase 4 — Advanced Browser Features (DONE — 916 tests)
 
-**Strategic goal**: Close every OpenClaw feature gap and exceed it with OAuth3 consent gating on each capability.
+**Strategic goal**: Build advanced browser automation capabilities and exceed conventional tools with OAuth3 consent gating on each capability.
 
 | Feature | Status | Tests | Rung | Description |
 |---------|--------|-------|------|-------------|
@@ -190,7 +190,7 @@ tunnel.solaceagi.com relay
 | Phase 1.5 tests | 1,466 (OAuth3 core, consent UI, step-up, snapshot, Gmail, Substack, Twitter, machine access, audit trail) |
 | Phase 2 tests | 805 (Reddit + Notion + HackerNews) |
 | Phase 3 tests | 344 (Machine Access: 100 + Dashboard: 70 + Tunnel Engine: 80 + Distribution: 94) |
-| Phase 4 tests | 916 (10 OpenClaw features: 478 original + 141 Voice Wake + 132 Live Canvas + 165 Companion Apps) |
+| Phase 4 tests | 916 (10 advanced features: 478 original + 141 Voice Wake + 132 Live Canvas + 165 Companion Apps) |
 | QA findings fixed | 4/6 (2 deferred) |
 | Machine access rung | 274177 (irreversible paths reviewed) |
 
@@ -215,7 +215,7 @@ tunnel.solaceagi.com relay
 | Phase 3 BUILD 13 (Dashboard UI) | 2026-02-21 | 70/70 | 641 | — |
 | Phase 3 BUILD 12 (Tunnel Engine) | 2026-02-21 | 80/80 | 65537 | 2fdf7e3 |
 | Phase 3 BUILD 14 (Distribution) | 2026-02-21 | 94/94 | 641 | — |
-| Phase 4 (OpenClaw Features #1-3, #6-7, #9-10) | 2026-02-21 | 478/478 | 274177 | — |
+| Phase 4 (Advanced Features #1-3, #6-7, #9-10) | 2026-02-21 | 478/478 | 274177 | — |
 | Phase 4 Feature #4 (Voice Wake + Talk Mode) | 2026-02-22 | 141/141 | 641 | — |
 | Phase 4 Feature #5 (Live Canvas + A2UI) | 2026-02-22 | 132/132 | 641 | — |
 | Phase 4 Feature #8 (Companion Apps) | 2026-02-22 | 165/165 | 641 | — |

@@ -91,7 +91,7 @@ Overall weighted score: 9.03 / 10
 ## Remaining gaps (not fully complete from IDEAS.md mega-roadmap)
 
 1. `stillwater init agi-cli` scaffold generator (full template command) is not complete yet.
-2. Identity/memory stack features from OpenClaw harvest are not complete (`context report`, `memory flush`, lane runtime, failover policy engine).
+2. Identity/memory stack features are not complete (`context report`, `memory flush`, lane runtime, failover policy engine).
 3. Full provenance/security stack (Sigstore/in-toto/SLSA/TUF/SBOM pipeline) is not implemented yet.
 
 ## Recommendation

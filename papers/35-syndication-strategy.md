@@ -24,7 +24,7 @@ The Stillwater `papers/` directory already contains 34+ papers. Each is a potent
 | Paradigm papers | 3 | Roadmap-Based Development |
 | Technical architecture | 8 | OAuth3 spec, verification ladder |
 | AI capability solutions | 10 | Solving hallucination, solving reasoning |
-| Competitive analysis | 2 | OpenClaw, FDA architecture |
+| Competitive analysis | 2 | AI authorization gaps, FDA architecture |
 | Community/flywheel | 4 | Community skill database, bootstrapping |
 | Founder authority | 1 | founder-authority.md |
 

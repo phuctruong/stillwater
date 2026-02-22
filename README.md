@@ -138,20 +138,20 @@ Stillwater OS is:
 
 Stillwater OS is not:
 - a "replace everything" agent platform
-- positioned as an OpenClaw competitor
+- a drop-in replacement for existing agent clients
 
 Practical framing:
-- If you already use OpenClaw, keep it.
+- If you already use an agent client or automation framework, keep it.
 - Load Stillwater skills/process on top to improve outcomes.
 
 > Bruce Lee framing: different schools can coexist; what matters is what works in sparring.
 
 ## Quick FAQ
 
-Q: Is this an OpenClaw alternative?  
-A: Not the primary positioning. This repo is the upgrade layer (skills + orchestration + verification), and can be used with OpenClaw or other model/client stacks.
+Q: Can Stillwater work with my existing agent stack?
+A: Yes. This repo is the upgrade layer (skills + orchestration + verification), and can be used with any LLM client or agent framework.
 
-Q: What's the fastest way to see value?  
+Q: What's the fastest way to see value?
 A: Run a controlled A/B test with and without `skills/prime-coder.md` on the same coding tasks.
 
 Q: Are performance claims guaranteed?  
