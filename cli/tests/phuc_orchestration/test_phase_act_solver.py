@@ -22,7 +22,6 @@ import subprocess
 import re
 import os
 from pathlib import Path
-from typing import Optional
 
 try:
     import pytest  # type: ignore
@@ -69,6 +68,7 @@ def test_act_solver_diff():
 
     # Use synthetic example for format testing
     iid = "synthetic__diff_test"
+    repo_dir = None  # Only used for non-synthetic instances
     problem = """
     Bug: The function `calculate_total()` in calculator.py incorrectly sums negative numbers.
     It should add all numbers but currently ignores negative values.
@@ -87,7 +87,7 @@ def test_act_solver_diff():
 """
 
     print(f"Synthetic Test: {iid}")
-    print(f"Problem: calculate_total() ignores negative numbers")
+    print("Problem: calculate_total() ignores negative numbers")
 
     # DECISION_RECORD (what Judge would output)
     decision = {
@@ -175,7 +175,7 @@ GENERATE DIFF NOW. Output format (MANDATORY):
         elif "--- a/" in response:
             # Extract from --- onwards
             lines = response.split('\n')
-            start = next((i for i, l in enumerate(lines) if l.startswith('--- a/')), -1)
+            start = next((i for i, ln in enumerate(lines) if ln.startswith('--- a/')), -1)
             if start < 0:
                 print(f"❌ No diff found. Response:\n{response[:300]}")
                 return False
@@ -188,9 +188,9 @@ GENERATE DIFF NOW. Output format (MANDATORY):
         diff_lines = diff_content.split('\n')
 
         # Check required headers
-        has_header_minus = any(l.startswith('--- a/') for l in diff_lines[:5])
-        has_header_plus = any(l.startswith('+++ b/') for l in diff_lines[:5])
-        has_hunks = any(l.startswith('@@') for l in diff_lines)
+        has_header_minus = any(ln.startswith('--- a/') for ln in diff_lines[:5])
+        has_header_plus = any(ln.startswith('+++ b/') for ln in diff_lines[:5])
+        has_hunks = any(ln.startswith('@@') for ln in diff_lines)
 
         if not has_header_minus:
             print("❌ Missing '--- a/...' header")
@@ -208,8 +208,6 @@ GENERATE DIFF NOW. Output format (MANDATORY):
 
         # Try to validate patch (for real repos only)
         # For synthetic examples, skip validation
-        import tempfile
-        import shutil
         if iid.startswith("synthetic"):
             print("ⓘ  Synthetic example - skipping patch application test")
             print("   (Unit test focus: diff format validation)")
@@ -225,13 +223,13 @@ GENERATE DIFF NOW. Output format (MANDATORY):
             )
 
             if result.returncode != 0:
-                print(f"⚠️  Patch might not apply cleanly:")
+                print("⚠️  Patch might not apply cleanly:")
                 print(f"   {result.stderr[:200]}")
             else:
                 print("✅ Patch applies cleanly (dry-run)")
 
         # Print diff
-        print(f"\nGenerated Diff:")
+        print("\nGenerated Diff:")
         for i, line in enumerate(diff_lines[:15]):
             print(f"  {line[:70]}")
         if len(diff_lines) > 15:

@@ -16,10 +16,8 @@ Important claim hygiene:
 """
 
 from dataclasses import dataclass
-from fractions import Fraction
 from collections import Counter
-import json
-from typing import Optional, List, Dict, Tuple, Any
+from typing import List, Dict, Tuple, Any
 
 
 # ============================================================================
@@ -516,12 +514,12 @@ def main():
 
     all_rungs_pass = rung_641 and rung_274177 and rung_65537
 
-    print(f"\n✓ Counter Bypass Protocol: DEMO RUN COMPLETE")
-    print(f"✓ Verification Ladder: 641 → 274177 → 65537")
+    print("\n✓ Counter Bypass Protocol: DEMO RUN COMPLETE")
+    print("✓ Verification Ladder: 641 → 274177 → 65537")
     print(f"✓ In-repo tests: {test_summary['passed']}/{test_summary['total']} passed")
     print(f"✓ Explanation present: {rung_65537}")
     print(f"✓ Status: {'OK (demo)' if all_rungs_pass else 'PARTIAL (demo)'}")
-    print(f"✓ Confidence: Lane B (Checked in-repo; not an external benchmark certificate)")
+    print("✓ Confidence: Lane B (Checked in-repo; not an external benchmark certificate)")
 
     print()
     print("Difference from pure LLM approach:")

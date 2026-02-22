@@ -25,7 +25,7 @@ Total: ~100 lemmas
 """
 
 import numpy as np
-from typing import Tuple, List, Optional
+from typing import Tuple
 from dataclasses import dataclass
 from enum import Enum
 
@@ -91,7 +91,7 @@ def lemma_incenter_definition(tri: Triangle) -> Tuple[Point, LemmaWitness]:
     c = np.linalg.norm(A - B)  # side AB
 
     I_coords = (a * A + b * B + c * C) / (a + b + c)
-    I = Point(I_coords[0], I_coords[1])
+    incenter = Point(I_coords[0], I_coords[1])
 
     witness = LemmaWitness(
         lemma_name="incenter_definition",
@@ -100,7 +100,7 @@ def lemma_incenter_definition(tri: Triangle) -> Tuple[Point, LemmaWitness]:
         reference="Euclid_IV_4"
     )
 
-    return I, witness
+    return incenter, witness
 
 def lemma_inradius_formula(tri: Triangle) -> Tuple[float, LemmaWitness]:
     """
@@ -221,8 +221,8 @@ def lemma_circumcenter_definition(tri: Triangle) -> Tuple[Point, float, LemmaWit
           (B[0]**2 + B[1]**2) * (A[0] - C[0]) +
           (C[0]**2 + C[1]**2) * (B[0] - A[0])) / D
 
-    O = Point(ux, uy)
-    R = np.linalg.norm(A - O.as_array())
+    circumcenter = Point(ux, uy)
+    R = np.linalg.norm(A - circumcenter.as_array())
 
     witness = LemmaWitness(
         lemma_name="circumcenter_definition",
@@ -231,9 +231,9 @@ def lemma_circumcenter_definition(tri: Triangle) -> Tuple[Point, float, LemmaWit
         reference="perpendicular_bisector_theorem"
     )
 
-    return O, R, witness
+    return circumcenter, R, witness
 
-def lemma_arc_midpoint_property(tri: Triangle, I: Point, P: Point) -> Tuple[bool, LemmaWitness]:
+def lemma_arc_midpoint_property(tri: Triangle, incenter: Point, P: Point) -> Tuple[bool, LemmaWitness]:
     """
     L2.2: If AI extended hits circumcircle at P, then P is midpoint of arc BC
 
@@ -420,7 +420,7 @@ def lemma_midsegment_parallel(tri: Triangle, mid1: Point, mid2: Point) -> Tuple[
     # 1. Segment mid1-mid2 is parallel to third side
     # 2. Length of mid1-mid2 is half the length of third side
 
-    A, B, C = tri.A.as_array(), tri.B.as_array(), tri.C.as_array()
+    _, B, C = tri.A.as_array(), tri.B.as_array(), tri.C.as_array()
     BC_length = np.linalg.norm(B - C)
     midseg_length = np.linalg.norm(mid1.as_array() - mid2.as_array())
 

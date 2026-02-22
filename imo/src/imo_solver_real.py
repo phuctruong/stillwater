@@ -16,9 +16,8 @@ Claim hygiene:
 import sys
 import os
 from pathlib import Path
-from typing import Optional, List, Tuple
+from typing import Optional, List
 from dataclasses import dataclass
-from fractions import Fraction
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
@@ -71,7 +70,7 @@ class IMOSolverReal:
         solution_text = self._generate_solution(problem)
 
         if not solution_text:
-            print(f"  ❌ Failed to generate solution")
+            print("  ❌ Failed to generate solution")
             return IMOSolution(
                 problem_number=problem.number,
                 success=False,
@@ -121,13 +120,8 @@ Requirements:
 
 Solution:"""
 
-        system = """You are an IMO mathematician expert.
-- Use exact arithmetic (fractions, not floats)
-- Show rigorous step-by-step work
-- Verify your answer
-- State the final answer clearly
-- Use mathematical notation
-- Include proof of correctness"""
+        # system prompt kept inline for future use when wrapper supports system param
+        # system = """You are an IMO mathematician expert. ..."""
 
         return self.wrapper.solve_math(prompt)
 

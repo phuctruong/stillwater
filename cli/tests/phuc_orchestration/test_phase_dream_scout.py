@@ -67,7 +67,7 @@ def setup_test_repo() -> tuple:
                 ["git", "-C", str(repo_dir), "checkout", inst.get("base_commit")],
                 capture_output=True, timeout=30
             )
-        except:
+        except Exception:
             return None, None, None, None, None
 
     # Get full context
@@ -88,7 +88,7 @@ def setup_test_repo() -> tuple:
 
         return iid, repo_dir, problem, error, source
 
-    except:
+    except Exception:
         return None, None, None, None, None
 
 
@@ -260,7 +260,7 @@ def test_dream_scout_json():
     print("✅ Required fields populated")
 
     # Print output
-    print(f"\nScout Report:")
+    print("\nScout Report:")
     print(f"  Summary: {scout_report['task_summary'][:60]}")
     print(f"  Repro: {scout_report['repro_command'][:60]}")
     print(f"  Failing tests: {scout_report['failing_tests'][:2]}")

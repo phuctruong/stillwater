@@ -25,7 +25,7 @@ CLI_SRC = Path(__file__).resolve().parent.parent / "cli" / "src"
 if str(CLI_SRC) not in sys.path:
     sys.path.insert(0, str(CLI_SRC))
 
-from stillwater.llm_cli_support import (
+from stillwater.llm_cli_support import (  # noqa: E402
     _norm_url,
     _dedupe_keep_order,
     _split_urls,
@@ -180,7 +180,7 @@ class TestLoadLlmConfig:
         assert result == {}
 
     def test_valid_yaml_dict_returned(self, tmp_path):
-        yaml = pytest.importorskip("yaml")
+        pytest.importorskip("yaml")
         cfg_path = tmp_path / "llm_config.yaml"
         cfg_path.write_text("provider: ollama\nollama:\n  url: http://localhost:11434\n")
         result = _load_llm_config(tmp_path)

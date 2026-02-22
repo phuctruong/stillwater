@@ -18,7 +18,6 @@ import subprocess
 import re
 import os
 from pathlib import Path
-from typing import Optional, Dict
 
 try:
     import pytest  # type: ignore
@@ -168,7 +167,7 @@ OUTPUT ONLY JSON (valid JSON, no text):"""
 
         # Validate structure
         if not isinstance(grace_memo['top_failure_modes_ranked'], list):
-            print(f"❌ top_failure_modes_ranked must be list")
+            print("❌ top_failure_modes_ranked must be list")
             return False
 
         if len(grace_memo['top_failure_modes_ranked']) == 0:
@@ -178,7 +177,7 @@ OUTPUT ONLY JSON (valid JSON, no text):"""
         print("✅ Failure modes identified")
 
         # Print output
-        print(f"\nGrace Forecast:")
+        print("\nGrace Forecast:")
         print(f"  Failure modes: {len(grace_memo['top_failure_modes_ranked'])}")
         for i, mode in enumerate(grace_memo['top_failure_modes_ranked'][:3], 1):
             print(f"    {i}. {mode.get('mode', '?')[:50]} ({mode.get('risk_level', '?')})")

@@ -733,7 +733,6 @@ class TestThreadSafety:
         but the tracker must not throw or deadlock.
         """
         t = make_tracker()
-        stop_event = threading.Event()
         errors = []
 
         def writer():

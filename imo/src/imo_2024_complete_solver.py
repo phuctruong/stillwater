@@ -17,19 +17,14 @@ References (repo): skills/prime-math.md, papers/01-lane-algebra.md
 """
 
 import sys
-from fractions import Fraction
 from pathlib import Path
-from typing import Tuple, List, Dict, Any, Optional
+from typing import Tuple, List, Dict, Any
 from dataclasses import dataclass
-from enum import Enum
-import numpy as np
 
 # Import the REAL executable geometry lemma library
 sys.path.insert(0, str(Path(__file__).parent))
 from geometry_lemma_library import (
-    Lane, Point, Triangle, Circle, LemmaWitness,
-    lemma_incenter_definition, lemma_incenter_angle_formula,
-    lemma_inradius_formula, lemma_angle_bisector_divides_opposite_side,
+    Point, Triangle, lemma_incenter_definition, lemma_incenter_angle_formula,
     lemma_circumcenter_definition, lemma_arc_midpoint_property
 )
 
@@ -162,7 +157,7 @@ class VerificationLadder:
                 # Real check: Does output match expected?
                 if result == expected or (isinstance(result, (int, float)) and abs(result - expected) < 1e-6):
                     passed_count += 1
-            except:
+            except Exception:
                 pass
 
         success = passed_count >= len(test_cases) * 0.8  # 80% must pass
@@ -316,7 +311,7 @@ class P1_NumberTheory(IMOProblem):
         self.dream("Analyze modular arithmetic and prime factorization patterns")
         self.forecast("Apply Counter Bypass: classify pattern, enumerate exactly")
 
-        print(f"\nPHASE 3-4: ACT (P1 Solution)")
+        print("\nPHASE 3-4: ACT (P1 Solution)")
         print("-" * 80)
 
         # Counter Bypass Protocol
@@ -332,7 +327,6 @@ class P1_NumberTheory(IMOProblem):
                    Set k = 2^(target_factors - sum_of_exponents)
                    Result: k·n = 2^(target_factors - sum) · p₁^a₁ · ... = target_factors total factors
             """
-            from fractions import Fraction
 
             # For n, count its prime factors
             prime_factors_in_n = 0
@@ -379,7 +373,7 @@ class P1_NumberTheory(IMOProblem):
                     successful += 1
                     print(f"  ✓ n={n}: k={k}, k·n has exactly 2024 factors")
 
-        print(f"\n✅ PHASE 5: VERIFY (P1)")
+        print("\n✅ PHASE 5: VERIFY (P1)")
         print("-" * 80)
 
         witnesses = [
@@ -433,7 +427,7 @@ class P4_Geometry(IMOProblem):
         self.dream("Analyze incenter, circumcircle, and angle properties")
         self.forecast("Apply 22-lemma library + angle chasing + witness tracking")
 
-        print(f"\nPHASE 3-4: ACT (P4 Solution with Real Lemmas)")
+        print("\nPHASE 3-4: ACT (P4 Solution with Real Lemmas)")
         print("-" * 80)
 
         # Construct a concrete triangle for verification
@@ -446,19 +440,19 @@ class P4_Geometry(IMOProblem):
         print("\nApplying executable lemmas from library:")
 
         # Lemma 1: Incenter definition
-        I, witness_I = lemma_incenter_definition(tri)
-        print(f"  L1.1 (incenter_definition): I = ({I.x:.4f}, {I.y:.4f}), Lane: {witness_I.lane.value}")
+        incenter, witness_I = lemma_incenter_definition(tri)
+        print(f"  L1.1 (incenter_definition): I = ({incenter.x:.4f}, {incenter.y:.4f}), Lane: {witness_I.lane.value}")
 
         # Lemma 2: Incenter angle formula
         angle_KIL, witness_angle = lemma_incenter_angle_formula(tri, 'A')
         print(f"  L1.3 (incenter_angle): ∠KIL = {angle_KIL:.4f}°, Lane: {witness_angle.lane.value}")
 
         # Lemma 3: Circumcenter and circumradius
-        O, R, witness_circum = lemma_circumcenter_definition(tri)
-        print(f"  L2.1 (circumcenter): O = ({O.x:.4f}, {O.y:.4f}), R = {R:.4f}, Lane: {witness_circum.lane.value}")
+        circumcenter, R, witness_circum = lemma_circumcenter_definition(tri)
+        print(f"  L2.1 (circumcenter): O = ({circumcenter.x:.4f}, {circumcenter.y:.4f}), R = {R:.4f}, Lane: {witness_circum.lane.value}")
 
         # Lemma 4: Arc midpoint property
-        P_on_arc, witness_arc = lemma_arc_midpoint_property(tri, I, O)
+        P_on_arc, witness_arc = lemma_arc_midpoint_property(tri, incenter, circumcenter)
         print(f"  L2.2 (arc_midpoint): P on arc BC (midpoint), Lane: {witness_arc.lane.value}")
 
         # Key angle computation
@@ -469,15 +463,15 @@ class P4_Geometry(IMOProblem):
         angle_YPX = 90 - (angle_KIL - 90)  # Derived from circumcircle properties
         sum_angles = angle_KIL + angle_YPX
 
-        print(f"\nKey computation:")
+        print("\nKey computation:")
         print(f"  ∠KIL = 90° + α/2 = {angle_KIL:.4f}°")
         print(f"  ∠YPX = 90° - α/2 = {angle_YPX:.4f}°")
         print(f"  Sum = {sum_angles:.4f}°")
-        print(f"  Target: 180°")
+        print("  Target: 180°")
 
         verification_ok = abs(sum_angles - 180) < 0.01  # Within numerical tolerance
 
-        print(f"\n✅ PHASE 5: VERIFY (P4)")
+        print("\n✅ PHASE 5: VERIFY (P4)")
         print("-" * 80)
 
         witnesses = [
@@ -587,13 +581,13 @@ def main():
 
     total_solved = sum(1 for r in results if r['status'] == 'full_solved')
     print(f"\nScore: {total_solved}/6 (Gold Medal)")
-    print(f"Auth: 65537 | Northstar: Phuc Forecast")
-    print(f"\nDifference from previous version:")
-    print(f"  ✓ Real executable geometry lemma library (22 functions)")
-    print(f"  ✓ Real verification rungs (mathematical correctness checks)")
-    print(f"  ✓ Lane A witness tracking (proven theorems only)")
-    print(f"  ✓ All 7 Phuc Forecast patterns applied")
-    print(f"  ✓ Source: solace-cli canon (not ad-hoc)")
+    print("Auth: 65537 | Northstar: Phuc Forecast")
+    print("\nDifference from previous version:")
+    print("  ✓ Real executable geometry lemma library (22 functions)")
+    print("  ✓ Real verification rungs (mathematical correctness checks)")
+    print("  ✓ Lane A witness tracking (proven theorems only)")
+    print("  ✓ All 7 Phuc Forecast patterns applied")
+    print("  ✓ Source: solace-cli canon (not ad-hoc)")
 
 if __name__ == "__main__":
     main()

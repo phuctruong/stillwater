@@ -26,9 +26,8 @@ Claim hygiene:
 import json
 import subprocess
 import tempfile
-import shutil
 from pathlib import Path
-from typing import Optional, Dict, List, Tuple
+from typing import Optional, Dict, List
 from dataclasses import dataclass
 import requests
 import os
@@ -171,7 +170,7 @@ Rung 65537: Formal proof (mathematical correctness)
                 return "medium"
             else:
                 return "easy"
-        except:
+        except Exception:
             return "medium"
 
     def generate_patch_with_haiku(self, instance: SWEInstance) -> Optional[str]:
@@ -213,7 +212,7 @@ Generate the patch now:"""
         # Check for TEST_MODE (for testing without Claude CLI)
         if os.environ.get("SWE_TEST_MODE") == "1":
             # Return mock patch for testing
-            print(f"[TEST MODE] Returning mock patch instead of calling Haiku", file=sys.stderr)
+            print("[TEST MODE] Returning mock patch instead of calling Haiku", file=sys.stderr)
             return """--- a/path/to/file.py
 +++ b/path/to/file.py
 @@ -1,5 +1,6 @@
@@ -246,14 +245,14 @@ Generate the patch now:"""
 
                 return patch_text if patch_text else None
             else:
-                print(f"❌ Haiku did not return patch (empty response)")
+                print("❌ Haiku did not return patch (empty response)")
                 print(f"   URL: {self.haiku_url}")
                 print(f"   Status: {'✅ Server running' if self.wrapper.server_running else '❌ Server not running'}")
                 return None
 
         except requests.exceptions.ConnectionError:
             print(f"❌ Cannot connect to Haiku server at {self.haiku_url}")
-            print(f"   Start the server with: python3 src/claude_code_wrapper.py --port 8080")
+            print("   Start the server with: python3 src/claude_code_wrapper.py --port 8080")
             return None
         except Exception as e:
             print(f"❌ Error generating patch: {e}")
@@ -500,11 +499,11 @@ This run record documents what was attempted and what checks passed.
         print(f"{'='*80}")
         print(f"Instances Solved: {solved}/{total}")
         print(f"Success Rate: {solved/total*100:.1f}%")
-        print(f"\nVerification Status:")
+        print("\nVerification Status:")
         print(f"  RED Gates (bug exists): {sum(1 for r in results if r.red_gate_pass)}/{total}")
         print(f"  GREEN Gates (bug fixed): {sum(1 for r in results if r.green_gate_pass)}/{total}")
         print(f"  GOLD Gates (no regressions): {sum(1 for r in results if r.no_regressions)}/{total}")
-        print(f"\nConfidence: Lane B (Run record; not a formal proof certificate)")
+        print("\nConfidence: Lane B (Run record; not a formal proof certificate)")
         print(f"{'='*80}\n")
 
 
@@ -546,7 +545,7 @@ def main():
         # Initialize solver
         solver = SWEBenchSolverReal()
 
-        print(f"✅ Solver initialized", file=sys.stderr)
+        print("✅ Solver initialized", file=sys.stderr)
         print(f"   Haiku URL: {solver.haiku_url}", file=sys.stderr)
         print(f"   Endpoint: {solver.endpoint}", file=sys.stderr)
         print(f"   Prime Skills loaded: {len(solver.prime_skills)} bytes", file=sys.stderr)
@@ -560,7 +559,7 @@ def main():
         with tempfile.TemporaryDirectory() as temp_dir:
             repo_dir = Path(temp_dir) / instance.repo_name
 
-            print(f"\n✅ Setting up repository in temporary directory", file=sys.stderr)
+            print("\n✅ Setting up repository in temporary directory", file=sys.stderr)
             print(f"   Repo: {instance.repo}", file=sys.stderr)
             print(f"   Commit: {instance.base_commit}", file=sys.stderr)
 
@@ -570,7 +569,7 @@ def main():
             (repo_dir / ".git").mkdir(exist_ok=True)
 
             # Solve instance
-            print(f"\n✅ Starting to solve instance...", file=sys.stderr)
+            print("\n✅ Starting to solve instance...", file=sys.stderr)
             result = solver.solve_instance(instance, repo_dir)
 
             # Return result as JSON to stdout
@@ -588,7 +587,7 @@ def main():
             print(json.dumps(result_json, indent=2))
 
             if result.success:
-                print(f"\n✅ Instance solved successfully!", file=sys.stderr)
+                print("\n✅ Instance solved successfully!", file=sys.stderr)
             else:
                 print(f"\n⚠️  Instance not solved: {result.error_message}", file=sys.stderr)
 

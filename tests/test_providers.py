@@ -303,7 +303,6 @@ class TestRegisterCustomProvider:
     def test_register_custom_appears_in_list(self):
         from stillwater.provider_registry import register_custom_provider, list_providers, PROVIDERS
         # Clean up after test
-        original_keys = set(PROVIDERS.keys())
         try:
             register_custom_provider(
                 name="my-vllm",
@@ -339,7 +338,7 @@ class TestRegisterCustomProvider:
 class TestSession:
     """Session dataclass: creation, expiry logic, is_active, serialization."""
 
-    def _make_session(self, ttl_seconds: int = 3600) -> "Session":
+    def _make_session(self, ttl_seconds: int = 3600):
         from stillwater.session_manager import Session
         now = int(time.time())
         return Session(
@@ -629,8 +628,8 @@ class TestSessionManagerListActive:
     def test_list_sorted_by_created_at(self):
         from stillwater.session_manager import SessionManager
         mgr = SessionManager()
-        s1 = mgr.create_session(skill_pack=[])
-        s2 = mgr.create_session(skill_pack=[])
+        mgr.create_session(skill_pack=[])
+        mgr.create_session(skill_pack=[])
         active = mgr.list_active()
         if len(active) == 2:
             assert active[0].created_at <= active[1].created_at

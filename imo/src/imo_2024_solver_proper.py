@@ -20,16 +20,15 @@ Notes:
 """
 
 import sys
-from fractions import Fraction
 from pathlib import Path
-from typing import Tuple, List, Dict, Any, Optional
+from typing import Tuple, List
 from dataclasses import dataclass
 import math
 
 # Try to import the geometry library
 try:
     sys.path.insert(0, str(Path(__file__).parent))
-    from geometry_lemma_library import (
+    from geometry_lemma_library import (  # noqa: F401
         Lane, Point, Triangle, Circle, LemmaWitness,
         lemma_incenter_definition, lemma_incenter_angle_formula,
         lemma_circumcenter_definition
@@ -82,7 +81,7 @@ class RealVerificationLadder:
                         passed_count += 1
                 elif result == expected_output:
                     passed_count += 1
-            except Exception as e:
+            except Exception:
                 # Don't silently swallow errors - report them
                 pass
 
@@ -211,7 +210,7 @@ class P1_NumberTheory:
 
         passed = sum(1 for tc in test_cases if verify_construction(tc))
         print(f"P1: {passed}/{len(test_cases)} test cases passed")
-        print(f"Algorithm: For n with f factors, k = 2^(2024-f), then k·n = 2024 factors")
+        print("Algorithm: For n with f factors, k = 2^(2024-f), then k·n = 2024 factors")
 
         vl = RealVerificationLadder()
         # Convert test cases to (input, expected_output) format for verification
@@ -286,16 +285,16 @@ class P2_ExhaustiveSearch:
 
         # Analysis: The property is VERY restrictive
         # Most k fail because a specific (a,b,c) triple violates it
-        print(f"P2: Exhaustive search k ∈ [1,50]")
+        print("P2: Exhaustive search k ∈ [1,50]")
         print(f"Found {len(valid_k)} valid k values: {valid_k if valid_k else 'Empty (property extremely restrictive)'}")
 
         if valid_k:
             print(f"Algorithm: Found k = {valid_k} satisfy the quadratic form property")
         else:
-            print(f"Algorithm: Proved no k ∈ [1,50] satisfies property for all (a,b,c)")
-            print(f"Insight: The problem asks for universal quantification - ANY k must work for ALL (a,b,c)")
+            print("Algorithm: Proved no k ∈ [1,50] satisfies property for all (a,b,c)")
+            print("Insight: The problem asks for universal quantification - ANY k must work for ALL (a,b,c)")
 
-        print(f"Mathematical insight: The answer involves divisibility and modular arithmetic constraints")
+        print("Mathematical insight: The answer involves divisibility and modular arithmetic constraints")
 
         vl = RealVerificationLadder()
 
@@ -357,7 +356,7 @@ class P3_Periodicity:
 
         result = tracker.check_property()
         print(f"P3: State machine test sequence (1..99): property holds = {result}")
-        print(f"Algorithm: Track medians of prefixes, verify mₙ/aₙ ≠ median(medians)")
+        print("Algorithm: Track medians of prefixes, verify mₙ/aₙ ≠ median(medians)")
 
         vl = RealVerificationLadder()
         r641 = vl.verify_rung_641("P3", lambda x: tracker.check_property(), [(None, result)])
@@ -399,9 +398,9 @@ class P4_Geometry:
         results = []
         for i, tri in enumerate(triangles):
             try:
-                I, w_i = lemma_incenter_definition(tri)
+                incenter, w_i = lemma_incenter_definition(tri)
                 angle_KIL, w_angle = lemma_incenter_angle_formula(tri, 'A')
-                O, R, w_circum = lemma_circumcenter_definition(tri)
+                circumcenter, R, w_circum = lemma_circumcenter_definition(tri)
 
                 angle_YPX = 180 - angle_KIL
                 sum_angles = angle_KIL + angle_YPX
@@ -416,7 +415,7 @@ class P4_Geometry:
 
         success = all(results)
         print(f"\nP4: Tested {len(results)} triangles, {sum(results)}/{len(results)} passed")
-        print(f"Algorithm: Apply executable lemmas L1.1, L1.3, L2.1 from 22-lemma library")
+        print("Algorithm: Apply executable lemmas L1.1, L1.3, L2.1 from 22-lemma library")
 
         vl = RealVerificationLadder()
         r641 = vl.verify_rung_641("P4", lambda x: all(results), [(None, success)])
@@ -446,7 +445,7 @@ class P5_GraphColoring:
 
         result = find_triangle(6)
         print(f"P5: K₆ monochromatic triangle found: {result}")
-        print(f"Algorithm: Ramsey R(3,3)=6 guarantees monochromatic triangle")
+        print("Algorithm: Ramsey R(3,3)=6 guarantees monochromatic triangle")
 
         vl = RealVerificationLadder()
         r641 = vl.verify_rung_641("P5", lambda x: find_triangle(6) is not None, [(None, result is not None)])
@@ -468,7 +467,8 @@ class P6_FunctionalEquations:
 
         def verify_identity(x, y):
             """f(x) = x satisfies f(x·f(y) + f(x)) = y·f(x) + f(f(x))"""
-            f = lambda t: t  # Identity function
+            def f(t):  # Identity function
+                return t
             lhs = f(x * f(y) + f(x))
             rhs = y * f(x) + f(f(x))
             return abs(lhs - rhs) < 0.0001
@@ -476,12 +476,13 @@ class P6_FunctionalEquations:
         def verify_involution(x, y):
             """f(x) = c-x (for some c) satisfies the equation"""
             c = 2.0
-            f = lambda t: c - t
+            def f(t):
+                return c - t
             try:
                 lhs = f(x * f(y) + f(x))
                 rhs = y * f(x) + f(f(x))
                 return abs(lhs - rhs) < 0.0001
-            except:
+            except Exception:
                 return False
 
         test_points = [(0, 0), (1, 1), (2, 3), (-1, 2), (0.5, 1.5)]
@@ -491,7 +492,7 @@ class P6_FunctionalEquations:
 
         print(f"P6: f(x)=x: {identity_pass}/{len(test_points)} tests passed")
         print(f"P6: f(x)=2-x: {involution_pass}/{len(test_points)} tests passed")
-        print(f"Algorithm: Verify solutions through dual-witness substitution")
+        print("Algorithm: Verify solutions through dual-witness substitution")
 
         vl = RealVerificationLadder()
         r641 = vl.verify_rung_641("P6", lambda x: identity_pass > 0, [(None, identity_pass > 0)])
@@ -536,12 +537,12 @@ def main():
 
     solved = sum(1 for r in results if "SOLVED" in r)
     print(f"\nScore: {solved}/6")
-    print(f"\nDifference from previous version:")
-    print(f"  ✓ REAL verification (not fake string matching)")
-    print(f"  ✓ All 6 problems have implementations")
-    print(f"  ✓ Multiple test cases for P4 (not just 1)")
-    print(f"  ✓ Honest about current status")
-    print(f"\nAuth: 65537 | Northstar: Phuc Forecast")
+    print("\nDifference from previous version:")
+    print("  ✓ REAL verification (not fake string matching)")
+    print("  ✓ All 6 problems have implementations")
+    print("  ✓ Multiple test cases for P4 (not just 1)")
+    print("  ✓ Honest about current status")
+    print("\nAuth: 65537 | Northstar: Phuc Forecast")
 
 if __name__ == "__main__":
     main()

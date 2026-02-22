@@ -10,7 +10,6 @@ Rung target: 65537 (security-sensitive module)
 
 from __future__ import annotations
 
-import hashlib
 import json
 import re
 import sys
@@ -125,7 +124,7 @@ class TestAppendJsonl:
         _append_jsonl(log, {"event": "one", "val": 1})
         _append_jsonl(log, {"event": "two", "val": 2})
         _append_jsonl(log, {"event": "three", "val": 3})
-        lines = [l for l in log.read_text(encoding="utf-8").strip().split("\n") if l]
+        lines = [ln for ln in log.read_text(encoding="utf-8").strip().split("\n") if ln]
         assert len(lines) == 3
 
     def test_each_line_is_valid_json(self, tmp_path: Path):

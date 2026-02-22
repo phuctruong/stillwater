@@ -15,7 +15,6 @@ Claim hygiene:
 - Any \"proof\" text produced here is a run record, not a machine-checked proof.
 """
 
-import json
 import os
 import subprocess
 import tempfile
@@ -91,29 +90,11 @@ class SWEBenchSolverUnified:
                 return "medium"
             else:
                 return "easy"
-        except:
+        except Exception:
             return "medium"
 
     def generate_patch(self, instance: SWEInstance) -> Optional[str]:
         """Generate patch using Claude Code wrapper."""
-        prompt = f"""Generate a MINIMAL, REVERSIBLE patch for this bug.
-
-REPO: {instance.repo_name}
-DIFFICULTY: {instance.difficulty}
-
-PROBLEM:
-{instance.problem_statement}
-
-OUTPUT ONLY a unified diff (no explanation):
-```diff
---- a/file/path
-+++ b/file/path
-@@ -start,count +start,count @@
- context
--removed
-+added
-```"""
-
         response = self.wrapper.generate_patch(
             instance.problem_statement,
             repo_context=f"Repo: {instance.repo_name}",
@@ -132,7 +113,7 @@ OUTPUT ONLY a unified diff (no explanation):
                 timeout=30,
             )
             return result.returncode != 0
-        except:
+        except Exception:
             return False
 
     def green_gate(self, repo_dir: Path, test_command: str) -> bool:
@@ -146,7 +127,7 @@ OUTPUT ONLY a unified diff (no explanation):
                 timeout=30,
             )
             return result.returncode == 0
-        except:
+        except Exception:
             return False
 
     def apply_patch(self, repo_dir: Path, patch: str) -> bool:
@@ -160,7 +141,7 @@ OUTPUT ONLY a unified diff (no explanation):
                 timeout=10,
             )
             return result.returncode == 0
-        except:
+        except Exception:
             return False
 
     def solve_instance(self, instance: SWEInstance, repo_dir: Path) -> PatchResult:
@@ -339,7 +320,7 @@ CONFIDENCE: Lane B (Checked in-repo; depends on available tests/data)
         print(f"{'='*80}")
         print(f"Instances Solved: {solved}/{total}")
         print(f"Success Rate: {solved/total*100:.1f}%")
-        print(f"\nGate Status:")
+        print("\nGate Status:")
         print(f"  RED Gates: {sum(1 for r in results if r.red_gate_pass)}/{total}")
         print(f"  GREEN Gates: {sum(1 for r in results if r.green_gate_pass)}/{total}")
         print(f"  GOLD Gates: {sum(1 for r in results if r.no_regressions)}/{total}")
@@ -361,21 +342,21 @@ def main():
     # Initialize solver
     solver = SWEBenchSolverUnified(model="claude-haiku-4-5-20251001")
 
-    print(f"\n✅ Solver initialized")
+    print("\n✅ Solver initialized")
     print(f"   Claude Code server: {solver.wrapper.localhost_url}")
-    print(f"   Model: claude-haiku-4-5-20251001")
+    print("   Model: claude-haiku-4-5-20251001")
 
     if solver.wrapper.server_running:
-        print(f"   Status: ✅ Running")
+        print("   Status: ✅ Running")
     else:
-        print(f"   Status: ⚠️  Not running")
-        print(f"   Start with: claude-code server --host localhost --port 8080")
+        print("   Status: ⚠️  Not running")
+        print("   Start with: claude-code server --host localhost --port 8080")
 
-    print(f"\nCapabilities:")
-    print(f"   ✓ Real patch generation via Claude Code")
-    print(f"   ✓ Red-Green gate enforcement")
-    print(f"   ✓ Verification ladder (641→274177→65537)")
-    print(f"   ✓ Run record generation (not a formal proof certificate)")
+    print("\nCapabilities:")
+    print("   ✓ Real patch generation via Claude Code")
+    print("   ✓ Red-Green gate enforcement")
+    print("   ✓ Verification ladder (641→274177→65537)")
+    print("   ✓ Run record generation (not a formal proof certificate)")
 
 
 if __name__ == "__main__":

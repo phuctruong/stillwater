@@ -80,7 +80,7 @@ def normalize_output(raw: str) -> str:
     text = _DURATION_COL_RE.sub("N.NNs", text)
 
     # Extract and sort PASSED/FAILED lines — makes hash order-independent
-    lines = [l for l in text.splitlines() if "PASSED" in l or "FAILED" in l]
+    lines = [ln for ln in text.splitlines() if "PASSED" in ln or "FAILED" in ln]
     return "\n".join(sorted(lines))
 
 

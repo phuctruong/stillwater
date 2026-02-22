@@ -17,11 +17,8 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
 import sys
-import tempfile
 from pathlib import Path
-from unittest import mock
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -304,8 +301,6 @@ class TestStillwaterStoreClient:
         assert sub_id == "sub_abc123"
         mock_post.assert_called_once()
         # Verify Authorization header includes Bearer
-        call_kwargs = mock_post.call_args
-        headers = call_kwargs.kwargs.get("headers") or call_kwargs.args[1] if len(call_kwargs.args) > 1 else {}
         # Check the actual call had headers passed
         assert mock_post.called
 
@@ -904,7 +899,6 @@ This is the skill body.
 
     def test_compute_sha256_manifest_correctness(self):
         """compute_sha256_manifest() produces correct SHA-256 for each file."""
-        import hashlib
         from store.packager import SkillPackager
         files = {
             "skill.md": "# My skill content",

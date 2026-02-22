@@ -27,7 +27,6 @@ Persona: Dragon Rider (Phuc's digital twin) — pragmatic founder testing.
 from __future__ import annotations
 
 import sys
-import uuid
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -38,8 +37,8 @@ _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
 
-from store.db import _Store, get_store
-from store.models import APIKey, ContentType, ReviewRecord, SkillStatus
+from store.db import _Store, get_store  # noqa: E402
+from store.models import APIKey, ContentType, ReviewRecord, SkillStatus  # noqa: E402
 
 
 # ===========================================================================

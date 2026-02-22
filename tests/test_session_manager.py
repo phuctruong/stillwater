@@ -505,11 +505,11 @@ class TestListing:
 
     def test_list_active_sorted_by_created_at(self):
         mgr = SessionManager()
-        s1 = mgr.create_session(skill_pack=[])
+        mgr.create_session(skill_pack=[])
         time.sleep(0.01)
-        s2 = mgr.create_session(skill_pack=[])
+        mgr.create_session(skill_pack=[])
         time.sleep(0.01)
-        s3 = mgr.create_session(skill_pack=[])
+        mgr.create_session(skill_pack=[])
         result = mgr.list_active()
         created_ats = [s.created_at for s in result]
         assert created_ats == sorted(created_ats), "list_active not sorted by created_at"
@@ -518,7 +518,7 @@ class TestListing:
         mgr = SessionManager()
         s1 = mgr.create_session(skill_pack=[])
         mgr.close_session(s1.session_id)
-        s2 = mgr.create_session(skill_pack=[])
+        mgr.create_session(skill_pack=[])
         result = mgr.list_all()
         assert result[0].created_at <= result[-1].created_at
 
@@ -565,7 +565,7 @@ class TestPurgeExpired:
 
     def test_second_purge_returns_zero(self):
         mgr = SessionManager()
-        s = mgr.create_session(skill_pack=_DEFAULT_SKILLS, ttl_seconds=1)
+        mgr.create_session(skill_pack=_DEFAULT_SKILLS, ttl_seconds=1)
         time.sleep(1.1)
         mgr.purge_expired()
         assert mgr.purge_expired() == 0

@@ -21,7 +21,7 @@ import sys
 import os
 import time
 from pathlib import Path
-from typing import List, Dict, Optional
+from typing import List, Dict
 from dataclasses import dataclass, asdict
 from datetime import datetime
 
@@ -50,8 +50,8 @@ class PhucForecastBatchProcessor:
         print("PHASE 1: DREAM (Design Phase)")
         print("="*80)
         print(f"[Lane A] Instances loaded: {len(instances)} (proven fact)")
-        print(f"[Lane B] Using Prime Skills: v1.3.0 (established framework)")
-        print(f"[Lane C] Assuming 30-60s per instance (heuristic)")
+        print("[Lane B] Using Prime Skills: v1.3.0 (established framework)")
+        print("[Lane C] Assuming 30-60s per instance (heuristic)")
         return instances
 
     def forecast_phase(self, instances: List[Dict]) -> Dict:
@@ -79,7 +79,7 @@ class PhucForecastBatchProcessor:
         print(f"[Lane A] Total instances: {forecast['total_instances']}")
         print(f"[Lane B] Expected success rate: {forecast['expected_success_rate']*100:.0f}%")
         print(f"[Lane C] Estimated time: {forecast['estimated_total_time_hours']:.1f} hours")
-        print(f"\nMitigation strategies:")
+        print("\nMitigation strategies:")
         for strat in forecast['mitigation_strategies']:
             print(f"  ✓ {strat}")
         
@@ -102,7 +102,7 @@ class PhucForecastBatchProcessor:
         print(f"[Lane A] Using TEST_MODE: {decisions['use_test_mode']}")
         print(f"[Lane B] Batch size: {decisions['batch_size']} instances")
         print(f"[Lane C] Timeout: {decisions['timeout_per_instance']}s per instance")
-        print(f"\n✓ Decisions LOCKED")
+        print("\n✓ Decisions LOCKED")
         
         return decisions
 
@@ -175,7 +175,7 @@ class PhucForecastBatchProcessor:
         print(f"  ✓ Failed: {self.stats.failed}")
         
         # Rung 274177: Stress test (sample verification)
-        print(f"\n[RUNG 274177] Stress Test (Sample):")
+        print("\n[RUNG 274177] Stress Test (Sample):")
         if self.results:
             success_rate = (self.stats.successful / max(self.stats.total, 1)) * 100
             print(f"  ✓ Success rate: {success_rate:.1f}%")
@@ -186,10 +186,10 @@ class PhucForecastBatchProcessor:
             print(f"  ✓ GREEN gates passed: {green_gates}/{len(self.results)}")
         
         # Rung 65537: Formal proof
-        print(f"\n[RUNG 65537] Explanation / Review Gate:")
+        print("\n[RUNG 65537] Explanation / Review Gate:")
         print(f"  ✓ Execution time: {self.stats.duration_seconds:.1f}s")
         print(f"  ✓ Avg per instance: {self.stats.avg_time_per_instance:.1f}s")
-        print(f"  ✓ Auth: 65537 (verified)")
+        print("  ✓ Auth: 65537 (verified)")
 
     def save_results(self) -> Path:
         """Save results to JSON file"""
@@ -220,20 +220,20 @@ class PhucForecastBatchProcessor:
         
         success_rate = (self.stats.successful / max(self.stats.total, 1)) * 100
         
-        print(f"\nProcessing Results:")
+        print("\nProcessing Results:")
         print(f"  Total: {self.stats.total}")
         print(f"  Successful: {self.stats.successful} ({success_rate:.1f}%)")
         print(f"  Failed: {self.stats.failed}")
         print(f"  Skipped: {self.stats.skipped}")
         
-        print(f"\nPerformance:")
+        print("\nPerformance:")
         print(f"  Total time: {self.stats.duration_seconds:.1f}s")
         print(f"  Avg per instance: {self.stats.avg_time_per_instance:.1f}s")
         
-        print(f"\nVerification Status:")
-        print(f"  ✓ Rung 641 (Edge Sanity): PASS")
-        print(f"  ✓ Rung 274177 (Stress Test): PASS")
-        print(f"  ✓ Rung 65537 (Explanation): PASS")
+        print("\nVerification Status:")
+        print("  ✓ Rung 641 (Edge Sanity): PASS")
+        print("  ✓ Rung 274177 (Stress Test): PASS")
+        print("  ✓ Rung 65537 (Explanation): PASS")
         
         print(f"\n{'='*80}")
         if success_rate >= 100:
@@ -289,7 +289,7 @@ def main():
     
     # Execute Phuc Forecast
     instances = processor.dream_phase(instances)
-    forecast = processor.forecast_phase(instances)
+    processor.forecast_phase(instances)
     decisions = processor.decide_phase()
     processor.act_phase(instances, decisions)
     processor.verify_phase()

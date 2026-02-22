@@ -60,7 +60,7 @@ class HaikuLocalHandler(BaseHTTPRequestHandler):
             prompt = request_data.get("prompt", "")
             stream = request_data.get("stream", False)
             temperature = request_data.get("temperature", 0.7)
-            model = request_data.get("model", HAIKU_MODEL)
+            _ = request_data.get("model", HAIKU_MODEL)  # model field accepted but server uses HAIKU_MODEL
 
             if not client:
                 self.send_json_error(401, "ANTHROPIC_API_KEY not set")

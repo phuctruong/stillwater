@@ -32,10 +32,8 @@ from __future__ import annotations
 
 import ast
 import hashlib
-import importlib
 import json
 import re
-import sys
 from pathlib import Path
 
 import pytest
@@ -124,7 +122,7 @@ class TestNoHardcodedSecrets:
                 if _OPENAI_KEY_RE.search(line):
                     if not _EXAMPLE_LINE_RE.search(line):
                         violations.append(f"{path.relative_to(REPO_ROOT)}:{i}: {line.strip()[:80]}")
-        assert not violations, f"OpenAI/Anthropic key found:\n" + "\n".join(violations)
+        assert not violations, "OpenAI/Anthropic key found:\n" + "\n".join(violations)
 
     def test_no_aws_access_keys_in_production(self):
         """No AKIA... AWS access key IDs in production code."""
@@ -135,7 +133,7 @@ class TestNoHardcodedSecrets:
                 if _AWS_KEY_RE.search(line):
                     if not _EXAMPLE_LINE_RE.search(line):
                         violations.append(f"{path.relative_to(REPO_ROOT)}:{i}: {line.strip()[:80]}")
-        assert not violations, f"AWS key found:\n" + "\n".join(violations)
+        assert not violations, "AWS key found:\n" + "\n".join(violations)
 
     def test_no_hardcoded_password_literals(self):
         """No password=<literal string> in production code outside docstrings."""
@@ -146,7 +144,7 @@ class TestNoHardcodedSecrets:
                 if _PASSWORD_LITERAL_RE.search(line):
                     if not _EXAMPLE_LINE_RE.search(line):
                         violations.append(f"{path.relative_to(REPO_ROOT)}:{i}: {line.strip()[:80]}")
-        assert not violations, f"Hardcoded password found:\n" + "\n".join(violations)
+        assert not violations, "Hardcoded password found:\n" + "\n".join(violations)
 
     def test_no_hardcoded_secret_literals(self):
         """No secret=<literal string> in production code outside docstrings."""
@@ -157,7 +155,7 @@ class TestNoHardcodedSecrets:
                 if _SECRET_LITERAL_RE.search(line):
                     if not _EXAMPLE_LINE_RE.search(line):
                         violations.append(f"{path.relative_to(REPO_ROOT)}:{i}: {line.strip()[:80]}")
-        assert not violations, f"Hardcoded secret found:\n" + "\n".join(violations)
+        assert not violations, "Hardcoded secret found:\n" + "\n".join(violations)
 
 
 # ===========================================================================
@@ -179,7 +177,7 @@ class TestEvalSafety:
             for i, line in enumerate(src.splitlines(), 1):
                 if _EVAL_ANY_RE.search(line):
                     violations.append(f"{path.relative_to(REPO_ROOT)}:{i}: {line.strip()[:80]}")
-        assert not violations, f"eval() found in store/:\n" + "\n".join(violations)
+        assert not violations, "eval() found in store/:\n" + "\n".join(violations)
 
     def test_cli_eval_is_sandboxed(self):
         """The only eval() in cli/ must use the sandboxed pattern (empty __builtins__)."""
@@ -219,7 +217,7 @@ class TestEvalSafety:
             for i, line in enumerate(src.splitlines(), 1):
                 if _EVAL_ANY_RE.search(line):
                     violations.append(f"{path.relative_to(REPO_ROOT)}:{i}: {line.strip()[:80]}")
-        assert not violations, f"eval() found in admin/:\n" + "\n".join(violations)
+        assert not violations, "eval() found in admin/:\n" + "\n".join(violations)
 
 
 # ===========================================================================
@@ -254,7 +252,7 @@ class TestOsSystemSafety:
             for i, line in enumerate(src.splitlines(), 1):
                 if re.search(r'\bos\.system\s*\(', line):
                     violations.append(f"{path.relative_to(REPO_ROOT)}:{i}: {line.strip()[:80]}")
-        assert not violations, f"os.system() found in store/:\n" + "\n".join(violations)
+        assert not violations, "os.system() found in store/:\n" + "\n".join(violations)
 
 
 # ===========================================================================
@@ -320,10 +318,10 @@ class TestEvidenceStructure:
         assert EVIDENCE_DIR.is_dir()
 
     def test_plan_json_exists(self):
-        assert PLAN_JSON.exists(), f"evidence/plan.json not found"
+        assert PLAN_JSON.exists(), "evidence/plan.json not found"
 
     def test_tests_json_exists(self):
-        assert TESTS_JSON.exists(), f"evidence/tests.json not found"
+        assert TESTS_JSON.exists(), "evidence/tests.json not found"
 
     def test_behavior_hash_evidence_exists(self):
         """At least one of the behavior hash files must exist."""

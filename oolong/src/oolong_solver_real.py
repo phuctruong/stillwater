@@ -16,7 +16,7 @@ What this file is NOT:
 
 import sys
 from pathlib import Path
-from typing import Optional, Dict, List, Tuple, Any
+from typing import Optional, Dict, List, Any
 from dataclasses import dataclass
 from collections import Counter
 import json
@@ -25,7 +25,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 CLI_SRC = REPO_ROOT / "cli" / "src"
 sys.path.insert(0, str(CLI_SRC))
 
-from claude_code_wrapper import ClaudeCodeWrapper
+from claude_code_wrapper import ClaudeCodeWrapper  # noqa: E402
 
 
 @dataclass
@@ -71,8 +71,8 @@ class OOLONGSolverReal:
 Find the {k} most frequent item(s).
 Answer: (list of items, e.g., ["item1", "item2"])"""
 
-        # Get LLM suggestion
-        llm_response = self.wrapper.query(prompt, temperature=0.0)
+        # Get LLM suggestion (result unused — CPU counter is authoritative)
+        self.wrapper.query(prompt, temperature=0.0)
 
         # Use Counter for exact enumeration (CPU backup)
         counter = Counter(items)

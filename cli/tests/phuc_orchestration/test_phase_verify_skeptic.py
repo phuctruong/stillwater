@@ -24,7 +24,6 @@ import tempfile
 import shutil
 import os
 from pathlib import Path
-from typing import Optional, Dict
 
 try:
     import pytest  # type: ignore
@@ -107,7 +106,7 @@ def test_verify_skeptic_redgreen():
         else:
             print("✅ Tests fail as expected (RED state)")
 
-        baseline_output = result.stdout + result.stderr
+        _ = result.stdout + result.stderr  # baseline captured for future regression use
 
     except subprocess.TimeoutExpired:
         print("❌ Test timeout")
@@ -147,7 +146,7 @@ def test_verify_skeptic_redgreen():
 
         if result.returncode != 0:
             # Expected - our dummy patch won't apply
-            print(f"⚠️  Patch did not apply (expected for dummy patch)")
+            print("⚠️  Patch did not apply (expected for dummy patch)")
             # In real case, if Solver's patch doesn't apply, Skeptic REJECTS
         else:
             print("✅ Patch applied")
@@ -158,7 +157,7 @@ def test_verify_skeptic_redgreen():
                 ["python", "-m", "pytest", "-xvs", "--tb=line"],
                 capture_output=True, text=True, timeout=60, cwd=str(repo_copy)
             )
-            after_patch = result.stdout + result.stderr
+            _ = result.stdout + result.stderr  # after-patch output captured for future use
 
             print(f"Test result after patch: {'PASS' if result.returncode == 0 else 'FAIL'}")
 

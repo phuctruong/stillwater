@@ -14,13 +14,8 @@ Red-Green gate: tests must FAIL before store/auth.py exists, PASS after.
 
 from __future__ import annotations
 
-import hashlib
-import hmac
 import sys
-import uuid
 from datetime import datetime, timezone
-from typing import Optional
-from unittest import mock
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -36,7 +31,7 @@ _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
 
-from store.auth import (
+from store.auth import (  # noqa: E402
     KEY_HEX_LENGTH,
     KEY_PREFIX,
     RATE_LIMIT_MAX,
@@ -49,7 +44,7 @@ from store.auth import (
     require_api_key,
     validate_key_format,
 )
-from store.models import APIKey
+from store.models import APIKey  # noqa: E402
 
 
 # ---------------------------------------------------------------------------

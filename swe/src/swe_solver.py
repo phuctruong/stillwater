@@ -25,9 +25,7 @@ reproduced SWE-bench evaluation harness.
 from dataclasses import dataclass
 from fractions import Fraction
 from enum import Enum
-import json
 from typing import Optional, List, Dict, Tuple, Any
-from pathlib import Path
 
 
 # ============================================================================
@@ -182,7 +180,7 @@ class SWEBenchSolver:
                 return "medium"
             else:
                 return "easy"
-        except:
+        except Exception:
             return "medium"
 
     def simulate_patch_generation(self, instance: SWEInstance) -> Optional[str]:
@@ -233,22 +231,22 @@ class SWEBenchSolver:
         print(f"  Problem: {instance.problem_statement[:100]}...")
 
         # FORECAST: Predict approach and likelihood
-        print(f"\n[FORECAST] Predicting solution approach")
+        print("\n[FORECAST] Predicting solution approach")
         success_estimate = Fraction(85, 100)  # 85% estimated success
         print(f"  Estimated success: {success_estimate}")
 
         # DECIDE: Commit to approach
-        print(f"\n[DECIDE] Red-Green gate enforcement")
+        print("\n[DECIDE] Red-Green gate enforcement")
         approach = "Apply Prime Coder minimal reversible patch"
         print(f"  Approach: {approach}")
 
         # ACT: Generate and apply patch
-        print(f"\n[ACT] Generating patch with Prime Skills v1.3.0")
+        print("\n[ACT] Generating patch with Prime Skills v1.3.0")
         patch = self.simulate_patch_generation(instance)
         print(f"  Patch generated ({len(patch) if patch else 0} bytes)")
 
         # VERIFY: Three-rung verification ladder
-        print(f"\n[VERIFY] Running verification ladder")
+        print("\n[VERIFY] Running verification ladder")
 
         # Run red-green gates
         red_gate = self.simulate_red_gate(instance)
