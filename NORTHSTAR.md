@@ -111,8 +111,8 @@ THE ALGORITHM:
 
 FULL SKILL: skills/northstar-reverse.md
 SWARM AGENT: swarms/northstar-navigator.md (persona: Sun Tzu)
-PAPER: papers/36-northstar-reverse-engineering.md
-APPLIED: papers/37-reverse-paths.md (concrete paths for each metric above)
+PAPER: papers/41-northstar-reverse-engineering.md
+APPLIED: papers/42-reverse-paths.md (concrete paths for each metric above)
 ```
 
 ## What Stillwater Powers (Case Studies)
