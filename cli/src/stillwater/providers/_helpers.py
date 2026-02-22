@@ -6,7 +6,6 @@ Version: 1.0.0
 from __future__ import annotations
 
 import hashlib
-import time
 from datetime import datetime, timezone
 
 from .base import LLMResponse

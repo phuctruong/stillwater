@@ -13,7 +13,6 @@ import secrets
 import shutil
 import subprocess
 import sys
-from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 import webbrowser

@@ -12,7 +12,7 @@ Abstract base for all LLM providers. Each provider implements:
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
 

@@ -13,7 +13,7 @@ import shlex
 import shutil
 import subprocess
 import sys
-from typing import Any, Dict, List, Optional
+from typing import Any
 import unicodedata
 import urllib.parse
 import urllib.request
@@ -5277,7 +5277,7 @@ def main(argv: list[str] | None = None) -> int:
     p_paths = sub.add_parser("paths", help="Print key repo paths.")
     p_paths.add_argument("--json", action="store_true", help="Machine-readable output.")
 
-    p_print = sub.add_parser("print", help="Print suggested next steps.")
+    sub.add_parser("print", help="Print suggested next steps.")
 
     p_init = sub.add_parser("init", help="Scaffold Stillwater project templates.")
     p_init_sub = p_init.add_subparsers(dest="init_cmd", required=True)
@@ -6355,8 +6355,8 @@ def main(argv: list[str] | None = None) -> int:
             claude_md_lines = [
                 f"# CLAUDE.md — {project_name}",
                 f"# Stillwater v{version_str} | Generated: {date_str}",
-                f"# Project context, architecture, and phases: see README.md",
-                f"# Skill directory (full files for sub-agent dispatch): skills/",
+                "# Project context, architecture, and phases: see README.md",
+                "# Skill directory (full files for sub-agent dispatch): skills/",
                 "",
                 "## Project Ripple",
                 "# See ripples/project.md for project-specific constraints and rung target.",
@@ -9699,7 +9699,6 @@ def main(argv: list[str] | None = None) -> int:
                 if cfg.active_provider == "ollama":
                     ollama_url = cfg.get_provider_url().rstrip("/")
                     model = cfg.get_provider_model().strip() or _default_ollama_model(root)
-                    import urllib.request as _ur
                     import json as _json2
                     payload_bytes2 = _json2.dumps({
                         "model": model,
@@ -9756,9 +9755,9 @@ def main(argv: list[str] | None = None) -> int:
         else:
             print(f"run_id: {run_id_val}")
             print(f"source: {llm_source}")
-            print(f"--- response ---")
+            print("--- response ---")
             print(response_text)
-            print(f"--- end response ---")
+            print("--- end response ---")
             print(f"Wrote: {run_dir / 'manifest.json'}")
             print(f"Wrote: {response_path}")
         return 0
@@ -10123,7 +10122,7 @@ def main(argv: list[str] | None = None) -> int:
                 return 0
             else:
                 print(f"VERDICT: BLOCKED ({len(failures)} check(s) failed)")
-                print(f"  stop_reason: EVIDENCE_INCOMPLETE")
+                print("  stop_reason: EVIDENCE_INCOMPLETE")
                 print(f"  failing_checks: {failures}")
                 return 1
 

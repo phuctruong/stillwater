@@ -16,7 +16,6 @@ No real API calls are made; cryptography is exercised locally.
 """
 from __future__ import annotations
 
-import json
 import secrets
 import sys
 from pathlib import Path
@@ -30,10 +29,10 @@ _REPO_ROOT = Path(__file__).parent.parent
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
-from fastapi.testclient import TestClient
+from fastapi.testclient import TestClient  # noqa: E402
 
-from admin.llm_portal import app  # type: ignore
-from admin.session_manager import SessionManager  # type: ignore
+from admin.llm_portal import app  # type: ignore  # noqa: E402
+from admin.session_manager import SessionManager  # type: ignore  # noqa: E402
 
 client = TestClient(app)
 

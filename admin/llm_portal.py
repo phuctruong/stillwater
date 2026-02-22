@@ -47,9 +47,9 @@ _CLI_SRC = Path(__file__).parent.parent / "cli" / "src"
 if str(_CLI_SRC) not in sys.path:
     sys.path.insert(0, str(_CLI_SRC))
 
-from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import HTMLResponse, JSONResponse
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException  # noqa: E402
+from fastapi.responses import HTMLResponse  # noqa: E402
+from pydantic import BaseModel  # noqa: E402
 
 try:
     from stillwater.llm_client import LLMClient, get_call_history  # type: ignore

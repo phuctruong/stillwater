@@ -17,7 +17,7 @@ import time
 from typing import Optional
 
 from .base import LLMProvider, LLMResponse
-from ._http import http_post_json, http_get_json, HTTPError
+from ._http import http_post_json, http_get_json
 from ._helpers import build_response, messages_to_prompt, estimate_tokens
 
 _DEFAULT_URL = "http://localhost:11434"

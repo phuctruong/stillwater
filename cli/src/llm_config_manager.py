@@ -9,10 +9,8 @@ a single configuration point.
 """
 
 import os
-import sys
 from pathlib import Path
 from typing import Dict, Any, Optional
-import json
 
 try:
     import yaml

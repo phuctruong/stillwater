@@ -34,8 +34,6 @@ Backward compatibility:
 from __future__ import annotations
 
 import json
-import os
-import sys
 import threading
 import time
 from datetime import datetime, timezone
@@ -49,7 +47,6 @@ from .providers import (
     get_provider,
     list_available_providers,
     get_cheapest_provider,
-    PROVIDER_PRIORITY,
     LLMProvider,
 )
 

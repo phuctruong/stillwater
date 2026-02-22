@@ -31,8 +31,7 @@ import subprocess
 import argparse
 import logging
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from typing import Optional, Dict, Any
-from pathlib import Path
+from typing import Optional
 
 # Configure logging
 logging.basicConfig(
@@ -73,7 +72,7 @@ class ClaudeCodeCLI:
             )
             if result.returncode == 0:
                 return result.stdout.strip()
-        except:
+        except Exception:
             pass
 
         # Fallback to 'claude-code' (older versions)
@@ -86,7 +85,7 @@ class ClaudeCodeCLI:
             )
             if result.returncode == 0:
                 return result.stdout.strip()
-        except:
+        except Exception:
             pass
 
         # Try direct execution to verify which works
@@ -100,7 +99,7 @@ class ClaudeCodeCLI:
                 )
                 if result.returncode == 0:
                     return cmd
-            except:
+            except Exception:
                 pass
 
         return "claude"  # Default to 'claude'
@@ -181,8 +180,8 @@ class ClaudeCodeCLI:
             else:
                 stderr = result.stderr
                 if "cannot be launched inside another Claude Code session" in stderr:
-                    logger.error(f"Nested Claude Code session detected.")
-                    logger.error(f"Solution: Unset CLAUDECODE variable or run outside Claude Code")
+                    logger.error("Nested Claude Code session detected.")
+                    logger.error("Solution: Unset CLAUDECODE variable or run outside Claude Code")
                     logger.error(f"Command: unset CLAUDECODE && {self.cli_path} -p '{prompt[:30]}...'")
                 else:
                     logger.error(f"CLI error: {stderr}")
@@ -437,18 +436,18 @@ def run_server(host: str = Config.HOST, port: int = Config.PORT):
         print(f"   CLI path: {cli.cli_path}")
     else:
         print(f"   CLI path: {cli.cli_path} (NOT FOUND)")
-        print(f"   Install with: pip install claude-code")
-    print(f"\n📝 Test with curl:")
+        print("   Install with: pip install claude-code")
+    print("\n📝 Test with curl:")
     print(f'   curl http://{host}:{port}/')
     print(f'   curl -X POST http://{host}:{port}/api/generate \\')
-    print(f'     -H "Content-Type: application/json" \\')
-    print(f'     -d \'{{"prompt": "Hello", "stream": false}}\'')
-    print(f"\n🔗 In Python/notebooks:")
-    print(f'   import requests')
+    print('     -H "Content-Type: application/json" \\')
+    print('     -d \'{"prompt": "Hello", "stream": false}\'')
+    print("\n🔗 In Python/notebooks:")
+    print('   import requests')
     print(f'   r = requests.post("http://{host}:{port}/api/generate",')
-    print(f'     json={{"prompt": "What is 2+2?"}})')
-    print(f'   print(r.json()["response"])')
-    print(f"\n⌨️  Press Ctrl+C to stop\n")
+    print('     json={"prompt": "What is 2+2?"})')
+    print('   print(r.json()["response"])')
+    print("\n⌨️  Press Ctrl+C to stop\n")
     print("=" * 80 + "\n")
 
     try:
