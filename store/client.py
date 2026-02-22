@@ -10,6 +10,12 @@ Class: StillwaterStoreClient
   list_skills(query, page, per_page) → list[dict]
   install_skill(skill_id, target_dir) → installed_path (str)
 
+Module-level convenience functions (thin wrappers around StillwaterStoreClient):
+  submit_skill(skill_path, author, rung_claimed, api_key, base_url) → dict
+  fetch_skill(skill_id, api_key, base_url) → dict
+  list_skills(query, rung, category, api_key, base_url) → list
+  install_skill(skill_id, target_dir, api_key, base_url) → str
+
 Rung target: 641 (local correctness + tests passing)
 Network: OFF in tests — all HTTP calls are mocked via unittest.mock.patch.
 
@@ -369,3 +375,217 @@ class StillwaterStoreClient:
         raise RuntimeError(
             f"Unexpected HTTP {code}: {detail}."
         )
+
+
+# ===========================================================================
+# Module-level convenience functions (thin wrappers around StillwaterStoreClient)
+#
+# These provide a functional interface that complements the class-based API.
+# All HTTP calls still go through StillwaterStoreClient internally.
+#
+# Import:
+#   from store.client import submit_skill, fetch_skill, list_skills, install_skill
+# ===========================================================================
+
+_DEFAULT_BASE_URL = "https://solaceagi.com"
+
+# Rung rank ordering: 65537 is HIGHEST even though numerically < 274177
+_RUNG_RANK: Dict[int, int] = {641: 0, 274177: 1, 65537: 2}
+
+
+def submit_skill(
+    skill_path: str,
+    author: str,
+    rung_claimed: int,
+    api_key: str,
+    base_url: str = _DEFAULT_BASE_URL,
+    evidence_dir: Optional[str] = None,
+) -> Dict[str, Any]:
+    """
+    Module-level convenience wrapper for StillwaterStoreClient.submit_skill().
+
+    Packages a skill + evidence bundle and POSTs it to the Stillwater Store.
+    The Authorization header is set to: Bearer sw_sk_{api_key}
+
+    Args:
+        skill_path:   Path to the skill .md file.
+        author:       Author name / account name.
+        rung_claimed: Rung being claimed (641 / 274177 / 65537).
+        api_key:      Your sw_sk_ API key.
+        base_url:     Base URL of the Store API.
+        evidence_dir: Path to evidence directory. Defaults to "evidence/" next to skill.
+
+    Returns:
+        dict with keys: {skill_id, status, rung_verified, submitted_at}
+        Note: the actual submission_id is mapped to skill_id for external API consistency.
+
+    Raises:
+        ValueError:      Invalid evidence bundle or API key format.
+        PermissionError: HTTP 401 — authentication failure.
+        RuntimeError:    HTTP 5xx — server error.
+    """
+    if evidence_dir is None:
+        # Default: evidence/ directory sibling to the skill file
+        evidence_dir = str(Path(skill_path).parent / "evidence")
+
+    client = StillwaterStoreClient(api_key=api_key, base_url=base_url)
+    submission_id = client.submit_skill(
+        skill_path=skill_path,
+        author=author,
+        rung_claimed=rung_claimed,
+        evidence_dir=evidence_dir,
+    )
+    return {
+        "skill_id":     submission_id,
+        "status":       "submitted",
+        "rung_verified": rung_claimed,
+        "submitted_at":  None,  # server-side timestamp; not available synchronously
+    }
+
+
+def fetch_skill(
+    skill_id: str,
+    api_key: str,
+    base_url: str = _DEFAULT_BASE_URL,
+) -> Dict[str, Any]:
+    """
+    Module-level convenience wrapper for StillwaterStoreClient.fetch_skill().
+
+    Fetches skill metadata and content from the Stillwater Store.
+
+    Args:
+        skill_id: The skill's unique ID (e.g. "sub_abc123" or UUID).
+        api_key:  Your sw_sk_ API key.
+        base_url: Base URL of the Store API.
+
+    Returns:
+        dict with keys: {skill_id, skill_name, skill_content, author, rung_claimed, ...}
+        (Note: raw JSON response from server)
+
+    Raises:
+        LookupError:  HTTP 404 — skill not found.
+        RuntimeError: HTTP 5xx — server error.
+    """
+    client = StillwaterStoreClient(api_key=api_key, base_url=base_url)
+    # fetch_skill() on the class returns the raw skill_content string.
+    # For the functional API we return the full response dict from the GET call.
+    url = client._base_url + _ENDPOINTS["fetch"].format(skill_id=skill_id)
+    response = requests.get(
+        url,
+        headers=client._auth_headers(),
+        timeout=_REQUEST_TIMEOUT,
+    )
+    StillwaterStoreClient._check_response(response)
+    return response.json()
+
+
+def list_skills(
+    query: str = "",
+    rung: Optional[int] = None,
+    category: Optional[str] = None,
+    api_key: str = "",
+    base_url: str = _DEFAULT_BASE_URL,
+) -> List[Dict[str, Any]]:
+    """
+    Module-level convenience wrapper for StillwaterStoreClient.list_skills().
+
+    Lists skills in the Stillwater Store catalog.
+
+    Args:
+        query:    Search query string (matched against skill names/tags).
+        rung:     Filter by rung level (641 / 274177 / 65537). None = all.
+        category: Filter by skill category string. None = all.
+        api_key:  Your sw_sk_ API key. Empty string for unauthenticated browse.
+        base_url: Base URL of the Store API.
+
+    Returns:
+        list of {skill_id, name, version, rung, author, category, description}
+
+    Raises:
+        RuntimeError: HTTP 5xx — server error.
+    """
+    client = StillwaterStoreClient(api_key=api_key, base_url=base_url)
+    url = client._base_url + _ENDPOINTS["list"]
+    params: Dict[str, Any] = {}
+    if query:
+        params["q"] = query
+    if rung is not None:
+        params["rung"] = rung
+    if category is not None:
+        params["category"] = category
+
+    response = requests.get(
+        url,
+        params=params,
+        headers=client._auth_headers(),
+        timeout=_REQUEST_TIMEOUT,
+    )
+    StillwaterStoreClient._check_response(response)
+    data = response.json()
+    return data.get("skills", [])
+
+
+def install_skill(
+    skill_id: str,
+    target_dir: str = "skills/",
+    api_key: str = "",
+    base_url: str = _DEFAULT_BASE_URL,
+) -> str:
+    """
+    Module-level convenience wrapper for StillwaterStoreClient.install_skill().
+
+    Fetches a skill from the Store and installs it to the local skills directory.
+    Verifies the download by computing SHA-256 of the written file.
+
+    Args:
+        skill_id:   The skill's unique ID.
+        target_dir: Local directory to install the skill file into.
+                    Default: "skills/" (relative to cwd).
+        api_key:    Your sw_sk_ API key.
+        base_url:   Base URL of the Store API.
+
+    Returns:
+        installed_path (str) — absolute path of the installed skill file.
+
+    Raises:
+        LookupError:  HTTP 404 — skill not found.
+        RuntimeError: HTTP 5xx — server error or SHA-256 mismatch after install.
+        OSError:      Cannot write to target_dir.
+    """
+    import hashlib as _hashlib
+
+    client = StillwaterStoreClient(api_key=api_key, base_url=base_url)
+
+    # Fetch skill content
+    url = client._base_url + _ENDPOINTS["fetch"].format(skill_id=skill_id)
+    response = requests.get(
+        url,
+        headers=client._auth_headers(),
+        timeout=_REQUEST_TIMEOUT,
+    )
+    StillwaterStoreClient._check_response(response)
+
+    data = response.json()
+    skill_content = data["skill_content"]
+    skill_name = data.get("skill_name", skill_id)
+
+    # Ensure target directory exists
+    target_path = Path(target_dir)
+    target_path.mkdir(parents=True, exist_ok=True)
+
+    # Write skill file
+    installed_path = target_path / f"{skill_name}.md"
+    content_bytes = skill_content.encode("utf-8")
+    installed_path.write_bytes(content_bytes)
+
+    # Verify SHA-256 after download (integrity gate)
+    written_sha256 = _hashlib.sha256(installed_path.read_bytes()).hexdigest()
+    expected_sha256 = _hashlib.sha256(content_bytes).hexdigest()
+    if written_sha256 != expected_sha256:
+        installed_path.unlink(missing_ok=True)
+        raise RuntimeError(
+            f"SHA-256 mismatch after install: expected {expected_sha256}, "
+            f"got {written_sha256}. File has been removed."
+        )
+
+    return str(installed_path.resolve())
