@@ -6,5 +6,9 @@ manages the service registry, health checks, and auto-discovery.
 
 from .models import ServiceDescriptor, ServiceHealth, ServiceRegistration
 from .registry import ServiceRegistry
+from .base import StillwaterService
 
-__all__ = ["ServiceDescriptor", "ServiceHealth", "ServiceRegistration", "ServiceRegistry"]
+__all__ = [
+    "ServiceDescriptor", "ServiceHealth", "ServiceRegistration",
+    "ServiceRegistry", "StillwaterService",
+]
