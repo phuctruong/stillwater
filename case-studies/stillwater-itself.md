@@ -161,6 +161,7 @@
 | 2026-02-22 | QA Audit: 40-question Northstar scorecard (GLOW ~28/100), URL fixes across 4 repos, trade secret redaction from OSS, Dragon Tip removal, fact corrections (Citystream/UpDown) | 641 | opus (orchestrator) | QA session |
 | 2026-02-22 | QA Infrastructure: prime-qa.md skill, qa-questioner + qa-scorer swarms, qa-audit combo (question-based QA paradigm) | 641 | sonnet (researcher + coder) | QA session |
 | 2026-02-22 | Tests: 324 new tests across 5 modules (usage_tracker, session_manager, store_auth, store_db, store_models), persona-based QA approach, db.py datetime bug fix, 19 obsolete files cleaned | 641 | sonnet (coder x5) | QA session |
+| 2026-02-22 | Mermaid QA: 22 diagram files (92 mermaid blocks), phuc-qa-unified skill (3-pillar QA), qa-diagrammer swarm, mermaid-qa combo, paper #43 (diagram-first QA), context file | 641 | sonnet (diagrammer x3) + opus (orchestrator) | QA session |
 
 ## Metrics
 
@@ -169,7 +170,7 @@
 | Tests (all phases) | 802 (93 llm_client + 91 providers + 66 store_client + 41 security + 16 oauth3 + 66 usage_tracker + 63 session_manager + 56 store_auth + 47 store_db + 92 store_models + 87 llm_cli_support + 84 admin_server) |
 | Skills in library | 15+ |
 | Swarm agent types | 19 (all persona-enhanced) |
-| Papers | 40 (index + 40 papers, including hackathon paradigm) |
+| Papers | 43 (index + 43 papers, including diagram-first QA) |
 | Personas | 50+ across 11 categories |
 | Claude Code commands | 5 |
 | Phases complete | 7 / 7 — ALL DONE |
@@ -182,6 +183,9 @@
 | Billing endpoints | 4 (checkout/webhook/portal/status) |
 | GLOW A/B improvement | +27% average across persona-enhanced swarms |
 | Hackathon combos | 3 (standard 4h, lightning 2h, marathon 8h) |
+| Mermaid diagrams | 22 files, 92 mermaid blocks (system architecture → deployment) |
+| Diagram categories | 8/8 covered (architecture, data flow, state machines, sequences, class, journey, deployment, dependencies) |
+| QA combos | 3 (qa-audit, mermaid-qa, run-test) |
 
 ## QA Audit (2026-02-22) — Question-Based QA + Persona-Based Testing
 
@@ -199,6 +203,64 @@
 | Dragon Tip removed | 12 files (entire program removed from OSS) |
 | QA infrastructure created | prime-qa.md skill, qa-questioner + qa-scorer swarms, qa-audit combo |
 | Northstar GLOW score | ~28/100 (5 GREEN, 15 YELLOW, 20 RED) |
+
+## Mermaid QA (2026-02-22) — Diagram-First Structural Verification
+
+| Metric | Value |
+|--------|-------|
+| Diagram files | 22 (diagrams/stillwater/01-22) |
+| Mermaid blocks | 92 total across all files |
+| Diagram categories | 8/8 (architecture, data flow, state, sequence, class, journey, deployment, dependency) |
+| New skills | 1 (phuc-qa-unified.md — 942-line consolidated 3-pillar QA) |
+| New swarms | 1 (qa-diagrammer.md — diagram generation agent) |
+| New combos | 1 (mermaid-qa.md — WISH+RECIPE for diagram QA) |
+| New papers | 1 (paper #43 — diagram-first QA paradigm) |
+| New context | 1 (context/mermaid-qa-context.md) |
+| Commit | 71abb85 |
+
+### Diagram Index
+
+| # | Name | Mermaid Blocks | Category |
+|---|------|----------------|----------|
+| 01 | System Architecture | 1 | Architecture |
+| 02 | Project Ecosystem | 2 | Architecture |
+| 03 | CLI Command Flow | 4 | Data Flow |
+| 04 | Store Data Model | 2 | Class/Entity |
+| 05 | Store Operations | 4 | Data Flow |
+| 06 | Auth Flow | 5 | Sequence |
+| 07 | Verification Ladder | 3 | State Machine |
+| 08 | QA Pipeline | 4 | Data Flow |
+| 09 | GLOW Scoring | 5 | State Machine |
+| 10 | Swarm Dispatch | 4 | Architecture |
+| 11 | Persona Engine | 3 | Architecture |
+| 12 | Skill Lifecycle | 3 | State Machine |
+| 13 | Session Management | 4 | State Machine |
+| 14 | Evidence Bundle | 4 | Data Flow |
+| 15 | LLM Portal | 5 | Architecture |
+| 16 | Admin Server | 6 | Architecture |
+| 17 | Northstar Reverse | 5 | Data Flow |
+| 18 | User Journey | 5 | Journey |
+| 19 | Content Syndication | 5 | Data Flow |
+| 20 | OAuth3 Flow | 6 | Sequence |
+| 21 | Pricing Tiers | 6 | Data Flow |
+| 22 | Deployment | 6 | Deployment |
+
+### Three-Pillar QA Paradigm (Unified)
+
+```
+Pillar 1: Questions  → prime-qa.md + qa-audit combo
+  "What are the LAST 3 questions to answer?"
+
+Pillar 2: Tests      → prime-coder.md + run-test combo
+  "What are the LAST 3 tests to pass?"
+  802 tests passing across 12 test files
+
+Pillar 3: Diagrams   → prime-mermaid.md + mermaid-qa combo
+  "What are the LAST 3 diagrams to draw?"
+  92 mermaid blocks across 22 diagram files
+
+All three pillars use Northstar Reverse Engineering.
+```
 
 ### Systemic Issues Identified (from 40-question scorecard)
 
