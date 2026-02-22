@@ -525,7 +525,7 @@ All referenced files exist in this repository:
   author = {Truong, Phuc Vinh},
   title  = {Solve the Maze From the End: Northstar Reverse Engineering for AI-Driven Development},
   year   = {2026},
-  url    = {https://github.com/phuctruong/stillwater/papers/36-northstar-reverse-engineering.md},
+  url    = {https://github.com/phuctruong/stillwater/papers/41-northstar-reverse-engineering.md},
   note   = {Auth: 65537 — Stillwater Reference Implementation}
 }
 ```

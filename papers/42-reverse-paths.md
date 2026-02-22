@@ -439,4 +439,4 @@ The maze is not complex. The exit is visible. The first step into the critical c
 
 *"Still water runs deep. But first, the water must flow."*
 
-*Paper 37 — Reverse Paths. 2026-02-21.*
+*Paper 42 — Reverse Paths. 2026-02-21.*

@@ -103,20 +103,21 @@ Reddit, Notion, HackerNews recipes delivered on top of OAuth3 foundation. All re
 | HackerNews Recipes | done | ~270 | 641 |
 | **Phase 2 Total** | | **805** | **641** |
 
-## Phase 3 — Universal Portal (IN PROGRESS)
+## Phase 3 — Universal Portal (DONE)
 
 **Strategic pivot**: Solace Browser transforms from web-only OAuth3 browser into a universal AI agent portal — web + machine + tunnel in a single consent-governed application.
 
 **Machine Access Layer**: BUILD 11 COMPLETE — 100 security tests (path traversal, command blocklist, scope enforcement, step-up auth, timeout). Rung 274177 achieved.
-**Dashboard UI**: BUILD 13 PARTIAL — 70 tests delivered (machine-dashboard.html + portal home page).
-**Remaining**: BUILD 12 (Tunnel Engine, rung 65537) + BUILD 14 (Cross-Platform Distribution)
+**Dashboard UI**: BUILD 13 COMPLETE — 70 tests delivered (machine-dashboard.html + portal home page).
+**Tunnel Engine**: BUILD 12 COMPLETE — 80 tests (WebSocket reverse tunnel, OAuth3-pinned, TLS-only, bandwidth enforcement, auto-reconnect). Rung 65537.
+**Distribution**: BUILD 14 COMPLETE — 94 tests (DMG + DEB + MSI cross-platform packaging).
 
 | Build | Status | Tests | Rung | Competitive Differentiator |
 |-------|--------|-------|------|---------------------------|
 | BUILD 11: Machine Access Layer | DONE | 100 | 274177 | First OAuth3-gated file + terminal access |
-| BUILD 12: Tunnel Engine | PLANNED | — | 65537 | Built-in reverse proxy — no ngrok needed |
-| BUILD 13: Home Page + Dashboard | PARTIAL | 70 | 641 | Universal portal command center |
-| BUILD 14: Cross-Platform Distribution | PLANNED | — | 641 | DMG + DEB + MSI — one download |
+| BUILD 12: Tunnel Engine | DONE | 80 | 65537 | Built-in reverse proxy — no ngrok needed |
+| BUILD 13: Home Page + Dashboard | DONE | 70 | 641 | Universal portal command center |
+| BUILD 14: Cross-Platform Distribution | DONE | 94 | 641 | DMG + DEB + MSI — one download |
 
 **Machine Access competitive gap**:
 
@@ -162,10 +163,10 @@ tunnel.solaceagi.com relay
 | Platforms with PM maps | 6 (LinkedIn, Gmail, Reddit, Notion, HackerNews + more) |
 | Platforms with recipes | 5 (LinkedIn: 6, Gmail: 6, Reddit: ~4, Notion: ~4, HackerNews: ~4) |
 | ROADMAP build prompts | 14 (8 Phase 1.5 + BUILD 11-14) |
-| Tests (total) | 2,441/2,441 passing |
+| Tests (total) | 2,615/2,615 passing |
 | Phase 1.5 tests | 1,466 (OAuth3 core, consent UI, step-up, snapshot, Gmail, Substack, Twitter, machine access, audit trail) |
 | Phase 2 tests | 805 (Reddit + Notion + HackerNews) |
-| Phase 3 tests (in progress) | 170 (Machine Access: 100 + Dashboard: 70) |
+| Phase 3 tests | 344 (Machine Access: 100 + Dashboard: 70 + Tunnel Engine: 80 + Distribution: 94) |
 | QA findings fixed | 4/6 (2 deferred) |
 | Machine access rung | 274177 (irreversible paths reviewed) |
 
@@ -188,6 +189,8 @@ tunnel.solaceagi.com relay
 | Phase 2 (HackerNews Recipes) | 2026-02-21 | ~270/270 | 641 | — |
 | Phase 3 BUILD 11 (Machine Access Layer) | 2026-02-21 | 100/100 | 274177 | — |
 | Phase 3 BUILD 13 (Dashboard UI) | 2026-02-21 | 70/70 | 641 | — |
+| Phase 3 BUILD 12 (Tunnel Engine) | 2026-02-21 | 80/80 | 65537 | 2fdf7e3 |
+| Phase 3 BUILD 14 (Distribution) | 2026-02-21 | 94/94 | 641 | — |
 
 ## Stillwater Evidence Bundles
 
@@ -198,8 +201,7 @@ tunnel.solaceagi.com relay
 
 ## Next Actions
 
-1. Phase 3: BUILD 12 (Tunnel Engine) → rung 65537 gate (security-critical, highest priority)
-2. Phase 3: BUILD 14 (Cross-Platform Distribution) → DMG + DEB + MSI
+1. Phase 4: Production deployment — solaceagi.com integration with cloud twin
 3. solaceagi.com tunnel server (Phase 5 in solaceagi ROADMAP) — server-side relay (parallel with BUILD 12)
 4. Phase 3.5: Persona integration in solaceagi.com (parallel work)
 
