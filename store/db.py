@@ -201,7 +201,12 @@ class _Store:
                     continue
                 submitted_at_str = data.get("submitted_at", "")
                 try:
-                    submitted_at = datetime.fromisoformat(submitted_at_str)
+                    # Python 3.10 fromisoformat() does not accept the 'Z' suffix
+                    # produced by Pydantic v2 datetime serialization; normalise it.
+                    normalised = submitted_at_str
+                    if isinstance(normalised, str) and normalised.endswith("Z"):
+                        normalised = normalised[:-1] + "+00:00"
+                    submitted_at = datetime.fromisoformat(normalised)
                     if submitted_at.tzinfo is None:
                         submitted_at = submitted_at.replace(tzinfo=timezone.utc)
                     if submitted_at >= cutoff:
