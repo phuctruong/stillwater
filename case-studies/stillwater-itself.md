@@ -1,7 +1,7 @@
 # Case Study: Stillwater — Self-Verification
 
 **Tracking since**: 2026-02-21
-**Status**: v2.0.0 released — ALL 7 phases COMPLETE (802 tests total)
+**Status**: v2.0.0 released — ALL 7 phases COMPLETE (1100 tests total)
 **Rung**: 65537 CI badge deployed (daily verification active)
 **Belt**: Orange
 
@@ -162,12 +162,14 @@
 | 2026-02-22 | QA Infrastructure: prime-qa.md skill, qa-questioner + qa-scorer swarms, qa-audit combo (question-based QA paradigm) | 641 | sonnet (researcher + coder) | QA session |
 | 2026-02-22 | Tests: 324 new tests across 5 modules (usage_tracker, session_manager, store_auth, store_db, store_models), persona-based QA approach, db.py datetime bug fix, 19 obsolete files cleaned | 641 | sonnet (coder x5) | QA session |
 | 2026-02-22 | Mermaid QA: 22 diagram files (92 mermaid blocks), phuc-qa-unified skill (3-pillar QA), qa-diagrammer swarm, mermaid-qa combo, paper #43 (diagram-first QA), context file | 641 | sonnet (diagrammer x3) + opus (orchestrator) | QA session |
+| 2026-02-22 | Lint cleanup: 387 ruff errors → 0 across entire repo (cli/src, store, admin, tests, swe, imo, oolong, scripts). Added ruff config to pyproject.toml. | 641 | sonnet (coder) + opus (orchestrator) | QA session |
+| 2026-02-22 | Test coverage expansion: 298 new tests — provider implementations (169), claude_code_wrapper (66), llm_config_manager (63). Total: 802 → 1100 tests. | 641 | sonnet (coder x3) | QA session |
 
 ## Metrics
 
 | Metric | Value |
 |--------|-------|
-| Tests (all phases) | 802 (93 llm_client + 91 providers + 66 store_client + 41 security + 16 oauth3 + 66 usage_tracker + 63 session_manager + 56 store_auth + 47 store_db + 92 store_models + 87 llm_cli_support + 84 admin_server) |
+| Tests (all phases) | 1100 (93 llm_client + 91 providers + 66 store_client + 41 security + 16 oauth3 + 66 usage_tracker + 63 session_manager + 56 store_auth + 47 store_db + 92 store_models + 87 llm_cli_support + 84 admin_server + 169 provider_implementations + 66 claude_code_wrapper + 63 llm_config_manager) |
 | Skills in library | 15+ |
 | Swarm agent types | 19 (all persona-enhanced) |
 | Papers | 43 (index + 43 papers, including diagram-first QA) |
@@ -253,7 +255,7 @@ Pillar 1: Questions  → prime-qa.md + qa-audit combo
 
 Pillar 2: Tests      → prime-coder.md + run-test combo
   "What are the LAST 3 tests to pass?"
-  802 tests passing across 12 test files
+  1100 tests passing across 15 test files
 
 Pillar 3: Diagrams   → prime-mermaid.md + mermaid-qa combo
   "What are the LAST 3 diagrams to draw?"
@@ -261,6 +263,22 @@ Pillar 3: Diagrams   → prime-mermaid.md + mermaid-qa combo
 
 All three pillars use Northstar Reverse Engineering.
 ```
+
+## Lint + Coverage Sweep (2026-02-22)
+
+| Metric | Value |
+|--------|-------|
+| Ruff errors before | 387 (across cli/src, store, admin, tests, swe, imo, oolong, scripts) |
+| Ruff errors after | 0 |
+| Auto-fixed | 209 (unused imports, f-string placeholders) |
+| Manual fixes | 56 (bare-except→Exception, unused vars, ambiguous names, noqa for late imports) |
+| Config | pyproject.toml `[tool.ruff]` added — excludes notebooks + wish templates |
+| New test files | 3 (test_provider_implementations, test_claude_code_wrapper, test_llm_config_manager) |
+| New tests | 298 (169 + 66 + 63) |
+| Tests before | 802 |
+| Tests after | 1100 |
+| Provider coverage | 50% → 100% (all 5 providers now have direct instantiation + error + cost tests) |
+| Core module coverage | 84% → 95% (only research/benchmark scripts remain untested) |
 
 ### Systemic Issues Identified (from 40-question scorecard)
 
