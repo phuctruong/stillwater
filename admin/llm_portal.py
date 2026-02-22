@@ -286,7 +286,14 @@ async def switch_provider(req: SwitchProviderRequest) -> dict:
 async def call_history(n: int = 50) -> dict:
     """Return recent LLM call log entries."""
     entries = get_call_history(n=min(n, 500))
-    return {"entries": list(reversed(entries)), "total": len(entries)}
+    # Count total log entries independently of the return cap so that
+    # callers can detect log growth even when n >= actual log size.
+    _log_path = Path.home() / ".stillwater" / "llm_calls.jsonl"
+    try:
+        total = sum(1 for line in _log_path.read_text(encoding="utf-8").splitlines() if line.strip())
+    except Exception:
+        total = len(entries)
+    return {"entries": list(reversed(entries)), "total": total}
 
 
 @app.post("/v1/chat/completions")

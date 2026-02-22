@@ -9779,10 +9779,8 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if ns.cmd == "evidence":
-        import hashlib
         import json as _json
         import platform
-        import subprocess
         from pathlib import Path as _Path
 
         evidence_dir = _Path(ns.evidence_dir)
@@ -9934,7 +9932,7 @@ def main(argv: list[str] | None = None) -> int:
                 "evidence_manifest.json",
             ]
 
-            def _load_json(fname):
+            def _load_evidence_json(fname):
                 """Return parsed JSON or None; emit pass/fail."""
                 fpath = evidence_dir / fname
                 if not fpath.exists():
@@ -9964,7 +9962,7 @@ def main(argv: list[str] | None = None) -> int:
                     _fail(f"{fname} — missing", f"{fname}_missing")
 
             # 2. JSON files parseable + key checks.
-            plan = _load_json("plan.json")
+            plan = _load_evidence_json("plan.json")
             plan_required_keys = [
                 "skill_version", "profile", "stop_reason", "last_known_state",
                 "loop_budgets", "localization_summary", "verification_rung_target",
@@ -9978,7 +9976,7 @@ def main(argv: list[str] | None = None) -> int:
                 else:
                     _ok("plan.json — present, parseable, required keys OK")
 
-            tests = _load_json("tests.json")
+            tests = _load_evidence_json("tests.json")
             tests_required_keys = [
                 "command", "exit_code", "failing_tests_before", "passing_tests_after"
             ]
@@ -9994,7 +9992,7 @@ def main(argv: list[str] | None = None) -> int:
                 else:
                     _ok(f"tests.json — present, parseable, exit_code={tests['exit_code']}")
 
-            null_chk = _load_json("null_checks.json")
+            null_chk = _load_evidence_json("null_checks.json")
             null_required_keys = [
                 "inputs_checked", "null_cases_handled",
                 "zero_cases_distinguished", "coercion_violations_detected",
@@ -10006,7 +10004,7 @@ def main(argv: list[str] | None = None) -> int:
                 else:
                     _ok("null_checks.json — present, parseable, required keys OK")
 
-            env_snap = _load_json("env_snapshot.json")
+            env_snap = _load_evidence_json("env_snapshot.json")
             env_required_keys = [
                 "git_commit", "git_dirty", "repo_root", "os", "arch",
                 "language_runtimes", "tool_versions", "timezone", "locale",
@@ -10018,7 +10016,7 @@ def main(argv: list[str] | None = None) -> int:
                 else:
                     _ok("env_snapshot.json — present, parseable, required keys OK")
 
-            manifest = _load_json("evidence_manifest.json")
+            manifest = _load_evidence_json("evidence_manifest.json")
             if manifest is not None:
                 if "schema_version" not in manifest:
                     _fail("evidence_manifest.json — missing schema_version", "manifest_no_schema_version")
@@ -10074,7 +10072,7 @@ def main(argv: list[str] | None = None) -> int:
                     else:
                         _ok(f"plan.json — verification_rung_target={vrt} (integer)")
 
-                artifacts_data = _load_json("artifacts.json")
+                artifacts_data = _load_evidence_json("artifacts.json")
                 if artifacts_data is not None:
                     arts = artifacts_data.get("artifacts", [])
                     if not isinstance(arts, list) or len(arts) == 0:
