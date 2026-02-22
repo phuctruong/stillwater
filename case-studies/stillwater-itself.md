@@ -1,7 +1,7 @@
 # Case Study: Stillwater — Self-Verification
 
 **Tracking since**: 2026-02-21
-**Status**: v2.0.0 released — ALL 7 phases COMPLETE (445 tests total)
+**Status**: v2.0.0 released — ALL 7 phases COMPLETE (631 tests total)
 **Rung**: 65537 CI badge deployed (daily verification active)
 **Belt**: Orange
 
@@ -158,12 +158,15 @@
 | 2026-02-21 | Phase 2.5: LLM Usage Tracker — usage_tracker.py + tip_callback in llm_call/llm_chat + SessionUsageTracker (Decimal-only, backward compat) | 641 | sonnet (coder) | stillwater build session |
 | 2026-02-21 | Phase 5: Persona Engine v1.3.0 — 50 personas (11 categories) + GLOW score skill + persona-coder swarm + papers 34-39 + all 19 swarms persona-enhanced (+27% A/B avg) | 641 | sonnet (coder) | stillwater build session |
 | 2026-02-21 | Phase 6: Hackathon System — hackathon.md skill + hackathon-lead swarm + hackathon-master persona + paper #40 + 3 sprint combos (sprint/lightning/marathon) | 641 | sonnet (coder) | stillwater build session |
+| 2026-02-22 | QA Audit: 40-question Northstar scorecard (GLOW ~28/100), URL fixes across 4 repos, trade secret redaction from OSS, Dragon Tip removal, fact corrections (Citystream/UpDown) | 641 | opus (orchestrator) | QA session |
+| 2026-02-22 | QA Infrastructure: prime-qa.md skill, qa-questioner + qa-scorer swarms, qa-audit combo (question-based QA paradigm) | 641 | sonnet (researcher + coder) | QA session |
+| 2026-02-22 | Tests: 324 new tests across 5 modules (usage_tracker, session_manager, store_auth, store_db, store_models), persona-based QA approach, db.py datetime bug fix, 19 obsolete files cleaned | 641 | sonnet (coder x5) | QA session |
 
 ## Metrics
 
 | Metric | Value |
 |--------|-------|
-| Tests (all phases) | 390 (258 base + 66 store + 91 LLM portal + 41 CI + 50 personas + hackathon; tip hook tests moved to scratch/) |
+| Tests (all phases) | 631 (93 llm_client + 91 providers + 66 store_client + 41 security + 16 oauth3 + 66 usage_tracker + 63 session_manager + 56 store_auth + 47 store_db + 92 store_models) |
 | Skills in library | 15+ |
 | Swarm agent types | 19 (all persona-enhanced) |
 | Papers | 40 (index + 40 papers, including hackathon paradigm) |
@@ -179,6 +182,32 @@
 | Billing endpoints | 4 (checkout/webhook/portal/status) |
 | GLOW A/B improvement | +27% average across persona-enhanced swarms |
 | Hackathon combos | 3 (standard 4h, lightning 2h, marathon 8h) |
+
+## QA Audit (2026-02-22) — Question-Based QA + Persona-Based Testing
+
+| Metric | Value |
+|--------|-------|
+| Tests before | 307 |
+| Tests after | 631 |
+| New test files | 5 (usage_tracker, session_manager, store_auth, store_db, store_models) |
+| Personas used | Werner Vogels, Skeptic Auditor, Security Auditor, Dragon Rider, Naval Ravikant |
+| Bugs found | 1 (store/db.py datetime parsing on Python 3.10 — Z suffix) |
+| Obsolete files removed | 19 (pre-reorganization vestiges) |
+| URL fixes | 55+ across 4 repos (solaceagi.com → www.solaceagi.com) |
+| Trade secrets redacted | 8 categories, 30+ files moved or sanitized |
+| Fact corrections | Citystream (failed, not acquired), UpDown.com (1M+ users, not 100K) |
+| Dragon Tip removed | 12 files (entire program removed from OSS) |
+| QA infrastructure created | prime-qa.md skill, qa-questioner + qa-scorer swarms, qa-audit combo |
+| Northstar GLOW score | ~28/100 (5 GREEN, 15 YELLOW, 20 RED) |
+
+### Systemic Issues Identified (from 40-question scorecard)
+
+1. **Integration Chasm**: 4 projects are silos with zero cross-project tests
+2. **Zero-User Problem**: 0 users, $0 MRR, 0 store submissions
+3. **Infrastructure Gap**: Tunnel not live, installer needs work
+4. **Rung 65537 Paradox**: Self-certified without independent adversarial verification
+5. **Deleted Files**: 19 uncommitted deletions (**FIXED** — git rm'd and committed)
+6. **Recipe Execution Stub**: Browser automation never actually executed
 
 ## Retroactive QA (2026-02-21) — Persona-Enhanced
 
