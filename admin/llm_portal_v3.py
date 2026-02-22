@@ -266,6 +266,29 @@ recipe_executor = RecipeExecutor(_recipes_dir)
 # Health & Info Endpoints
 # ============================================================
 
+@app.get("/")
+async def root() -> dict:
+    """Root endpoint with API documentation."""
+    return {
+        "name": "Stillwater LLM Portal v3",
+        "status": "operational",
+        "version": "3.0.0",
+        "endpoints": {
+            "GET /": "This endpoint",
+            "GET /health": "Health check",
+            "GET /v1/models": "List available models",
+            "POST /v1/swarm/execute": "Execute swarm with skill injection",
+            "POST /v1/recipe/execute": "Execute recipe on CPU nodes",
+        },
+        "docs": {
+            "openapi": "/openapi.json",
+            "swagger": "/docs",
+            "redoc": "/redoc",
+        },
+        "timestamp": datetime.now().isoformat(),
+    }
+
+
 @app.get("/health")
 async def health() -> dict:
     """Health check."""
