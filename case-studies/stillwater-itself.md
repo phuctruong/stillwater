@@ -1,7 +1,7 @@
 # Case Study: Stillwater — Self-Verification
 
 **Tracking since**: 2026-02-21
-**Status**: v2.0.0 released — ALL 7 phases COMPLETE (631 tests total)
+**Status**: v2.0.0 released — ALL 7 phases COMPLETE (802 tests total)
 **Rung**: 65537 CI badge deployed (daily verification active)
 **Belt**: Orange
 
@@ -166,7 +166,7 @@
 
 | Metric | Value |
 |--------|-------|
-| Tests (all phases) | 631 (93 llm_client + 91 providers + 66 store_client + 41 security + 16 oauth3 + 66 usage_tracker + 63 session_manager + 56 store_auth + 47 store_db + 92 store_models) |
+| Tests (all phases) | 802 (93 llm_client + 91 providers + 66 store_client + 41 security + 16 oauth3 + 66 usage_tracker + 63 session_manager + 56 store_auth + 47 store_db + 92 store_models + 87 llm_cli_support + 84 admin_server) |
 | Skills in library | 15+ |
 | Swarm agent types | 19 (all persona-enhanced) |
 | Papers | 40 (index + 40 papers, including hackathon paradigm) |
@@ -188,8 +188,8 @@
 | Metric | Value |
 |--------|-------|
 | Tests before | 307 |
-| Tests after | 631 |
-| New test files | 5 (usage_tracker, session_manager, store_auth, store_db, store_models) |
+| Tests after | 802 |
+| New test files | 7 (usage_tracker, session_manager, store_auth, store_db, store_models, llm_cli_support, admin_server) |
 | Personas used | Werner Vogels, Skeptic Auditor, Security Auditor, Dragon Rider, Naval Ravikant |
 | Bugs found | 1 (store/db.py datetime parsing on Python 3.10 — Z suffix) |
 | Obsolete files removed | 19 (pre-reorganization vestiges) |
