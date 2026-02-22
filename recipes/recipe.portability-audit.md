@@ -24,7 +24,7 @@ steps:
     checkpoint: "File exists; distinguish between $HOME in example comments (INFO) vs $HOME used as a literal config value (VIOLATION)"
     rollback: "If ambiguous, classify conservatively as VIOLATION and note in run.log for human review"
   - step: 4
-    action: "Grep all Python and shell files under skills/, recipes/, and core/ for float literals in verification-path code: patterns like '== 0.0', '< 0.1', '> 1e-', '/ 100.0', 'math.isclose', 'np.allclose', 'pytest.approx'; emit hits to scratch/portability_float_verification.txt"
+    action: "Grep all Python and shell files under skills/ and recipes/ for float literals in verification-path code: patterns like '== 0.0', '< 0.1', '> 1e-', '/ 100.0', 'math.isclose', 'np.allclose', 'pytest.approx'; emit hits to scratch/portability_float_verification.txt"
     artifact: "scratch/portability_float_verification.txt — one line per hit"
     checkpoint: "File exists; hits are from code files only (not YAML comments or display-only strings)"
     rollback: "If hit is in display-only path (e.g., print() or f-string for logging), reclassify as INFO; exact arithmetic required only in comparison/hash paths"

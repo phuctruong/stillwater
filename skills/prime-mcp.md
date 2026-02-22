@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: prime-mcp v1.0.0
+SKILL: prime-mcp v1.1.0
 PURPOSE: Fail-closed Model Context Protocol (MCP) server creation skill with security gates; every tool must declare auth_required, data_classification, network_access, and destructive_ops before implementation.
 CORE CONTRACT: MCP servers are trusted to call tools — ALL tool implementations MUST apply prime-safety constraints. Tool schemas are public API surfaces; breaking changes require major semver bump. Security manifest is mandatory evidence.
 HARD GATES: Any tool without an explicit security declaration → BLOCKED. Unvalidated input to subprocess/eval → BLOCKED. Secrets in schemas → BLOCKED. API surface changes without semver plan → BLOCKED. Network access not declared → BLOCKED.
@@ -9,12 +9,25 @@ VERIFY: rung_641 (schema valid + handlers tested + security manifest present) | 
 LOAD FULL: always for production; quick block is for orientation only
 -->
 PRIME_MCP_SKILL:
-  version: 1.0.0
+  version: 1.1.0
   profile: strict
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
   status: FINAL
+
+  # ============================================================
+  # MAGIC_WORD_MAP
+  # ============================================================
+  Magic_Word_Map:
+    version: "1.0"
+    skill: "prime-mcp"
+    mappings:
+      server: {word: "portal", tier: 1, id: "MW-045", note: "MCP server is a portal exposing tools to LLM clients"}
+      tool: {word: "skill", tier: 1, id: "MW-042", note: "each MCP tool is a versioned behavioral unit with explicit security properties"}
+      protocol: {word: "constraint", tier: 0, id: "MW-004", note: "MCP protocol constrains the solution space of tool invocations"}
+      connection: {word: "portal", tier: 1, id: "MW-045", note: "connection to MCP server routes through the portal boundary"}
+    compression_note: "T0=universal primitives, T1=Stillwater protocol concepts, T2=operational details"
 
   # ============================================================
   # PRIME MCP — MCP SERVER CREATION WITH SECURITY GATES
@@ -39,7 +52,7 @@ PRIME_MCP_SKILL:
   # ============================================================
 
   # ------------------------------------------------------------
-  # A) Portability + Configuration (Hard)
+  # A) Portability + Configuration (Hard) [T0: constraint]
   # ------------------------------------------------------------
   Portability:
     rules:
@@ -56,7 +69,7 @@ PRIME_MCP_SKILL:
       - never_write_outside_EVIDENCE_ROOT_or_repo_worktree: true
 
   # ------------------------------------------------------------
-  # B) Layering (Never Weaken Public)
+  # B) Layering (Never Weaken Public) [T0: integrity]
   # ------------------------------------------------------------
   Layering:
     layering_rule:
@@ -94,7 +107,7 @@ PRIME_MCP_SKILL:
         - must_emit_budget_reduction_log: true
 
   # ------------------------------------------------------------
-  # D) Max Love + Integrity Constraint (Hard Ordering)
+  # D) Max Love + Integrity Constraint (Hard Ordering) [T0: constraint + portal]
   # ------------------------------------------------------------
   Max_Love_Integrity:
     ordering:
@@ -116,7 +129,7 @@ PRIME_MCP_SKILL:
         - prefer_BLOCKED_over_silent_implementation_when_risk_is_HIGH
 
   # ------------------------------------------------------------
-  # 0) Closed State Machine (Fail-Closed Runtime)
+  # 0) Closed State Machine (Fail-Closed Runtime) [T0: constraint + skill]
   # ------------------------------------------------------------
   State_Machine:
     STATE_SET:
@@ -224,7 +237,7 @@ PRIME_MCP_SKILL:
           - remaining_tool_calls > 0
 
   # ------------------------------------------------------------
-  # 1) Tool Security Declaration Policy (Core Discipline)
+  # 1) Tool Security Declaration Policy (Core Discipline) [T1: skill + constraint]
   # ------------------------------------------------------------
   Tool_Security_Declaration:
     purpose:
@@ -295,7 +308,7 @@ PRIME_MCP_SKILL:
       evidence_path: "${EVIDENCE_ROOT}/security_manifest.json"
 
   # ------------------------------------------------------------
-  # 2) API Surface Lock (Tool Schema Discipline)
+  # 2) API Surface Lock (Tool Schema Discipline) [T1: portal + governance]
   # ------------------------------------------------------------
   API_Surface_Lock:
     purpose:
@@ -456,7 +469,7 @@ PRIME_MCP_SKILL:
       - test_exit_code: "0 required for PASS"
 
   # ------------------------------------------------------------
-  # 7) Verification Ladder (Rung Targets)
+  # 7) Verification Ladder (Rung Targets) [T1: skill + portal]
   # ------------------------------------------------------------
   Verification_Ladder:
     purpose:

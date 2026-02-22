@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: prime-api v1.0.0
+SKILL: prime-api v1.2.0
 PURPOSE: Fail-closed REST/GraphQL API design agent with OpenAPI spec authoring, boundary analysis, breaking change detection, and versioning discipline.
 CORE CONTRACT: Every API PASS requires: OpenAPI/schema spec committed, breaking changes detected before merge, auth on all non-public endpoints, input validation on all user-controlled fields, and semver discipline enforced.
 HARD GATES: Breaking change gate blocks any schema change that removes/renames fields or changes types without major version bump. Auth gate blocks any endpoint without explicit auth requirement documented. Input gate blocks unvalidated user input reaching business logic. Version gate blocks promotion without semver declaration.
@@ -11,12 +11,32 @@ LOAD FULL: always for production; quick block is for orientation only
 -->
 
 PRIME_API_SKILL:
-  version: 1.0.0
+  version: 1.2.0
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
   status: FINAL
   quote: "An API is a promise. Break it and you break trust. — Martin Fowler, paraphrased"
+
+  # ============================================================
+  # MAGIC_WORD_MAP — Semantic Compression Index
+  # ============================================================
+  # Maps domain concepts to stillwater magic words for context compression.
+  # Load coordinates (e.g. "portal[T1]") instead of full definitions.
+  #
+  # endpoint     → portal [T1]          — endpoint is the routing layer between caller and service
+  # auth         → governance [T1]      — auth is the structure that resolves access conflicts
+  # rate-limit   → constraint [T0]      — rate limits are boundary conditions reducing solution space
+  # payload      → signal [T0]          — request/response payload carries causal-weight information
+  # breaking change → reversibility [T0] — breaking changes violate the reversibility contract with callers
+  # schema       → coherence [T0]       — API schema enforces that all parts produce a unified contract
+  # versioning   → memory [T2]          — version numbers preserve state history across API evolution
+  # input validation → boundary [T0]   — validation is the surface that separates trusted from untrusted
+  # --- Three Pillars ---
+  # LEK          → portal [T1]          — API skill is learnable: OpenAPI spec, semver, auth schemes, contract tests
+  # LEAK         → governance [T1]      — API expertise is asymmetric: unvalidated input and float money catch novices
+  # LEC          → coherence [T0]       — API conventions emerge: OpenAPI-first, breaking-change gates become law
+  # ============================================================
 
   # ============================================================
   # PRIME API — Fail-Closed API Design Skill  [10/10]
@@ -31,7 +51,7 @@ PRIME_API_SKILL:
   # ============================================================
 
   # ------------------------------------------------------------
-  # A) Configuration
+  # A) Configuration  [coherence:T0 — config enforces unified API contract policy]
   # ------------------------------------------------------------
   Config:
     EVIDENCE_ROOT: "evidence"
@@ -45,7 +65,7 @@ PRIME_API_SKILL:
     AUTH_METHODS_RECOGNIZED: [bearer_jwt, api_key, oauth2, mutual_tls, session_cookie]
 
   # ------------------------------------------------------------
-  # B) State Machine
+  # B) State Machine  [constraint:T0 → portal:T1 → reversibility:T0]
   # ------------------------------------------------------------
   State_Machine:
     STATE_SET:
@@ -108,7 +128,7 @@ PRIME_API_SKILL:
       - UNVERSIONED_PUBLIC_API
 
   # ------------------------------------------------------------
-  # C) Hard Gates (Domain-Specific)
+  # C) Hard Gates (Domain-Specific)  [boundary:T0 → governance:T1]
   # ------------------------------------------------------------
   Hard_Gates:
 
@@ -164,7 +184,7 @@ PRIME_API_SKILL:
       lane: B
 
   # ------------------------------------------------------------
-  # D) Boundary Analysis Protocol
+  # D) Boundary Analysis Protocol  [boundary:T0 — maps the API surface/interface]
   # ------------------------------------------------------------
   Boundary_Analysis:
     steps:
@@ -180,7 +200,7 @@ PRIME_API_SKILL:
       - breaking_changes_detected: list
 
   # ------------------------------------------------------------
-  # E) OpenAPI Spec Discipline
+  # E) OpenAPI Spec Discipline  [coherence:T0 — spec is the source of truth for all parts]
   # ------------------------------------------------------------
   OpenAPI_Discipline:
     required_top_level:
@@ -206,7 +226,7 @@ PRIME_API_SKILL:
       - allOf/oneOf without discriminator
 
   # ------------------------------------------------------------
-  # F) Contract Testing Protocol
+  # F) Contract Testing Protocol  [verification:T1 — contracts produce Lane A evidence]
   # ------------------------------------------------------------
   Contract_Testing:
     tools_supported: [dredd, schemathesis, pact, jest-openapi]
@@ -219,7 +239,7 @@ PRIME_API_SKILL:
     evidence_file: "${EVIDENCE_ROOT}/contract_tests.json"
 
   # ------------------------------------------------------------
-  # G) Lane-Typed Claims
+  # G) Lane-Typed Claims  [evidence:T1 → signal:T0]
   # ------------------------------------------------------------
   Lane_Claims:
     Lane_A:
@@ -238,7 +258,7 @@ PRIME_API_SKILL:
       - pagination_strategy_hints
 
   # ------------------------------------------------------------
-  # H) Verification Rung Target
+  # H) Verification Rung Target  [rung:T1 → 65537:T1]
   # ------------------------------------------------------------
   Verification_Rung:
     default_target: 65537
@@ -256,7 +276,7 @@ PRIME_API_SKILL:
       - CORS_policy_verified
 
   # ------------------------------------------------------------
-  # I) Socratic Review Questions (API-Specific)
+  # I) Socratic Review Questions (API-Specific)  [verification:T1]
   # ------------------------------------------------------------
   Socratic_Review:
     questions:
@@ -270,7 +290,7 @@ PRIME_API_SKILL:
     on_failure: revise_spec and recheck
 
   # ------------------------------------------------------------
-  # J) Evidence Schema
+  # J) Evidence Schema  [evidence:T1 — artifacts only gate PASS]
   # ------------------------------------------------------------
   Evidence:
     required_files:
@@ -285,3 +305,61 @@ PRIME_API_SKILL:
       security_gate_triggered:
         - "${EVIDENCE_ROOT}/auth_bypass_test.txt"
         - "${EVIDENCE_ROOT}/injection_sweep.txt"
+
+  # ============================================================
+  # K) API Safety FSM — Visual State Diagram
+  # ============================================================
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> INTAKE: TASK_REQUEST
+    INTAKE --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO: spec/task missing
+    NULL_CHECK --> CLASSIFY_CHANGE: ok
+    CLASSIFY_CHANGE --> SCHEMA_LOAD
+    SCHEMA_LOAD --> BOUNDARY_ANALYSIS
+    BOUNDARY_ANALYSIS --> BREAKING_CHANGE_DETECT: existing schema present
+    BOUNDARY_ANALYSIS --> AUTH_AUDIT: new API design
+    BREAKING_CHANGE_DETECT --> EXIT_BLOCKED: breaking change without major bump
+    BREAKING_CHANGE_DETECT --> AUTH_AUDIT: no breaking change / major bump declared
+    AUTH_AUDIT --> EXIT_BLOCKED: protected endpoint missing auth
+    AUTH_AUDIT --> INPUT_VALIDATION_AUDIT: ok
+    INPUT_VALIDATION_AUDIT --> EXIT_BLOCKED: unvalidated user input
+    INPUT_VALIDATION_AUDIT --> SPEC_DRAFT: ok
+    SPEC_DRAFT --> VERSION_GATE
+    VERSION_GATE --> EXIT_BLOCKED: version undeclared/inconsistent
+    VERSION_GATE --> TEST_CONTRACTS: ok
+    TEST_CONTRACTS --> EVIDENCE_BUILD: pass
+    TEST_CONTRACTS --> EXIT_BLOCKED: fail
+    EVIDENCE_BUILD --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> SPEC_DRAFT: revision needed
+    SOCRATIC_REVIEW --> FINAL_SEAL: ok
+    FINAL_SEAL --> EXIT_PASS: evidence complete
+    FINAL_SEAL --> EXIT_BLOCKED: evidence missing
+    EXIT_PASS --> [*]
+    EXIT_BLOCKED --> [*]
+    EXIT_NEED_INFO --> [*]
+```
+
+  # ============================================================
+  # L) Three Pillars Integration
+  # ============================================================
+  Three_Pillars:
+    LEK_Law_of_Emergent_Knowledge:
+      summary: "API design discipline is teachable. OpenAPI spec-first, semver breaking-change rules,
+        auth requirements, and input validation constraints are concrete learnable practices."
+      key_knowledge_units: [openapi_spec_completeness, semver_breaking_change_detection,
+        auth_scheme_per_endpoint, input_type_constraints, contract_testing_tools]
+
+    LEAK_Law_of_Emergent_Asymmetric_Knowledge:
+      summary: "API expertise is asymmetric. Novices break callers silently by renaming fields,
+        skip auth on 'internal' endpoints, and use float for monetary amounts."
+      asymmetric_traps: [silent_field_rename_breaking_callers, unauthed_internal_endpoint,
+        float_monetary_field, unvalidated_free_text_input, missing_error_response_schemas]
+
+    LEC_Law_of_Emergent_Conventions:
+      summary: "API conventions crystallize into law. OpenAPI-first, breaking-change gates,
+        and integer-cents for money started as best practices; they are now Lane A gates."
+      emerging_conventions: [openapi_as_source_of_truth, breaking_change_requires_major_bump,
+        integer_cents_for_money, contract_tests_in_CI]

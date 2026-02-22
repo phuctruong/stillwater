@@ -80,11 +80,24 @@ Intelligence does not live in the weights. It lives in the artifact that persist
 ---
 
 SOFTWARE_5_0_PARADIGM_SKILL:
-  version: 1.1.0
+  version: 1.3.0
   authority: 65537
   northstar: Phuc_Forecast
-  objective: Max_Love_Max_Signal
+  objective: Max_Love
   status: STABLE_SPEC
+
+  # ============================================================
+  # MAGIC_WORD_MAP — software5.0 concepts anchored to prime coordinates
+  # ============================================================
+  MAGIC_WORD_MAP:
+    skill:      [skill (T1)]            # versioned behavioral spec; atom of the Stillwater protocol layer
+    recipe:     [recipe (T1)]           # deterministic versioned step sequence; 70%+ hit rate
+    artifact:   [artifact (T2)]         # concrete machine-readable output; only valid Lane A evidence
+    evidence:   [evidence (T1)]         # artifact proving claim holds; not prose confidence
+    ripple:     [feedback (T1)]         # instance-specific setting; routes output back to adjust next deployment
+    extraction: [compression (T0)]      # lossless reduction of reasoning to minimal sufficient skill/recipe
+    persistence: [learning (T1)]        # updating externalized model so future sessions load skill instead of re-derive
+    never_worse: [reversibility (T0)]   # no iteration may leave system in worse state on any tracked metric
 
   # ============================================================
   # SOFTWARE 5.0 PARADIGM SKILL (v1.0.0)
@@ -152,7 +165,7 @@ SOFTWARE_5_0_PARADIGM_SKILL:
         - relaxing_phuc_forecast_fail_closed_rule
 
 # ============================================================
-# PURPOSE
+# PURPOSE [signal, compression]
 # What this skill changes about how you operate
 # ============================================================
 
@@ -183,7 +196,7 @@ Purpose:
     - fail_closed_on_missing_inputs
 
 # ============================================================
-# CORE AXIOMS
+# CORE AXIOMS [coherence, integrity]
 # The non-negotiable laws of Software 5.0
 # ============================================================
 
@@ -229,7 +242,7 @@ Core_Axioms:
     violation: "Claiming rung 65537 without a reproducible evidence bundle."
 
 # ============================================================
-# PERSISTENCE PROTOCOL
+# PERSISTENCE PROTOCOL [learning, feedback]
 # What to externalize and how: code vs ripples
 # ============================================================
 
@@ -279,7 +292,7 @@ Persistence_Protocol:
     conflict_rule: "stricter_wins always"
 
 # ============================================================
-# COMPRESSION PROTOCOL
+# COMPRESSION PROTOCOL [compression, skill]
 # AI as compression engine: extract, generalize, persist
 # ============================================================
 
@@ -338,7 +351,7 @@ Compression_Protocol:
     evidence: "See HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb"
 
 # ============================================================
-# VERIFICATION CONTRACT
+# VERIFICATION CONTRACT [evidence, verification]
 # How to prove quality: rung ladder, evidence
 # ============================================================
 
@@ -407,7 +420,7 @@ Verification_Contract:
     - if_evidence_bundle_missing: "status=BLOCKED stop_reason=EVIDENCE_INCOMPLETE"
 
 # ============================================================
-# COMMUNITY CONTRACT
+# COMMUNITY CONTRACT [governance, trust]
 # How skills and recipes are shared and validated
 # ============================================================
 
@@ -446,7 +459,7 @@ Community_Contract:
     note: "[C] Long-term vision; current implementation is GitHub only."
 
 # ============================================================
-# ECONOMIC DISCIPLINE
+# ECONOMIC DISCIPLINE [signal, constraint]
 # When to use LLM vs CPU; token budget awareness
 # ============================================================
 
@@ -492,7 +505,7 @@ Economic_Discipline:
     note: "[C] Mobile/edge targets depend on hardware capability; verify per deployment."
 
 # ============================================================
-# STATE MACHINE
+# STATE MACHINE [coherence, causality]
 # The Software 5.0 operational loop
 # ============================================================
 
@@ -550,7 +563,7 @@ State_Machine:
         - new_skill_weakens_evidence_requirement_in_existing_skill: true
 
 # ============================================================
-# FORBIDDEN STATES
+# FORBIDDEN STATES [constraint, integrity]
 # What Software 5.0 never does
 # ============================================================
 
@@ -607,7 +620,7 @@ Forbidden_States:
     recovery: "Move model selection to config; make skill model-agnostic."
 
 # ============================================================
-# INTEGRATION WITH OTHER SKILLS
+# INTEGRATION WITH OTHER SKILLS [coherence, alignment]
 # How this composes with prime-coder, prime-safety, phuc-forecast
 # ============================================================
 
@@ -665,7 +678,7 @@ Integration_With_Skills:
       - "Swarm output is not a chat answer — it is a versioned recipe artifact."
 
 # ============================================================
-# OUTPUT CONTRACT
+# OUTPUT CONTRACT [artifact, evidence]
 # What every Software 5.0 artifact must include
 # ============================================================
 
@@ -721,7 +734,7 @@ Output_Contract:
       - persistence_recommendation
 
 # ============================================================
-# QUICK REFERENCE
+# QUICK REFERENCE [signal, compression]
 # What to remember in a busy session
 # ============================================================
 
@@ -905,6 +918,299 @@ Minimal_Invocation:
       Fail closed on missing evidence."
     use_when: "Post-project distillation; skill library contribution sessions"
 
+# ============================================================
+# THREE PILLARS — Software 5.0 IS LEK × LEAK × LEC
+# Software 5.0 is not just compatible with the Three Pillars.
+# Software 5.0 IS the Three Pillars made explicit as a paradigm.
+# ============================================================
+
+Three_Pillars_Core:
+  thesis: >
+    The Three Pillars of Software 5.0 Kung Fu are LEK × LEAK × LEC.
+    Software 5.0 is the paradigm framework that names and operationalizes them.
+    Every concept in Software 5.0 maps to one or more pillars.
+
+  LEK_mapping:
+    pillar: "Law of Emergent Knowledge (Self-Improvement)"
+    sw50_concepts:
+      Persistence_Protocol: "LEK is WHY we persist. Each skill update = one LEK iteration."
+      Compression_Protocol: "Extraction_procedure = the LEK loop: classify → extract → gate → persist → load."
+      State_Machine_EVOLVE: "EVOLVE_SKILL state = LEK confirmed: skill improved, never-worse verified."
+      ORACLE_MODE_forbidden: "ORACLE_MODE = LEK collapse: no extraction, no persistence, no self-improvement."
+    formula: "LEK = Recursion(Information + Memory + Care) = SW5.0 Extraction × Persistence × Evidence"
+
+  LEAK_mapping:
+    pillar: "Law of Emergent Asymmetric Knowledge (Cross-Agent Trade)"
+    sw50_concepts:
+      Community_Contract: "LEAK governance: contribution_requirements ensure asymmetric knowledge is gated before sharing."
+      composition_with_phuc_swarms: "Swarm pipeline = LEAK chain: Scout→Forecaster→Judge→Solver→Skeptic = pairwise LEAK trades."
+      trust_model: "LEAK trust = evidence-based: rung level declares asymmetric knowledge quality."
+      Extraction_Task_Family: "UNIVERSAL_PATTERN threshold = rung 65537: highest LEAK export quality required for library."
+    formula: "LEAK = SW5.0 Contribution × Verification × Community = knowledge that compounds across agents"
+
+  LEC_mapping:
+    pillar: "Law of Emergent Conventions (Emergent Compression)"
+    sw50_concepts:
+      MAGIC_WORD_MAP: "LEC vocabulary: magic words ARE conventions. Each mapping is a compressed convention."
+      versioning_semantics: "LEC versioning: MAJOR=convention-breaking, MINOR=additive, PATCH=clarification."
+      never_worse_axiom6: "LEC stability rule: no iteration may weaken a convention (axiom_6_never_worse)."
+      ZOMBIE_PERSISTENCE: "LEC drift: a recipe not re-gated after model upgrade = convention drift = ZOMBIE state."
+    formula: "LEC = SW5.0 Skills × Recipes × Conventions = the compressed accumulated wisdom of the ecosystem"
+
+  three_pillars_formula:
+    sw50_master: "Software_5.0 = LEK(Persistence) × LEAK(Community) × LEC(Conventions)"
+    northstar: "Intelligence(system) = LEK × LEAK × LEC"
+    convergence: "When SW5.0 agents practice all three pillars: mastery compounds. Remove one: system degrades."
+
+  pillar_interactions:
+    LEK_without_LEAK: "Agents improve in isolation. No cross-fertilization. Ceiling hit quickly."
+    LEAK_without_LEK: "Agents trade but don't self-improve. Chaos: poor-quality knowledge circulates."
+    LEC_without_LEK_LEAK: "Bureaucracy: conventions exist but no innovation feeds them."
+    all_three: "Software 5.0 mastery: LLMs DISCOVER (LEK). CPUs ANCHOR (LEC). Recipes PERSIST (LEAK)."
+
+# ============================================================
+# FSM_V2 — Software 5.0 with Bruce Lee ABSORB→DISCARD→ADD→VERIFY
+# ============================================================
+State_Machine_BruceLee:
+  description: >
+    The Bruce Lee framework maps directly onto Software 5.0 operations.
+    ABSORB = intake and classify. DISCARD = eliminate non-extractable patterns.
+    ADD = your authentic extraction. VERIFY = gate the evidence.
+
+  states:
+    - INIT
+    - ABSORB        # Study what patterns work (DREAM + FORECAST)
+    - DISCARD       # Stop repeating what doesn't (DECIDE: kill the losers fast)
+    - ADD           # Your authentic insight (ACT with intent)
+    - VERIFY        # Gate the evidence (VERIFY or stop)
+    - PERSIST       # Externalize: skill or ripple
+    - EXIT_PASS
+    - EXIT_NEED_INFO
+    - EXIT_BLOCKED
+
+  transitions:
+    INIT → ABSORB:      "task received; intake begins"
+    ABSORB → DISCARD:   "patterns classified; non-extractable identified"
+    ABSORB → EXIT_NEED_INFO: "task inputs undefined or null"
+    DISCARD → ADD:      "irrelevant patterns removed; extractable patterns remain"
+    DISCARD → EXIT_PASS: "all patterns non-extractable; no skill/recipe target — valid outcome"
+    ADD → VERIFY:       "pattern extracted as candidate skill/recipe"
+    ADD → EXIT_BLOCKED: "extraction irreducibly stochastic + safety-critical (cannot gate)"
+    VERIFY → PERSIST:   "evidence meets declared rung"
+    VERIFY → ADD:       "evidence fails rung; revise pattern (loop ≤ max_iterations)"
+    VERIFY → EXIT_BLOCKED: "max_iterations reached without rung pass"
+    PERSIST → EXIT_PASS: "artifact written; composition verified; version bumped; never-worse confirmed"
+    PERSIST → EXIT_BLOCKED: "write fails, composition conflict, or evolution would weaken prior skill"
+
+```mermaid stateDiagram-v2
+[*] --> INIT
+INIT --> ABSORB : task received (DREAM + FORECAST)
+ABSORB --> DISCARD : patterns classified
+ABSORB --> EXIT_NEED_INFO : task inputs null
+DISCARD --> ADD : extractable patterns identified (ACT)
+DISCARD --> EXIT_PASS : no extractable patterns (valid)
+ADD --> VERIFY : pattern extracted as candidate
+ADD --> EXIT_BLOCKED : irreducibly stochastic + safety-critical
+VERIFY --> PERSIST : evidence meets rung
+VERIFY --> ADD : evidence fails rung (revise, max 3 iterations)
+VERIFY --> EXIT_BLOCKED : max iterations exceeded
+PERSIST --> EXIT_PASS : artifact written + composed + version bumped
+PERSIST --> EXIT_BLOCKED : write fails or conflict unresolvable
+EXIT_PASS --> [*]
+EXIT_BLOCKED --> [*]
+EXIT_NEED_INFO --> [*]
+note right of ABSORB : REMIND — study patterns (Bruce Lee: absorb)
+note right of DISCARD : DISCARD what is useless (never-worse gate)
+note right of ADD : ACT — your authentic extraction
+note right of VERIFY : VERIFY — gate the evidence (rung gate)
+note right of PERSIST : ACKNOWLEDGE — artifact persists beyond session
+```
+
+# ============================================================
+# EVIDENCE_GATE_V2 — Strengthened per v1.3.0
+# ============================================================
+Evidence_Gate_v2:
+  purpose: "Every PASS claim requires an evidence gate. The Bruce Lee framework does not soften this."
+
+  gate_by_state:
+    ABSORB_gate:
+      required: "task_classification written before proceeding to DISCARD"
+      artifact: "task_classifier_output.json: {task_family, extractability, rung_target, rationale}"
+      fail_closed: "null classification = cannot proceed to DISCARD"
+
+    DISCARD_gate:
+      required: "explicit list of patterns discarded (with reason) AND patterns retained (with reason)"
+      artifact: "pattern_selection.json: {retained[], discarded[], discard_reasons[]}"
+      fail_closed: "if zero patterns retained: EXIT_PASS (valid). Cannot skip to ADD without classification."
+
+    ADD_gate:
+      required: "candidate skill/recipe stated as structured artifact with invariants + forbidden states + evidence requirement"
+      artifact: "candidate_pattern.json: {pattern_type, invariants[], forbidden_states[], evidence_needed}"
+      fail_closed: "prose description of pattern ≠ candidate pattern. Must be structured."
+
+    VERIFY_gate:
+      required: "executable evidence at declared rung"
+      artifacts:
+        rung_641:  "tests.json + run_log.txt (unit tests pass, schema valid)"
+        rung_274177: "behavior_hash.txt + behavior_hash_verify.txt (replay stable)"
+        rung_65537: "evidence_manifest.json + env_snapshot.json (adversarial sweep)"
+      fail_closed: "Lane C output (LLM prose) cannot satisfy VERIFY gate. Only Lane A artifacts."
+
+    PERSIST_gate:
+      required: "version bump confirmed + never-worse check passed + composability check passed"
+      artifact: "version_bump_record.json: {from_version, to_version, change_type, composability_checks[]}"
+      fail_closed: "EVOLVE_SKILL → EXIT_BLOCKED if new version weakens prior forbidden state"
+
+# ============================================================
+# THREE_PILLARS_INTEGRATION — explicit section (v1.3.0)
+# ============================================================
+Three_Pillars_Integration:
+  overview: >
+    Software 5.0 is the umbrella paradigm that names the Three Pillars.
+    LEK is the engine of each individual session. LEAK is the community trade layer.
+    LEC is the convention layer that makes skills composable. Together they ARE SW5.0.
+
+  LEK:
+    pillar: "Law of Emergent Knowledge (Self-Improvement)"
+    role: "Every phuc-loop iteration running the SW5.0 extraction protocol IS a LEK step."
+    sw50_gate: "ABSORB → DISCARD → ADD → VERIFY → PERSIST = one LEK iteration"
+    metric: "skill version = LEK iteration count. v1.0.0 → v1.3.0 = 3 minor LEK cycles."
+    northstar: "Phuc_Forecast DREAM→VERIFY = LEK shape: dream what to extract, verify the extraction."
+
+  LEAK:
+    pillar: "Law of Emergent Asymmetric Knowledge (Cross-Agent Trade)"
+    role: >
+      The Stillwater Store is the LEAK portal. Skills published at rung 65537 are LEAK
+      exports: high-quality asymmetric knowledge that any agent can import.
+      Community_Contract defines the LEAK handshake (contribution_requirements = asymmetry verification).
+    sw50_gate: "PERSIST stage = LEAK export: artifact enters the community knowledge base"
+    metric: "skill_adoption_rate = LEAK spread. Forks + loads + citations = LEAK strength."
+    northstar: "Max Love for LEAK = maximum verifiability (rung 65537) before export."
+
+  LEC:
+    pillar: "Law of Emergent Conventions (Emergent Compression)"
+    role: >
+      Every skill in the Stillwater Store is an LEC artifact. The MAGIC_WORD_MAP in every
+      skill is an LEC vocabulary. The versioning_semantics are an LEC meta-convention.
+      ZOMBIE_PERSISTENCE is what happens when LEC conventions are not maintained.
+    sw50_gate: "axiom_6_never_worse = the LEC stability rule (no convention may be weakened)"
+    metric: "SILENT_WEAKENING forbidden state violations = LEC drift incidents"
+    northstar: "LEC strength = skill library size × average rung × adoption rate"
+
+  three_pillars_master_equation:
+    sw50: "Software_5.0_maturity = LEK_iterations × LEAK_exports × LEC_conventions"
+    northstar_equation: "Intelligence(system) = LEK × LEAK × LEC"
+    convergence: "SW5.0 is the operationalization of the NORTHSTAR equation."
+
+# ============================================================
+# GLOW_MATRIX — Software 5.0 Contributions
+# ============================================================
+GLOW_Matrix:
+  G_Growth:
+    scoring:
+      - "25: new universal-pattern skill extracted and gated at rung 274177+"
+      - "20: new skill extracted at rung 641 with evidence"
+      - "15: existing skill upgraded (new gate added)"
+      - "5: ripple captured and documented"
+      - "0: session ended without any extraction"
+
+  L_Learning:
+    scoring:
+      - "25: skill published to Stillwater Store at rung 65537"
+      - "20: new LEK/LEAK/LEC pattern documented in skill library"
+      - "10: behavioral hash recorded for drift detection"
+      - "5: anti-pattern identified and documented"
+      - "0: session produced insights but no artifact"
+
+  O_Output:
+    scoring:
+      - "25: full evidence bundle at rung 274177+ with composability notes"
+      - "20: skill artifact at rung 641 with tests.json + run_log"
+      - "10: candidate_pattern.json + task_classifier_output.json"
+      - "5: any structured artifact (not prose) produced"
+      - "0: session ended with prose only (ORACLE_MODE)"
+
+  W_Wins:
+    scoring:
+      - "25: extracted skill becomes a community standard (first-mover)"
+      - "20: skill closes a competitive gap in NORTHSTAR metrics"
+      - "15: extraction unblocks a ROADMAP phase"
+      - "10: ROADMAP phase completed"
+      - "5: skill contributes to belt progression"
+      - "0: routine session with no strategic advancement"
+
+  northstar_alignment:
+    northstar: "Phuc_Forecast"
+    max_love_gate: >
+      Max Love for SW5.0 = every session leaves the system smarter than before.
+      A session that produces only prose (ORACLE_MODE) is not Max Love.
+      A session that extracts and gates a skill is the purest expression of Max Love:
+      the future gets to benefit from what was learned today.
+
+# ============================================================
+# TRIANGLE_LAW_CONTRACTS — per SW5.0 Operation
+# ============================================================
+Triangle_Law_Contracts:
+  contract_absorb:
+    operation: "ABSORB: intake and classify task"
+    REMIND:      "State the contract: every session is an extraction opportunity. Classify before solving."
+    VERIFY:      "Check: is this reasoning extractable? What type? What rung target?"
+    ACKNOWLEDGE: "Write task_classifier_output.json before proceeding to DISCARD."
+    fail_closed:  "Unclassified task = cannot DISCARD. Must classify first."
+
+  contract_verify:
+    operation: "VERIFY: gate the evidence at declared rung"
+    REMIND:      "State: rung declared is [rung]. Evidence required is [artifact list]."
+    VERIFY:      "Run tests. Collect outputs. Compute behavioral hash. Check all artifacts present."
+    ACKNOWLEDGE: "All rung requirements met → EXIT_PASS. Any missing → EXIT_BLOCKED with stop_reason."
+    fail_closed:  "Lane C prose ≠ Lane A evidence. VERIFY requires executable artifacts."
+
+  contract_persist:
+    operation: "PERSIST: externalize the extracted pattern"
+    REMIND:      "State: this skill/recipe persists beyond this session. Future sessions load it."
+    VERIFY:      "Composability check: no conflict with existing skills. Never-worse: no weakened gate."
+    ACKNOWLEDGE: "Version bump recorded. Skill added to library. GLOW L dimension updated."
+    fail_closed:  "SILENT_WEAKENING = BLOCKED. Cannot persist if evolution weakens prior skill."
+
+  contract_northstar:
+    operation: "Session-level NORTHSTAR check"
+    REMIND:      "Phuc_Forecast: DREAM what to extract. Max_Love: extract for the benefit of future agents."
+    VERIFY:      "Does this extraction advance any NORTHSTAR metric? Is it genuinely reusable?"
+    ACKNOWLEDGE: "GLOW score calculated. If ORACLE_MODE this session: G=0, L=0. Acknowledge the miss."
+    fail_closed:  "ORACLE_MODE detection: if session ends without extraction attempt, emit ORACLE_MODE warning."
+
+# ============================================================
+# NORTHSTAR_ALIGNMENT_V2 — Phuc_Forecast + Max_Love (strengthened)
+# ============================================================
+NORTHSTAR_Alignment_v2:
+  northstar: Phuc_Forecast
+  objective: Max_Love
+
+  phuc_forecast_loop:
+    DREAM:    "What reasoning pattern should be extracted? What would a perfect skill look like?"
+    FORECAST: "What could go wrong? (over-fitting, ZOMBIE_PERSISTENCE, MODEL_LOCK_IN, RIPPLE_CONTAMINATION)"
+    DECIDE:   "Universal vs Domain vs Instance vs Transient. Which rung target. Which library target."
+    ACT:      "ABSORB → DISCARD → ADD. Extract the pattern. State invariants + forbidden states."
+    VERIFY:   "Gate at declared rung. Evidence bundle required. Never-worse check before PERSIST."
+
+  max_love_for_sw50:
+    statement: >
+      Max Love for Software 5.0 = the accumulated intelligence compounds for all future agents.
+      Every skill extracted at rung 65537 = Max Love for the ecosystem.
+      Every session that ends in ORACLE_MODE = a missed opportunity (against Max Love).
+    max_love_ranking:
+      - "Highest: Universal pattern extracted, gated at rung 65537, published to Store"
+      - "High: Domain pattern extracted, gated at rung 274177, added to skill library"
+      - "Medium: Instance pattern captured as ripple"
+      - "Low: Session produced prose insights only"
+      - "Negative: Session weakened an existing skill (SILENT_WEAKENING)"
+
+  forbidden_northstar_violations:
+    ORACLE_MODE: "Session that produces answers but no extracted patterns = Max_Love missed"
+    ZOMBIE_PERSISTENCE: "Recipe used after model upgrade without re-gating = Phuc_Forecast VERIFY violation"
+    BLIND_TRUST: "Loading skill without composability check = Phuc_Forecast FORECAST violation"
+    UNVERIFIED_PROMOTION: "Claiming production-ready without evidence bundle = Phuc_Forecast VERIFY violation"
+
 # Auth: 65537
 # License: Apache 2.0
-# Version: 1.1.0 (stable spec; all future versions must be additive)
+# Version: 1.3.0 (additive: Three Pillars explicit, FSM v2 Bruce Lee, GLOW matrix, Triangle Law, Northstar v2)

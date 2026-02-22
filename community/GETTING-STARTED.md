@@ -134,7 +134,7 @@ stillwater/
     SCORING-RUBRIC.md        The 5-criterion binary scorecard
     CONTRIBUTING.md          Submission and review process
     MANIFEST.json            Community contribution registry
-  core/             Always-on canonical copies of the 4 foundational skills
+  skills/           Prompt-loadable skill packs (includes the 4 foundational always-on skills)
   artifacts/        Cached run artifacts
   scratch/          Git-ignored scratch space
   README.md         Project overview

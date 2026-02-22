@@ -49,7 +49,7 @@ The tower has a foundation. Here is the structure:
 | Directory | What It Is |
 |-----------|-----------|
 | `skills/` | Prompt-loadable constraint packs (prime-coder, prime-safety, phuc-forecast, phuc-context) |
-| `core/` | Always-on canonical copies of the 4 foundational skills; baseline for divergence detection |
+| `skills/` | Prompt-loadable skill packs, including the 4 always-on foundational skills (prime-safety, prime-coder, phuc-forecast, phuc-context) |
 | `recipes/` | Step-by-step replayable workflows with artifact schemas, forbidden states, and rollback steps |
 | `swarms/` | Typed agent definitions: persona + skill pack + FSM + forbidden states per agent role |
 | `papers/` | Theory papers with receipts — `papers/00-index.md` is the map |

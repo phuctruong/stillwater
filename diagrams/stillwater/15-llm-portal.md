@@ -46,7 +46,7 @@ flowchart TD
     end
 
     subgraph REGISTRY["Provider Registry — providers/__init__.py"]
-        PRIORITY["PROVIDER_PRIORITY:\n1. ollama (free)\n2. together ($0.59/M)\n3. openai\n4. openrouter\n5. anthropic"]
+        PRIORITY["PROVIDER_PRIORITY:\n1. ollama (free)\n2. together (market rate)\n3. openai\n4. openrouter\n5. anthropic"]
         GET_P["get_provider(name)"]
         LIST_P["list_available_providers()"]
         CHEAPEST["get_cheapest_provider()"]
@@ -93,7 +93,7 @@ flowchart LR
     AUTO --> P1{"ollama\navailable?"}
     P1 -->|"Yes"| USE_OLLAMA["Use ollama\n(free, local)"]
     P1 -->|"No"| P2{"together\navailable?"}
-    P2 -->|"Yes"| USE_TOGETHER["Use together\n($0.59/M tokens)"]
+    P2 -->|"Yes"| USE_TOGETHER["Use together\n(market rate)"]
     P2 -->|"No"| P3{"openai\navailable?"}
     P3 -->|"Yes"| USE_OPENAI["Use openai\n(gpt-4o-mini $0.15/M)"]
     P3 -->|"No"| P4{"openrouter\navailable?"}

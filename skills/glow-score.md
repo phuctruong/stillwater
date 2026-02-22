@@ -9,10 +9,23 @@ COMMIT FORMAT: feat: ... GLOW {total} [G:{g} L:{l} O:{o} W:{w}]
 FORBIDDEN: GLOW_WITHOUT_NORTHSTAR_ALIGNMENT | INFLATED_GLOW | GLOW_FOR_VIBE_WORK
 -->
 name: glow-score
-version: 1.0.0
+version: 1.1.0
 authority: 65537
 northstar: Phuc_Forecast
 status: STABLE
+
+# ============================================================
+# MAGIC_WORD_MAP — glow-score concepts anchored to prime coordinates
+# ============================================================
+MAGIC_WORD_MAP:
+  glow:       [glow (T0)]             # G+L+O+W semantic density metric; glows when all 4 axes high
+  growth:     [emergence (T0)]        # new capability appearing at system level; not present before
+  learning:   [learning (T1)]         # updating model from evidence; skill files + recipes as externalized knowledge
+  output:     [signal (T0)]           # committed artifacts carrying causal weight; not vibes
+  wins:       [northstar (T0)]        # strategic victories that advance the fixed, non-negotiable goal
+  belt:       [rung (T1)]             # discrete progression level in verification ladder (641→274177→65537)
+  evidence:   [evidence (T1)]         # artifact proving score claim; git commit hash + evidence bundle path
+  northstar_link: [alignment (T0)]    # each component must reinforce the northstar metric direction
 
 # ============================================================
 # GLOW SCORE v1.0.0
@@ -34,7 +47,7 @@ status: STABLE
 # ============================================================
 
 # ============================================================
-# A) GLOW Score Components
+# A) GLOW Score Components [glow, emergence]
 # ============================================================
 
 components:
@@ -101,7 +114,7 @@ total_glow:
   calculation_rule: "Each component scored independently. No rounding up. No partial credit for incomplete criteria."
 
 # ============================================================
-# B) Belt Integration
+# B) Belt Integration [rung, northstar]
 # ============================================================
 
 belt_integration:
@@ -139,7 +152,7 @@ belt_integration:
 
 
 # ============================================================
-# C) Session GLOW Tracking
+# C) Session GLOW Tracking [signal, alignment]
 # ============================================================
 
 session_tracking:
@@ -209,7 +222,7 @@ session_tracking:
       description: "Review only, no commits — acceptable, not the goal"
 
 # ============================================================
-# D) GLOW Score Calculation Examples
+# D) GLOW Score Calculation Examples [evidence, verification]
 # ============================================================
 
 examples:
@@ -252,7 +265,7 @@ examples:
     belt_impact: "Black Belt threshold"
 
 # ============================================================
-# E) GLOW Anti-Patterns
+# E) GLOW Anti-Patterns [constraint, integrity]
 # ============================================================
 
 anti_patterns:
@@ -277,7 +290,7 @@ anti_patterns:
     fix: "O >= 20 requires evidence bundle path in commit message."
 
 # ============================================================
-# F) Integration with Other Skills
+# F) Integration with Other Skills [coherence, alignment]
 # ============================================================
 
 integration:
@@ -300,7 +313,7 @@ integration:
     rule2: "Hub must verify W claim by checking NORTHSTAR.md metric tables"
 
 # ============================================================
-# G) Quick Reference Cheat Sheet
+# G) Quick Reference Cheat Sheet [signal, compression]
 # ============================================================
 quick_reference:
   formula: "GLOW = G(0-25) + L(0-25) + O(0-25) + W(0-25) = 0-100"

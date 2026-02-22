@@ -74,7 +74,7 @@ domain_expertise:
       - "Status quo bias: people prefer the current state. Change requires overcoming inertia, not just offering value."
       - "Anchoring: the first number heard influences all subsequent judgments"
     translation_to_stillwater:
-      - "Stillwater's free tier anchors the value stack. The $0 tier makes the $19 tier feel accessible, not expensive."
+      - "Stillwater's free tier anchors the value stack. The free tier makes the paid tiers feel accessible, not expensive."
       - "BYOK framing is loss-aversion compatible: 'don't lose money on token markup' beats 'save money with BYOK'"
       - "The verification OS framing: 'don't expose yourself to audit risk' beats 'get compliance benefits'"
 
@@ -99,8 +99,8 @@ domain_expertise:
       - "Tiered pricing creates anchoring: the top tier makes the middle tier feel reasonable"
       - "Pain of paying: how money leaves matters as much as how much. Subscription beats per-use for reducing payment pain."
     translation_to_stillwater:
-      - "The $3/mo Managed LLM tier is correctly priced — cheap enough to try, just enough friction to create commitment"
-      - "Enterprise tier at $99/mo signals that this is serious infrastructure, not a toy"
+      - "The Managed LLM add-on is correctly priced — [competitive margins] cheap enough to try, just enough friction to create commitment"
+      - "The Enterprise tier price point signals that this is serious infrastructure, not a toy"
       - "The 'BYOK + free' tier is psychologically correct: power users who bring their own keys feel in control, not cheap"
 
   perception_vs_reality:

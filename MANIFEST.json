@@ -4,11 +4,10 @@
   "description": "Machine-parseable index of all skills, recipes, papers, core skills, and swarm types in this repo.",
   "generated_at_commit": "20f989658688d31ac6834b6ee41e0c9c3ad2b6de",
   "core": [
-    {"path": "core/README.md", "sha256": "6ed2082108d5dd137239d626a3079ad35f00a5d3ccfbc0957e7511a057944fdf", "role": "always-on-skill", "version": "copy"},
-    {"path": "core/phuc-context.md", "sha256": "54bd3bb60330a889110e69371da18b8a2830beda19bc03ad1876df4ffc0cca37", "role": "always-on-skill", "version": "copy"},
-    {"path": "core/phuc-forecast.md", "sha256": "af21a17fca1c7e39c4d24e887a1fbf32cdcf1d5f226ce6b9509847e2a3c0c5a3", "role": "always-on-skill", "version": "copy"},
-    {"path": "core/prime-coder.md", "sha256": "f50891a51ee8459ec4850c570674e94356915781421eae7a854fed687764bf9c", "role": "always-on-skill", "version": "copy"},
-    {"path": "core/prime-safety.md", "sha256": "0670a223a6e4939687c7cf56a0f6038ab4c4f0d3a08ffa1f49dce5b5adf4fc1f", "role": "always-on-skill", "version": "copy"}
+    {"path": "skills/phuc-context.md", "sha256": "531dc0e8a9897d98b7dbe19470406499f178456b5901301c4f705549b6091b7d", "role": "always-on-skill", "version": "1.1.0"},
+    {"path": "skills/phuc-forecast.md", "sha256": "f121669338aa04a09449395b2048a3d3cca9e77a4ce74622dd4e57fd10d90be2", "role": "always-on-skill", "version": "1.2.0"},
+    {"path": "skills/prime-coder.md", "sha256": "b3c39bb8a0d580518768d4e97bc585516ac5a7172873a151103b4e2dd4ba55dc", "role": "always-on-skill", "version": "2.1.0"},
+    {"path": "skills/prime-safety.md", "sha256": "49ed791516d7719231b13a1d8340accc5ffc186d3d68efe91c8729b5ab76f5d2", "role": "always-on-skill", "version": "2.1.0"}
   ],
   "skills": [
     {"path": "skills/MODEL-UPLIFT-REPORT.md", "sha256": "95dc8ff4c6433ec486fe03907a702ae68e4e650b22e3ad823188a2b57fa134b5", "role": "skill", "version": "1.0.0"},

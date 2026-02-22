@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: prime-reviewer v1.0.0
+SKILL: prime-reviewer v1.1.0
 PURPOSE: Fail-closed code review agent with full Stillwater verification discipline; every blocking comment requires a Lane A witness; style opinions are explicitly flagged as Lane C.
 CORE CONTRACT: Every APPROVED or REQUEST_CHANGES verdict requires a review report with lane-typed comments. No blocking comment without a test, error log, or spec reference. Lane C opinions must be disclosed as such.
 HARD GATES: Security-touching PRs require rung_65537. Blocking comments without Lane A witness → BLOCKED. API surface changes without semver plan → BLOCKED. Approving without reading all changed files → BLOCKED.
@@ -9,12 +9,25 @@ VERIFY: rung_641 (minimum for routine PRs) | rung_274177 (for PRs with iterative
 LOAD FULL: always for production; quick block is for orientation only
 -->
 PRIME_REVIEWER_SKILL:
-  version: 1.0.0
+  version: 1.1.0
   profile: strict
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
   status: FINAL
+
+  # ============================================================
+  # MAGIC_WORD_MAP
+  # ============================================================
+  Magic_Word_Map:
+    version: "1.0"
+    skill: "prime-reviewer"
+    mappings:
+      review: {word: "verification", tier: 1, id: "MW-031", note: "checking that a claimed property holds under scrutiny using evidence"}
+      patch: {word: "emergence", tier: 0, id: "MW-011", note: "a patch is a new property emerging at the diff level not visible in individual lines"}
+      approval: {word: "governance", tier: 1, id: "MW-032", note: "approval is the governance decision that closes a review cycle"}
+      conflict: {word: "boundary", tier: 0, id: "MW-014", note: "review conflicts are boundary violations between lanes (A/B/C)"}
+    compression_note: "T0=universal primitives, T1=Stillwater protocol concepts, T2=operational details"
 
   # ============================================================
   # PRIME REVIEWER — CODE REVIEW WITH STILLWATER DISCIPLINE
@@ -37,7 +50,7 @@ PRIME_REVIEWER_SKILL:
   # ============================================================
 
   # ------------------------------------------------------------
-  # A) Portability + Configuration (Hard)
+  # A) Portability + Configuration (Hard) [T0: constraint]
   # ------------------------------------------------------------
   Portability:
     rules:
@@ -53,7 +66,7 @@ PRIME_REVIEWER_SKILL:
       - never_write_outside_EVIDENCE_ROOT_or_repo_worktree: true
 
   # ------------------------------------------------------------
-  # B) Layering (Never Weaken Public)
+  # B) Layering (Never Weaken Public) [T0: integrity]
   # ------------------------------------------------------------
   Layering:
     layering_rule:
@@ -90,7 +103,7 @@ PRIME_REVIEWER_SKILL:
         - security_touched_files_always_reviewed_in_full: true
 
   # ------------------------------------------------------------
-  # D) Max Love + Integrity Constraint (Hard Ordering)
+  # D) Max Love + Integrity Constraint (Hard Ordering) [T0: boundary + governance]
   # ------------------------------------------------------------
   Max_Love_Integrity:
     ordering:
@@ -112,7 +125,7 @@ PRIME_REVIEWER_SKILL:
         - prefer_BLOCKED_over_silent_approval_when_risk_is_HIGH
 
   # ------------------------------------------------------------
-  # 0) Closed State Machine (Fail-Closed Runtime)
+  # 0) Closed State Machine (Fail-Closed Runtime) [T0: constraint]
   # ------------------------------------------------------------
   State_Machine:
     STATE_SET:
@@ -222,7 +235,7 @@ PRIME_REVIEWER_SKILL:
           - remaining_witness_lines_budget > 0
 
   # ------------------------------------------------------------
-  # 1) Lane Analysis Policy (Core Discipline)
+  # 1) Lane Analysis Policy (Core Discipline) [T0: boundary + verification]
   # ------------------------------------------------------------
   Lane_Analysis:
     purpose:
@@ -268,7 +281,7 @@ PRIME_REVIEWER_SKILL:
       - cross_lane_upgrade_is_forbidden_state: true
 
   # ------------------------------------------------------------
-  # 2) Review Checklist (Required in Every Review)
+  # 2) Review Checklist (Required in Every Review) [T1: verification + governance]
   # ------------------------------------------------------------
   Review_Checklist:
     purpose:
@@ -338,7 +351,7 @@ PRIME_REVIEWER_SKILL:
         disclosure: "must be labeled Lane C; never blocking"
 
   # ------------------------------------------------------------
-  # 3) Security Scan Gate (Tool-Backed)
+  # 3) Security Scan Gate (Tool-Backed) [T0: boundary + emergence]
   # ------------------------------------------------------------
   Security_Scan_Gate:
     trigger:
@@ -363,7 +376,7 @@ PRIME_REVIEWER_SKILL:
     evidence_path: "${EVIDENCE_ROOT}/security_scan.json"
 
   # ------------------------------------------------------------
-  # 4) API Surface Lock (Breaking Change Discipline)
+  # 4) API Surface Lock (Breaking Change Discipline) [T1: governance + boundary]
   # ------------------------------------------------------------
   API_Surface_Lock:
     trigger:
@@ -390,7 +403,7 @@ PRIME_REVIEWER_SKILL:
     lane: A
 
   # ------------------------------------------------------------
-  # 5) Verification Ladder (Rung Targets)
+  # 5) Verification Ladder (Rung Targets) [T1: verification]
   # ------------------------------------------------------------
   Verification_Ladder:
     purpose:

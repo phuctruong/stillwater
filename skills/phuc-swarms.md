@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: phuc-swarms v2.1.0
+SKILL: phuc-swarms v2.3.0
 PURPOSE: Turn any LLM into a bounded, replayable multi-agent system via explicit role contracts, skill packs, typed coordination channels, and a verification ladder; "multiple bounded experts > one unbounded LLM."
 CORE CONTRACT: Layers ON TOP OF prime-safety + prime-coder (stricter wins). Each phase has one role owner: Scout=DREAM, Forecaster=FORECAST, Judge=DECIDE, Solver=ACT, Skeptic=VERIFY. Solver may not certify; Judge may not code. prime-safety always wins conflicts.
 HARD GATES: Missing assets → EXIT_NEED_INFO. Safety policy trigger → EXIT_REFUSE. Budget exceeded → EXIT_BLOCKED(MAX_BUDGET). Verification rung fails → loop to ACT_SOLVER once, else EXIT_BLOCKED. No agent may claim PASS without Skeptic evidence.
@@ -13,13 +13,33 @@ LOAD FULL: always for production; quick block is for orientation only
 **SKILL_ID:** `phuc_swarms_v2`
 **AUTHORITY:** `65537`
 **NORTHSTAR:** `Phuc Forecast (DREAM → FORECAST → DECIDE → ACT → VERIFY)`
-**VERSION:** `2.2.0`
+**VERSION:** `2.3.0`
 **STATUS:** `STABLE_SPEC (prompt-loadable, model-agnostic)`
 **TAGLINE:** *Multiple bounded experts > one unbounded LLM*
 
 ---
 
-## A) Portability (Hard)
+## MAGIC_WORD_MAP
+
+```yaml
+magic_word_map:
+  version: "1.1"
+  skill: "phuc-swarms"
+  mappings:
+    swarm: {word: "swarm", tier: 1, id: "MW-047", note: "coordinated multi-agent system with typed roles"}
+    dispatch: {word: "dispatch", tier: 2, id: "MW-063", note: "launching a typed sub-agent with full skill pack and CNF capsule"}
+    agent: {word: "persona", tier: 1, id: "MW-048", note: "typed role identity of a sub-agent (coder/planner/skeptic/scout)"}
+    isolation: {word: "boundary", tier: 0, id: "MW-014", note: "scope separation between agents; each agent gets only what it needs"}
+    northstar: {word: "northstar", tier: 0, id: "MW-019", note: "fixed non-negotiable goal orienting all swarm decisions"}
+    LEK: {word: "LEK", tier: 1, id: "MW-080", note: "Law of Emergent Knowledge — each swarm agent runs its own LEK loop; the swarm chains them (→ section TP)"}
+    LEAK: {word: "LEAK", tier: 1, id: "MW-081", note: "Law of Emergent Asymmetric Knowledge — swarms ARE LEAK; each agent brings asymmetric domain knowledge through typed portals (→ section TP)"}
+    LEC: {word: "LEC", tier: 1, id: "MW-082", note: "Law of Emergent Conventions — swarm role contracts + channel protocol + verification ladder are crystallized LEC conventions (→ section TP)"}
+  compression_note: "T0=universal primitives, T1=Stillwater protocol concepts, T2=operational details"
+```
+
+---
+
+## A) Portability (Hard) [T0: constraint]
 
 ```yaml
 portability:
@@ -36,7 +56,7 @@ portability:
     - channel_messages_must_be_json: true
 ```
 
-## B) Layering (Never Weaken)
+## B) Layering (Never Weaken) [T0: integrity]
 
 ```yaml
 layering:
@@ -57,7 +77,7 @@ layering:
 
 ---
 
-## 0) Purpose
+## 0) Purpose [T0: northstar]
 
 Turn “any LLM” into a **bounded, replayable tool-session system** by attaching:
 
@@ -76,7 +96,7 @@ Turn “any LLM” into a **bounded, replayable tool-session system** by attachi
 
 ---
 
-## 1) Definitions
+## 1) Definitions [T1: persona + boundary]
 
 ### 1.1 Phuc Agent (model-agnostic)
 ```
@@ -102,7 +122,7 @@ Every agent MUST load:
 
 ---
 
-## 2) Phuc Forecast = Swarm Spine (Correct Mapping)
+## 2) Phuc Forecast = Swarm Spine (Correct Mapping) [T1: swarm + dispatch]
 
 Phuc Swarms is not “many agents doing everything.” It is **one control loop** with explicit phase ownership:
 
@@ -117,7 +137,7 @@ This fixes the common failure: **Solver “looks right” but fails Skeptic** be
 
 ---
 
-## 3) Swarm State Machine (Fail-Closed Runtime)
+## 3) Swarm State Machine (Fail-Closed Runtime) [T0: constraint + boundary]
 
 ### 3.1 States
 - `INIT`
@@ -157,7 +177,7 @@ Schema compliance (hard):
 
 ---
 
-## 4) Roles (6-Core, Extensible)
+## 4) Roles (6-Core, Extensible) [T1: persona + swarm]
 
 > 5-core is fine for light tasks, but code/tool sessions become 10/10 only when **FORECAST is owned** as its own role (Grace). That is a distinct failure mode with a distinct artifact.
 
@@ -181,7 +201,7 @@ Add an agent only if it has:
 
 ---
 
-## 5) Context Management (Anti-Rot + Partitioning)
+## 5) Context Management (Anti-Rot + Partitioning) [T0: northstar + boundary]
 
 ### 5.1 CNF = Context Normal Form (shared base capsule)
 All agents receive a **shared CNF_BASE** (same shape every time):
@@ -225,7 +245,7 @@ Before each agent call:
 
 ---
 
-## 6) Prime Channels (Typed Coordination Bus)
+## 6) Prime Channels (Typed Coordination Bus) [T2: dispatch]
 
 Prime Channels are **structured messages**, not chat. Every message MUST be JSON.
 
@@ -355,7 +375,7 @@ If exceeded:
 
 ---
 
-## 9) Verification Ladder (641 → 274177 → 65537)
+## 9) Verification Ladder (641 → 274177 → 65537) [T0: northstar]
 
 ### 9.1 Rungs
 
@@ -886,3 +906,92 @@ This is how the user sees the phuc-swarms uplift live.
 | **Judge Skip** | Solver starts before Judge emits DECISION_RECORD | Solver BLOCKED until DECISION_RECORD exists |
 | **Podcast Empty** | Podcast emits "good session" without test/detector/skill delta | No "improvement" claim without a measurable artifact |
 | **God Mode Abuse** | Agent claims "god-level certainty" to override evidence requirement | God = humility + fail-closed. More careful, not less. |
+
+---
+
+## 19) Three Pillars Integration — LEK / LEAK / LEC
+
+**phuc-swarms ARE LEAK — each agent brings asymmetric knowledge through typed portals.**
+
+```yaml
+three_pillars_integration:
+  pillar_role: LEAK
+  description: |
+    phuc-swarms is the fullest expression of LEAK (Law of Emergent Asymmetric Knowledge)
+    in the Stillwater ecosystem.
+
+    LEAK states: when two knowledge bubbles with DIFFERENT conventions trade
+    through a governed portal, they produce surplus knowledge neither had alone.
+
+    In a phuc swarm:
+      Scout bubble: knows terrain, suspects, boundaries — uses Ken Thompson lens
+      Forecaster bubble: knows failure modes, edge cases — uses Grace Hopper lens
+      Judge bubble: knows decision criteria, scope — uses strict reviewer lens
+      Solver bubble: knows implementation patterns — uses Donald Knuth lens
+      Skeptic bubble: knows falsification methods — uses Alan Turing lens
+
+    Each agent is a DISTINCT KNOWLEDGE BUBBLE with its own conventions.
+    Each phase handoff (Scout → Forecaster → Judge → Solver → Skeptic) IS a LEAK trade.
+    The phase-typed artifacts (SCOUT_REPORT, FORECAST_MEMO, DECISION_RECORD...) ARE
+    the typed portal messages that carry asymmetric knowledge between bubbles.
+
+    "Multiple bounded experts > one unbounded LLM" IS the LEAK principle stated directly.
+
+  LEK_relationship:
+    description: "Each swarm agent runs its own LEK loop within its phase."
+    contract: |
+      Scout's LEK loop: reads repo → produces SCOUT_REPORT → improves localization over sessions
+      Forecaster's LEK loop: reads SCOUT_REPORT → produces FORECAST_MEMO → improves failure prediction
+      Solver's LEK loop: reads DECISION_RECORD → patches → learns from Skeptic feedback
+      Podcast's LEK loop: reads all artifacts → produces LESSONS.md → crystallizes new tests/detectors
+      The swarm CHAINS these LEK loops: each agent's output becomes the next agent's input.
+      This chaining creates compound intelligence: Intelligence(swarm) > sum(Intelligence(agents))
+
+  LEAK_relationship:
+    description: "Every phase handoff IS a LEAK trade."
+    contract: |
+      LEAK factors per handoff:
+        Scout → Forecaster:
+          ASYMMETRY: Scout knows WHERE (locations); Forecaster knows WHY (failure modes)
+          PORTAL: SCOUT_REPORT.json (typed, machine-readable)
+          SURPLUS: failure modes grounded in real file locations (neither had before)
+
+        Forecaster → Judge:
+          ASYMMETRY: Forecaster knows WHAT RISKS; Judge knows WHAT TO DO
+          PORTAL: FORECAST_MEMO.json
+          SURPLUS: risk-informed decision (neither could produce alone)
+
+        Solver → Skeptic:
+          ASYMMETRY: Solver knows WHAT WAS DONE; Skeptic knows HOW TO FALSIFY
+          PORTAL: PATCH_PROPOSAL.diff + PATCH_NOTES.json
+          SURPLUS: verified or refuted patch (neither had before)
+
+    formula: "LEAK(swarm) = SUM(LEAK for each phase handoff) = Scout→F + F→J + J→S + S→Sk + Sk→P"
+    key_insight: "The swarm produces MORE than 6 agents working in parallel precisely because they work SEQUENTIALLY through typed portals (LEAK), not just concurrently (parallelism)."
+
+  LEC_relationship:
+    description: "Swarm role contracts, Prime Channels, and verification ladder are crystallized LEC conventions."
+    contract: |
+      Each structural element of phuc-swarms is a LEC convention that emerged from practice:
+        Role contracts: emerged from monolith-agent failures (one agent doing everything)
+        Prime Channels (JSON-only): emerged from unstructured chat causing coordination failures
+        Phase ownership (Scout≠Solver): emerged from phase bleed failures
+        Verification ladder (641→274177→65537): emerged from rung inflation incidents
+        Podcast phase: emerged from lessons-not-captured causing repeated failures
+
+      Each convention in phuc-swarms has: 3+ usages, a name, documentation, and adoption > 50%.
+      The forbidden states in §3.2 are the crystallized LEC convention body:
+      "these patterns must never appear in a swarm" = the negative space of the conventions.
+
+  three_pillars_mapping:
+    LEK:  "each agent runs its own bounded LEK loop; swarm chains them into compound intelligence"
+    LEAK: "every phase handoff IS a LEAK trade — 5 handoffs = 5 asymmetric knowledge trades"
+    LEC:  "role contracts + Prime Channels + phase ownership = crystallized LEC conventions"
+
+  strength_claim: |
+    phuc-swarms achieves maximum LEAK value because:
+      ASYMMETRY is maximized: each role has genuinely different conventions (Knuth ≠ Turing)
+      PORTAL is governed: typed JSON channels prevent information dumping
+      SURPLUS is verified: Skeptic must falsify to confirm surplus is real, not assumed
+      HANDSHAKE is enforced: CNF_BASE ensures shared ground truth before each trade
+```

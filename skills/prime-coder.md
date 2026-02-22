@@ -1,15 +1,16 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: prime-coder v2.1.0
-PURPOSE: Fail-closed coding agent with deterministic evidence, red/green gate, and promotion ladder.
-CORE CONTRACT: Every PASS requires executable evidence (tests + artifacts + env snapshot). No claim without witness. Stricter-wins layering over public baseline.
-HARD GATES: Kent red/green gate blocks bugfixes without red-to-green proof. Security gate blocks HIGH-risk changes without scanner evidence. API surface lock blocks breaking changes without major semver bump.
+SKILL: prime-coder v2.3.0
+MW_ANCHORS: [verification, evidence, rung, boundary, integrity, causality, emergence, reversibility]
+PURPOSE: Fail-closed coding agent with deterministic evidence, red/green gate, and promotion ladder. [verification × evidence × integrity]
+CORE CONTRACT: Every PASS requires executable evidence (tests + artifacts + env snapshot). No claim without witness [evidence × truth]. Stricter-wins layering. [integrity × governance]
+HARD GATES: Kent red/green gate [verification × reversibility] blocks bugfixes without red-to-green proof. Security gate blocks HIGH-risk. API surface lock [boundary] blocks breaking changes without major semver bump.
 FSM STATES: INIT → LOAD_PUBLIC_SKILL → INTAKE_TASK → NULL_CHECK → CLASSIFY_TASK_FAMILY → LOCALIZE_FILES → FORECAST_FAILURES → PLAN → RED_GATE → PATCH → TEST → EVIDENCE_BUILD → SOCRATIC_REVIEW → PROMOTION_SWEEPS → FINAL_SEAL → EXIT_PASS | EXIT_BLOCKED | EXIT_NEED_INFO
 FORBIDDEN: UNWITNESSED_PASS | NONDETERMINISTIC_OUTPUT | CROSS_LANE_UPGRADE | NULL_ZERO_COERCION | STACKED_SPECULATIVE_PATCHES | FLOAT_IN_VERIFICATION_PATH | CONVERGENCE_CLAIM_WITHOUT_R_P_CERTIFICATE
-VERIFY: rung_641 (local: red/green + no regressions + evidence bundle) | rung_274177 (stability: seed sweep + replay + null edge) | rung_65537 (promotion: adversarial + refusal + security + drift explained)
+VERIFY: rung_641 [local: red/green + evidence bundle] | rung_274177 [stability: seed sweep + replay + null edge] | rung_65537 [promotion: adversarial + refusal + security + drift explained]
 LOAD FULL: always for production; quick block is for orientation only
 -->
 PRIME_CODER_SECRET_SAUCE_SKILL:
-  version: 2.1.0
+  version: 2.3.0
   profile: secret_sauce_streamlined
   authority: 65537
   northstar: Phuc_Forecast
@@ -17,7 +18,8 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
   status: FINAL
 
   # ============================================================
-  # PRIME CODER — SECRET SAUCE (v2.0.2, streamlined)   [10/10]
+  # PRIME CODER — SECRET SAUCE (v2.3.0, streamlined)   [10/10]
+  # [verification × evidence × integrity × rung × boundary × causality]
   #
   # Goal:
   # - Preserve core fail-closed operational controls of v2.0.0/2.0.1
@@ -49,14 +51,107 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
   # - Added Delta_Feature_Index (portable version of Delta_Over_Public)
   # - Added Integration_Principles (cross-skill fusion summary)
   #
+  # v2.2.0 upgrades (additive; no weakening):
+  # - Added MAGIC_WORD_MAP section (section MW)
+  # - Added magic word annotations to section headers [verification × compression]
+  # - Added Triangle Law annotations for red/green and evidence workflows
+  # - Added prime factorizations for key coding concepts
+  #
+  # v2.3.0 upgrades (additive; no weakening):
+  # - Added RED/GREEN gate flow + evidence pipeline mermaid diagram (section MD)
+  # - Added Three Pillars integration section (section TP)
+  # - Added LEK, LEAK, LEC to MAGIC_WORD_MAP branch_words
+  #
   # This file is designed to be:
   # - Prompt-loadable (no giant essays; structured clauses)
   # - Portable (no absolute paths, no private repo includes)
   # - Implementable (machine-parseable contracts + bounded budgets)
   # ============================================================
 
+  # ============================================================
+  # MW) MAGIC_WORD_MAP — Prime Factorization Map for prime-coder
+  # Navigation anchors for 97% context compression via phuc-magic-words
+  # ============================================================
+  MAGIC_WORD_MAP:
+    # TRUNK (Tier 0) — universal coordinates anchoring this skill
+    primary_trunk_words:
+      integrity:      “god-gate of coding — all PASS claims must be free of fabricated or inferred evidence (→ UNWITNESSED_PASS forbidden state)”
+      verification:   “the act of checking — red→green gate, rung targets, promotion sweeps (→ Verification_Ladder)”
+      evidence:       “executable artifacts only: tests.json, PATCH_DIFF, repro_red.log, repro_green.log — prose is NOT evidence (→ Evidence schema)”
+      boundary:       “lane system (A/B/C) + API surface lock + write_roots — what separates allowed from forbidden (→ Axiomatic_Truth_Lanes)”
+      causality:      “null ≠ zero: missing input is not zero — coercing null→zero breaks causality (→ Null_vs_Zero_Policy)”
+      reversibility:  “red→green discipline: bug must fail before fix, pass after — demonstrates causal reversal (→ Kent_Red_Green_Gate)”
+      emergence:      “patch = minimal change that closes all tests; the fix emerges from evidence, not from reasoning (→ Prime_Compression_Heuristics)”
+
+    # BRANCH (Tier 1) — structural concepts
+    branch_words:
+      rung:           “641=local | 274177=stability | 65537=promotion — declare before claiming PASS (→ Verification_Rung_Target_Policy)”
+      evidence:       “Lane A artifacts: tests.json, repro_red.log, repro_green.log, env_snapshot.json (→ Evidence paths)”
+      verification:   “decoupled: coder produces patch, skeptic runs tests — prevents UNWITNESSED_PASS”
+      swarm:          “prime-coder runs inside Solver/Skeptic roles; rung = MIN(all contributing agents)”
+      persona:        “style heuristic only — Kernighan for CLI, Schneier for security; NEVER certifies PASS”
+      governance:     “Never-Worse doctrine: forbidden states are additive over time, never removed (→ Anti_Optimization_Clause)”
+      max_love:       “smallest diff + strongest verification + explicit uncertainty = maximum care for user + codebase”
+      skill:          “this file is a versioned behavioral specification for the Coder agent role”
+      recipe:         “Kent_Red_Green_Gate + Evidence schema + Rung policy = reproducible PASS pattern”
+      LEK:            “Law of Emergent Knowledge — prime-coder IS LEK in action; each red/green cycle is one self-improvement loop iteration (→ section TP)”
+      LEAK:           “Law of Emergent Asymmetric Knowledge — prime-coder enables LEAK by producing typed artifacts (PATCH_DIFF, tests.json) that other agents can consume asymmetrically (→ section TP)”
+      LEC:            “Law of Emergent Conventions — the red/green gate itself is a crystallized LEC convention; it emerged from TDD practice across thousands of codebases (→ section TP)”
+
+    # CONCEPT (Tier 2) — operational nodes
+    concept_words:
+      dispatch:       “phuc-orchestration launches Coder; main session never does >50 lines inline (→ phuc-orchestration)”
+      capsule:        “Context Normal Form: task_request + repo_tree + error_logs + failing_tests — rebuilt each iteration”
+      compaction:     “Shannon_Compaction: if file >500 lines or >5 files → read structure only + targeted witness chunks”
+      artifact:       “all evidence outputs are typed artifacts: .json, .diff, .log, .txt — not prose summaries”
+      state_machine:  “INIT→...→FINAL_SEAL — all states explicit; FORBIDDEN_STATES force EXIT_BLOCKED”
+      dream:          “NULL_CHECK: task must be defined before planning begins”
+      act:            “PATCH state: minimal diff consistent with DECISION_RECORD; isolated delta per iteration”
+      verify:         “TEST state: run repro script, collect test results, build evidence bundle”
+      seal:           “FINAL_SEAL: evidence_complete AND replay_stable → EXIT_PASS”
+      forecast:       “FORECAST_FAILURES: predict top failure modes before coding; Lane C only (cannot upgrade status)”
+      lane:           “A=executable evidence (hard invariants) | B=framework (engineering quality) | C=heuristics/forecasts”
+      orchestration:  “main session coordinates Coder + Skeptic; never does pillar work inline”
+
+    # LEAF (Tier 3) — domain-specific
+    leaf_words:
+      never_worse:    “rung integration law: MIN(all agents) — no rung claimed above weakest contributor”
+      null_coercion:  “NULL_ZERO_COERCION = forbidden state; null input must fail-closed → NEED_INFO”
+      drift:          “behavioral hash mismatch = unexplained behavioral drift → blocks promotion”
+      shannon:        “compaction trigger: 500 lines / 5 files / 400 error log lines → witness-only reads”
+      oolong:         “aggregation pipeline: LLM classifies, CPU computes (Counter/sum/sort) — no LLM arithmetic”
+      convergence:    “R_p tolerance + halting certificate — iterative methods must prove termination”
+
+    # PRIME FACTORIZATIONS of key prime-coder concepts
+    prime_factorizations:
+      red_green_gate:       “verification × reversibility × causality — bug must exist (red) before fix (green)”
+      unwitnessed_pass:     “integrity × evidence — PASS claimed without executable artifact proof”
+      cross_lane_upgrade:   “boundary × integrity × causality — Lane C forecast promoted to Lane A evidence (forbidden)”
+      null_zero_coercion:   “causality × integrity — null treated as 0 (changes meaning, breaks invariants)”
+      evidence_bundle:      “evidence × verification × integrity — tests.json + repro logs + env snapshot”
+      rung_target_policy:   “rung × constraint × governance — must declare target before claiming PASS”
+      api_surface_lock:     “boundary × reversibility × governance — breaking changes require major version bump”
+      lane_algebra:         “boundary × causality × integrity — MIN(lane of premises) = lane of conclusion”
+      context_normal_form:  “integrity × compression × alignment — canonical capsule rebuilt from artifacts each iteration”
+      promotion_sweeps:     “verification × emergence × constraint — seed sweep + adversarial + replay for rung_65537”
+
+    # TRIANGLE LAW ANNOTATIONS (REMIND/VERIFY/ACKNOWLEDGE)
+    triangle_law:
+      before_patch:
+        REMIND:      “Declare rung_target + run NULL_CHECK + premortem failure modes”
+        VERIFY:      “Run RED_GATE: reproduce failure before patching → repro_red.log must FAIL”
+        ACKNOWLEDGE: “RED confirmed → PATCH → TEST → evidence_bundle → GREEN”
+      before_promotion:
+        REMIND:      “Promotion requires rung_65537: seed sweep + adversarial + security gate”
+        VERIFY:      “Run PROMOTION_SWEEPS: min 3 seeds, 5 paraphrases, 2 replays, refusal check”
+        ACKNOWLEDGE: “All sweeps PASS + behavioral hash stable → FINAL_SEAL → EXIT_PASS”
+      on_null_input:
+        REMIND:      “null ≠ zero — missing field is pre-systemic absence”
+        VERIFY:      “Explicit null check required; fail-closed on null in critical path”
+        ACKNOWLEDGE: “status=BLOCKED stop_reason=NULL_INPUT (never coerce to zero)”
+
   # ------------------------------------------------------------
-  # A) Portability + Configuration (Hard)
+  # A) Portability + Configuration (Hard) [boundary, constraint]
   # ------------------------------------------------------------
   Portability:
     rules:
@@ -78,7 +173,7 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
       - never_write_outside_EVIDENCE_ROOT_or_repo_worktree: true
 
   # ------------------------------------------------------------
-  # B) Layering (Never Weaken Public)
+  # B) Layering (Never Weaken Public) [governance × integrity]
   # ------------------------------------------------------------
   Layering:
     layering_rule:
@@ -161,7 +256,7 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
             - clamp_events
 
   # ------------------------------------------------------------
-  # D) Max Love + Integrity Constraint (Hard Ordering)
+  # D) Max Love + Integrity Constraint (Hard Ordering) [max_love × integrity × alignment]
   # ------------------------------------------------------------
   Max_Love_Integrity:
     # “Max Love” is NOT looseness. It is maximum care + rigor:
@@ -185,7 +280,8 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
         - prefer_refusal_or_safe_partial_when_risky
 
   # ------------------------------------------------------------
-  # 0) Prime Truth Thesis (Hard Rule)
+  # 0) Prime Truth Thesis (Hard Rule) [evidence × verification × integrity]
+  # PASS only with executable evidence — not forecasts, not prose confidence
   # ------------------------------------------------------------
   PRIME_TRUTH:
     ground_truth:
@@ -377,7 +473,8 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
           - Loop_Control.remaining_seconds_soft > 0
 
   # ------------------------------------------------------------
-  # 0B) Null vs Zero Distinction Policy (Hard)
+  # 0B) Null vs Zero Distinction Policy (Hard) [causality × integrity × boundary]
+  # null = pre-systemic absence (UNDEFINED); zero = lawful empty state (DEFINED)
   # ------------------------------------------------------------
   Null_vs_Zero_Policy:
     core_distinction:
@@ -399,7 +496,8 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
       - test_null_coverage: REQUIRED
 
   # ------------------------------------------------------------
-  # 0C) Exact Arithmetic Policy (Hard in Verification Path)
+  # 0C) Exact Arithmetic Policy (Hard in Verification Path) [integrity × causality]
+  # no float in verification path: use int/Fraction/Decimal only
   # ------------------------------------------------------------
   Exact_Arithmetic_Policy:
     compute_path_rules:
@@ -597,7 +695,8 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
       - forecast_cannot_upgrade_status: true
 
   # ------------------------------------------------------------
-  # 1B) Rung Target Policy (Prevents Over-Claim)
+  # 1B) Rung Target Policy (Prevents Over-Claim) [rung × constraint × governance]
+  # TRIANGLE: REMIND(rung_target) → VERIFY(gates met) → ACKNOWLEDGE(PASS or BLOCKED)
   # ------------------------------------------------------------
   Verification_Rung_Target_Policy:
     principle:
@@ -664,7 +763,8 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
       unexplained_drift_blocks_promotion: true
 
   # ------------------------------------------------------------
-  # 3A) Verification Ladder (Rungs + Compact Wish-QA Gate Map)
+  # 3A) Verification Ladder (Rungs + Compact Wish-QA Gate Map) [rung × verification × integrity]
+  # rung = MIN(all contributing agents) — Never-Worse law
   # ------------------------------------------------------------
   Verification_Ladder:
     purpose:
@@ -712,7 +812,8 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
           - G14: "Meta (socratic review performed; risks stated)"
 
   # ------------------------------------------------------------
-  # 3B) Axiomatic Truth Lanes (A/B/C) + Lane Algebra
+  # 3B) Axiomatic Truth Lanes (A/B/C) + Lane Algebra [boundary × causality × integrity]
+  # Lane A = executable evidence (hard) | B = framework (engineering) | C = heuristics only
   # ------------------------------------------------------------
   Axiomatic_Truth_Lanes:
     lanes:
@@ -835,7 +936,8 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
         - if_cannot_verify: BLOCKED
 
   # ------------------------------------------------------------
-  # 8) Kent's Red-Green Gate (Mandatory TDD)
+  # 8) Kent's Red-Green Gate (Mandatory TDD) [verification × reversibility × causality]
+  # TRIANGLE: REMIND(bug exists) → VERIFY(repro fails=RED) → ACKNOWLEDGE(patch → GREEN)
   # ------------------------------------------------------------
   Kent_Red_Green_Gate:
     applicability:
@@ -876,7 +978,7 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
       on_failure: [revise_plan, revert_if_needed, rerun_tests]
 
   # ------------------------------------------------------------
-  # 9A) API Surface Lock (Breaking Change Discipline)
+  # 9A) API Surface Lock (Breaking Change Discipline) [boundary × reversibility × governance]
   # ------------------------------------------------------------
   API_Surface_Lock:
     purpose:
@@ -905,7 +1007,7 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
           after: "${EVIDENCE_ROOT}/api_surface_after.json"
 
   # ------------------------------------------------------------
-  # 10) Evidence Schema (Normalized, Machine-Parseable)
+  # 10) Evidence Schema (Normalized, Machine-Parseable) [evidence × verification × integrity]
   # ------------------------------------------------------------
   Evidence:
     paths:
@@ -1092,7 +1194,8 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
         - rules_that_reduce_existing_hard_gates
 
   # ------------------------------------------------------------
-  # 12) Anti-Optimization Clause (Never-Worse)
+  # 12) Anti-Optimization Clause (Never-Worse) [governance × integrity × constraint]
+  # Hard gates + forbidden states are additive-only — never removed
   # ------------------------------------------------------------
   Anti_Optimization_Clause:
     never_worse_doctrine:
@@ -1214,7 +1317,8 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
       rule: "Persist verified artifacts, not conversation. Chat is not authority."
 
   # ------------------------------------------------------------
-  # 17) Shannon Compaction (Concrete Trigger + Procedure)
+  # 17) Shannon Compaction (Concrete Trigger + Procedure) [compression × boundary × signal]
+  # Trigger: >500 lines OR >5 files → read structure+witnesses only, not full files
   # ------------------------------------------------------------
   Shannon_Compaction:
     trigger:
@@ -1373,7 +1477,8 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
       - format: "Prime Mermaid or equivalent FSM notation"
 
   # ------------------------------------------------------------
-  # 22) Lane Algebra Integration (MIN Operator + State-Lane Map)
+  # 22) Lane Algebra Integration (MIN Operator + State-Lane Map) [boundary × causality × integrity]
+  # Lane(Conclusion) = MIN(Lane(Premises)): A > B > C — forecast cannot upgrade to PASS
   # ------------------------------------------------------------
   Lane_Algebra_Integration:
     min_operator:
@@ -1482,3 +1587,120 @@ PRIME_CODER_SECRET_SAUCE_SKILL:
     conflict_rule:
       ordering: "prime-safety > prime-coder > phuc-* skills"
       resolution: "stricter wins on any gate conflict"
+
+  # ------------------------------------------------------------
+  # MD) MERMAID STATE DIAGRAM — RED/GREEN Gate Flow + Evidence Pipeline
+  # v2.3.0 addition: visual map of the coding evidence pipeline
+  # ------------------------------------------------------------
+
+```mermaid stateDiagram-v2
+[*] --> INTAKE_TASK
+INTAKE_TASK --> NULL_CHECK
+NULL_CHECK --> EXIT_NEED_INFO : null_detected
+NULL_CHECK --> FORECAST_FAILURES : inputs_defined
+
+FORECAST_FAILURES --> PLAN : premortem_complete
+PLAN --> RED_GATE : kent_gate_applicable
+PLAN --> PATCH : otherwise
+
+RED_GATE --> EXIT_BLOCKED : non_reproducible
+RED_GATE --> PATCH : red_confirmed
+
+state RED_GATE {
+  [*] --> CREATE_REPRO
+  CREATE_REPRO --> RUN_REPRO_MUST_FAIL
+  RUN_REPRO_MUST_FAIL --> [*] : exit_code_nonzero
+}
+
+PATCH --> TEST
+
+state TEST {
+  [*] --> RUN_TEST_SUITE
+  RUN_TEST_SUITE --> CHECK_REGRESSIONS
+  CHECK_REGRESSIONS --> [*]
+}
+
+TEST --> SECURITY_GATE : security_triggered
+TEST --> EVIDENCE_BUILD : otherwise
+TEST --> EXIT_BLOCKED : invariant_violation
+
+SECURITY_GATE --> EXIT_BLOCKED : security_failed
+SECURITY_GATE --> EVIDENCE_BUILD : security_passed
+
+state EVIDENCE_BUILD {
+  [*] --> BUILD_PLAN_JSON
+  BUILD_PLAN_JSON --> BUILD_TESTS_JSON
+  BUILD_TESTS_JSON --> BUILD_ENV_SNAPSHOT
+  BUILD_ENV_SNAPSHOT --> COMPUTE_BEHAVIOR_HASH
+  COMPUTE_BEHAVIOR_HASH --> [*]
+}
+
+EVIDENCE_BUILD --> SOCRATIC_REVIEW
+SOCRATIC_REVIEW --> PATCH : critique_requires_revision
+SOCRATIC_REVIEW --> PROMOTION_SWEEPS : promotion_candidate
+SOCRATIC_REVIEW --> FINAL_SEAL : otherwise
+
+PROMOTION_SWEEPS --> EXIT_BLOCKED : sweeps_failed
+PROMOTION_SWEEPS --> FINAL_SEAL : sweeps_passed
+
+FINAL_SEAL --> EXIT_PASS : evidence_complete_and_replay_stable
+FINAL_SEAL --> EXIT_BLOCKED : otherwise
+
+EXIT_PASS --> [*]
+EXIT_BLOCKED --> [*]
+EXIT_NEED_INFO --> [*]
+
+note right of RED_GATE
+  Kent Gate: repro MUST fail (RED)
+  before patch, then MUST pass (GREEN)
+  after patch. No patch without RED.
+end note
+
+note right of EVIDENCE_BUILD
+  Lane A artifacts required:
+  plan.json, tests.json, repro_red.log
+  repro_green.log, env_snapshot.json
+  behavior_hash.txt
+end note
+```
+
+  # ------------------------------------------------------------
+  # TP) THREE PILLARS INTEGRATION — LEK / LEAK / LEC
+  # prime-coder as LEK in action
+  # ------------------------------------------------------------
+
+  Three_Pillars_Integration:
+    pillar_role: LEK
+    description: |
+      prime-coder IS LEK (Law of Emergent Knowledge) in action.
+
+      LEK states: Intelligence(agent) = Memory × Care × Iteration.
+      Every red/green cycle is one iteration of this equation:
+        - Memory = evidence artifacts (tests.json, repro logs, env_snapshot)
+        - Care = smallest diff + strongest verification (Max Love ordering)
+        - Iteration = each PATCH → TEST → EVIDENCE_BUILD → SOCRATIC_REVIEW loop
+
+      A codebase with prime-coder discipline compounds knowledge over time:
+      each rung achieved (641 → 274177 → 65537) is a permanent increment
+      of the codebase's intelligence. The Never-Worse doctrine ensures this
+      knowledge cannot be lost — forbidden states grow additive-only.
+
+    LEK_relationship:
+      description: "prime-coder is the most direct implementation of LEK."
+      contract: "Each coding iteration produces typed artifacts. These artifacts ARE the memory of the LEK loop. Without prime-coder discipline, iterations produce chat output, not memory."
+      equation: "Intelligence(codebase) = Evidence_Artifacts × Red_Green_Care × Rung_Iterations"
+
+    LEAK_relationship:
+      description: "prime-coder enables LEAK by making artifacts machine-readable and portable."
+      contract: "PATCH_DIFF, tests.json, repro_red.log are typed artifacts that other agents can consume. A Skeptic agent reading a Solver's evidence bundle IS LEAK — asymmetric knowledge crossing a portal."
+      analogy: "The evidence schema IS the portal specification. typed artifacts = tradeable knowledge units."
+
+    LEC_relationship:
+      description: "The red/green gate is a crystallized LEC convention — TDD emerged from practice."
+      contract: "Kent Beck's TDD practice appeared across thousands of codebases, was named, documented, and adopted. prime-coder's Kent_Red_Green_Gate is LEC materialized as skill."
+      evidence: "The gate is in the skill because it emerged from incident patterns: tests written after code fail to catch regressions. LEC crystallized the lesson."
+
+    three_pillars_mapping:
+      LEK:  "prime-coder IS the LEK loop — red/green cycles compound codebase intelligence"
+      LEAK: "evidence schema enables LEAK — typed artifacts cross agent portals as asymmetric knowledge"
+      LEC:  "red/green gate is LEC — Kent's TDD pattern crystallized into a named convention"

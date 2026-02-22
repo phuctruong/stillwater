@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: prime-sql v1.0.0
+SKILL: prime-sql v1.2.0
 PURPOSE: Fail-closed SQL query design agent with null-safety, index analysis, explain plan interpretation, and financial arithmetic discipline.
 CORE CONTRACT: Every query PASS requires explain plan evidence, null-coverage proof, and no float in financial paths. Cartesian joins require explicit documented intent. SELECT * is never acceptable in production.
 HARD GATES: Index gate blocks queries lacking index coverage on large tables. Null gate blocks queries that coerce NULL to zero or empty. Financial gate blocks float arithmetic in any aggregation path. Explain gate requires EXPLAIN ANALYZE output for any query touching >1000 estimated rows.
@@ -11,12 +11,32 @@ LOAD FULL: always for production; quick block is for orientation only
 -->
 
 PRIME_SQL_SKILL:
-  version: 1.0.0
+  version: 1.2.0
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
   status: FINAL
   quote: "A query that returns wrong nulls is not a query — it is a trap. — adapted from C.J. Date"
+
+  # ============================================================
+  # MAGIC_WORD_MAP — Semantic Compression Index
+  # ============================================================
+  # Maps domain concepts to stillwater magic words for context compression.
+  # Load coordinates (e.g. "signal[T0]") instead of full definitions.
+  #
+  # query        → signal [T0]        — a query extracts causal-weight information from data
+  # schema       → coherence [T0]     — schema enforces that all parts reinforce a unified structure
+  # injection    → boundary [T0]      — SQL injection is a boundary violation (untrusted data crossing)
+  # migration    → reversibility [T0] — schema migration must be undoable or forward-compatible
+  # null         → constraint [T0]    — null semantics are boundary conditions reducing solution space
+  # index        → compression [T0]   — indexes compress lookup cost by pre-ordering signal
+  # explain plan → evidence [T1]      — explain plan is Lane A artifact proving query behavior
+  # financial    → integrity [T0]     — financial arithmetic requires NUMERIC to preserve integrity
+  # --- Three Pillars ---
+  # LEK          → signal [T0]        — SQL skill is learnable knowledge: null rules, index coverage, exact types
+  # LEAK         → boundary [T0]      — SQL expertise is asymmetric: null traps and float errors catch novices
+  # LEC          → coherence [T0]     — SQL conventions emerge: EXPLAIN gates, parameterization, NUMERIC become law
+  # ============================================================
 
   # ============================================================
   # PRIME SQL — Fail-Closed SQL Design Skill  [10/10]
@@ -31,7 +51,7 @@ PRIME_SQL_SKILL:
   # ============================================================
 
   # ------------------------------------------------------------
-  # A) Configuration
+  # A) Configuration  [coherence:T0]
   # ------------------------------------------------------------
   Config:
     EVIDENCE_ROOT: "evidence"
@@ -44,7 +64,7 @@ PRIME_SQL_SKILL:
       - "NVL(x, 0) applied to quantity columns"
 
   # ------------------------------------------------------------
-  # B) State Machine
+  # B) State Machine  [constraint:T0 → boundary:T0 → reversibility:T0]
   # ------------------------------------------------------------
   State_Machine:
     STATE_SET:
@@ -104,7 +124,7 @@ PRIME_SQL_SKILL:
       - NONDETERMINISTIC_ORDER_WITHOUT_TIEBREAKER
 
   # ------------------------------------------------------------
-  # C) Hard Gates (Domain-Specific)
+  # C) Hard Gates (Domain-Specific)  [boundary:T0 → verification:T1]
   # ------------------------------------------------------------
   Hard_Gates:
 
@@ -161,7 +181,7 @@ PRIME_SQL_SKILL:
       lane: A
 
   # ------------------------------------------------------------
-  # D) Null Analysis Protocol
+  # D) Null Analysis Protocol  [signal:T0 — null is absence of causal-weight information]
   # ------------------------------------------------------------
   Null_Analysis:
     per_column_required:
@@ -175,7 +195,7 @@ PRIME_SQL_SKILL:
       - equality_check_null_eq_null: "use IS NULL not = NULL"
 
   # ------------------------------------------------------------
-  # E) Index Analysis Protocol
+  # E) Index Analysis Protocol  [compression:T0 — indexes compress lookup signal]
   # ------------------------------------------------------------
   Index_Analysis:
     steps:
@@ -192,7 +212,7 @@ PRIME_SQL_SKILL:
     evidence_file: "${EVIDENCE_ROOT}/index_analysis.txt"
 
   # ------------------------------------------------------------
-  # F) Financial Arithmetic Policy
+  # F) Financial Arithmetic Policy  [integrity:T0 — exact types preserve numeric integrity]
   # ------------------------------------------------------------
   Financial_Arithmetic:
     allowed_types: [NUMERIC, DECIMAL]
@@ -206,7 +226,7 @@ PRIME_SQL_SKILL:
       - never_rely_on_implicit_cast: true
 
   # ------------------------------------------------------------
-  # G) Lane-Typed Claims
+  # G) Lane-Typed Claims  [evidence:T1 → verification:T1]
   # ------------------------------------------------------------
   Lane_Claims:
     Lane_A:
@@ -225,7 +245,7 @@ PRIME_SQL_SKILL:
       - denormalization_hints
 
   # ------------------------------------------------------------
-  # H) Verification Rung Target
+  # H) Verification Rung Target  [rung:T1 → 641/274177/65537:T1]
   # ------------------------------------------------------------
   Verification_Rung:
     default_target: 641
@@ -243,7 +263,7 @@ PRIME_SQL_SKILL:
       - data_exposure_audit
 
   # ------------------------------------------------------------
-  # I) Socratic Review Questions (SQL-Specific)
+  # I) Socratic Review Questions (SQL-Specific)  [verification:T1]
   # ------------------------------------------------------------
   Socratic_Review:
     questions:
@@ -257,7 +277,7 @@ PRIME_SQL_SKILL:
     on_failure: revise_query and recheck
 
   # ------------------------------------------------------------
-  # J) Evidence Schema
+  # J) Evidence Schema  [evidence:T1 — Lane A artifacts only gate PASS]
   # ------------------------------------------------------------
   Evidence:
     required_files:
@@ -274,3 +294,60 @@ PRIME_SQL_SKILL:
         - "${EVIDENCE_ROOT}/cartesian_intent.txt"
       user_input_present:
         - "${EVIDENCE_ROOT}/parameterization_proof.txt"
+
+  # ============================================================
+  # K) SQL Safety FSM — Visual State Diagram
+  # ============================================================
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> INTAKE: TASK_REQUEST
+    INTAKE --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO: schema/task missing
+    NULL_CHECK --> CLASSIFY_QUERY: ok
+    CLASSIFY_QUERY --> SCHEMA_LOAD
+    SCHEMA_LOAD --> NULL_ANALYSIS
+    NULL_ANALYSIS --> INDEX_ANALYSIS
+    INDEX_ANALYSIS --> QUERY_DRAFT
+    QUERY_DRAFT --> EXPLAIN_GATE: estimated_rows > 1000
+    QUERY_DRAFT --> FINANCIAL_GATE: financial columns touched
+    QUERY_DRAFT --> TEST_QUERY: otherwise
+    EXPLAIN_GATE --> EXIT_BLOCKED: plan missing/unacceptable
+    EXPLAIN_GATE --> FINANCIAL_GATE: financial path present
+    EXPLAIN_GATE --> TEST_QUERY: ok
+    FINANCIAL_GATE --> EXIT_BLOCKED: float detected
+    FINANCIAL_GATE --> TEST_QUERY: exact types confirmed
+    TEST_QUERY --> EVIDENCE_BUILD: pass
+    TEST_QUERY --> EXIT_BLOCKED: fail / cartesian detected
+    EVIDENCE_BUILD --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> QUERY_DRAFT: revision needed
+    SOCRATIC_REVIEW --> FINAL_SEAL: ok
+    FINAL_SEAL --> EXIT_PASS: evidence complete
+    FINAL_SEAL --> EXIT_BLOCKED: evidence missing
+    EXIT_PASS --> [*]
+    EXIT_BLOCKED --> [*]
+    EXIT_NEED_INFO --> [*]
+```
+
+  # ============================================================
+  # L) Three Pillars Integration
+  # ============================================================
+  Three_Pillars:
+    LEK_Law_of_Emergent_Knowledge:
+      summary: "SQL safety is teachable. Null semantics, index gates, NUMERIC types, and EXPLAIN plans
+        are concrete rules any practitioner can learn and apply systematically."
+      key_knowledge_units: [null_semantic_per_column, index_coverage_analysis, EXPLAIN_plan_interpretation,
+        NUMERIC_over_FLOAT, parameterized_queries]
+
+    LEAK_Law_of_Emergent_Asymmetric_Knowledge:
+      summary: "SQL expertise is asymmetric. Novices write COALESCE(amount, 0) in financial aggregations
+        and miss cartesian joins. Experts see these traps instantly. The gap = competitive advantage."
+      asymmetric_traps: [float_in_financial_sum, null_coercion_silencing_missing_data,
+        select_star_breaking_downstream, unparameterized_concatenation]
+
+    LEC_Law_of_Emergent_Conventions:
+      summary: "SQL conventions crystallize into law over time. EXPLAIN-before-large-query,
+        NUMERIC-for-money, and parameterized inputs started as best practices; they are now Lane A gates."
+      emerging_conventions: [explain_gate_as_default, numeric_decimal_standard,
+        parameterization_as_non_negotiable, null_semantic_documentation]

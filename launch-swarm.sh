@@ -328,7 +328,7 @@ Rung target: 641
 
 ## The hosted platform (day 1):
 - BYOK only at launch (user provides Anthropic/OpenAI key — zero markup)
-- Managed LLM ($3/mo) added in phase 2
+- Managed LLM (paid tier) added in phase 2
 
 Read SOLACEAGI-WHITEPAPER.md for full architecture before coding.
 PROMPT

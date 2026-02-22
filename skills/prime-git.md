@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: prime-git v1.0.0
+SKILL: prime-git v1.2.0
 PURPOSE: Fail-closed Git workflow agent enforcing branch strategy, commit message discipline, review gates, and history integrity.
 CORE CONTRACT: Every merge PASS requires: at least one reviewer approval (non-author), commit messages follow Conventional Commits format, force-push to main is blocked, and squash merges include a full changelog summary.
 HARD GATES: Force-push gate blocks any push --force to main/master/release branches. Review gate blocks merge without non-author approval. Message gate blocks commits without Conventional Commits format. Squash gate blocks squash-merge without a changelog entry summarizing squashed commits.
@@ -11,12 +11,32 @@ LOAD FULL: always for production; quick block is for orientation only
 -->
 
 PRIME_GIT_SKILL:
-  version: 1.0.0
+  version: 1.2.0
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
   status: FINAL
   quote: "History is a weapon. Guard it. — paraphrased from Linus Torvalds on git integrity"
+
+  # ============================================================
+  # MAGIC_WORD_MAP — Semantic Compression Index
+  # ============================================================
+  # Maps domain concepts to stillwater magic words for context compression.
+  # Load coordinates (e.g. "evidence[T1]") instead of full definitions.
+  #
+  # commit       → evidence [T1]        — a commit is an artifact demonstrating a claimed change happened
+  # branch       → boundary [T0]        — a branch is the surface separating in-progress from stable work
+  # merge        → portal [T1]          — merge is the routing layer that integrates branches
+  # history      → memory [T2]          — git history is persistence of state across time boundaries
+  # force-push   → reversibility [T0]   — force-push destroys reversibility of shared history
+  # secret leak  → boundary [T0]        — leaked secrets are boundary violations (private data in public layer)
+  # review gate  → governance [T1]      — four-eyes principle is a governance structure for code changes
+  # conventional commit → signal [T0]  — structured commit messages carry causal-weight information
+  # --- Three Pillars ---
+  # LEK          → evidence [T1]        — git skill is learnable: conventional commits, branch strategy, LFS policy
+  # LEAK         → memory [T2]          — git expertise is asymmetric: history rewrite risks and secret leaks catch novices
+  # LEC          → governance [T1]      — git conventions emerge: protected branches, review gates, CC format become law
+  # ============================================================
 
   # ============================================================
   # PRIME GIT — Fail-Closed Git Workflow Skill  [10/10]
@@ -31,7 +51,7 @@ PRIME_GIT_SKILL:
   # ============================================================
 
   # ------------------------------------------------------------
-  # A) Configuration
+  # A) Configuration  [coherence:T0 — config enforces unified workflow policy]
   # ------------------------------------------------------------
   Config:
     EVIDENCE_ROOT: "evidence"
@@ -46,7 +66,7 @@ PRIME_GIT_SKILL:
     BINARY_SIZE_WARN_BYTES: 1048576  # 1 MB — suggest LFS above this
 
   # ------------------------------------------------------------
-  # B) State Machine
+  # B) State Machine  [constraint:T0 → boundary:T0 → memory:T2]
   # ------------------------------------------------------------
   State_Machine:
     STATE_SET:
@@ -104,7 +124,7 @@ PRIME_GIT_SKILL:
       - MERGE_CONFLICT_MARKER_IN_COMMITTED_FILE
 
   # ------------------------------------------------------------
-  # C) Hard Gates (Domain-Specific)
+  # C) Hard Gates (Domain-Specific)  [reversibility:T0 → governance:T1]
   # ------------------------------------------------------------
   Hard_Gates:
 
@@ -157,7 +177,7 @@ PRIME_GIT_SKILL:
       lane: A
 
   # ------------------------------------------------------------
-  # D) Conventional Commits Protocol
+  # D) Conventional Commits Protocol  [signal:T0 — structured messages carry causal weight]
   # ------------------------------------------------------------
   Conventional_Commits:
     format: "<type>(<scope>): <description>"
@@ -184,7 +204,7 @@ PRIME_GIT_SKILL:
       - subjects longer than 72 characters
 
   # ------------------------------------------------------------
-  # E) Branch Strategy
+  # E) Branch Strategy  [boundary:T0 — branches separate stable from in-progress]
   # ------------------------------------------------------------
   Branch_Strategy:
     recommended_model: "GitHub Flow (main + feature branches) or GitFlow for complex releases"
@@ -202,7 +222,7 @@ PRIME_GIT_SKILL:
       - long_lived_personal_branches_over_2_weeks_without_merge
 
   # ------------------------------------------------------------
-  # F) Lane-Typed Claims
+  # F) Lane-Typed Claims  [evidence:T1 → verification:T1]
   # ------------------------------------------------------------
   Lane_Claims:
     Lane_A:
@@ -221,7 +241,7 @@ PRIME_GIT_SKILL:
       - interactive_rebase_workflow_hints
 
   # ------------------------------------------------------------
-  # G) Verification Rung Target
+  # G) Verification Rung Target  [rung:T1 → 641/274177:T1]
   # ------------------------------------------------------------
   Verification_Rung:
     default_target: 641
@@ -236,7 +256,7 @@ PRIME_GIT_SKILL:
       - history_graph_integrity_verified
 
   # ------------------------------------------------------------
-  # H) Socratic Review Questions (Git-Specific)
+  # H) Socratic Review Questions (Git-Specific)  [verification:T1]
   # ------------------------------------------------------------
   Socratic_Review:
     questions:
@@ -250,7 +270,7 @@ PRIME_GIT_SKILL:
     on_failure: revise_commits and recheck
 
   # ------------------------------------------------------------
-  # I) Evidence Schema
+  # I) Evidence Schema  [evidence:T1 — commit_lint + secret_scan = Lane A artifacts]
   # ------------------------------------------------------------
   Evidence:
     required_files:
@@ -263,3 +283,58 @@ PRIME_GIT_SKILL:
         - "${EVIDENCE_ROOT}/merge_strategy_log.txt"
       squash_merge:
         - "${EVIDENCE_ROOT}/squash_changelog.txt"
+
+  # ============================================================
+  # J) Git Safety FSM — Visual State Diagram
+  # ============================================================
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> INTAKE: TASK_REQUEST
+    INTAKE --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO: repo/operation missing
+    NULL_CHECK --> CLASSIFY_OPERATION: ok
+    CLASSIFY_OPERATION --> BRANCH_AUDIT
+    BRANCH_AUDIT --> EXIT_BLOCKED: force-push to protected branch
+    BRANCH_AUDIT --> COMMIT_LINT: ok
+    COMMIT_LINT --> EXIT_BLOCKED: fails conventional format
+    COMMIT_LINT --> SECRET_SCAN: ok
+    SECRET_SCAN --> EXIT_BLOCKED: secret in commit
+    SECRET_SCAN --> REVIEW_CHECK: clean
+    REVIEW_CHECK --> EXIT_BLOCKED: merge without non-author approval
+    REVIEW_CHECK --> MERGE_STRATEGY_GATE: approved
+    MERGE_STRATEGY_GATE --> EXIT_BLOCKED: squash without changelog
+    MERGE_STRATEGY_GATE --> HISTORY_VERIFY: ok
+    HISTORY_VERIFY --> EVIDENCE_BUILD
+    EVIDENCE_BUILD --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> COMMIT_LINT: revision needed
+    SOCRATIC_REVIEW --> FINAL_SEAL: ok
+    FINAL_SEAL --> EXIT_PASS: evidence complete
+    FINAL_SEAL --> EXIT_BLOCKED: evidence missing
+    EXIT_PASS --> [*]
+    EXIT_BLOCKED --> [*]
+    EXIT_NEED_INFO --> [*]
+```
+
+  # ============================================================
+  # K) Three Pillars Integration
+  # ============================================================
+  Three_Pillars:
+    LEK_Law_of_Emergent_Knowledge:
+      summary: "Git discipline is teachable. Conventional Commits format, branch protection rules,
+        four-eyes review, and secret scanning are concrete practices any team can adopt."
+      key_knowledge_units: [conventional_commits_format, protected_branch_config,
+        non_author_review_requirement, secret_scan_before_push, squash_changelog_rule]
+
+    LEAK_Law_of_Emergent_Asymmetric_Knowledge:
+      summary: "Git expertise is asymmetric. Novices force-push to main, commit secrets,
+        and write 'fix stuff' messages. Experts see these as permanent damage."
+      asymmetric_traps: [force_push_destroys_shared_history, secret_in_commit_permanent,
+        wip_commit_messages_lost_context, amend_on_pushed_shared_commit]
+
+    LEC_Law_of_Emergent_Conventions:
+      summary: "Git conventions crystallize into law. Conventional Commits, protected branches,
+        and secret scanning in CI started as team choices; they are now Lane A gates."
+      emerging_conventions: [conventional_commits_as_standard, branch_protection_as_default,
+        secret_scan_in_CI_pipeline, four_eyes_review_for_all_merges]

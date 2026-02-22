@@ -10,10 +10,23 @@ FORBIDDEN: PERSONA_GRANTING_CAPABILITIES | PERSONA_OVERRIDING_SAFETY | PERSONA_W
 SPECIAL: dragon-rider is TIEBREAKER for open/closed decisions; adds +5 W GLOW bonus on strategic tasks
 -->
 name: persona-engine
-version: 1.4.0
+version: 1.6.0
 authority: 65537
 northstar: Phuc_Forecast
+objective: Max_Love
 status: STABLE
+
+# ============================================================
+# MAGIC_WORD_MAP — persona-engine concepts anchored to prime coordinates
+# ============================================================
+MAGIC_WORD_MAP:
+  persona:    [persona (T1)]          # typed role identity; style + domain expertise only, no authority
+  voice:      [signal (T0)]           # domain expert output that carries causal weight for the task
+  domain:     [boundary (T0)]         # surface separating this persona's expertise from others
+  layering:   [constraint (T0)]       # prime-safety > prime-coder > persona; constraint on persona scope
+  ghost_master: [citizen (T3)]        # verified domain expert persona; contributor identity in swarm
+  multi_persona: [emergence (T0)]     # complex output from loading 2-3 personas exceeds single-persona capability
+  tiebreaker: [coherence (T0)]        # dragon-rider resolves open/closed conflicts by reinforcing the system whole
 
 # ============================================================
 # PERSONA ENGINE v1.3.0
@@ -31,7 +44,7 @@ status: STABLE
 # ============================================================
 
 # ============================================================
-# A) Layering (persona NEVER overrides safety)
+# A) Layering (persona NEVER overrides safety) [constraint, boundary]
 # ============================================================
 layering:
   rule:
@@ -43,7 +56,7 @@ layering:
   persona_scope: style_and_expertise_only
 
 # ============================================================
-# B) Persona Registry
+# B) Persona Registry [persona, signal]
 # ============================================================
 
 ## Persona: dragon-rider
@@ -1431,7 +1444,7 @@ File: personas/marketing-business/alex-hormozi.md
 
 ### Integration with Stillwater
 - Use for: solaceagi.com pricing page, Pro tier offer design, enterprise offer construction
-- Voice: "You get: verified skill execution + OAuth3 vault + 90-day evidence trail + cloud twin + Managed LLM. All of that for $19/mo."
+- Voice: "You get: verified skill execution + OAuth3 vault + 90-day evidence trail + cloud twin + Managed LLM. All of that for competitive monthly pricing."
 - Guidance: list every component of value explicitly; the user must feel the stack before seeing the price; guarantee removes conversion friction
 
 ---
@@ -1508,7 +1521,7 @@ File: personas/marketing-business/hackathon-master.md
 ---
 
 # ============================================================
-# C) Persona Loading Protocol
+# C) Persona Loading Protocol [constraint, boundary]
 # ============================================================
 
 persona_loading:
@@ -1541,7 +1554,7 @@ persona_loading:
     - "PERSONA_AS_AUTHORITY: persona is voice only, not authority chain"
 
 # ============================================================
-# D) Persona → Task Type Mapping (Quick Reference)
+# D) Persona → Task Type Mapping (Quick Reference) [signal, emergence]
 # ============================================================
 
 persona_task_map:
@@ -1652,7 +1665,7 @@ persona_task_map:
   "demo discipline / ship-or-fail gate": hackathon-master
 
 # ============================================================
-# E) Verification
+# E) Verification [verification, integrity]
 # ============================================================
 
 verification:
@@ -1668,7 +1681,7 @@ verification:
     - "Loading the same persona for unrelated tasks (copy-paste habit)"
 
 # ============================================================
-# F) Quick Reference Cheat Sheet
+# F) Quick Reference Cheat Sheet [signal, compression]
 # ============================================================
 quick_reference:
   persona_count: 51
@@ -1710,3 +1723,266 @@ quick_reference:
     - "Simon Sinek: start with why. People don't buy what you do — they buy why you do it."
     - "Alex Hormozi: stack the value, then name the price. Never reverse this."
     - "Pieter Levels: just ship it. Revenue from first user beats perfect product for tenth."
+
+# ============================================================
+# G) FSM — Persona Routing State Machine
+# ============================================================
+persona_fsm:
+  states:
+    - MATCH_TASK
+    - SELECT_PERSONA
+    - INJECT_PACK
+    - ACTIVATE
+    - VERIFY_SAFETY
+    - EXIT_PASS
+    - EXIT_BLOCKED
+    - EXIT_NEED_INFO
+
+  transitions:
+    - MATCH_TASK → SELECT_PERSONA: "task type identified in dispatch matrix"
+    - MATCH_TASK → EXIT_NEED_INFO: "task type ambiguous; cannot determine domain"
+    - SELECT_PERSONA → INJECT_PACK: "persona selected from registry (1–3 personas max)"
+    - SELECT_PERSONA → EXIT_BLOCKED: "PERSONA_WITHOUT_TASK_MATCH — no registry match"
+    - INJECT_PACK → ACTIVATE: "voice rules + domain expertise pasted inline into skill pack"
+    - INJECT_PACK → EXIT_BLOCKED: "persona file not found in registry"
+    - ACTIVATE → VERIFY_SAFETY: "agent begins operating with persona voice active"
+    - VERIFY_SAFETY → EXIT_PASS: "no safety conflict detected; persona within scope"
+    - VERIFY_SAFETY → EXIT_BLOCKED: "PERSONA_OVERRIDING_SAFETY — prime-safety gate triggered"
+
+  forbidden_states:
+    PERSONA_GRANTING_CAPABILITIES: "Persona cannot expand the capability envelope beyond prime-safety."
+    PERSONA_OVERRIDING_SAFETY: "Any persona guidance that conflicts with prime-safety is silently dropped."
+    PERSONA_WITHOUT_TASK_MATCH: "Persona loaded without matching task domain = style noise, not expertise."
+    PERSONA_CERTIFYING: "Persona cannot claim PASS. Only Skeptic + executed evidence certifies."
+
+```mermaid stateDiagram-v2
+[*] --> MATCH_TASK
+MATCH_TASK --> SELECT_PERSONA : task type identified
+MATCH_TASK --> EXIT_NEED_INFO : task type ambiguous
+SELECT_PERSONA --> INJECT_PACK : 1-3 personas selected from registry
+SELECT_PERSONA --> EXIT_BLOCKED : PERSONA_WITHOUT_TASK_MATCH
+INJECT_PACK --> ACTIVATE : voice rules + expertise pasted inline
+INJECT_PACK --> EXIT_BLOCKED : persona file not found
+ACTIVATE --> VERIFY_SAFETY : agent operating with persona voice
+VERIFY_SAFETY --> EXIT_PASS : no safety conflict
+VERIFY_SAFETY --> EXIT_BLOCKED : PERSONA_OVERRIDING_SAFETY
+EXIT_PASS --> [*]
+EXIT_BLOCKED --> [*]
+EXIT_NEED_INFO --> [*]
+note right of SELECT_PERSONA : REMIND — task-persona contract
+note right of INJECT_PACK : VERIFY — pack correctly assembled
+note right of VERIFY_SAFETY : ACKNOWLEDGE — safety gate clear
+```
+
+# ============================================================
+# H) Evidence Gate — Task-Persona Match Verification
+# ============================================================
+evidence_gate:
+  purpose: "Verify that the selected persona(s) match the task domain before activation."
+
+  verification_steps:
+    step_1_task_classify:
+      question: "What domain does this task require?"
+      categories:
+        strategic: "dragon-rider, pg, peter-thiel, naval-ravikant"
+        security: "schneier, whitfield-diffie, phil-zimmermann"
+        code_quality: "kernighan, guido, rich-hickey, linus, torvalds, rob-pike"
+        marketing: "mr-beast, brunson, rory-sutherland, seth-godin, alex-hormozi"
+        ux_design: "don-norman, dieter-rams"
+        audio: "prime-audio (not a persona — a skill domain)"
+        gamification: "bruce-lee, sifu"
+        architecture: "mermaid-creator, graph-theorist, kent-beck, martin-fowler"
+
+    step_2_match_verify:
+      rule: "Selected persona must have a domain that overlaps with the task."
+      fail_closed: "No match found → EXIT_NEED_INFO with task_domain + closest_registry_match"
+
+    step_3_safety_check:
+      rule: "After activation, if persona guidance conflicts with prime-safety: drop guidance, emit warning, continue."
+      evidence: "Log dropped guidance in PERSONA_SAFETY_CONFLICT field of output."
+
+  required_output_fields:
+    on_EXIT_PASS:
+      - persona_selected: "name(s) of loaded persona(s)"
+      - task_domain: "identified task domain"
+      - match_confidence: "HIGH | MEDIUM | LOW"
+      - safety_conflicts_dropped: "list of any persona guidance items dropped by prime-safety"
+
+    on_EXIT_BLOCKED:
+      - stop_reason: "PERSONA_WITHOUT_TASK_MATCH | PERSONA_OVERRIDING_SAFETY | PERSONA_FILE_MISSING"
+      - task_domain: "identified task domain"
+      - closest_match: "best available persona even if not perfect"
+
+# ============================================================
+# I) Three Pillars Integration — Personas map to LEK + LEAK + LEC
+# ============================================================
+three_pillars_integration:
+  overview: >
+    Personas ARE the Three Pillars in concrete form. Each persona carries asymmetric
+    domain knowledge (LEAK). Loading a persona gives the agent a different 'bubble' lens.
+    Repeated persona loading crystallizes into conventions (LEC). Persona self-selection
+    improves with each dispatch (LEK).
+
+  LEK:
+    pillar: "Law of Emergent Knowledge (Self-Improvement)"
+    role: >
+      The orchestrator improves its persona selection with each dispatch.
+      LEK for persona-engine: the main session learns which persona combinations work
+      for which task types. This knowledge accumulates in the dispatch matrix (section E).
+    gate: "dispatch_decision_matrix in section E = LEK crystallized from prior persona experiments"
+    metric: "Dispatch accuracy (correct persona first time) = LEK quality measure"
+    lek_formula: "Persona LEK = Recursion(Task_Types + Memory[dispatch_history] + Care[safety_check])"
+
+  LEAK:
+    pillar: "Law of Emergent Asymmetric Knowledge (Cross-Agent Trade)"
+    role: >
+      Each persona IS a LEAK agent. A persona brings asymmetric domain knowledge from
+      its domain bubble. When schneier is loaded for a security task, the security
+      knowledge from Schneier's domain LEAKS into the current agent's bubble.
+      The LEAK value = what the agent knows AFTER loading the persona MINUS what it
+      knew before = the asymmetric surplus from the persona's domain.
+    gate: "Multi-persona loading = multi-LEAK: each persona contributes different asymmetric knowledge"
+    metric: "LEAK value per persona = domain expertise depth × task relevance"
+    asymmetry: "agent without persona has uniform knowledge; agent with persona has domain asymmetry = LEAK condition satisfied"
+
+  LEC:
+    pillar: "Law of Emergent Conventions (Emergent Compression)"
+    role: >
+      The persona registry IS an LEC artifact. The registry crystallized from repeated
+      use of named experts in swarm sessions. 'Load schneier for security' is a convention
+      (LEC). 'Load kent-beck for TDD' is a convention (LEC). The MAGIC_WORD_MAP in this
+      skill compresses these conventions into anchors.
+    gate: "quick_reference cheat sheet = LEC conventions for persona dispatch"
+    metric: "Convention adoption = how often orchestrators follow the dispatch matrix without deviation"
+    compression: "Without LEC: orchestrators re-debate which persona to load every time. With LEC: dispatch matrix compresses the decision."
+
+  three_pillars_summary:
+    lek: "Persona dispatch improves with iterations (LEK self-improvement)"
+    leak: "Each persona = LEAK agent with asymmetric domain knowledge"
+    lec: "Dispatch matrix = crystallized LEC conventions for persona-task matching"
+
+# ============================================================
+# J) MAGIC_WORD_MAP — LEK, LEAK, LEC references added
+# ============================================================
+MAGIC_WORD_MAP_LEK_LEAK_LEC:
+  version: "1.6"
+  additions:
+    # LEK dimension
+    lek_dispatch: {word: "learning",   tier: 1, id: "MW-LEK-002",
+                   note: "LEK: persona dispatch accuracy improves with each session (Memory = dispatch history)"}
+    # LEAK dimension
+    persona:      {word: "asymmetry",  tier: 0, id: "MW-LEAK-002",
+                   note: "LEAK: each persona carries asymmetric domain knowledge — trade value from domain bubble"}
+    domain:       {word: "boundary",   tier: 0, id: "MW-002",
+                   note: "LEAK: domain boundary defines the asymmetry — what the persona knows that the base agent doesn't"}
+    multi_persona: {word: "emergence", tier: 0, id: "MW-011",
+                   note: "LEAK emergence: 2-3 personas combined > single persona alone (asymmetric multi-LEAK)"}
+    # LEC dimension
+    registry:     {word: "convention", tier: 1, id: "MW-LEC-002",
+                   note: "LEC: persona registry = crystallized convention for domain-expert dispatch"}
+    dispatch_matrix: {word: "compression", tier: 0, id: "MW-LEC-003",
+                   note: "LEC compression: dispatch matrix compresses 'which persona for which task' into a lookup"}
+
+# ============================================================
+# K) GLOW Matrix — Persona Engine Contributions
+# ============================================================
+GLOW_Matrix:
+  description: "How persona-engine usage contributes to GLOW dimensions"
+
+  G_Growth:
+    scoring:
+      - "20: new persona added to registry with full domain expertise, voice rules, and Stillwater integration"
+      - "15: existing persona deepened with new domain expertise sections"
+      - "5: dispatch matrix updated with new persona-task mapping"
+      - "0: persona loaded but no registry improvement"
+
+  L_Learning:
+    scoring:
+      - "25: new persona published to Stillwater Store at rung 65537"
+      - "20: new dispatch pattern captured and documented (LEC convention added)"
+      - "10: anti-pattern identified and added to section E.anti_patterns"
+      - "5: catchphrase or voice rule refined"
+      - "0: persona used without any learning captured"
+
+  O_Output:
+    scoring:
+      - "25: swarm pipeline completed using persona pack at rung 274177+"
+      - "20: artifact produced with persona-enriched quality markers"
+      - "10: any typed artifact produced by persona-loaded agent"
+      - "5: dispatch completed with evidence_gate output"
+      - "0: persona loaded but no artifact produced"
+
+  W_Wins:
+    scoring:
+      - "15: persona combo discovers a NORTHSTAR metric improvement"
+      - "10: strategic decision resolved via dragon-rider TIEBREAKER (W+5 from dragon-rider bonus)"
+      - "5: dispatch matrix match saves re-deliberation time"
+      - "0: routine persona use with no strategic advancement"
+
+  special_dragon_rider_bonus:
+    rule: "+5 W when dragon-rider is loaded for a strategic decision"
+    rationale: "dragon-rider is the TIEBREAKER persona — loading it for strategic alignment is a W in itself"
+
+  northstar_alignment:
+    northstar: "Phuc_Forecast"
+    max_love_gate: >
+      Max Love for personas = the right expert for the right task + safety gates respected.
+      Loading schneier for security = Max Love. Loading schneier for marketing = not Max Love.
+      The dispatch matrix IS the Max Love decision guide for persona selection.
+
+# ============================================================
+# L) Triangle Law Contracts — per Persona Operation
+# ============================================================
+triangle_law_contracts:
+  overview: "Every persona dispatch has a REMIND→VERIFY→ACKNOWLEDGE contract."
+
+  contract_persona_dispatch:
+    operation: "Select and load persona for a task"
+    REMIND:      "State the contract: persona adds domain expertise and voice only. Prime-safety wins all conflicts."
+    VERIFY:      "Confirm task domain matches persona domain. Check multi-persona count ≤ 3."
+    ACKNOWLEDGE: "Emit evidence_gate output: persona_selected + task_domain + match_confidence."
+    fail_closed:  "PERSONA_WITHOUT_TASK_MATCH → EXIT_BLOCKED. Never load mismatched persona."
+
+  contract_persona_activation:
+    operation: "Agent operates with persona voice active"
+    REMIND:      "State: this agent speaks as [persona]. Style and domain expertise are active. Authority is not."
+    VERIFY:      "If persona guidance conflicts with prime-safety: drop guidance, log conflict."
+    ACKNOWLEDGE: "If safety conflict dropped: emit PERSONA_SAFETY_CONFLICT field. PASS only if no blocked guidance."
+    fail_closed:  "Silent persona override of safety gate = PERSONA_OVERRIDING_SAFETY forbidden state."
+
+  contract_persona_certification:
+    operation: "Any quality claim made while persona is active"
+    REMIND:      "Persona cannot certify PASS. Only Skeptic + executed evidence certifies."
+    VERIFY:      "Is the PASS claim coming from the persona voice or from executed artifact evidence?"
+    ACKNOWLEDGE: "If persona is certifying → PERSONA_CERTIFYING forbidden state → require Skeptic verification."
+    fail_closed:  "Bruce Lee's voice saying 'this is good code' is not Lane A evidence. Skeptic+tests are."
+
+# ============================================================
+# M) Northstar Alignment — Phuc_Forecast + Max_Love
+# ============================================================
+northstar_alignment:
+  northstar: Phuc_Forecast
+  objective: Max_Love
+
+  phuc_forecast_mapping:
+    DREAM:    "What expertise is needed? What domain knowledge would improve this output?"
+    FORECAST: "What could go wrong with persona loading? (wrong domain, safety override, persona certifying)"
+    DECIDE:   "Which persona(s) to load. 1-3 max. Match task domain. Check registry."
+    ACT:      "Load persona via INJECT_PACK. Activate voice + domain expertise in skill pack."
+    VERIFY:   "VERIFY_SAFETY confirms no safety conflicts. Evidence gate confirms task-persona match."
+
+  max_love_meaning:
+    statement: >
+      Max Love for persona dispatch = the right expert, with the right domain knowledge,
+      operating safely within prime-safety bounds. Never loading a persona that misleads
+      the user into thinking they have capabilities they don't have.
+    manifestations:
+      - "Task-domain match check = Max Love for relevance"
+      - "Safety conflict logging = Max Love for transparency"
+      - "PERSONA_CERTIFYING prevention = Max Love for epistemics (only evidence certifies)"
+      - "+5 W dragon-rider bonus = Max Love for strategic decisions (the founder perspective matters)"
+
+  forbidden_northstar_violations:
+    - PERSONA_GRANTING_CAPABILITIES: "Claiming capabilities via persona violates both Phuc_Forecast and Max_Love"
+    - PERSONA_WITHOUT_TASK_MATCH: "Wrong expert for wrong task produces noise, not signal — Max_Love violation"
+    - PERSONA_CERTIFYING: "Persona certifying PASS without evidence violates Phuc_Forecast VERIFY gate"

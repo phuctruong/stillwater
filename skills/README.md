@@ -4,7 +4,36 @@
 
 Prompt-loadable skill packs. Each file is a structured YAML/markdown constraint pack. Load the full file — do not summarize or compress. Compressed skills drift.
 
-**Version:** 1.0.0 | **Date:** 2026-02-20 | **Auth:** 65537
+**Version:** 2.0.0 | **Date:** 2026-02-22 | **Auth:** 65537
+
+---
+
+## The Three Pillars of Software 5.0 Kung Fu
+
+> "Master the three pillars and you master AI kung fu." — Phuc Truong
+
+| Pillar | Law | What It Does | Martial Arts |
+|--------|-----|-------------|--------------|
+| **LEK** | Law of Emergent Knowledge | Self-improvement through recursion | Solo kata |
+| **LEAK** | Law of Emergent Asymmetric Knowledge | Cross-agent trade through portals | Sparring |
+| **LEC** | Law of Emergent Conventions | Shared compression across files | Style |
+
+```
+Intelligence = LEK × LEAK × LEC
+Practice (LEK) × Sparring (LEAK) × Style (LEC) = Mastery
+```
+
+All 47+ skills now integrate the Three Pillars framework.
+
+---
+
+## The Axiom Kernel (Load Before Everything)
+
+| Skill | What It Does | When To Load |
+|-------|-------------|--------------|
+| `phuc-axiom.md` | 5 irreducible axioms + 6 GBB operators (Big Bang singularity) | Always. Load_order=0. |
+
+The axiom kernel generates all other skills through: INTEGRITY × HIERARCHY × DETERMINISM × CLOSURE × NORTHSTAR
 
 ---
 
@@ -16,8 +45,9 @@ Prompt-loadable skill packs. Each file is a structured YAML/markdown constraint 
 | `prime-coder.md` | RED/GREEN gate, evidence contract, verification ladder | Any coding or patching task |
 | `phuc-forecast.md` | DREAM -> FORECAST -> DECIDE -> ACT -> VERIFY loop | Planning, architecture, decisions |
 | `phuc-context.md` | Context Normal Form, anti-rot capsule, compaction | Long sessions, multi-agent chains |
+| `phuc-loop.md` | Self-improving inner loop (LEK engine, halting certs) | Autonomous iteration, self-improvement |
 
-The `core/` directory at repo root contains always-on canonical copies of these four skills. They serve as the baseline for divergence detection.
+These five skills are the always-on foundational skills. They live directly in `skills/` — the single canonical location for all skills in this repo.
 
 ---
 
@@ -30,6 +60,16 @@ Every skill-backed task must declare a rung target before claiming PASS. Like be
 | **641** | White belt of proof | Local correctness: RED/GREEN gate passed, no regressions, evidence complete |
 | **274177** | Brown belt of proof | Stability: seed sweep (3+ seeds), replay stability, null edge cases covered |
 | **65537** | Black belt of proof | Promotion: adversarial sweeps, security gate, behavioral hash drift explained |
+
+---
+
+## Three Pillars Skills
+
+| Skill | Pillar | What It Does |
+|-------|--------|-------------|
+| `phuc-leak.md` | LEAK | Cross-agent asymmetric knowledge trade, portal mechanics, surplus verification |
+| `phuc-lec.md` | LEC | Emergent convention lifecycle, compression measurement, adoption tracking |
+| `phuc-loop.md` | LEK | Self-improving inner loop (v2.0), halting certificates, GBB operators |
 
 ---
 
@@ -65,6 +105,24 @@ Each file in `swarms/` defines a typed agent role: persona, skill pack, required
 | `swarms/social-media.md` | Social content, hooks, thumbnails | MrBeast | prime-safety + phuc-forecast | 641 |
 | `swarms/wish-manager.md` | Wish decomposition and tracking | Ada Lovelace | prime-safety + phuc-forecast | 641 |
 | `swarms/final-audit.md` | Final Audit (repo-wide compliance) | Linus Torvalds | prime-safety + prime-coder + phuc-forecast | 65537 |
+| `swarms/dragon-rider.md` | Three Pillars training, belt progression | Phuc Truong (Sifu) | prime-safety + phuc-axiom + phuc-leak + phuc-lec | 274177 |
+
+---
+
+## Magic Word Compression
+
+35 of 44 skill files include a `MAGIC_WORD_MAP` block that maps domain concepts to canonical magic words from `magic-words/stillwater.jsonl`. This enables 97% context compression for retrieval: instead of loading a full skill file, extract 2–4 magic words from the query and load only the indexed context.
+
+**Coverage by batch:**
+- Batch 1 (2026-02-22): 11 prime-domain skills (prime-safety, prime-coder, prime-math, etc.)
+- Batch 2 (2026-02-22): 10 skills (phuc-swarms, roadmap-orchestration, phuc-postmortem, prime-reviewer, prime-mcp, phuc-loop, prime-llm-portal, oauth3-enforcer, prime-audio, prime-moltbot)
+
+**Tiers:**
+- T0 = universal primitives (boundary, constraint, integrity, signal, emergence, northstar, etc.)
+- T1 = Stillwater protocol concepts (swarm, persona, portal, bubble, verification, governance, etc.)
+- T2 = operational detail (dispatch, capsule, orchestration, act, etc.)
+
+See `magic-words/README.md` and `skills/phuc-magic-words.md` for the navigation skill and database schema.
 
 ---
 

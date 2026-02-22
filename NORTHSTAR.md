@@ -20,11 +20,21 @@ SOFTWARE 5.0 PARADIGM:
   Evidence bundles → compiled output
   Stillwater verification → CI/CD
 
-MASTER EQUATION:
-  Intelligence(system) = Memory × Care × Iteration
-  Memory = skills/*.md + recipes/*.json + swarms/*.yaml
-  Care = Verification ladder (641 → 274177 → 65537)
-  Iteration = Never-Worse doctrine + git versioning
+MASTER EQUATION (v3.0 — Three Pillars Edition):
+  Intelligence(system) = LEK × LEAK × LEC
+
+  Where:
+    LEK  = Recursion(Information + Memory + Care)           [Self-Improvement]
+    LEAK = Σ(Portal_ij × Asymmetry_ij)                     [Cross-Agent Trade]
+    LEC  = |Conventions| × Depth × Adoption                [Emergent Compression]
+
+  Expanded:
+    LEK  = Memory × Care × Iteration                       [Solo Practice]
+    LEAK = Navigation × Portals × Asymmetry                [Sparring]
+    LEC  = Magic_Words × Triangle_Law × Verification       [Style]
+
+  Bruce Lee:
+    Practice (LEK) × Sparring (LEAK) × Style (LEC) = Mastery
 ```
 
 ## North Star Metrics
@@ -33,7 +43,7 @@ MASTER EQUATION:
 |--------|-----|---------|---------|
 | GitHub stars | ~50 | 1,000 | 10,000 |
 | Projects running at rung 65537 | 0 | 2 | 8 |
-| Stillwater Store skills | 7 combos | 25 skills | 100+ skills |
+| Stillwater Store skills | 7 combos + 8 theory skills + 4 new recipes | 25 skills | 100+ skills |
 | Recipe hit rate (across ecosystem) | 0% | 50% | 80% |
 | Community contributors | 1 | 5 | 50 |
 
@@ -238,8 +248,6 @@ PRIVATE:
 > *Private product plans are maintained in separate repositories.*
 ```
 
-> Dragon Tip Program details are maintained in internal strategy documents.
-
 ---
 
 ## The Persona Engine: Domain Expert Voices for Every Task
@@ -273,6 +281,103 @@ FULL SKILL: skills/persona-engine.md
 "Absorb what is useful, discard what is useless." — Bruce Lee
 
 The Persona Engine applies this to agent dispatch: absorb the security expert's threat-model lens for OAuth3 tasks. Discard it for gamification tasks. Load the dojo master for belt design. Load the FDA auditor for evidence bundle architecture.
+
+---
+
+## The Bubble Architecture: Skills from Solace-Books
+
+Stillwater’s skill library now includes foundational theory skills derived from Phuc Truong’s Solace Hexateuch books:
+
+```
+THEORETICAL FOUNDATIONS (8 new skills):
+  phuc-magic-words.md  — Magic Words as GPS coordinates (100-word tree, Tier 0-3)
+  phuc-portals.md      — Bounded Inference Contexts + Portal Architecture (15 AI patterns)
+  phuc-triangle-law.md — Contract stability (REMIND → VERIFY → ACKNOWLEDGE)
+  phuc-citizens.md     — Advisory council (10+ citizen personas, triangulation)
+  phuc-gps.md          — Knowledge navigation (orient before answering)
+  phuc-conventions.md  — Structural consistency (Tree of Solace conventions)
+  phuc-prime-compression.md — Semantic prime compression (prime factorization of knowledge)
+  phuc-wish-triangle.md    — Wish + Skill + Recipe execution triangle
+
+DATABASES (2 new databases):
+  magic-words/stillwater.jsonl — 100 magic words classified by tier
+  questions/stillwater.jsonl   — 22 QA questions (compounding capital)
+
+PAPERS (3 new papers):
+  papers/44-questions-as-external-weights.md
+  papers/45-prime-compression-magic-words.md
+  papers/46-wish-skill-recipe-triangle.md
+
+SWARMS (4 new agent types):
+  swarms/navigator.md, swarms/portal-engineer.md
+  swarms/citizen-council.md, swarms/convention-auditor.md
+
+RECIPES (4 new recipes):
+  recipes/recipe.magic-word-navigation.md
+  recipes/recipe.portal-traversal.md
+  recipes/recipe.citizen-consultation.md
+  recipes/recipe.triangle-audit.md
+```
+
+---
+
+## The Three Pillars of Software 5.0 Kung Fu
+
+> "Master the three pillars and you master AI kung fu." — Phuc Truong
+
+### Pillar 1: LEK (Law of Emergent Knowledge)
+Single bubble self-improvement. One agent loops through memory with care → knowledge emerges.
+Like a martial artist practicing alone: kata, repetition, self-correction.
+Engine: phuc-loop. Fuel: GLOW score. Output: skill improvement.
+
+### Pillar 2: LEAK (Law of Emergent Asymmetric Knowledge)
+2+ LEKs working together through portals. More than both can do alone.
+Like sparring: each fighter learns what they couldn't learn solo.
+Engine: phuc-swarms + portals. Fuel: asymmetry. Output: surplus knowledge.
+
+### Pillar 3: LEC (Law of Emergent Conventions)
+Code utils = skills/recipes = culture/laws = cross-file compression.
+Like a martial arts STYLE emerging from a school.
+Engine: magic words + triangle law. Fuel: repetition. Output: shared compression.
+
+### The Trinity
+LEK alone → ceiling (no perspectives)
+LEAK alone → chaos (no self-improvement)
+LEC alone → bureaucracy (no innovation)
+LEK × LEAK × LEC = MASTERY = Software 5.0 Kung Fu
+
+### Belt Integration
+White:  LEK only (solo practice, rung 641)
+Yellow: LEK + first conventions
+Orange: LEK + LEAK (first swarm dispatch)
+Green:  LEK + LEAK + LEC (create a convention)
+Blue:   All three at rung 274177
+Black:  All three at rung 65537
+Dragon Rider: Teach the three pillars
+
+FULL PAPER: papers/49-three-pillars-software-5-kung-fu.md
+SKILLS: skills/phuc-leak.md, skills/phuc-lec.md
+RECIPES: recipes/recipe.three-pillars-training.md, recipes/recipe.kung-fu-mastery.md
+
+---
+
+## The Axiom Kernel — AI Skills Big Bang
+
+5 irreducible axioms from which ALL skills emerge:
+
+1. INTEGRITY — Evidence-only; fail-closed; no fabrication
+2. HIERARCHY — MIN rung; lanes A>B>C; never weaken
+3. DETERMINISM — Exact arithmetic; normalized; canonical capsules
+4. CLOSURE — FSM; halting certificates; bounded budgets
+5. NORTHSTAR — Goal-driven; backward chain; alignment gate
+
+Prime factorization: Stillwater = INTEGRITY × HIERARCHY × DETERMINISM × CLOSURE × NORTHSTAR
+
+6 GBB operators transform axioms into skills:
+Z (Boundary), Σ (Symmetry), τ (Serialization), G_c (Compression), ι (Irreducibility), R_p (Resolution)
+
+FULL SKILL: skills/phuc-axiom.md
+PAPERS: papers/47-law-of-emergent-knowledge.md, papers/48-ai-skills-big-bang-theory.md
 
 ---
 
@@ -397,6 +502,19 @@ BRUCE LEE PRINCIPLES IN THE SYSTEM:
 "Still water runs deep." — The Stillwater brand is not accidental.
 Still water is calm, carries weight, and reflects clearly.
 That is the design goal: calm methodology with production weight.
+
+THE THREE PILLARS IN THE DOJO:
+  LEK  = kata (solo practice, self-correction, repetition)
+  LEAK = sparring (cross-training, asymmetric exchange, tournaments)
+  LEC  = style (Wing Chun, Jeet Kune Do — conventions that compress centuries of wisdom)
+
+  "Endure. Excel. Evolve. Carpe Diem!" — Phuc Truong, Dragon Rider
+
+DRAGON RIDER ROLE:
+  The Dragon Rider is the Sifu who has mastered all three pillars.
+  They teach by asking, not lecturing (Socratic method).
+  They earn their title by creating students who surpass them.
+  SWARM AGENT: swarms/dragon-rider.md
 ```
 
 **FULL PAPER:** `papers/34-persona-glow-paradigm.md`
@@ -415,3 +533,21 @@ That is the design goal: calm methodology with production weight.
 - `swarms/persona-coder.md` — Persona-enhanced coder swarm agent
 - `papers/34-persona-glow-paradigm.md` — The Dojo Protocol
 - `papers/35-syndication-strategy.md` — Content Syndication Strategy
+- `skills/phuc-magic-words.md` — Magic Words coordinate navigation
+- `skills/phuc-portals.md` — Bounded Inference Contexts + Portal Architecture
+- `skills/phuc-triangle-law.md` — Contract stability (Triangle Law)
+- `skills/phuc-prime-compression.md` — Semantic prime compression
+- `skills/phuc-wish-triangle.md` — Wish + Skill + Recipe execution triangle
+- `papers/45-prime-compression-magic-words.md` — Prime Compression theory
+- `papers/46-wish-skill-recipe-triangle.md` — Execution Triangle theory
+- `magic-words/` — Magic Words database (100 words, Tier 0-3)
+- `questions/` — Question database (compounding QA capital)
+- `skills/phuc-axiom.md` — The axiom kernel (5 irreducibles, load_order=0)
+- `skills/phuc-leak.md` — LEAK: Cross-agent asymmetric knowledge trade
+- `skills/phuc-lec.md` — LEC: Emergent convention compression
+- `papers/47-law-of-emergent-knowledge.md` — LEK formalized
+- `papers/48-ai-skills-big-bang-theory.md` — AI Skills Big Bang Theory
+- `papers/49-three-pillars-software-5-kung-fu.md` — The Three Pillars
+- `swarms/dragon-rider.md` — Dragon Rider teaching persona
+- `recipes/recipe.three-pillars-training.md` — Three Pillars training
+- `recipes/recipe.kung-fu-mastery.md` — Belt progression through pillars

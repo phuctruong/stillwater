@@ -10,12 +10,28 @@ RUNG_TARGET: 65537 always — hooks are production security surfaces with full s
 LOAD FULL: always for production; quick block is for orientation only
 -->
 PRIME_HOOKS_SKILL:
-  version: 1.0.0
+  version: 1.1.0
   profile: strict
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
   status: FINAL
+
+  # ============================================================
+  # MAGIC_WORD_MAP — Semantic Compression Index
+  # ============================================================
+  # Maps domain concepts to stillwater magic words for context compression.
+  # Load coordinates (e.g. "portal[T1]") instead of full definitions.
+  #
+  # hook         → portal [T1]          — hook is the routing layer between lifecycle events and handlers
+  # trigger      → causality [T0]       — hook trigger is a directional dependency: event → handler
+  # guard        → constraint [T0]      — security guard reduces the action space to safe states only
+  # security declaration → boundary [T0] — declaration defines what crosses the hook's privilege boundary
+  # silent failure → drift [T3]         — silent failures are undetected deviations from expected behavior
+  # injection    → portal [T1]          — content injection routes text into the agent's context pipeline
+  # blocking hook → constraint [T0]    — blocking enforces a boundary condition on tool execution space
+  # UV script    → compression [T0]     — single-file UV scripts compress runtime + deps to minimal form
+  # ============================================================
 
   # ============================================================
   # PRIME HOOKS — CLAUDE CODE HOOK AUTHORING WITH SECURITY GATES
@@ -42,7 +58,7 @@ PRIME_HOOKS_SKILL:
   # ============================================================
 
   # ------------------------------------------------------------
-  # A) Portability + Configuration (Hard)
+  # A) Portability + Configuration (Hard)  [coherence:T0 — no absolute paths preserves portability]
   # ------------------------------------------------------------
   Portability:
     rules:
@@ -61,7 +77,7 @@ PRIME_HOOKS_SKILL:
       - hook_scripts_must_live_under_HOOKS_DIR: true
 
   # ------------------------------------------------------------
-  # B) Layering (Never Weaken Public)
+  # B) Layering (Never Weaken Public)  [constraint:T0 — stricter wins all conflicts]
   # ------------------------------------------------------------
   Layering:
     layering_rule:
@@ -78,7 +94,7 @@ PRIME_HOOKS_SKILL:
         - omitting_security_declarations_for_any_hook
 
   # ------------------------------------------------------------
-  # C) Profiles (Budgets Only; Hard Gates Never Skipped)
+  # C) Profiles (Budgets Only; Hard Gates Never Skipped)  [constraint:T0 — budgets adjust; gates never skip]
   # ------------------------------------------------------------
   Profiles:
     - name: strict
@@ -96,7 +112,7 @@ PRIME_HOOKS_SKILL:
         - must_emit_budget_reduction_log: true
 
   # ============================================================
-  # 0) Hook Philosophy (Bruce Lee Framing)
+  # 0) Hook Philosophy (Bruce Lee Framing)  [causality:T0 → boundary:T0]
   # ============================================================
   Hook_Philosophy:
     principle:
@@ -116,7 +132,7 @@ PRIME_HOOKS_SKILL:
       - "Hooks that fail silently are forbidden states. Log or exit non-zero."
 
   # ============================================================
-  # 1) Hook Type Catalog (All 13 Claude Code Event Types)
+  # 1) Hook Type Catalog (All 13 Claude Code Event Types)  [portal:T1 → causality:T0]
   # ============================================================
   Hook_Type_Catalog:
     principle:
@@ -313,7 +329,7 @@ PRIME_HOOKS_SKILL:
         lane: A
 
   # ============================================================
-  # 2) Closed State Machine (Fail-Closed Runtime)
+  # 2) Closed State Machine (Fail-Closed Runtime)  [constraint:T0 → verification:T1]
   # ============================================================
   State_Machine:
     STATE_SET:
@@ -379,7 +395,7 @@ PRIME_HOOKS_SKILL:
       - NONDETERMINISTIC_OUTPUT
 
   # ============================================================
-  # 2A) Applicability Predicates (Deterministic; No Hidden Branching)
+  # 2A) Applicability Predicates (Deterministic; No Hidden Branching)  [coherence:T0]
   # ============================================================
   Applicability:
     principle:
@@ -429,7 +445,7 @@ PRIME_HOOKS_SKILL:
           - config_patch_file_exists == true
 
   # ============================================================
-  # 3) Security Gate (Always HIGH — Shell Privileges)
+  # 3) Security Gate (Always HIGH — Shell Privileges)  [boundary:T0 → constraint:T0]
   # ============================================================
   Security_Gate:
     priority: HIGH
@@ -555,7 +571,7 @@ PRIME_HOOKS_SKILL:
           - tool_versions: "dict"
 
   # ============================================================
-  # 4) UV Single-File Script Discipline
+  # 4) UV Single-File Script Discipline  [compression:T0 — UV scripts = minimal sufficient runtime]
   # ============================================================
   UV_Script_Discipline:
     principle:
@@ -604,7 +620,7 @@ PRIME_HOOKS_SKILL:
       - "Secrets must never appear in logs."  # [A]
 
   # ============================================================
-  # 5) Configuration Structure (.claude/settings.json)
+  # 5) Configuration Structure (.claude/settings.json)  [memory:T2 — settings persist hook registrations]
   # ============================================================
   Claude_Config_Structure:
     config_file: ".claude/settings.json"
@@ -695,7 +711,7 @@ PRIME_HOOKS_SKILL:
       - "Changing hook command path is a patch change."  # [B]
 
   # ============================================================
-  # 6) UV Script Templates (Concrete, Runnable)
+  # 6) UV Script Templates (Concrete, Runnable)  [evidence:T1 — runnable templates are Lane A artifacts]
   # ============================================================
   UV_Script_Templates:
     note: "All templates use exact shebang. Replace placeholder values before use."
@@ -1125,7 +1141,7 @@ PRIME_HOOKS_SKILL:
             main()
 
   # ============================================================
-  # 7) Testing Policy
+  # 7) Testing Policy  [verification:T1 → evidence:T1]
   # ============================================================
   Testing_Policy:
     principle:
@@ -1168,7 +1184,7 @@ PRIME_HOOKS_SKILL:
             - all_passed: bool
 
   # ============================================================
-  # 8) Null vs Zero Distinction Policy (Hard)
+  # 8) Null vs Zero Distinction Policy (Hard)  [signal:T0 — null ≠ zero: distinct causal meanings]
   # ============================================================
   Null_vs_Zero_Policy:
     core_distinction:
@@ -1189,7 +1205,7 @@ PRIME_HOOKS_SKILL:
       - TREATING_ABSENT_FIELD_AS_EMPTY_STRING
 
   # ============================================================
-  # 9) Verification Ladder (Rung Targets)
+  # 9) Verification Ladder (Rung Targets)  [rung:T1 → 65537:T1 — all hooks default to highest rung]
   # ============================================================
   Verification_Ladder:
     rung_target_policy:
@@ -1230,7 +1246,7 @@ PRIME_HOOKS_SKILL:
           - all_forbidden_states_verified_absent: true
 
   # ============================================================
-  # 10) Socratic Check (Pre-Emission Reflexion)
+  # 10) Socratic Check (Pre-Emission Reflexion)  [verification:T1]
   # ============================================================
   Socratic_Check:
     before_emit_hook:
@@ -1250,7 +1266,7 @@ PRIME_HOOKS_SKILL:
       on_failure: [revise_implementation, fix_security_declaration, rerun_tests]
 
   # ============================================================
-  # 11) Lane-Typed Claims Summary
+  # 11) Lane-Typed Claims Summary  [evidence:T1 → signal:T0]
   # ============================================================
   Lane_Claims:
     Lane_A:
@@ -1280,7 +1296,7 @@ PRIME_HOOKS_SKILL:
         - "Stop continuation hooks are best introduced after simpler hooks are stable."
 
   # ============================================================
-  # 12) Output Contract
+  # 12) Output Contract  [coherence:T0 — all outputs reinforce unified security standard]
   # ============================================================
   Output_Contract:
     required_outputs:
@@ -1325,7 +1341,7 @@ PRIME_HOOKS_SKILL:
         - verification_rung_achieved
 
   # ============================================================
-  # 13) Evidence Schema
+  # 13) Evidence Schema  [evidence:T1 — security manifest + tests = Lane A artifacts]
   # ============================================================
   Evidence:
     paths:
@@ -1389,7 +1405,7 @@ PRIME_HOOKS_SKILL:
       fail_closed_if_missing_or_unparseable: true
 
   # ============================================================
-  # 14) Loop Control (Bounded Budget)
+  # 14) Loop Control (Bounded Budget)  [constraint:T0 — budgets reduce action space to safe bounds]
   # ============================================================
   Loop_Control:
     budgets:
@@ -1425,7 +1441,7 @@ PRIME_HOOKS_SKILL:
       - if_two_iterations_no_improvement: revert_to_last_best_known
 
   # ============================================================
-  # 15) Source Grounding Discipline (Hard)
+  # 15) Source Grounding Discipline (Hard)  [evidence:T1 — grounded claims only; no vibe assertions]
   # ============================================================
   Source_Grounding:
     allowed_grounding:
@@ -1440,7 +1456,7 @@ PRIME_HOOKS_SKILL:
       - asserting_a_hook_is_safe_without_security_declaration
 
   # ============================================================
-  # 16) Anti-Patterns (Named Hook Failure Modes)
+  # 16) Anti-Patterns (Named Hook Failure Modes)  [drift:T3 — named failure modes prevent undetected drift]
   # ============================================================
   Anti_Patterns:
     Vibe_Security:
@@ -1494,7 +1510,7 @@ PRIME_HOOKS_SKILL:
       forbidden_state: BLOCKING_HOOK_WITHOUT_EXPLICIT_ALLOW_REASON
 
   # ============================================================
-  # 17) Anti-Optimization Clause (Never-Worse)
+  # 17) Anti-Optimization Clause (Never-Worse)  [reversibility:T0 — gates are strictly additive]
   # ============================================================
   Anti_Optimization_Clause:
     never_worse_doctrine:
@@ -1508,7 +1524,7 @@ PRIME_HOOKS_SKILL:
         - any_relaxation_requires_major_version_and_deprecation_plan: true
 
   # ============================================================
-  # 18) Integration Principles (Cross-Skill Fusion)
+  # 18) Integration Principles (Cross-Skill Fusion)  [coherence:T0 — all skills reinforce each other]
   # ============================================================
   Integration_Principles:
     with_prime_safety:

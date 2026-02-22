@@ -11,10 +11,23 @@ FORBIDDEN: SCOPE_CREEP | SKIP_REVIEW | UNBOXED_TIME | GLOW_WITHOUT_SHIP | PERSON
 LOAD FULL: always for production; quick block for orientation only
 -->
 name: hackathon
-version: 1.0.0
+version: 1.1.0
 authority: 65537
 northstar: Phuc_Forecast
 status: STABLE
+
+# ============================================================
+# MAGIC_WORD_MAP — hackathon concepts anchored to prime coordinates
+# ============================================================
+MAGIC_WORD_MAP:
+  sprint:     [act (T2)]              # ACT phase with time box; executing the build plan with checkpoints
+  phase:      [boundary (T0)]         # surface separating one hackathon step from the next; sequential not skippable
+  glow:       [glow (T0)]             # G+L+O+W semantic density metric; 1.5x multiplier when shipped in time box
+  pitch:      [signal (T0)]           # deliverable that carries causal weight; hook that makes demo undeniable
+  time_box:   [constraint (T0)]       # reduces the solution space; the constraint IS the feature
+  ship:       [evidence (T1)]         # git commit with HACKATHON tag; proof that demo is not a promise
+  persona:    [persona (T1)]          # domain expert role loaded per phase; not decoration, domain routing
+  challenge_brief: [goal (T3)]        # defined desired end state with measurable success criteria for the sprint
 
 # ============================================================
 # HACKATHON SKILL v1.0.0
@@ -36,7 +49,7 @@ status: STABLE
 # ============================================================
 
 # ============================================================
-# A) Core Contract
+# A) Core Contract [signal, northstar]
 # ============================================================
 
 core_contract:
@@ -47,7 +60,7 @@ core_contract:
   relationship_to_roadmap: "Every ROADMAP phase IS a hackathon. Hackathon skill formalizes what roadmap-based development already does — but makes the sprint structure explicit."
 
 # ============================================================
-# B) The Eight Phases
+# B) The Eight Phases [boundary, causality]
 # ============================================================
 
 phases:
@@ -305,7 +318,7 @@ phases:
       - "[ ] Celebrate (time-boxed success is worth celebrating)"
 
 # ============================================================
-# C) Timing Templates
+# C) Timing Templates [constraint, act]
 # ============================================================
 
 timing_templates:
@@ -383,7 +396,7 @@ timing_templates:
       glow_target: "≥75 base (100 with 1.5x multiplier)"
 
 # ============================================================
-# D) GLOW Multiplier (Hackathon Mode)
+# D) GLOW Multiplier (Hackathon Mode) [glow, evidence]
 # ============================================================
 
 glow_multiplier:
@@ -408,7 +421,7 @@ glow_multiplier:
     - "MULTIPLIER_WITHOUT_REVIEW: applying multiplier when REVIEW phase was skipped"
 
 # ============================================================
-# E) Hackathon Roles (Mapped to Swarms)
+# E) Hackathon Roles (Mapped to Swarms) [persona, emergence]
 # ============================================================
 
 roles:
@@ -484,7 +497,7 @@ roles:
     glow_bonus: "none (mechanical role)"
 
 # ============================================================
-# F) FSM (State Machine)
+# F) FSM (State Machine) [coherence, causality]
 # ============================================================
 
 fsm:
@@ -554,7 +567,7 @@ fsm:
       condition: "Git commit with HACKATHON tag exists + ROADMAP updated"
 
 # ============================================================
-# G) Forbidden States
+# G) Forbidden States [constraint, boundary]
 # ============================================================
 
 forbidden_states:
@@ -593,7 +606,7 @@ forbidden_states:
     note: "Permitted in Lightning template; forbidden in Marathon and Weekend templates where domain expertise separation matters"
 
 # ============================================================
-# H) Integration with Other Skills
+# H) Integration with Other Skills [coherence, alignment]
 # ============================================================
 
 integration:
@@ -632,7 +645,7 @@ integration:
     rule3: "SHIP commit message cites NORTHSTAR metric delta"
 
 # ============================================================
-# I) Quick Reference Cheat Sheet
+# I) Quick Reference Cheat Sheet [signal, glow]
 # ============================================================
 
 quick_reference:

@@ -1,13 +1,26 @@
 PRIME_MATH_SECRET_SKILL:
-  version: 2.2.0
+  version: 2.3.0
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
   profile: private
   includes_public_skill: canon/prime-math/skills/prime_math_public_skill_v1.0.0.md
-  secret_pack_id: stillwater-prime-math-secret-v2.2.0
+  secret_pack_id: stillwater-prime-math-secret-v2.3.0
   sealing_policy: 641-274177-65537
   status: FINAL
+
+  # ============================================================
+  # MAGIC_WORD_MAP — prime-math concepts anchored to prime coordinates
+  # ============================================================
+  MAGIC_WORD_MAP:
+    proof:      [verification (T1)]     # executable witness that claim holds; not prose confidence
+    exact:      [integrity (T0)]        # no float in verification path; exact arithmetic preserves coherence
+    fraction:   [compression (T0)]      # Fraction(1,3) = lossless rational; no precision lost
+    witness:    [evidence (T1)]         # artifact proving mathematical claim; compute:// or proof:// handle
+    counterexample: [constraint (T0)]   # reduces solution space; one disconfirming instance falsifies universal
+    rung:       [rung (T1)]             # 641=local, 274177=stability, 65537=proof-grade promotion
+    dual_witness: [coherence (T0)]      # two independent witnesses both pointing to same truth
+    domain:     [boundary (T0)]         # over ℝ vs ℤ vs ℤ/pℤ; undeclared domain = UNKNOWN
 
   # ============================================================
   # PRIME MATH — SECRET SKILL (v2.2.0)  [10/10]
@@ -88,7 +101,7 @@ PRIME_MATH_SECRET_SKILL:
     compatibility: solace_cli_prime_math_ab_v1
 
   # ------------------------------------------------------------
-  # 0) Global Hard Rules (apply to every state)
+  # 0) Global Hard Rules (apply to every state) [integrity, verification]
   # ------------------------------------------------------------
   Global_Hard_Rules:
     truth_priority_non_override:
@@ -296,7 +309,7 @@ PRIME_MATH_SECRET_SKILL:
       - unresolved_lemmas
 
   # ------------------------------------------------------------
-  # 0.5) Math Red→Green Protocol (mechanical verification analog)
+  # 0.5) Math Red→Green Protocol (mechanical verification analog) [verification, evidence]
   # ------------------------------------------------------------
   Math_Red_Green_Protocol:
     purpose:
@@ -318,7 +331,7 @@ PRIME_MATH_SECRET_SKILL:
       - if_SEAL_not_met: status=UNKNOWN
 
   # ------------------------------------------------------------
-  # 0.5A) Deterministic Compute Kernel (F1 exact arithmetic)
+  # 0.5A) Deterministic Compute Kernel (F1 exact arithmetic) [integrity, compression]
   # ------------------------------------------------------------
   Deterministic_Compute_Kernel:
     applies_when:
@@ -677,7 +690,7 @@ PRIME_MATH_SECRET_SKILL:
     S17: Scale_Rarity_Priors
 
   # ------------------------------------------------------------
-  # 4) Verification Ladder (mechanical checklists)
+  # 4) Verification Ladder (mechanical checklists) [verification, rung]
   # ------------------------------------------------------------
   Verification_Ladder:
     RUNG_641:
@@ -877,7 +890,7 @@ PRIME_MATH_SECRET_SKILL:
           note: "Proof is incomplete until all lemmas are at least QUALIFIED"
 
   # ------------------------------------------------------------
-  # 10) Exact Arithmetic Policy (Hard in Verification Path)
+  # 10) Exact Arithmetic Policy (Hard in Verification Path) [integrity, compression]
   # ------------------------------------------------------------
   Exact_Arithmetic_Policy:
     # This is the math-domain analog of prime-coder's exact arithmetic policy.
@@ -907,7 +920,7 @@ PRIME_MATH_SECRET_SKILL:
         - "pow(a, e, m) via math.exp → float — FORBIDDEN"
 
   # ------------------------------------------------------------
-  # 11) Null vs Zero Distinction (Math Context)
+  # 11) Null vs Zero Distinction (Math Context) [integrity, causality]
   # ------------------------------------------------------------
   Null_vs_Zero_Math:
     core_principle:
@@ -939,7 +952,7 @@ PRIME_MATH_SECRET_SKILL:
       - null_search_result_not_equal_to_exhaustive_proof: true
 
   # ------------------------------------------------------------
-  # 12) Anti-Patterns (Named Math Failure Modes)
+  # 12) Anti-Patterns (Named Math Failure Modes) [constraint, evidence]
   # ------------------------------------------------------------
   Math_Anti_Patterns:
     Proof_TODO:
@@ -983,7 +996,7 @@ PRIME_MATH_SECRET_SKILL:
       fix: "Dual-status reporting required: classical_status + framework_status + scope."
 
   # ------------------------------------------------------------
-  # 13) Quick Reference (Cheat Sheet)
+  # 13) Quick Reference (Cheat Sheet) [signal, compression]
   # ------------------------------------------------------------
   Quick_Reference:
     task_family_cheat_sheet:

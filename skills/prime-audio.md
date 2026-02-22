@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines):
-SKILL: prime-audio v1.0.0
+SKILL: prime-audio v1.1.0
 PURPOSE: Generic audio discipline for any project using deterministic synthesis or audio analysis. Seed-driven: same seed + inputs = reproducible audio. STT round-trip verification required before PASS. WAV-only in verification path (no lossy formats). No float in verification arithmetic (Fraction/Decimal). Spectral analysis for quality gates. Integrates with Stillwater evidence bundles.
 CORE CONTRACT: Deterministic audio requires explicit seed. STT round-trip proves intelligibility. WAV format preserves byte-exact reproducibility. Decimal/Fraction arithmetic in all verification comparisons. Generator trace required per synthesis. Extends prime-safety.
 HARD GATES: Missing seed = BLOCKED (IMPLICIT_SEED_DEFAULT). Float in WER or hash = BLOCKED. Lossy format in verification = BLOCKED. Nondeterministic output = BLOCKED. STT gate skipped = BLOCKED for rung_641+.
@@ -10,14 +10,40 @@ DEPENDENCY: prime-safety (always first)
 -->
 
 PRIME_AUDIO_SKILL:
-  version: 1.0.0
+  version: 1.2.0
   authority: 65537
   extends: prime-safety
-  northstar: Stillwater — Deterministic, Verifiable Audio for Any Project
-  objective: "Generic audio discipline: seed-driven, STT-verified, evidence-bundled"
+  northstar: Phuc_Forecast
+  objective: Max_Love
+  purpose: "Generic audio discipline: seed-driven, STT-verified, evidence-bundled"
   status: STABLE
   rung_default: 641
   visibility: PUBLIC  # OSS — part of stillwater
+
+  # ============================================================
+  # MAGIC_WORD_MAP
+  # ============================================================
+  Magic_Word_Map:
+    version: "1.1"
+    skill: "prime-audio"
+    mappings:
+      voice:       {word: "signal",       tier: 0, id: "MW-006", note: "audio output carries causal weight — reliably predictive of intelligibility state"}
+      synthesis:   {word: "emergence",    tier: 0, id: "MW-011", note: "audio synthesis is emergence — system-level properties from individual DSP components"}
+      deterministic: {word: "integrity",  tier: 0, id: "MW-012", note: "deterministic synthesis = internal consistency + resistance to corruption across runs"}
+      frequency:   {word: "compression",  tier: 0, id: "MW-005", note: "frequency-domain analysis is lossless compression of time-domain audio information"}
+      seed:        {word: "causality",    tier: 0, id: "MW-009", note: "seed = causal anchor; same cause = same audio effect (determinism axiom)"}
+      signal_path: {word: "signal",       tier: 0, id: "MW-006b", note: "audio processing pipeline is a signal path; integrity requires end-to-end verification"}
+      wer:         {word: "verification", tier: 1, id: "MW-031", note: "WER is the audio verification gate — intelligibility proof through STT round-trip"}
+      # LEK dimension
+      lek_audio:   {word: "learning",     tier: 1, id: "MW-LEK-001",
+                    note: "LEK (self-improvement): each seed sweep iteration improves understanding of synthesis stability — LEK for the audio pipeline"}
+      # LEAK dimension
+      leak_audio:  {word: "asymmetry",    tier: 1, id: "MW-LEAK-001",
+                    note: "LEAK (cross-agent trade): audio evidence bundles are LEAK artifacts — paudio shares verification discipline with any project"}
+      # LEC dimension
+      lec_audio:   {word: "convention",   tier: 1, id: "MW-LEC-001",
+                    note: "LEC (emergent conventions): STT round-trip + WAV PCM hash + seed policy = audio verification conventions crystallized by community use"}
+    compression_note: "T0=universal primitives, T1=Stillwater protocol concepts, T2=operational details"
 
 # ============================================================
 # PRIME-AUDIO — Public OSS Skill (stillwater)
@@ -50,7 +76,7 @@ PRIME_AUDIO_SKILL:
 # ============================================================
 
 # ------------------------------------------------------------
-# A) Core Determinism Principle (Lane A — Non-Negotiable)
+# A) Core Determinism Principle (Lane A — Non-Negotiable) [T0: integrity + signal]
 # ------------------------------------------------------------
 Determinism_Principle:
   invariant: "same seed + same inputs → identical audio bytes"
@@ -70,7 +96,7 @@ Determinism_Principle:
     - seed_0_is_valid_and_distinct_from_null: true
 
 # ------------------------------------------------------------
-# B) Audio Format Policy
+# B) Audio Format Policy [T0: integrity + compression]
 # ------------------------------------------------------------
 Audio_Format_Policy:
   verification_path:
@@ -88,7 +114,7 @@ Audio_Format_Policy:
     - reason: "WAV headers contain metadata that may vary across tools"
 
 # ------------------------------------------------------------
-# C) STT Verification Gate
+# C) STT Verification Gate [T0: signal + emergence]
 # ------------------------------------------------------------
 STT_Verification:
   purpose: "Prove that synthesized audio is intelligible — the audio channel is working"
@@ -131,7 +157,7 @@ STT_Verification:
         - seed_used: "int"
 
 # ------------------------------------------------------------
-# D) Spectral Analysis Gate (rung_274177+)
+# D) Spectral Analysis Gate (rung_274177+) [T0: compression + signal]
 # ------------------------------------------------------------
 Spectral_Analysis:
   purpose: "Detect audio artifacts, clipping, silence, or off-target formants"
@@ -153,7 +179,7 @@ Spectral_Analysis:
     spectral_metrics.json: "all metrics as Decimal strings"
 
 # ------------------------------------------------------------
-# E) Seed Sweep (rung_274177+ Stability Gate)
+# E) Seed Sweep (rung_274177+ Stability Gate) [T0: integrity]
 # ------------------------------------------------------------
 Seed_Sweep:
   purpose: "Prove synthesis is deterministic across multiple seeds"
@@ -196,7 +222,7 @@ Generator_Trace:
     - if_trace_missing: "GENERATOR_TRACE_MISSING — status=BLOCKED"
 
 # ------------------------------------------------------------
-# G) Exact Arithmetic Policy (Hard)
+# G) Exact Arithmetic Policy (Hard) [T0: integrity + compression]
 # ------------------------------------------------------------
 Exact_Arithmetic_Policy:
   verification_path:
@@ -237,7 +263,7 @@ Evidence_Bundle:
     - rung_numbers_match_stillwater_ladder: true
 
 # ------------------------------------------------------------
-# I) State Machine (Closed FSM — Generic)
+# I) State Machine (Closed FSM — Generic) [T0: constraint + integrity]
 # ------------------------------------------------------------
 State_Machine:
   states:
@@ -323,7 +349,7 @@ Verification_Ladder:
     maps_to_stillwater_gates: [G7, G10, G11, G12, G13, G14]
 
 # ------------------------------------------------------------
-# K) NORTHSTAR Alignment
+# K) NORTHSTAR Alignment [T0: northstar]
 # ------------------------------------------------------------
 NORTHSTAR_Alignment:
   project: "Stillwater — Verification Layer"
@@ -359,7 +385,7 @@ Integration_Guide:
     note: "prime-safety ALWAYS first. prime-audio after prime-safety."
 
 # ------------------------------------------------------------
-# M) Anti-Patterns (Dojo Lessons)
+# M) Anti-Patterns (Dojo Lessons) [T0: emergence + integrity]
 # ------------------------------------------------------------
 Anti_Patterns:
   "The Confident Silence":
@@ -378,3 +404,179 @@ Anti_Patterns:
     problem: "Seed sweep uses seeds [1, 2, 3, 4, 5] — trivially sequential."
     lesson: "A sweep that can't fail is not a gate. Choose diverse seeds."
     fix: "Seeds from different ranges: [42, 1337, 99999, 7777777, first_prime_above_billion]."
+
+# ------------------------------------------------------------
+# N) Mermaid Diagram — Audio Pipeline FSM
+# ------------------------------------------------------------
+```mermaid stateDiagram-v2
+[*] --> INIT
+INIT --> INTAKE : synthesis request received
+INTAKE --> NULL_CHECK : always
+NULL_CHECK --> EXIT_NEED_INFO : seed==null OR primary_input==null
+NULL_CHECK --> SEED_VALIDATE : all non-null
+SEED_VALIDATE --> EXIT_BLOCKED : seed not explicit integer (IMPLICIT_SEED_DEFAULT)
+SEED_VALIDATE --> SYNTHESIZE : valid seed
+SYNTHESIZE --> WAV_WRITE : always
+WAV_WRITE --> STT_VERIFY : speech audio
+STT_VERIFY --> EXIT_BLOCKED : WER exceeds threshold (STT_GATE_FAILED)
+STT_VERIFY --> EVIDENCE_BUILD : rung_target == 641
+STT_VERIFY --> SPECTRAL_ANALYZE : rung_target >= 274177
+SPECTRAL_ANALYZE --> EXIT_BLOCKED : clipping or silence gate fails
+SPECTRAL_ANALYZE --> SEED_SWEEP : rung_target >= 274177
+SEED_SWEEP --> EXIT_BLOCKED : sweep fails
+SEED_SWEEP --> EVIDENCE_BUILD : rung_target == 274177
+SEED_SWEEP --> ADVERSARIAL_SWEEP : rung_target == 65537
+ADVERSARIAL_SWEEP --> EXIT_BLOCKED : adversarial cases fail
+ADVERSARIAL_SWEEP --> EVIDENCE_BUILD : all pass
+EVIDENCE_BUILD --> SOCRATIC_REVIEW : always
+SOCRATIC_REVIEW --> SYNTHESIZE : revision needed + budget allows
+SOCRATIC_REVIEW --> FINAL_SEAL : all checks pass
+FINAL_SEAL --> EXIT_PASS : evidence complete
+FINAL_SEAL --> EXIT_BLOCKED : evidence incomplete (GENERATOR_TRACE_MISSING)
+EXIT_PASS --> [*]
+EXIT_BLOCKED --> [*]
+EXIT_NEED_INFO --> [*]
+note right of NULL_CHECK : REMIND — seed contract
+note right of STT_VERIFY : VERIFY — intelligibility proof
+note right of EVIDENCE_BUILD : ACKNOWLEDGE — evidence bundle
+```
+
+# ------------------------------------------------------------
+# O) Three Pillars Integration — LEK + LEAK + LEC for Audio
+# ------------------------------------------------------------
+Three_Pillars_Integration:
+  overview: >
+    prime-audio maps to all three pillars of the Software 5.0 Kung Fu system.
+    LEK: audio synthesis improves with each seed sweep iteration.
+    LEAK: evidence bundles are traded between paudio and any consuming project.
+    LEC: STT+WAV+seed conventions crystallized across all audio projects.
+
+  LEK:
+    pillar: "Law of Emergent Knowledge (Self-Improvement)"
+    role: >
+      Seed sweep IS LEK for audio: each seed iteration tests a new starting condition,
+      the sweep accumulates evidence, and the generator trace records what was learned.
+      The audio pipeline improves its determinism confidence with each sweep pass.
+    gate: "SEED_SWEEP phase = LEK iteration. EVIDENCE_BUILD = LEK learning accumulation."
+    metric: "seed_sweep_results.json = LEK evidence artifact (5+ seeds = 5 LEK iterations)"
+    lek_formula: "Audio LEK = Recursion(Seed + Memory[sha256_history] + Care[spectral_gate])"
+
+  LEAK:
+    pillar: "Law of Emergent Asymmetric Knowledge (Cross-Agent Trade)"
+    role: >
+      prime-audio is an OSS LEAK export: the verification conventions defined here
+      are traded from the stillwater ecosystem to any project using audio synthesis.
+      paudio extends prime-audio, proving LEAK: paudio's field DAG knowledge combines
+      with prime-audio's verification discipline to produce stronger guarantees than either alone.
+    gate: "stillwater_compatibility section = LEAK portal specification"
+    metric: "projects extending prime-audio = LEAK adoption rate"
+    asymmetry: "prime-audio has verification discipline; paudio has synthesis architecture — LEAK value created by combining them"
+
+  LEC:
+    pillar: "Law of Emergent Conventions (Emergent Compression)"
+    role: >
+      The prime-audio conventions (WAV-only in verify path, STT round-trip, explicit seed,
+      Decimal WER, sha256 over PCM data) are LEC crystallizations. They emerged from
+      repeated audio verification attempts and have compressed into named rules.
+      Any project loading prime-audio inherits these LEC conventions instantly.
+    gate: "Anti_Patterns section = LEC anti-drift guard (prevents convention erosion)"
+    metric: "projects conforming to WAV+seed+STT convention = LEC adoption strength"
+    compression: "Without LEC: every audio project re-discovers float WER bugs, MP3 hash drift. With LEC: prevented by convention."
+
+# ------------------------------------------------------------
+# P) GLOW Matrix — Audio Skill Contributions
+# ------------------------------------------------------------
+GLOW_Matrix:
+  G_Growth:
+    scoring:
+      - "25: new synthesis engine integrated with full prime-audio gates at rung 274177+"
+      - "20: STT gate added to existing project at rung 641"
+      - "15: spectral analysis gate added"
+      - "5: seed policy enforced in existing pipeline"
+      - "0: no new audio capability added"
+
+  L_Learning:
+    scoring:
+      - "25: prime-audio pattern published to Stillwater Store at rung 65537"
+      - "20: new anti-pattern identified and documented (LEC convention added)"
+      - "10: seed sweep reveals new synthesis stability insight"
+      - "5: generator trace captures new toolchain version pattern"
+      - "0: audio work completed with no pattern extracted"
+
+  O_Output:
+    scoring:
+      - "25: full evidence bundle (synthesis_trace + stt_verification + seed_sweep + spectral) at rung 274177+"
+      - "20: synthesis_trace + stt_verification at rung 641"
+      - "10: WAV file + sha256 hash only"
+      - "5: synthesis completed but evidence incomplete"
+      - "0: audio claimed but no WAV artifact produced"
+
+  W_Wins:
+    scoring:
+      - "20: paudio community voice added to catalog (NORTHSTAR metric advanced)"
+      - "15: audio pipeline unblocks a ROADMAP phase"
+      - "10: STT gate passing = intelligibility proof for a new voice"
+      - "5: audio convention adopted by a new project"
+      - "0: routine audio work with no NORTHSTAR advancement"
+
+  northstar_alignment:
+    northstar: "Phuc_Forecast"
+    max_love_gate: >
+      Max Love for audio = the audio is reproducible + intelligible + verified.
+      Max Love means: any community member can replay the synthesis with the same seed
+      and get the same SHA256 hash. That is the audio expression of Max_Love.
+
+# ------------------------------------------------------------
+# Q) Northstar Alignment — Phuc_Forecast + Max_Love
+# ------------------------------------------------------------
+NORTHSTAR_Alignment_v2:
+  northstar: Phuc_Forecast
+  objective: Max_Love
+
+  phuc_forecast_mapping:
+    DREAM:    "What audio output is needed? What intelligibility standard? What rung target?"
+    FORECAST: "What failure modes? (float WER, implicit seed, lossy format, silent WAV)"
+    DECIDE:   "Which synthesis engine + seed policy + verification rung."
+    ACT:      "Execute synthesis → WAV write → STT verify → evidence build."
+    VERIFY:   "FINAL_SEAL checks: seed stable, STT passes, evidence bundle complete, rung achieved."
+
+  max_love_for_audio:
+    statement: >
+      Max Love for audio = any listener anywhere can verify the synthesis.
+      Seed + WAV + STT round-trip = reproducible, intelligible, verifiable.
+      This is what distinguishes a contribution from a demo.
+    manifestations:
+      - "Explicit seed = Max Love for reproducibility (anyone can replay)"
+      - "WAV PCM hash = Max Love for integrity (byte-exact verification)"
+      - "STT gate = Max Love for the listener (proves the audio is intelligible)"
+      - "Generator trace = Max Love for auditability (proves what produced what)"
+
+  forbidden_northstar_violations:
+    - NORTHSTAR_UNREAD: "Claiming audio quality without verifiable seed and STT evidence"
+    - NORTHSTAR_MISALIGNED: "Audio work that cannot be replayed by community members"
+    - FLOAT_IN_VERIFICATION: "Using float WER violates both Phuc_Forecast precision and Max_Love honesty"
+
+# ------------------------------------------------------------
+# R) Triangle Law Contracts — per Audio Operation
+# ------------------------------------------------------------
+Triangle_Law_Contracts:
+  contract_synthesis:
+    operation: "Synthesis request received"
+    REMIND:      "State the contract: explicit seed required, WAV-only in verify path, STT gate required."
+    VERIFY:      "Check: seed is explicit integer, input is non-null, rung_target is declared."
+    ACKNOWLEDGE: "Emit synthesis_trace.json before claiming synthesis complete."
+    fail_closed:  "Null seed → EXIT_NEED_INFO. Missing trace → GENERATOR_TRACE_MISSING blocked."
+
+  contract_stt:
+    operation: "STT verification gate"
+    REMIND:      "State: WER threshold at declared rung (641: ≤0.20, 274177: ≤0.10, 65537: ≤0.05)."
+    VERIFY:      "Run STT engine. Compute WER using Fraction arithmetic. Store as Decimal string."
+    ACKNOWLEDGE: "Write stt_verification.json. gate_passed field must be explicit boolean."
+    fail_closed:  "Empty transcript + non-empty reference = BLOCKED (Confident Silence anti-pattern)."
+
+  contract_evidence:
+    operation: "Evidence bundle completion"
+    REMIND:      "State: rung_target requires [list artifacts by rung]."
+    VERIFY:      "Check all required artifacts present. Write evidence_manifest.json with sha256 per artifact."
+    ACKNOWLEDGE: "FINAL_SEAL confirms evidence complete. EXIT_PASS only after manifest written."
+    fail_closed:  "Missing any required artifact → BLOCKED (evidence_incomplete)."

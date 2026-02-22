@@ -158,6 +158,15 @@ Dispatch threshold: >50 lines specialized work OR domain expertise → dispatch.
 | Wish contract, backlog | Wish Manager | prime-safety + prime-wishes + prime-mermaid | sonnet |
 | Adversarial review | Skeptic | prime-safety + prime-coder + phuc-forecast | sonnet/opus |
 | Northstar path planning, goal decomposition | Northstar Navigator | prime-safety + phuc-forecast + northstar-reverse | sonnet |
+| Semantic compression, context optimization | Compressor | prime-safety + phuc-prime-compression + phuc-magic-words | sonnet |
+| Knowledge navigation, context loading | Navigator | prime-safety + phuc-magic-words + phuc-gps | haiku/sonnet |
+| Cross-bubble communication, integration | Portal Engineer | prime-safety + phuc-portals + phuc-triangle-law | sonnet |
+| Advisory consultation, perspective gathering | Citizen Council | prime-safety + phuc-citizens + phuc-gps | sonnet |
+| Convention enforcement, structure audit | Convention Auditor | prime-safety + phuc-conventions + phuc-cleanup | haiku |
+| Three Pillars training, belt progression | Dragon Rider | prime-safety + phuc-axiom + phuc-leak + phuc-lec + glow-score | sonnet |
+| Cross-agent knowledge trade, swarm synergy | LEAK Facilitator | prime-safety + phuc-leak + phuc-portals | sonnet |
+| Convention emergence, cross-file compression | LEC Analyst | prime-safety + phuc-lec + phuc-conventions | sonnet |
+| Axiom compliance, Big Bang derivation | Axiom Auditor | prime-safety + phuc-axiom + phuc-forecast | sonnet/opus |
 | Trivial (<50 lines, no domain expertise) | — | Inline | — |
 
 ## Sub-Agent Prompt Rules (CNF Anti-Rot)
@@ -224,6 +233,18 @@ END_SKILL
 #   skills/prime-mermaid.md       — Graph Designer agent
 #   skills/northstar-reverse.md   — Northstar Reverse Engineering (backward chaining from goal)
 #   skills/phuc-orchestration.md  — Full orchestration skill (reference)
+#   skills/phuc-magic-words.md    — Magic Words coordinate navigation (Tier 0-3 tree)
+#   skills/phuc-portals.md        — Bounded Inference Contexts + Portal Architecture
+#   skills/phuc-triangle-law.md   — Contract stability (REMIND→VERIFY→ACKNOWLEDGE)
+#   skills/phuc-citizens.md       — Advisory council (10+ citizen personas, triangulation)
+#   skills/phuc-gps.md            — Knowledge navigation (orient before answering)
+#   skills/phuc-conventions.md    — Structural consistency (Tree of Solace conventions)
+#   skills/phuc-wish-triangle.md  — Wish+Skill+Recipe execution triangle
+#   skills/phuc-prime-compression.md — Semantic prime compression (prime factorization of knowledge)
+#   skills/phuc-axiom.md          — Axiom kernel (5 irreducibles, load_order=0, Big Bang singularity)
+#   skills/phuc-loop.md           — Self-improving inner loop v2.0 (LEK engine, halting certificates)
+#   skills/phuc-leak.md           — LEAK: Cross-agent asymmetric knowledge trade (Pillar 2)
+#   skills/phuc-lec.md            — LEC: Emergent convention compression (Pillar 3)
 #
 # LLM PORTAL: http://localhost:8788 (start: bash admin/start-llm-portal.sh)
 #   Providers: ollama (192.168.68.100:11434), claude-code (localhost:8080),
@@ -238,7 +259,9 @@ END_SKILL
 #   swarms/forecaster.md, swarms/judge.md, swarms/podcast.md,
 #   swarms/writer.md, swarms/janitor.md, swarms/wish-manager.md,
 #   swarms/security-auditor.md, swarms/context-manager.md,
-#   swarms/social-media.md, swarms/northstar-navigator.md
+#   swarms/social-media.md, swarms/northstar-navigator.md,
+#   swarms/navigator.md, swarms/portal-engineer.md, swarms/citizen-council.md,
+#   swarms/convention-auditor.md, swarms/dragon-rider.md
 #
 # Usage: When dispatching sub-agents, read the appropriate swarms/*.md file
 # to get the skill pack template, then paste full skill content inline.

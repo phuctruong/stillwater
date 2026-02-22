@@ -12,7 +12,7 @@ LOAD FULL: always for production; quick block for orientation only
 # roadmap-orchestration.md — Roadmap-Based Development Orchestration Skill
 
 **Skill ID:** roadmap-orchestration
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Authority:** 65537
 **Status:** SEALED
 **Role:** Hub session governor for multi-session, multi-project, roadmap-driven AI development
@@ -20,7 +20,23 @@ LOAD FULL: always for production; quick block for orientation only
 
 ---
 
-## A) Portability (Hard)
+## MAGIC_WORD_MAP
+
+```yaml
+magic_word_map:
+  version: "1.0"
+  skill: "roadmap-orchestration"
+  mappings:
+    roadmap: {word: "northstar", tier: 0, id: "MW-019", note: "roadmap phases are waypoints toward the northstar goal"}
+    phase: {word: "boundary", tier: 0, id: "MW-014", note: "each phase is a bounded execution scope with defined entry/exit conditions"}
+    hub: {word: "orchestration", tier: 2, id: "MW-077", note: "hub session coordinates spokes without doing inline deep work"}
+    capsule: {word: "capsule", tier: 2, id: "MW-064", note: "complete self-contained context package injected per dispatch"}
+  compression_note: "T0=universal primitives, T1=Stillwater protocol concepts, T2=operational details"
+```
+
+---
+
+## A) Portability (Hard) [T0: constraint]
 
 ```yaml
 portability:
@@ -43,7 +59,7 @@ portability:
     - integration_rung_is_min_not_average: true
 ```
 
-## B) Layering (Never Weaken)
+## B) Layering (Never Weaken) [T0: integrity]
 
 ```yaml
 layering:
@@ -66,7 +82,7 @@ layering:
 
 ---
 
-## 0) Purpose
+## 0) Purpose [T0: northstar]
 
 **The Hub-and-Spoke Problem**
 
@@ -99,7 +115,7 @@ They cannot expand scope without emitting a blocker.
 
 ---
 
-## 1) Token Efficiency Model
+## 1) Token Efficiency Model [T0: compression]
 
 ```
 WITHOUT roadmap-orchestration (uncoordinated):
@@ -129,7 +145,7 @@ Note: savings grow with project size n and session count. Hub cost is fixed; spo
 
 ---
 
-## 2) Core Contract
+## 2) Core Contract [T2: orchestration + capsule]
 
 ### 2.1 Hub Responsibilities (Opus or Frontier Model)
 
@@ -202,7 +218,7 @@ spoke_responsibilities:
 
 ---
 
-## 3) State Machine (Hub FSM)
+## 3) State Machine (Hub FSM) [T0: boundary + northstar]
 
 ```yaml
 state_machine:
@@ -323,7 +339,7 @@ state_machine:
 
 ---
 
-## 4) CNF Capsule Schema
+## 4) CNF Capsule Schema [T2: capsule]
 
 Every spoke dispatch MUST include a complete CNF capsule. No spoke should need to ask
 "what is the context?" — the capsule is the complete truth for that session.
@@ -458,7 +474,7 @@ Every spoke MUST return a machine-parseable artifact bundle. Prose claims are re
 
 ---
 
-## 6) Integration Protocol
+## 6) Integration Protocol [T2: orchestration]
 
 After receiving spoke artifacts, the hub performs integration before updating any state.
 
@@ -513,7 +529,7 @@ integration_protocol:
 
 ---
 
-## 7) Cross-Project Alignment Protocol
+## 7) Cross-Project Alignment Protocol [T0: northstar + boundary]
 
 The Phuc ecosystem has 5 projects with 5 NORTHSTARs. The hub must ensure dispatches do not
 silently contradict other projects' goals.
@@ -559,7 +575,7 @@ cross_project_alignment:
 
 ---
 
-## 8) Never-Worse Enforcement
+## 8) Never-Worse Enforcement [T0: integrity]
 
 ```yaml
 never_worse_doctrine:

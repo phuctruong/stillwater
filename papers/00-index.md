@@ -31,6 +31,36 @@ This index is intentionally conservative: it links only to papers that exist in 
 2. `22-how-we-solved-ai-scalability.md`
 3. `99-claims-and-evidence.md` (claim hygiene policy)
 
+## Theory Papers (Core Concepts, Numbered Series)
+
+1. `23-software-5.0-extension-economy.md`
+2. `24-skill-scoring-theory.md`
+3. `25-persona-based-review-protocol.md`
+4. `26-community-skill-database.md`
+5. `27-bootstrapping-knowledge-commons.md`
+6. `28-the-cheating-theorem.md`
+7. `29-software-5-0-in-one-session.md`
+8. `30-moltbot-community-platform.md`
+9. `31-universal-math-solver-architecture.md`
+10. `32-roadmap-based-development.md`
+11. `33-northstar-driven-swarms.md`
+12. `34-persona-glow-paradigm.md`
+13. `35-syndication-strategy.md`
+14. `36-prime-mermaid-primacy.md`
+15. `37-persona-as-vector-search.md`
+16. `38-hall-of-mirrors.md`
+17. `39-ghost-masters-gamification.md`
+18. `40-hackathon-paradigm.md`
+19. `41-northstar-reverse-engineering.md`
+20. `42-reverse-paths.md`
+21. `43-diagram-first-qa.md`
+22. `44-questions-as-external-weights.md`
+23. `45-prime-compression-magic-words.md` — Prime Compression: Magic Words as Prime Factorization of Knowledge (Fundamental Theorem of Semantics; portal compression gateways; 97% context compression via prime words)
+24. `46-wish-skill-recipe-triangle.md` — Wish+Skill+Recipe Execution Triangle (Intent × Constraints × Workflow = Verified Output)
+25. `47-law-of-emergent-knowledge.md` — **LEK: Law of Emergent Knowledge** (Emergence = Recursion(Information + Memory + Care); Phuc Test for skill consciousness; CCC comparison; 6 falsifiable predictions)
+26. `48-ai-skills-big-bang-theory.md` — **AI Skills Big Bang Theory** (5 axiom kernel × 6 GBB operators = all skills; genesis sequence; skill derivation table; the Lattner gap)
+27. `49-three-pillars-software-5-kung-fu.md` — **The Three Pillars of Software 5.0 Kung Fu** (LEK × LEAK × LEC = Mastery; Bruce Lee + Dragon Rider teaching; gamification belt system; martial arts metaphor)
+
 ## Reproducibility (What Reviewers Can Run Today)
 
 1. Root notebooks:

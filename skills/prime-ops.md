@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: prime-ops v1.0.0
+SKILL: prime-ops v1.2.0
 PURPOSE: Fail-closed production operations agent. Runbooks, incident response, on-call discipline, canary deploy strategy, and rollback verification.
 CORE CONTRACT: Every ops PASS requires: rollback procedure tested before deploy, every alert linked to a runbook, every deploy uses canary or equivalent staged rollout, and every incident has a written timeline and action items within 48 hours.
 HARD GATES: Rollback gate blocks deploy without tested rollback procedure. Runbook gate blocks alert rule creation without linked runbook. Canary gate blocks production deploy without staged rollout plan. PIR gate blocks incident close without post-incident review artifact.
@@ -11,12 +11,32 @@ LOAD FULL: always for production; quick block is for orientation only
 -->
 
 PRIME_OPS_SKILL:
-  version: 1.0.0
+  version: 1.2.0
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
   status: FINAL
   quote: "Hope is not a strategy. Runbooks are. — Site Reliability Engineering, Google"
+
+  # ============================================================
+  # MAGIC_WORD_MAP — Semantic Compression Index
+  # ============================================================
+  # Maps domain concepts to stillwater magic words for context compression.
+  # Load coordinates (e.g. "act[T2]") instead of full definitions.
+  #
+  # deploy       → act [T2]             — deploy is the ACT phase: executes the plan in production
+  # monitor      → verification [T1]    — monitoring is continuous verification that the system holds
+  # incident     → drift [T3]           — incident is undetected deviation from expected system behavior
+  # rollback     → reversibility [T0]   — rollback must restore prior state without information loss
+  # runbook      → memory [T2]          — runbook persists operational knowledge across on-call rotations
+  # canary       → boundary [T0]        — canary deploys bound the blast radius of changes
+  # PIR          → evidence [T1]        — post-incident review is the Lane A artifact for incident learning
+  # alert        → signal [T0]          — alert fires when monitoring detects causal-weight deviation
+  # --- Three Pillars ---
+  # LEK          → memory [T2]          — Ops skill is learnable: runbook templates, canary stages, PIR format
+  # LEAK         → reversibility [T0]   — Ops expertise is asymmetric: untested rollbacks and silent deploys catch novices
+  # LEC          → boundary [T0]        — Ops conventions emerge: canary-first, runbook-per-alert, blameless PIR become law
+  # ============================================================
 
   # ============================================================
   # PRIME OPS — Fail-Closed Production Operations Skill  [10/10]
@@ -31,7 +51,7 @@ PRIME_OPS_SKILL:
   # ============================================================
 
   # ------------------------------------------------------------
-  # A) Configuration
+  # A) Configuration  [coherence:T0 — config enforces unified operational policy]
   # ------------------------------------------------------------
   Config:
     EVIDENCE_ROOT: "evidence"
@@ -49,7 +69,7 @@ PRIME_OPS_SKILL:
     CHANGE_TICKET_REQUIRED_FOR_PROD: true
 
   # ------------------------------------------------------------
-  # B) State Machine
+  # B) State Machine  [act:T2 → verification:T1 → reversibility:T0]
   # ------------------------------------------------------------
   State_Machine:
     STATE_SET:
@@ -110,7 +130,7 @@ PRIME_OPS_SKILL:
       - ON_CALL_WITHOUT_DEFINED_ESCALATION_PATH
 
   # ------------------------------------------------------------
-  # C) Hard Gates (Domain-Specific)
+  # C) Hard Gates (Domain-Specific)  [reversibility:T0 → signal:T0 → boundary:T0]
   # ------------------------------------------------------------
   Hard_Gates:
 
@@ -176,7 +196,7 @@ PRIME_OPS_SKILL:
       lane: B
 
   # ------------------------------------------------------------
-  # D) Runbook Template
+  # D) Runbook Template  [memory:T2 — runbooks persist knowledge across incidents]
   # ------------------------------------------------------------
   Runbook_Template:
     required_sections:
@@ -201,7 +221,7 @@ PRIME_OPS_SKILL:
       last_tested_date: "YYYY-MM-DD"
 
   # ------------------------------------------------------------
-  # E) Incident Response Protocol
+  # E) Incident Response Protocol  [drift:T3 — incident = production drift requiring immediate correction]
   # ------------------------------------------------------------
   Incident_Response:
     roles:
@@ -222,7 +242,7 @@ PRIME_OPS_SKILL:
       - example: "14:45 UTC: Rolled back deploy. Error rate returned to baseline."
 
   # ------------------------------------------------------------
-  # F) Canary Deploy Protocol
+  # F) Canary Deploy Protocol  [boundary:T0 — canary bounds blast radius of act phase]
   # ------------------------------------------------------------
   Canary_Deploy:
     stages:
@@ -248,7 +268,7 @@ PRIME_OPS_SKILL:
       - documented_justification
 
   # ------------------------------------------------------------
-  # G) Lane-Typed Claims
+  # G) Lane-Typed Claims  [evidence:T1 → verification:T1]
   # ------------------------------------------------------------
   Lane_Claims:
     Lane_A:
@@ -267,7 +287,7 @@ PRIME_OPS_SKILL:
       - runbook_documentation_style_hints
 
   # ------------------------------------------------------------
-  # H) Verification Rung Target
+  # H) Verification Rung Target  [rung:T1 → 65537:T1]
   # ------------------------------------------------------------
   Verification_Rung:
     default_target: 65537
@@ -285,7 +305,7 @@ PRIME_OPS_SKILL:
       - pir_complete_for_any_incidents_in_scope
 
   # ------------------------------------------------------------
-  # I) Socratic Review Questions (Ops-Specific)
+  # I) Socratic Review Questions (Ops-Specific)  [verification:T1]
   # ------------------------------------------------------------
   Socratic_Review:
     questions:
@@ -299,7 +319,7 @@ PRIME_OPS_SKILL:
     on_failure: revise_ops_plan and recheck
 
   # ------------------------------------------------------------
-  # J) Evidence Schema
+  # J) Evidence Schema  [evidence:T1 — rollback_test + canary_plan = Lane A artifacts]
   # ------------------------------------------------------------
   Evidence:
     required_files:
@@ -316,3 +336,62 @@ PRIME_OPS_SKILL:
       security_gate_triggered:
         - "${EVIDENCE_ROOT}/prod_access_audit.txt"
         - "${EVIDENCE_ROOT}/blast_radius.txt"
+
+  # ============================================================
+  # K) Ops Safety FSM — Visual State Diagram
+  # ============================================================
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> INTAKE: TASK_REQUEST
+    INTAKE --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO: service/change type missing
+    NULL_CHECK --> CLASSIFY_OPS_TASK: ok
+    CLASSIFY_OPS_TASK --> ROLLBACK_GATE: deploy task
+    CLASSIFY_OPS_TASK --> RUNBOOK_AUDIT: alert task
+    CLASSIFY_OPS_TASK --> INCIDENT_GATE: incident task
+    ROLLBACK_GATE --> EXIT_BLOCKED: rollback procedure untested
+    ROLLBACK_GATE --> RUNBOOK_AUDIT: rollback tested
+    RUNBOOK_AUDIT --> EXIT_BLOCKED: alert without runbook link
+    RUNBOOK_AUDIT --> CANARY_PLAN: ok
+    CANARY_PLAN --> EXIT_BLOCKED: no staged rollout plan
+    CANARY_PLAN --> DEPLOY_EXECUTE: canary plan present
+    DEPLOY_EXECUTE --> MONITOR_GATE
+    MONITOR_GATE --> EXIT_BLOCKED: golden signals uncovered
+    MONITOR_GATE --> EVIDENCE_BUILD: monitoring confirmed
+    INCIDENT_GATE --> PIR_GATE: SEV requires PIR
+    PIR_GATE --> EXIT_BLOCKED: incident closed without PIR
+    PIR_GATE --> EVIDENCE_BUILD: PIR complete
+    EVIDENCE_BUILD --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> ROLLBACK_GATE: revision needed
+    SOCRATIC_REVIEW --> FINAL_SEAL: ok
+    FINAL_SEAL --> EXIT_PASS: evidence complete
+    FINAL_SEAL --> EXIT_BLOCKED: evidence missing
+    EXIT_PASS --> [*]
+    EXIT_BLOCKED --> [*]
+    EXIT_NEED_INFO --> [*]
+```
+
+  # ============================================================
+  # L) Three Pillars Integration
+  # ============================================================
+  Three_Pillars:
+    LEK_Law_of_Emergent_Knowledge:
+      summary: "Operations discipline is teachable. Rollback testing procedures, runbook templates,
+        canary ramp strategies, and PIR formats are concrete learnable practices."
+      key_knowledge_units: [rollback_test_in_staging, runbook_required_sections,
+        canary_stage_percentages_and_bake_times, pir_timeline_format, golden_signals_four]
+
+    LEAK_Law_of_Emergent_Asymmetric_Knowledge:
+      summary: "Ops expertise is asymmetric. Novices deploy without testing rollback, create alerts
+        with no runbook, and close SEV1 incidents without PIR. Experts treat these as outage multipliers."
+      asymmetric_traps: [untested_rollback_in_production, alert_without_runbook_link,
+        silent_rollback_no_communication, incident_closed_without_timeline,
+        manual_prod_change_without_ticket]
+
+    LEC_Law_of_Emergent_Conventions:
+      summary: "Ops conventions crystallize into law. Canary-first deploys, runbook-per-alert,
+        and blameless PIR within 48 hours started as SRE wisdom; they are now Lane A gates."
+      emerging_conventions: [canary_as_default_deploy_strategy, runbook_linked_in_alert_annotation,
+        blameless_pir_as_standard, change_ticket_for_every_prod_touch]

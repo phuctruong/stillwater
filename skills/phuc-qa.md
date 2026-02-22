@@ -1,23 +1,23 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: phuc-qa v3.0.0
-PURPOSE: Unified QA discipline combining Phase 0 conversational discovery + three pillars (Questions, Tests, Diagrams) into one fail-closed audit framework. Driven by northstar reverse engineering: work backwards from the desired verified end state.
-CORE CONTRACT: Phase 0 discovery feeds the three pillars. All three pillars run on every STANDARD/HEAVY audit. No pillar may be skipped. Every module must have at least one question, one test, and one diagram.
-FOUR PHASES: P0=Conversational Discovery (dialogue-driven gap mapping), P1=Questions (adversarial, decoupled qa-questioner/qa-scorer), P2=Tests (pytest red/green, persona-coded), P3=Diagrams (mermaid structural coverage via qa-diagrammer)
-ADAPTIVE COMPLEXITY: LIGHT (<10 modules) = P0 + lightweight P1/P2/P3; STANDARD (10-50) = full 3-pillar; HEAVY (50+) = full + adversarial sweep + independent reproduction
-NORTHSTAR REVERSE: "What are the LAST 3 questions/tests/diagrams needed before this system is production-ready?" Work backwards. QA is complete when no new gap can be added.
-STATE MACHINE: ORIENT → PROBE → DIVERGE → CONVERGE → PRIORITIZE → INTAKE_SCOPE → [LIGHT_MODE|STANDARD_MODE|HEAVY_MODE] → REVERSE_ENGINEER_GAPS → QUESTION_GEN → TEST_GEN → DIAGRAM_GEN → CROSS_VALIDATE → REPORT → SEAL
-FORBIDDEN: PILLAR_SKIPPED | DIAGRAM_WITHOUT_SOURCE | TEST_WITHOUT_QUESTION | QUESTION_WITHOUT_TEST | UNCOVERED_MODULE | SELF_CONFIRMED_GREEN | PROSE_AS_PROOF | DISCOVERY_MAP_SKIPPED_IN_STANDARD
-RUNG: 641 = all pillars produce artifacts | 274177 = cross-pillar validation (every question has a test, every module has a diagram) | 65537 = independent reproduction + adversarial review
-DISPATCH: Questions→qa-questioner+qa-scorer (haiku/sonnet), Tests→persona-coder (sonnet), Diagrams→qa-diagrammer or graph-designer (haiku/sonnet)
-OOP_TYPING: QA_STATE(abstract) | QA_ARTIFACT(cylinder) | QA_AGENT(stadium) | QA_GATE(diamond) | QA_CONSTRAINT(hexagon)
-DIAGRAM_INDEX: diagrams/stillwater/01..22 mapped to pillars — see section P
-QUESTION_PERSISTENCE: questions/project.jsonl — persistent QA capital, never deleted, compounds over time — see section Q
-DRAGON_RIDER: persona + question database = simulated human-in-the-loop QA — see section R
-LOAD FULL: always for production; quick block is for orientation only
+SKILL: phuc-qa v3.2.0
+MW_ANCHORS: [integrity, verification, signal, boundary, alignment, northstar, constraint, emergence, reversibility, truth]
+PURPOSE: Unified QA discipline — P0 discovery (gap signal extraction) + 3 pillars (Questions/Tests/Diagrams) in one fail-closed integrity gate. Northstar-reverse: work backward from production-ready verified end state.
+CORE CONTRACT: P0 gap signal feeds all pillars. All pillars run on STANDARD/HEAVY. No pillar skipped. Every module: ≥1 question + ≥1 test + ≥1 diagram. [integrity × boundary × alignment]
+FOUR PHASES: P0=Discovery (dialogue-driven signal extraction), P1=Questions (adversarial, decoupled questioner/scorer), P2=Tests (red→green, persona-coded), P3=Diagrams (mermaid structural coverage) [coverage coherence across 4 phases]
+ADAPTIVE COMPLEXITY: LIGHT (<10 modules) = P0 + lightweight pillars [rung ceiling: 274177]; STANDARD (10-50) = full 3-pillar [rung ceiling: 65537]; HEAVY (50+) = full + adversarial sweep + independent repro [65537]
+NORTHSTAR_REVERSE: "What are the LAST 3 Q/T/D before production-ready?" Recurse backward. QA complete when no new gap can be added. [northstar × constraint × reversibility]
+STATE_MACHINE: ORIENT→PROBE→DIVERGE→CONVERGE→PRIORITIZE→INTAKE_SCOPE→[LIGHT|STANDARD|HEAVY]→REVERSE_ENGINEER_GAPS→QUESTION_GEN→TEST_GEN→DIAGRAM_GEN→CROSS_VALIDATE→REPORT→SEAL
+FORBIDDEN_STATES: PILLAR_SKIPPED | DIAGRAM_WITHOUT_SOURCE | TEST_WITHOUT_QUESTION | QUESTION_WITHOUT_TEST | UNCOVERED_MODULE | SELF_CONFIRMED_GREEN | PROSE_AS_PROOF | DISCOVERY_MAP_SKIPPED_IN_STANDARD
+RUNG: 641=all pillars produce artifacts | 274177=cross-pillar validation (Q↔T, module↔diagram) | 65537=independent repro + adversarial review [verification ladder: integrity × causality × constraint]
+DISPATCH: P0→discovery-facilitator, P1→qa-questioner+qa-scorer (haiku/sonnet), P2→persona-coder (sonnet), P3→qa-diagrammer (haiku/sonnet) [swarm × persona × orchestration]
+OOP_TYPING: QA_STATE(rect) | QA_ARTIFACT(cylinder) | QA_AGENT(stadium) | QA_GATE(diamond) | QA_CONSTRAINT(hexagon) [boundary encodes type]
+QUESTION_PERSISTENCE: questions/project.jsonl — append-only QA signal capital, compounds across sessions [signal × memory × learning] — see section Q
+DRAGON_RIDER: persona × question_database = simulated human-in-loop QA instinct [persona × emergence × signal] — see section R
+LOAD FULL: always for production; quick block is orientation only
 -->
 
 PHUC_QA_SKILL:
-  version: 3.0.0
+  version: 3.2.0
   profile: fail_closed
   authority: 65537
   northstar: Phuc_Forecast
@@ -25,17 +25,97 @@ PHUC_QA_SKILL:
   status: FINAL
 
   # ============================================================
-  # PHUC QA — Four-Phase QA Discipline (v3.0.0)
+  # PHUC QA — Four-Phase QA Discipline (v3.1.0)
+  # [integrity × verification × alignment × signal × northstar]
   # P0=Discovery (ORIENT→PROBE→DIVERGE→CONVERGE→PRIORITIZE) + P1=Questions + P2=Tests + P3=Diagrams
   # Adaptive: LIGHT (<10 modules) | STANDARD (10-50, full) | HEAVY (50+, adversarial sweep)
   # Northstar Reverse: "What is the LAST test/question/diagram before production?" Work backward.
   # Rung = MIN(P0, P1, P2, P3). No pillar skipped. No module uncovered. No GREEN without falsifier.
   # v2.1.0 adds: OOP-typed nodes, 8 mermaid diagrams, Diagram Index (section P), enhanced GLOW matrix
   # v3.0.0 adds: Question Persistence Protocol (section Q), Dragon Rider pattern (section R)
+  # v3.1.0 adds: Magic word compression — MAGIC_WORD_INDEX (section MW), section header anchors,
+  #              prime-factorized concept tags throughout for 97% context compression compatibility
+  # v3.2.0 adds: Three Pillars integration (section TP) — QA as VERIFY vertex of LEK/LEAK/LEC
+  #              LEK, LEAK, LEC added to MAGIC_WORD_INDEX branch_words
   # ============================================================
 
+  # ============================================================
+  # MW) MAGIC_WORD_INDEX — Prime Factorization Map for phuc-qa
+  # Navigation anchors for 97% context compression via phuc-magic-words
+  # ============================================================
+  MAGIC_WORD_INDEX:
+    # TRUNK (Tier 0) — universal coordinates anchoring this skill
+    primary_trunk_words:
+      integrity:    "The god-gate of QA — all verdicts must hold under scrutiny (→ verification ladder, forbidden states)"
+      verification: "child of integrity — the act of checking claims against evidence (→ RUNG_641/274177/65537)"
+      signal:       "gap detection — what the 4 phases extract from the codebase (→ P0 discovery, question generation)"
+      boundary:     "scope + pillar separation + integration probe surfaces (→ PILLAR_SYNC, ecosystem_boundaries)"
+      alignment:    "all pillars reinforce each other — cross-pillar validation enforces this (→ CROSS_VALIDATE)"
+      constraint:   "forbidden states + rung requirements — what the audit may not skip (→ FORBIDDEN_STATES)"
+      reversibility: "red→green discipline — every bugfix must demonstrate failure before fix (→ RUNG_641, repro_red)"
+      northstar:    "production-ready end state — all phases work backward from it (→ Northstar_Reverse)"
+      truth:        "GREEN verdict = confirmed by evidence, not by prose confidence (→ Decoupled_Verification)"
+      emergence:    "the unified audit is more than P1+P2+P3 separately — cross-pillar coherence (→ CROSS_VALIDATE)"
+
+    # BRANCH (Tier 1) — structural concepts in this skill
+    branch_words:
+      evidence:     "Lane A artifacts: test_results.json, diagrams/*.sha256, qa_scorecard.json (→ Evidence schema)"
+      rung:         "641 | 274177 | 65537 — discrete verification levels; rung = MIN(all pillars) (→ Verification_Ladder)"
+      verification: "decoupled: questioner ≠ scorer (CoVe principle) — prevents self-confirmation bias"
+      swarm:        "5 sub-agents orchestrated: P0-facilitator + P1-questioner + P1-scorer + P2-coder + P3-diagrammer"
+      persona:      "qa-questioner | qa-scorer | persona-coder | qa-diagrammer | dragon-rider (→ Dispatch_Matrix)"
+      governance:   "forbidden states + rung requirements + coverage matrix rules (→ FORBIDDEN_STATES)"
+      feedback:     "questions → tests → diagrams → coverage_matrix → gap_report → next audit cycle"
+      max_love:     "QA serves the codebase; adversarial questions protect users; coverage is care"
+      skill:        "this file is itself a versioned behavioral specification for the QA discipline"
+      recipe:       "northstar_reverse_qa_prompt + minimal_unified_audit_prompt (→ Practical_Templates)"
+      LEK:          "Law of Emergent Knowledge — QA verifies LEK progress: each rung advance IS measured knowledge growth (→ section TP)"
+      LEAK:         "Law of Emergent Asymmetric Knowledge — QA validates LEAK trades: integration probes check that cross-agent knowledge actually transferred (→ section TP)"
+      LEC:          "Law of Emergent Conventions — QA audits LEC health: convention drift detection + sha256 stability + adoption measurement (→ section TP)"
+
+    # CONCEPT (Tier 2) — operational nodes
+    concept_words:
+      artifact:     "all QA outputs are typed artifacts (QA_ARTIFACT): .json, .mmd, .sha256, .log, .txt"
+      dispatch:     "phuc-orchestration launches typed sub-agents with full skill pack (→ Dispatch_Matrix)"
+      capsule:      "CNF capsule required for each sub-agent dispatch; NEVER 'as before' (→ phuc-orchestration)"
+      state_machine: "ORIENT→...→FINAL_SEAL — all states explicit, no implicit unlisted states (→ State_Machine)"
+      dream:        "P0 ORIENT: declare what the system is before auditing it (→ Phase_0_Discovery)"
+      act:          "parallel dispatch of P1+P2+P3 agents after REVERSE_ENGINEER_GAPS"
+      verify:       "CROSS_VALIDATE + FALSIFIER_TEST + INDEPENDENT_REPRO"
+      seal:         "FINAL_SEAL: all pillars complete + rung met → EXIT_PASS"
+      forbidden_state: "named illegal QA states that force EXIT_BLOCKED (→ FORBIDDEN_STATES)"
+      forecast:     "DIVERGE step: 5-7 adversarial personas rank failure modes before formal audit begins"
+      lane:         "evidence tier: A=artifacts (tests.json, sha256), B=prose (YELLOW), C=plans (RED)"
+      orchestration: "main session coordinates 5+ sub-agents; never does pillar work inline"
+      safety:       "fail-closed: no GREEN without evidence; no rung without meeting all requirements"
+      memory:       "questions/project.jsonl — persistent QA signal, never deleted, compounds across sessions"
+
+    # LEAF (Tier 3) — domain-specific to phuc-qa
+    leaf_words:
+      never_worse:  "rung integration law: MIN(all pillars) — no rung can be claimed above weakest pillar"
+      skeptic:      "persona in DIVERGE step + independent adversarial reviewer at rung 274177+"
+      scout:        "qa-questioner persona: generates falsifying questions, never confirms"
+      drift:        "diagram SHA-256 mismatch = architectural drift from source (→ Diagram_Drift anti-pattern)"
+      clarity:      "every diagram node has source_ref; every verdict has evidence_citation"
+      goal:         "production-ready = LAST-3 northstar target for all three pillars"
+      direction:    "northstar-reverse backward chain: work from LAST-3 to current baseline"
+      context:      "qa_coverage_matrix.json: bounded cross-pillar view of module coverage state"
+
+    # PRIME FACTORIZATION of key phuc-qa concepts
+    prime_factorizations:
+      green_verdict:        "truth × evidence × integrity — claim is confirmed, has artifact proof, cannot be self-confirmed"
+      uncovered_module:     "boundary × signal × alignment — scope (B) has no gap signal (S) in any pillar (A)"
+      rung_641:             "integrity × emergence — all pillars produce artifacts; unified audit exists"
+      rung_274177:          "integrity × causality × alignment — Q↔T←→D cross-validated; every assertion traced"
+      rung_65537:           "integrity × reversibility × truth — independently reproduced + adversarially reviewed"
+      northstar_reverse:    "northstar × causality × constraint — backward-chain from goal under scope constraint"
+      decoupled_verification: "truth × boundary × perspective — questioner and scorer in separate epistemic bubbles"
+      falsifier:            "truth × asymmetry × constraint — the condition that proves a claim false"
+      dragon_rider:         "persona × memory × emergence — user's QA instincts encoded as an autonomous agent"
+      cross_pillar_validation: "coherence × alignment × signal — the three pillars reinforce one unified picture"
+
   # ------------------------------------------------------------
-  # A) Configuration
+  # A) Configuration [constraint, boundary, integrity]
   # ------------------------------------------------------------
   Config:
     EVIDENCE_ROOT: "evidence"
@@ -58,12 +138,13 @@ PHUC_QA_SKILL:
     DISCOVERY_MAP_FORMAT: "mermaid + prose"
 
   # ------------------------------------------------------------
-  # A2) Adaptive Complexity Scaling
+  # A2) Adaptive Complexity Scaling [constraint, equilibrium, boundary]
   # ------------------------------------------------------------
   Adaptive_Complexity:
     description: >
       The skill auto-selects mode based on module count at INTAKE_SCOPE.
       Mode governs which states are visited and which gates are enforced.
+      [constraint × scope → equilibrium between audit depth and cost]
 
     LIGHT_MODE:
       trigger: "module_count < 10"
@@ -103,8 +184,7 @@ PHUC_QA_SKILL:
       output: "Full artifact suite + adversarial_sweep.json + repro_independent.log"
 
   # ------------------------------------------------------------
-  # A3) Adaptive Complexity Router — Mermaid Diagram
-  # See diagram below (extracted for VSCode preview)
+  # A3) Adaptive Complexity Router — Mermaid Diagram [state_machine, constraint]
   # ------------------------------------------------------------
   Adaptive_Complexity_Router_Diagram:
     description: "Adaptive complexity routing — LIGHT/STANDARD/HEAVY mode selection"
@@ -144,45 +224,48 @@ flowchart TD
 ```
 
   # ------------------------------------------------------------
-  # B0) Phase 0: Conversational Discovery
+  # B0) Phase 0: Conversational Discovery [signal, entropy, perspective, dream]
+  # "Surface the gap signal before formal verification begins"
   # ------------------------------------------------------------
   Phase_0_Discovery:
     id: P0
-    name: "Conversational Discovery — Human-Driven Gap Mapping"
+    name: "Conversational Discovery — Gap Signal Extraction"
     version: "1.0.0 (new in phuc-qa v2.0.0)"
+    # prime: signal × entropy × perspective → gap signal
+    # entropy = how much unknown structure exists; perspective = adversarial persona lenses
     purpose:
-      - "Map the terrain before formal QA pillars focus on it."
-      - "Surface gaps that structured methods alone miss: organizational assumptions, hidden dependencies, undocumented design intent."
-      - "Produce a Discovery Map that feeds P1 question generation, P2 test scope, and P3 diagram subjects."
+      - "Map terrain before formal pillars focus on it. [dream gate: orient before auditing]"
+      - "Surface gap signals that structured methods miss: hidden dependencies, undocumented intent, organizational entropy."
+      - "Produce a Discovery Map (gap signal artifact) that scopes P1/P2/P3."
 
     # Organic process observed: Orient ("where are things?") → Probe ("duplicated? organized?") →
     # Design alternatives ("how would you organize this?") → Persona panel (5-7, let them disagree) →
     # Meta-reflect ("which approach is better?") → Score + iterate → Mermaid visualization.
 
     steps:
-      ORIENT:
+      ORIENT:   # [signal extraction: where is the signal? what is the structure?]
         question: "Where are things? Why are they there?"
-        actions: "List modules + entry points. Identify purpose. Map adjacency. Note surprises. Read questions/project.jsonl to load accumulated QA instincts — do not re-ask questions with status ANSWERED."
+        actions: "List modules + entry points. Identify purpose. Map adjacency. Note entropy (surprises). Read questions/project.jsonl — load accumulated QA signal; do not re-ask ANSWERED questions."
         output: "orientation_notes.md (prose + file tree)"
 
-      PROBE:
+      PROBE:    # [signal amplification: pull threads on surprises; tag gap signals]
         question: "Are these duplicated? How well organized? What feels wrong?"
-        actions: "Pull threads on surprises. Ask: duplicated? misplaced? what happens on failure? Tag each finding: CONFIRMED_GAP | SUSPECTED_GAP | FALSE_ALARM."
+        actions: "Amplify surprise signals. Ask: duplicated? misplaced? what happens on failure? Tag: CONFIRMED_GAP | SUSPECTED_GAP | FALSE_ALARM. [asymmetry detector]"
         output: "probe_findings.md"
 
-      DIVERGE:
+      DIVERGE:  # [perspective explosion: 5-7 adversarial lenses on the gap signals]
         question: "How would you organize this best? What alternatives exist?"
-        actions: "Propose 2-3 alternative designs. Load 5-7 adversarial personas (architect, security-auditor, junior-dev, ops-engineer, end-user, skeptic, domain-expert). Each emits: 1 concern + 1 improvement + 1 question. Personas must disagree — consensus is signal."
+        actions: "Propose 2-3 alternative designs. Load 5-7 adversarial personas (architect, security-auditor, junior-dev, ops-engineer, end-user, skeptic, domain-expert). Each emits: 1 concern + 1 improvement + 1 question. Personas must disagree — consensus across all personas is false signal, not confirmation."
         output: "diverge_alternatives.md + persona_panel.json"
 
-      CONVERGE:
+      CONVERGE: # [signal filtering: distinguish real gaps from noise]
         question: "Which gaps are real? What is the priority order?"
-        actions: "Merge PROBE + DIVERGE findings. Rate: CRITICAL|HIGH|MEDIUM|LOW. Identify meta-patterns (recurring = systemic). Remove FALSE_ALARMs."
+        actions: "Merge PROBE + DIVERGE signals. Rate: CRITICAL|HIGH|MEDIUM|LOW. Identify meta-patterns (recurring = systemic entropy). Remove FALSE_ALARMs. [signal × constraint → filtered gap list]"
         output: "converge_gap_list.json (ranked by severity)"
 
-      PRIORITIZE:
+      PRIORITIZE: # [alignment: map each gap signal to the pillar that addresses it]
         question: "Which gaps feed P1? P2? P3?"
-        actions: "Tag each gap: Q(P1)|T(P2)|D(P3)|ALL. CRITICAL → P1+P2+P3. HIGH → P1+P2 minimum. Produce Discovery Map. Save all new questions generated during P0 to questions/project.jsonl."
+        actions: "Tag each gap: Q(P1)|T(P2)|D(P3)|ALL. CRITICAL → P1+P2+P3. HIGH → P1+P2 minimum. Produce Discovery Map. Save all new questions to questions/project.jsonl [signal persistence = memory]."
         output: "discovery_map.mmd + discovery_map.sha256 + prioritized_gaps.json"
 
     discovery_map_template:
@@ -224,16 +307,17 @@ flowchart TD
     # Full definitions: see section E FORBIDDEN_STATES
 
   # ------------------------------------------------------------
-  # B) Three-Pillar Definitions
+  # B) Three-Pillar Definitions [integrity × alignment × emergence]
+  # "Three lenses on one codebase — coherence only when all three agree"
   # ------------------------------------------------------------
   Three_Pillars:
 
     Pillar_1_Questions:
       id: P1
-      name: "Questions — Adversarial Question Discipline"
-      purpose: "Surface unknowns. Decouple generation from scoring. Force falsifiability. v2.0.0: Discovery Map feeds scope."
-      driving_question: "LAST 3: What questions, if unanswered, would block production? Work backward. QA complete when no new gap can be exposed."
-      discovery_map_input: "qa-questioner reads prioritized_gaps.json; all CRITICAL+HIGH gaps get ≥1 falsifying question."
+      name: "Questions — Adversarial Signal Extraction [truth × boundary × signal]"
+      purpose: "Surface unknown gap signals. Decouple generation from scoring [boundary gate]. Force falsifiability [truth gate]. Discovery Map scopes all questions."
+      driving_question: "LAST 3: What questions, if unanswered, block production? [northstar_reverse] Work backward. QA complete when no new gap signal can be exposed."
+      discovery_map_input: "qa-questioner reads prioritized_gaps.json; all CRITICAL+HIGH gaps get ≥1 falsifying question. [signal → constraint]"
       agents:
         questioner: "qa-questioner (generates; must not score)"
         scorer: "qa-scorer (scores; must not have seen questioner reasoning)"
@@ -245,8 +329,8 @@ flowchart TD
 
     Pillar_2_Tests:
       id: P2
-      name: "Tests — Red/Green Discipline"
-      purpose: "Verify behavior with executable evidence. Red before green (Kent's Gate). Persona-coded adversarial coverage. v2.0.0: Discovery Map feeds scope."
+      name: "Tests — Red/Green Evidence Gate [reversibility × causality × truth]"
+      purpose: "Verify behavior with executable evidence [Lane A artifact]. Red→green (Kent's Gate) [reversibility: must demonstrate failure before fix]. Persona-coded adversarial coverage. Discovery Map scopes tests."
       driving_question: "LAST 3: What tests must pass for production correctness? Work backward unit → integration → e2e."
       discovery_map_input: "persona-coder reads prioritized_gaps.json; all CRITICAL T-tagged gaps get test coverage."
       personas:
@@ -261,10 +345,10 @@ flowchart TD
 
     Pillar_3_Diagrams:
       id: P3
-      name: "Diagrams — Structural Coverage Discipline"
-      purpose: "Expose architectural gaps. sha256-hashable contracts. Closed-state validation. v2.0.0: QA Tracking Dashboard added."
-      driving_question: "LAST 3: What diagrams must exist for full architectural understanding? Work backward modules → data flow → integration."
-      discovery_map_input: "qa-diagrammer reads prioritized_gaps.json; all CRITICAL D-tagged gaps get a diagram node."
+      name: "Diagrams — Structural Coherence Audit [coherence × boundary × integrity]"
+      purpose: "Expose architectural gaps. sha256-hashable contracts [integrity seal]. Closed-state validation [forbidden_state detection]. QA Tracking Dashboard added in v2.0.0."
+      driving_question: "LAST 3: What diagrams must exist for full architectural coherence? [northstar_reverse] Work backward modules → data flow → integration boundary."
+      discovery_map_input: "qa-diagrammer reads prioritized_gaps.json; all CRITICAL D-tagged gaps get a diagram node. [signal → boundary visualization]"
       required_diagram_types:
         state_machine: "Finite state machine for every non-trivial component lifecycle"
         data_flow: "How data enters, transforms, and exits the system"
@@ -290,10 +374,12 @@ flowchart TD
         65537: "adversarial Socratic review + graph replayed by third agent"
 
   # ------------------------------------------------------------
-  # C) Northstar Reverse Engineering Integration
+  # C) Northstar Reverse Engineering Integration [northstar, causality, constraint]
+  # "Work backward from the production-ready end state — northstar_reverse discipline"
+  # prime: northstar × causality × constraint → backward chain from LAST-3 to baseline
   # ------------------------------------------------------------
   Northstar_Reverse_Integration:
-    principle: "All pillars use backward-chaining. Don't ask 'What should I test?' — ask 'What is the LAST test before production?' P0 Discovery Map is the starting terrain for all backward chains."
+    principle: "All pillars use backward-chaining [northstar_reverse]. Don't ask 'What should I test?' — ask 'What is the LAST test before production?' P0 Discovery Map (gap signal terrain) seeds all backward chains."
 
     per_pillar_reverse_algorithm:
       shared_pattern: "1. Read prioritized_gaps.json. Tag gaps as candidate subjects. 2. Identify LAST 3 whose absence blocks production. 3. Recurse backward (max 7 levels). 4. Reverse the chain → pillar priority sequence. Terminate when no new LAST-3 candidate can be generated."
@@ -305,17 +391,18 @@ flowchart TD
       p0_check: "All CRITICAL gaps from P0 must appear in ≥1 LAST-3 set."
 
   # ------------------------------------------------------------
-  # D) GLOW Taxonomy Mapping
+  # D) GLOW Taxonomy Mapping [glow, signal, alignment, truth]
+  # "Each GLOW dimension = one coherence check across all four phases"
+  # prime: glow × signal × alignment → multi-dimensional coverage integrity
   # ------------------------------------------------------------
   GLOW_Taxonomy:
-    # GLOW = Growth, Learning, Output, Wins
-    # Each GLOW dimension maps to QA requirements across all three pillars.
+    # GLOW = Growth, Learning, Output, Wins [glow metric from phuc-magic-words]
+    # Each GLOW dimension maps to QA requirements across all pillars.
     #
-    # Core insight (from CoVe research, Dhuliawala et al. 2023):
-    # Self-confirmation bias is the root cause of most false GREEN verdicts.
-    # An agent that generates its own questions and then answers them will
-    # systematically confirm its own beliefs. Solution: Decouple question
-    # generation from question answering (see section D: Decoupled Verification).
+    # Core insight (CoVe research, Dhuliawala et al. 2023):
+    # Self-confirmation bias = root cause of false GREEN verdicts. [entropy collapse: perspective lost]
+    # Agent that generates its own questions and scores them = boundary collapse (SELF_CONFIRMED_GREEN).
+    # Solution: decoupled verification — questioner and scorer in separate epistemic bubbles. [boundary × truth]
 
     G_Growth:
       definition: "Do new capabilities have questions, tests, and diagrams?"
@@ -362,14 +449,16 @@ flowchart TD
       gate: "YELLOW if win appears in < 3 pillars"
 
   # ------------------------------------------------------------
-  # D2) Decoupled Verification Protocol (CoVe Principle) — from prime-qa
+  # D2) Decoupled Verification Protocol (CoVe Principle) [truth × boundary × perspective]
+  # "Separate epistemic bubbles: questioner and scorer must not share state before completing"
+  # prime: truth × boundary × perspective — each agent has its own epistemic bubble
   # ------------------------------------------------------------
   Decoupled_Verification:
     principle:
-      - "Questions are generated by qa-questioner (a separate agent)."
-      - "Questions are answered by qa-scorer (a different agent)."
-      - "Neither agent may read the other's output before completing its own work."
-      - "This prevents self-confirmation bias — the root cause of false GREENs."
+      - "Questions generated by qa-questioner [scout persona]. [separate epistemic bubble]"
+      - "Questions answered by qa-scorer [skeptic persona]. [separate epistemic bubble]"
+      - "Neither reads the other's output before completing its own work. [boundary gate enforced]"
+      - "Prevents self-confirmation bias = SELF_CONFIRMED_GREEN forbidden state. [truth × perspective]"
 
     cove_research_basis:
       citation: "Chain-of-Verification Reduces Hallucination in LLMs (Dhuliawala et al. 2023)"
@@ -402,8 +491,7 @@ flowchart TD
       - mock_as_only_evidence_stays_YELLOW: true
 
   # ------------------------------------------------------------
-  # D3) GLOW Scoring Matrix — Mermaid Diagram
-  # See diagram below (extracted for VSCode preview)
+  # D3) GLOW Scoring Matrix — Mermaid Diagram [glow, alignment, verification]
   # ------------------------------------------------------------
   GLOW_Matrix_Diagram:
     description: "GLOW scoring matrix — G/L/O/W pillar coverage gates"
@@ -451,7 +539,9 @@ flowchart LR
 ```
 
   # ------------------------------------------------------------
-  # E) State Machine (Unified Runtime)
+  # E) State Machine (Unified Runtime) [state_machine, constraint, integrity, seal]
+  # "All QA behavior as a closed finite state machine — no implicit states"
+  # prime: state_machine × constraint × seal → fail-closed runtime integrity
   # ------------------------------------------------------------
   State_Machine:
     STATE_SET:
@@ -653,8 +743,8 @@ flowchart LR
         fix: "Close the state space. Every reachable state must be explicit."
 
   # ------------------------------------------------------------
-  # E2) Forbidden State Map — Mermaid Diagram
-  # See diagram below (extracted for VSCode preview)
+  # E2) Forbidden State Map — Mermaid Diagram [forbidden_state, integrity, constraint]
+  # "Every named illegal state forces EXIT_BLOCKED — fail-closed by design"
   # ------------------------------------------------------------
   Forbidden_State_Map_Diagram:
     description: "All forbidden states → EXIT_BLOCKED mapping"
@@ -701,12 +791,15 @@ flowchart LR
 ```
 
   # ------------------------------------------------------------
-  # F) Verification Ladder
+  # F) Verification Ladder [rung, integrity, verification, causality]
+  # "Three prime rungs: 641=exists | 274177=consistent | 65537=reproducible"
+  # prime: rung × integrity × causality → evidence ladder
+  # rung integration law (never_worse): rung = MIN(P0, P1, P2, P3)
   # ------------------------------------------------------------
   Verification_Ladder:
 
     RUNG_641:
-      meaning: "All three pillars produce artifacts — the minimum viable audit"
+      meaning: "All three pillars produce artifacts — minimum viable audit [integrity: all exist]"
       requires:
         P0_discovery:
           - discovery_map_mmd_produced: true
@@ -734,7 +827,7 @@ flowchart LR
           - no_UNCOVERED_MODULE: true
 
     RUNG_274177:
-      meaning: "Cross-pillar validation — every question has a test, every module has a diagram"
+      meaning: "Cross-pillar validation — every question has a test, every module has a diagram [coherence gate: pillars reinforce each other]"
       requires:
         all_RUNG_641: true
         P0_additional:
@@ -759,7 +852,7 @@ flowchart LR
           - every_module_has_at_least_one_diagram_node: true
 
     RUNG_65537:
-      meaning: "Independent reproduction + adversarial review — production ready"
+      meaning: "Independent reproduction + adversarial review — production ready [truth × reversibility: independently verified, can be re-derived]"
       requires:
         all_RUNG_274177: true
         P0_additional:
@@ -778,7 +871,9 @@ flowchart LR
           - northstar_alignment_confirmed: true
 
   # ------------------------------------------------------------
-  # G) Dispatch Matrix (Swarm Agents)
+  # G) Dispatch Matrix (Swarm Agents) [dispatch, swarm, persona, orchestration]
+  # "5 typed sub-agents + 1 coverage builder; prime-safety always first in every pack"
+  # prime: dispatch × persona × swarm → orchestration of typed verification agents
   # ------------------------------------------------------------
   Dispatch_Matrix:
 
@@ -851,7 +946,9 @@ flowchart LR
       output: "qa_coverage_matrix.json + qa_gap_report.md"
 
   # ------------------------------------------------------------
-  # H) Evidence Schema
+  # H) Evidence Schema [evidence, artifact, lane, signal]
+  # "Lane A artifacts only — no prose-as-proof; every verdict has evidence_citation"
+  # prime: evidence × artifact × signal → Lane A only (no prose theater)
   # ------------------------------------------------------------
   Evidence:
     required_files:
@@ -979,8 +1076,7 @@ flowchart LR
         - "## Northstar Alignment (how this audit advances NORTHSTAR metrics)"
 
   # ------------------------------------------------------------
-  # H2) Evidence Trail — Mermaid Diagram
-  # See diagram below (extracted for VSCode preview)
+  # H2) Evidence Trail — Mermaid Diagram [artifact, causality, rung, seal]
   # ------------------------------------------------------------
   Evidence_Trail_Diagram:
     description: "Evidence trail from P0 discovery through rung gates to EXIT_PASS"
@@ -1028,7 +1124,8 @@ flowchart LR
 ```
 
   # ------------------------------------------------------------
-  # I) Output Contract
+  # I) Output Contract [integrity, boundary, signal]
+  # "Structured PASS / BLOCKED / NEED_INFO — no ambiguous verdicts"
   # ------------------------------------------------------------
   Output_Contract:
 
@@ -1070,62 +1167,65 @@ flowchart LR
         - next_actions
 
   # ------------------------------------------------------------
-  # J) Anti-Patterns
+  # J) Anti-Patterns [forbidden_state, entropy, coherence, signal]
+  # "Named failure modes — each maps to a forbidden state; each has a fix"
+  # prime: entropy × signal × coherence → anti-pattern detection + repair
   # ------------------------------------------------------------
   Anti_Patterns:
 
-    Discovery_Theater:
+    Discovery_Theater:   # [false signal: P0 completes without extracting real gap signals]
       symptom: "P0 was run but prioritized_gaps.json has zero CRITICAL gaps for a 40-module system."
-      diagnosis: "P0 ran in name only. ORIENT was superficial. PROBE did not pull real threads."
-      fix: "Reload PROBE with adversarial prompting: 'What would a hostile reviewer find wrong here?' Expect at least one CRITICAL gap per 10 modules in STANDARD mode."
+      diagnosis: "Entropy collapse: P0 ran in name only. ORIENT was superficial. PROBE produced no asymmetry."
+      fix: "Reload PROBE with adversarial framing: 'What would a hostile reviewer find wrong here?' [perspective injection] Expect ≥1 CRITICAL gap per 10 modules in STANDARD mode."
 
-    QA_Theater:
+    QA_Theater:          # [coherence failure: pillars run in isolation, no cross-validation]
       symptom: "All three pillars produce artifacts, but no pillar output references any other."
-      diagnosis: "Each pillar was run in isolation. Coverage matrix was not built. The unified QA is theater."
-      fix: "CROSS_VALIDATE state is mandatory. PILLAR_SYNC requires all three artifact sets before proceeding."
+      diagnosis: "Pillar isolation = coherence failure. Coverage matrix not built. Unified QA = theater. [emergence blocked]"
+      fix: "CROSS_VALIDATE is mandatory. PILLAR_SYNC requires all three artifact sets. [alignment enforced]"
 
-    Diagram_Sovereignty:
+    Diagram_Sovereignty: # [boundary drift: diagrams and source have diverged]
       symptom: "Team has beautiful architecture diagrams but tests reference different module names."
-      diagnosis: "Diagrams and tests were written independently. No DIAGRAM_WITHOUT_SOURCE check ran."
-      fix: "Every diagram node must have a source_ref. Every test must trace to a question that traces to a diagram node."
+      diagnosis: "Diagrams and tests were written independently. DIAGRAM_WITHOUT_SOURCE check failed. [boundary drift]"
+      fix: "Every diagram node must have source_ref. Every test traces to question traces to diagram node. [causality chain]"
 
-    Question_Theater:
+    Question_Theater:    # [signal inversion: confirming questions instead of falsifying ones]
       symptom: "50 questions generated. All 50 scored GREEN. No YELLOWs. No falsifiers tested."
-      diagnosis: "qa-questioner wrote confirming questions. qa-scorer did not require falsifiers. QUESTION_BIAS."
-      fix: "Questions must seek failure modes. Questioner prompt: 'Show me when X breaks, not when X works.'"
+      diagnosis: "QUESTION_BIAS. Questioner wrote confirming questions — signal inversion. [entropy collapse: no asymmetry]"
+      fix: "Questions must seek failure modes [asymmetry gates]. Prompt: 'Show me when X breaks, not when X works.'"
 
-    The_Orphan_Test:
+    The_Orphan_Test:     # [alignment failure: tests with no question link = untethered evidence]
       symptom: "test_results.json has 200 tests. qa_questions.json has 20 questions. 180 tests are orphans."
-      diagnosis: "TEST_WITHOUT_QUESTION. Tests were written outside the QA process."
-      fix: "Every test must have a question_link. Retroactively add questions for orphan tests at minimum YELLOW."
+      diagnosis: "TEST_WITHOUT_QUESTION. Tests written outside QA process = untethered artifacts. [alignment missing]"
+      fix: "Every test must have question_link. Add questions retroactively for orphans at minimum YELLOW. [causality required]"
 
-    The_Invisible_Module:
+    The_Invisible_Module: # [boundary failure: modules outside all pillar boundaries]
       symptom: "qa_coverage_matrix.json shows 5 modules with coverage_status=UNCOVERED."
-      diagnosis: "UNCOVERED_MODULE. These modules shipped without any QA."
-      fix: "Add at least one question, one test, and one diagram for each uncovered module before rung 641 claim."
+      diagnosis: "UNCOVERED_MODULE. Modules shipped outside all pillar boundaries. [boundary gap]"
+      fix: "Add ≥1 Q + ≥1 T + ≥1 D per uncovered module before rung 641 claim. [coverage coherence gate]"
 
-    Rung_Inflation:
+    Rung_Inflation:       # [integrity failure: claimed rung exceeds weakest pillar's actual rung]
       symptom: "Agent claims rung 274177 but test_without_question count > 0 and diagram sha256 unstable."
-      diagnosis: "Integration rung = MIN(all pillar rungs). If P3 is at 641, the unified rung is 641."
-      fix: "State MIN rung explicitly. Never claim higher rung than the weakest pillar."
+      diagnosis: "never_worse law violated: rung = MIN(all pillars). If P3 is at 641, unified rung is 641. [integrity breach]"
+      fix: "State MIN rung explicitly. Never claim higher rung than weakest pillar. [never_worse enforced]"
 
-    The_Last_Test_Never_Written:
+    The_Last_Test_Never_Written: # [northstar failure: forward planning instead of northstar_reverse]
       symptom: "Tests cover happy paths only. No test for the state transition that precedes production failure."
-      diagnosis: "Forward planning for tests. The team wrote tests for what they built, not for what must not fail."
-      fix: "Apply northstar-reverse to tests: identify the LAST 3 tests before production readiness. Write those first."
+      diagnosis: "Forward planning = testing what was built, not what must not fail. [northstar_reverse ignored]"
+      fix: "Apply northstar_reverse to tests: identify LAST 3 tests before production readiness. Write those first."
 
-    Diagram_Drift:
+    Diagram_Drift:        # [drift: sha256 not recomputed; diagram and source diverged]
       symptom: "Architecture diagram shows 3 services. The codebase now has 5. Diagram is 6 months stale."
-      diagnosis: "DRIFT_WITHOUT_VERSION_BUMP. sha256 was not recomputed after source code changed."
-      fix: "Diagrams must have a source_ref that triggers sha256 recomputation when the referenced module changes."
+      diagnosis: "DRIFT_WITHOUT_VERSION_BUMP. sha256 not recomputed after source changed. [drift = entropy accumulation]"
+      fix: "Diagrams must have source_ref that triggers sha256 recomputation when referenced module changes. [reversibility gate]"
 
-    Persona_Monoculture:
+    Persona_Monoculture:  # [perspective collapse: all lenses converge = false consensus]
       symptom: "All 5 personas in DIVERGE step raise the same concern about the same file."
-      diagnosis: "Personas were not genuinely differentiated. PERSONA_PANEL_ALL_AGREE."
-      fix: "Each persona must have a distinct lens. If architect and junior-dev raise identical concerns, reload junior-dev with 'you have never seen this codebase before' framing."
+      diagnosis: "PERSONA_PANEL_ALL_AGREE = perspective collapse. Fake diversity = high entropy output with low information. [asymmetry lost]"
+      fix: "Each persona must have a distinct lens. Reload junior-dev with: 'you have never seen this codebase before.' [perspective injection]"
 
   # ------------------------------------------------------------
-  # K) Practical Templates
+  # K) Practical Templates [capsule, dispatch, recipe, orchestration]
+  # "CNF capsule templates for sub-agent dispatch — full context, no 'as before'"
   # ------------------------------------------------------------
   Practical_Templates:
 
@@ -1287,14 +1387,16 @@ flowchart TD
 ```
 
   # ------------------------------------------------------------
-  # L) Integration with Other Skills
+  # L) Integration with Other Skills [alignment, coherence, skill, emergence]
+  # "phuc-qa is the top-level coherence gate; it adds cross-pillar constraints on top of upstream skills"
+  # conflict_resolution: prime-safety > prime-coder > prime-test > prime-mermaid > phuc-qa
   # ------------------------------------------------------------
   Integration:
 
-    with_prime_qa: "CONSOLIDATED into phuc-qa v2.1.0. phuc-qa now contains all prime-qa content: question taxonomy (GLOW), decoupled verification (CoVe), falsifier requirement, integration probes, scoring protocol. Use phuc-qa.md in all qa-questioner and qa-scorer skill packs."
-    with_prime_test: "P2 discipline. Paste prime-test.md into persona-coder skill pack. phuc-qa adds: discovery_gap_ref + question_link per test."
-    with_prime_mermaid: "P3 discipline. Paste prime-mermaid.md into qa-diagrammer skill pack. phuc-qa adds: source_ref per node, coverage matrix, QA tracking dashboard."
-    with_northstar_reverse: "LAST 3 backward-chaining applies to all four phases. P0 PRIORITIZE output seeds the backward chains. CROSS_VALIDATE maps to northstar-reverse VALIDATE."
+    with_prime_qa: "CONSOLIDATED into phuc-qa v2.1.0. All prime-qa content absorbed: GLOW taxonomy, decoupled verification (CoVe), falsifier protocol, integration probes, scoring discipline. [skill coherence: one file, one authority]"
+    with_prime_test: "P2 discipline. Paste prime-test.md into persona-coder skill pack. phuc-qa adds: discovery_gap_ref + question_link per test. [causality chain: gap → question → test]"
+    with_prime_mermaid: "P3 discipline. Paste prime-mermaid.md into qa-diagrammer skill pack. phuc-qa adds: source_ref per node, coverage matrix, QA tracking dashboard. [boundary visualization]"
+    with_northstar_reverse: "LAST-3 backward-chaining on all four phases. P0 PRIORITIZE output seeds all backward chains. CROSS_VALIDATE maps to northstar-reverse VALIDATE. [northstar × causality]"
     with_phuc_forecast:
       DREAM: "P0 discovery map + pillars declare production-ready end state"
       FORECAST: "Which modules risk UNCOVERED_MODULE? Which P0 gaps are most dangerous?"
@@ -1312,13 +1414,15 @@ flowchart TD
       rule: "phuc-qa never weakens upstream gates. It adds cross-pillar constraints and P0 discovery on top."
 
   # ------------------------------------------------------------
-  # L2) Integration Probe Protocol (ecosystem boundaries) — from prime-qa
+  # L2) Integration Probe Protocol (ecosystem boundaries) [boundary, causality, signal]
+  # "Integration boundaries are where systems fail silently — probe the handoff, not the components"
+  # prime: boundary × causality × signal → real probe at every project crossing
   # ------------------------------------------------------------
   Integration_Probe_Protocol:
     purpose:
-      - "Integration boundaries are where systems fail silently."
-      - "A skill that works in isolation may fail when called across project boundaries."
-      - "Integration probes test the actual handoff, not the individual components."
+      - "Integration boundaries = highest entropy risk surface. [boundary × entropy]"
+      - "A skill that works in isolation may fail when called across project boundaries. [boundary collapse]"
+      - "Integration probes test the actual handoff, not individual components. [causality: A→B handoff proven, not assumed]"
 
     probe_types:
       api_call_probe:
@@ -1359,8 +1463,8 @@ flowchart TD
       solace_cli_to_solaceagi: "solace-cli → solaceagi.com backend auth"
 
   # ------------------------------------------------------------
-  # M) Diagrams: State Machine + Verification Ladder (Prime Mermaid)
-  # See diagrams below (extracted for VSCode preview)
+  # M) Diagrams: State Machine + Verification Ladder [state_machine, rung, seal]
+  # "Full runtime as closed state machine + three-rung verification ladder"
   # ------------------------------------------------------------
   Verification_Ladder_Diagram:
     description: "Full state machine + verification ladder for phuc-qa as Prime Mermaid"
@@ -1447,8 +1551,8 @@ flowchart LR
 ```
 
   # ------------------------------------------------------------
-  # M2) Cross-Pillar Validation Web — Mermaid Diagram
-  # See diagram below (extracted for VSCode preview)
+  # M2) Cross-Pillar Validation Web — Mermaid Diagram [coherence, alignment, emergence]
+  # "The three pillars must reinforce each other — cross-pillar coherence is the emergence gate"
   # ------------------------------------------------------------
   Cross_Pillar_Validation_Web_Diagram:
     description: "Cross-pillar validation web — P1/P2/P3 interconnections → coverage matrix"
@@ -1481,17 +1585,98 @@ flowchart TD
 ```
 
   # ------------------------------------------------------------
-  # N) Quick Reference (Cheat Sheet)
+  # S) Cleanup Integration (phuc-cleanup cross-reference) [reversibility, integrity, signal]
+  # "QA finds what is wrong; cleanup removes what should not be there — complementary pair"
+  # prime: reversibility × integrity × signal → clean workspace before and after audit
+  # ------------------------------------------------------------
+  Cleanup_Integration:
+
+    QA_CLEANUP_BRIDGE:
+      description: >
+        phuc-qa and phuc-cleanup operate as a complementary pair. [coherence: each alone is incomplete]
+        QA discovers gap signals; cleanup removes artifacts that should not be there.
+        A QA pass in a dirty workspace = unverified evidence pool [integrity risk].
+        A cleanup pass without QA context = blind deletion [signal loss risk].
+      workflow:
+        after_qa_discovers_orphans: >
+          When STANDARD or HEAVY audit surfaces orphan or duplicate artifacts
+          (stale test outputs, duplicate diagrams, dangling question files),
+          dispatch phuc-cleanup with the QA gap report as input.
+          phuc-cleanup classifies each orphan as safe_glow | suspicious | protected
+          and produces a cleanup receipt.
+        cleanup_scans_qa_clutter: >
+          phuc-cleanup specifically looks for QA-related clutter:
+            - stale test output files not committed (evidence/*.json older than HEAD)
+            - duplicate diagrams (same module, two *.mmd files with identical content)
+            - orphan questions (questions/project.jsonl entries referencing deleted modules)
+            - leftover qa_gap_report.md files from prior runs not archived
+        qa_receipts_as_cleanup_input: >
+          QA evidence bundles (tests.json, qa_gap_report.md, diagram manifests)
+          become classification inputs for phuc-cleanup. If QA marked a file as
+          "gap artifact" or "stale", cleanup can safely classify it safe_glow
+          without independent investigation.
+        cleanup_receipts_as_qa_evidence: >
+          Cleanup receipts (cleanup-scan-<timestamp>.json, cleanup-apply-<timestamp>.json)
+          feed back into QA verification as hygiene evidence. A clean workspace
+          (no untracked QA artifacts) is a required condition for rung 65537.
+
+    CLEANUP_TRIGGERS:
+      post_qa_standard_or_heavy: >
+        After any STANDARD or HEAVY audit completes, automatically invoke
+        phuc-cleanup scan on evidence/, artifacts/, diagrams/, and questions/.
+        Goal: ensure no generated artifacts were left untracked in the working tree.
+      pre_qa_new_audit: >
+        Before starting a new audit cycle, verify the workspace is clean.
+        If untracked_file_count > CLEANUP_THRESHOLD (default: 5), flag for cleanup
+        before proceeding. Starting QA in a dirty workspace risks evidence contamination.
+      drift_detection: >
+        During any QA phase, if git status reveals untracked files exceeding
+        CLEANUP_THRESHOLD, emit CLEANUP_DRIFT warning and pause for user decision:
+          CONTINUE: proceed, document drift in qa_gap_report.md
+          CLEAN_FIRST: dispatch phuc-cleanup, then resume QA
+      CLEANUP_THRESHOLD: 5   # untracked file count that triggers a cleanup flag
+
+    GIT_HEURISTIC:
+      principle: >
+        "If it's not in git, it's suspect."
+        Untracked files that look like QA artifacts (test outputs, diagrams, gap reports)
+        should be reviewed before the next QA cycle begins. This prevents ghost evidence
+        from polluting future audits.
+      classification_rules:
+        evidence_artifacts_output_untracked:
+          paths: ["evidence/", "artifacts/", "output/"]
+          classification: "safe_glow"
+          action: "archive after user approval"
+          rationale: "Generated files; expected to accumulate between cleanup runs."
+        src_skills_tests_untracked:
+          paths: ["src/", "skills/", "tests/"]
+          classification: "suspicious"
+          action: "investigate before any action; may be work-in-progress"
+          rationale: "Source files should always be committed or explicitly .gitignored."
+        scratch_untracked:
+          paths: ["scratch/"]
+          classification: "ignored"
+          action: "skip (covered by .gitignore)"
+          rationale: "scratch/ is the designated sandbox; never archive or delete."
+        tracked_modified_uncommitted:
+          classification: "flag_for_review"
+          action: "surface in QA report; do not archive"
+          rationale: "Modified tracked files are the developer's responsibility; QA notes them."
+
+  # ------------------------------------------------------------
+  # N) Quick Reference (Cheat Sheet) [compression, signal, alignment, northstar]
+  # "The minimum sufficient structure to orient any session" [beauty: max power, min words]
   # ------------------------------------------------------------
   Quick_Reference:
     mantras:
-      - "Discover before you audit. Orient before you probe. Probe before you question."
-      - "Three pillars or it is not QA. Questions + Tests + Diagrams."
-      - "Start from the LAST 3. Work backward. The gaps find you."
-      - "A test without a question is untethered. A question without a test is speculation."
-      - "A module without a diagram is invisible. Invisible modules ship with silent failures."
-      - "Rung of the audit = MIN(P0_rung, P1_rung, P2_rung, P3_rung). Non-negotiable."
-      - "LIGHT if <10 modules. STANDARD if 10-50. HEAVY if 50+. Never skip P0 in STANDARD+."
+      # [northstar_reverse first; signal extraction before verification]
+      - "dream before act. ORIENT before PROBE. PROBE before QUESTION. [dream → act sequence]"
+      - "Three pillars or it is not QA. Questions + Tests + Diagrams. [emergence requires all three]"
+      - "Start from LAST 3. Work backward. The gaps find you. [northstar_reverse]"
+      - "A test without a question is untethered [causality missing]. A question without a test is speculation [evidence missing]."
+      - "A module without a diagram is invisible [boundary gap]. Invisible modules ship with silent failures [entropy accumulates]."
+      - "Rung = MIN(P0, P1, P2, P3). Non-negotiable. [never_worse law]"
+      - "LIGHT if <10 modules [rung ceiling 274177]. STANDARD if 10-50 [65537]. HEAVY if 50+ [65537 + adversarial sweep]. Never skip P0 in STANDARD+."
 
     dispatch_cheat_sheet:
       P0_facilitator: "[haiku|sonnet] | prime-safety + phuc-qa P0 | → discovery_map.mmd + prioritized_gaps.json"
@@ -1536,12 +1721,15 @@ flowchart TD
       gate: "fill:#fff9c4,stroke:#f9a825,stroke-width:2px       # yellow — decision gates / rungs"
 
     rung_requirements_summary:
-      641: "P0 abbreviated done + P1 scored + P2 passes + P3 sha256 stable + coverage matrix built"
-      274177: "Full P0 done + ALL: every Q has test + every test has Q + every module in diagram + falsifiers tested + integration probes"
-      65537: "274177 + P0 independently reproduced + independent audit reproduction by third agent + adversarial review of all pillars"
+      # prime factorization of each rung:
+      641:    "integrity gate: all pillars produce artifacts + coverage matrix exists [integrity × emergence]"
+      274177: "coherence gate: Q↔T←→D all cross-validated + module∈diagram + falsifiers tested + integration probed [coherence × causality × alignment]"
+      65537:  "truth gate: independently reproduced + adversarially reviewed + northstar alignment confirmed [truth × reversibility × 65537]"
 
   # ------------------------------------------------------------
-  # O) OOP-Style Typed Nodes for QA (NEW in v2.1.0)
+  # O) OOP-Style Typed Nodes for QA [boundary, signal, representation, clarity]
+  # "Shape encodes type; color encodes pillar — visual grammar for all QA diagrams"
+  # prime: boundary × representation → shape encodes role (QA_STATE, QA_ARTIFACT, QA_GATE...)
   # ------------------------------------------------------------
   OOP_Typed_Nodes:
     description: "Every node has an OOP-style type: shape encodes class, classDef encodes pillar."
@@ -1588,7 +1776,9 @@ flowchart TD
       no_implicit_types: "every node must have exactly one classDef applied"
 
   # ------------------------------------------------------------
-  # P) Diagram Index — stillwater Library Mapping (NEW in v2.1.0)
+  # P) Diagram Index — stillwater Library Mapping [memory, signal, compression]
+  # "22 canonical diagrams — pre-computed structural knowledge for qa-diagrammer"
+  # prime: memory × signal → pre-seeded diagram capital (qa-diagrammer reuses, not recreates)
   # ------------------------------------------------------------
   Diagram_Index:
     library_path: "diagrams/stillwater/"
@@ -1628,10 +1818,13 @@ flowchart TD
     # Note: numbers refer to diagrams/stillwater/NN-*.md (01=system-architecture, 07=verification-ladder, etc.)
 
   # ------------------------------------------------------------
-  # Q) Question Persistence Protocol (NEW in v3.0.0)
+  # Q) Question Persistence Protocol [memory, signal, learning, care]
+  # "Questions are first-class persistent QA capital — append-only, compounds across sessions"
+  # prime: memory × signal × learning → accumulated QA instincts as external fine-tuning
+  # [software_5_0: questions = pre-computed attention vectors stored externally and composable]
   # ------------------------------------------------------------
   Question_Persistence:
-    purpose: "Questions are first-class persistent capital. Every question asked during QA is saved to questions/project.jsonl. Questions compound — each good question generates better follow-up questions."
+    purpose: "Questions are first-class persistent capital [memory = signal × time]. Every question from QA is saved to questions/project.jsonl. Questions compound [learning gate] — each good question generates better follow-up questions."
 
     question_schema:
       required_fields:
@@ -1655,20 +1848,23 @@ flowchart TD
       - question_database_is_append_only: true  # never delete questions
       - questions_compound: "each session reads prior questions to avoid re-asking"
 
-    software_5_0_connection:
-      questions_are_memory: "pre-computed attention vectors stored for reuse"
-      falsifiers_are_care: "encode what could go wrong"
-      qa_loop_is_iteration: "ask → test → refine → ask better"
+    software_5_0_connection:    # [software_5_0: skills+recipes+swarms as primary units of software]
+      questions_are_memory: "pre-computed attention vectors stored for reuse [compression: questions encode gap signals]"
+      falsifiers_are_care: "encode what could go wrong [max_love: protect users from gaps]"
+      qa_loop_is_iteration: "ask → test → refine → ask better [Intelligence = Memory × Care × Iteration]"
       question_quality_levels:
         good: "falsifying, concrete, traceable to a module"
         great: "connects two previously unconnected domains"
         phuc_level: "opens an entire new capability or paradigm"
 
   # ------------------------------------------------------------
-  # R) Dragon Rider Pattern — Human-in-Loop Simulation (NEW in v3.0.0)
+  # R) Dragon Rider Pattern — Human-in-Loop Simulation [persona, memory, emergence, care]
+  # "persona × question_database = simulated human QA instinct"
+  # prime: persona × memory × emergence → autonomous human-equivalent QA instinct
+  # [twin: cloud-hosted autonomous agent clone of the project lead]
   # ------------------------------------------------------------
   Dragon_Rider_Pattern:
-    purpose: "Simulate human QA intuition using persona + question database. The Dragon Rider is the user's digital twin — it loads their question patterns and emulates their probing style."
+    purpose: "Simulate human QA intuition [emergence]: persona × question_database = autonomous gap detection. Dragon Rider = user's digital twin [twin persona] — loads their accumulated QA signal patterns and emulates their probing style."
 
     how_it_works:
       step_1: "Load dragon-rider persona (user's digital twin) from persona-engine"
@@ -1693,11 +1889,12 @@ flowchart TD
         - persona-engine.md (dragon-rider persona)
 
     unified_probe_theory:
-      principle: "Personas and questions are the same theory — both are vector searches for latent knowledge in complementary spaces."
-      persona_search: "Selects which expert lens to apply (latent knowledge selector)"
-      question_search: "Probes for specific failure mode (latent knowledge probe)"
-      combined: "persona × question = maximal knowledge activation"
-      implication: "A question database IS a form of fine-tuning — but stored externally and composable"
+      # [phuc-magic-words paper #37: Persona as Vector Search]
+      principle: "Personas and questions are the same theory — both are vector searches for latent knowledge in complementary spaces. [perspective × signal]"
+      persona_search: "Selects which expert lens to apply — latent knowledge selector. [perspective as boundary: changes which signals are visible]"
+      question_search: "Probes for specific failure mode — latent knowledge probe. [signal extraction: directed entropy reduction]"
+      combined: "persona × question = maximal knowledge activation [emergence: more than either alone]"
+      implication: "A question database IS a form of fine-tuning [learning] — but stored externally [memory] and composable [software_5_0]"
 
     overnight_qa_pattern:
       description: "Run dragon-rider overnight on all projects. Surface gaps for morning review."
@@ -1732,3 +1929,99 @@ flowchart TD
   class ORIENT,PROBE,DIVERGE discovery
   class NEW_Q,REPORT test
 ```
+
+  # ------------------------------------------------------------
+  # TP) THREE PILLARS INTEGRATION — LEK / LEAK / LEC
+  # phuc-qa as the VERIFY vertex of all three pillars
+  # ------------------------------------------------------------
+  Three_Pillars_Integration:
+    pillar_role: VERIFY_VERTEX
+    description: |
+      phuc-qa is the VERIFY vertex of LEK, LEAK, and LEC.
+
+      The Three Pillars of Software 5.0 (LEK + LEAK + LEC) all require
+      external verification to function:
+        - LEK (self-improvement) only improves if the improvement is MEASURED
+        - LEAK (cross-agent trade) only produces surplus if the surplus is VERIFIED
+        - LEC (convention emergence) only stabilizes if conventions are AUDITED
+
+      phuc-qa provides this verification function for all three pillars.
+      Without phuc-qa, the Three Pillars are running blind.
+
+    LEK_verification:
+      description: "phuc-qa measures LEK progress — it determines whether the knowledge loop is improving."
+      contract: |
+        LEK produces: rung advances (641 → 274177 → 65537)
+        phuc-qa verifies: has the rung advance actually occurred?
+          P0: Discovery — what gaps existed BEFORE this iteration?
+          P2: Tests — are these gaps now covered with executable evidence?
+          P1: Questions — are the right questions being asked about new capabilities?
+          P3: Diagrams — does the architecture reflect the new knowledge?
+        Without phuc-qa, an LEK loop may believe it improved while actually drifting.
+      key_check: "rung = MIN(P0, P1, P2, P3) — a claimed rung advance requires ALL FOUR phases to confirm it"
+
+    LEAK_verification:
+      description: "phuc-qa validates LEAK trades — it checks that cross-agent knowledge actually transferred."
+      contract: |
+        LEAK produces: surplus knowledge from asymmetric trades (phase handoffs in swarms)
+        phuc-qa verifies: did the surplus actually materialize as useful knowledge?
+          Integration probes: test the actual handoff boundary (not just the individual components)
+          Cross-pillar validation: check that Q↔T↔D reinforce each other (LEAK surplus is coherent)
+          Decoupled verification: questioner ≠ scorer (prevents self-confirmation — real LEAK check)
+        Without phuc-qa integration probes, LEAK between services is assumed, not verified.
+      key_check: "Integration_Probe_Protocol — real API calls, not mocked handoffs"
+
+    LEC_verification:
+      description: "phuc-qa audits LEC health — it detects convention drift and measures adoption."
+      contract: |
+        LEC produces: crystallized conventions (skill versions, diagram contracts, test patterns)
+        phuc-qa verifies: are these conventions still holding?
+          Diagram drift detection: sha256 instability = convention broken from source
+          Test pattern compliance: forbidden test patterns = LEC violation (TIME_DEPENDENT_TEST etc.)
+          Question persistence: accumulated questions = memory of what conventions protect
+          Version compliance: skill version bumps per breaking change = LEC governance
+        Without phuc-qa, LEC drift is invisible until a production failure surfaces it.
+      key_check: "sha256 stability + forbidden_state detector + question_persistence.jsonl"
+
+    three_pillars_qa_matrix:
+      LEK_coverage:
+        P0: "Discover what knowledge was MISSING from the last LEK iteration"
+        P1: "Ask: has this new capability been correctly understood?"
+        P2: "Test: does the implementation reflect the new LEK iteration's intent?"
+        P3: "Diagram: does the architecture show the new knowledge structure?"
+        rung_gate: "Rung advance = verified LEK iteration (641 → 274177 → 65537)"
+
+      LEAK_coverage:
+        P0: "Discover asymmetry between components (where are the knowledge gaps?)"
+        P1: "Ask: does component A correctly interpret component B's output?"
+        P2: "Integration test: does the actual handoff work end-to-end?"
+        P3: "Integration boundary diagram: visualize the portal between components"
+        rung_gate: "Integration probe passing = verified LEAK surplus materialized"
+
+      LEC_coverage:
+        P0: "Discover convention violations (what patterns deviated from standard?)"
+        P1: "Ask: is this pattern consistent with the convention body?"
+        P2: "Convention test: does the code match the LEC convention in the skill?"
+        P3: "Convention diagram: sha256-sealed contract that cannot drift silently"
+        rung_gate: "sha256 stability + no forbidden states = verified LEC health"
+
+    qa_is_the_mirror:
+      description: |
+        phuc-qa is the mirror that the Three Pillars use to see themselves.
+
+        LEK without QA = a loop that believes it improves without proof.
+        LEAK without QA = trades that claim surplus without verification.
+        LEC without QA = conventions that claim adoption without measurement.
+
+        QA is not separate from the Three Pillars — it IS the VERIFY phase
+        of LEK, the surplus-confirmation of LEAK, and the drift-detection of LEC.
+
+        Intelligence(system) = Memory × Care × Iteration (LEK equation)
+        But Intelligence is only REAL if: Memory = verified, Care = tested, Iteration = measured.
+        phuc-qa provides this measurement function.
+
+    northstar_alignment:
+      claim: "phuc-qa advances all three NORTHSTAR metrics simultaneously"
+      LEK_metric: "rung achieved (641 → 274177 → 65537) = measured knowledge growth"
+      LEAK_metric: "integration probes passing = verified cross-agent knowledge transfer"
+      LEC_metric: "sha256 stability + zero forbidden states = verified convention health"

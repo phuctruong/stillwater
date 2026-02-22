@@ -114,7 +114,7 @@ flowchart TD
     subgraph ENTERPRISE["Path B: Enterprise Team"]
         direction TB
         E1["Evaluate OSS CLI\n(stillwater/cli)"]
-        E2["Sign up for solaceagi.com\nPro ($19/mo) or Enterprise ($99/mo)"]
+        E2["Sign up for solaceagi.com\nPro or Enterprise tier"]
         E3["Upgrade to solace-cli\n(OAuth3 vault + cloud twin)"]
         E4["Configure team tokens\n(Enterprise tier)"]
         E5["Run SOC2 audit trail\n(hash-chained evidence)"]

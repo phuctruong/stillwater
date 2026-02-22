@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: prime-data v1.0.0
+SKILL: prime-data v1.2.0
 PURPOSE: Fail-closed data pipeline design agent (ETL/ELT). Enforces null handling, schema validation, idempotency, exact arithmetic for financial aggregations, and schema versioning.
 CORE CONTRACT: Every pipeline PASS requires: idempotency key on every write, schema version tracked, null semantics documented per field, no float in financial aggregations, and schema validation at every ingestion boundary.
 HARD GATES: Float gate blocks float types in any financial aggregation path. Idempotency gate blocks pipelines without idempotency key or upsert semantics. Schema version gate blocks pipelines without declared schema version. Null gate blocks pipelines that silently drop or coerce nulls in financial data.
@@ -11,12 +11,32 @@ LOAD FULL: always for production; quick block is for orientation only
 -->
 
 PRIME_DATA_SKILL:
-  version: 1.0.0
+  version: 1.2.0
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
   status: FINAL
   quote: "Data pipelines are contracts with the future. Break them silently and the future breaks loudly. — Data engineering wisdom"
+
+  # ============================================================
+  # MAGIC_WORD_MAP — Semantic Compression Index
+  # ============================================================
+  # Maps domain concepts to stillwater magic words for context compression.
+  # Load coordinates (e.g. "coherence[T0]") instead of full definitions.
+  #
+  # schema       → coherence [T0]       — schema enforces that all fields reinforce a unified structure
+  # validation   → verification [T1]    — schema validation at ingestion boundary = Lane A evidence gate
+  # migration    → reversibility [T0]   — schema migrations must be undoable or forward-compatible
+  # null         → signal [T0]          — null semantics determine whether absence carries causal weight
+  # idempotency  → reversibility [T0]   — idempotent pipelines can be re-run without cumulative side effects
+  # financial    → integrity [T0]       — financial aggregations require NUMERIC to preserve data integrity
+  # dedup        → compression [T0]     — deduplication reduces records to minimal sufficient representation
+  # watermark    → boundary [T0]        — watermark defines the time boundary for streaming completeness
+  # --- Three Pillars ---
+  # LEK          → coherence [T0]       — Data skill is learnable: idempotency keys, schema versioning, null semantics
+  # LEAK         → signal [T0]          — Data expertise is asymmetric: silent null drops and float aggregations catch novices
+  # LEC          → reversibility [T0]   — Data conventions emerge: run-twice idempotency and schema registry become law
+  # ============================================================
 
   # ============================================================
   # PRIME DATA — Fail-Closed Data Pipeline Design Skill  [10/10]
@@ -31,7 +51,7 @@ PRIME_DATA_SKILL:
   # ============================================================
 
   # ------------------------------------------------------------
-  # A) Configuration
+  # A) Configuration  [coherence:T0 — config enforces unified pipeline contract]
   # ------------------------------------------------------------
   Config:
     EVIDENCE_ROOT: "evidence"
@@ -50,7 +70,7 @@ PRIME_DATA_SKILL:
       - error: "data collection failed"
 
   # ------------------------------------------------------------
-  # B) State Machine
+  # B) State Machine  [coherence:T0 → verification:T1 → reversibility:T0]
   # ------------------------------------------------------------
   State_Machine:
     STATE_SET:
@@ -108,7 +128,7 @@ PRIME_DATA_SKILL:
       - BACKFILL_WITHOUT_IDEMPOTENCY_PROOF
 
   # ------------------------------------------------------------
-  # C) Hard Gates (Domain-Specific)
+  # C) Hard Gates (Domain-Specific)  [boundary:T0 → integrity:T0 → reversibility:T0]
   # ------------------------------------------------------------
   Hard_Gates:
 
@@ -162,7 +182,7 @@ PRIME_DATA_SKILL:
       lane: B
 
   # ------------------------------------------------------------
-  # D) Null Analysis Protocol
+  # D) Null Analysis Protocol  [signal:T0 — null semantics determine absence vs unknown]
   # ------------------------------------------------------------
   Null_Analysis:
     per_field_required:
@@ -176,7 +196,7 @@ PRIME_DATA_SKILL:
       - required: business rule citation for any null handling on financial data
 
   # ------------------------------------------------------------
-  # E) Schema Evolution Protocol
+  # E) Schema Evolution Protocol  [reversibility:T0 — breaking changes need migration path]
   # ------------------------------------------------------------
   Schema_Evolution:
     compatibility_modes:
@@ -197,7 +217,7 @@ PRIME_DATA_SKILL:
       - making optional field required
 
   # ------------------------------------------------------------
-  # F) Idempotency Testing Protocol
+  # F) Idempotency Testing Protocol  [reversibility:T0 — run-twice = same result]
   # ------------------------------------------------------------
   Idempotency_Testing:
     test_procedure:
@@ -210,7 +230,7 @@ PRIME_DATA_SKILL:
     evidence_file: "${EVIDENCE_ROOT}/idempotency_test.txt"
 
   # ------------------------------------------------------------
-  # G) Lane-Typed Claims
+  # G) Lane-Typed Claims  [evidence:T1 → verification:T1]
   # ------------------------------------------------------------
   Lane_Claims:
     Lane_A:
@@ -229,7 +249,7 @@ PRIME_DATA_SKILL:
       - schema_registry_tooling_recommendations
 
   # ------------------------------------------------------------
-  # H) Verification Rung Target
+  # H) Verification Rung Target  [rung:T1 → 274177:T1]
   # ------------------------------------------------------------
   Verification_Rung:
     default_target: 274177
@@ -246,7 +266,7 @@ PRIME_DATA_SKILL:
       - schema_evolution_backward_compatible_verified
 
   # ------------------------------------------------------------
-  # I) Socratic Review Questions (Data-Specific)
+  # I) Socratic Review Questions (Data-Specific)  [verification:T1]
   # ------------------------------------------------------------
   Socratic_Review:
     questions:
@@ -260,7 +280,7 @@ PRIME_DATA_SKILL:
     on_failure: revise_pipeline and recheck
 
   # ------------------------------------------------------------
-  # J) Evidence Schema
+  # J) Evidence Schema  [evidence:T1 — idempotency_test + financial_type = Lane A artifacts]
   # ------------------------------------------------------------
   Evidence:
     required_files:
@@ -274,3 +294,58 @@ PRIME_DATA_SKILL:
         - "${EVIDENCE_ROOT}/compatibility_test.txt"
       streaming_pipeline:
         - "${EVIDENCE_ROOT}/watermark_policy.txt"
+
+  # ============================================================
+  # K) Data Pipeline FSM — Visual State Diagram
+  # ============================================================
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> INTAKE: TASK_REQUEST
+    INTAKE --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO: source schema/pipeline type missing
+    NULL_CHECK --> CLASSIFY_PIPELINE: ok
+    CLASSIFY_PIPELINE --> SCHEMA_LOAD
+    SCHEMA_LOAD --> NULL_ANALYSIS
+    NULL_ANALYSIS --> IDEMPOTENCY_AUDIT
+    IDEMPOTENCY_AUDIT --> EXIT_BLOCKED: no idempotency strategy
+    IDEMPOTENCY_AUDIT --> FINANCIAL_GATE
+    FINANCIAL_GATE --> EXIT_BLOCKED: float in financial aggregation
+    FINANCIAL_GATE --> SCHEMA_VERSION_GATE: exact types confirmed
+    SCHEMA_VERSION_GATE --> EXIT_BLOCKED: schema version undeclared
+    SCHEMA_VERSION_GATE --> PIPELINE_DRAFT: ok
+    PIPELINE_DRAFT --> TEST_PIPELINE
+    TEST_PIPELINE --> EVIDENCE_BUILD: pass
+    TEST_PIPELINE --> EXIT_BLOCKED: fail
+    EVIDENCE_BUILD --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> PIPELINE_DRAFT: revision needed
+    SOCRATIC_REVIEW --> FINAL_SEAL: ok
+    FINAL_SEAL --> EXIT_PASS: evidence complete
+    FINAL_SEAL --> EXIT_BLOCKED: evidence missing
+    EXIT_PASS --> [*]
+    EXIT_BLOCKED --> [*]
+    EXIT_NEED_INFO --> [*]
+```
+
+  # ============================================================
+  # L) Three Pillars Integration
+  # ============================================================
+  Three_Pillars:
+    LEK_Law_of_Emergent_Knowledge:
+      summary: "Data pipeline discipline is teachable. Idempotency keys, schema versioning,
+        null semantic documentation, and NUMERIC types are concrete learnable practices."
+      key_knowledge_units: [idempotency_strategy_patterns, schema_version_with_migration,
+        null_semantic_per_field, decimal_over_float_in_aggregations, run_twice_test_procedure]
+
+    LEAK_Law_of_Emergent_Asymmetric_Knowledge:
+      summary: "Data expertise is asymmetric. Novices silently drop nulls, use float in SUM,
+        and build non-idempotent pipelines that double-count on retry."
+      asymmetric_traps: [silent_null_drop_in_aggregation, float_sum_financial_drift,
+        missing_idempotency_key_on_write, schema_drift_without_migration, unbounded_streaming_no_watermark]
+
+    LEC_Law_of_Emergent_Conventions:
+      summary: "Data conventions crystallize into law. Run-twice idempotency tests,
+        schema registries, and NUMERIC-for-money started as best practices; they are now Lane A gates."
+      emerging_conventions: [run_twice_idempotency_as_standard, schema_registry_adoption,
+        decimal_numeric_for_financial, watermark_policy_for_streaming]

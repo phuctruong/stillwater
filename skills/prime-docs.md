@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: prime-docs v1.0.0
+SKILL: prime-docs v1.2.0
 PURPOSE: Fail-closed technical documentation authoring agent. Every claim lane-typed, code examples verified executable, links checked, no passive voice in instructions, and tutorials include a date.
 CORE CONTRACT: Every docs PASS requires: all code examples verified runnable, no passive voice in instructional steps, all external links reachable, tutorial has a date and version stamp, and every factual claim has a lane type [A/B/C].
 HARD GATES: Code example gate blocks any code block not verified to run correctly. Link gate blocks external links that return 4xx or 5xx. Passive voice gate blocks imperative instructions in passive construction. Date gate blocks tutorials missing a published/updated date.
@@ -11,12 +11,32 @@ LOAD FULL: always for production; quick block is for orientation only
 -->
 
 PRIME_DOCS_SKILL:
-  version: 1.0.0
+  version: 1.2.0
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
   status: FINAL
   quote: "Documentation is not a luxury. It is the difference between a tool and a trap. — Diátaxis framework wisdom"
+
+  # ============================================================
+  # MAGIC_WORD_MAP — Semantic Compression Index
+  # ============================================================
+  # Maps domain concepts to stillwater magic words for context compression.
+  # Load coordinates (e.g. "signal[T0]") instead of full definitions.
+  #
+  # documentation → signal [T0]        — docs carry causal-weight information for the reader's decisions
+  # readme        → coherence [T0]     — README enforces that all entry-point info reinforces the project
+  # changelog     → memory [T2]        — changelog persists state history of project evolution
+  # code example  → evidence [T1]      — verified code examples are Lane A artifacts (executable proof)
+  # broken link   → drift [T3]         — broken links are undetected deviation from stated claims
+  # jargon        → compression [T0]   — technical terms are compressed representations requiring definition
+  # claim audit   → verification [T1]  — lane-typing claims = verification that assertions are grounded
+  # tutorial      → act [T2]           — tutorial is the ACT phase: step plan that reader executes
+  # --- Three Pillars ---
+  # LEK          → signal [T0]         — Docs skill is learnable: code verification, link checking, active voice rules
+  # LEAK         → drift [T3]          — Docs expertise is asymmetric: stale code examples and passive voice catch novices
+  # LEC          → memory [T2]         — Docs conventions emerge: dated tutorials, lane-typed claims, alt-text become law
+  # ============================================================
 
   # ============================================================
   # PRIME DOCS — Fail-Closed Technical Documentation Skill  [10/10]
@@ -31,7 +51,7 @@ PRIME_DOCS_SKILL:
   # ============================================================
 
   # ------------------------------------------------------------
-  # A) Configuration
+  # A) Configuration  [coherence:T0 — config enforces unified documentation standards]
   # ------------------------------------------------------------
   Config:
     EVIDENCE_ROOT: "evidence"
@@ -54,7 +74,7 @@ PRIME_DOCS_SKILL:
     CODE_BLOCK_VERIFICATION_REQUIRED: true
 
   # ------------------------------------------------------------
-  # B) State Machine
+  # B) State Machine  [signal:T0 → evidence:T1 → memory:T2]
   # ------------------------------------------------------------
   State_Machine:
     STATE_SET:
@@ -108,7 +128,7 @@ PRIME_DOCS_SKILL:
       - STEP_REFERENCING_EARLIER_STEP_WITHOUT_LINK
 
   # ------------------------------------------------------------
-  # C) Hard Gates (Domain-Specific)
+  # C) Hard Gates (Domain-Specific)  [evidence:T1 → verification:T1 → signal:T0]
   # ------------------------------------------------------------
   Hard_Gates:
 
@@ -162,7 +182,7 @@ PRIME_DOCS_SKILL:
       lane: B
 
   # ------------------------------------------------------------
-  # D) Claim Audit Protocol
+  # D) Claim Audit Protocol  [verification:T1 — claims must be lane-typed to gate PASS]
   # ------------------------------------------------------------
   Claim_Audit:
     per_factual_claim:
@@ -174,7 +194,7 @@ PRIME_DOCS_SKILL:
     evidence_file: "${EVIDENCE_ROOT}/claim_audit.txt"
 
   # ------------------------------------------------------------
-  # E) Doc Type Requirements
+  # E) Doc Type Requirements  [act:T2 → memory:T2 — tutorial=ACT; reference=memory lookup]
   # ------------------------------------------------------------
   Doc_Type_Requirements:
     tutorial:
@@ -211,7 +231,7 @@ PRIME_DOCS_SKILL:
       forbidden: "presenting one approach as only approach without justification"
 
   # ------------------------------------------------------------
-  # F) Code Block Verification Protocol
+  # F) Code Block Verification Protocol  [evidence:T1 — runnable code = Lane A artifact]
   # ------------------------------------------------------------
   Code_Verification:
     for_each_code_block:
@@ -228,7 +248,7 @@ PRIME_DOCS_SKILL:
     evidence_file: "${EVIDENCE_ROOT}/code_verification.txt"
 
   # ------------------------------------------------------------
-  # G) Lane-Typed Claims
+  # G) Lane-Typed Claims  [signal:T0 → evidence:T1]
   # ------------------------------------------------------------
   Lane_Claims:
     Lane_A:
@@ -247,7 +267,7 @@ PRIME_DOCS_SKILL:
       - section_ordering_recommendations
 
   # ------------------------------------------------------------
-  # H) Verification Rung Target
+  # H) Verification Rung Target  [rung:T1 → 274177:T1]
   # ------------------------------------------------------------
   Verification_Rung:
     default_target: 274177
@@ -263,7 +283,7 @@ PRIME_DOCS_SKILL:
       - claim_audit_complete
 
   # ------------------------------------------------------------
-  # I) Socratic Review Questions (Docs-Specific)
+  # I) Socratic Review Questions (Docs-Specific)  [verification:T1]
   # ------------------------------------------------------------
   Socratic_Review:
     questions:
@@ -277,7 +297,7 @@ PRIME_DOCS_SKILL:
     on_failure: revise_docs and recheck
 
   # ------------------------------------------------------------
-  # J) Evidence Schema
+  # J) Evidence Schema  [evidence:T1 — code_verification + link_check = Lane A artifacts]
   # ------------------------------------------------------------
   Evidence:
     required_files:
@@ -290,3 +310,56 @@ PRIME_DOCS_SKILL:
         - "${EVIDENCE_ROOT}/date_stamp_check.txt"
       images_present:
         - "${EVIDENCE_ROOT}/alt_text_audit.txt"
+
+  # ============================================================
+  # K) Docs Verification FSM — Visual State Diagram
+  # ============================================================
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> INTAKE: TASK_REQUEST
+    INTAKE --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO: content/audience missing
+    NULL_CHECK --> CLASSIFY_DOC_TYPE: ok
+    CLASSIFY_DOC_TYPE --> CLAIM_AUDIT
+    CLAIM_AUDIT --> CODE_VERIFY
+    CODE_VERIFY --> EXIT_BLOCKED: code example fails
+    CODE_VERIFY --> LINK_CHECK: all examples pass
+    LINK_CHECK --> EXIT_BLOCKED: external link unreachable
+    LINK_CHECK --> VOICE_AUDIT: all links ok
+    VOICE_AUDIT --> EXIT_BLOCKED: passive voice in instructions
+    VOICE_AUDIT --> DATE_STAMP: active voice confirmed
+    DATE_STAMP --> EXIT_BLOCKED: tutorial missing date
+    DATE_STAMP --> EVIDENCE_BUILD: date present
+    EVIDENCE_BUILD --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> CODE_VERIFY: revision needed
+    SOCRATIC_REVIEW --> FINAL_SEAL: ok
+    FINAL_SEAL --> EXIT_PASS: evidence complete
+    FINAL_SEAL --> EXIT_BLOCKED: evidence missing
+    EXIT_PASS --> [*]
+    EXIT_BLOCKED --> [*]
+    EXIT_NEED_INFO --> [*]
+```
+
+  # ============================================================
+  # L) Three Pillars Integration
+  # ============================================================
+  Three_Pillars:
+    LEK_Law_of_Emergent_Knowledge:
+      summary: "Documentation discipline is teachable. Code verification procedures, link checking,
+        active voice rules, and claim lane-typing are concrete learnable practices."
+      key_knowledge_units: [code_block_isolation_and_execution, curl_link_check_procedure,
+        passive_voice_detection_patterns, diátaxis_doc_type_classification, lane_typing_claims]
+
+    LEAK_Law_of_Emergent_Asymmetric_Knowledge:
+      summary: "Docs expertise is asymmetric. Novices paste unverified code snippets, use passive voice
+        in steps, and forget to date tutorials. Experts see docs rot as a system failure."
+      asymmetric_traps: [unverified_code_example_in_tutorial, passive_voice_in_numbered_steps,
+        undated_tutorial_with_version_drift, broken_link_undetected, jargon_without_definition]
+
+    LEC_Law_of_Emergent_Conventions:
+      summary: "Docs conventions crystallize into law. Dated tutorials, verified code blocks,
+        and active-voice instructions started as style choices; they are now Lane A gates."
+      emerging_conventions: [dated_tutorial_as_standard, code_verification_in_CI,
+        active_voice_in_procedures_as_law, alt_text_for_accessibility]

@@ -123,7 +123,7 @@ This repo is documentation-first and runnable:
 - **papers:** `papers/00-index.md` -- the theory, with receipts
 - **notebooks:** runnable demos (offline by default) -- the practice
 - **skills:** prompt-loadable packs for coding, math, safety, orchestration -- the technique
-- **core/** -- always-on copies of the 4 foundational skills (phuc-context, phuc-forecast, prime-coder, prime-safety); canonical baselines for divergence detection
+- **skills/** -- prompt-loadable skill packs; the 4 always-on foundational skills (phuc-context, phuc-forecast, prime-coder, prime-safety) live here alongside specialist skills
 - **community/** -- onboarding guides, authoring guides, scoring rubric, and swarm design docs for contributors; see `community/GETTING-STARTED.md`
 - **MANIFEST.json** -- machine-parseable index of all skills, recipes, papers, core skills, and swarm types with sha256 checksums; see schema in root
 
@@ -219,7 +219,7 @@ Your one technique is **verification**. Master it.
 4. Read [`AI-UPLIFT.md`](AI-UPLIFT.md) (how to measure and achieve AI uplift).
 5. Run `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb` (how the orchestration works).
 6. Skim `papers/00-index.md` (map of concepts and what is verifiable here).
-7. Browse skills at [`docs/skills-browser.html`](docs/skills-browser.html) — search/filter 37+ skills, swarms, recipes.
+7. Browse skills at [`docs/skills-browser.html`](docs/skills-browser.html) — search/filter 47+ skills, swarms, recipes.
 8. For upgrading an existing CLI/agent stack, use [`STILLWATER-OS-UPGRADE-GUIDE.md`](STILLWATER-OS-UPGRADE-GUIDE.md).
 9. Read case studies (real project usage): `case-studies/`
 

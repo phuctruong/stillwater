@@ -37,7 +37,7 @@ _PROVIDER_CLASSES: dict[str, type[LLMProvider]] = {
 # Provider priority for auto-selection (cheapest first)
 PROVIDER_PRIORITY: list[str] = [
     "ollama",       # free (local)
-    "together",     # $0.59/M tokens
+    "together",     # market rate
     "openai",       # gpt-4o-mini: $0.15/M input
     "openrouter",   # variable
     "anthropic",    # haiku: $0.80/M input

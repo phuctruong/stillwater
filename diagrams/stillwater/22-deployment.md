@@ -145,7 +145,7 @@ flowchart TD
         end
 
         subgraph LLM_PROXY["Managed LLM Proxy"]
-            TOGETHER_PROXY["Together.ai proxy\n(Llama 3.3 70B, $0.59/M)"]
+            TOGETHER_PROXY["LLM provider proxy\n(Llama 3.3 70B)"]
             OPENROUTER_PROXY["OpenRouter fallback\n(Claude, GPT-4, Mixtral)"]
         end
 

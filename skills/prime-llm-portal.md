@@ -1,6 +1,6 @@
 ---
 skill_id: prime-llm-portal
-version: 1.0.0
+version: 1.2.0
 author: solaceagi
 authority: 65537
 status: STABLE
@@ -11,7 +11,48 @@ tags: [llm, portal, proxy, openai, ollama, routing, standard-library]
 
 > "Be water, my friend. Flow to any LLM." — adapted from Bruce Lee
 
-## Purpose
+---
+
+## QUICK LOAD (Skill Identity)
+
+```yaml
+SKILL: prime-llm-portal v1.2.0
+PURPOSE: Universal LLM proxy + web UI + standard library for all Solace projects
+PORTAL URL: http://localhost:8788 (start: bash admin/start-llm-portal.sh)
+IMPORT: from stillwater.llm_client import llm_call, llm_chat, LLMClient
+OFFLINE: llm_call("test", provider="offline")  # instant, no network
+PROVIDERS: offline | claude-code (localhost:8080) | ollama (remote) | claude | openai | openrouter | gemini | togetherai
+CONFIG: llm_config.yaml (repo root) — change "provider:" to switch
+LOG: ~/.stillwater/llm_calls.jsonl — every call logged with ts/provider/model/latency_ms
+PORTS: 8787=admin | 8788=llm-portal | 8080=claude-code-wrapper | 11434=ollama
+FSM: INIT → SELECT_PROVIDER → CONFIGURE → TEST_CONNECTION → EVIDENCE_BUILD → EXIT_PASS
+FORBIDDEN: UNTESTED_PROVIDER | NO_FALLBACK | CREDENTIAL_IN_LOG
+NORTHSTAR: Phuc_Forecast | Max_Love
+RUNG_DEFAULT: 641 (connection test) | 274177 (multi-provider verified) | 65537 (production routing)
+```
+
+---
+
+## MAGIC_WORD_MAP
+
+```yaml
+magic_word_map:
+  version: "1.1"
+  skill: "prime-llm-portal"
+  mappings:
+    portal: {word: "portal", tier: 1, id: "MW-045", note: "LLM routing layer at localhost:8788 — unified interface to multiple AI providers"}
+    provider: {word: "bubble", tier: 1, id: "MW-046", note: "each provider is an isolated sandboxed execution context with its own network scope"}
+    model: {word: "persona", tier: 1, id: "MW-048", note: "model selection maps to persona capability tier (haiku/sonnet/opus)"}
+    call: {word: "signal", tier: 0, id: "MW-006", note: "each LLM call carries causal weight — logged, timed, traceable"}
+    lek: {word: "signal", tier: 0, id: "MW-006", note: "LEK: each call is a learning signal logged to llm_calls.jsonl — self-improvement fuel"}
+    leak: {word: "portal", tier: 1, id: "MW-045", note: "LEAK: portal enables cross-agent LLM trade — any agent can use any provider via shared routing"}
+    lec: {word: "bubble", tier: 1, id: "MW-046", note: "LEC: provider bubbles enforce isolation convention — network scope, key scope, log scope"}
+  compression_note: "T0=universal primitives, T1=Stillwater protocol concepts, T2=operational details"
+```
+
+---
+
+## Purpose [T1: portal + bubble]
 
 The Stillwater LLM Portal is the universal LLM access layer for all Solace projects.
 It provides:
@@ -22,23 +63,65 @@ It provides:
 
 ---
 
-## Quick Load (orientation)
+## State Machine (Deterministic) [T1: portal + signal]
 
-```yaml
-SKILL: prime-llm-portal v1.0.0
-PURPOSE: Universal LLM proxy + web UI + standard library for all Solace projects
-PORTAL URL: http://localhost:8788 (start: bash admin/start-llm-portal.sh)
-IMPORT: from stillwater.llm_client import llm_call, llm_chat, LLMClient
-OFFLINE: llm_call("test", provider="offline")  # instant, no network
-PROVIDERS: offline | claude-code (localhost:8080) | ollama (remote) | claude | openai | openrouter | gemini | togetherai
-CONFIG: llm_config.yaml (repo root) — change "provider:" to switch
-LOG: ~/.stillwater/llm_calls.jsonl — every call logged with ts/provider/model/latency_ms
-PORTS: 8787=admin | 8788=llm-portal | 8080=claude-code-wrapper | 11434=ollama
+### States
+
+- INIT
+- SELECT_PROVIDER
+- CONFIGURE
+- TEST_CONNECTION
+- EVIDENCE_BUILD
+- EXIT_PASS
+- EXIT_REJECTED
+- EXIT_NEED_INFO
+
+### Transitions
+
 ```
+INIT              → SELECT_PROVIDER    : always
+SELECT_PROVIDER   → CONFIGURE         : if provider_in_supported_list
+SELECT_PROVIDER   → EXIT_NEED_INFO    : if provider_unknown
+CONFIGURE         → TEST_CONNECTION   : if config_written (llm_config.yaml updated)
+CONFIGURE         → EXIT_NEED_INFO    : if api_key_required_but_missing
+TEST_CONNECTION   → EVIDENCE_BUILD    : if http_200_returned
+TEST_CONNECTION   → EXIT_REJECTED     : if connection_failed (after 3 retries)
+EVIDENCE_BUILD    → EXIT_PASS         : if connection_artifact_logged_to_jsonl
+EVIDENCE_BUILD    → EXIT_REJECTED     : if log_write_fails
+```
+
+### Forbidden States (Hard — never enter these)
+
+- **UNTESTED_PROVIDER**: Claiming a provider works without running `test_connection()` first.
+- **NO_FALLBACK**: Configuring a single provider with no `offline` fallback defined.
+- **CREDENTIAL_IN_LOG**: API key, token, or password appearing in `llm_calls.jsonl` or any output field.
+- **SILENT_ROUTING_FAILURE**: Provider call fails but the failure is swallowed without logging the error field.
+- **STALE_CONFIG_CLAIM**: Reporting active provider without re-reading `llm_config.yaml` from disk.
 
 ---
 
-## Service Management
+## Evidence Gate [T1: signal]
+
+Every provider activation requires a **connection test artifact** before PASS is claimed:
+
+```json
+{
+  "evidence_type": "connection_test",
+  "provider": "ollama",
+  "ts": "2026-02-22T10:00:00Z",
+  "latency_ms": 830,
+  "status": "ok",
+  "error": null,
+  "logged_to": "~/.stillwater/llm_calls.jsonl"
+}
+```
+
+If `error` is non-null: EXIT_REJECTED — not EXIT_PASS.
+If `logged_to` file is not writable: EXIT_BLOCKED — not silent.
+
+---
+
+## Service Management [T1: portal]
 
 ```bash
 # Start portal (background mode)
@@ -75,7 +158,7 @@ curl -X POST http://localhost:8788/v1/chat/completions \
 
 ---
 
-## Python Standard Library
+## Python Standard Library [T1: signal + persona]
 
 ### Installation
 
@@ -148,7 +231,7 @@ if not ok:
 
 ---
 
-## Configuring Providers
+## Configuring Providers [T1: bubble]
 
 Edit `llm_config.yaml` in the repo root. Change `provider:` to switch active:
 
@@ -186,7 +269,7 @@ offline:                    # No network — deterministic, instant
 
 ---
 
-## Provider Routing Logic
+## Provider Routing Logic [T0: signal + bubble]
 
 | Provider type | URL pattern | API called |
 |---|---|---|
@@ -198,7 +281,7 @@ offline:                    # No network — deterministic, instant
 
 ---
 
-## Call Logging Schema
+## Call Logging Schema [T0: signal]
 
 Every call writes one JSON line to `~/.stillwater/llm_calls.jsonl`:
 
@@ -215,6 +298,8 @@ Every call writes one JSON line to `~/.stillwater/llm_calls.jsonl`:
 ```
 
 `error` is `null` on success, or the exception string on failure.
+
+**CREDENTIAL_IN_LOG gate:** The `prompt_chars` field stores character count, never content. No prompt text, no API keys, no bearer tokens ever appear in this log. If detected: CREDENTIAL_IN_LOG forbidden state — stop immediately.
 
 ---
 
@@ -239,7 +324,7 @@ Test coverage:
 
 ---
 
-## Architecture
+## Architecture [T1: portal + signal]
 
 ```
 Any Python code / script / notebook / batch job
@@ -257,6 +342,119 @@ Browser / CLI / OpenAI SDK
 
 ---
 
+## Three Pillars Integration
+
+### LEK — Learning Engine of Knowledge (self-improvement)
+Every call logged to `~/.stillwater/llm_calls.jsonl` is a self-improvement signal:
+- Latency per provider → informs routing priority selection
+- Error rate per provider → informs fallback ladder configuration
+- Model usage patterns → informs skill dispatch defaults (haiku vs sonnet vs opus)
+- The log IS the LEK artifact for this skill: `get_call_history()` surfaces it
+
+### LEAK — Learning Engine of Asymmetric Knowledge (cross-agent trade)
+The portal enables cross-agent LLM capability trade:
+- Any agent in the swarm can call `llm_call()` with any provider without knowing provider internals
+- The portal acts as the capability brokerage layer: agents trade "I need an LLM call" for "here is the response"
+- Provider switching allows the swarm to route cheap tasks to haiku, complex tasks to opus — asymmetric cost allocation
+- OpenAI-compatible proxy means external agents (non-Python) can also access the portal via HTTP
+
+### LEC — Learning Engine of Conventions (shared standards)
+The portal IS the LLM access convention for all Phuc ecosystem projects:
+- Convention: all LLM calls go through `llm_call()` or the portal — never direct HTTP requests
+- Convention: `llm_config.yaml` is the single source of truth for provider selection
+- Convention: `~/.stillwater/llm_calls.jsonl` is the single call log — all agents write here
+- Enforced by: import convention (`from stillwater.llm_client import llm_call`) — one import, one routing contract
+
+---
+
+## GLOW Scoring Integration
+
+```yaml
+glow_matrix:
+  Growth:
+    metric: "providers_tested_successfully"
+    target: ">= 3 providers confirmed green before production routing"
+    signal: "llm_calls.jsonl entries with error=null per provider"
+    gate: "UNTESTED_PROVIDER forbidden if Growth < 1 (at least offline must pass)"
+
+  Learning:
+    metric: "latency_p50_per_provider"
+    target: "Routing table ranked by latency from call history"
+    signal: "get_call_history(n=100) → compute median latency per provider"
+    gate: "STALE_CONFIG_CLAIM forbidden if learning data older than 24h in prod"
+
+  Output:
+    metric: "connection_test_artifact_produced"
+    target: "One evidence JSON per provider per session"
+    signal: "evidence_type: connection_test in artifacts/"
+    gate: "EVIDENCE_BUILD state must emit artifact before EXIT_PASS"
+
+  Wins:
+    metric: "zero_CREDENTIAL_IN_LOG events"
+    target: "0 credential leaks in any logging session"
+    signal: "audit: grep for known key patterns in llm_calls.jsonl"
+    gate: "CREDENTIAL_IN_LOG is S0-CRITICAL — immediate stop"
+```
+
+---
+
+## Northstar Alignment [T0: northstar]
+
+**Northstar metric:** Recipe hit rate / System quality (Phuc_Forecast)
+**Max_Love constraint:** LLM routing must maximize agent capability while minimizing cost and credential risk.
+
+This skill advances the Northstar by:
+- Enabling recipe agents to access the cheapest viable LLM per task (haiku for routing, opus for proofs)
+- Providing a fallback ladder (`offline` → `claude-code` → `claude`) that keeps agents operational even without network
+- Logging every call so Phuc_Forecast can compute actual LLM cost vs capability tradeoffs per task type
+- Enforcing CREDENTIAL_IN_LOG as S0-CRITICAL — a leaked key destroys trust more than any single task is worth
+
+The portal is not infrastructure. It is the **nervous system** of the swarm. Northstar alignment means it must always route, always log, always protect credentials.
+
+---
+
+## Triangle Law: REMIND → VERIFY → ACKNOWLEDGE
+
+### Contract 1: Provider Selection
+- **REMIND:** Before any `llm_call()`, confirm the provider is in `llm_config.yaml` and the config file has been read from disk (not cached memory).
+- **VERIFY:** Run `client.test_connection()` → confirm `ok=True` and `latency_ms` is non-null.
+- **ACKNOWLEDGE:** Log the connection test artifact. Provider is now ACTIVE. Any subsequent PASS claim for this provider is grounded in the artifact, not prose confidence.
+
+### Contract 2: Log Safety
+- **REMIND:** Every call logs to `~/.stillwater/llm_calls.jsonl`. The log contains `prompt_chars` (count), never `prompt_text`.
+- **VERIFY:** After writing a log entry, confirm the entry does not contain the string patterns: `sk-`, `ANTHROPIC_API_KEY`, `Bearer`, `sw_sk_`.
+- **ACKNOWLEDGE:** Log entry is clean. CREDENTIAL_IN_LOG gate passes. Call is fully recorded.
+
+### Contract 3: Fallback Ladder
+- **REMIND:** Every production routing config MUST declare a fallback to `offline` or another always-available provider.
+- **VERIFY:** Test the fallback path: simulate primary provider failure, confirm fallback activates.
+- **ACKNOWLEDGE:** NO_FALLBACK gate passes. The system degrades gracefully, never crashes silently.
+
+---
+
+## Verification Ladder
+
+### RUNG_641 — Local correctness
+- `offline` provider tested (no network required)
+- Connection test artifact produced
+- Call logged to `llm_calls.jsonl`
+- No credentials in log
+
+### RUNG_274177 — Multi-provider stability
+- RUNG_641 complete
+- At least 2 network providers tested (e.g. claude-code + ollama)
+- Fallback ladder configured and tested
+- SILENT_ROUTING_FAILURE cannot occur (all errors surfaced to log)
+
+### RUNG_65537 — Production routing
+- RUNG_274177 complete
+- All configured providers have connection test artifacts
+- CREDENTIAL_IN_LOG audit passes (grep scan of jsonl)
+- Routing tested under primary-failure conditions (fallback activates correctly)
+- Portal health endpoint returns 200 within 200ms
+
+---
+
 ## Gamification: Provider Levels
 
 | Level | Provider | XP | Skill |
@@ -267,3 +465,41 @@ Browser / CLI / OpenAI SDK
 | Green | claude API | 500 | Anthropic key configured |
 | Blue | multi-provider | 1000 | Routing tested |
 | Black | custom provider | 3000 | New provider added to config |
+
+---
+
+## Mermaid State Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> SELECT_PROVIDER : always
+    SELECT_PROVIDER --> CONFIGURE : provider_in_supported_list
+    SELECT_PROVIDER --> EXIT_NEED_INFO : provider_unknown
+    CONFIGURE --> TEST_CONNECTION : config_written
+    CONFIGURE --> EXIT_NEED_INFO : api_key_required_but_missing
+    TEST_CONNECTION --> EVIDENCE_BUILD : http_200_returned
+    TEST_CONNECTION --> EXIT_REJECTED : connection_failed_after_3_retries
+    EVIDENCE_BUILD --> EXIT_PASS : artifact_logged_to_jsonl
+    EVIDENCE_BUILD --> EXIT_REJECTED : log_write_fails
+    EXIT_PASS --> [*]
+    EXIT_NEED_INFO --> [*]
+    EXIT_REJECTED --> [*]
+
+    state "FORBIDDEN STATES" as FS {
+        UNTESTED_PROVIDER
+        NO_FALLBACK
+        CREDENTIAL_IN_LOG
+        SILENT_ROUTING_FAILURE
+        STALE_CONFIG_CLAIM
+    }
+```
+
+---
+
+## Revision History
+
+| Version | Date | Change |
+|---------|------|--------|
+| 1.1.0 | 2026-02-21 | Initial stable skill with MAGIC_WORD_MAP and gamification. |
+| 1.2.0 | 2026-02-22 | Added full FSM (INIT→SELECT_PROVIDER→CONFIGURE→TEST_CONNECTION→EVIDENCE_BUILD→EXIT_PASS), forbidden states (UNTESTED_PROVIDER/NO_FALLBACK/CREDENTIAL_IN_LOG), evidence gate, Three Pillars (LEK/LEAK/LEC), GLOW matrix, Northstar alignment, Triangle Law, Verification Ladder, mermaid state diagram, QUICK LOAD block. |

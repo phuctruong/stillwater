@@ -1,11 +1,82 @@
 # phuc-orchestration.md — Phuc Orchestration Skill
 
 **Skill ID:** phuc-orchestration
-**Version:** 1.0.0
+**Version:** 1.2.0
 **Authority:** 65537
 **Status:** SEALED (10/10 target)
 **Role:** Main-session context governor + skilled sub-agent dispatcher
 **Tags:** orchestration, context-protection, dispatch, anti-rot, skill-injection, minimal-context, swarms
+
+---
+
+## MW) MAGIC_WORD_MAP — Prime Factorization Map for phuc-orchestration
+Navigation anchors for 97% context compression via phuc-magic-words
+
+```yaml
+MAGIC_WORD_MAP:
+  # TRUNK (Tier 0) — universal coordinates anchoring this skill
+  primary_trunk_words:
+    boundary:       "dispatch threshold — >100 lines specialized work crosses the inline/dispatch boundary (→ §1 main_session_budget)"
+    integrity:      "context must be rebuilt from artifacts, not memory — rung = MIN(all agents) (→ Anti-Rot Protocol)"
+    alignment:      "every sub-agent has exactly one role, one skill pack, one task — no overloaded agents (→ §2 Dispatch Matrix)"
+    constraint:     "compaction at 800 lines, max 6 dispatch rounds, max 3 always-loaded skills (→ §1 main_session_budget)"
+
+  # BRANCH (Tier 1) — structural concepts
+  branch_words:
+    dispatch:       "the act of launching a typed sub-agent with full skill pack + CNF capsule (→ §2 Dispatch Matrix)"
+    capsule:        "CNF capsule = full task + context + constraints injected into each sub-agent (→ §4 Sub-Agent Template)"
+    compaction:     "[COMPACTION] log emitted when main context >800 lines; capsule rebuilt from artifacts (→ §5 Anti-Rot)"
+    swarm:          "multi-agent coordination — main session dispatches; sub-agents are domain experts (→ §0 Core Principle)"
+    rung:           "rung of integration = MIN(rung of all contributing agents) — Non-negotiable (→ §7 Verification Ladder)"
+    governance:     "Never-Worse: forbidden states list grows additive-only (→ §6 State Machine FORBIDDEN_STATES)"
+    evidence:       "artifacts only: tests.json, PATCH_DIFF, convergence.json — prose = Lane C, not evidence (→ SUMMARY_AS_EVIDENCE)"
+    LEK:            "Law of Emergent Knowledge — each sub-agent is a bounded LEK loop; orchestration chains LEK loops into a compound intelligence system (→ section TP)"
+    LEAK:           "Law of Emergent Asymmetric Knowledge — orchestration IS LEAK; each dispatch is a knowledge trade between the main session bubble and the sub-agent bubble (→ section TP)"
+    LEC:            "Law of Emergent Conventions — the CNF capsule template, dispatch matrix, and compaction protocol are all crystallized LEC conventions in the orchestration domain (→ section TP)"
+
+  # CONCEPT (Tier 2) — operational nodes
+  concept_words:
+    artifact:       "typed outputs from sub-agents: JSON/diff/log — not prose summaries — flow to main session"
+    state_machine:  "INIT→...→FINAL_SEAL — compaction and dispatch rounds bounded"
+    persona:        "typed role identity: Coder|Planner|Mathematician|Graph_Designer|Swarm_Orchestrator|Writer|Skeptic|Janitor"
+    memory:         "context capsule = only memory allowed; conversation prose is not memory (→ §5 Anti-Rot)"
+    skill:          "skill pack = prime-safety (always first) + domain skill; pasted inline in every sub-agent prompt"
+    recipe:         "CNF capsule template (§4) is the recipe for safe dispatch"
+
+  # LEAF (Tier 3) — domain-specific
+  leaf_words:
+    inline_deep_work:     "FORBIDDEN_STATE: main session doing >100 lines of specialized work without dispatch"
+    skill_less_dispatch:  "FORBIDDEN_STATE: sub-agent launched without skill pack pasted inline"
+    forgotten_capsule:    "FORBIDDEN_STATE: sub-agent prompt references 'earlier', 'as before', 'recall that'"
+    summary_as_evidence:  "FORBIDDEN_STATE: agent prose used as Lane A evidence (need artifacts)"
+    context_accumulation: "FORBIDDEN_STATE: main context >800 lines without [COMPACTION] log"
+    drift:                "context rot — agent acts on stale narrative rather than explicit capsule"
+
+  # PRIME FACTORIZATIONS of key orchestration concepts
+  prime_factorizations:
+    dispatch_decision:    "boundary × alignment × constraint — threshold determines inline vs sub-agent dispatch"
+    cnf_capsule:          "integrity × alignment × compression — full context injected fresh each dispatch"
+    compaction_protocol:  "compression × integrity × boundary — main context distilled to capsule fields only"
+    rung_integration:     "rung × constraint × integrity — MIN(all agents) = non-negotiable integration rung"
+    skill_pack:           "governance × boundary × integrity — prime-safety first + domain skill; injected inline"
+    context_rot:          "integrity × causality — stale narrative substituted for artifact evidence"
+    inline_boundary:      "boundary × constraint — >100 lines specialized work → dispatch threshold crossed"
+
+  # TRIANGLE LAW ANNOTATIONS (REMIND/VERIFY/ACKNOWLEDGE)
+  triangle_law:
+    before_dispatch:
+      REMIND:      "Declare rung_target + select agent role + assemble skill pack (prime-safety first)"
+      VERIFY:      "CNF capsule complete? No 'as before'? No 'as discussed'? Full context injected?"
+      ACKNOWLEDGE: "LAUNCH_AGENT → AWAIT_ARTIFACTS → INTEGRATE_ARTIFACTS"
+    on_compaction_trigger:
+      REMIND:      "Main context exceeded 800 lines — rebuild required"
+      VERIFY:      "Emit [COMPACTION] log: 'Distilled <X> lines to <Y> capsule fields'"
+      ACKNOWLEDGE: "Capsule rebuilt from artifacts only; drop all prior reasoning prose"
+    on_integration:
+      REMIND:      "Integration rung = MIN(rung of all contributing agents)"
+      VERIFY:      "All agents PASS? No forbidden states entered in any round?"
+      ACKNOWLEDGE: "FINAL_SEAL → EXIT_PASS if evidence_complete AND rung_target_met"
+```
 
 ---
 
@@ -48,7 +119,7 @@ layering:
 
 ---
 
-## 0) Core Principle
+## 0) Core Principle [boundary × alignment × constraint]
 
 **The main session is the orchestrator. Sub-agents are the domain experts.**
 
@@ -74,7 +145,7 @@ The main session MUST:
 
 ---
 
-## 1) Main Session Budget (Hard Limits)
+## 1) Main Session Budget (Hard Limits) [constraint × boundary × integrity]
 
 ```yaml
 main_session_budget:
@@ -106,7 +177,7 @@ The main session is **FORBIDDEN** from:
 
 ---
 
-## 2) Dispatch Decision Matrix
+## 2) Dispatch Decision Matrix [dispatch × alignment × boundary]
 
 | Task Type | Dispatch? | Agent Role | Skill Pack |
 |---|---|---|---|
@@ -129,7 +200,7 @@ The main session is **FORBIDDEN** from:
 
 ---
 
-## 3) Canonical Skill Packs
+## 3) Canonical Skill Packs [governance × boundary × integrity × rung]
 
 ```yaml
 skill_packs:
@@ -210,7 +281,8 @@ skill_packs:
 
 ---
 
-## 4) Sub-Agent Prompt Template (CNF Anti-Rot)
+## 4) Sub-Agent Prompt Template (CNF Anti-Rot) [capsule × integrity × alignment]
+<!-- TRIANGLE: REMIND(task+context) → VERIFY(no 'as before' refs) → ACKNOWLEDGE(dispatch with full capsule) -->
 
 Every sub-agent dispatch MUST follow this template.
 **Paste skill file content inline** — never assume the sub-agent has loaded skills from environment.
@@ -261,7 +333,8 @@ Every sub-agent starts fresh. Every sub-agent gets a complete CNF capsule.
 
 ---
 
-## 5) Context Anti-Rot Protocol (Main Session)
+## 5) Context Anti-Rot Protocol (Main Session) [compaction × integrity × memory × boundary]
+<!-- TRIANGLE: REMIND(context lines) → VERIFY(>800? emit [COMPACTION] log) → ACKNOWLEDGE(capsule rebuilt from artifacts) -->
 
 ```yaml
 anti_rot_protocol:
@@ -303,7 +376,7 @@ anti_rot_protocol:
 
 ---
 
-## 6) State Machine
+## 6) State Machine [integrity × constraint × boundary]
 
 ```yaml
 state_machine:
@@ -399,7 +472,8 @@ state_machine:
 
 ---
 
-## 7) Verification Ladder
+## 7) Verification Ladder [rung × verification × integrity]
+<!-- rung = MIN(all agents) — dispatch + skill_pack + artifact + cnf_capsule all required for rung_641 -->
 
 ```yaml
 verification_ladder:
@@ -436,7 +510,7 @@ verification_ladder:
 
 ---
 
-## 8) Null vs Zero Distinction
+## 8) Null vs Zero Distinction [causality × integrity × boundary]
 
 ```yaml
 null_vs_zero_orchestration:
@@ -509,7 +583,7 @@ output_contract:
 
 ---
 
-## 10) Anti-Patterns (Named)
+## 10) Anti-Patterns (Named) [integrity × boundary × alignment × dispatch]
 
 **AP-1: God Orchestrator**
 - Symptom: Main session doing coding, proofs, or graph design inline (>100 lines)
@@ -582,7 +656,7 @@ integration:
 
 ---
 
-## 12) Quick Reference (Cheat Sheet)
+## 12) Quick Reference (Cheat Sheet) [dispatch × capsule × compaction × rung × integrity]
 
 ```
 Main session loads: prime-safety + prime-coder + phuc-orchestration (always)
@@ -604,4 +678,151 @@ Forbidden (hard):   SKILL_LESS_DISPATCH | CONTEXT_ACCUMULATION | SUMMARY_AS_EVID
 
 Swarms:             When complex multi-agent work needed → dispatch Swarm Orchestrator
                     with phuc-swarms + phuc-context in skill pack (not inline)
+```
+
+---
+
+## MD) Mermaid State Diagram — Dispatch Decision Flow + CNF Capsule Lifecycle
+
+```mermaid stateDiagram-v2
+[*] --> INIT
+INIT --> INTAKE_TASK : task_received
+INTAKE_TASK --> NULL_CHECK
+NULL_CHECK --> EXIT_NEED_INFO : task_null_or_ambiguous
+NULL_CHECK --> BUDGET_CHECK : task_defined
+
+BUDGET_CHECK --> COMPACTION : main_context_gt_800_lines
+BUDGET_CHECK --> DISPATCH_DECISION : within_budget
+COMPACTION --> DISPATCH_DECISION : capsule_rebuilt_from_artifacts
+
+state DISPATCH_DECISION {
+  [*] --> CLASSIFY_TASK
+  CLASSIFY_TASK --> INLINE_EXECUTE : trivial_lt_50_lines
+  CLASSIFY_TASK --> BUILD_CNF_CAPSULE : requires_dispatch_gt_100_lines
+}
+
+DISPATCH_DECISION --> INLINE_EXECUTE : trivial
+DISPATCH_DECISION --> BUILD_CNF_CAPSULE : dispatch_required
+
+state BUILD_CNF_CAPSULE {
+  [*] --> INJECT_TASK_FULL_TEXT
+  INJECT_TASK_FULL_TEXT --> INJECT_CONSTRAINTS
+  INJECT_CONSTRAINTS --> INJECT_CONTEXT_ARTIFACTS
+  INJECT_CONTEXT_ARTIFACTS --> INJECT_NORTHSTAR
+  INJECT_NORTHSTAR --> DECLARE_RUNG_TARGET
+  DECLARE_RUNG_TARGET --> [*]
+  note: NEVER: "as before", "as discussed"
+}
+
+BUILD_CNF_CAPSULE --> SELECT_SKILL_PACK
+SELECT_SKILL_PACK --> LAUNCH_AGENT
+
+state SELECT_SKILL_PACK {
+  [*] --> LOAD_PRIME_SAFETY_FIRST
+  LOAD_PRIME_SAFETY_FIRST --> LOAD_DOMAIN_SKILL
+  LOAD_DOMAIN_SKILL --> [*]
+}
+
+LAUNCH_AGENT --> AWAIT_ARTIFACTS
+
+AWAIT_ARTIFACTS --> INTEGRATE_ARTIFACTS : artifacts_received
+AWAIT_ARTIFACTS --> EXIT_BLOCKED : agent_exit_blocked
+AWAIT_ARTIFACTS --> EXIT_NEED_INFO : agent_exit_need_info
+
+INTEGRATE_ARTIFACTS --> VERIFY_INTEGRATION
+VERIFY_INTEGRATION --> FINAL_SEAL : integration_consistent_all_rounds_complete
+VERIFY_INTEGRATION --> BUILD_CNF_CAPSULE : re_dispatch_needed_budgets_allow
+VERIFY_INTEGRATION --> EXIT_BLOCKED : max_rounds_exceeded
+
+INLINE_EXECUTE --> FINAL_SEAL
+
+FINAL_SEAL --> EXIT_PASS : evidence_complete_rung_target_met
+FINAL_SEAL --> EXIT_BLOCKED : otherwise
+
+EXIT_PASS --> [*]
+EXIT_BLOCKED --> [*]
+EXIT_NEED_INFO --> [*]
+
+note right of BUILD_CNF_CAPSULE
+  CNF Anti-Rot Rules:
+  1. Full task verbatim
+  2. Explicit constraints
+  3. Artifacts as links/JSON (not prose)
+  4. Northstar metric targeted
+  5. rung_target declared
+end note
+
+note right of SELECT_SKILL_PACK
+  prime-safety ALWAYS first.
+  Domain skill second.
+  No overloading: load only
+  what the role needs.
+end note
+```
+
+---
+
+## 13) Three Pillars Integration — LEK / LEAK / LEC
+
+**phuc-orchestration IS LEAK — cross-agent asymmetric knowledge trade made structural.**
+
+```yaml
+three_pillars_integration:
+  pillar_role: LEAK
+  description: |
+    phuc-orchestration is the structural implementation of LEAK
+    (Law of Emergent Asymmetric Knowledge).
+
+    LEAK states: when two knowledge bubbles trade through a portal,
+    they produce MORE than either could alone — because each bubble
+    has different conventions and compresses knowledge differently.
+
+    In orchestration:
+      - Main session = Bubble A (coordinator, context-holder)
+      - Sub-agent = Bubble B (domain expert, specialized skills)
+      - CNF capsule = the portal (governed knowledge transfer channel)
+      - dispatch = the LEAK trade (asymmetric knowledge exchange)
+
+    The main session knows: task context, prior artifacts, constraints.
+    The sub-agent knows: domain skills, specialized procedures, evidence discipline.
+    Neither knows what the other knows. The capsule is the portal.
+    The artifact returned IS the LEAK surplus — new knowledge neither had before.
+
+  LEK_relationship:
+    description: "Each sub-agent is a bounded LEK loop; orchestration chains them."
+    contract: |
+      A Coder sub-agent runs its own LEK loop (red/green cycles).
+      A Planner sub-agent runs its own LEK loop (DREAM→VERIFY cycles).
+      phuc-orchestration chains these LEK loops into a compound intelligence:
+        Intelligence(system) = MIN(all LEK loops) × LEAK(between loops) × LEC(conventions shared)
+      The MIN(rung) law ensures no LEK loop's weakness is hidden by others.
+
+  LEAK_relationship:
+    description: "Orchestration IS LEAK — every dispatch is an asymmetric knowledge trade."
+    contract: |
+      Key LEAK factors in orchestration:
+        ASYMMETRY: main session has context; sub-agent has domain skills
+        COMPRESSION: CNF capsule compresses context for the sub-agent bubble
+        PORTAL: the sub-agent prompt IS the portal specification
+        SURPLUS: the artifact returned (PATCH_DIFF, FORECAST_MEMO) IS the LEAK surplus
+      The forbidden state SKILL_LESS_DISPATCH prevents portals without handshake.
+      The forbidden state SUMMARY_AS_EVIDENCE ensures only real LEAK surplus (artifacts) counts.
+    formula: "LEAK(orchestration) = ASYMMETRY(main,sub) × COMPRESSION(CNF) × PORTAL(capsule) × SURPLUS(artifact)"
+
+  LEC_relationship:
+    description: "The CNF capsule template, dispatch matrix, and compaction protocol are crystallized LEC conventions."
+    contract: |
+      Each element of phuc-orchestration emerged from repeated failure patterns:
+        - SKILL_LESS_DISPATCH emerged from sub-agents failing without skills
+        - FORGOTTEN_CAPSULE emerged from context rot breaking multi-turn tasks
+        - COMPACTION protocol emerged from context overflow failures
+        - MIN(rung) law emerged from rung laundering incidents
+      Each failure was observed, named, and crystallized into the forbidden states list.
+      The forbidden states list IS the LEC convention body for orchestration.
+    lec_strength: "Very high — universally adopted across all swarm sessions; additive-only growth"
+
+  three_pillars_mapping:
+    LEK:  "each sub-agent is a LEK loop — orchestration chains bounded LEK loops"
+    LEAK: "every dispatch IS LEAK — asymmetric knowledge trade between main and sub bubbles"
+    LEC:  "CNF capsule + dispatch matrix + compaction = crystallized LEC conventions"
 ```

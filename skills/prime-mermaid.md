@@ -1,9 +1,24 @@
 PRIME_MERMAID_SKILL:
-  version: 1.1.0
+  version: 1.2.0
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love_Max_Signal_Max_Geometry
   status: ACTIVE
+
+  # ============================================================
+  # MAGIC_WORD_MAP — prime-mermaid concepts anchored to prime coordinates
+  # ============================================================
+  MAGIC_WORD_MAP:
+    diagram:    [signal (T0)]           # graph = externalized structure carrying causal weight
+    canonical:  [coherence (T0)]        # normalized form that makes all parts reinforce each other
+    hash:       [integrity (T0)]        # SHA-256 over canonical bytes = corruption-resistant identity
+    node:       [emergence (T0)]        # system-level unit not reducible to its label alone
+    edge:       [causality (T0)]        # directional dependency; A → B means B requires A
+    portal:     [portal (T1)]           # typed link to external LLM/tool resource (P0–P4 scope)
+    forbidden_state: [constraint (T0)]  # boundary condition that eliminates incoherent graph states
+    seal:       [verification (T1)]     # SEAL state = sha256 stable across two normalizations
+    channel:    [boundary (T0)]         # prime-numbered typed coordination bus; never mixed
+    compression: [compression (T0)]     # structural reuse: encode once, re-derive never
 
   # ============================================================
   # PRIME MERMAID — Universal Geometric Knowledge Language
@@ -85,7 +100,7 @@ PRIME_MERMAID_SKILL:
       - replacing_executable_tests_with_graphs_alone
 
   # ------------------------------------------------------------
-  # C) Core Thesis — Why Geometry Wins
+  # C) Core Thesis — Why Geometry Wins [signal, emergence]
   # ------------------------------------------------------------
   Core_Thesis:
     problem_statement:
@@ -158,7 +173,7 @@ PRIME_MERMAID_SKILL:
       - "JSON or YAML (those are derived transport formats)"
 
   # ------------------------------------------------------------
-  # E) Canonical Format Contract (Hard)
+  # E) Canonical Format Contract (Hard) [coherence, integrity]
   # ------------------------------------------------------------
   Canonical_Format_Contract:
     source_of_truth_hierarchy:
@@ -233,7 +248,7 @@ PRIME_MERMAID_SKILL:
       - "One visual channel = one semantic dimension."
 
   # ------------------------------------------------------------
-  # G) Node and Edge Type System
+  # G) Node and Edge Type System [emergence, causality]
   # ------------------------------------------------------------
   Node_Type_System:
     state_nodes:
@@ -274,7 +289,7 @@ PRIME_MERMAID_SKILL:
       - "Unlabeled branches from a diamond node = FORBIDDEN_STATE."
 
   # ------------------------------------------------------------
-  # H) Portal Architecture (P0–P4)
+  # H) Portal Architecture (P0–P4) [portal, boundary]
   # ------------------------------------------------------------
   Portal_Architecture:
     purpose:
@@ -403,7 +418,7 @@ PRIME_MERMAID_SKILL:
       - never_read_parent_scope_without_explicit_p1_portal: true
 
   # ------------------------------------------------------------
-  # K) Compression Protocol
+  # K) Compression Protocol [compression, signal]
   # ------------------------------------------------------------
   Compression_Protocol:
     principle:
@@ -463,7 +478,7 @@ PRIME_MERMAID_SKILL:
       - float_arithmetic_in_exact_count_output
 
   # ------------------------------------------------------------
-  # M) State Machine (Fail-Closed Runtime)
+  # M) State Machine (Fail-Closed Runtime) [coherence, causality]
   # ------------------------------------------------------------
   State_Machine:
     states:
@@ -525,7 +540,7 @@ PRIME_MERMAID_SKILL:
         true_if: "sha256(normalize(mmd_v1)) == sha256(normalize(mmd_v2))"
 
   # ------------------------------------------------------------
-  # N) Forbidden States (Hard)
+  # N) Forbidden States (Hard) [constraint, integrity]
   # ------------------------------------------------------------
   Forbidden_States:
     - UNLABELED_BRANCH_FROM_DECISION_NODE
@@ -658,7 +673,7 @@ PRIME_MERMAID_SKILL:
         ```
 
   # ------------------------------------------------------------
-  # Q) Output Contract (Hard Rules)
+  # Q) Output Contract (Hard Rules) [integrity, verification]
   # ------------------------------------------------------------
   Output_Contract:
     for_every_prime_mermaid_artifact:

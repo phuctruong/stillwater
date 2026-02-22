@@ -1,15 +1,54 @@
 # phuc-postmortem — QA-to-Improvement Feedback Loop
 
 **Skill ID:** phuc-postmortem
-**Version:** 1.0.0
+**Version:** 1.2.0
 **Authority:** 65537
 **Role:** Extract learnings from every QA round and feed them back into skills/recipes/swarms
 **Load Order:** After prime-safety, before any domain skill
 **Conflict Resolution:** Strengthens all other skills (never weakens)
+**Northstar:** Phuc_Forecast | Max_Love
 
 ---
 
-## 0) Purpose
+## QUICK LOAD
+
+```yaml
+SKILL: phuc-postmortem v1.2.0
+PURPOSE: Turn every QA finding into a permanent system improvement. Never-worse doctrine for the skill library.
+FSM: INIT → INTAKE_FINDINGS → CLASSIFY → ROOT_CAUSE → PLAN_IMPROVEMENTS →
+     APPLY_IMPROVEMENTS → VERIFY_FIXES → REGISTER → EXIT_IMPROVED
+FORBIDDEN: FINDING_WITHOUT_IMPROVEMENT | IMPROVEMENT_WITHOUT_VERIFY | UNREGISTERED_POSTMORTEM |
+           SAME_FINDING_TWICE | PROSE_ONLY_FIX | BLAME_THE_MODEL
+RUNG_DEFAULT: 641 (single finding) | 274177 (multi-finding + system impact) | 65537 (security/production)
+NORTHSTAR: Phuc_Forecast — postmortem loop IS the system quality metric actuator
+MAX_LOVE: Every improvement spares a future agent the cost of encountering the same mistake
+GLOW: Growth=improvements_per_QA_round | Learning=recurrence_rate | Output=postmortem_registry_entries | Wins=zero_SAME_FINDING_TWICE
+THREE_PILLARS: LEK=learning_loop | LEAK=improvements_benefit_all_agents | LEC=forbidden_state_conventions
+TRIANGLE_LAW: REMIND→VERIFY→ACKNOWLEDGE for each improvement contract
+```
+
+---
+
+## MAGIC_WORD_MAP
+
+```yaml
+magic_word_map:
+  version: "1.1"
+  skill: "phuc-postmortem"
+  mappings:
+    postmortem: {word: "verification", tier: 1, id: "MW-031", note: "postmortem verifies system properties hold after QA findings"}
+    root_cause: {word: "causality", tier: 0, id: "MW-009", note: "directional dependency between failure event and its underlying cause"}
+    lesson: {word: "learning", tier: 1, id: "MW-030", note: "updating internal model based on evidence to improve future behavior"}
+    action: {word: "act", tier: 2, id: "MW-071", note: "the ACT phase: concrete fix applied to skill/recipe/swarm"}
+    lek: {word: "learning", tier: 1, id: "MW-030", note: "LEK: each finding→improvement cycle is a self-improvement iteration for the ecosystem"}
+    leak: {word: "verification", tier: 1, id: "MW-031", note: "LEAK: improvements to skills/swarms propagate to all agents that load them — asymmetric benefit"}
+    lec: {word: "causality", tier: 0, id: "MW-009", note: "LEC: forbidden states and improvement types are the postmortem conventions all agents must follow"}
+  compression_note: "T0=universal primitives, T1=Stillwater protocol concepts, T2=operational details"
+```
+
+---
+
+## 0) Purpose [T0: northstar + learning]
 
 Every QA round produces findings. Most teams log them and move on. Stillwater turns every finding into a permanent system improvement. This skill ensures that:
 
@@ -20,9 +59,11 @@ Every QA round produces findings. Most teams log them and move on. Stillwater tu
 > "A mistake repeated is a decision." — Paulo Coelho
 > "Absorb what is useful, discard what is useless, and add what is specifically your own." — Bruce Lee
 
+**Northstar alignment:** The postmortem loop IS the recipe hit rate actuator. Every forbidden state added prevents a future failure. Every gate added prevents a future miss. The system compounds smarter with each loop iteration.
+
 ---
 
-## 1) The Postmortem Loop (MANDATORY after every QA round)
+## 1) The Postmortem Loop (MANDATORY after every QA round) [T1: verification + learning]
 
 ```
 QA_ROUND_COMPLETE
@@ -49,7 +90,7 @@ QA_ROUND_COMPLETE
 
 ---
 
-## 2) Finding Classification
+## 2) Finding Classification [T0: causality]
 
 ### Severity Levels
 
@@ -76,7 +117,7 @@ QA_ROUND_COMPLETE
 
 ---
 
-## 3) Improvement Types
+## 3) Improvement Types [T2: act]
 
 Every finding MUST produce at least one of these improvements:
 
@@ -124,7 +165,7 @@ cnf_capsule_required_fields:
 
 ---
 
-## 4) State Machine
+## 4) State Machine [T1: verification + causality]
 
 ```
 States:
@@ -158,7 +199,7 @@ Forbidden States:
 
 ---
 
-## 5) Postmortem Registry Schema
+## 5) Postmortem Registry Schema [T1: verification + learning]
 
 Append to `postmortem_registry.jsonl` (one JSON per line):
 
@@ -202,7 +243,7 @@ Append to `postmortem_registry.jsonl` (one JSON per line):
 
 ---
 
-## 6) Integration with Phuc-Orchestration
+## 6) Integration with Phuc-Orchestration [T2: act]
 
 ### When the Hub (Opus) receives QA results:
 
@@ -232,7 +273,7 @@ required_context:
 
 ---
 
-## 7) Recurring Finding Escalation
+## 7) Recurring Finding Escalation [T0: causality]
 
 If the same finding appears in two QA rounds:
 
@@ -244,15 +285,88 @@ If the same finding appears in two QA rounds:
 
 ---
 
-## 8) NORTHSTAR Alignment
+## 8) Three Pillars Integration
+
+### LEK — Learning Engine of Knowledge (self-improvement)
+The postmortem loop IS LEK in action:
+- Every finding → improvement cycle adds a permanent gate to the skill library
+- The system's error surface shrinks with each iteration — compounding self-improvement
+- The postmortem_registry.jsonl IS the LEK evidence log: every session's learning, timestamped and searchable
+- LEK metric: `system_improvements_count` per QA round, tracked over time → must be non-zero and non-decreasing
+- Never-worse doctrine: the postmortem loop ensures each QA round leaves the system stronger than it found it
+
+### LEAK — Learning Engine of Asymmetric Knowledge (cross-agent trade)
+Improvements propagate asymmetrically across all agents:
+- A gate added to `skills/prime-coder.md` benefits every coder agent that loads it — immediately
+- A forbidden state added to `swarms/coder.md` benefits every coder sub-agent in every session — forever
+- One postmortem session's work compounds across the entire swarm: LEAK multiplier = number of agents × sessions
+- The postmortem author's effort is the smallest possible unit; the benefit is ecosystem-wide
+
+### LEC — Learning Engine of Conventions (shared standards)
+The postmortem conventions ARE the LEC layer for QA improvement:
+- Forbidden states (`FINDING_WITHOUT_IMPROVEMENT`, `PROSE_ONLY_FIX`) are constitutional
+- Improvement types (A through F) are the canonical vocabulary for expressing changes
+- The postmortem_registry.jsonl schema is the data convention — all entries look the same
+- These conventions ensure any agent reading the registry understands every entry without translation
+
+---
+
+## 9) GLOW Scoring for Improvement Value
+
+```yaml
+glow_matrix:
+  Growth:
+    metric: "improvements_per_QA_round"
+    target: ">= 1 improvement per finding (never-worse doctrine)"
+    formula: "sum(improvements) / sum(findings) >= 1.0"
+    signal: "postmortem_registry.jsonl: system_improvements_count per entry"
+    gate: "FINDING_WITHOUT_IMPROVEMENT forbidden if Growth < 1.0 for any finding"
+    belt_progression:
+      white: "1-3 improvements per postmortem"
+      yellow: "4-10 improvements with verified fixes"
+      orange: "10+ improvements, zero SAME_FINDING_TWICE events"
+      green: "Recurring finding rate < 5% across all rounds"
+
+  Learning:
+    metric: "recurrence_rate"
+    formula: "findings_seen_before / total_findings in last 30 days"
+    target: "< 5% recurrence rate (previously fixed findings must stay fixed)"
+    signal: "recurrence_count field in postmortem_registry findings"
+    gate: "SAME_FINDING_TWICE triggers severity +1 escalation — learning gate failed"
+
+  Output:
+    metric: "postmortem_registry_completeness"
+    target: "Every QA round produces exactly 1 registry entry with all schema fields populated"
+    signal: "UNREGISTERED_POSTMORTEM forbidden state — registry must grow monotonically"
+    gate: "Incomplete registry entry = IMPROVEMENT_WITHOUT_VERIFY state violation"
+
+  Wins:
+    metric: "zero_PROSE_ONLY_FIX_events"
+    target: "0 'we'll be more careful' fixes — all fixes are code/config/skill changes"
+    signal: "improvement.type must be one of: forbidden_state | gate | recipe | swarm | checklist | cnf_capsule"
+    gate: "PROSE_ONLY_FIX is S1-HIGH — the lesson was not institutionalized"
+```
+
+---
+
+## 10) NORTHSTAR Alignment [T0: northstar]
+
+**Northstar metric:** Recipe hit rate / System quality (Phuc_Forecast)
+**Max_Love constraint:** Every improvement must maximize future agent quality while minimizing future agent confusion.
 
 This skill advances the NORTHSTAR metric: **Recipe hit rate / System quality**
 
 Every postmortem improvement:
-- Adds a gate that prevents the same mistake → fewer failures
-- Adds context to CNF capsules → better sub-agent output
-- Adds anti-patterns to swarms → agents avoid known traps
+- Adds a gate that prevents the same mistake → fewer failures → higher recipe hit rate
+- Adds context to CNF capsules → better sub-agent output → higher system quality
+- Adds anti-patterns to swarms → agents avoid known traps → compounding reliability
 - Makes the system smarter without retraining any model
+
+**Max_Love application to postmortem:**
+- PROSE_ONLY_FIX is an anti-love violation: it forces future agents to make the same mistake again
+- BLAME_THE_MODEL is an anti-love violation: it removes accountability from the system architecture
+- The real act of love is: find the gate that was missing, add it, so no future agent falls in the same hole
+- Max_Love means: the cost of this finding is borne once, by you, now — not repeatedly by every future agent
 
 This IS Software 5.0: the skill library only gets stronger.
 
@@ -261,7 +375,26 @@ This IS Software 5.0: the skill library only gets stronger.
 
 ---
 
-## 9) Quick Reference
+## 11) Triangle Law: REMIND → VERIFY → ACKNOWLEDGE
+
+### Contract 1: Before Claiming a Fix
+- **REMIND:** Every improvement must be applied to an actual file (skill/recipe/swarm/config). No prose-only fixes.
+- **VERIFY:** Re-run the specific check that found the issue. Does it now pass?
+- **ACKNOWLEDGE:** Fix is verified. Log to improvements array in registry. improvement.verified = true.
+
+### Contract 2: Before Registering the Postmortem
+- **REMIND:** Every QA round gets exactly one postmortem_registry.jsonl entry. No round goes unregistered.
+- **VERIFY:** Does the entry have: postmortem_id, date, qa_round, findings array, system_improvements_count, rung?
+- **ACKNOWLEDGE:** Registry entry complete and appended. UNREGISTERED_POSTMORTEM gate passes.
+
+### Contract 3: On Recurring Findings
+- **REMIND:** If this finding has appeared before: previous fix was insufficient. Do not apply the same fix again.
+- **VERIFY:** What was the previous fix? Why did it not prevent recurrence? What deeper gate is missing?
+- **ACKNOWLEDGE:** Root cause is deeper than last time. Severity escalated. New improvement type chosen. Recurrence_count incremented.
+
+---
+
+## 12) Quick Reference [T1: verification + learning]
 
 ```
 After every QA round:
@@ -277,6 +410,44 @@ Forbidden:
   - SAME_FINDING_TWICE (escalate!)
   - PROSE_ONLY_FIX ("we'll be careful" is not a fix)
   - BLAME_THE_MODEL (missing gate is the real cause)
+
+GLOW: Growth=improvements/finding | Learning=zero_recurrences | Output=registry_entry | Wins=zero_PROSE_ONLY_FIX
+Northstar: postmortem loop = recipe hit rate actuator
+Max_Love: institutionalize the lesson so no future agent pays the cost
+Three Pillars: LEK=learning_loop | LEAK=improvements_propagate_to_all | LEC=postmortem_conventions
+```
+
+---
+
+## Mermaid Diagram: Postmortem Loop
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> INTAKE_FINDINGS : QA_round_complete
+    INTAKE_FINDINGS --> CLASSIFY : findings_list_gt_zero
+    CLASSIFY --> ROOT_CAUSE : all_findings_have_severity_and_category
+    ROOT_CAUSE --> PLAN_IMPROVEMENTS : all_findings_have_root_cause
+    PLAN_IMPROVEMENTS --> APPLY_IMPROVEMENTS : each_finding_has_improvement
+    APPLY_IMPROVEMENTS --> VERIFY_FIXES : all_improvements_applied
+    VERIFY_FIXES --> REGISTER : re_check_passes
+    REGISTER --> EXIT_IMPROVED : registry_updated
+    EXIT_IMPROVED --> [*]
+
+    state "GLOW Loop" as GLOW {
+        Growth_improvements_per_round
+        Learning_recurrence_rate
+        Output_registry_entry
+        Wins_zero_PROSE_ONLY_FIX
+    }
+
+    state "FORBIDDEN" as F {
+        FINDING_WITHOUT_IMPROVEMENT
+        PROSE_ONLY_FIX
+        BLAME_THE_MODEL
+        SAME_FINDING_TWICE
+        UNREGISTERED_POSTMORTEM
+    }
 ```
 
 ---
@@ -286,3 +457,5 @@ Forbidden:
 | Version | Date | Change |
 |---------|------|--------|
 | 1.0.0 | 2026-02-21 | Initial skill. Born from OAuth3 spec QA finding (wrong repo URL). |
+| 1.1.0 | 2026-02-22 | Added MAGIC_WORD_MAP (postmortem→verification, root_cause→causality, lesson→learning, action→act). Added T0/T1 section tags. |
+| 1.2.0 | 2026-02-22 | Added QUICK LOAD block (with GLOW/Northstar/Three Pillars fields), Three Pillars section (LEK/LEAK/LEC), GLOW matrix (section 9) with belt progression, Northstar alignment section (Max_Love application), Triangle Law (section 11, REMIND→VERIFY→ACKNOWLEDGE for 3 contracts), mermaid stateDiagram-v2 of postmortem loop, updated MAGIC_WORD_MAP with LEK/LEAK/LEC, bumped version. |

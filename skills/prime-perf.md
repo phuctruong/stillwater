@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: prime-perf v1.0.0
+SKILL: prime-perf v1.2.0
 PURPOSE: Fail-closed performance analysis and optimization agent. Profile-first discipline, mandatory before/after benchmarks, statistical regression detection, no micro-benchmark without context.
 CORE CONTRACT: Every perf PASS requires: profiler output before any change, statistically valid benchmark (N>=30 runs, report p50/p95/p99), before/after comparison, and regression detection on existing benchmarks. Claims of improvement require numbers.
 HARD GATES: Profiler gate blocks optimization without profiler evidence. Stats gate blocks benchmark with N<30 runs or report showing only mean. Regression gate blocks changes that degrade existing benchmarks beyond threshold. Context gate blocks micro-benchmarks presented without system context (workload, hardware, concurrency).
@@ -11,12 +11,32 @@ LOAD FULL: always for production; quick block is for orientation only
 -->
 
 PRIME_PERF_SKILL:
-  version: 1.0.0
+  version: 1.2.0
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
   status: FINAL
   quote: "Measure, don't guess. The profiler is always right; your intuition is often wrong. — Donald Knuth, paraphrased"
+
+  # ============================================================
+  # MAGIC_WORD_MAP — Semantic Compression Index
+  # ============================================================
+  # Maps domain concepts to stillwater magic words for context compression.
+  # Load coordinates (e.g. "signal[T0]") instead of full definitions.
+  #
+  # latency      → signal [T0]          — latency is the signal that indicates service responsiveness
+  # throughput   → compression [T0]     — throughput = how much work is compressed into unit time
+  # benchmark    → verification [T1]    — benchmark is Lane A evidence for performance claims
+  # profiler     → evidence [T1]        — profiler output is mandatory Lane A artifact before any change
+  # regression   → drift [T3]           — performance regression is undetected deviation from baseline
+  # hotspot      → gradient [T1]        — hotspot is the steepest point in the performance cost landscape
+  # p50/p95/p99  → signal [T0]          — percentile distribution = full causal-weight picture of latency
+  # context      → perspective [T0]     — benchmark context (hardware/workload) = frame-dependent view
+  # --- Three Pillars ---
+  # LEK          → evidence [T1]        — Perf skill is learnable: profiler-first, N>=30 runs, p50/p95/p99 reporting
+  # LEAK         → drift [T3]           — Perf expertise is asymmetric: mean-only reporting and profilerless guesses catch novices
+  # LEC          → gradient [T1]        — Perf conventions emerge: profile-before-optimize, Decimal regression checks become law
+  # ============================================================
 
   # ============================================================
   # PRIME PERF — Fail-Closed Performance Optimization Skill  [10/10]
@@ -31,7 +51,7 @@ PRIME_PERF_SKILL:
   # ============================================================
 
   # ------------------------------------------------------------
-  # A) Configuration
+  # A) Configuration  [coherence:T0 — config enforces unified benchmarking standards]
   # ------------------------------------------------------------
   Config:
     EVIDENCE_ROOT: "evidence"
@@ -55,7 +75,7 @@ PRIME_PERF_SKILL:
       - never float for regression decision
 
   # ------------------------------------------------------------
-  # B) State Machine
+  # B) State Machine  [evidence:T1 → verification:T1 → signal:T0]
   # ------------------------------------------------------------
   State_Machine:
     STATE_SET:
@@ -112,7 +132,7 @@ PRIME_PERF_SKILL:
       - HARDWARE_MISMATCH_BETWEEN_BASELINE_AND_AFTER
 
   # ------------------------------------------------------------
-  # C) Hard Gates (Domain-Specific)
+  # C) Hard Gates (Domain-Specific)  [evidence:T1 → verification:T1 → drift:T3]
   # ------------------------------------------------------------
   Hard_Gates:
 
@@ -161,7 +181,7 @@ PRIME_PERF_SKILL:
       lane: A
 
   # ------------------------------------------------------------
-  # D) Profiling Protocol
+  # D) Profiling Protocol  [gradient:T1 — find steepest hotspot before optimizing]
   # ------------------------------------------------------------
   Profiling_Protocol:
     steps:
@@ -177,7 +197,7 @@ PRIME_PERF_SKILL:
     rule: "Optimize the hotspot the profiler found, not the one you expect."
 
   # ------------------------------------------------------------
-  # E) Benchmark Design Protocol
+  # E) Benchmark Design Protocol  [signal:T0 → verification:T1 — percentiles = full signal]
   # ------------------------------------------------------------
   Benchmark_Design:
     required_elements:
@@ -198,7 +218,7 @@ PRIME_PERF_SKILL:
       - claiming_cold_cache_performance_from_warm_cache_benchmark: BLOCKED
 
   # ------------------------------------------------------------
-  # F) Regression Detection Protocol
+  # F) Regression Detection Protocol  [drift:T3 — regression = undetected performance deviation]
   # ------------------------------------------------------------
   Regression_Detection:
     procedure:
@@ -214,7 +234,7 @@ PRIME_PERF_SKILL:
     evidence_file: "${EVIDENCE_ROOT}/regression_report.txt"
 
   # ------------------------------------------------------------
-  # G) Lane-Typed Claims
+  # G) Lane-Typed Claims  [evidence:T1 → signal:T0]
   # ------------------------------------------------------------
   Lane_Claims:
     Lane_A:
@@ -232,7 +252,7 @@ PRIME_PERF_SKILL:
       - caching_strategy_heuristics
 
   # ------------------------------------------------------------
-  # H) Verification Rung Target
+  # H) Verification Rung Target  [rung:T1 → 274177:T1]
   # ------------------------------------------------------------
   Verification_Rung:
     default_target: 274177
@@ -249,7 +269,7 @@ PRIME_PERF_SKILL:
       - hardware_and_workload_documented
 
   # ------------------------------------------------------------
-  # I) Socratic Review Questions (Perf-Specific)
+  # I) Socratic Review Questions (Perf-Specific)  [verification:T1]
   # ------------------------------------------------------------
   Socratic_Review:
     questions:
@@ -263,7 +283,7 @@ PRIME_PERF_SKILL:
     on_failure: revise_optimization and recheck
 
   # ------------------------------------------------------------
-  # J) Evidence Schema
+  # J) Evidence Schema  [evidence:T1 — profiler + benchmarks = Lane A artifacts]
   # ------------------------------------------------------------
   Evidence:
     required_files:
@@ -276,3 +296,57 @@ PRIME_PERF_SKILL:
         - "${EVIDENCE_ROOT}/regression_tradeoff.txt"
       stability_check:
         - "${EVIDENCE_ROOT}/benchmark_replay_3x.txt"
+
+  # ============================================================
+  # K) Perf Analysis FSM — Visual State Diagram
+  # ============================================================
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> INTAKE: TASK_REQUEST
+    INTAKE --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO: code/workload missing
+    NULL_CHECK --> CLASSIFY_PERF_TASK: ok
+    CLASSIFY_PERF_TASK --> PROFILER_GATE
+    PROFILER_GATE --> EXIT_BLOCKED: optimization without profiler output
+    PROFILER_GATE --> BASELINE_MEASURE: profiler output present
+    BASELINE_MEASURE --> HOTSPOT_IDENTIFY
+    HOTSPOT_IDENTIFY --> CHANGE_PLAN
+    CHANGE_PLAN --> PATCH
+    PATCH --> BENCHMARK_GATE
+    BENCHMARK_GATE --> EXIT_BLOCKED: N<30 or mean-only report
+    BENCHMARK_GATE --> REGRESSION_CHECK: valid benchmark
+    REGRESSION_CHECK --> EXIT_BLOCKED: degradation > 5% threshold
+    REGRESSION_CHECK --> EVIDENCE_BUILD: no regression
+    EVIDENCE_BUILD --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> PATCH: revision needed
+    SOCRATIC_REVIEW --> FINAL_SEAL: ok
+    FINAL_SEAL --> EXIT_PASS: evidence complete
+    FINAL_SEAL --> EXIT_BLOCKED: evidence missing
+    EXIT_PASS --> [*]
+    EXIT_BLOCKED --> [*]
+    EXIT_NEED_INFO --> [*]
+```
+
+  # ============================================================
+  # L) Three Pillars Integration
+  # ============================================================
+  Three_Pillars:
+    LEK_Law_of_Emergent_Knowledge:
+      summary: "Performance discipline is teachable. Profile-first workflow, N>=30 benchmark runs,
+        p50/p95/p99 reporting, and Decimal regression checks are concrete learnable practices."
+      key_knowledge_units: [profiler_tool_per_language, benchmark_warmup_exclusion,
+        percentile_reporting_not_mean, decimal_regression_arithmetic, context_documentation_fields]
+
+    LEAK_Law_of_Emergent_Asymmetric_Knowledge:
+      summary: "Perf expertise is asymmetric. Novices optimize without profiling, report only mean,
+        and declare 2x speedup without before/after numbers. Experts block all three immediately."
+      asymmetric_traps: [optimize_without_profiler_output, mean_only_benchmark_report,
+        claim_improvement_without_numbers, float_in_regression_decision, cold_cache_claimed_from_warm_run]
+
+    LEC_Law_of_Emergent_Conventions:
+      summary: "Perf conventions crystallize into law. Profile-before-optimize, N>=30 with percentiles,
+        and Decimal-not-float for regression decisions are now Lane A gates."
+      emerging_conventions: [profiler_gate_as_mandatory, thirty_run_minimum_as_standard,
+        percentile_distribution_over_mean, decimal_regression_arithmetic_as_law]

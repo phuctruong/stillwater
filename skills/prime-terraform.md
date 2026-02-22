@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: prime-terraform v1.0.0
+SKILL: prime-terraform v1.2.0
 PURPOSE: Fail-closed Terraform IaC authoring agent. Enforces remote state, no hardcoded credentials, plan-before-destroy, and mandatory resource tagging strategy.
 CORE CONTRACT: Every Terraform PASS requires: remote state backend configured, no hardcoded credentials in any .tf file, terraform plan reviewed before apply, destroy operations require explicit plan review artifact, and all resources carry mandatory tags.
 HARD GATES: Credential gate blocks hardcoded secrets in .tf or .tfvars files. State gate blocks local-only state in production. Destroy gate blocks terraform destroy without plan file reviewed and documented. Tag gate blocks resources missing mandatory tags.
@@ -11,12 +11,32 @@ LOAD FULL: always for production; quick block is for orientation only
 -->
 
 PRIME_TERRAFORM_SKILL:
-  version: 1.0.0
+  version: 1.2.0
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
   status: FINAL
   quote: "Infrastructure as code means the code is the infrastructure. Treat it with the same discipline. — Kief Morris, paraphrased"
+
+  # ============================================================
+  # MAGIC_WORD_MAP — Semantic Compression Index
+  # ============================================================
+  # Maps domain concepts to stillwater magic words for context compression.
+  # Load coordinates (e.g. "coherence[T0]") instead of full definitions.
+  #
+  # state        → coherence [T0]       — Terraform state tracks that all parts reinforce each other
+  # plan         → forecast [T2]        — terraform plan is the FORECAST phase: ranked changes + risks
+  # apply        → act [T2]             — terraform apply is the ACT phase: executes the plan
+  # destroy      → reversibility [T0]   — destroy operations must be reversible (approval + backup required)
+  # credential   → boundary [T0]        — credentials must not cross the .tf file boundary
+  # remote state → memory [T2]          — remote state is persistence of infrastructure state across sessions
+  # IAM policy   → constraint [T0]      — least-privilege IAM is a boundary condition on action space
+  # drift        → drift [T3]           — difference between plan and actual = undetected deviation
+  # --- Three Pillars ---
+  # LEK          → forecast [T2]        — Terraform skill is learnable: remote state, plan gates, tagging strategy
+  # LEAK         → boundary [T0]        — Terraform expertise is asymmetric: hardcoded creds and wildcard IAM catch novices
+  # LEC          → coherence [T0]       — Terraform conventions emerge: plan-before-apply, remote state, pinned providers become law
+  # ============================================================
 
   # ============================================================
   # PRIME TERRAFORM — Fail-Closed IaC Skill  [10/10]
@@ -31,7 +51,7 @@ PRIME_TERRAFORM_SKILL:
   # ============================================================
 
   # ------------------------------------------------------------
-  # A) Configuration
+  # A) Configuration  [coherence:T0 — config enforces unified IaC policy]
   # ------------------------------------------------------------
   Config:
     EVIDENCE_ROOT: "evidence"
@@ -56,7 +76,7 @@ PRIME_TERRAFORM_SKILL:
     PLAN_FILE_REQUIRED: true
 
   # ------------------------------------------------------------
-  # B) State Machine
+  # B) State Machine  [forecast:T2 → act:T2 → reversibility:T0]
   # ------------------------------------------------------------
   State_Machine:
     STATE_SET:
@@ -120,7 +140,7 @@ PRIME_TERRAFORM_SKILL:
       - UNPINNED_PROVIDER_VERSION
 
   # ------------------------------------------------------------
-  # C) Hard Gates (Domain-Specific)
+  # C) Hard Gates (Domain-Specific)  [boundary:T0 → constraint:T0 → reversibility:T0]
   # ------------------------------------------------------------
   Hard_Gates:
 
@@ -176,7 +196,7 @@ PRIME_TERRAFORM_SKILL:
       lane: A
 
   # ------------------------------------------------------------
-  # D) Module Discipline
+  # D) Module Discipline  [coherence:T0 — pinned module versions ensure reproducibility]
   # ------------------------------------------------------------
   Module_Discipline:
     versioning:
@@ -190,7 +210,7 @@ PRIME_TERRAFORM_SKILL:
       - resources: <provider>_<resource>_<purpose>
 
   # ------------------------------------------------------------
-  # E) Tagging Strategy
+  # E) Tagging Strategy  [signal:T0 — tags carry causal-weight metadata for cost/ownership]
   # ------------------------------------------------------------
   Tagging_Strategy:
     mandatory_tags:
@@ -209,7 +229,7 @@ PRIME_TERRAFORM_SKILL:
       - use default_tags in provider block when supported (AWS)
 
   # ------------------------------------------------------------
-  # F) Blast Radius Analysis
+  # F) Blast Radius Analysis  [reversibility:T0 — blast radius = irreversibility scope]
   # ------------------------------------------------------------
   Blast_Radius:
     required_before_large_changes:
@@ -228,7 +248,7 @@ PRIME_TERRAFORM_SKILL:
     evidence_file: "${EVIDENCE_ROOT}/blast_radius.txt"
 
   # ------------------------------------------------------------
-  # G) Lane-Typed Claims
+  # G) Lane-Typed Claims  [evidence:T1 → verification:T1]
   # ------------------------------------------------------------
   Lane_Claims:
     Lane_A:
@@ -248,7 +268,7 @@ PRIME_TERRAFORM_SKILL:
       - workspace_strategy_preferences
 
   # ------------------------------------------------------------
-  # H) Verification Rung Target
+  # H) Verification Rung Target  [rung:T1 → 65537:T1]
   # ------------------------------------------------------------
   Verification_Rung:
     default_target: 65537
@@ -266,7 +286,7 @@ PRIME_TERRAFORM_SKILL:
       - destroy_approval_artifact_present_if_destroys
 
   # ------------------------------------------------------------
-  # I) Socratic Review Questions (Terraform-Specific)
+  # I) Socratic Review Questions (Terraform-Specific)  [verification:T1]
   # ------------------------------------------------------------
   Socratic_Review:
     questions:
@@ -280,7 +300,7 @@ PRIME_TERRAFORM_SKILL:
     on_failure: revise_tf and recheck
 
   # ------------------------------------------------------------
-  # J) Evidence Schema
+  # J) Evidence Schema  [evidence:T1 — plan + credential scan = Lane A artifacts]
   # ------------------------------------------------------------
   Evidence:
     required_files:
@@ -296,3 +316,62 @@ PRIME_TERRAFORM_SKILL:
         - "${EVIDENCE_ROOT}/iam_audit.txt"
       module_changes:
         - "${EVIDENCE_ROOT}/module_tests.txt"
+
+  # ============================================================
+  # K) Terraform Safety FSM — Visual State Diagram
+  # ============================================================
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> INTAKE: TASK_REQUEST
+    INTAKE --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO: tf files/environment missing
+    NULL_CHECK --> CLASSIFY_CHANGE: ok
+    CLASSIFY_CHANGE --> CREDENTIAL_SCAN
+    CREDENTIAL_SCAN --> EXIT_BLOCKED: credentials in tf files
+    CREDENTIAL_SCAN --> STATE_AUDIT: clean
+    STATE_AUDIT --> EXIT_BLOCKED: prod using local state
+    STATE_AUDIT --> TAG_AUDIT: remote state confirmed
+    TAG_AUDIT --> EXIT_BLOCKED: resources missing mandatory tags
+    TAG_AUDIT --> IAM_AUDIT
+    IAM_AUDIT --> EXIT_BLOCKED: wildcard IAM policies
+    IAM_AUDIT --> PLAN_GENERATE: ok
+    PLAN_GENERATE --> PLAN_REVIEW
+    PLAN_REVIEW --> DESTROY_GATE: plan contains destroys
+    PLAN_REVIEW --> APPLY_GATE: no destroys
+    DESTROY_GATE --> EXIT_BLOCKED: no approval artifact
+    DESTROY_GATE --> APPLY_GATE: destroy approved
+    APPLY_GATE --> EVIDENCE_BUILD: apply succeeds
+    APPLY_GATE --> EXIT_BLOCKED: apply fails/drifts
+    EVIDENCE_BUILD --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> PLAN_GENERATE: revision needed
+    SOCRATIC_REVIEW --> FINAL_SEAL: ok
+    FINAL_SEAL --> EXIT_PASS: evidence complete
+    FINAL_SEAL --> EXIT_BLOCKED: evidence missing
+    EXIT_PASS --> [*]
+    EXIT_BLOCKED --> [*]
+    EXIT_NEED_INFO --> [*]
+```
+
+  # ============================================================
+  # L) Three Pillars Integration
+  # ============================================================
+  Three_Pillars:
+    LEK_Law_of_Emergent_Knowledge:
+      summary: "Terraform discipline is teachable. Remote state setup, plan-before-apply,
+        credential scanning, resource tagging, and least-privilege IAM are learnable practices."
+      key_knowledge_units: [remote_state_backend_config, plan_file_workflow,
+        credential_scan_patterns, mandatory_tag_strategy, blast_radius_analysis]
+
+    LEAK_Law_of_Emergent_Asymmetric_Knowledge:
+      summary: "Terraform expertise is asymmetric. Novices hardcode passwords in .tfvars,
+        use wildcard IAM, and run apply without a saved plan. Experts treat these as instant disqualifiers."
+      asymmetric_traps: [hardcoded_credentials_in_tfvars, wildcard_iam_action_resource,
+        apply_without_plan_file, local_state_in_production, unpinned_provider_version]
+
+    LEC_Law_of_Emergent_Conventions:
+      summary: "Terraform conventions crystallize into law. Remote state with locking,
+        plan-before-destroy approval, and pinned provider versions are now Lane A gates."
+      emerging_conventions: [remote_state_as_default, plan_file_required_for_apply,
+        destroy_approval_artifact, pinned_module_and_provider_versions]

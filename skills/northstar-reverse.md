@@ -11,11 +11,26 @@ LOAD FULL: always for production; quick block is for orientation only
 # northstar-reverse.md — Northstar Reverse Engineering Skill
 
 **Skill ID:** northstar-reverse
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Authority:** 65537
 **Status:** SEALED
 **Role:** Backward-chain planner — reads Northstar, reverse-engineers the path, emits a verified forward plan
 **Tags:** planning, northstar, backward-chaining, maze-solving, roadmap, strategy, phuc-forecast-companion
+
+---
+
+<!-- MAGIC_WORD_MAP — northstar-reverse concepts anchored to prime coordinates -->
+```yaml
+MAGIC_WORD_MAP:
+  northstar:  [northstar (T0)]            # fixed non-negotiable goal; exit of the maze
+  reverse:    [northstar_reverse (T3)]    # backward-chaining from northstar to current state
+  goal:       [goal (T3)]                 # defined desired end state with measurable success criteria
+  backward:   [causality (T0)]            # directional dependency traced from effect back to cause
+  constraint: [constraint (T0)]          # completion criteria that reduce the valid-path solution space
+  chain:      [coherence (T0)]            # every link must reinforce the next; no broken dependencies
+  artifact:   [evidence (T1)]             # northstar-reverse-plan.json; required for PASS claim
+  validate:   [verification (T1)]         # every consecutive link checked; gaps filled or BLOCKED
+```
 
 ---
 
@@ -78,7 +93,7 @@ layering:
 
 ---
 
-## 0) Purpose
+## 0) Purpose [northstar, causality]
 
 **The Forward Planning Problem**
 
@@ -137,7 +152,7 @@ WHY AI ADVANTAGES MATTER HERE:
 
 ---
 
-## 2) Core Contract (Fail-Closed)
+## 2) Core Contract (Fail-Closed) [constraint, verification]
 
 ### 2.1 Inputs (Required)
 
@@ -180,7 +195,7 @@ If NORTHSTAR.md is missing or the chain cannot be grounded in current state:
 
 ---
 
-## 3) State Machine (Deterministic Runtime)
+## 3) State Machine (Deterministic Runtime) [coherence, causality]
 
 ### 3.1 States
 
@@ -294,7 +309,7 @@ forbidden_states:
 
 ---
 
-## 4) Algorithm: Step-by-Step
+## 4) Algorithm: Step-by-Step [northstar_reverse, constraint]
 
 ### 4.1 ANCHOR Phase — Read the Exit
 
@@ -417,7 +432,7 @@ On write failure: EXIT_BLOCKED with filesystem reason.
 
 ---
 
-## 5) Evidence Artifact Schema
+## 5) Evidence Artifact Schema [evidence, integrity]
 
 ```json
 {
@@ -789,7 +804,7 @@ next_action: Step 1 — Complete OAuth3 enforcer skill spec draft
 
 ---
 
-## 10) Verification Ladder
+## 10) Verification Ladder [verification, rung]
 
 ```yaml
 verification_ladder:
@@ -924,7 +939,7 @@ companion_skills:
 
 ---
 
-## 14) Quick Reference (Cheat Sheet)
+## 14) Quick Reference (Cheat Sheet) [signal, compression]
 
 ```
 Epigraph:  "Start from the end of the maze. The path back is straight."

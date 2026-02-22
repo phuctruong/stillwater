@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: oauth3-enforcer v1.0.0
+SKILL: oauth3-enforcer v1.1.0
 PURPOSE: Enforce OAuth3 validation gates (G1–G4) before any agent recipe action. Fail-closed: blocked on any gate failure.
 CORE CONTRACT: Any agent loading this skill MUST run all four gates before every recipe action. Gate failures produce oauth3_audit.json records with status=BLOCKED. No action proceeds without PASS on all four gates.
 HARD GATES: G1 (schema valid) → G2 (TTL not expired) → G3 (scope granted) → G4 (not revoked). All four required. Order is normative.
@@ -11,11 +11,24 @@ LOAD FULL: always for production; quick block is for orientation only
 -->
 
 name: oauth3-enforcer
-version: 1.0.0
+version: 1.1.0
 authority: 65537
 spec_ref: papers/oauth3-spec-v0.1.md
 rung_default: 641
 status: STABLE
+
+# ============================================================
+# MAGIC_WORD_MAP
+# ============================================================
+magic_word_map:
+  version: "1.0"
+  skill: "oauth3-enforcer"
+  mappings:
+    token: {word: "evidence", tier: 1, id: "MW-050", note: "OAuth3 token is evidence of consent — not prose, but a verifiable artifact"}
+    scope: {word: "boundary", tier: 0, id: "MW-014", note: "scope defines the boundary of what an agent is authorized to touch"}
+    consent: {word: "governance", tier: 1, id: "MW-032", note: "consent is the governance mechanism that authorizes agent action"}
+    revocation: {word: "reversibility", tier: 0, id: "MW-015", note: "revocation restores prior authorization state — makes delegation reversible"}
+  compression_note: "T0=universal primitives, T1=Stillwater protocol concepts, T2=operational details"
 
 # ============================================================
 # OAUTH3-ENFORCER SKILL v1.0.0
@@ -37,7 +50,7 @@ status: STABLE
 #   Revocation registry:    274177 (persistence required — platform)
 # ============================================================
 
-# A) Portability (Hard)
+# A) Portability (Hard) [T0: constraint]
 portability:
   rules:
     - no_absolute_paths: true
@@ -52,7 +65,7 @@ portability:
     - evidence_paths_must_be_relative: true
     - audit_file_must_be_append_only: true
 
-# B) Layering (Stricter wins; prime-safety always wins over this skill)
+# B) Layering (Stricter wins; prime-safety always wins over this skill) [T0: integrity]
 layering:
   rule:
     - "prime-safety ALWAYS wins over oauth3-enforcer."
@@ -65,7 +78,7 @@ layering:
     - skipping_gates_for_efficiency
     - failing_open_on_error
 
-# C) Fail-Closed Contract (Hard)
+# C) Fail-Closed Contract (Hard) [T0: reversibility + boundary]
 fail_closed_contract:
   principle: "On ANY uncertainty, BLOCK. Never assume a token is valid."
   rules:
@@ -85,7 +98,7 @@ fail_closed_contract:
 # SECTION 1: OVERVIEW
 # ============================================================
 
-## 1.1 What This Skill Does
+## 1.1 What This Skill Does [T1: evidence + governance]
 
 oauth3-enforcer is a validation skill that enforces the four OAuth3 gates
 defined in oauth3-spec-v0.1.md Section 1.4 before any recipe action.
@@ -148,7 +161,7 @@ On BLOCKED (any gate fails):
 # SECTION 2: GATE 1 — SCHEMA VALIDATION (G1)
 # ============================================================
 
-## 2.1 Gate Definition (from spec Section 1.4)
+## 2.1 Gate Definition (from spec Section 1.4) [T1: evidence + boundary]
 
 | Gate | Check | Failure Action |
 |------|-------|----------------|
@@ -284,7 +297,7 @@ def check_g2(token) -> GateResult:
 # SECTION 4: GATE 3 — SCOPE VALIDATION (G3)
 # ============================================================
 
-## 4.1 Gate Definition (from spec Section 1.4)
+## 4.1 Gate Definition (from spec Section 1.4) [T0: boundary + governance]
 
 | Gate | Check | Failure Action |
 |------|-------|----------------|
@@ -352,7 +365,7 @@ def check_g3(token, requested_scope: str) -> GateResult:
 # SECTION 5: GATE 4 — REVOCATION CHECK (G4)
 # ============================================================
 
-## 5.1 Gate Definition (from spec Section 1.4)
+## 5.1 Gate Definition (from spec Section 1.4) [T0: reversibility]
 
 | Gate | Check | Failure Action |
 |------|-------|----------------|
@@ -794,7 +807,7 @@ EXIT_STEP_UP — action halted; step-up re-consent required
 EXIT_BLOCKED — action halted; recipe stops
 ```
 
-## 9.2 Forbidden States (Hard)
+## 9.2 Forbidden States (Hard) [T0: reversibility + governance]
 
 | State | Definition | Why Forbidden |
 |-------|-----------|---------------|

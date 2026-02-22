@@ -29,7 +29,7 @@ flowchart LR
     end
 
     subgraph PAID_LAYER ["Hosted Platform"]
-        SOLACE["solaceagi.com\nIntegration layer\nBYOK + Managed LLM\nOAuth3 vault\nAvatar system\n$3/mo LLM tier\n$19/mo Pro\n$99/mo Enterprise"]
+        SOLACE["solaceagi.com\nIntegration layer\nBYOK + Managed LLM\nOAuth3 vault\nAvatar system\nFree / Managed LLM / Pro / Enterprise tiers"]
     end
 
     %% stillwater relationships
@@ -78,9 +78,9 @@ flowchart LR
         ANTHRO["Anthropic/OpenAI\n(user's own key)"]
     end
 
-    subgraph MANAGED ["Managed LLM Path (+$3/mo)"]
+    subgraph MANAGED ["Managed LLM Path (paid tier)"]
         SCLI2["solace-cli\n(private extension)"]
-        TOGETHER["Together.ai\nLlama-3.3-70B\n$0.59/M tokens"]
+        TOGETHER["LLM provider\nLlama-3.3-70B\nmarket rate"]
         OPENROUTER["OpenRouter\nfallback"]
     end
 
@@ -120,5 +120,5 @@ flowchart LR
 - Data flow from stillwater CLI through managed LLM providers
 - Avatar system convergence: paudio (voice) + pvideo (visual) at solaceagi.com
 - Stillwater Store submission and review lifecycle
-- Pricing tiers: BYOK (free) vs managed LLM (+$3/mo) vs Pro ($19/mo)
+- Pricing tiers: BYOK (free) vs managed LLM (paid add-on) vs Pro tier
 - IF Theory as physics substrate flowing into pvideo and pzip

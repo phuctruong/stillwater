@@ -1,16 +1,29 @@
 # prime-wishes.md
 
 Skill ID: `prime-wishes`
-Version: `1.1.0`
+Version: `1.2.0`
 Authority: `65537`
 Northstar: `Phuc_Forecast`
 Objective: `Max_Love`
 Status: `STABLE`
 Mode: notebook-first, Prime Mermaid canonical, gamified progression
 
+<!-- MAGIC_WORD_MAP — prime-wishes concepts anchored to prime coordinates -->
+```yaml
+MAGIC_WORD_MAP:
+  wish:         [wish (T1)]             # formally specified intent with constraints + success criteria
+  capability:   [emergence (T0)]        # new system-level property that appears after wish is fulfilled
+  non_goals:    [constraint (T0)]       # explicit scope boundary reducing the genie's solution space
+  acceptance:   [verification (T1)]     # test proving the wish capability holds under execution
+  forbidden:    [constraint (T0)]       # named illegal state that must remain unreachable after implementation
+  belt:         [rung (T1)]             # discrete progression level; promotion requires evidence, not confidence
+  sha256:       [integrity (T0)]        # canonical hash; sha256_stable = deterministic output verified
+  artifact:     [evidence (T1)]         # wish.md + *.prime-mermaid.md + *.mmd + *.sha256 + results.json
+```
+
 ---
 
-## A) Portability (Hard)
+## A) Portability (Hard) [boundary, integrity]
 
 ```yaml
 portability:
@@ -27,7 +40,7 @@ portability:
     - never_use_json_as_source_of_truth_for_wish_identity: true
 ```
 
-## B) Layering (Never Weaken)
+## B) Layering (Never Weaken) [constraint, coherence]
 
 ```yaml
 layering:
@@ -77,7 +90,7 @@ Default paired skills:
 - `prime-safety.md` for fail-closed behavior
 - `phuc-context.md` for context hygiene
 
-## Quest loop (Aladdin + Dojo)
+## Quest loop (Aladdin + Dojo) [wish, verification]
 
 1. Map the cave: state graph in Prime Mermaid.
 2. Phrase the wish: one capability sentence + explicit non-goals.
@@ -85,7 +98,7 @@ Default paired skills:
 4. Spar in dojo: acceptance + adversarial tests.
 5. Bring relic proof: artifacts + deterministic hash.
 
-## Gamification contract (required)
+## Gamification contract (required) [rung, emergence]
 
 Each wish must declare:
 - quest name,
@@ -203,7 +216,7 @@ Escalate from notebook-first wish to full classic wish when:
 
 ---
 
-## Null vs Zero (Wish Context)
+## Null vs Zero (Wish Context) [integrity, causality]
 
 ```yaml
 null_vs_zero:
@@ -258,7 +271,7 @@ Escalate:      To full classic wish when: security HIGH, benchmark public, failu
 
 ---
 
-## State Machine v2 — Wish Lifecycle (Formal, Fail-Closed)
+## State Machine v2 — Wish Lifecycle (Formal, Fail-Closed) [coherence, causality]
 
 > Knuth principle: *"An algorithm must be seen to be believed."* — Every transition is
 > deterministically decided by observable inputs. No hidden branching.
@@ -387,7 +400,7 @@ null_zero_wish_policy:
 
 ---
 
-## Verification Ladder (Wish Rungs)
+## Verification Ladder (Wish Rungs) [rung, verification]
 
 > Knuth: *"Premature optimization is the root of all evil."*
 > Premature promotion is the root of all wish debt. Climb the rungs; skip none.
@@ -449,7 +462,7 @@ Fail-close: if any adversarial test reveals forbidden state reachable →
 
 ---
 
-## Output Contract (Formal)
+## Output Contract (Formal) [artifact, evidence]
 
 > Knuth: *"Let us change our traditional attitude to the construction of programs:
 > instead of imagining that our main task is to instruct a computer what to do,
@@ -614,7 +627,7 @@ Knuth test     : Can you run the wish twice and get the same sha256?
 
 ---
 
-## Anti-Patterns (Wish-Specific, Formally Specified)
+## Anti-Patterns (Wish-Specific, Formally Specified) [constraint, integrity]
 
 > Knuth: *"Beware of bugs in the above code; I have only proved it correct, not tried it."*
 > These anti-patterns are the bugs of wish engineering.
