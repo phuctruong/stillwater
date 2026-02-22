@@ -253,7 +253,7 @@ app = FastAPI(
 )
 
 # Initialize executors
-_project_root = Path(__file__).parent.parent.parent
+_project_root = Path(__file__).parent.parent  # admin/llm_portal_v3.py -> admin -> stillwater
 _swarms_dir = _project_root / "swarms"
 _skills_dir = _project_root / "skills"
 _recipes_dir = _project_root / "recipes"
