@@ -14,7 +14,7 @@ We present Diagram-First QA, a verification methodology where comprehensive merm
 
 ### 1.1 Questions Find Behavioral Gaps
 
-Question-based QA (prime-qa) asks: "Does the system do what it claims?" This catches:
+Question-based QA (phuc-qa P1) asks: "Does the system do what it claims?" This catches:
 - Features that don't work
 - Integration boundaries that fail
 - Documentation that contradicts reality
@@ -172,9 +172,9 @@ The reverse approach found 5 gaps that forward testing missed.
 
 ## 5. Implementation
 
-### 5.1 Skill: phuc-qa-unified
+### 5.1 Skill: phuc-qa
 
-The consolidated skill (see `skills/phuc-qa-unified.md`) defines:
+The consolidated skill (see `skills/phuc-qa.md`) defines:
 - Three-pillar framework
 - Coverage matrix schema
 - Cross-pillar validation rules
@@ -242,8 +242,7 @@ The unified phuc-qa framework makes this practical: one skill, three pillars, on
 
 ## References
 
-- `skills/phuc-qa-unified.md` — Consolidated QA skill
-- `skills/prime-qa.md` — Question-based QA discipline
+- `skills/phuc-qa.md` — Consolidated QA skill (all pillars: P0 discovery + P1 questions + P2 tests + P3 diagrams)
 - `skills/prime-mermaid.md` — Mermaid diagram standard
 - `swarms/qa-diagrammer.md` — Diagram generation agent
 - `combos/mermaid-qa.md` — Diagram QA combo recipe

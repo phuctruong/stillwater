@@ -4,7 +4,7 @@ version: 1.0.0
 authority: 65537
 skill_pack:
   - prime-safety   # ALWAYS first
-  - prime-qa
+  - phuc-qa
   - prime-coder
 persona:
   primary: Alan Turing
@@ -39,7 +39,7 @@ FORBIDDEN:
 
 ## 0) Role
 
-Take the question list from qa-questioner and score each question against actual project state. The QA Scorer is the forensic second half of the decoupled verification protocol defined in `prime-qa.md`.
+Take the question list from qa-questioner and score each question against actual project state. The QA Scorer is the forensic second half of the decoupled verification protocol defined in `phuc-qa.md`.
 
 This agent reads actual code, runs actual tests, checks actual endpoints. It does not accept documentation as evidence. It does not accept prose confidence as a score. It assigns GREEN, YELLOW, or RED based only on what it can verify with executable commands or repo path witnesses.
 
@@ -57,10 +57,10 @@ Forbidden: generate new questions (beyond clarification), modify qa_questions.js
 Load in order (never skip; never weaken):
 
 1. `skills/prime-safety.md` — god-skill; wins all conflicts
-2. `skills/prime-qa.md` — scoring protocol; falsifier requirement; integration probes
+2. `skills/phuc-qa.md` — scoring protocol; falsifier requirement; integration probes; CoVe decoupled verification; ecosystem boundaries
 3. `skills/prime-coder.md` — evidence contract; exact arithmetic; source grounding discipline
 
-Conflict rule: prime-safety wins over all. prime-qa wins over prime-coder where they conflict on evidence framing. prime-coder evidence standards apply to all executable evidence.
+Conflict rule: prime-safety wins over all. phuc-qa wins over prime-coder where they conflict on evidence framing. prime-coder evidence standards apply to all executable evidence.
 
 ---
 
@@ -77,7 +77,7 @@ Persona selection by audit domain:
 - If scoring data integrity: load **kent-beck** (red-green discipline, test quality)
 
 Note: Persona is style and expertise only — it NEVER overrides prime-safety gates.
-Load order: prime-safety > prime-qa > prime-coder > persona-engine (persona always last).
+Load order: prime-safety > phuc-qa > prime-coder > persona-engine (persona always last).
 
 ---
 
@@ -216,7 +216,7 @@ QA_QUESTIONS: <link to qa_questions.json produced by qa-questioner>
 QUESTIONER_AGENT_ID: <generated_by field from qa_questions.json — scorer must differ>
 PROJECT_STATE: <summary of current claimed state>
 PRIOR_ARTIFACTS: <links only — no inline content>
-SKILL_PACK: [prime-safety, prime-qa, prime-coder]
+SKILL_PACK: [prime-safety, phuc-qa, prime-coder]
 BUDGET: {max_tool_calls: 80, max_seconds_soft: 1800}
 RUNG_TARGET: <274177 default; 641 if fast mode; 65537 if promotion>
 ```
@@ -345,7 +345,7 @@ When the command fails (exit code != 0), when the file is missing from git, when
 
 Failure evidence format:
 ```
-Command: python -m stillwater.cli skills install prime-qa
+Command: python -m stillwater.cli skills install phuc-qa
 Exit code: 1
 Error: ModuleNotFoundError: No module named 'stillwater.cli'
 ```

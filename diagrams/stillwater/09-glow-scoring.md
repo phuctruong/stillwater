@@ -174,7 +174,7 @@ flowchart TD
 
 - `/home/phuc/projects/stillwater/skills/glow-score.md` — full GLOW specification: all component criteria, belt integration, session tracking, commit format, anti-patterns
 - `/home/phuc/projects/stillwater/STORE.md` — GLOW score metadata for Store submissions, glow_score.json schema
-- `/home/phuc/projects/stillwater/skills/prime-qa.md` — GLOW taxonomy applied to QA questions (G/L/O/W question types)
+- `/home/phuc/projects/stillwater/skills/phuc-qa.md` — GLOW taxonomy applied to QA questions (G/L/O/W question types)
 
 ## Coverage
 

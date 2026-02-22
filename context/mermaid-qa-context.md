@@ -7,11 +7,11 @@ This context document provides the essential information for any agent running m
 ## Three-Pillar QA Framework
 
 ```
-PILLAR 1: Questions  → skills/prime-qa.md + combos/qa-audit.md
+PILLAR 1: Questions  → skills/phuc-qa.md + combos/qa-audit.md
 PILLAR 2: Tests      → skills/prime-coder.md + combos/run-test.md
 PILLAR 3: Diagrams   → skills/prime-mermaid.md + combos/mermaid-qa.md
 
-UNIFIED:  skills/phuc-qa-unified.md (all three pillars)
+UNIFIED:  skills/phuc-qa.md (all three pillars)
 ```
 
 ## Diagram Categories (8 Required)

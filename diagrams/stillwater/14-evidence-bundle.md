@@ -217,7 +217,7 @@ flowchart TD
 
 - `/home/phuc/projects/stillwater/store/rung_validator.py` — `RungValidator`: all gate logic, `REQUIRED_EVIDENCE_FILES`, `PLAN_REQUIRED_FIELDS`, `TESTS_REQUIRED_FIELDS`, `BEHAVIOR_REQUIRED_SEEDS`, `compute_behavior_hash()`, `verify_evidence()`, `verify_rung()`, `validate_bundle()`
 - `/home/phuc/projects/stillwater/skills/prime-coder.md` — evidence bundle requirements, red-green gate, Lane A/B/C classification
-- `/home/phuc/projects/stillwater/skills/prime-qa.md` — evidence schema per pillar (qa_questions.json, qa_scorecard.json, qa_falsifiers.json, qa_gap_report.md)
+- `/home/phuc/projects/stillwater/skills/phuc-qa.md` — evidence schema per pillar (qa_questions.json, qa_scorecard.json, qa_falsifiers.json, qa_gap_report.md)
 - `/home/phuc/projects/stillwater/skills/glow-score.md` — glow_score.json schema and when O ≥ 20 requires evidence bundle path
 - `/home/phuc/projects/stillwater/STORE.md` — glow_score.json schema for Store submissions
 

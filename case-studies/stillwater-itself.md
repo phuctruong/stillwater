@@ -159,9 +159,9 @@
 | 2026-02-21 | Phase 5: Persona Engine v1.3.0 — 50 personas (11 categories) + GLOW score skill + persona-coder swarm + papers 34-39 + all 19 swarms persona-enhanced (+27% A/B avg) | 641 | sonnet (coder) | stillwater build session |
 | 2026-02-21 | Phase 6: Hackathon System — hackathon.md skill + hackathon-lead swarm + hackathon-master persona + paper #40 + 3 sprint combos (sprint/lightning/marathon) | 641 | sonnet (coder) | stillwater build session |
 | 2026-02-22 | QA Audit: 40-question Northstar scorecard (GLOW ~28/100), URL fixes across 4 repos, trade secret redaction from OSS, Dragon Tip removal, fact corrections (Citystream/UpDown) | 641 | opus (orchestrator) | QA session |
-| 2026-02-22 | QA Infrastructure: prime-qa.md skill, qa-questioner + qa-scorer swarms, qa-audit combo (question-based QA paradigm) | 641 | sonnet (researcher + coder) | QA session |
+| 2026-02-22 | QA Infrastructure: phuc-qa.md skill, qa-questioner + qa-scorer swarms, qa-audit combo (question-based QA paradigm) | 641 | sonnet (researcher + coder) | QA session |
 | 2026-02-22 | Tests: 324 new tests across 5 modules (usage_tracker, session_manager, store_auth, store_db, store_models), persona-based QA approach, db.py datetime bug fix, 19 obsolete files cleaned | 641 | sonnet (coder x5) | QA session |
-| 2026-02-22 | Mermaid QA: 22 diagram files (92 mermaid blocks), phuc-qa-unified skill (3-pillar QA), qa-diagrammer swarm, mermaid-qa combo, paper #43 (diagram-first QA), context file | 641 | sonnet (diagrammer x3) + opus (orchestrator) | QA session |
+| 2026-02-22 | Mermaid QA: 22 diagram files (92 mermaid blocks), phuc-qa skill (3-pillar QA), qa-diagrammer swarm, mermaid-qa combo, paper #43 (diagram-first QA), context file | 641 | sonnet (diagrammer x3) + opus (orchestrator) | QA session |
 | 2026-02-22 | Lint cleanup: 387 ruff errors → 0 across entire repo (cli/src, store, admin, tests, swe, imo, oolong, scripts). Added ruff config to pyproject.toml. | 641 | sonnet (coder) + opus (orchestrator) | QA session |
 | 2026-02-22 | Test coverage expansion: 298 new tests — provider implementations (169), claude_code_wrapper (66), llm_config_manager (63). Total: 802 → 1100 tests. | 641 | sonnet (coder x3) | QA session |
 
@@ -203,7 +203,7 @@
 | Trade secrets redacted | 8 categories, 30+ files moved or sanitized |
 | Fact corrections | Citystream (failed, not acquired), UpDown.com (1M+ users, not 100K) |
 | Dragon Tip removed | 12 files (entire program removed from OSS) |
-| QA infrastructure created | prime-qa.md skill, qa-questioner + qa-scorer swarms, qa-audit combo |
+| QA infrastructure created | phuc-qa.md skill, qa-questioner + qa-scorer swarms, qa-audit combo |
 | Northstar GLOW score | ~28/100 (5 GREEN, 15 YELLOW, 20 RED) |
 
 ## Mermaid QA (2026-02-22) — Diagram-First Structural Verification
@@ -213,7 +213,7 @@
 | Diagram files | 22 (diagrams/stillwater/01-22) |
 | Mermaid blocks | 92 total across all files |
 | Diagram categories | 8/8 (architecture, data flow, state, sequence, class, journey, deployment, dependency) |
-| New skills | 1 (phuc-qa-unified.md — 942-line consolidated 3-pillar QA) |
+| New skills | 1 (phuc-qa.md — 942-line consolidated 3-pillar QA) |
 | New swarms | 1 (qa-diagrammer.md — diagram generation agent) |
 | New combos | 1 (mermaid-qa.md — WISH+RECIPE for diagram QA) |
 | New papers | 1 (paper #43 — diagram-first QA paradigm) |
@@ -250,7 +250,7 @@
 ### Three-Pillar QA Paradigm (Unified)
 
 ```
-Pillar 1: Questions  → prime-qa.md + qa-audit combo
+Pillar 1: Questions  → phuc-qa.md + qa-audit combo
   "What are the LAST 3 questions to answer?"
 
 Pillar 2: Tests      → prime-coder.md + run-test combo

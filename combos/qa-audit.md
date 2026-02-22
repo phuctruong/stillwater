@@ -1,6 +1,6 @@
 # Combo — QA Audit (Questioner → Scorer → Gap Report)
 
-This combo enforces the decoupled verification protocol from `prime-qa.md`. A separate agent generates questions that a separate agent answers — preventing self-confirmation bias and producing an honest scorecard.
+This combo enforces the decoupled verification protocol from `phuc-qa.md`. A separate agent generates questions that a separate agent answers — preventing self-confirmation bias and producing an honest scorecard.
 
 ---
 
@@ -120,7 +120,7 @@ Fail-closed if project is unknown or NORTHSTAR.md is absent → `NEED_INFO`.
 ### Node 2 — L3 LLM: qa-questioner (Adversarial Question Generation)
 
 Agent: `qa-questioner` (see `swarms/qa-questioner.md`)
-Skill pack: `prime-safety + prime-qa`
+Skill pack: `prime-safety + phuc-qa`
 Model: sonnet
 
 Inputs (CNF capsule):
@@ -164,7 +164,7 @@ Outputs:
 ### Node 4 — L3 LLM: qa-scorer (Evidence Forensics)
 
 Agent: `qa-scorer` (see `swarms/qa-scorer.md`)
-Skill pack: `prime-safety + prime-qa + prime-coder`
+Skill pack: `prime-safety + phuc-qa + prime-coder`
 Model: sonnet
 
 Inputs (CNF capsule):
@@ -223,7 +223,7 @@ Hard requirements:
 
 - `ScorecardIntegrityReport.integrity_verdict == PASS`
 - `qa_gap_report.md` present and non-empty
-- Rung target met per prime-qa Verification Ladder
+- Rung target met per phuc-qa Verification Ladder
 - No forbidden states were entered (from Node 4 log)
 
 Outputs:

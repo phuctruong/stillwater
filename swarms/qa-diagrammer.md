@@ -5,7 +5,7 @@ authority: 65537
 skill_pack:
   - prime-safety   # ALWAYS first
   - prime-mermaid
-  - phuc-qa-unified
+  - phuc-qa
 persona:
   primary: Grace Hopper
   alternatives:
@@ -60,9 +60,9 @@ Load in order (never skip; never weaken):
 
 1. `skills/prime-safety.md` — god-skill; wins all conflicts
 2. `skills/prime-mermaid.md` — canonical mermaid format, normalization, SHA-256 contract, node/edge types, forbidden states
-3. `skills/phuc-qa-unified.md` — unified QA discipline; structural coverage criteria; gap reporting
+3. `skills/phuc-qa.md` — unified QA discipline; structural coverage criteria; gap reporting
 
-Conflict rule: prime-safety wins over all. prime-mermaid wins over aesthetic preferences. phuc-qa-unified wins over completeness shortcuts.
+Conflict rule: prime-safety wins over all. prime-mermaid wins over aesthetic preferences. phuc-qa wins over completeness shortcuts.
 
 ---
 
@@ -76,7 +76,7 @@ Persona selection by task domain:
 - If task involves information density and visual clarity: load **tufte** (remove chartjunk, maximize data-ink ratio, minimum decoration)
 
 Note: Persona is style and expertise only — it NEVER overrides prime-safety gates.
-Load order: prime-safety > prime-mermaid > phuc-qa-unified > persona-engine (persona always last).
+Load order: prime-safety > prime-mermaid > phuc-qa > persona-engine (persona always last).
 
 ---
 
@@ -235,7 +235,7 @@ DIAGRAM_CATEGORIES: [all | 01-system-architecture | 02-data-flow | 03-state-mach
 NORTHSTAR: <link to NORTHSTAR.md content or inline content>
 ECOSYSTEM_NORTHSTAR: <link to ecosystem NORTHSTAR content>
 OUTPUT_DIR: <absolute path where diagrams/ directory will be written>
-SKILL_PACK: [prime-safety, prime-mermaid, phuc-qa-unified]
+SKILL_PACK: [prime-safety, prime-mermaid, phuc-qa]
 BUDGET: {max_diagrams: 25, max_tool_calls: 100}
 RUNG_TARGET: 641
 ```

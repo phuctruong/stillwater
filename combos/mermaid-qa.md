@@ -113,7 +113,7 @@ Fail-closed if project root doesn't exist → `NEED_INFO`.
 ### Node 2 — L3 LLM: qa-diagrammer (Architecture + Data Flow)
 
 Agent: `qa-diagrammer` (see `swarms/qa-diagrammer.md`)
-Skill pack: `prime-safety + prime-mermaid + phuc-qa-unified`
+Skill pack: `prime-safety + prime-mermaid + phuc-qa`
 Model: sonnet
 
 Inputs (CNF capsule):
@@ -140,7 +140,7 @@ Rules:
 ### Node 3 — L3 LLM: qa-diagrammer (Models + Sequences + State)
 
 Agent: `qa-diagrammer` (second instance, can run in parallel with Node 2)
-Skill pack: `prime-safety + prime-mermaid + phuc-qa-unified`
+Skill pack: `prime-safety + prime-mermaid + phuc-qa`
 Model: sonnet
 
 Inputs (CNF capsule):
