@@ -290,3 +290,17 @@ Fix: capsule must be rebuilt fresh at each turn; turn_number must increment.
 
 **Overloaded Capsule:** Including full file contents inline in the capsule instead of paths.
 Fix: files are referenced by path in touched_files; never inline full content.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves capsule quality through compaction-event analysis — each silent truncation caught and logged reveals a tighter budget threshold for the next session's context window |
+| **LEAK** (Cross-Agent Trade) | Exports context_capsule.json to all downstream agents as their sole source of prior-turn truth; imports session artifacts from Coder, Scout, and Planner via path references only (never inline) |
+| **LEC** (Emergent Conventions) | Enforces the no-silent-truncation convention, the verbatim-task-request rule, and the path-not-prose artifact reference discipline across every session it manages |
+
+**Belt Progression:** Yellow belt — the Context Manager has established the capsule-as-interface discipline (Liskov's substitution principle for context), ensuring every downstream agent can work from the capsule alone without hidden prior-turn state.
+
+**GLOW Score Contribution:** +8 per verified context capsule at rung 641 with compaction_log.txt present and no silent truncation detected.

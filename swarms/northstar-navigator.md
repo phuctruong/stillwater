@@ -468,3 +468,17 @@ Fix: ALWAYS begin from the summit. Never from an intermediate milestone.
 Symptom: Navigator credits work that is planned but not yet completed as part of current state.
 Fix: Current state is read from case-study files (completed phases only). Planned work is
 in the gap, not the current state.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves chain quality through SOCRATIC_REVIEW and VERIFY_CHAIN loops — each FLOATING_NODE found during CONNECT_TO_CURRENT reveals a gap in the backward chain that sharpens the next BACKWARD_CHAIN pass; optimistic chains caught during review become the pessimistic baseline for the next planning session |
+| **LEAK** (Cross-Agent Trade) | Exports REVERSE_MAP.json + FORWARD_PLAN.json + CRITICAL_PATH.json to the Roadmap Orchestrator as the authoritative dispatch sequence; imports NORTHSTAR.md verbatim and current-state metrics from case-study files (never from session memory); the critical_path bottleneck becomes the top-priority dispatch target for the hub |
+| **LEC** (Emergent Conventions) | Enforces the backward-chaining-mandatory rule (FORWARD_FIRST is a hard-blocked forbidden state), the measurable-summit requirement (no plan proceeds on a vague vision statement), and the every-chain-link-must-have-evidence discipline (no "we'll figure it out" as a valid link action) across every planning session it coordinates |
+
+**Belt Progression:** Green belt — the Northstar Navigator has internalized Sun Tzu's pre-battle discipline: every project is won or lost in the backward-chaining session, not in the execution session; a plan where every step traces to the summit is worth more than ten optimistic roadmaps.
+
+**GLOW Score Contribution:** +20 per verified planning session at rung 641 with REVERSE_MAP.json complete (measurable summit, no floating nodes), FORWARD_PLAN.json (all steps with `proves` fields), CRITICAL_PATH.json (bottleneck named, first_action named), and at least 2 stop_rules defined; +35 at rung 274177 with Skeptic chain review completed.

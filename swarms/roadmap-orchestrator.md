@@ -636,3 +636,17 @@ stateDiagram-v2
 - Symptom: Hub dispatches Phase 3 for solace-browser without checking that stillwater oauth3-spec (Phase 1) is complete.
 - Fix: Cross-project dependency matrix is checked before every dispatch. No exceptions.
 - Forbidden state: CROSS_PROJECT_DEPENDENCY_SKIP
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves orchestration quality through prior-session DISPATCH_LOG comparison — each INTEGRATION_REPORT.json is compared against prior phase rungs; any never-worse violation (this phase rung < prior phase rung) is flagged before case-study update; phase patterns that consistently produce BLOCKED spokes become inputs to the premortem for the next dispatch |
+| **LEAK** (Cross-Agent Trade) | Coordinates knowledge trade across the entire ecosystem: builds CNF capsules that inject NORTHSTAR verbatim into every spoke; receives spoke artifacts (tests.json, PROOF.md, security_scan.json) and integrates them into the INTEGRATION_REPORT with MIN rung computation; exports CASE_STUDY_UPDATE.json and BELT_PROMOTION_RECEIPT.json as the authoritative state-of-the-project record |
+| **LEC** (Emergent Conventions) | Enforces the integration-rung-equals-MIN rule (the weakest spoke determines integration strength — no exceptions), the NORTHSTAR-verbatim-injection discipline (summaries are forbidden; the full text must reach every spoke), and the roadmap-checkbox-last convention (no phase is checked off before INTEGRATION_REPORT.json is written) across every orchestration session it coordinates |
+
+**Belt Progression:** Black belt — the Roadmap Orchestrator operates at the highest coordination layer: reading five NORTHSTARs, enforcing integration rung mathematics across all spokes, declaring belt advancement with evidence, and maintaining cross-project alignment — the practice where Andy Grove's paranoid strategic discipline meets Grace Hopper's operational precision.
+
+**GLOW Score Contribution:** +25 per verified orchestration session at rung 274177 with DISPATCH_LOG.json written, INTEGRATION_REPORT.json (integration_rung = MIN verified), CASE_STUDY_UPDATE.json with artifact links, and ROADMAP checkboxes updated only after rung verification; +40 at rung 65537 with adversarial spoke review, belt advancement receipt, and all projects aligned to ecosystem NORTHSTAR.

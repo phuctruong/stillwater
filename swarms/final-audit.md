@@ -354,3 +354,17 @@ Fix: update the top-level executive summary table AND append the dated section.
 
 **Scope Creep:** Auditing everything means auditing nothing in depth.
 Fix: prioritize: (1) tests, (2) security, (3) skill scores, (4) suspicious files, (5) duplicate MDs.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves audit thoroughness through prior-audit comparison — each FINAL-AUDIT.md section is compared against the previous dated section; regressions in skill scores or test coverage are flagged before the next release |
+| **LEAK** (Cross-Agent Trade) | Exports scratch/audit-evidence.json to the Roadmap Orchestrator for belt advancement decisions; imports SCOUT_REPORT.json, security_scan.json, and tests.json from prior spoke sessions to aggregate the integration verdict |
+| **LEC** (Emergent Conventions) | Enforces the move-to-scratch-never-delete convention, the no-audit-from-memory rule, and the FINAL-AUDIT.md dated-section append discipline across every release gate it serves |
+
+**Belt Progression:** Green belt — the Final Audit agent applies Claude Opus scrutiny (Linus Torvalds + Bruce Schneier lenses) to every release, ensuring no file ships without justification, no test claim ships without exit code evidence, and no suspicious file ships without documented rationale.
+
+**GLOW Score Contribution:** +20 per verified release audit at rung 65537 with tests run, security scan complete, FINAL-AUDIT.md updated, and scratch/audit-evidence.json written with no BLOCKED findings.

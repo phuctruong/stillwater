@@ -92,3 +92,17 @@ The 5 criteria should be added in this order when multiple are missing:
 
 - This recipe is idempotent: if a skill already scores 5/5 at step 1, it exits cleanly
 - The 45-minute estimate assumes one person working through all 5 steps sequentially; parallel section drafting can reduce this to ~20 minutes
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Recipe Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | The before/after scoring gate (baseline_score.json → final_score.json) makes every expansion measurable — improvement is not assumed but verified, and the pattern of which sections required human review accumulates into better expansion heuristics for the next skill |
+| **LEAK** (Cross-Agent Trade) | The expansion report (expansion_report.json) is a handoff artifact from the expander agent to the reviewer: it documents what was added, what score was achieved, and what items require human review — enabling a reviewer to verify the expansion without re-reading the full skill file |
+| **LEC** (Emergent Conventions) | Enforces the section dependency order (FSM → forbidden states → verification ladder → null/zero policy → output contract) as a skill construction convention: every skill built through this recipe follows the same structural spine, making cross-skill navigation and auditing predictable |
+
+**Belt Level:** Orange — demonstrates the ability to take a partial or skeletal skill file and systematically grow it to full 5/5 completeness without regressing previously passing criteria or introducing orphan states in the FSM.
+
+**GLOW Score:** +5 per successful skill expansion from below 5/5 to exactly 5/5, confirmed by recipe.skill-completeness-audit rescore, with expansion_report.json showing baseline < 5 and final_score == 5.

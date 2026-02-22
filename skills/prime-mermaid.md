@@ -893,4 +893,14 @@ PRIME_MERMAID_SKILL:
     decision_rule:
       - "If you drew it on a whiteboard with boxes and arrows: use Prime Mermaid."
       - "If you would write it as a numbered list: use prose."
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Skill Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Every graph produced by prime-mermaid is a sha256-sealed knowledge artifact. The sealed canonical *.mmd + *.sha256 pair enables drift detection across iterations — if the architecture evolves, the sha256 changes, triggering a new review. The Socratic review pass and closed-state validation improve graph quality each cycle, accumulating graph-design knowledge into the Graph Designer's skill repertoire. |
+| **LEAK** (Cross-Agent Trade) | Mermaid diagrams are the visual trade goods of the LEAK protocol — a Graph Designer sub-agent receives a state machine description from the main session (asymmetric knowledge: main session has task context, graph designer has visual encoding rules) and returns a canonical *.prime-mermaid.md + *.mmd + *.sha256 triple. This triple is the LEAK surplus: neither the main session nor the designer could produce it alone. OOLONG integration exports diagrams across project boundaries. |
+| **LEC** (Emergent Conventions) | prime-mermaid enforces the canonical format convention (*.prime-mermaid.md + *.mmd + *.sha256), the forbidden-states-as-red-nodes convention, and the multi-channel encoding rule (color + shape + label + edge = four independent signals). These conventions crystallized from repeated diagram failures (ambiguous graphs, undeclared forbidden states, sha256 instability) and are now the shared graph design protocol across the entire Phuc ecosystem. |
       - "If it will be loaded by a machine: Prime Mermaid is always better."

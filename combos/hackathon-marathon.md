@@ -320,3 +320,40 @@ Wave 1 is for the highest-risk items — the ones most likely to fail. If they f
 Wave 2 is for integration and polish. You can only polish what exists. If Wave 1 failed, Wave 2 becomes recovery, not expansion.
 
 The Hour 4 gate is the most important 30 minutes of the entire marathon.
+
+---
+
+## Three Pillars Mapping
+
+| Pillar | How This Combo Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Two build waves with a mid-point gate create a structured double-loop: Wave 1 tests the riskiest assumptions, Hour 4 gate adjusts scope, Wave 2 builds on what actually works — compounding improvement within the session |
+| **LEAK** (Cross-Agent Trade) | Wave 1 sub-agents hold domain-specific implementation knowledge; Wave 2 lead agent holds integration knowledge; Skeptic holds adversarial knowledge — each trades their specialized view via sprint.json and skeptic_verdict.json |
+| **LEC** (Emergent Conventions) | Wave structure + mandatory Skeptic + GLOW >= 65 become marathon conventions: any 8-hour session that skips the Hour 4 gate or the Skeptic pass is structurally not a marathon, regardless of output |
+
+---
+
+## State Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> DEEP_SCOUT
+    DEEP_SCOUT --> BLOCKED: deliverables list not producible
+    DEEP_SCOUT --> MARATHON_PLAN: MarathonScout.json ready
+    MARATHON_PLAN --> WAVE1_BUILD: MarathonPlan.json locked
+    WAVE1_BUILD --> HOUR4_GATE: 180 min elapsed
+    HOUR4_GATE --> WAVE2_BUILD: GREEN (>=50% done, NORTHSTAR aligned)
+    HOUR4_GATE --> WAVE2_REDUCED: YELLOW (30-50% done)
+    HOUR4_GATE --> ABORT: RED (<30% done or NORTHSTAR misaligned)
+    WAVE2_BUILD --> SKEPTIC: 150 min elapsed
+    WAVE2_REDUCED --> SKEPTIC: 150 min elapsed
+    SKEPTIC --> FIX_PASS: BLOCKED (one 15-min fix pass)
+    FIX_PASS --> SKEPTIC_RECHECK: fix applied
+    SKEPTIC_RECHECK --> DEMO_CLOSE: regardless of result
+    SKEPTIC --> DEMO_CLOSE: PASS
+    DEMO_CLOSE --> PASS: GLOW >= 65 + demo.md committed
+    DEMO_CLOSE --> BLOCKED: GLOW < 65 or demo missing
+    ABORT --> [*]
+    PASS --> [*]
+    BLOCKED --> [*]
+```

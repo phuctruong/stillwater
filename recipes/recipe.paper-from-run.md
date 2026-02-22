@@ -96,3 +96,17 @@ Every key claim in the paper must be typed:
 - Every number in the results section must trace to a run artifact file with an explicit path
 - The paper number is determined by the directory state at writing time — always re-check before finalizing
 - Lane C claims are valuable in papers but must be clearly labeled as heuristics, not proofs
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Recipe Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each paper extraction run trains the agent to identify which swarm artifacts contain publishable insights — the feedback loop between LESSONS.md quality and paper generalizability improves the Podcast agent's synthesis discipline in future swarm runs |
+| **LEAK** (Cross-Agent Trade) | The Podcast agent distills the Solver and Skeptic agents' combined evidence into typed claims [A/B/C], enabling the Writer agent to produce a paper without needing to re-read all underlying artifacts — compressed, typed knowledge traded across agent roles |
+| **LEC** (Emergent Conventions) | Establishes the [A/B/C] claim typing system as a reusable convention for all published work: Lane A = invariant, Lane B = engineering preference, Lane C = heuristic — making the epistemic status of every claim explicit and reviewable |
+
+**Belt Level:** Green — demonstrates the full lifecycle from execution to knowledge: running a swarm, synthesizing its insights via Podcast, extracting typed claims, and publishing a falsifiable paper with traceable provenance to run artifacts.
+
+**GLOW Score:** +6 per published paper with at least 3 typed claims [A/B/C], a falsifiable hypothesis, all figures sourced to run artifacts, and a correct index entry in papers/00-index.md.

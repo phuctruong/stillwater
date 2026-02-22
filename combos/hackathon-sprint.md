@@ -322,3 +322,37 @@ A sprint without structure is a waste of time. Structure without a time box is a
 The hackathon combo enforces both: the Scout discovers what matters, the Plan locks scope ruthlessly, the Build ships something real, the Skeptic catches what is broken, and the Close makes the GLOW visible.
 
 Every ROADMAP phase in stillwater is a hackathon. This combo makes that explicit and executable.
+
+---
+
+## Three Pillars Mapping
+
+| Pillar | How This Combo Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | GLOW score at close is a self-assessment loop: Growth + Learning + Output + Wins measured explicitly, so each sprint teaches the team what to do more of and what to cut next time |
+| **LEAK** (Cross-Agent Trade) | Scout agent (dragon-rider) holds discovery knowledge asymmetrically; Builder agent (domain persona) holds implementation knowledge; Skeptic (kent-beck/schneier) holds adversarial knowledge — each role stays in its lane, trading via SprintPlan.json and SkepticVerdict.json |
+| **LEC** (Emergent Conventions) | Demo-or-fail and scope-cut-never-the-clock become project conventions that apply to every ROADMAP phase — any agent that proposes scope expansion mid-sprint is violating a team-wide rule, not just a local policy |
+
+---
+
+## State Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE
+    INTAKE --> SCOUT: feature request received
+    SCOUT --> NEED_INFO: northstar_alignment = no
+    SCOUT --> PLAN_SCOPE_LOCK: ScoutReport.json ready
+    PLAN_SCOPE_LOCK --> BUILD: SprintPlan.json locked
+    BUILD --> SCOPE_CUT: 45% time expired, not shippable
+    SCOPE_CUT --> BUILD: demo_target reduced
+    BUILD --> SKEPTIC_REVIEW: artifact committed
+    SKEPTIC_REVIEW --> BUILD_REDUCED: demo_target_met = false (one pass only)
+    BUILD_REDUCED --> DEMO_CLOSE: remaining time
+    SKEPTIC_REVIEW --> DEMO_CLOSE: demo_target_met = true
+    DEMO_CLOSE --> PASS: demo.md + glow_score.json + sprint.json committed, GLOW >= 50
+    DEMO_CLOSE --> BLOCKED: GLOW < 50 or no demo
+    NEED_INFO --> [*]
+    PASS --> [*]
+    BLOCKED --> [*]
+```

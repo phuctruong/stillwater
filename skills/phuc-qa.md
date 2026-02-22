@@ -1933,6 +1933,83 @@ flowchart TD
 ```
 
   # ------------------------------------------------------------
+  # FSM) MERMAID STATE DIAGRAM — phuc-qa Main Pipeline
+  # Full four-phase state machine (P0 → P1 → P2 → P3)
+  # ------------------------------------------------------------
+  Main_FSM_Diagram:
+    description: "phuc-qa four-phase pipeline state machine (stateDiagram-v2)"
+
+```mermaid stateDiagram-v2
+[*] --> INIT
+INIT --> INTAKE_SCOPE : scope_received
+INTAKE_SCOPE --> NULL_CHECK : always
+NULL_CHECK --> EXIT_NEED_INFO : scope_null_or_module_count_missing
+NULL_CHECK --> COMPLEXITY_ROUTE : scope_defined
+
+state COMPLEXITY_ROUTE {
+  [*] --> CHECK_COUNT
+  CHECK_COUNT --> LIGHT_MODE : count_lt_10
+  CHECK_COUNT --> STANDARD_MODE : count_10_to_50
+  CHECK_COUNT --> HEAVY_MODE : count_gt_50
+}
+
+COMPLEXITY_ROUTE --> PHASE_0_DISCOVERY : mode_selected
+
+state PHASE_0_DISCOVERY {
+  [*] --> ORIENT
+  ORIENT --> PROBE : findings_noted
+  PROBE --> DIVERGE : gap_candidates_tagged
+  DIVERGE --> CONVERGE : persona_concerns_merged
+  CONVERGE --> PRIORITIZE : ranked_gaps_produced
+  PRIORITIZE --> [*]
+  note right of DIVERGE : 5-7 adversarial personas\nMust disagree — consensus = false signal
+}
+
+PHASE_0_DISCOVERY --> PHASE_1_QUESTIONS : discovery_map_produced
+
+state PHASE_1_QUESTIONS {
+  [*] --> QUESTIONER_GENERATES
+  QUESTIONER_GENERATES --> SCORER_RATES : questions_produced
+  SCORER_RATES --> FALSIFIER_DEFINES : scores_assigned
+  FALSIFIER_DEFINES --> [*]
+  note right of QUESTIONER_GENERATES : Questioner must NOT score.\nScorer must NOT see questioner reasoning.
+}
+
+PHASE_1_QUESTIONS --> PHASE_2_TESTS : qa_questions_json_produced
+
+state PHASE_2_TESTS {
+  [*] --> MATH_RED
+  MATH_RED --> MATH_GREEN : test_fails_as_expected
+  MATH_RED --> EXIT_BLOCKED : test_cannot_be_made_to_fail
+  MATH_GREEN --> FLAKINESS_CHECK : tests_pass
+  FLAKINESS_CHECK --> [*]
+  note right of MATH_RED : Kent Gate: test must fail\nbefore fix is counted.
+}
+
+PHASE_2_TESTS --> PHASE_3_DIAGRAMS : test_results_json_produced
+
+state PHASE_3_DIAGRAMS {
+  [*] --> DRAFT_DIAGRAMS
+  DRAFT_DIAGRAMS --> SHA256_SEAL : diagrams_complete
+  SHA256_SEAL --> SOCRATIC_REVIEW : sha256_computed
+  SOCRATIC_REVIEW --> SHA256_SEAL : diagram_requires_revision
+  SOCRATIC_REVIEW --> [*] : diagram_approved
+  note right of SHA256_SEAL : sha256 must be stable\nacross two normalizations.
+}
+
+PHASE_3_DIAGRAMS --> CROSS_VALIDATE : all_artifacts_produced
+CROSS_VALIDATE --> FINAL_SEAL : pillars_triangularly_consistent
+CROSS_VALIDATE --> PHASE_1_QUESTIONS : inconsistency_found_retry
+
+FINAL_SEAL --> EXIT_PASS : rung_target_met AND coverage_complete
+FINAL_SEAL --> EXIT_BLOCKED : rung_target_not_met OR pillar_gap_found
+
+EXIT_PASS --> [*]
+EXIT_BLOCKED --> [*]
+EXIT_NEED_INFO --> [*]
+```
+
+  # ------------------------------------------------------------
   # TP) THREE PILLARS INTEGRATION — LEK / LEAK / LEC
   # phuc-qa as the VERIFY vertex of all three pillars
   # ------------------------------------------------------------

@@ -290,6 +290,36 @@ Produces:
 
 LEK summary: Knowledge (localization) targets the patch; Energy (runs) verifies it; Logic (Kent Gate) seals it.
 
+| Pillar | How This Combo Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each bugfix iteration (RED→PATCH→GREEN) is a self-improvement loop: the codebase learns from its own failure and encodes the fix as regression coverage |
+| **LEAK** (Cross-Agent Trade) | Coder agent holds patch knowledge asymmetrically; Skeptic judge holds invariant knowledge; they trade via PatchVerdict.json — neither can PASS alone |
+| **LEC** (Emergent Conventions) | Kent Gate becomes a project-wide convention: every accepted patch has repro_red.log + repro_green.log, creating a shared evidence culture |
+
+---
+
+## State Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE
+    INTAKE --> REPRO_RED: bug report received
+    REPRO_RED --> BLOCKED: repro passes (non-reproducible)
+    REPRO_RED --> PATCH_PROPOSAL: repro fails as expected
+    PATCH_PROPOSAL --> PATCH_GATE: diff proposed
+    PATCH_GATE --> PATCH_PROPOSAL: PATCH verdict (too broad)
+    PATCH_GATE --> REPRO_GREEN: APPROVE verdict
+    REPRO_GREEN --> PATCH_PROPOSAL: still failing (bounded retry)
+    REPRO_GREEN --> REGRESSION_GATES: repro passes
+    REGRESSION_GATES --> BUNDLE_BUILD: gates pass
+    REGRESSION_GATES --> BLOCKED: gate failure
+    BUNDLE_BUILD --> FINAL_SEAL: artifacts assembled
+    FINAL_SEAL --> PASS: RED+GREEN+tests confirmed
+    FINAL_SEAL --> BLOCKED: missing evidence
+    PASS --> [*]
+    BLOCKED --> [*]
+```
+
 ---
 
 Say **”next”** for:

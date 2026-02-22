@@ -255,3 +255,77 @@ Fix: report total lines read per file, not just lines used; this is the actual b
 
 **The Assumed Tier:** Navigator assumes a magic word maps to a particular tier from training data instead of reading the tier registry.
 Fix: always read phuc-magic-words tier registry before mapping; never assume mappings from memory.
+
+---
+
+## 8.0) State Machine (YAML)
+
+```yaml
+state_machine:
+  states: [INIT, INTAKE_QUERY, NULL_CHECK, EXTRACT_MAGIC_WORDS, MAP_TO_TIERS,
+           TRAVERSE_TRUNK, BRANCH_IF_NEEDED, LOAD_CONTEXT, VALIDATE_COMPRESSION,
+           BUILD_ARTIFACTS, SOCRATIC_REVIEW, EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  transitions:
+    - {from: INIT,                   to: INTAKE_QUERY,         trigger: capsule_received}
+    - {from: INTAKE_QUERY,           to: NULL_CHECK,            trigger: always}
+    - {from: NULL_CHECK,             to: EXIT_NEED_INFO,        trigger: query_or_repo_null}
+    - {from: NULL_CHECK,             to: EXTRACT_MAGIC_WORDS,   trigger: inputs_defined}
+    - {from: EXTRACT_MAGIC_WORDS,    to: EXIT_NEED_INFO,        trigger: no_magic_words}
+    - {from: EXTRACT_MAGIC_WORDS,    to: MAP_TO_TIERS,          trigger: magic_words_found}
+    - {from: MAP_TO_TIERS,           to: TRAVERSE_TRUNK,        trigger: always}
+    - {from: TRAVERSE_TRUNK,         to: BRANCH_IF_NEEDED,      trigger: trunk_insufficient}
+    - {from: TRAVERSE_TRUNK,         to: LOAD_CONTEXT,          trigger: trunk_resolves}
+    - {from: BRANCH_IF_NEEDED,       to: LOAD_CONTEXT,          trigger: always}
+    - {from: LOAD_CONTEXT,           to: VALIDATE_COMPRESSION,  trigger: always}
+    - {from: VALIDATE_COMPRESSION,   to: EXIT_BLOCKED,          trigger: compression_too_low}
+    - {from: VALIDATE_COMPRESSION,   to: BUILD_ARTIFACTS,       trigger: compression_gate_passed}
+    - {from: BUILD_ARTIFACTS,        to: SOCRATIC_REVIEW,       trigger: always}
+    - {from: SOCRATIC_REVIEW,        to: TRAVERSE_TRUNK,        trigger: revision_needed}
+    - {from: SOCRATIC_REVIEW,        to: EXIT_PASS,             trigger: artifacts_complete}
+    - {from: SOCRATIC_REVIEW,        to: EXIT_BLOCKED,          trigger: budget_exceeded}
+  forbidden_states:
+    - FULL_CORPUS_LOAD
+    - SKIP_TRUNK
+    - COMPRESSION_BYPASS
+    - MAGIC_WORD_INVENTION
+    - SCOPE_EXPANSION
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE_QUERY
+    INTAKE_QUERY --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : query_null
+    NULL_CHECK --> EXTRACT_MAGIC_WORDS : inputs_defined
+    EXTRACT_MAGIC_WORDS --> EXIT_NEED_INFO : no_magic_words
+    EXTRACT_MAGIC_WORDS --> MAP_TO_TIERS : words_found
+    MAP_TO_TIERS --> TRAVERSE_TRUNK
+    TRAVERSE_TRUNK --> BRANCH_IF_NEEDED : trunk_insufficient
+    TRAVERSE_TRUNK --> LOAD_CONTEXT : trunk_resolves
+    BRANCH_IF_NEEDED --> LOAD_CONTEXT
+    LOAD_CONTEXT --> VALIDATE_COMPRESSION
+    VALIDATE_COMPRESSION --> EXIT_BLOCKED : compression_too_low
+    VALIDATE_COMPRESSION --> BUILD_ARTIFACTS : gate_passed
+    BUILD_ARTIFACTS --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> TRAVERSE_TRUNK : revision_needed
+    SOCRATIC_REVIEW --> EXIT_PASS : artifacts_complete
+    SOCRATIC_REVIEW --> EXIT_BLOCKED : budget_exceeded
+    classDef forbidden fill:#f55,color:#fff
+    class FULL_CORPUS_LOAD,SKIP_TRUNK,COMPRESSION_BYPASS,MAGIC_WORD_INVENTION forbidden
+```
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves navigation efficiency through compression-ratio feedback loops — each VALIDATE_COMPRESSION failure exposes which magic word mappings load too much context; over repeated runs on the same repo, the Navigator learns which trunk tiers resolve queries without branching, compressing future navigation paths |
+| **LEAK** (Cross-Agent Trade) | Exports navigation_map.json + context_load_receipt.json to all downstream agents as the minimal pre-loaded context bundle; imports magic word hints from the orchestrating session's CNF capsule; the compression_report.json feeds the phuc-context skill with empirical token budget data for capsule sizing |
+| **LEC** (Emergent Conventions) | Enforces the trunk-first-before-branch rule (never jump to leaf nodes without traversing trunk tiers), the magic-word-verbatim requirement (no synonym inference in tier mapping), and the compression-ratio-must-be-computed rule (no PASS without a quantified ratio) across every navigation session it produces |
+
+**Belt Progression:** Yellow belt — the Navigator has mastered Claude Shannon's minimum-description-length discipline: every context load is justified by information theory, not intuition, producing navigation receipts that prove efficiency rather than asserting it.
+
+**GLOW Score Contribution:** +8 per verified navigation session at rung 641 with navigation_map.json complete, trunk_first_compliance == true, compression_ratio >= 2.0 confirmed, and all three artifacts (navigation_map, context_load_receipt, compression_report) present and parseable.

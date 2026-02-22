@@ -87,3 +87,17 @@ Every PR must include in the PR body:
 - The scoring rubric in `community/SCORING-RUBRIC.md` is authoritative; if rubric and this recipe conflict, rubric wins
 - Do not skip the self-score step even if you are confident in your contribution — self-scoring catches issues before reviewer time is spent
 - BLOCK-level reviewer comments are non-negotiable; WARN-level comments require either a fix or explicit justification
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Recipe Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each submission cycle trains the contributor to score their own work against the community rubric, building internal calibration that improves accuracy of future self-scores and reduces reviewer round-trips |
+| **LEAK** (Cross-Agent Trade) | Contributor and reviewer agents exchange scoring evidence through the PR diff: contributor posts self_score.json + example run, reviewer returns BLOCK/WARN annotations — each round reduces misalignment between contributor intent and community standard |
+| **LEC** (Emergent Conventions) | Enforces the community submission standard as a reusable convention: the PR title format `[contrib] <type>: <id> (score: <X>/5)` and the three-part PR body (self-score + problem statement + example run) become the universal onboarding protocol |
+
+**Belt Level:** Yellow — demonstrates ability to participate in the community skill economy: reading rubrics, self-scoring work, and completing the evidence-backed submission loop.
+
+**GLOW Score:** +3 per successful merged contribution (skill/recipe/swarm with 5/5 self-score and reviewer PASS on first review cycle).

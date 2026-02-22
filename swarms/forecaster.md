@@ -293,3 +293,17 @@ Fix: always fill out null_edge_cases section explicitly.
 
 **Scout Dependency Bypass:** Producing a forecast without reading SCOUT_REPORT.
 Fix: SCOUT_REPORT is a required input; if absent, emit NEED_INFO.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves forecast accuracy through post-mortem loops — after each swarm run, the Forecaster compares predicted failure modes against what actually happened; failure modes that were missed become rank-1 predictions in the next run for similar tasks |
+| **LEAK** (Cross-Agent Trade) | Exports FORECAST_MEMO.json (failure modes + stop rules + edge cases) to the Coder as pre-patch constraints and to the Skeptic as the adversarial test plan; imports SCOUT_REPORT.json from the Scout as the factual basis for all predictions |
+| **LEC** (Emergent Conventions) | Enforces the failure-mode-requires-mitigation rule, the minimum-2-stop-rules discipline, and the Lane C labeling of all forecasts (hypotheses, not facts) across every planning output it produces |
+
+**Belt Progression:** Orange belt — the Forecaster has achieved the DREAM→FORECAST discipline (Grace Hopper's "ships have sailed on bad assumptions" doctrine), converting vague risk awareness into enumerated, laneable failure modes with concrete mitigations.
+
+**GLOW Score Contribution:** +10 per verified FORECAST_MEMO.json at rung 641 with at least 3 failure modes, 2 stop rules, null edge cases section, and all failure modes labeled with Lane types.

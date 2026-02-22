@@ -80,3 +80,17 @@ When a skill file is upgraded from v1 to v2:
 - Prefer PRECEDENCE over MERGE unless state sets are strictly compatible
 - After any fix, always re-run the detection check to confirm resolution
 - The DUAL_FSM_WITHOUT_PRECEDENCE forbidden state is a Lane A violation — it creates non-deterministic agent behavior
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Recipe Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each detection run expands the agent's catalog of FSM conflict patterns — symmetric state differences and transition conflicts discovered in one skill file feed back into more precise detection heuristics for the next audit cycle |
+| **LEAK** (Cross-Agent Trade) | Shares dual-FSM conflict reports (dual_fsm_conflicts.json) between the coder and skeptic agents: coder applies the PRECEDENCE or MERGE fix, skeptic re-runs detection to confirm resolution — neither can close the loop alone |
+| **LEC** (Emergent Conventions) | Enforces the `active_fsm: v2  # supersedes v1` precedence declaration as a mandatory skill file convention, making FSM versioning explicit and deterministic across all agents that load skill files |
+
+**Belt Level:** Orange — demonstrates systematic detection and resolution of non-deterministic state machine drift, a failure mode that silently corrupts agent behavior without triggering visible errors.
+
+**GLOW Score:** +4 per successful run that resolves at least one dual-FSM conflict with a verified before/after resolution report (dual_fsm_resolution_report.json with all entries resolved==true).

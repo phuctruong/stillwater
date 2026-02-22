@@ -294,6 +294,39 @@ The recipe must output a stable “replay capsule”:
 
 LEK summary: Knowledge (FailureSignature) localizes the bug; Energy (Repro Red Run) confirms it; Logic (Closure Gate) prevents fixes without proof of failure.
 
+| Pillar | How This Combo Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | CI failure becomes structured knowledge (FailureSignature + replay capsule) that improves the next triage cycle — the system learns from each failure it processes |
+| **LEAK** (Cross-Agent Trade) | Localization agent holds file-ranking knowledge; Repro Constructor holds minimal-script knowledge; they trade via FailureSignature.json — each agent specializes asymmetrically |
+| **LEC** (Emergent Conventions) | Repro-first becomes a team convention: no fix is proposed without a reproducible failure command, enforced structurally by the Triage Closure Gate |
+
+---
+
+## State Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> LOG_INTAKE
+    LOG_INTAKE --> SIGNATURE_EXTRACTED: CI log parsed
+    LOG_INTAKE --> BLOCKED: no recognizable failure
+    SIGNATURE_EXTRACTED --> LOCALIZATION: FailureSignature.json produced
+    LOCALIZATION --> REPRO_CONSTRUCTOR: ranked file list ready
+    REPRO_CONSTRUCTOR --> REPRO_RED_RUN: repro script produced
+    REPRO_RED_RUN --> BLOCKED: repro passes (NON_REPRODUCIBLE)
+    REPRO_RED_RUN --> PLAN_MODE: repro fails — plan branch
+    REPRO_RED_RUN --> EXECUTE_MODE: repro fails — execute branch
+    PLAN_MODE --> TRIAGE_CLOSURE: FixPlan.json emitted
+    EXECUTE_MODE --> PATCH_PROPOSED: patch diff produced
+    PATCH_PROPOSED --> REPRO_GREEN_RUN: patch applied
+    REPRO_GREEN_RUN --> TRIAGE_CLOSURE: repro passes
+    REPRO_GREEN_RUN --> PATCH_PROPOSED: still failing (bounded)
+    TRIAGE_CLOSURE --> PASS: FailureSignature + LocalizationReport + repro evidence present
+    TRIAGE_CLOSURE --> NEED_INFO: multiple roots without branching
+    PASS --> [*]
+    BLOCKED --> [*]
+    NEED_INFO --> [*]
+```
+
 ---
 
 ## Why This Combo Is Critical

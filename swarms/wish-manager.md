@@ -312,3 +312,17 @@ Fix: every wish in BACKLOG must have an explicit activation criterion or expiry 
 
 **Batch Promotion:** Promoting multiple wishes with a single shared receipt.
 Fix: every wish promotion requires its own belt_promotion_receipt.json.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves wish contract quality through SOCRATIC_REVIEW loops — each wish revision that catches a missing postcondition or an under-scoped scope section sharpens the next contract's precision; belt promotion receipts where criteria_met had to be revisited reveal which success criteria were too vague to verify, improving the specificity of future wish statements |
+| **LEAK** (Cross-Agent Trade) | Exports wish.{id}.md (the contract) to the Coder or Planner as the bounded scope for execution; exports belt_promotion_receipt.json to the Roadmap Orchestrator as belt advancement evidence that feeds BELT_PROMOTION_RECEIPT.json; exports state.mmd + state.sha256 to the Graph Designer's canonical format registry as a verified lifecycle diagram |
+| **LEC** (Emergent Conventions) | Enforces the individual-contract-required rule (no batch execution — each wish has its own contract), the state-graph-requires-sha256 discipline (state.mmd and state.sha256 must always be co-present), and the belt-promotion-requires-all-criteria-met convention (partial completion is not promotion — criteria_failed must be empty for any receipt to be issued) across every wish lifecycle it manages |
+
+**Belt Progression:** Yellow belt — the Wish Manager has mastered Donald Knuth's algorithm-as-wish discipline: every wish is a precondition-postcondition pair, the FSM is the algorithm, the belt promotion is the proof that the postcondition was reached from the precondition — making the gamified backlog as rigorous as a mathematical proof.
+
+**GLOW Score Contribution:** +8 per verified wish contract at rung 641 with wish.{id}.md (all required sections), state.mmd (closed state space, labeled transitions, classDef forbidden), state.sha256 (matching sha256 of state.mmd), and belt_promotion_receipt.json (all criteria_met == true, no criteria_failed) when promotion is claimed.

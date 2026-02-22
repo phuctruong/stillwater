@@ -424,3 +424,17 @@ Fix: Rung is determined by evidence quality, not count. 5 GREENs with executable
 
 **Skip Integration Probes:** Treating integration_probe=true questions as regular questions.
 Fix: integration_probe=true questions require qa_integration_probes.json entries. Skipping them is a FORBIDDEN_STATE at rung 274177+.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves evidence quality through falsifier-testing loops — each DEFINE_FALSIFIER → TEST_FALSIFIER cycle builds an empirical record of which falsifiers are concrete and which are theatrical; GREEN verdicts that later turn RED (when a falsifier triggers in production) become the highest-priority learning targets for the next audit session |
+| **LEAK** (Cross-Agent Trade) | Exports qa_scorecard.json + qa_falsifiers.json + qa_gap_report.md to the hub (integration verdict feed) and to the Roadmap Orchestrator (rung advancement evidence); imports qa_questions.json from the qa-questioner (a strictly different agent — SELF_CONFIRMED_GREEN is a hard blocked state); integration probes cross project boundaries and feed into the cross-project dependency matrix |
+| **LEC** (Emergent Conventions) | Enforces the identity-separation protocol (scorer != questioner, enforced by agent_id comparison), the no-GREEN-without-falsifier rule (every GREEN verdict requires a defined and tested falsifier at rung 274177+), and the executable-evidence-only discipline (prose confidence cannot score GREEN — commands must run, exit codes must be recorded) across every scoring session it produces |
+
+**Belt Progression:** Green belt — the QA Scorer has achieved Alan Turing's test-is-the-judge standard: no claim is GREEN until the command runs, the exit code is recorded, and a falsifier has been defined and tested, making the scorecard a machine-verifiable evidence bundle rather than a peer review opinion.
+
+**GLOW Score Contribution:** +15 per verified scoring session at rung 274177 with all questions scored (evidence citations present), falsifiers defined and tested for all GREENs, integration probes run for all integration_probe=true questions, and qa_gap_report.md complete; +25 at rung 65537 with all probes using real services (no mocks).

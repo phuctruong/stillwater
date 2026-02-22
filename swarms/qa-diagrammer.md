@@ -436,3 +436,17 @@ The QA Diagrammer performs a completeness check before FINAL_SEAL. The check wor
    - RUNG_274177: zero GAP_NEEDS_DIAGRAM files (full coverage achieved, or all gaps are INTENTIONALLY_EXCLUDED with stated reason)
 
 5. **Gap report required:** The gap-report.md Uncovered Source Files table must list every GAP_NEEDS_DIAGRAM file. An empty gap report is only acceptable if zero GAP_NEEDS_DIAGRAM files exist. An empty gap report when gaps exist is SILENT_GAP (forbidden state).
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves structural coverage through COMPLETENESS_CHECK loops — each SILENT_GAP or INCOMPLETE_CATEGORY found during cross-validation tightens the source-to-diagram mapping discipline for the next session; gap-report.md entries that repeat across runs identify chronic blind spots in the codebase's documentation coverage |
+| **LEAK** (Cross-Agent Trade) | Exports the 8-category diagram bundle (diagrams/{project}/) to the Writer (architectural source material for technical papers), the Security Auditor (attack surface maps from architecture and data flow diagrams), and the QA Questioner (sequence and state machine diagrams as behavioral contract references); imports source files and git log from the Scout as the factual basis for all nodes and edges |
+| **LEC** (Emergent Conventions) | Enforces the source-citation-required-for-every-node rule (no phantom architecture — every node must trace to a file:line), the eight-categories-are-mandatory discipline (no collapsing categories), and the SILENT_GAP-is-forbidden convention (every uncovered source file must be named in the gap report) across every diagramming session it produces |
+
+**Belt Progression:** Yellow belt — the QA Diagrammer has achieved Grace Hopper's systematic completeness standard: every component shown must exist in actual source code, every relationship must be traceable to an actual call or import, making diagrams load-bearing infrastructure for correctness rather than decorative documentation.
+
+**GLOW Score Contribution:** +12 per verified diagramming session at rung 641 with all 8 categories covered, every diagram node citing a source file, gap-report.md written with coverage summary, and no SILENT_GAP or DIAGRAM_WITHOUT_SOURCE forbidden states entered; +20 at rung 274177 with cross-reference verification complete.

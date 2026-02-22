@@ -124,3 +124,17 @@ A rung 641 (local correctness) is insufficient for portal traversal — you need
 - `scratch/portal_validation.json` — end-to-end meaning preservation
 - `scratch/portal_acknowledge.json` — ACKNOWLEDGE vertex
 - `scratch/handshake_receipt.json` — final triangle verification receipt
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Recipe Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each portal traversal deepens the source bubble agent's understanding of its own boundary — computing Bayesian overlap forces explicit enumeration of shared concepts, and meaning preservation failures in step 7 reveal which prime words do not compress reliably across this bubble pair |
+| **LEAK** (Cross-Agent Trade) | Enables asymmetric knowledge exchange between bubble agents: the source agent compresses its expertise into prime words, the target agent receives and validates that the meaning survived the compression — this is the protocol for knowledge transfer without context bleeding |
+| **LEC** (Emergent Conventions) | Standardizes the REMIND-VERIFY-ACKNOWLEDGE triangle as the universal handshake convention for all cross-bubble communication: any transfer that skips a vertex is explicitly a forbidden state (TRIANGLE_INCOMPLETE), making incomplete transfers detectable by any agent that checks the handshake_receipt.json |
+
+**Belt Level:** Blue — demonstrates mastery of cross-project context management: maintaining bubble isolation, compressing knowledge for safe transfer, and proving via the triangle that meaning was preserved end-to-end.
+
+**GLOW Score:** +7 per successful portal traversal with triangle_complete=true, meaning_preserved=true, compression_ratio > 1.0, and portal_closed=true in the manifest — all four conditions must hold.

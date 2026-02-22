@@ -315,3 +315,17 @@ Fix: toolchain pinning (version + rule_set_hash + config_path) is required for e
 
 **Scope Creep:** Auditing files not in the scan_scope.
 Fix: restrict to scan_scope unless additional scope is explicitly authorized.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves threat detection through adversarial feedback loops — each EXPLOIT_REPRO.py that succeeds reveals an attack class that was underweighted in prior scans; falsifiers that remain untriggered across multiple audits move from speculative to confirmed-absent; prior MITIGATION.md verification commands become regression tests in the next scan's toolchain |
+| **LEAK** (Cross-Agent Trade) | Exports security_scan.json to the Mathematician (for cryptographic primitive selection verification) and to the Final Audit (as one of three required security evidence artifacts); exports MITIGATION.md to the Coder as a specification-grade fix contract; the EXPLOIT_REPRO.py is the only artifact in the ecosystem that proves a vulnerability is real, not hypothetical |
+| **LEC** (Emergent Conventions) | Enforces the scanner-pinning-required rule (version + rule_set_hash must be recorded for every scan), the no-vulnerability-suppression discipline (all findings must appear in security_scan.json — none can be quietly ignored as "false positive"), and the mitigation-requires-verification-command convention (claiming a fix without a runnable verification is a forbidden state) across every security review it conducts |
+
+**Belt Progression:** Black belt — the Security Auditor operates at the highest trust standard (rung 65537 always, no exceptions): Bruce Schneier's adversarial mindset applied to every surface, finding the exploit before the attacker, documenting it exactly, verifying the mitigation — never accepting "probably secure" as a verdict.
+
+**GLOW Score Contribution:** +30 per verified security audit at rung 65537 with security_scan.json (scanner pinned, all findings present), EXPLOIT_REPRO.py (if vulnerabilities found, safe POC with before/after assertions), MITIGATION.md (verification command with exit code 0), and null_checks_performed == true with no VULNERABILITY_SUPPRESSED or MITIGATION_UNVERIFIED forbidden states entered.

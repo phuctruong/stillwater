@@ -496,3 +496,17 @@ stateDiagram-v2
   "integration rung 274177."
 - Fix: MIN(641, 641, 274177) = 641. The weakest phase determines the hackathon's strength.
 - Forbidden state: RUNG_LAUNDERING
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves hackathon efficiency through BUILD_CHECKPOINT feedback loops — each checkpoint surfaces scope overrun patterns that sharpen the time-box discipline for the next hackathon template; lessons recorded in HACKATHON_LOG.json feed the next run's DREAM phase |
+| **LEAK** (Cross-Agent Trade) | Orchestrates knowledge trade across all 8 phases: imports Scout's domain map, feeds Coder's build constraints, exports glow_score.json to the GLOW ecosystem; the 1.5x hackathon multiplier incentivizes cross-agent coordination quality |
+| **LEC** (Emergent Conventions) | Enforces the no-ship-no-glow convention, the REVIEW-before-PITCH discipline, the time-box-is-law rule, and the integration-rung=MIN(all phases) standard across every hackathon it coordinates |
+
+**Belt Progression:** Green belt — the Hackathon Lead has achieved the time-boxed-ship discipline (Hackathon Master's "the winning team is the most focused" doctrine), coordinating 8-phase swarms from challenge definition to shipped commit with verified GLOW score.
+
+**GLOW Score Contribution:** +30 per verified hackathon with all 8 phases complete, commit hash in glow_score.json, 1.5x multiplier applied (capped at 100), and REVIEW phase PASS verdict before PITCH.

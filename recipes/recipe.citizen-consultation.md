@@ -106,3 +106,17 @@ This recipe targets rung 641 (local correctness) because perspective generation 
 - `scratch/consultation_triangulation.json` — agreement/disagreement map
 - `scratch/consultation_synthesis.json` — final falsifiable recommendation
 - `scratch/council_transcript.json` — full assembly of all consultation artifacts
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Recipe Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each consultation run refines citizen selection heuristics — lens divergence scoring improves as the agent learns which tradition combinations produce the richest tensions for a given domain |
+| **LEAK** (Cross-Agent Trade) | Citizens trade epistemic debt across intellectual traditions: Shannon's compression lens corrects Turing's decidability lens, and Noether's invariant lens checks Torvalds' pragmatic lens, creating asymmetric knowledge exchange that no single agent could produce |
+| **LEC** (Emergent Conventions) | Enforces the triangulation-over-consensus convention: the recipe hardcodes that insight emerges FROM tension, not despite it — making this an emergent protocol for all multi-perspective advisory tasks |
+
+**Belt Level:** Orange — demonstrates the ability to orchestrate structured disagreement across multiple intellectual traditions and derive falsifiable synthesis rather than averaging perspectives.
+
+**GLOW Score:** +5 per successful execution with evidence bundle (consultation_synthesis.json with non-trivial falsifier + council_transcript.json with all 7 artifact layers).

@@ -229,6 +229,34 @@ If:
 
 LEK summary: Knowledge (Plan.json) is crystallized first; Logic (Mode Enforcer) blocks premature execution; Energy (Promotion Gate) releases only on explicit seal.
 
+| Pillar | How This Combo Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Every Plan.json produced is a reusable template for future tasks in the same domain — the planning corpus grows with each iteration, improving plan quality over time |
+| **LEAK** (Cross-Agent Trade) | Planner agent holds scope-decomposition knowledge; Executor agent holds implementation knowledge; they trade via wish.lock.json — the planner never touches execution, the executor never redesigns scope |
+| **LEC** (Emergent Conventions) | The PLAN→PROMOTE→EXECUTE sequence becomes a team-wide convention: no agent ever writes code without a sealed wish, creating a shared culture of intent-before-action |
+
+---
+
+## State Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> PROMPT_RECEIVED
+    PROMPT_RECEIVED --> INTENT_CLASSIFY: user prompt ingested
+    INTENT_CLASSIFY --> PLAN_MODE: default (all prompts)
+    PLAN_MODE --> PLAN_EMIT: Plan.md + Plan.json produced
+    PLAN_EMIT --> MODE_ENFORCE: Mode Enforcer check
+    MODE_ENFORCE --> ERROR_MODE_VIOLATION: tool call or file write detected
+    MODE_ENFORCE --> AWAIT_PROMOTION: plan clean
+    AWAIT_PROMOTION --> NEED_INFO: user requests clarification
+    AWAIT_PROMOTION --> PROMOTION_GATE: user confirms execution
+    PROMOTION_GATE --> NEED_INFO: required fields missing
+    PROMOTION_GATE --> EXECUTE_MODE: wish.lock.json produced
+    EXECUTE_MODE --> [*]: hand off to execution recipes
+    NEED_INFO --> [*]
+    ERROR_MODE_VIOLATION --> [*]
+```
+
 ---
 
 # Why This Combo Is First

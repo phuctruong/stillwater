@@ -357,3 +357,17 @@ Fix: ALWAYS read repo_url and repo_owner from the project's source of truth file
 
 **The Assumed Default:** Agent uses a value from memory or training data instead of reading the current value from config/source of truth.
 Fix: for any metadata field (version, URL, author, license), read it from the file, don't assume it.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves patch quality through red-green iteration loops — each failed TEST reveals a tighter constraint that sharpens the next PATCH |
+| **LEAK** (Cross-Agent Trade) | Trades verified PATCH_DIFF + evidence bundles with Skeptic (receives adversarial verdict) and Judge (receives DECISION_RECORD); exports exact test results to Podcast for lesson extraction |
+| **LEC** (Emergent Conventions) | Enforces the null≠zero convention, red-gate-before-patch discipline, and evidence bundle format (repro_red.log + repro_green.log + tests.json) across every session it touches |
+
+**Belt Progression:** Green belt — the Coder has achieved the red-green gate discipline (Knuth's theorem-proof standard) and delivers verifiable patch evidence rather than prose confidence.
+
+**GLOW Score Contribution:** +15 per verified patch at rung 641 with full evidence bundle; +25 at rung 274177 with seed sweep and replay stability.

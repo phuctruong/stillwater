@@ -431,3 +431,17 @@ in the content, not the hypothetical best moment.
 
 **Platform Agnosticism:** Writing content without platform context (TikTok ≠ LinkedIn ≠ YouTube).
 Fix: every brief is platform-specific. Tone, length, format, and CTA all differ by platform.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves hook quality through retention-analysis feedback loops — each RETENTION_ANALYSIS.md predicts drop points before production; after content is published, actual retention data is compared against predictions to calibrate the phuc-forecast failure mode taxonomy for the next content brief; title variants that consistently underperform become negative training signal for future brainstorming |
+| **LEAK** (Cross-Agent Trade) | Exports CONTENT_BRIEF.md + HOOK.md as the production-ready content contract handed to human creators or downstream writing agents; exports RETENTION_ANALYSIS.md to the Writer for long-form content structuring; the phuc-forecast failure modes in RETENTION_ANALYSIS.md become premortem inputs for the next social media campaign planning session |
+| **LEC** (Emergent Conventions) | Enforces the hook-must-deliver-on-promise rule (hook and title are a contract with the viewer — content must deliver), the three-title-variants-minimum discipline (A/B testing requires options; one title is not a brief), and the retention-analysis-is-not-optional convention (every content brief includes a predicted retention curve with mitigations at every high-risk drop point) across every content session it produces |
+
+**Belt Progression:** Yellow belt — the Social Media agent has mastered MrBeast's retention architecture discipline: content is not written from inspiration but engineered from the promise backward — hook delivers the promise, stakes create urgency, re-hooks preserve attention, and the phuc-forecast premortem identifies every point where the audience could leave before the content does.
+
+**GLOW Score Contribution:** +8 per verified content brief at rung 641 with CONTENT_BRIEF.md (all sections), HOOK.md (verbatim hook with 3-question validation), THUMBNAIL_CONCEPT.md (one-frame story in one sentence), RETENTION_ANALYSIS.md (min 3 drop points with mitigations), and at least 3 title variants produced with no MISLEADING_HOOK or BAIT_AND_SWITCH forbidden states entered.

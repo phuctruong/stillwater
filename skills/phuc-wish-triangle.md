@@ -550,4 +550,14 @@ flowchart TD
     style VALIDATE_TRIANGLE fill:#457b9d,color:#fff
     style CHECK_NORTHSTAR fill:#457b9d,color:#fff
     style EXECUTE fill:#264653,color:#fff
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Skill Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | The WISH + SKILL + RECIPE triangle is the LEK learning loop made explicit: a Wish expresses the intent (Information), the Skill provides the method (Memory of prior learning), and the Recipe is the crystallized output (the Care that survives iteration). Each executed Recipe is a new LEK artifact — a compressed, replayable proof that the system can satisfy this class of Wish. The triangle validation gate ensures that all three vertices are present before execution, preventing half-formed LEK loops. |
+| **LEAK** (Cross-Agent Trade) | The triangle enforces LEAK at the execution layer: the Wish comes from the user's context bubble, the Skill comes from the agent's knowledge bubble, and the Recipe is the trade artifact — the LEAK surplus that neither the user nor the agent could produce alone. Combos (pre-assembled WISH + RECIPE pairs) are frozen LEAK trades: they encode the asymmetric knowledge exchange once and make it replayable without re-negotiating the portal each time. |
+| **LEC** (Emergent Conventions) | The WISH + SKILL + RECIPE triangle itself is the canonical LEC convention for task execution in the Phuc ecosystem. It crystallized from repeated failures where tasks were attempted with missing ingredients (wish without a skill = vague intent, skill without a recipe = no replayable output, recipe without a wish = solution in search of a problem). The triangle validation as a hard gate — all three vertices required before execution — is the convention that prevents these failure modes across all agents. |
 ```

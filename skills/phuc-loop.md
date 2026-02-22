@@ -1635,3 +1635,13 @@ INTEGRATION: Load: prime-safety (1) + prime-coder (2) + phuc-swarms (3) + phuc-l
 *Layers on prime-safety + prime-coder + phuc-swarms. Stricter always wins.*
 *Emergence = Recursion(Information + Memory + Care). The loop that learns from itself.*
 *seed_checksum: 641 × 274177 × 65537 = 11517961089409*
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Skill Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | phuc-loop IS the LEK engine — each iteration accumulates learnings into AGENTS.md, advances GLOW score, and must pass the Phuc Test (5 conditions) before claiming self-improvement. The while-not-done loop with halting certificates is the mechanized form of Recursion(Information + Memory + Care). |
+| **LEAK** (Cross-Agent Trade) | Each spawned sub-agent is a LEAK portal: the main loop holds task context, the sub-agent holds domain skills, and the CNF capsule is the typed handshake. Learnings flow back as lane-typed artifacts (EXACT/CONVERGED halting certificates), not prose. The GBB operators (Good/Better/Best) enforce asymmetric knowledge surplus — never worse than prior iteration. |
+| **LEC** (Emergent Conventions) | The loop enforces conventions that emerged from failure: halting certificates required before iteration 0; AGENTS.md accumulation mandatory; GLOW scoring with W=0 three-consecutive = EXIT_BLOCKED; Phuc Test as the self-improvement gate. These conventions are additive-only (Never-Worse doctrine) and compress all prior loop failures into the forbidden states list. |

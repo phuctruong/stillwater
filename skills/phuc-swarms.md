@@ -995,3 +995,13 @@ three_pillars_integration:
       SURPLUS is verified: Skeptic must falsify to confirm surplus is real, not assumed
       HANDSHAKE is enforced: CNF_BASE ensures shared ground truth before each trade
 ```
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Skill Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each swarm run improves dispatch efficiency through postmortem evidence — the Podcast phase distills learnings into AGENTS.md, and the Skeptic's falsifiers become new test cases. Each agent runs its own bounded LEK loop (Scout improves localization, Solver improves implementation quality, Skeptic improves falsification depth). The swarm chains these loops into compound intelligence where the whole exceeds the sum of bounded parts. |
+| **LEAK** (Cross-Agent Trade) | phuc-swarms is the fullest expression of LEAK in the Stillwater ecosystem: each of the 5 phase handoffs (Scout → Forecaster → Judge → Solver → Skeptic) is a typed asymmetric knowledge trade. The Scout holds terrain knowledge the Solver lacks; the Skeptic holds falsification methods the Solver lacks; the Forecaster holds edge-case patterns the Scout lacks. The typed JSON phase artifacts (SCOUT_REPORT, FORECAST_MEMO, DECISION_RECORD, PATCH_PROPOSAL, SKEPTIC_VERDICT) are the governed portals that carry surplus knowledge across bubble boundaries. |
+| **LEC** (Emergent Conventions) | Swarm role contracts, Prime Channels, phase ownership, and the CNF capsule template are all crystallized LEC conventions that emerged from multi-agent coordination failures. The forbidden states list (SKILL_LESS_DISPATCH, FORGOTTEN_CAPSULE, SUMMARY_AS_EVIDENCE, GOD_AGENT, SKIPPED_SKEPTIC) encodes the negative space of these conventions. Every swarm session that loads phuc-swarms adopts this convention body, and its forbidden states grow additive-only — Never-Worse doctrine applied to the orchestration protocol itself. |

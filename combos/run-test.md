@@ -235,6 +235,35 @@ Emit `GATES.json`:
 
 LEK summary: Energy (execution) is bounded and deterministic; Logic (Claim Gate) verifies it; Knowledge (GATES.json) persists it for future replays.
 
+| Pillar | How This Combo Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each run produces GATES.json — a replayable capsule. Future runs replay the same gates, comparing behavior hashes to detect regressions automatically |
+| **LEAK** (Cross-Agent Trade) | Executor agent holds run-environment knowledge (io_boundary, offline flag, toolchain); Judge agent holds evidence-quality knowledge (what counts as PASS); they trade via ExecutionVerdict.json |
+| **LEC** (Emergent Conventions) | Artifact hashing (sha256 in artifacts.json) and output normalization (strip timestamps) become project-wide conventions for what "reproducible evidence" means |
+
+---
+
+## State Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> MANIFEST_BUILD
+    MANIFEST_BUILD --> BLOCKED: gate_commands missing
+    MANIFEST_BUILD --> EXECUTE_GATES: RunManifest.json ready
+    EXECUTE_GATES --> BLOCKED: tool call in Plan Mode
+    EXECUTE_GATES --> BLOCKED: network access when offline
+    EXECUTE_GATES --> BLOCKED: io_boundary violation
+    EXECUTE_GATES --> NORMALIZE: stdout/stderr captured
+    NORMALIZE --> ARTIFACT_HASH: timestamps stripped, stable sort
+    ARTIFACT_HASH --> CLAIM_GATE: sha256 list produced
+    CLAIM_GATE --> BLOCKED: gate command exit != 0
+    CLAIM_GATE --> BLOCKED: required evidence file missing
+    CLAIM_GATE --> BLOCKED: nondeterministic fields detected
+    CLAIM_GATE --> PASS: all gates pass + evidence complete
+    PASS --> [*]
+    BLOCKED --> [*]
+```
+
 ---
 
 ## Why This Combo Is Critical

@@ -267,6 +267,39 @@ Outputs:
 
 LEK summary: Knowledge (DEPENDENCY_LOCK) pins the change; Energy (replay runs) validates stability; Logic (Never-Worse gate) blocks any regression from merging.
 
+| Pillar | How This Combo Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each bump attempt (pass or rollback) improves the BASELINE.json and DEPENDENCY_LOCK.json corpus — the system accumulates versioning knowledge over time |
+| **LEAK** (Cross-Agent Trade) | Risk classifier holds security-domain knowledge (crypto/auth/parser risk flags); Verdict judge holds stability knowledge (replay parity); they trade via RISK_REPORT.json without needing to share full context |
+| **LEC** (Emergent Conventions) | Two-run replay parity becomes a project convention: every dependency change must demonstrate behavior-hash stability, making "works on my machine" structurally impossible |
+
+---
+
+## State Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> BASELINE_SNAPSHOT
+    BASELINE_SNAPSHOT --> DEP_APPLY: baseline locked
+    DEP_APPLY --> BLOCKED: resolution cannot be pinned
+    DEP_APPLY --> RISK_CLASSIFY: DEPENDENCY_LOCK.json produced
+    RISK_CLASSIFY --> TEST_SUITE: risk level assigned
+    RISK_CLASSIFY --> SECURITY_GATE: HIGH_RISK detected
+    SECURITY_GATE --> TEST_SUITE: scan passes
+    SECURITY_GATE --> ROLLBACK: security scan fails
+    TEST_SUITE --> ROLLBACK: test failures detected
+    TEST_SUITE --> REPLAY_PARITY: tests pass
+    REPLAY_PARITY --> ROLLBACK: hashes mismatch
+    REPLAY_PARITY --> VERDICT: replay stable
+    VERDICT --> PASS: tests + replay + security all pass
+    VERDICT --> ROLLBACK: any gate fails
+    ROLLBACK --> ROLLBACK_VERIFY: dep files reverted
+    ROLLBACK_VERIFY --> PASS_ROLLBACK: baseline GREEN restored
+    PASS --> [*]
+    PASS_ROLLBACK --> [*]
+    BLOCKED --> [*]
+```
+
 ---
 
 ## 🔌 ABI: Plan→Execute + Run/Test Harness + Review/Security Gate

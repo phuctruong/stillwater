@@ -290,3 +290,44 @@ Fix: synthesis.json falsifier field is required; PASS blocked if field is empty 
 
 **Perspective Prose Inflation:** Each citizen perspective is padded to seem thorough; genuine insight buried in filler.
 Fix: core_insight is one paragraph max; key_risk and recommended_action are one sentence each; no filler.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves triangulation quality through divergence-forced reselection — when synthetic consensus is detected, the council rebuilds itself with a more orthogonal citizen set |
+| **LEAK** (Cross-Agent Trade) | Exports synthesis.json (multi-lens insight) to Planner and Forecaster agents; imports domain context from Scout reports to calibrate citizen selection scores |
+| **LEC** (Emergent Conventions) | Enforces the no-averaging convention (synthesis from tension, not mean), the minimum-3-citizens rule, and the falsifier-required discipline across all advisory outputs |
+
+**Belt Progression:** Orange belt — the Citizen Council has learned to assemble genuinely divergent panels rather than comfortable consensus groups, producing falsifiable insights instead of averaged opinions.
+
+**GLOW Score Contribution:** +10 per verified council run with council_transcript.json + triangulation_report.json + synthesis.json, minimum 3 citizens, and a non-null falsifier.
+
+---
+
+## FSM (Mermaid)
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE_QUESTION
+    INTAKE_QUESTION --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : question_or_registry_null
+    NULL_CHECK --> SCORE_REGISTRY : inputs_defined
+    SCORE_REGISTRY --> SELECT_CITIZENS
+    SELECT_CITIZENS --> DIVERGENCE_CHECK
+    DIVERGENCE_CHECK --> SELECT_CITIZENS : low_divergence
+    DIVERGENCE_CHECK --> SUMMON_PERSPECTIVES : divergence_met
+    SUMMON_PERSPECTIVES --> DETECT_SYNTHETIC_CONSENSUS
+    DETECT_SYNTHETIC_CONSENSUS --> SELECT_CITIZENS : synthetic_consensus
+    DETECT_SYNTHETIC_CONSENSUS --> TRIANGULATE : no_consensus
+    TRIANGULATE --> SYNTHESIZE
+    SYNTHESIZE --> BUILD_ARTIFACTS
+    BUILD_ARTIFACTS --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> SUMMON_PERSPECTIVES : additional_perspective
+    SOCRATIC_REVIEW --> EXIT_PASS : artifacts_complete
+    SOCRATIC_REVIEW --> EXIT_BLOCKED : budget_exceeded
+    classDef forbidden fill:#f55,color:#fff
+    class COUNCIL_BELOW_MINIMUM,SYNTHETIC_CONSENSUS_IGNORED,FORCED_CONSENSUS forbidden
+```

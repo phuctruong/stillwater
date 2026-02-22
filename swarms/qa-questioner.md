@@ -301,3 +301,17 @@ Fix: Generate questions per dimension in sequence; check minimum coverage before
 
 **Scope Creep:** Questioner expands scope beyond what the qa-scorer can realistically answer.
 Fix: Questions must be answerable from the project's repo, endpoints, or CI — not from hypothetical future states.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves question adversarial depth through coverage-gap feedback loops — after each qa-scorer session, unanswered or YELLOW-gap questions (where the scorer couldn't find evidence) reveal which question types probe system boundaries most effectively; question patterns that consistently trigger RED verdicts become the template for the next audit's rank-1 questions |
+| **LEAK** (Cross-Agent Trade) | Exports qa_questions.json as the adversarial contract handed to the qa-scorer (a different agent — identity separation is a hard protocol requirement); imports NORTHSTAR.md, ROADMAP.md, case-studies, and git log as the factual basis for all questions; the qa-questioner sets the adversarial agenda that the qa-scorer must prove or disprove |
+| **LEC** (Emergent Conventions) | Enforces the falsification-framing-required rule (questions assume claims are false until proven), the GLOW-dimension-coverage discipline (at least 2 questions per G/L/O/W dimension), and the expected-evidence-type-required convention (every question must specify the exact evidence format that would constitute proof) across every question set it produces |
+
+**Belt Progression:** Orange belt — the QA Questioner has mastered Barbara Liskov's substitution discipline: every question asks whether the system actually satisfies its behavioral contract, probing the interface where implementation details leak, making the question list a formal adversarial specification that the scorer must satisfy with executable evidence.
+
+**GLOW Score Contribution:** +10 per verified question set at rung 641 with at least 8 questions (min 2 per GLOW dimension), each question specifying expected_evidence_type, all integration boundaries questioned, and qa_questions.json complete and parseable; +15 at rung 274177 with adversarial depth and edge cases (null, empty, zero) covered.

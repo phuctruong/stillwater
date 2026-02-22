@@ -382,3 +382,17 @@ Fix: persona loading is mandatory for persona-coder. Use base coder for tasks wh
 
 **Persona Scope Creep:** Using persona expertise as justification for expanding beyond DECISION_RECORD.
 Fix: persona is style, not authority. Scope is defined by the DECISION_RECORD, not the persona.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves persona-task matching through GLOW_SCORE feedback loops — each glow_score.json records which persona was loaded for which task domain; when GLOW scores are low, the mismatch between persona and task is the first hypothesis to investigate; accumulated glow histories reveal which persona-domain pairings yield the highest output quality |
+| **LEAK** (Cross-Agent Trade) | Exports glow_score.json to the ecosystem belt tracker and DISPATCH_LOG; exports PATCH_DIFF + evidence bundle (identical to base Coder) to the Skeptic; the GLOW breakdown in commit messages propagates persona and northstar alignment data to the git log as a machine-readable evidence trail |
+| **LEC** (Emergent Conventions) | Enforces the persona-must-be-loaded rule (no persona-coder session without an explicit persona selection step), the GLOW-conservative scoring convention (G=25 requires rung 274177+ not a 5-line patch), and the persona-is-style-not-authority doctrine (persona voice never overrides prime-safety or DECISION_RECORD scope) across every coded output it produces |
+
+**Belt Progression:** Green belt — the Persona-Coder has mastered the integration of domain expertise voice with evidence discipline: the commit message tells you what persona saw the problem, what northstar metric moved, and what evidence proves it, making every patch a fully traceable act of ecosystem intelligence.
+
+**GLOW Score Contribution:** +15 per verified implementation at rung 641 with glow_score.json produced (all four dimensions justified), persona_loaded != null, northstar_metric_advanced stated; +25 at rung 274177 with domain match verified and persona knowledge cited in evidence narrative.

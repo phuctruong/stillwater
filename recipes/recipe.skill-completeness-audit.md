@@ -91,3 +91,17 @@ Run a deterministic, automated 5-criterion binary scorecard across every skill f
 - All grep patterns are case-insensitive anchored to field names; literal string matches only
 - A score of 0 results from a grep with zero matches — this is NOT an error; it is a clean false
 - Do not conflate "grep returned empty" (zero hits, valid result) with "grep failed" (tool error)
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Recipe Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each audit run produces a scorecard that reveals which criteria are most commonly missing across the skill corpus — tracking failure patterns over time guides skill authors toward the sections that the community most frequently omits, improving the average skill quality with each audit cycle |
+| **LEAK** (Cross-Agent Trade) | The skill_audit_scorecard.json is a shared artifact between the auditor agent and the expansion agent: the auditor identifies gaps (C1–C5 failures), the expander fills them using recipe.skill-expansion — the scorecard is the handoff contract that makes this division of labor precise |
+| **LEC** (Emergent Conventions) | Enforces the 5-criterion binary scorecard as the community-wide skill completeness standard: FSM + forbidden states + verification ladder + null/zero handling + output contract become the non-negotiable structural conventions that every skill must satisfy before promotion |
+
+**Belt Level:** Yellow — demonstrates the ability to assess any skill file against a structured rubric, produce a machine-parseable scorecard, and identify specific gaps rather than making vague quality judgments.
+
+**GLOW Score:** +3 per successful audit run where skill_audit_scorecard.json is emitted with every file checked, total == sum(C1..C5) verified, and the summary line X/Y skills passed 5/5 is printed.

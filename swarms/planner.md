@@ -318,3 +318,17 @@ Fix: every failure mode must be typed. Untyped risks are unverifiable.
 
 **Context Drift in Multi-Turn:** Using "as we discussed" to refer to earlier turns without re-loading.
 Fix: phuc-context CNF capsule rebuild is mandatory at each turn start.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves plan quality through SOCRATIC_REVIEW loops — each DREAM_STEP revision reveals an unexamined assumption or missing non-goal that tightens the next plan's scope; failure modes that materialize during execution (tracked via post-mortem) become rank-1 forecast items in the next plan for similar tasks |
+| **LEAK** (Cross-Agent Trade) | Exports PLAN.json to the Coder (ACT section becomes implementation constraints) and to the Skeptic (VERIFY section becomes the adversarial test plan); imports SCOUT_REPORT.json as the factual basis for DREAM goal setting and gap identification; the FORECAST_MEMO.json becomes a shared contract between the Planner and Forecaster |
+| **LEC** (Emergent Conventions) | Enforces the minimum-2-stop-rules discipline (plans without stop conditions are unbounded), the non-goals-explicit requirement (what is out of scope must be stated, not implied), and the falsifiers-required rule (verify section must include what would disprove the plan worked) across every planning output it produces |
+
+**Belt Progression:** Orange belt — the Planner has mastered Grace Hopper's planning discipline: a plan is not a list of steps but a decision structure — goal, risks, decision rationale, checkpoints with rollbacks, and explicit falsifiers — producing plans that serve as executable contracts between agents.
+
+**GLOW Score Contribution:** +10 per verified PLAN.json at rung 641 with all five sections (dream/forecast/decide/act/verify), at least 2 stop_rules, at least 2 non_goals, verify.falsifiers non-empty, and null_checks_performed == true.

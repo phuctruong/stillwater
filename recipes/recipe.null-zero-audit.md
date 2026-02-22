@@ -92,3 +92,17 @@ Treating null as zero (or `[]` as absent) creates hidden state bugs where an emp
 - A grep returning zero hits is a clean PASS for that category — never treat it as a tool error
 - YAML skill files deserve special attention: the `forbidden_states: []` pattern (empty list) vs absent `forbidden_states` key is the most common null/zero confusion in skill files
 - The `software5.0-paradigm` skill pack is not listed here but may be relevant for swarm-level null propagation analysis
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Recipe Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each audit run expands the agent's pattern library of null/zero coercions — new violation types discovered in one sweep (e.g., a novel YAML `[]`-vs-null pattern) are added to the grep pattern set, improving detection coverage in future runs |
+| **LEAK** (Cross-Agent Trade) | Shares the null_checks.json report between the coder and skeptic agents: coder applies the fix suggestions from BLOCK violations, skeptic verifies the fixes do not introduce new coercions — the audit output is the shared contract between them |
+| **LEC** (Emergent Conventions) | Enforces the null≠zero convention across all skill and code files: by flagging `forbidden_states: []` as a BLOCK violation, the recipe makes the distinction between absent field and empty list a repo-wide invariant rather than a per-author judgment call |
+
+**Belt Level:** Orange — demonstrates the discipline to distinguish pre-systemic absence (null) from lawful boundary values (zero/empty), a distinction that prevents entire classes of hidden state bugs at the boundary of skill and code.
+
+**GLOW Score:** +4 per successful audit run with null_checks.json emitted, all BLOCK violations addressed, and a clean re-sweep confirming zero new coercions introduced by the fixes.

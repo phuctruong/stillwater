@@ -168,3 +168,44 @@ If you want, next I can produce the **canon file layout** for this meta-recipe:
 * `canon/prime-coder/recipes/devloop/recipe-devloop-v0.1.mmd`
 * `canon/prime-coder/abi/wish_recipe_abi_v1.json`
 * `canon/prime-coder/wishes/wish-plan-execute-split.md` … etc.
+
+---
+
+## Three Pillars Mapping
+
+| Pillar | How This Combo Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | The meta-recipe is a self-improving router: each task classification (ci_triage, bugfix, dep_bump) feeds back into the ABI contract, and new capability tags can be added without breaking existing wish/recipe pairs |
+| **LEAK** (Cross-Agent Trade) | WWO (Wish side) holds intent and acceptance-test knowledge; RRO (Recipe side) holds capability and tool-permission knowledge; they trade via the minimal ABI interface — neither side knows the other's implementation details |
+| **LEC** (Emergent Conventions) | The Wish→Recipe ABI (capability_tags, required_artifacts, replay_policy) becomes a cross-combo convention: any new combo must declare its capability_tags and will_emit artifacts to participate in the DevLoop meta-orchestration |
+
+---
+
+## State Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> WISH_DRAFT
+    WISH_DRAFT --> WISH_SEAL: WWO CPU draft intent
+    WISH_SEAL --> WISH_CHECK: LLM writes WishSpec.md
+    WISH_CHECK --> QUESTIONS: BLOCKED or NEED_INFO
+    WISH_CHECK --> MODE_CLASSIFY: wish contract OK
+    MODE_CLASSIFY --> PLAN_EMIT: PlanOnly mode
+    PLAN_EMIT --> [*]: plan artifacts only, no execution
+    MODE_CLASSIFY --> ABI_MATCH: ExecutePromoted mode
+    ABI_MATCH --> QUESTIONS: capability_tags not satisfied
+    ABI_MATCH --> TASK_CLASSIFY: ABI match passes
+    TASK_CLASSIFY --> CI_TRIAGE: CI failure / logs
+    TASK_CLASSIFY --> BUGFIX_REDGREEN: bugfix / regression
+    TASK_CLASSIFY --> RUN_TEST_HARNESS: general run
+    TASK_CLASSIFY --> DEP_BUMP: dependency bump
+    CI_TRIAGE --> RUN_TEST_HARNESS: after repro
+    BUGFIX_REDGREEN --> RUN_TEST_HARNESS: after GREEN
+    DEP_BUMP --> RUN_TEST_HARNESS: after lock
+    RUN_TEST_HARNESS --> REVIEW_SECURITY: tests complete
+    REVIEW_SECURITY --> BLOCKED: scanner HIGH/CRITICAL
+    REVIEW_SECURITY --> VERIFIED_PATCH: governance PASS
+    VERIFIED_PATCH --> [*]
+    BLOCKED --> [*]
+    QUESTIONS --> [*]
+```

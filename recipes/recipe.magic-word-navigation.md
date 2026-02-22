@@ -103,3 +103,17 @@ The compression ratio gate (>= 2.0) ensures the navigation was efficient:
 - If the query has no magic words at all, this recipe returns NEED_INFO. Use recipe.swarm-pipeline to do full codebase exploration instead.
 - Compression ratio is informational at rung 641; it becomes a hard gate at rung 274177.
 - The trunk-first rule is the core invariant. Any navigator that starts at leaves is using this recipe incorrectly.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Recipe Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each navigation run improves the agent's magic word coverage: unmatched terms from navigation_keywords.json are candidates for new tier registry entries, deepening the vocabulary that enables future traversals to start closer to the right trunk node |
+| **LEAK** (Cross-Agent Trade) | Magic words compress knowledge for asymmetric exchange — a scout agent navigating a large codebase can hand off a context_load_receipt.json to a coder agent, giving it exactly the file set it needs without transferring the full corpus |
+| **LEC** (Emergent Conventions) | Standardizes trunk-first traversal as the navigation convention: any agent that loads a query-specific context slice must compute a compression ratio and prove it navigated efficiently, making lazy full-corpus loading a detectable violation |
+
+**Belt Level:** Yellow — demonstrates disciplined context management: navigating large codebases without loading unnecessary tokens, and proving the navigation was efficient via the compression ratio gate.
+
+**GLOW Score:** +3 per successful navigation run with compression_ratio >= 2.0 and a context_load_receipt.json where every claim traces to a file reference.

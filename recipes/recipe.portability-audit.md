@@ -80,3 +80,17 @@ Sweep all skill, recipe, and core files for portability violations: absolute pat
 - A grep returning zero hits is NOT an error — it is a clean PASS for that category
 - Do not use `$HOME` or `~` as config values; use `EVIDENCE_ROOT` relative paths per the portability spec
 - Float literals in `print()` or logging f-strings are acceptable; float in `assert`, `==`, `<`, `>` comparisons in test/verification code is BLOCK
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Recipe Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each portability audit run refines the agent's violation taxonomy — newly discovered portability patterns (e.g., a novel host-specific env var) are added to the grep sweep, shrinking the gap between what the recipe detects and what actually breaks reproducibility on other machines |
+| **LEAK** (Cross-Agent Trade) | The portability_report.json is a shared contract between the contributor agent and the community reviewer: BLOCK violations must be cleared before the contributor can claim the skill is portable, making the report the evidence token that enables reviewer trust without re-reading the full file |
+| **LEC** (Emergent Conventions) | Enforces repo-relative paths and `EVIDENCE_ROOT`-anchored references as a universal portability convention: any skill or recipe that hardcodes `/home/` or `/Users/` is provably non-portable, and this recipe makes that a detectable, actionable violation rather than an implicit assumption |
+
+**Belt Level:** Yellow — demonstrates that contributions are reproducible beyond the author's machine, a prerequisite for community participation and the first rung of public trust.
+
+**GLOW Score:** +3 per successful audit run with portability_report.json emitted and zero BLOCK violations confirmed (clean sweep or all BLOCKs resolved before report emission).

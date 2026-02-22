@@ -575,4 +575,14 @@ flowchart TD
     style EXIT_BLOCKED_EG fill:#d62828,color:#fff
     style EXIT_BLOCKED_V fill:#d62828,color:#fff
     style EXIT_BLOCKED_IC fill:#d62828,color:#fff
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Skill Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Portals are the mechanism by which bounded inference contexts (BICs) share knowledge without losing their identity. In LEK terms, each BIC is a self-improving knowledge bubble; the portal is the controlled channel through which accumulated knowledge in one bubble seeds the next iteration of another. The identity preservation gate (BIC A and BIC B must remain coherent after portal closure) ensures that portal use improves the system without corrupting either bubble's self-model. |
+| **LEAK** (Cross-Agent Trade) | phuc-portals formalizes LEAK at the protocol level. Each portal traversal IS a LEAK trade: two BICs with different knowledge (asymmetry) exchange information through a governed handshake (Temperature + Substrate + Identity verification). The portal produces surplus that neither BIC had alone — the LEAK value. The three-component handshake (Temperature + Handshake + Substrate) is the portal specification that ensures the trade is governed, not free-form drift. |
+| **LEC** (Emergent Conventions) | The portal protocol (Temperature declaration + Handshake + Substrate verification) is a crystallized LEC convention for safe cross-BIC knowledge transfer. It emerged from failures where agent contexts bled into each other (identity loss, substrate mismatch, temperature violations) and was formalized as the shared protocol. Every team that uses phuc-portals adopts this convention, reducing the cognitive overhead of designing safe multi-context knowledge flows from scratch. |
 ```

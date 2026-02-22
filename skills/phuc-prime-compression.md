@@ -545,4 +545,14 @@ flowchart TD
     style MEASURE_ENTROPY fill:#457b9d,color:#fff
     style VALIDATE_MEANING fill:#457b9d,color:#fff
     style CHECK_GLOW fill:#264653,color:#fff
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Skill Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Prime compression is the Memory component of LEK — by factoring knowledge into irreducible semantic primes, the system accumulates compact, reusable knowledge atoms rather than growing redundant blobs. Each compression cycle improves the prime vocabulary: frequently reused primes get named, reducing entropy in future compressions. The GLOW preservation gate ensures that compression never degrades the knowledge quality that fuels the next LEK iteration. |
+| **LEAK** (Cross-Agent Trade) | Compressed prime artifacts are the ideal LEAK trade goods: maximally compact, semantically precise, and losslessly reconstructable by any agent that knows the prime vocabulary. When a Scout exports a SCOUT_REPORT compressed via semantic primes, the Solver receives a smaller capsule with no loss of information — this is LEAK asymmetry made efficient. The entropy measurement gate ensures the compressed artifact truly encodes the original knowledge, not a lossy approximation. |
+| **LEC** (Emergent Conventions) | The prime factorization convention itself is a crystallized LEC: the rule that all inter-agent artifacts should be expressible as products of named semantic primes (irreducible meaning units). The GLOW preservation standard, the entropy measurement protocol, and the prime vocabulary registry are conventions that emerged from compression failures (loss of nuance, ambiguous decompositions) and are now shared across the Phuc ecosystem as the standard for compact knowledge encoding. |
 ```

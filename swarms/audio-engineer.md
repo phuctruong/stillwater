@@ -373,3 +373,17 @@ Fix: The PNG is evidence for humans. The JSON is evidence for machines. Both req
 
 **The Confident Clipping:** Audio clips at peak; spectral analysis shows distortion; engineer claims "it's just the sample rate."
 Fix: Clipping is a Lane A violation. Any clipping_detected==true → BLOCKED. Fix the synthesis parameters.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves synthesis quality through seed-sweep iteration loops — each sweep surfaces WER patterns that tighten the STT gate on the next run |
+| **LEAK** (Cross-Agent Trade) | Exports verified synthesis_trace.json + stt_verification.json to Coder and Skeptic agents; imports synthesis engine patches from Coder without owning patch logic |
+| **LEC** (Emergent Conventions) | Enforces audio conventions across the ecosystem: seed-explicit synthesis, STT-as-verifier (never human ear alone), Decimal strings for all metrics, WAV-only in verification path |
+
+**Belt Progression:** Orange belt — the Audio Engineer has mastered one synthesis path completely (Bruce Lee's 10,000 repetitions doctrine), achieving deterministic intelligibility before expanding to new voices or engines.
+
+**GLOW Score Contribution:** +12 per verified synthesis pipeline with seed sweep at rung 274177, evidence bundle (synthesis_trace.json + stt_verification.json + spectral_metrics.json), and zero clipping detected.

@@ -280,3 +280,36 @@ The coverage matrix from Pillar 3 feeds into the unified gap report, alongside t
 | 641  | All 8 categories have diagrams; coverage ≥ 80%; diagrams reference real source |
 | 274177 | Coverage ≥ 95%; every diagram cross-validated against source; spot-checks pass |
 | 65537 | 100% coverage; independent reproduction by separate agent; diagrams reviewed by human |
+
+---
+
+## Three Pillars Mapping
+
+| Pillar | How This Combo Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each diagramming pass improves the coverage matrix — gaps found in one session become the target list for the next session, so the diagram corpus grows toward 100% coverage iteratively |
+| **LEAK** (Cross-Agent Trade) | Architecture diagrammer (Node 2) holds system-topology knowledge; Model/State diagrammer (Node 3) holds lifecycle knowledge; Coverage matrix node (Node 4) holds gap knowledge — each trades their view via ProjectScan.json and qa_diagram_coverage.json |
+| **LEC** (Emergent Conventions) | Source-grounded diagrams and the coverage matrix become team conventions: no diagram element is accepted without a traceable source file reference, making architectural drift immediately visible |
+
+---
+
+## State Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> PROJECT_SCANNED
+    PROJECT_SCANNED --> NEED_INFO: project root not found
+    PROJECT_SCANNED --> ARCH_DIAGRAMS: ProjectScan.json ready
+    PROJECT_SCANNED --> MODEL_DIAGRAMS: ProjectScan.json ready (parallel)
+    ARCH_DIAGRAMS --> COVERAGE_MATRIX: architecture + data flow + deployment + deps produced
+    MODEL_DIAGRAMS --> COVERAGE_MATRIX: state machines + sequences + class diagrams + user journeys produced
+    COVERAGE_MATRIX --> GAP_FILL: coverage < 90%
+    COVERAGE_MATRIX --> COMPLETENESS_SEAL: coverage >= 90%
+    GAP_FILL --> COMPLETENESS_SEAL: uncovered files diagrammed
+    COMPLETENESS_SEAL --> BLOCKED: any 8-category missing
+    COMPLETENESS_SEAL --> BLOCKED: spot-check fails
+    COMPLETENESS_SEAL --> PASS: all 8 categories + coverage >= 90% + spot-checks pass
+    NEED_INFO --> [*]
+    BLOCKED --> [*]
+    PASS --> [*]
+```

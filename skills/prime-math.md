@@ -1042,3 +1042,69 @@ PRIME_MATH_SECRET_SKILL:
       - "Two-pass arithmetic. No float in verification path."
       - "Math Red before Math Green. Adversarial before claim."
       - "Null result is not zero. No solution is not zero solution."
+
+---
+
+## Mermaid FSM — prime-math State Machine
+
+```mermaid stateDiagram-v2
+[*] --> INIT
+INIT --> INTAKE_TASK : task_received
+INTAKE_TASK --> NULL_CHECK : always
+NULL_CHECK --> EXIT_NEED_INFO : task_null_or_domain_undeclared
+NULL_CHECK --> CLASSIFY_TASK : task_defined
+
+CLASSIFY_TASK --> WITNESS_SEARCH : F1_deterministic OR F2_resolution_bound
+CLASSIFY_TASK --> BUILD_PLAN : F6_olympiad OR F7_famous OR F8_IF_theory
+
+WITNESS_SEARCH --> EXACT_COMPUTE : witness_strategy_selected
+BUILD_PLAN --> EXACT_COMPUTE : lemma_decomposition_complete
+
+EXACT_COMPUTE --> MATH_RED_CHECK : computation_complete
+note right of EXACT_COMPUTE
+  No float in verification path.
+  Use Fraction / Decimal / int only.
+  Two-pass arithmetic required.
+end note
+
+MATH_RED_CHECK --> EXIT_BLOCKED : math_red_fails_to_confirm_falsifiable
+MATH_RED_CHECK --> MATH_GREEN : math_red_confirmed
+
+MATH_GREEN --> DUAL_WITNESS : single_witness_produced
+DUAL_WITNESS --> REPLAY_CHECK : dual_witness_complete
+note right of DUAL_WITNESS
+  Two independent witnesses
+  must converge on same truth.
+  Seed disagreement = UNKNOWN.
+end note
+
+REPLAY_CHECK --> HALT_CERTIFICATE : replay_stable_across_seeds
+REPLAY_CHECK --> EXIT_BLOCKED : replay_unstable_SEED_DISAGREEMENT
+
+HALT_CERTIFICATE --> ADVERSARIAL_CHECK : certificate_declared
+note right of HALT_CERTIFICATE
+  EXACT(A) | CONVERGED(B) |
+  TIMEOUT(C) | UNKNOWN(D)
+  Must be declared before claiming OK.
+end note
+
+ADVERSARIAL_CHECK --> FINAL_SEAL : no_counterexample_found
+ADVERSARIAL_CHECK --> WITNESS_SEARCH : counterexample_found_retry_allowed
+
+FINAL_SEAL --> EXIT_PASS : rung_target_met AND evidence_complete
+FINAL_SEAL --> EXIT_BLOCKED : rung_target_not_met
+
+EXIT_PASS --> [*]
+EXIT_BLOCKED --> [*]
+EXIT_NEED_INFO --> [*]
+```
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Skill Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Deepens proof rigor through witness-first iteration and halting certificates. Each Math Red → Math Green cycle accumulates a new witness artifact, and the Lemma Library Protocol stores reusable lemmas that improve future proof efficiency. The two-pass arithmetic rule and dual-witness requirement ensure that each iteration genuinely advances mathematical knowledge rather than recycling prior speculative claims. |
+| **LEAK** (Cross-Agent Trade) | Exports exact arithmetic results (as typed witnesses: `proof://`, `compute://`, `exhaustive://`) to Coder, Judge, and Skeptic agents via prime channels. The asymmetry is explicit: the Mathematician knows proof strategies; the Coder knows implementation constraints; the Judge knows acceptance criteria. The witness artifact is the LEAK surplus — a verified mathematical fact that neither the Mathematician nor the Coder could certify alone. |
+| **LEC** (Emergent Conventions) | Enforces mathematical conventions that crystallized from proof failures: no floats in the verification path (use Fraction/Decimal/int), seed checksums for deterministic arithmetic, dual-witness requirement before claiming OK, and the 6-step IMO-style proof structure. The rung ladder (641/274177/65537) maps mathematical rigor levels to a shared convention that all agents in the ecosystem understand and can verify. |

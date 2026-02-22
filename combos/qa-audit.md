@@ -314,3 +314,41 @@ The result is a scorecard that can be trusted because the bias has been removed 
 | 641  | ≥2 questions per GLOW dimension | Verdicts with evidence citations; falsifiers defined for GREENs |
 | 274177 | ≥1 integration probe per ecosystem boundary | All GREEN falsifiers tested; integration probes run with real services |
 | 65537 | Questions adversarially reviewed before handoff | Independent re-run by separate scorer; no mocks in integration probes |
+
+---
+
+## Three Pillars Mapping
+
+| Pillar | How This Combo Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each audit cycle produces a gap report that becomes the input for the next audit — GREEN/YELLOW/RED counts improve over time as REDs are fixed (via Bugfix PR combo) and re-audited, creating a measurable quality trajectory |
+| **LEAK** (Cross-Agent Trade) | Questioner agent holds adversarial-question knowledge (what would expose failure); Scorer agent holds evidence-forensics knowledge (what commands actually prove claims); they trade via qa_questions.json only — the scorer never sees the questioner's reasoning |
+| **LEC** (Emergent Conventions) | Decoupled questioner/scorer becomes a project-wide convention: self-confirmation bias is not a willpower problem but a structural one, and the convention enforces separation at the agent_id level |
+
+---
+
+## State Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> SCOPE_DEFINED
+    SCOPE_DEFINED --> NEED_INFO: NORTHSTAR.md absent or project unknown
+    SCOPE_DEFINED --> QUESTIONS_GENERATED: AuditScope.json ready
+    QUESTIONS_GENERATED --> DECOUPLING_GATE: qa_questions.json produced
+    DECOUPLING_GATE --> QUESTIONS_GENERATED: questions rejected (gaps in coverage)
+    DECOUPLING_GATE --> EVIDENCE_GATHERED: questions approved
+    EVIDENCE_GATHERED --> BLOCKED: scorer_id == questioner_id
+    EVIDENCE_GATHERED --> VERDICTS_ASSIGNED: commands run, files checked
+    VERDICTS_ASSIGNED --> FALSIFIERS_DEFINED: GREEN/YELLOW/RED per question
+    FALSIFIERS_DEFINED --> FALSIFIERS_TESTED: rung_target >= 274177
+    FALSIFIERS_DEFINED --> INTEGRATION_PROBED: rung_target = 641 (skip test)
+    FALSIFIERS_TESTED --> INTEGRATION_PROBED: falsifiers verified
+    INTEGRATION_PROBED --> GAP_REPORT_WRITTEN: cross-boundary probes run
+    GAP_REPORT_WRITTEN --> INTEGRITY_CHECK: qa_gap_report.md produced
+    INTEGRITY_CHECK --> EVIDENCE_GATHERED: integrity BLOCKED (one retry)
+    INTEGRITY_CHECK --> AUDIT_SEALED: decoupling + falsifier coverage + format pass
+    AUDIT_SEALED --> PASS: AuditVerdict.json complete
+    NEED_INFO --> [*]
+    BLOCKED --> [*]
+    PASS --> [*]
+```

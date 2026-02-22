@@ -136,3 +136,17 @@ Rung 641 would be insufficient for a repair plan used in promotion decisions.
 - A vertex check returning 0 matches is a clean false, not an error. Do not confuse missing indicators with a failed grep.
 - The repair plan proposes minimal fixes only — add the missing vertex indicators, do not rewrite the contract.
 - COMPLETE contracts require no action; they appear only in the summary count, not in the repair plan.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Recipe Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each audit run generates a triangle health percentage that tracks over time — as the codebase matures, BROKEN contracts become PARTIAL and then COMPLETE, and the health score rising from CRITICAL toward HEALTHY is the measurable evidence of contract discipline improving across the system |
+| **LEAK** (Cross-Agent Trade) | The repair plan (triangle_audit_repair_plan.json) is a structured handoff between the auditor agent and skill/spec authors: the auditor identifies exactly which vertex is missing and what the minimal fix is, enabling a coder agent to address the gap without needing to understand the full triangle law theory |
+| **LEC** (Emergent Conventions) | Enforces REMIND-VERIFY-ACKNOWLEDGE as the universal three-vertex contract convention across all contract types (interfaces, specs, skills, CI rules) — a codebase that passes this audit has made the triangle law an enforced structural convention, not an aspirational guideline |
+
+**Belt Level:** Green — demonstrates the ability to audit contract stability across an entire codebase at once, compute a health score that tracks system-wide reliability, and generate a prioritized repair plan that respects the BROKEN-before-PARTIAL severity ordering.
+
+**GLOW Score:** +6 per successful audit run where triangle_audit_summary.json is emitted with correct triangle_health_pct, the repair plan correctly orders BROKEN before PARTIAL, and the total_broken + total_partial + total_complete count matches total_contracts.

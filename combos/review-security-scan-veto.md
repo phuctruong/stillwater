@@ -239,3 +239,36 @@ Consumes:
 * L4 Tool: pinned commands
 * L5 Judge: veto rules + required artifacts list
 
+---
+
+## Three Pillars Mapping
+
+| Pillar | How This Combo Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each security review produces SECURITY_REVIEW.json with evidence-anchored findings — this corpus improves the next review by providing concrete examples of what "PASS" and "FAIL" look like for this codebase |
+| **LEAK** (Cross-Agent Trade) | Patch classifier (CPU) holds risk-heuristic knowledge (which file paths are high-risk); Scanner (tool) holds static-analysis knowledge; Code reviewer (LLM) holds contextual risk knowledge — each trades their view via PatchSummary.json and SECURITY_SCAN.json |
+| **LEC** (Emergent Conventions) | Scanner-veto-is-absolute becomes a project-wide convention: no scan finding can be overridden by functional correctness or time pressure — the veto gate creates a security culture that is structural, not aspirational |
+
+---
+
+## State Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> PATCH_INTAKE
+    PATCH_INTAKE --> PATCH_CLASSIFY: PATCH.diff + MANIFEST.json received
+    PATCH_CLASSIFY --> SECURITY_GATE_PLAN: risk categories identified
+    SECURITY_GATE_PLAN --> SCAN_EXECUTE: scanners selected + pinned
+    SECURITY_GATE_PLAN --> MITIGATION_PATH: scanners unavailable
+    SCAN_EXECUTE --> BLOCKED: scanner exit non-zero (HIGH/CRITICAL finding)
+    SCAN_EXECUTE --> CODE_REVIEW: scan passes
+    MITIGATION_PATH --> BLOCKED: mitigation cannot be verified deterministically
+    MITIGATION_PATH --> CODE_REVIEW: MITIGATION_REPORT.json produced
+    CODE_REVIEW --> VETO_GATE: SECURITY_REVIEW.json with checklist
+    VETO_GATE --> BLOCKED: injection/deserialization/path-traversal unmitigated
+    VETO_GATE --> BLOCKED: determinism regression without normalization
+    VETO_GATE --> PASS: all checklist items PASS, no HIGH findings
+    PASS --> [*]
+    BLOCKED --> [*]
+```
+

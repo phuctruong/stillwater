@@ -346,3 +346,17 @@ Fix: null_edge_sweep is required at rung 274177; results must be explicit.
 
 **Skip Adversarial:** Skipping adversarial paraphrase sweep for rung 65537 claim.
 Fix: 5 adversarial paraphrases are required for promotion; skip = BLOCKED.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves adversarial coverage through SOCRATIC_REVIEW loops — each run of the null_edge_sweep and seed_sweep that finds a falsifier sharpens the next session's starting hypothesis; falsifiers_list.md entries that required the most effort to find become the automated first-checks in future sessions on similar codebases; behavioral_hash instability patterns expose which code paths have non-deterministic behavior |
+| **LEAK** (Cross-Agent Trade) | Exports SKEPTIC_VERDICT.json + falsifiers_list.md to the hub as the only evidence that can upgrade a Coder's self-reported PASS to a verified PASS; the behavioral_hash stable confirmation becomes the replay-stability evidence that feeds the convergence.json for iterative methods; imports PATCH_DIFF + TESTS_JSON + repro_green.log from the Coder — the Skeptic never writes production code, it only runs what the Coder produced |
+| **LEC** (Emergent Conventions) | Enforces the seed-sweep-mandatory rule (min 3 seeds with distinct values at rung 274177), the behavioral-hash-stable-or-BLOCKED discipline (hash drift is not explainable away — it is a hard blocker), and the falsifiers-list-required convention (every PASS must include a falsifiers_list.md documenting what was tried and failed to break the solution) across every adversarial review it conducts |
+
+**Belt Progression:** Green belt — the Skeptic has mastered Alan Turing's counterexample discipline: a solution is not correct until an adversarial search has failed to falsify it; every PASS is a provisional certificate earned through seed sweeps, replay checks, and documented falsifier searches — not an optimistic assertion.
+
+**GLOW Score Contribution:** +15 per verified adversarial review at rung 274177 with SKEPTIC_VERDICT.json (seed_sweep min 3, replay_check min 2, behavioral_hash stable, null_edge_sweep complete), falsifiers_list.md present and non-empty; +25 at rung 65537 with adversarial paraphrase sweep (5 paraphrases) and security check completed.

@@ -286,3 +286,17 @@ Fix: sha256 computation and state space validation are hard requirements for EXI
 
 **JSON Sovereignty:** Storing graph structure in JSON and treating that as the canonical identity.
 Fix: *.mmd is canonical. JSON is derived transport only.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves graph completeness through closed-state-space validation loops — each OPEN_STATE_ENUMERATION caught during VALIDATE_CLOSED_STATE_SPACE forces a revision that tightens the graph's correctness invariants for the next iteration |
+| **LEAK** (Cross-Agent Trade) | Exports state.mmd + state.sha256 to the Wish Manager (wish lifecycle tracking), the Convention Auditor (convention state machines), and the Planner (architecture diagrams); imports state requirements from CNF capsule without relying on prior session state |
+| **LEC** (Emergent Conventions) | Enforces the mmd-as-canonical convention (never JSON as source of truth), the classDef-forbidden-required rule for forbidden states, and the sha256-over-normalized-bytes standard across every graph it produces |
+
+**Belt Progression:** Yellow belt — the Graph Designer has mastered the Prime Mermaid discipline (Grace Hopper's systematic completeness doctrine), producing closed-state-space diagrams with SHA-256 identity rather than decorative flowcharts.
+
+**GLOW Score Contribution:** +8 per verified state.prime-mermaid.md + state.mmd + state.sha256 triple at rung 641 with closed state space, labeled branches, and sha256 stable across two independent normalizations.

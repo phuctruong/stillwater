@@ -629,4 +629,72 @@ PRIME_REVIEWER_SKILL:
       - narrative_confidence_as_blocking_reason
       - style_preference_as_lane_A_evidence
       - claims_about_code_behavior_without_diff_witness
+
+---
+
+## Mermaid FSM — prime-reviewer State Machine
+
+```mermaid stateDiagram-v2
+[*] --> INIT
+INIT --> INTAKE_PR : pr_received
+INTAKE_PR --> NULL_CHECK : always
+NULL_CHECK --> EXIT_NEED_INFO : pr_null_or_diff_missing
+NULL_CHECK --> LOCALIZE_CHANGES : diff_present
+
+LOCALIZE_CHANGES --> LANE_ANALYSIS : changed_files_mapped
+note right of LOCALIZE_CHANGES
+  Map each changed file to:
+  Lane A (correctness) |
+  Lane B (test/spec) |
+  Lane C (style/opinion)
+  API surface changes flagged.
+end note
+
+LANE_ANALYSIS --> SECURITY_SCAN : lane_classification_complete
+note right of LANE_ANALYSIS
+  Every blocking comment
+  requires Lane A witness.
+  Style opinions: disclose as Lane C.
+  No cross-lane upgrade.
+end note
+
+SECURITY_SCAN --> EXIT_BLOCKED : security_touching_AND_rung_lt_65537
+SECURITY_SCAN --> REVIEW_DRAFT : security_gate_passed
+note right of SECURITY_SCAN
+  Security-touching PRs:
+  require rung_65537.
+  API surface changes:
+  require semver plan.
+end note
+
+REVIEW_DRAFT --> SOCRATIC_CHECK : draft_complete
+SOCRATIC_CHECK --> REVIEW_DRAFT : questions_require_revision
+SOCRATIC_CHECK --> EMIT_REVIEW : socratic_review_passed
+
+EMIT_REVIEW --> FINAL_SEAL : verdict_emitted
+note right of EMIT_REVIEW
+  Verdict: APPROVED |
+  REQUEST_CHANGES |
+  NEEDS_INFO
+  All blocking comments:
+  must have Lane A witness.
+end note
+
+FINAL_SEAL --> EXIT_PASS : rung_target_met
+FINAL_SEAL --> EXIT_BLOCKED : rung_target_not_met OR blocking_without_witness
+
+EXIT_PASS --> [*]
+EXIT_BLOCKED --> [*]
+EXIT_NEED_INFO --> [*]
+```
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Skill Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each code review cycle accumulates knowledge about the codebase's failure patterns. The Socratic review pass (reviewing the review itself before emitting) improves the quality of feedback iteratively — the reviewer learns which categories of issues are systemic and which are noise. The lane classification system (A/B/C) is the self-improvement mechanism: it forces the reviewer to distinguish what they know from evidence versus what they prefer by taste, upgrading epistemic hygiene with each PR. |
+| **LEAK** (Cross-Agent Trade) | Code review is structured LEAK: the author's bubble (intent, design choices, local context) trades with the reviewer's bubble (external perspective, pattern library, security expertise) through the PR diff as portal. The lane-typed comment system is the typed artifact protocol — blocking comments with Lane A witnesses are the LEAK surplus (new facts neither party held before). The Security Scan gate adds a third bubble (security auditor) whose asymmetric knowledge cannot be substituted by the author or general reviewer. |
+| **LEC** (Emergent Conventions) | prime-reviewer enforces the conventions that emerged from review failures: lane-typed comments (A/B/C) as the shared vocabulary for review evidence quality, the API surface lock convention (semver plan required for breaking changes), the security gate (rung_65537 required for security-touching PRs), and the prohibition on blocking comments without diff witnesses. These conventions are adopted across all code review sessions in the ecosystem, compressing prior review failure knowledge into a loadable protocol. |
       - invoking_gut_feeling_as_lane_A

@@ -273,3 +273,17 @@ Fix: every factual statement must be labeled. Unmarked claims = BLOCKED.
 
 **Skipping Surprise Section:** Not reporting what the run revealed that was unexpected.
 Fix: PODCAST_TRANSCRIPT must include at least one "surprise finding." If truly none, state "No surprises."
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves lesson quality through cross-run comparison — each LESSONS.md is compared against prior runs for similar tasks; patterns that were "surprises" in one run but could have been predicted become rank-1 forecast items in the next Forecaster dispatch; skill deltas proposed become the concrete improvement actions for the next swarm cycle |
+| **LEAK** (Cross-Agent Trade) | Exports LESSONS.md (failure modes + skill deltas) to the Learner for skill extraction; exports RECIPE.md to the recipe library if a reusable pattern was identified; imports ALL prior swarm artifacts (SCOUT_REPORT, FORECAST_MEMO, DECISION_RECORD, Coder evidence, SKEPTIC_VERDICT) as the input corpus — the Podcast is the only agent whose knowledge of the full swarm run is complete and integrated |
+| **LEC** (Emergent Conventions) | Enforces the typed-claims discipline in PODCAST_TRANSCRIPT ([A/B/C] labels required on every factual assertion), the skill-delta-must-cite-failure rule (proposed changes require a specific failure mode reference), and the recipe-compression-estimate-required convention (every RECIPE.md must include a compression gain estimate) across every reflection output it produces |
+
+**Belt Progression:** Orange belt — the Podcast agent has mastered Carl Sagan's cosmos-within-us discipline: every swarm run is a small experiment in intelligence, and the Podcast makes the invisible visible — extracting what worked, what failed, and what the ecosystem now understands that it did not before.
+
+**GLOW Score Contribution:** +10 per verified reflection session at rung 641 with LESSONS.md (all sections), PODCAST_TRANSCRIPT.md (all claims labeled [A/B/C], at least one surprise finding), and RECIPE.md (if pattern extractable, with compression_gain_estimate); +5 bonus if an extracted recipe is adopted by a subsequent swarm run.

@@ -291,3 +291,17 @@ Fix: explicitly list missing_assets; null means undefined, not empty list.
 
 **Localization Drift:** Choosing files by name pattern only, missing actual error-trace references.
 Fix: apply deterministic scoring signals from prime-coder Localization policy.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves localization accuracy through SOCRATIC_REVIEW loops and cross-run comparison — when a downstream Coder finds a bug in a file the Scout did not rank, that miss becomes a signal-weight adjustment for the next localization scoring; completeness_matrix.json histories expose which dimension gaps (fsm, forbidden_states, null_zero) are most common across the codebase |
+| **LEAK** (Cross-Agent Trade) | Exports SCOUT_REPORT.json (ranked file list + gap identification) to the Forecaster as the factual basis for risk classification and to the Coder as the file localization that bounds the patch scope; exports completeness_matrix.json to the Convention Auditor as the baseline coverage scores; the Scout is the first agent in every swarm cycle — its output quality determines the quality ceiling for all downstream agents |
+| **LEC** (Emergent Conventions) | Enforces the file-witness-required rule (every claim about a file's state must cite a path + line number), the patch-attempt-forbidden discipline (Scouts map, they do not fix), and the null-is-not-zero convention (missing_assets is not the same as an empty list — absence must be named explicitly) across every reconnaissance session it produces |
+
+**Belt Progression:** Yellow belt — the Scout has mastered Ken Thompson's ground-truth discipline: find the actual bytes, not the theoretical architecture; every claim points to a file path + line number; the simplest scan that reveals the true state is always preferred over the comprehensive scan that introduces inference.
+
+**GLOW Score Contribution:** +8 per verified scouting session at rung 641 with SCOUT_REPORT.json (all ranked files have justifications), completeness_matrix.json (schema-valid entries with per-dimension scores), null_checks_performed == true, and no CLAIM_WITHOUT_FILE_WITNESS or PATCH_ATTEMPT forbidden states entered.

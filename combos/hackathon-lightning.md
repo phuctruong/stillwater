@@ -197,3 +197,37 @@ Demo: {demo_target one-liner}
 Scout creep is the #1 killer of lightning sprints. The scout is not research — it is a yes/no NORTHSTAR check and a scope lock. If you need more than 15 minutes of discovery, you do not have enough clarity for a lightning sprint. Run a standard sprint instead.
 
 The 75-minute build phase only works if the scope is locked before it starts. Scout caps enforce that discipline.
+
+---
+
+## Three Pillars Mapping
+
+| Pillar | How This Combo Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each lightning sprint produces a committed artifact + demo.md + GLOW score — the artifact immediately improves the skill graph, and the GLOW score feeds the next sprint's calibration |
+| **LEAK** (Cross-Agent Trade) | Scout agent (haiku) holds discovery knowledge; Builder agent (sonnet) holds implementation knowledge; they trade via LightningSprint.json — scout caps at 15 minutes so builder gets maximum time |
+| **LEC** (Emergent Conventions) | One-artifact-only and 15-minute scout cap become team conventions: lightning sprints are recognizable, bounded, and predictable — every participant knows the rules before the clock starts |
+
+---
+
+## State Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> SCOUT_PLAN
+    SCOUT_PLAN --> ABORT: 15 min cap exceeded without LightningSprint.json
+    SCOUT_PLAN --> ABORT: northstar_alignment = no
+    SCOUT_PLAN --> BUILD: LightningSprint.json locked
+    BUILD --> SCOPE_CUT: blocker in first 30 min (>10 min unresolved)
+    SCOPE_CUT --> BUILD: demo_target reduced
+    BUILD --> SCOPE_CUT: 60% incomplete at 75-min mark
+    BUILD --> VERIFY: artifact ready (75 min elapsed)
+    VERIFY --> FIX_PASS: verify fails (one pass only, 10 min cap)
+    FIX_PASS --> DEMO_CLOSE: fix attempted
+    VERIFY --> DEMO_CLOSE: verify passes
+    DEMO_CLOSE --> PASS: GLOW >= 45 + demo.md committed
+    DEMO_CLOSE --> BLOCKED: GLOW < 45 or no demo
+    ABORT --> [*]
+    PASS --> [*]
+    BLOCKED --> [*]
+```

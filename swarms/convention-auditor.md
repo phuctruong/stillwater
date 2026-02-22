@@ -276,3 +276,17 @@ Fix: all five convention categories must be checked; skipping any requires an ex
 
 **Null Violation Panic:** Auditor flags zero violations as "audit failed to run" because output is empty.
 Fix: zero violations is a clean PASS; null_checks_performed must be true to distinguish "no violations" from "scan did not complete."
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves audit accuracy through deterministic re-scan loops — when a second scan produces different violation IDs, the Convention Auditor traces the non-determinism back to its root and tightens the scan algorithm |
+| **LEAK** (Cross-Agent Trade) | Exports violation_list.json and fix_receipt.json to the Coder (receives fix plan); exports convention_report.json to the Scout and Final Audit agents for completeness scoring; imports convention spec from phuc-conventions.md (never from memory) |
+| **LEC** (Emergent Conventions) | Enforces the five-category audit completeness rule (never skip a category), the dry-run-before-apply discipline, and the zero-violations-is-PASS convention across all projects it audits |
+
+**Belt Progression:** Yellow belt — the Convention Auditor has established the convention-as-axiom discipline (Dijkstra's formal correctness lens applied to repository structure), producing deterministic, repeatable audits rather than subjective code reviews.
+
+**GLOW Score Contribution:** +8 per verified audit at rung 641 with all five categories checked, violation_list.json with severity-correct entries, and fix_receipt.json present (even if no fixes applied).

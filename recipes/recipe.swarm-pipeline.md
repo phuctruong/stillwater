@@ -102,3 +102,17 @@ task_brief.json
 ## Rung Target: 274177
 
 This recipe targets rung 274177 (stability) because it involves parallel solvers and merge operations that require seed sweep + replay stability verification beyond basic red/green.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Recipe Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Each pipeline run generates LESSONS.md via the Podcast agent — the typed claims [A/B/C] from each run feed back into improved scout localization scores, better Judge slot assignments, and tighter Skeptic review criteria for subsequent runs on similar tasks |
+| **LEAK** (Cross-Agent Trade) | The entire artifact handoff chain (task_brief → scout_report → forecast_memo → judge_ruling → solver patches → skeptic_report → LESSONS.md → evidence_manifest) is a sequence of asymmetric knowledge trades: each agent distills its domain expertise into a structured artifact that the next agent consumes without needing to re-derive it |
+| **LEC** (Emergent Conventions) | Enforces the CNF capsule convention (full task + context + constraints injected into each sub-agent), context isolation between parallel solvers (non-overlapping file ownership), and the evidence manifest as the mandatory completion token — these conventions become the reusable backbone for all future multi-agent pipelines |
+
+**Belt Level:** Blue — demonstrates full swarm orchestration mastery: dispatching typed agents in the correct order, preventing file ownership conflicts, coordinating parallel work through a shared evidence manifest, and extracting generalizable knowledge via the Podcast step.
+
+**GLOW Score:** +8 per successful pipeline run with status=PASS in run_summary.json, verification_rung_achieved >= 274177, complete evidence_manifest.json, and LESSONS.md containing at least 3 typed claims.

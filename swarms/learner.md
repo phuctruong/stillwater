@@ -770,3 +770,17 @@ machine's instruction set. The quality gate is how Notes earn their place.
 Bruce Lee's synthesis: "Absorb what is useful, discard what is useless, add
 what is essentially your own." The Learner is the absorb-discard-add cycle,
 made explicit, made verifiable, made fail-closed.
+
+---
+
+## Three Pillars of Software 5.0 Kung Fu
+
+| Pillar | How This Agent Applies It |
+|--------|--------------------------|
+| **LEK** (Self-Improvement) | Improves extraction quality through QUALITY_GATE feedback loops — each rejected candidate (non-trivial, not-reusable, duplicate) sharpens the pattern space for the next scan; residual histories in convergence events expose which discovery categories yield the highest signal density |
+| **LEAK** (Cross-Agent Trade) | Exports learned skill files (skills/learned-*.md) and recipes/ to every downstream agent that loads a skill pack; imports raw session evidence (tool calls, corrections, artifacts) from any swarm agent that produced output this session; the Learner is the memory consolidation node for the whole ecosystem |
+| **LEC** (Emergent Conventions) | Enforces the Lane-C-start rule (all extracted drafts begin as hypotheses until human-promoted), the never-overwrite-existing-skill discipline, and the non-trivial threshold (patterns obvious to any competent practitioner are not extracted) across every skill file it emits |
+
+**Belt Progression:** Blue belt — the Learner has achieved the Ada Lovelace standard: extracted knowledge is not a log of what happened, but a program — a precise, verifiable, reusable instruction that makes the next session's agent measurably more capable than this one.
+
+**GLOW Score Contribution:** +15 per verified skill extraction at rung 641 with QUALITY_GATE passed, Lane C labeling, non-duplicate confirmed, and human-promotable output produced; +25 if the extracted skill is adopted and referenced by a subsequent swarm run.
