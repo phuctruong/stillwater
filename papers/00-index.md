@@ -65,6 +65,7 @@ This index is intentionally conservative: it links only to papers that exist in 
 30. `52-solace-browser-architecture.md` — **The Solace Browser Architecture** (5-axiom derivation of browser automation; five moats: OAuth3, twin browser, custom engine, PZip, recipe system; 5-layer latency model; Part 11 compliance mapping)
 31. `53-enterprise-browser-paradigm.md` — **Enterprise-Grade AI Browser Automation** (Five Pillars: OAuth3 + Evidence Bundles + PZip Replay + Twin Architecture + Recipe Determinism; FDA 21 CFR Part 11 mapping; ALCOA+; beyond FDA: FINRA, HIPAA, FRE)
 32. `54-webservice-first-architecture.md` — **Webservice-First Architecture** (Every recipe node = a web service; admin as mandatory gateway + service registry; 7 service types on ports 8787-9222; CLI as thin orchestrator; self-host → solaceagi.com gateway)
+33. `55-custom-browser-competitive-moat.md` — **Custom Browser Competitive Moat** (18 Manifest V3 extension limitations × 18 custom browser advantages; four-category AI browser landscape; Solace Browser five-layer architecture; five uncopyable moats; token-revenue vendor misalignment; feature matrix; 5 falsifiable predictions)
 
 ## Reproducibility (What Reviewers Can Run Today)
 
