@@ -1,8 +1,8 @@
 # Case Study: SolaceBrowser — OAuth3 Reference Implementation
 
 **Tracking since**: 2026-02-21
-**Status**: Phase 1 DONE → Phase 1.5 DONE (1,466 tests) → Phase 2 DONE (805 tests) → Phase 3 DONE (Machine Access: 100, Dashboard: 70, Distribution: 94, Tunnel Engine: 80 tests) → Phase 4 IN PROGRESS (DOM Snapshots + Workflow Engine + Channel Gateway: 192 tests)
-**Tests**: 2,807 total
+**Status**: Phase 1 DONE → Phase 1.5 DONE (1,466 tests) → Phase 2 DONE (805 tests) → Phase 3 DONE (344 tests) → Phase 4 DONE (7 OpenClaw competitive features: 478 tests)
+**Tests**: 3,078 total
 **Rung**: 65537 (tunnel engine — security-critical)
 **Belt**: Orange
 
