@@ -209,6 +209,67 @@ RUNG_274177 (for canonical skill/swarm contracts):
 
 ---
 
+## 8.0) State Machine (YAML)
+
+```yaml
+state_machine:
+  states: [INIT, INTAKE_TASK, NULL_CHECK, DRAFT_GRAPH, CLASSIFY_NODES,
+           ASSIGN_EDGES, MARK_FORBIDDEN_STATES, NORMALIZE_CANONICAL,
+           VALIDATE_CLOSED_STATE_SPACE, COMPUTE_SHA256, SOCRATIC_REVIEW,
+           SEAL, EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  transitions:
+    - {from: INIT,                         to: INTAKE_TASK,               trigger: capsule_received}
+    - {from: INTAKE_TASK,                  to: NULL_CHECK,                 trigger: always}
+    - {from: NULL_CHECK,                   to: EXIT_NEED_INFO,             trigger: task_or_states_null}
+    - {from: NULL_CHECK,                   to: DRAFT_GRAPH,                trigger: inputs_defined}
+    - {from: DRAFT_GRAPH,                  to: CLASSIFY_NODES,             trigger: always}
+    - {from: CLASSIFY_NODES,               to: ASSIGN_EDGES,               trigger: always}
+    - {from: ASSIGN_EDGES,                 to: MARK_FORBIDDEN_STATES,      trigger: forbidden_states_required}
+    - {from: ASSIGN_EDGES,                 to: NORMALIZE_CANONICAL,        trigger: no_forbidden_states}
+    - {from: MARK_FORBIDDEN_STATES,        to: NORMALIZE_CANONICAL,        trigger: always}
+    - {from: NORMALIZE_CANONICAL,          to: VALIDATE_CLOSED_STATE_SPACE,trigger: always}
+    - {from: VALIDATE_CLOSED_STATE_SPACE,  to: EXIT_BLOCKED,               trigger: open_enumeration_detected}
+    - {from: VALIDATE_CLOSED_STATE_SPACE,  to: COMPUTE_SHA256,             trigger: closed_confirmed}
+    - {from: COMPUTE_SHA256,               to: SOCRATIC_REVIEW,            trigger: always}
+    - {from: SOCRATIC_REVIEW,              to: DRAFT_GRAPH,                trigger: revision_needed}
+    - {from: SOCRATIC_REVIEW,              to: SEAL,                       trigger: all_checks_pass}
+    - {from: SEAL,                         to: EXIT_PASS,                  trigger: sha256_stable}
+    - {from: SEAL,                         to: EXIT_BLOCKED,               trigger: sha256_unstable}
+  forbidden_states:
+    - UNLABELED_BRANCH_FROM_DECISION_NODE
+    - OPEN_STATE_ENUMERATION
+    - JSON_AS_SOURCE_OF_TRUTH
+    - SHA256_OVER_NON_CANONICAL_FORM
+    - DRIFT_WITHOUT_VERSION_BUMP
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE_TASK
+    INTAKE_TASK --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : task_null
+    NULL_CHECK --> DRAFT_GRAPH : inputs_defined
+    DRAFT_GRAPH --> CLASSIFY_NODES
+    CLASSIFY_NODES --> ASSIGN_EDGES
+    ASSIGN_EDGES --> MARK_FORBIDDEN_STATES : forbidden_required
+    ASSIGN_EDGES --> NORMALIZE_CANONICAL : no_forbidden
+    MARK_FORBIDDEN_STATES --> NORMALIZE_CANONICAL
+    NORMALIZE_CANONICAL --> VALIDATE_CLOSED_STATE_SPACE
+    VALIDATE_CLOSED_STATE_SPACE --> EXIT_BLOCKED : open_enumeration
+    VALIDATE_CLOSED_STATE_SPACE --> COMPUTE_SHA256 : closed
+    COMPUTE_SHA256 --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> DRAFT_GRAPH : revision_needed
+    SOCRATIC_REVIEW --> SEAL : all_pass
+    SEAL --> EXIT_PASS : sha256_stable
+    SEAL --> EXIT_BLOCKED : sha256_unstable
+    classDef forbidden fill:#f55,color:#fff
+    class UNLABELED_BRANCH_FROM_DECISION_NODE,OPEN_STATE_ENUMERATION,JSON_AS_SOURCE_OF_TRUTH forbidden
+```
+
+---
+
 ## 8) Anti-Patterns
 
 **Unlabeled Branch:** Diamond node with two exits but one unlabeled.

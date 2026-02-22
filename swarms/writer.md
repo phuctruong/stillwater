@@ -206,6 +206,62 @@ RUNG_641 (default):
 
 ---
 
+## 8.0) State Machine (YAML)
+
+```yaml
+state_machine:
+  states: [INIT, INTAKE_TASK, NULL_CHECK, BUILD_CNF_CAPSULE, READ_SOURCE_ARTIFACTS,
+           OUTLINE, DRAFT, CLAIM_TYPING_PASS, RECIPE_EXTRACTION, SOCRATIC_REVIEW,
+           EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  transitions:
+    - {from: INIT,                  to: INTAKE_TASK,           trigger: capsule_received}
+    - {from: INTAKE_TASK,           to: NULL_CHECK,             trigger: always}
+    - {from: NULL_CHECK,            to: EXIT_NEED_INFO,         trigger: task_null}
+    - {from: NULL_CHECK,            to: BUILD_CNF_CAPSULE,      trigger: inputs_defined}
+    - {from: BUILD_CNF_CAPSULE,     to: READ_SOURCE_ARTIFACTS,  trigger: always}
+    - {from: READ_SOURCE_ARTIFACTS, to: OUTLINE,                trigger: always}
+    - {from: OUTLINE,               to: DRAFT,                  trigger: always}
+    - {from: DRAFT,                 to: CLAIM_TYPING_PASS,      trigger: always}
+    - {from: CLAIM_TYPING_PASS,     to: EXIT_BLOCKED,           trigger: unlabeled_claim_found}
+    - {from: CLAIM_TYPING_PASS,     to: RECIPE_EXTRACTION,      trigger: pattern_extractable}
+    - {from: CLAIM_TYPING_PASS,     to: SOCRATIC_REVIEW,        trigger: no_recipe}
+    - {from: RECIPE_EXTRACTION,     to: SOCRATIC_REVIEW,        trigger: always}
+    - {from: SOCRATIC_REVIEW,       to: DRAFT,                  trigger: revision_needed}
+    - {from: SOCRATIC_REVIEW,       to: EXIT_PASS,              trigger: all_claims_typed}
+    - {from: SOCRATIC_REVIEW,       to: EXIT_BLOCKED,           trigger: oracle_mode_detected}
+  forbidden_states:
+    - ORACLE_MODE
+    - UNLABELED_CLAIM
+    - CONTEXT_ROT
+    - SUMMARIZED_FROM_MEMORY
+    - PATCH_ATTEMPT
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE_TASK
+    INTAKE_TASK --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : task_null
+    NULL_CHECK --> BUILD_CNF_CAPSULE : inputs_defined
+    BUILD_CNF_CAPSULE --> READ_SOURCE_ARTIFACTS
+    READ_SOURCE_ARTIFACTS --> OUTLINE
+    OUTLINE --> DRAFT
+    DRAFT --> CLAIM_TYPING_PASS
+    CLAIM_TYPING_PASS --> EXIT_BLOCKED : unlabeled_claim
+    CLAIM_TYPING_PASS --> RECIPE_EXTRACTION : pattern_extractable
+    CLAIM_TYPING_PASS --> SOCRATIC_REVIEW : no_recipe
+    RECIPE_EXTRACTION --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> DRAFT : revision_needed
+    SOCRATIC_REVIEW --> EXIT_PASS : all_claims_typed
+    SOCRATIC_REVIEW --> EXIT_BLOCKED : oracle_mode
+    classDef forbidden fill:#f55,color:#fff
+    class ORACLE_MODE,UNLABELED_CLAIM,CONTEXT_ROT forbidden
+```
+
+---
+
 ## 8) Anti-Patterns
 
 **Confidence Laundering:** Starting a paragraph with a hypothesis and ending it as a fact, without labeling.

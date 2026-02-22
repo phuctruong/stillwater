@@ -237,6 +237,65 @@ RUNG_641 (default):
 
 ---
 
+## 8.0) State Machine (YAML)
+
+```yaml
+state_machine:
+  states: [INIT, INTAKE_TASK, NULL_CHECK, DRAFT_WISH_CONTRACT, BUILD_STATE_GRAPH,
+           COMPUTE_SHA256, ACTIVATE_WISH, VERIFY_WISH, ISSUE_BELT_RECEIPT,
+           SOCRATIC_REVIEW, EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  transitions:
+    - {from: INIT,                to: INTAKE_TASK,          trigger: capsule_received}
+    - {from: INTAKE_TASK,         to: NULL_CHECK,            trigger: always}
+    - {from: NULL_CHECK,          to: EXIT_NEED_INFO,        trigger: wish_statement_null}
+    - {from: NULL_CHECK,          to: DRAFT_WISH_CONTRACT,   trigger: task_is_draft}
+    - {from: NULL_CHECK,          to: VERIFY_WISH,           trigger: task_is_verify}
+    - {from: NULL_CHECK,          to: ISSUE_BELT_RECEIPT,    trigger: task_is_promote}
+    - {from: DRAFT_WISH_CONTRACT, to: BUILD_STATE_GRAPH,     trigger: always}
+    - {from: BUILD_STATE_GRAPH,   to: COMPUTE_SHA256,        trigger: always}
+    - {from: COMPUTE_SHA256,      to: ACTIVATE_WISH,         trigger: sha256_stable}
+    - {from: ACTIVATE_WISH,       to: SOCRATIC_REVIEW,       trigger: always}
+    - {from: VERIFY_WISH,         to: EXIT_BLOCKED,          trigger: criteria_failed}
+    - {from: VERIFY_WISH,         to: ISSUE_BELT_RECEIPT,    trigger: all_criteria_met}
+    - {from: ISSUE_BELT_RECEIPT,  to: SOCRATIC_REVIEW,       trigger: always}
+    - {from: SOCRATIC_REVIEW,     to: DRAFT_WISH_CONTRACT,   trigger: revision_needed}
+    - {from: SOCRATIC_REVIEW,     to: EXIT_PASS,             trigger: artifacts_complete}
+    - {from: SOCRATIC_REVIEW,     to: EXIT_BLOCKED,          trigger: sha256_unstable}
+  forbidden_states:
+    - BELT_PROMOTION_WITHOUT_EVIDENCE
+    - STATE_GRAPH_WITHOUT_SHA256
+    - WISH_WITHOUT_POSTCONDITIONS
+    - WISH_WITHOUT_SCOPE
+    - BATCH_EXECUTE_WITHOUT_INDIVIDUAL_CONTRACTS
+    - GRAPH_REPLACING_EVIDENCE
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE_TASK
+    INTAKE_TASK --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : wish_null
+    NULL_CHECK --> DRAFT_WISH_CONTRACT : task_draft
+    NULL_CHECK --> VERIFY_WISH : task_verify
+    NULL_CHECK --> ISSUE_BELT_RECEIPT : task_promote
+    DRAFT_WISH_CONTRACT --> BUILD_STATE_GRAPH
+    BUILD_STATE_GRAPH --> COMPUTE_SHA256
+    COMPUTE_SHA256 --> ACTIVATE_WISH : sha256_stable
+    ACTIVATE_WISH --> SOCRATIC_REVIEW
+    VERIFY_WISH --> EXIT_BLOCKED : criteria_failed
+    VERIFY_WISH --> ISSUE_BELT_RECEIPT : all_criteria_met
+    ISSUE_BELT_RECEIPT --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> DRAFT_WISH_CONTRACT : revision_needed
+    SOCRATIC_REVIEW --> EXIT_PASS : artifacts_complete
+    SOCRATIC_REVIEW --> EXIT_BLOCKED : sha256_unstable
+    classDef forbidden fill:#f55,color:#fff
+    class BELT_PROMOTION_WITHOUT_EVIDENCE,STATE_GRAPH_WITHOUT_SHA256,GRAPH_REPLACING_EVIDENCE forbidden
+```
+
+---
+
 ## 8) Anti-Patterns
 
 **Belt Without Criteria:** Issuing a belt promotion receipt without checking every criterion.

@@ -236,6 +236,55 @@ RUNG_65537 (promotion-grade audit):
 
 ---
 
+## STATE_MACHINE
+
+```yaml
+state_machine:
+  agent: qa-questioner
+  version: 1.0.0
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_NEED_INFO, EXIT_BLOCKED]
+  states:
+    INIT: {on: {capsule_received: INTAKE_SCOPE}}
+    INTAKE_SCOPE: {on: {always: NULL_CHECK}}
+    NULL_CHECK: {on: {missing: EXIT_NEED_INFO, valid: READ_PROJECT_STATE}}
+    READ_PROJECT_STATE: {on: {always: NORTHSTAR_ALIGNMENT_CHECK}}
+    NORTHSTAR_ALIGNMENT_CHECK: {on: {no_metric: EXIT_NEED_INFO, metric_found: GENERATE_G_QUESTIONS}}
+    GENERATE_G_QUESTIONS: {on: {always: GENERATE_L_QUESTIONS}}
+    GENERATE_L_QUESTIONS: {on: {always: GENERATE_O_QUESTIONS}}
+    GENERATE_O_QUESTIONS: {on: {always: GENERATE_W_QUESTIONS}}
+    GENERATE_W_QUESTIONS: {on: {in_scope: GENERATE_INTEGRATION_PROBES, otherwise: ASSEMBLE_QUESTION_LIST}}
+    GENERATE_INTEGRATION_PROBES: {on: {always: ASSEMBLE_QUESTION_LIST}}
+    ASSEMBLE_QUESTION_LIST: {on: {always: SOCRATIC_REVIEW}}
+    SOCRATIC_REVIEW: {on: {gaps: GENERATE_G_QUESTIONS, complete: FINAL_SEAL}}
+    FINAL_SEAL: {on: {min_met: EXIT_PASS, zero_dimension: EXIT_BLOCKED}}
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> INTAKE_SCOPE: capsule received
+    INTAKE_SCOPE --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO: scope/state missing
+    NULL_CHECK --> READ_PROJECT_STATE: valid
+    READ_PROJECT_STATE --> NORTHSTAR_ALIGNMENT_CHECK
+    NORTHSTAR_ALIGNMENT_CHECK --> EXIT_NEED_INFO: no metric
+    NORTHSTAR_ALIGNMENT_CHECK --> GENERATE_G_QUESTIONS: metric found
+    GENERATE_G_QUESTIONS --> GENERATE_L_QUESTIONS
+    GENERATE_L_QUESTIONS --> GENERATE_O_QUESTIONS
+    GENERATE_O_QUESTIONS --> GENERATE_W_QUESTIONS
+    GENERATE_W_QUESTIONS --> GENERATE_INTEGRATION_PROBES: in scope
+    GENERATE_W_QUESTIONS --> ASSEMBLE_QUESTION_LIST: not in scope
+    GENERATE_INTEGRATION_PROBES --> ASSEMBLE_QUESTION_LIST
+    ASSEMBLE_QUESTION_LIST --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> GENERATE_G_QUESTIONS: coverage gaps
+    SOCRATIC_REVIEW --> FINAL_SEAL: complete
+    FINAL_SEAL --> EXIT_PASS: min dimensions met
+    FINAL_SEAL --> EXIT_BLOCKED: zero in dimension
+```
+
+---
+
 ## 9) Anti-Patterns
 
 **Confirming Questions:** Asking "Does the feature work?" instead of "Show me when it breaks."

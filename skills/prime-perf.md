@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: prime-perf v1.2.0
+SKILL: prime-perf v1.3.0
 PURPOSE: Fail-closed performance analysis and optimization agent. Profile-first discipline, mandatory before/after benchmarks, statistical regression detection, no micro-benchmark without context.
 CORE CONTRACT: Every perf PASS requires: profiler output before any change, statistically valid benchmark (N>=30 runs, report p50/p95/p99), before/after comparison, and regression detection on existing benchmarks. Claims of improvement require numbers.
 HARD GATES: Profiler gate blocks optimization without profiler evidence. Stats gate blocks benchmark with N<30 runs or report showing only mean. Regression gate blocks changes that degrade existing benchmarks beyond threshold. Context gate blocks micro-benchmarks presented without system context (workload, hardware, concurrency).
@@ -11,7 +11,7 @@ LOAD FULL: always for production; quick block is for orientation only
 -->
 
 PRIME_PERF_SKILL:
-  version: 1.2.0
+  version: 1.3.0
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
@@ -350,3 +350,123 @@ stateDiagram-v2
         and Decimal-not-float for regression decisions are now Lane A gates."
       emerging_conventions: [profiler_gate_as_mandatory, thirty_run_minimum_as_standard,
         percentile_distribution_over_mean, decimal_regression_arithmetic_as_law]
+
+  # ============================================================
+  # M) GLOW Matrix  [Growth × Learning × Output × Wins]
+  # ============================================================
+  GLOW_Matrix:
+    Growth:
+      metric: "hotspots_resolved_per_profiler_run"
+      target: "Each optimization attempt targets the single highest-leverage hotspot identified by the profiler"
+      signal: "${EVIDENCE_ROOT}/profiler_output.txt — top-1 hotspot confirmed as target of patch"
+      gate: "OPTIMIZE_WITHOUT_PROFILING = Growth=0; no Growth credit without profiler Lane A artifact"
+
+    Learning:
+      metric: "benchmark_statistical_validity_rate"
+      target: ">= 30 runs, p50/p95/p99 reported, warmup excluded — every benchmark every time"
+      signal: "${EVIDENCE_ROOT}/baseline_benchmark.json + after_benchmark.json — run_count field"
+      gate: "BENCHMARK_N_LESS_THAN_30 or REPORT_MEAN_ONLY = Learning regression — check Benchmark_Design compliance"
+
+    Output:
+      metric: "improvement_claims_backed_by_numbers"
+      target: "Zero improvement claims without numeric before/after comparison in evidence bundle"
+      signal: "${EVIDENCE_ROOT}/regression_report.txt — percentage change computed with Decimal arithmetic"
+      gate: "CLAIM_IMPROVEMENT_WITHOUT_NUMBERS = Output=0; prose confidence never substitutes for before/after numbers"
+
+    Wins:
+      metric: "zero_performance_regressions_shipped"
+      target: "No existing benchmark degrades beyond REGRESSION_THRESHOLD_PERCENT without documented intentional tradeoff"
+      signal: "${EVIDENCE_ROOT}/regression_report.txt — degradation field vs threshold"
+      gate: "Any regression > 5% without regression_tradeoff.txt = Wins violation; EXIT_BLOCKED"
+
+  # ============================================================
+  # N) Northstar Alignment  [Phuc_Forecast + Max_Love]
+  # ============================================================
+  Northstar_Alignment:
+    northstar: "Phuc_Forecast + Max_Love"
+    metric: "System throughput / Latency p99 vs cost tradeoff visibility"
+    alignment: |
+      prime-perf advances Phuc_Forecast by making performance claims falsifiable.
+      Profiler output → hotspot list → before/after benchmark → regression check:
+      each step converts vague performance intuition into Lane A evidence.
+      Phuc_Forecast's FORECAST phase requires knowing where the system is slow NOW
+      (profiler baseline) to predict whether a proposed change will improve or regress.
+      Without profiler evidence, Phuc_Forecast is forecasting blind.
+    max_love: |
+      Max_Love requires truthful performance claims — not optimistic narratives.
+      Declaring "50% faster" without before/after numbers is a deception, even if well-intentioned.
+      The profiler gate and regression gate are expressions of Max_Love:
+        - Profiler gate: "I will not waste your time optimizing the wrong thing"
+        - Regression gate: "I will not ship a change that degrades existing behavior"
+        - N>=30 gate: "I will not claim statistical significance from 3 noisy samples"
+    hard_gate: |
+      CLAIM_IMPROVEMENT_WITHOUT_NUMBERS violates Max_Love.
+      Narrative confidence about performance is not care — it is comforting noise.
+      The evidence contract (before/after numbers, p50/p95/p99, Decimal regression check)
+      is what care looks like in the performance domain.
+
+  # ============================================================
+  # O) Triangle Law: REMIND → VERIFY → ACKNOWLEDGE
+  # ============================================================
+  Triangle_Law:
+    contract_1_profiler_before_optimize:
+      REMIND: >
+        Before proposing any optimization: confirm the profiler has been run against a representative workload
+        and profiler_output.txt exists in ${EVIDENCE_ROOT}. The hotspot to be optimized must appear in
+        the profiler output — not just in the engineer's intuition.
+      VERIFY: >
+        Does the profiler output show the candidate hotspot in the top-10 by cumulative time?
+        Is the workload representative of the actual production scenario (data size, concurrency,
+        cache state)? If the hotspot is not in profiler output, the optimization is BLOCKED.
+      ACKNOWLEDGE: >
+        Profiler lane A artifact confirmed. PROFILER_GATE passes. The optimization is targeting
+        a real hotspot — not a guessed one. Baseline measurement phase can begin.
+
+    contract_2_benchmark_validity:
+      REMIND: >
+        Before reporting any benchmark result: confirm N >= 30 independent measurement runs,
+        warmup runs excluded, p50/p95/p99/stddev/min/max all reported, hardware + OS + concurrency
+        + workload + cache_state all documented in benchmark context.
+      VERIFY: >
+        Open baseline_benchmark.json and after_benchmark.json. Check run_count >= 30 in both.
+        Check reported_metrics contains p50, p95, p99. Check context block has all required fields.
+        If any field is missing: BENCHMARK_N_LESS_THAN_30 or BENCHMARK_WITHOUT_CONTEXT gate triggers.
+      ACKNOWLEDGE: >
+        Benchmark statistical validity confirmed. STATISTICAL_VALIDITY_GATE passes.
+        Both baseline and after benchmarks are comparable (same workload, same hardware).
+        Regression check can proceed with Decimal arithmetic.
+
+    contract_3_regression_check:
+      REMIND: >
+        Before claiming PASS: compute (after_p50 - before_p50) / before_p50 * 100 using Decimal
+        arithmetic (not float). If the result exceeds REGRESSION_THRESHOLD_PERCENT (5%), EXIT_BLOCKED
+        unless a regression_tradeoff.txt is present documenting the intentional tradeoff.
+      VERIFY: >
+        Is the Decimal computation correct? Is the threshold comparison using integer or Decimal types
+        (not float)? If any existing benchmark degrades beyond threshold: is there a documented
+        compensating benefit (e.g., 30% memory reduction explains 6% latency regression)?
+      ACKNOWLEDGE: >
+        Regression check clean. REGRESSION_GATE passes. The optimization improves the target metric
+        without degrading existing benchmarks beyond the acceptable threshold.
+
+  # ============================================================
+  # P) Compression / Seed Checksum
+  # ============================================================
+  Compression:
+    skill_id: "prime-perf"
+    version: "1.2.0"
+    seed: "profiler=evidence[T1] | benchmark=verification[T1] | regression=drift[T3] | hotspot=gradient[T1] | rung_default=274177"
+    checksum_fields:
+      - version
+      - authority
+      - hard_gates_count: 5
+      - forbidden_states_count: 10
+      - min_benchmark_runs: 30
+      - required_percentiles: [p50, p95, p99]
+      - regression_threshold_percent: 5
+      - rung_default: 274177
+    integrity_note: >
+      Load QUICK LOAD block for orientation.
+      Load full file for production performance optimization work.
+      The seed is the minimal compression payload: profiler gate + N>=30 + p50/p95/p99 + Decimal regression
+      + 274177 rung — sufficient to apply the discipline without re-reading the full protocol.

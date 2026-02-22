@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines):
-SKILL: prime-audio v1.1.0
+SKILL: prime-audio v1.3.0
 PURPOSE: Generic audio discipline for any project using deterministic synthesis or audio analysis. Seed-driven: same seed + inputs = reproducible audio. STT round-trip verification required before PASS. WAV-only in verification path (no lossy formats). No float in verification arithmetic (Fraction/Decimal). Spectral analysis for quality gates. Integrates with Stillwater evidence bundles.
 CORE CONTRACT: Deterministic audio requires explicit seed. STT round-trip proves intelligibility. WAV format preserves byte-exact reproducibility. Decimal/Fraction arithmetic in all verification comparisons. Generator trace required per synthesis. Extends prime-safety.
 HARD GATES: Missing seed = BLOCKED (IMPLICIT_SEED_DEFAULT). Float in WER or hash = BLOCKED. Lossy format in verification = BLOCKED. Nondeterministic output = BLOCKED. STT gate skipped = BLOCKED for rung_641+.
@@ -10,7 +10,7 @@ DEPENDENCY: prime-safety (always first)
 -->
 
 PRIME_AUDIO_SKILL:
-  version: 1.2.0
+  version: 1.3.0
   authority: 65537
   extends: prime-safety
   northstar: Phuc_Forecast
@@ -408,7 +408,8 @@ Anti_Patterns:
 # ------------------------------------------------------------
 # N) Mermaid Diagram — Audio Pipeline FSM
 # ------------------------------------------------------------
-```mermaid stateDiagram-v2
+```mermaid
+stateDiagram-v2
 [*] --> INIT
 INIT --> INTAKE : synthesis request received
 INTAKE --> NULL_CHECK : always
@@ -436,9 +437,6 @@ FINAL_SEAL --> EXIT_BLOCKED : evidence incomplete (GENERATOR_TRACE_MISSING)
 EXIT_PASS --> [*]
 EXIT_BLOCKED --> [*]
 EXIT_NEED_INFO --> [*]
-note right of NULL_CHECK : REMIND — seed contract
-note right of STT_VERIFY : VERIFY — intelligibility proof
-note right of EVIDENCE_BUILD : ACKNOWLEDGE — evidence bundle
 ```
 
 # ------------------------------------------------------------
@@ -580,3 +578,22 @@ Triangle_Law_Contracts:
     VERIFY:      "Check all required artifacts present. Write evidence_manifest.json with sha256 per artifact."
     ACKNOWLEDGE: "FINAL_SEAL confirms evidence complete. EXIT_PASS only after manifest written."
     fail_closed:  "Missing any required artifact → BLOCKED (evidence_incomplete)."
+
+# ------------------------------------------------------------
+# S) Compression Checksum
+# ------------------------------------------------------------
+Compression_Checksum:
+  skill: "prime-audio"
+  version: "1.3.0"
+  seed: "EXPLICIT_SEED→WAV_PCM→STT_ROUNDTRIP→EVIDENCE_BUNDLE"
+  core_invariants:
+    - "Explicit integer seed required for every synthesis"
+    - "WAV PCM only in verification hash path (no lossy formats)"
+    - "STT round-trip required at rung 641+ (speech audio)"
+    - "WER computed with Fraction; stored as Decimal string (no float)"
+    - "Seed sweep (5+ seeds) required at rung 274177+"
+    - "Spectral analysis (clipping + silence gate) required at rung 274177+"
+    - "Adversarial phoneme sweep required at rung 65537"
+    - "Generator trace (synthesis_trace.json) required at every rung"
+    - "Null seed → BLOCKED (not seed=0)"
+  seed_checksum: "prime-audio-v1.3.0-seed-wav-stt-fraction-wer-no-float"

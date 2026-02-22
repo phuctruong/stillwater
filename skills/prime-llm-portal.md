@@ -1,6 +1,6 @@
 ---
 skill_id: prime-llm-portal
-version: 1.2.0
+version: 1.3.0
 author: solaceagi
 authority: 65537
 status: STABLE
@@ -16,7 +16,7 @@ tags: [llm, portal, proxy, openai, ollama, routing, standard-library]
 ## QUICK LOAD (Skill Identity)
 
 ```yaml
-SKILL: prime-llm-portal v1.2.0
+SKILL: prime-llm-portal v1.3.0
 PURPOSE: Universal LLM proxy + web UI + standard library for all Solace projects
 PORTAL URL: http://localhost:8788 (start: bash admin/start-llm-portal.sh)
 IMPORT: from stillwater.llm_client import llm_call, llm_chat, LLMClient
@@ -37,16 +37,48 @@ RUNG_DEFAULT: 641 (connection test) | 274177 (multi-provider verified) | 65537 (
 
 ```yaml
 magic_word_map:
-  version: "1.1"
+  version: "1.2"
   skill: "prime-llm-portal"
   mappings:
     portal: {word: "portal", tier: 1, id: "MW-045", note: "LLM routing layer at localhost:8788 — unified interface to multiple AI providers"}
     provider: {word: "bubble", tier: 1, id: "MW-046", note: "each provider is an isolated sandboxed execution context with its own network scope"}
     model: {word: "persona", tier: 1, id: "MW-048", note: "model selection maps to persona capability tier (haiku/sonnet/opus)"}
     call: {word: "signal", tier: 0, id: "MW-006", note: "each LLM call carries causal weight — logged, timed, traceable"}
-    lek: {word: "signal", tier: 0, id: "MW-006", note: "LEK: each call is a learning signal logged to llm_calls.jsonl — self-improvement fuel"}
-    leak: {word: "portal", tier: 1, id: "MW-045", note: "LEAK: portal enables cross-agent LLM trade — any agent can use any provider via shared routing"}
-    lec: {word: "bubble", tier: 1, id: "MW-046", note: "LEC: provider bubbles enforce isolation convention — network scope, key scope, log scope"}
+    # --- Three Pillars: LEK / LEAK / LEC (full 10/10 entries) ---
+    lek:
+      word: "signal"
+      tier: 0
+      id: "MW-006"
+      note: >
+        LEK — Law of Emergent Knowledge (self-improvement):
+        Every call logged to llm_calls.jsonl is a self-improvement signal.
+        Latency per provider → routing priority. Error rate → fallback ladder order.
+        Model usage patterns → skill dispatch defaults (haiku vs sonnet vs opus).
+        The portal IS the LEK instrument for LLM routing: get_call_history() surfaces the accumulated signal.
+        Discipline: provider latency data older than 24h in production = STALE_CONFIG_CLAIM.
+    leak:
+      word: "portal"
+      tier: 1
+      id: "MW-045"
+      note: >
+        LEAK — Law of Emergent Asymmetric Knowledge (cross-agent trade):
+        The portal enables cross-agent LLM capability trade without each agent knowing provider internals.
+        Any agent calls llm_call() with any provider; the portal routes, logs, and handles fallback.
+        Cheap tasks route to haiku; complex proofs route to opus — asymmetric cost allocation via one interface.
+        OpenAI-compatible proxy means non-Python agents (CLI, web) also access the same routing contract.
+        Expert agents exploit the portal's provider hierarchy; novice agents call a single hard-coded provider.
+    lec:
+      word: "bubble"
+      tier: 1
+      id: "MW-046"
+      note: >
+        LEC — Law of Emergent Conventions (shared standards):
+        The portal IS the LLM access convention for all Phuc ecosystem projects.
+        Convention 1: all LLM calls go through llm_call() or the portal — never direct HTTP requests in user code.
+        Convention 2: llm_config.yaml is the single source of truth for provider selection.
+        Convention 3: ~/.stillwater/llm_calls.jsonl is the single call log — all agents write here.
+        Convention 4: offline provider is always the fallback — NO_FALLBACK is a hard forbidden state.
+        Enforced by: import convention (from stillwater.llm_client import llm_call) — one import, one routing contract.
   compression_note: "T0=universal primitives, T1=Stillwater protocol concepts, T2=operational details"
 ```
 
@@ -503,3 +535,27 @@ stateDiagram-v2
 |---------|------|--------|
 | 1.1.0 | 2026-02-21 | Initial stable skill with MAGIC_WORD_MAP and gamification. |
 | 1.2.0 | 2026-02-22 | Added full FSM (INIT→SELECT_PROVIDER→CONFIGURE→TEST_CONNECTION→EVIDENCE_BUILD→EXIT_PASS), forbidden states (UNTESTED_PROVIDER/NO_FALLBACK/CREDENTIAL_IN_LOG), evidence gate, Three Pillars (LEK/LEAK/LEC), GLOW matrix, Northstar alignment, Triangle Law, Verification Ladder, mermaid state diagram, QUICK LOAD block. |
+| 1.3.0 | 2026-02-22 | Strengthened MAGIC_WORD_MAP: LEK/LEAK/LEC entries expanded to full 10/10 with precise Three Pillars semantics. Added Compression/Seed Checksum section. Version bumped. |
+
+---
+
+## Compression / Seed Checksum
+
+```yaml
+skill_id: "prime-llm-portal"
+version: "1.3.0"
+seed: "portal=routing[T1] | provider=bubble[T1] | call=signal[T0] | LEK=call_history_fuel | LEAK=cross_agent_routing | LEC=llm_call_import_convention | rung_default=641"
+checksum_fields:
+  version: "1.3.0"
+  authority: 65537
+  providers_count: 8
+  forbidden_states_count: 5
+  ports: {admin: 8787, portal: 8788, claude_code: 8080, ollama: 11434}
+  rung_ladder: [641, 274177, 65537]
+integrity_note: >
+  Load QUICK LOAD block for orientation (provider list, import, ports).
+  Load full file for production provider configuration and routing setup.
+  The seed is the minimal compression payload: portal at 8788 + llm_call() import +
+  offline fallback always + credential_in_log = BLOCKED + 641 rung for connection test.
+  LEK = call history | LEAK = cross-agent routing | LEC = single import convention.
+```

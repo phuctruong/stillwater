@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: prime-ops v1.2.0
+SKILL: prime-ops v1.3.0
 PURPOSE: Fail-closed production operations agent. Runbooks, incident response, on-call discipline, canary deploy strategy, and rollback verification.
 CORE CONTRACT: Every ops PASS requires: rollback procedure tested before deploy, every alert linked to a runbook, every deploy uses canary or equivalent staged rollout, and every incident has a written timeline and action items within 48 hours.
 HARD GATES: Rollback gate blocks deploy without tested rollback procedure. Runbook gate blocks alert rule creation without linked runbook. Canary gate blocks production deploy without staged rollout plan. PIR gate blocks incident close without post-incident review artifact.
@@ -11,7 +11,7 @@ LOAD FULL: always for production; quick block is for orientation only
 -->
 
 PRIME_OPS_SKILL:
-  version: 1.2.0
+  version: 1.3.0
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
@@ -343,34 +343,34 @@ PRIME_OPS_SKILL:
 
 ```mermaid
 stateDiagram-v2
-    [*] --> INIT
-    INIT --> INTAKE: TASK_REQUEST
-    INTAKE --> NULL_CHECK
-    NULL_CHECK --> EXIT_NEED_INFO: service/change type missing
-    NULL_CHECK --> CLASSIFY_OPS_TASK: ok
-    CLASSIFY_OPS_TASK --> ROLLBACK_GATE: deploy task
-    CLASSIFY_OPS_TASK --> RUNBOOK_AUDIT: alert task
-    CLASSIFY_OPS_TASK --> INCIDENT_GATE: incident task
-    ROLLBACK_GATE --> EXIT_BLOCKED: rollback procedure untested
-    ROLLBACK_GATE --> RUNBOOK_AUDIT: rollback tested
-    RUNBOOK_AUDIT --> EXIT_BLOCKED: alert without runbook link
-    RUNBOOK_AUDIT --> CANARY_PLAN: ok
-    CANARY_PLAN --> EXIT_BLOCKED: no staged rollout plan
-    CANARY_PLAN --> DEPLOY_EXECUTE: canary plan present
-    DEPLOY_EXECUTE --> MONITOR_GATE
-    MONITOR_GATE --> EXIT_BLOCKED: golden signals uncovered
-    MONITOR_GATE --> EVIDENCE_BUILD: monitoring confirmed
-    INCIDENT_GATE --> PIR_GATE: SEV requires PIR
-    PIR_GATE --> EXIT_BLOCKED: incident closed without PIR
-    PIR_GATE --> EVIDENCE_BUILD: PIR complete
-    EVIDENCE_BUILD --> SOCRATIC_REVIEW
-    SOCRATIC_REVIEW --> ROLLBACK_GATE: revision needed
-    SOCRATIC_REVIEW --> FINAL_SEAL: ok
-    FINAL_SEAL --> EXIT_PASS: evidence complete
-    FINAL_SEAL --> EXIT_BLOCKED: evidence missing
-    EXIT_PASS --> [*]
-    EXIT_BLOCKED --> [*]
-    EXIT_NEED_INFO --> [*]
+[*] --> INIT
+INIT --> INTAKE : TASK_REQUEST
+INTAKE --> NULL_CHECK : always
+NULL_CHECK --> EXIT_NEED_INFO : service or change type missing
+NULL_CHECK --> CLASSIFY_OPS_TASK : ok
+CLASSIFY_OPS_TASK --> ROLLBACK_GATE : deploy task
+CLASSIFY_OPS_TASK --> RUNBOOK_AUDIT : alert task
+CLASSIFY_OPS_TASK --> INCIDENT_GATE : incident task
+ROLLBACK_GATE --> EXIT_BLOCKED : rollback procedure untested
+ROLLBACK_GATE --> RUNBOOK_AUDIT : rollback tested
+RUNBOOK_AUDIT --> EXIT_BLOCKED : alert without runbook link
+RUNBOOK_AUDIT --> CANARY_PLAN : ok
+CANARY_PLAN --> EXIT_BLOCKED : no staged rollout plan
+CANARY_PLAN --> DEPLOY_EXECUTE : canary plan present
+DEPLOY_EXECUTE --> MONITOR_GATE : always
+MONITOR_GATE --> EXIT_BLOCKED : golden signals uncovered
+MONITOR_GATE --> EVIDENCE_BUILD : monitoring confirmed
+INCIDENT_GATE --> PIR_GATE : SEV requires PIR
+PIR_GATE --> EXIT_BLOCKED : incident closed without PIR
+PIR_GATE --> EVIDENCE_BUILD : PIR complete
+EVIDENCE_BUILD --> SOCRATIC_REVIEW : always
+SOCRATIC_REVIEW --> ROLLBACK_GATE : revision needed
+SOCRATIC_REVIEW --> FINAL_SEAL : ok
+FINAL_SEAL --> EXIT_PASS : evidence complete
+FINAL_SEAL --> EXIT_BLOCKED : evidence missing
+EXIT_PASS --> [*]
+EXIT_BLOCKED --> [*]
+EXIT_NEED_INFO --> [*]
 ```
 
   # ============================================================
@@ -395,3 +395,122 @@ stateDiagram-v2
         and blameless PIR within 48 hours started as SRE wisdom; they are now Lane A gates."
       emerging_conventions: [canary_as_default_deploy_strategy, runbook_linked_in_alert_annotation,
         blameless_pir_as_standard, change_ticket_for_every_prod_touch]
+
+  # ============================================================
+  # M) Triangle Law Contracts — per Ops Operation
+  # ============================================================
+  Triangle_Law_Contracts:
+    overview: "Every ops gate has a REMIND→VERIFY→ACKNOWLEDGE contract."
+
+    contract_deploy:
+      operation: "Production deploy request"
+      REMIND:      "State the contract: rollback tested in staging, runbook linked, canary plan present, change ticket exists."
+      VERIFY:      "Run all four hard gates (Rollback_Gate, Runbook_Gate, Canary_Gate, Change_Ticket_Gate). Each must PASS."
+      ACKNOWLEDGE: "Emit rollback_test.txt + canary_plan.txt + change_ticket.txt. DEPLOY_EXECUTE authorized."
+      fail_closed:  "Any gate BLOCKED → deploy halted. No exceptions. SILENT_ROLLBACK is the worst outcome."
+
+    contract_incident:
+      operation: "SEV1/SEV2 incident response"
+      REMIND:      "State: PIR required within 48 hours. Blameless. Timeline format: HH:MM UTC: <fact or action>."
+      VERIFY:      "Has incident commander been declared? Status page updated? PIR draft started within 2 hours?"
+      ACKNOWLEDGE: "incident_timeline.txt written. PIR.md structure started. Communication cadence committed."
+      fail_closed:  "INCIDENT_CLOSED_WITHOUT_PIR → EXIT_BLOCKED. Cannot close SEV1/SEV2 without PIR artifact."
+
+    contract_alert:
+      operation: "Creating or modifying an alert rule"
+      REMIND:      "State: every alert must link to a runbook with alert_description + impact + investigation_steps + escalation."
+      VERIFY:      "Runbook exists with all required sections? Alert annotation contains runbook URL?"
+      ACKNOWLEDGE: "runbook_audit.txt written. ALERT_WITHOUT_RUNBOOK prevented. Alert rule authorized."
+      fail_closed:  "Alert without runbook → EXIT_BLOCKED. The runbook IS the alert's value to the on-call engineer."
+
+  # ============================================================
+  # N) GLOW Matrix — Ops Skill Contributions
+  # ============================================================
+  GLOW_Matrix:
+    G_Growth:
+      scoring:
+        - "25: new service fully instrumented with golden signals + runbook per alert + canary deploy strategy"
+        - "20: existing service runbooks written for all alert rules"
+        - "15: PIR converts SEV1 into permanent system improvement (action items resolved)"
+        - "5: canary deploy stage added to existing deploy pipeline"
+        - "0: ops task completed but no system improvement documented"
+
+    L_Learning:
+      scoring:
+        - "25: PIR published with root cause + action items that prevent recurrence class"
+        - "20: new anti-pattern identified and added to runbook template or canary protocol"
+        - "10: blast radius analysis reveals previously unknown service dependency"
+        - "5: incident timeline reveals monitoring gap that is then closed"
+        - "0: ops session completes without any learning captured"
+
+    O_Output:
+      scoring:
+        - "25: full evidence bundle at rung 65537 (rollback tested + runbook + canary + PIR if applicable)"
+        - "20: deploy completed at rung 641 with all gates passing"
+        - "10: runbook written and linked but deploy not yet executed"
+        - "5: canary plan documented but rollback not tested"
+        - "0: deploy executed without any gate artifacts"
+
+    W_Wins:
+      scoring:
+        - "20: production incident resolved in < CANARY_BAKE_TIME with automatic rollback"
+        - "15: SEV1 resolved with zero data loss and PIR complete within deadline"
+        - "10: first end-to-end runbook-per-alert coverage achieved for a service"
+        - "5: change ticket gate adoption by team (first ticket-gated deploy)"
+        - "0: routine ops with no system quality improvement"
+
+    northstar_alignment:
+      northstar: "Phuc_Forecast"
+      max_love_gate: >
+        Max Love for ops = production systems that self-explain when they fail.
+        Runbooks explain what alerts mean. PIRs prevent recurrence. Canaries limit blast radius.
+        Max Love = on-call engineer reads runbook at 2am and knows exactly what to do.
+
+  # ============================================================
+  # O) Northstar Alignment — Phuc_Forecast + Max_Love
+  # ============================================================
+  NORTHSTAR_Alignment:
+    northstar: Phuc_Forecast
+    objective: Max_Love
+
+    phuc_forecast_mapping:
+      DREAM:    "What system change? What success criteria? What rollback criteria?"
+      FORECAST: "What failure modes? blast radius? data loss risk? alert coverage gaps?"
+      DECIDE:   "Canary strategy. Runbook coverage plan. Rollback procedure. Change ticket."
+      ACT:      "DEPLOY_EXECUTE → MONITOR_GATE. Canary stages with bake times."
+      VERIFY:   "SOCRATIC_REVIEW + FINAL_SEAL. Evidence bundle complete. PIR if incident."
+
+    max_love_for_ops:
+      statement: >
+        Max Love for ops = the on-call engineer is never alone.
+        Runbooks guide them. Rollback procedures protect them. PIRs learn from them.
+        Blameless culture respects them. The canary limits the blast radius so a mistake
+        does not become a disaster.
+      manifestations:
+        - "Runbook-per-alert = Max Love for the on-call engineer"
+        - "Tested rollback = Max Love for trust in the deploy process"
+        - "Blameless PIR = Max Love for the people who keep systems running"
+        - "Canary deploy = Max Love for users (bounded blast radius)"
+
+    forbidden_northstar_violations:
+      - ROLLBACK_WITHOUT_TESTED_PROCEDURE: "Untested rollback violates Phuc_Forecast VERIFY gate"
+      - SILENT_ROLLBACK_WITHOUT_COMMUNICATION: "Silent rollback violates Max_Love transparency"
+      - INCIDENT_CLOSED_WITHOUT_PIR: "Closing without PIR violates LEK self-improvement principle"
+
+  # ============================================================
+  # P) Compression Checksum
+  # ============================================================
+  Compression_Checksum:
+    skill: "prime-ops"
+    version: "1.3.0"
+    seed: "ROLLBACK_TESTED→RUNBOOK_LINKED→CANARY_FIRST→PIR_48H"
+    core_invariants:
+      - "Rollback tested in staging before production deploy"
+      - "Every alert has a runbook link (Lane A)"
+      - "Canary minimum 5%, bake 15 minutes"
+      - "PIR required for SEV1/SEV2 within 48 hours"
+      - "No silent rollbacks — all rollbacks communicated"
+      - "Change ticket required for every production touch"
+      - "Blameless PIR — no individual blame"
+      - "Golden signals monitored for every service"
+    seed_checksum: "prime-ops-v1.3.0-rollback-runbook-canary-pir-blameless"

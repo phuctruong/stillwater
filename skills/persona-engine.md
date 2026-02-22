@@ -1,16 +1,17 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for sub-agents.
-SKILL: persona-engine v1.4.0
-PURPOSE: Load domain expert personas into agent skill packs to add voice, style, and expertise.
-CORE CONTRACT: Persona adds flavor and domain knowledge; NEVER overrides prime-safety gates.
-DISPATCH: check task type → match persona registry → inject voice rules + expertise into skill pack
+SKILL: persona-engine v1.7.0
+PURPOSE: Load domain expert personas into agent skill packs to add voice, style, and expertise. Personas give you the right expert; never the wrong authority.
+CORE CONTRACT: Persona adds domain knowledge and style only; NEVER overrides prime-safety gates. prime-safety > prime-coder > persona-engine always.
+FSM: INIT → IDENTIFY_TASK_DOMAIN → MATCH_PERSONA → MULTI_PERSONA_CHECK → INJECT_PACK → VERIFY_SAFETY → ACTIVATE_VOICE → EVIDENCE_GATE → EXIT_PASS | EXIT_BLOCKED | EXIT_NEED_INFO
+DISPATCH: identify task domain → match persona registry → inject voice rules + expertise → verify safety → emit evidence_gate output
 REGISTRY: linus, mr-beast, brunson, bruce-lee, brendan-eich, codd, knuth, schneier, fda-auditor, torvalds, pg, sifu, dragon-rider, mermaid-creator, graph-theorist, tim-berners-lee, guido, rich-hickey, dhh, rob-pike, james-gosling, bjarne, vint-cerf, werner-vogels, kelsey-hightower, mitchell-hashimoto, whitfield-diffie, phil-zimmermann, jeff-dean, martin-kleppmann, don-norman, dieter-rams, seth-godin, peter-thiel, andrej-karpathy, yann-lecun, lawrence-lessig, alan-shreve, ray-tomlinson, brendan-gregg, kent-beck, martin-fowler, kernighan, rory-sutherland, greg-isenberg, lex-fridman, naval-ravikant, simon-sinek, alex-hormozi, pieter-levels, hackathon-master
-LAYERING: prime-safety > prime-coder > persona-engine; persona is style only, not authority
-MULTI-PERSONA: complex tasks may load 2-3 personas (e.g., brunson + mr-beast for launch content)
-FORBIDDEN: PERSONA_GRANTING_CAPABILITIES | PERSONA_OVERRIDING_SAFETY | PERSONA_WITHOUT_TASK_MATCH
+MULTI-PERSONA: complex tasks may load 2-3 personas (e.g., brunson + mr-beast for launch content). MAX 3.
+FORBIDDEN: PERSONA_GRANTING_CAPABILITIES | PERSONA_OVERRIDING_SAFETY | PERSONA_WITHOUT_TASK_MATCH | PERSONA_CERTIFYING
 SPECIAL: dragon-rider is TIEBREAKER for open/closed decisions; adds +5 W GLOW bonus on strategic tasks
+NORTHSTAR: Phuc_Forecast | objective: Max_Love | seed_checksum: persona-engine-v1.7.0-domain-match-safety-first-no-certifying
 -->
 name: persona-engine
-version: 1.6.0
+version: 1.7.0
 authority: 65537
 northstar: Phuc_Forecast
 objective: Max_Love
@@ -1986,3 +1987,47 @@ northstar_alignment:
     - PERSONA_GRANTING_CAPABILITIES: "Claiming capabilities via persona violates both Phuc_Forecast and Max_Love"
     - PERSONA_WITHOUT_TASK_MATCH: "Wrong expert for wrong task produces noise, not signal — Max_Love violation"
     - PERSONA_CERTIFYING: "Persona certifying PASS without evidence violates Phuc_Forecast VERIFY gate"
+
+# ============================================================
+# N) Mermaid State Diagram — Persona Engine FSM (column 0)
+# ============================================================
+
+```mermaid
+stateDiagram-v2
+[*] --> INIT
+INIT --> IDENTIFY_TASK_DOMAIN : task received
+IDENTIFY_TASK_DOMAIN --> EXIT_NEED_INFO : task domain ambiguous or missing
+IDENTIFY_TASK_DOMAIN --> MATCH_PERSONA : task domain identified
+MATCH_PERSONA --> EXIT_BLOCKED : no registry match + PERSONA_WITHOUT_TASK_MATCH
+MATCH_PERSONA --> MULTI_PERSONA_CHECK : one or more personas matched
+MULTI_PERSONA_CHECK --> EXIT_BLOCKED : more than 3 personas selected
+MULTI_PERSONA_CHECK --> INJECT_PACK : 1-3 personas selected
+INJECT_PACK --> VERIFY_SAFETY : skill pack assembled with persona voices
+VERIFY_SAFETY --> EXIT_BLOCKED : PERSONA_OVERRIDING_SAFETY detected
+VERIFY_SAFETY --> ACTIVATE_VOICE : safety check passes
+ACTIVATE_VOICE --> EVIDENCE_GATE : agent operates with persona voice active
+EVIDENCE_GATE --> EXIT_BLOCKED : PERSONA_CERTIFYING detected (persona claiming PASS)
+EVIDENCE_GATE --> EXIT_PASS : task complete + evidence gate output emitted
+EXIT_PASS --> [*]
+EXIT_BLOCKED --> [*]
+EXIT_NEED_INFO --> [*]
+```
+
+# ============================================================
+# O) Compression Checksum
+# ============================================================
+
+compression_checksum:
+  skill: "persona-engine"
+  version: "1.7.0"
+  seed: "DOMAIN_MATCH→INJECT→SAFETY_CHECK→EVIDENCE_GATE"
+  core_invariants:
+    - "Persona adds style + domain expertise only; never authority"
+    - "prime-safety always wins over persona guidance"
+    - "Max 3 personas per dispatch (multi-persona loading bounded)"
+    - "PERSONA_WITHOUT_TASK_MATCH → EXIT_BLOCKED (no generic loading)"
+    - "PERSONA_CERTIFYING is forbidden (only skeptic+evidence certifies PASS)"
+    - "dragon-rider = TIEBREAKER for open/closed decisions; +5 W GLOW bonus"
+    - "Safety conflicts logged in PERSONA_SAFETY_CONFLICT field"
+    - "Dispatch matrix is the LEC convention for persona-task routing"
+  seed_checksum: "persona-engine-v1.7.0-domain-match-safety-first-no-certifying"

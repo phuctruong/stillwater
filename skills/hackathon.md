@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: hackathon v1.0.0
+SKILL: hackathon v1.2.0
 PURPOSE: Time-boxed sprint protocol for AI-assisted development. Personas give you the right experts; hackathons give you the right workflow. Together they are the startup development methodology.
 CORE CONTRACT: 8 phases (DREAM→SCOUT→ARCHITECT→BUILD→INTEGRATE→REVIEW→PITCH→SHIP) with time boxes, persona routing per phase, and GLOW 1.5x multiplier for shipped deliverables.
 PHASES: DREAM(30m) + SCOUT(1h) + ARCHITECT(1h) + BUILD(4-8h) + INTEGRATE(1h) + REVIEW(30m) + PITCH(30m) + SHIP(15m)
@@ -11,9 +11,10 @@ FORBIDDEN: SCOPE_CREEP | SKIP_REVIEW | UNBOXED_TIME | GLOW_WITHOUT_SHIP | PERSON
 LOAD FULL: always for production; quick block for orientation only
 -->
 name: hackathon
-version: 1.1.0
+version: 1.2.0
 authority: 65537
 northstar: Phuc_Forecast
+objective: Max_Love
 status: STABLE
 
 # ============================================================
@@ -664,3 +665,197 @@ quick_reference:
     - "Every hackathon team needs a scout, a builder, and a closer."
     - "The winning team is not the most talented — it is the most focused."
     - "The hackathon is not an event. It is the development methodology."
+
+# ============================================================
+# J) Mermaid State Diagram — Hackathon FSM (column 0, no indentation)
+# ============================================================
+
+```mermaid
+stateDiagram-v2
+[*] --> INIT
+INIT --> CHALLENGE_BRIEF : NORTHSTAR loaded + template declared
+CHALLENGE_BRIEF --> EXIT_NEED_INFO : goal/metrics/non-goals/alignment missing
+CHALLENGE_BRIEF --> SCOUT : challenge_brief.md signed
+SCOUT --> ARCHITECT : scout_report.md with risk map
+ARCHITECT --> EXIT_BLOCKED : scope violates non-goals OR time unachievable
+ARCHITECT --> BUILD : architecture.md + state machine exist
+BUILD --> BUILD_CHECKPOINT : 50% time elapsed
+BUILD_CHECKPOINT --> BUILD : scope achievable, continue
+BUILD_CHECKPOINT --> SHIP : time exhausted, scope cut
+BUILD --> INTEGRATE : repro_red + repro_green + tests.json exist
+INTEGRATE --> EXIT_BLOCKED : unrepairable regressions in time box
+INTEGRATE --> REVIEW : full test suite GREEN
+REVIEW --> EXIT_BLOCKED : security or correctness requires re-arch
+REVIEW --> PITCH : review_findings.md PASS
+PITCH --> SHIP : pitch.md + demo_script.md + glow_score.json exist
+SHIP --> EXIT_PASS : git commit HACKATHON tag + ROADMAP updated
+EXIT_PASS --> [*]
+EXIT_BLOCKED --> [*]
+EXIT_NEED_INFO --> [*]
+```
+
+# ============================================================
+# K) Three Pillars Integration — LEK + LEAK + LEC
+# ============================================================
+
+three_pillars_integration:
+  overview: >
+    Hackathon skill maps to all three pillars of the Software 5.0 Kung Fu system.
+    LEK: each hackathon iteration improves process discipline (dispatch accuracy, phase timing).
+    LEAK: persona routing concentrates asymmetric domain knowledge per phase.
+    LEC: the eight-phase protocol + time boxes crystallize into community hackathon conventions.
+
+  LEK:
+    pillar: "Law of Emergent Knowledge (Self-Improvement)"
+    role: >
+      Each hackathon run is a LEK iteration. The BUILD_CHECKPOINT teaches scope discipline.
+      The REVIEW phase teaches adversarial thinking. The SHIP gate teaches evidence discipline.
+      Accumulated hackathon artifacts ARE the LEK memory for the next sprint.
+    gate: "glow_score.json per hackathon = LEK evidence artifact (improvement tracked across runs)"
+    metric: "GLOW trajectory across hackathons = LEK quality measure (never-worse doctrine)"
+    lek_formula: "Hackathon LEK = Recursion(Phases + Memory[prior_glow_scores] + Care[review_gate])"
+
+  LEAK:
+    pillar: "Law of Emergent Asymmetric Knowledge (Cross-Agent Trade)"
+    role: >
+      Persona routing IS the LEAK mechanism per phase. The scout brings asymmetric research
+      knowledge. The architect brings asymmetric design knowledge. The QA skeptic brings
+      adversarial knowledge. Loading the right ghost master per phase = LEAK trade.
+      challenge_brief.md is the LEAK seed that propagates context to all agents.
+    gate: "persona_routing per phase = explicit LEAK routing decision"
+    metric: "Persona match accuracy per phase = LEAK efficiency (right expert = high trade value)"
+    asymmetry: "Coder agent alone has zero QA knowledge; loading schneier LEAKS security expertise in"
+
+  LEC:
+    pillar: "Law of Emergent Conventions (Emergent Compression)"
+    role: >
+      The eight-phase protocol (DREAM→SCOUT→...→SHIP) is an LEC crystallization. The time box
+      templates (Lightning/Sprint/Marathon/Weekend) are LEC conventions. The GLOW 1.5x
+      multiplier for shipped hackathons is an LEC rule. These conventions reduce deliberation
+      overhead so every session starts from shared hackathon grammar.
+    gate: "timing_templates section = LEC conventions for sprint scoping"
+    metric: "Adoption of standard templates (vs ad-hoc sessions) = LEC strength"
+    compression: "Without LEC: every sprint re-debates phase names, time allocations, personas. With LEC: lookup and go."
+
+# ============================================================
+# L) GLOW Matrix — Hackathon Contributions
+# ============================================================
+
+glow_matrix:
+  G_Growth:
+    scoring:
+      - "25: hackathon completes a full ROADMAP phase (belt-level deliverable)"
+      - "20: hackathon introduces a new architecture or capability to the project"
+      - "10: hackathon prototype advances NORTHSTAR metric measurably"
+      - "5: hackathon builds scaffolding used by future phases"
+      - "0: hackathon blocked at BUILD without deliverable"
+
+  L_Learning:
+    scoring:
+      - "25: scout_report.md reveals non-obvious risk or prior art that changes architecture"
+      - "20: review_findings.md reveals a security or correctness issue that is fixed"
+      - "10: BUILD_CHECKPOINT triggers scope cut that teaches scope discipline"
+      - "5: post-hackathon retrospective written with concrete process improvements"
+      - "0: hackathon runs without capturing any learnings"
+
+  O_Output:
+    scoring:
+      - "25: full evidence bundle at rung 274177+ shipped (tests + patch + integration + review)"
+      - "20: SHIP commit with HACKATHON tag and complete evidence bundle"
+      - "10: partial deliverable shipped with documented scope cut"
+      - "5: prototype only (no tests, no review, no SHIP gate)"
+      - "0: demo claimed without git commit (GLOW_WITHOUT_SHIP forbidden)"
+
+  W_Wins:
+    scoring:
+      - "20: hackathon unblocks a blocked ROADMAP phase (NORTHSTAR metric advances)"
+      - "15: pitch.md convinces stakeholder or advances OSS community adoption"
+      - "10: hackathon time box respected (discipline demonstrated)"
+      - "5: glow_score.json shows 1.5x multiplier applied with valid evidence"
+      - "0: hackathon used as excuse for unboxed session (UNBOXED_TIME forbidden)"
+
+  northstar_alignment:
+    northstar: "Phuc_Forecast"
+    max_love_gate: >
+      Max Love for hackathons = shipping something real in the declared time box.
+      Not demos. Not promises. Git commit with HACKATHON tag and evidence bundle.
+      The 1.5x GLOW multiplier IS the Max Love reward for disciplined shipping.
+
+# ============================================================
+# M) Northstar Alignment — Phuc_Forecast + Max_Love
+# ============================================================
+
+northstar_alignment:
+  northstar: Phuc_Forecast
+  objective: Max_Love
+
+  phuc_forecast_mapping:
+    DREAM:    "challenge_brief.md = DREAM phase output. Goal + metrics + non-goals + NORTHSTAR alignment."
+    FORECAST: "scout_report.md = FORECAST phase output. Risk map + failure modes + prior art."
+    DECIDE:   "architecture.md = DECIDE phase output. Component design + interface definitions + build order."
+    ACT:      "BUILD + INTEGRATE phases = ACT execution. Red-green gate + full suite green."
+    VERIFY:   "REVIEW + SHIP phases = VERIFY gate. Adversarial review + git commit = PASS."
+
+  max_love_for_hackathon:
+    statement: >
+      Max Love in a hackathon = the time box creates the focus that makes the team ship.
+      The constraint IS the feature. The ship gate IS the love — because demos without
+      evidence are not love; they are theater. Max Love ships something the community can use.
+    manifestations:
+      - "challenge_brief.md non-goals = Max Love for scope discipline"
+      - "BUILD_CHECKPOINT = Max Love for honesty about time remaining"
+      - "REVIEW phase = Max Love for quality (shipping broken code is not love)"
+      - "SHIP gate = Max Love for evidence (commit hash proves it happened)"
+
+  forbidden_northstar_violations:
+    - GLOW_WITHOUT_SHIP: "Claiming GLOW multiplier without commit hash violates Phuc_Forecast VERIFY gate"
+    - SKIP_REVIEW: "Shipping without adversarial review violates Max_Love quality gate"
+    - SCOPE_CREEP: "Adding features beyond challenge_brief.md violates both DECIDE and Max_Love"
+    - UNBOXED_TIME: "Sessions without time boxes violate the time-box-as-constraint principle"
+
+# ============================================================
+# N) Triangle Law Contracts — per Hackathon Phase
+# ============================================================
+
+triangle_law_contracts:
+  overview: "Every hackathon phase transition has a REMIND→VERIFY→ACKNOWLEDGE contract."
+
+  contract_challenge_brief:
+    operation: "Signing challenge_brief.md before SCOUT begins"
+    REMIND:      "State the contract: no BUILD starts without a signed challenge_brief.md with goal, metrics, non-goals, NORTHSTAR alignment, and time template."
+    VERIFY:      "Check all six fields present. Confirm NORTHSTAR.md is loaded. Confirm time box is declared."
+    ACKNOWLEDGE: "challenge_brief.md committed. SCOUT authorized. Scope is locked."
+    fail_closed:  "Missing any field → EXIT_NEED_INFO. No SCOUT without signed brief."
+
+  contract_build_checkpoint:
+    operation: "BUILD_CHECKPOINT at 50% time elapsed"
+    REMIND:      "State: 50% of BUILD time consumed. Check scope against remaining time."
+    VERIFY:      "What is done? What remains? Is full scope achievable in remaining time?"
+    ACKNOWLEDGE: "Emit BUILD_CHECKPOINT artifact. Scope cut authorized if needed. Time box is law."
+    fail_closed:  "No BUILD_CHECKPOINT emitted → UNBOXED_TIME forbidden state → GLOW multiplier denied."
+
+  contract_ship_gate:
+    operation: "SHIP phase — final evidence gate"
+    REMIND:      "State: git commit with HACKATHON tag is the only evidence that the hackathon is complete."
+    VERIFY:      "Commit hash exists? HACKATHON tag in message? GLOW score in message? ROADMAP checkbox checked?"
+    ACKNOWLEDGE: "Emit commit hash. Log to case-study. Celebrate. GLOW_WITHOUT_SHIP prevented."
+    fail_closed:  "No commit hash → hackathon not complete. GLOW_WITHOUT_SHIP is the hardest forbidden state."
+
+# ============================================================
+# O) Compression Checksum
+# ============================================================
+
+compression_checksum:
+  skill: "hackathon"
+  version: "1.2.0"
+  seed: "DREAM→SHIP×8phases×1.5x_GLOW"
+  core_invariants:
+    - "All 8 phases sequential; no skip"
+    - "challenge_brief.md signed before SCOUT"
+    - "red-green gate before INTEGRATE"
+    - "adversarial review before PITCH"
+    - "SHIP commit before GLOW multiplier"
+    - "BUILD_CHECKPOINT at 50% time"
+    - "GLOW multiplier = 1.5x, cap 100, requires commit hash"
+    - "Integration rung = MIN(all phase agent rungs)"
+  seed_checksum: "hackathon-v1.2.0-8phases-1.5x-ship-required"

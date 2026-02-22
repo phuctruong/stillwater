@@ -268,6 +268,73 @@ RUNG_65537 (required for this agent):
 
 ---
 
+## 8.0) State Machine (YAML)
+
+```yaml
+state_machine:
+  states: [INIT, INTAKE_TASK, NULL_CHECK, ENUMERATE_FILES, CLASSIFY_FILES,
+           RUN_TESTS, SECURITY_SCAN, AUDIT_SKILLS, AUDIT_RECIPES, AUDIT_MDS,
+           DETECT_DUPLICATES, MOVE_SUSPICIOUS, BUILD_EVIDENCE,
+           UPDATE_FINAL_AUDIT, SOCRATIC_REVIEW,
+           EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  transitions:
+    - {from: INIT,              to: INTAKE_TASK,        trigger: capsule_received}
+    - {from: INTAKE_TASK,       to: NULL_CHECK,          trigger: always}
+    - {from: NULL_CHECK,        to: EXIT_NEED_INFO,      trigger: repo_root_missing}
+    - {from: NULL_CHECK,        to: ENUMERATE_FILES,     trigger: inputs_defined}
+    - {from: ENUMERATE_FILES,   to: CLASSIFY_FILES,      trigger: always}
+    - {from: CLASSIFY_FILES,    to: RUN_TESTS,           trigger: always}
+    - {from: RUN_TESTS,         to: EXIT_BLOCKED,        trigger: tests_failed}
+    - {from: RUN_TESTS,         to: SECURITY_SCAN,       trigger: tests_passed}
+    - {from: SECURITY_SCAN,     to: EXIT_BLOCKED,        trigger: critical_finding}
+    - {from: SECURITY_SCAN,     to: AUDIT_SKILLS,        trigger: security_passed}
+    - {from: AUDIT_SKILLS,      to: AUDIT_RECIPES,       trigger: always}
+    - {from: AUDIT_RECIPES,     to: AUDIT_MDS,           trigger: always}
+    - {from: AUDIT_MDS,         to: DETECT_DUPLICATES,   trigger: always}
+    - {from: DETECT_DUPLICATES, to: MOVE_SUSPICIOUS,     trigger: always}
+    - {from: MOVE_SUSPICIOUS,   to: BUILD_EVIDENCE,      trigger: always}
+    - {from: BUILD_EVIDENCE,    to: UPDATE_FINAL_AUDIT,  trigger: always}
+    - {from: UPDATE_FINAL_AUDIT,to: SOCRATIC_REVIEW,     trigger: always}
+    - {from: SOCRATIC_REVIEW,   to: EXIT_PASS,           trigger: all_gates_passed}
+    - {from: SOCRATIC_REVIEW,   to: EXIT_BLOCKED,        trigger: blocker_remains}
+  forbidden_states:
+    - PASS_WITHOUT_TEST_RUN
+    - PASS_WITHOUT_SECURITY_SCAN
+    - AUDIT_FROM_MEMORY
+    - DELETE_WITHOUT_BACKUP
+    - CLAIM_WITHOUT_EVIDENCE
+    - MODIFY_PRODUCTION_CODE
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE_TASK
+    INTAKE_TASK --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : repo_root_missing
+    NULL_CHECK --> ENUMERATE_FILES : inputs_defined
+    ENUMERATE_FILES --> CLASSIFY_FILES
+    CLASSIFY_FILES --> RUN_TESTS
+    RUN_TESTS --> EXIT_BLOCKED : tests_failed
+    RUN_TESTS --> SECURITY_SCAN : tests_passed
+    SECURITY_SCAN --> EXIT_BLOCKED : critical_finding
+    SECURITY_SCAN --> AUDIT_SKILLS : security_passed
+    AUDIT_SKILLS --> AUDIT_RECIPES
+    AUDIT_RECIPES --> AUDIT_MDS
+    AUDIT_MDS --> DETECT_DUPLICATES
+    DETECT_DUPLICATES --> MOVE_SUSPICIOUS
+    MOVE_SUSPICIOUS --> BUILD_EVIDENCE
+    BUILD_EVIDENCE --> UPDATE_FINAL_AUDIT
+    UPDATE_FINAL_AUDIT --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> EXIT_PASS : all_gates_passed
+    SOCRATIC_REVIEW --> EXIT_BLOCKED : blocker_remains
+    classDef forbidden fill:#f55,color:#fff
+    class PASS_WITHOUT_TEST_RUN,AUDIT_FROM_MEMORY,DELETE_WITHOUT_BACKUP forbidden
+```
+
+---
+
 ## 8) Anti-Patterns
 
 **Audit Theater:** Writing "everything looks good" without running tests.

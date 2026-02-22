@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: prime-sql v1.2.0
+SKILL: prime-sql v1.3.0
 PURPOSE: Fail-closed SQL query design agent with null-safety, index analysis, explain plan interpretation, and financial arithmetic discipline.
 CORE CONTRACT: Every query PASS requires explain plan evidence, null-coverage proof, and no float in financial paths. Cartesian joins require explicit documented intent. SELECT * is never acceptable in production.
 HARD GATES: Index gate blocks queries lacking index coverage on large tables. Null gate blocks queries that coerce NULL to zero or empty. Financial gate blocks float arithmetic in any aggregation path. Explain gate requires EXPLAIN ANALYZE output for any query touching >1000 estimated rows.
@@ -11,7 +11,7 @@ LOAD FULL: always for production; quick block is for orientation only
 -->
 
 PRIME_SQL_SKILL:
-  version: 1.2.0
+  version: 1.3.0
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
@@ -351,3 +351,127 @@ stateDiagram-v2
         NUMERIC-for-money, and parameterized inputs started as best practices; they are now Lane A gates."
       emerging_conventions: [explain_gate_as_default, numeric_decimal_standard,
         parameterization_as_non_negotiable, null_semantic_documentation]
+
+  # ============================================================
+  # M) GLOW Matrix  [Growth × Learning × Output × Wins]
+  # ============================================================
+  GLOW_Matrix:
+    Growth:
+      metric: "queries_with_explain_plans_captured"
+      target: "Every query touching > LARGE_TABLE_THRESHOLD_ROWS (1000) has EXPLAIN ANALYZE output in evidence"
+      signal: "${EVIDENCE_ROOT}/explain_plan.txt — rows estimated vs actual, plan node types"
+      gate: "UNWITNESSED_EXPLAIN_PLAN = Growth=0; no Growth credit without EXPLAIN ANALYZE for large-table queries"
+
+    Learning:
+      metric: "null_semantics_documented_per_nullable_column_rate"
+      target: ">= 95% of nullable columns have documented null_semantic and aggregation_behavior"
+      signal: "${EVIDENCE_ROOT}/null_analysis.txt — columns_without_null_semantic count"
+      gate: "NULL_COERCED_TO_ZERO without business-rule citation = Learning regression; null discipline not applied"
+
+    Output:
+      metric: "financial_columns_using_exact_types"
+      target: "Zero FLOAT/DOUBLE/REAL types in any SUM, AVG, or comparison path on financial data"
+      signal: "${EVIDENCE_ROOT}/financial_type_check.txt — forbidden_types_found list"
+      gate: "FLOAT_IN_FINANCIAL_PATH = Output=0; NUMERIC(19,4) minimum is the only acceptable output for money"
+
+    Wins:
+      metric: "zero_cartesian_joins_and_zero_unparameterized_inputs"
+      target: "No cartesian joins without documented intent; no user input concatenated into SQL"
+      signal: "${EVIDENCE_ROOT}/test_results.txt — cartesian_detected flag; parameterization_proof.txt"
+      gate: "CARTESIAN_JOIN_WITHOUT_INTENT or UNPARAMETERIZED_USER_INPUT = Wins violation = EXIT_BLOCKED"
+
+  # ============================================================
+  # N) Northstar Alignment  [Phuc_Forecast + Max_Love]
+  # ============================================================
+  Northstar_Alignment:
+    northstar: "Phuc_Forecast + Max_Love"
+    metric: "Query correctness / Financial data integrity / SQL injection surface = 0"
+    alignment: |
+      prime-sql advances Phuc_Forecast by making SQL query behavior observable and auditable.
+      EXPLAIN plans → Phuc_Forecast can model query cost before deployment.
+      Null semantic documentation → Phuc_Forecast knows what absence means in each column.
+      Parameterized queries → Phuc_Forecast can reason about injection surface with confidence.
+      Without EXPLAIN evidence and null documentation, Phuc_Forecast is reasoning about
+      data queries from first principles rather than from observed behavior.
+    max_love: |
+      Max_Love requires SQL honesty — users trust query results to represent reality.
+      FLOAT_IN_FINANCIAL_PATH is a Max_Love violation: amounts drift silently at scale.
+      NULL_COERCED_TO_ZERO is a Max_Love violation: missing data appears as zero — wrong in both directions.
+      CARTESIAN_JOIN_WITHOUT_INTENT is a Max_Love violation: joins explode row counts silently.
+      The SQL gates exist because incorrect queries produce numbers users believe and act on.
+    hard_gate: |
+      UNPARAMETERIZED_USER_INPUT violates both Max_Love and prime-safety.
+      SQL injection is a boundary violation: untrusted data executes as SQL.
+      The SQL_Injection_Gate is a prime-safety hard stop, not just a quality preference.
+
+  # ============================================================
+  # O) Triangle Law: REMIND → VERIFY → ACKNOWLEDGE
+  # ============================================================
+  Triangle_Law:
+    contract_1_null_safety:
+      REMIND: >
+        Before writing any SQL with nullable columns: document the null semantic for each nullable column
+        (missing/inapplicable/unknown/error). Confirm: is COUNT(*) or COUNT(column) correct for this
+        business logic? Is AVG() on a nullable column excluding NULLs intentionally or accidentally?
+        Is COALESCE(financial_col, 0) justified by a business rule?
+      VERIFY: >
+        Open the null_analysis document. Does every nullable column appearing in the query have a
+        documented null_semantic and aggregation_behavior? Does any COALESCE(x, 0) on a currency
+        column have a business_rule_citation? If any column lacks documentation: NULL_SAFETY_GATE triggers.
+      ACKNOWLEDGE: >
+        Null analysis documented. ${EVIDENCE_ROOT}/null_analysis.txt written.
+        NULL_SAFETY_GATE passes. Null semantics are now Lane A artifacts.
+        The query's behavior on missing data is explicit and intentional, not accidental.
+
+    contract_2_explain_plan:
+      REMIND: >
+        Before executing any query against a table with estimated rows > LARGE_TABLE_THRESHOLD_ROWS (1000):
+        run EXPLAIN ANALYZE and capture the output. Look for Seq Scan on large tables,
+        Nested Loop with large outer sets, and mismatched estimated vs actual row counts.
+      VERIFY: >
+        Does the explain plan show index usage on all WHERE/JOIN columns?
+        Are there any Seq Scan nodes on tables with > 10000 rows that are not justified?
+        Is the estimated row count reasonable (within 10x of actual)?
+        If unexpected plan nodes appear: revise query or add index before proceeding.
+      ACKNOWLEDGE: >
+        EXPLAIN ANALYZE output captured in ${EVIDENCE_ROOT}/explain_plan.txt.
+        EXPLAIN_PLAN_GATE passes. Query execution plan is observable and acceptable.
+        Index coverage verified. No unexpected Seq Scans on large tables.
+
+    contract_3_financial_types:
+      REMIND: >
+        Before any SQL aggregation on monetary or quantity columns: scan for FLOAT, DOUBLE PRECISION,
+        REAL, float4, or float8 types. Replace all with NUMERIC(19,4) for monetary values
+        or NUMERIC(10,6) for rate values. Make all rounding explicit with ROUND(value, scale).
+      VERIFY: >
+        Run financial_type_check. Does ${EVIDENCE_ROOT}/financial_type_check.txt show
+        zero entries in forbidden_types_found? Does every SUM/AVG operate on NUMERIC/DECIMAL?
+        Are all ROUND calls explicit with declared scale? Is there any implicit cast to float?
+      ACKNOWLEDGE: >
+        Financial type check clean. ${EVIDENCE_ROOT}/financial_type_check.txt written.
+        FLOAT_FINANCIAL_GATE passes. All monetary aggregations use exact NUMERIC arithmetic.
+        Financial totals will not drift with scale. Max_Love honored in financial reporting.
+
+  # ============================================================
+  # P) Compression / Seed Checksum
+  # ============================================================
+  Compression:
+    skill_id: "prime-sql"
+    version: "1.3.0"
+    seed: "null=constraint[T0] | index=compression[T0] | explain=evidence[T1] | financial=integrity[T0] | injection=boundary[T0] | rung_default=641"
+    checksum_fields:
+      - version
+      - authority
+      - hard_gates_count: 7
+      - forbidden_states_count: 10
+      - financial_types_forbidden: [float, double, real, float4, float8]
+      - financial_types_required: [numeric, decimal]
+      - large_table_threshold_rows: 1000
+      - rung_default: 641
+      - security_queries_rung: 65537
+    integrity_note: >
+      Load QUICK LOAD block for orientation.
+      Load full file for production SQL authoring and review.
+      The seed is the minimal compression payload: no-float-in-finance + null-semantics-per-column
+      + EXPLAIN-for-large-tables + no-cartesian-without-intent + parameterized-user-input
+      + 641 rung default (65537 for security-sensitive queries).

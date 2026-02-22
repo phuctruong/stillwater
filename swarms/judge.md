@@ -222,6 +222,65 @@ RUNG_641 (default):
 
 ---
 
+## 8.0) State Machine (YAML)
+
+```yaml
+state_machine:
+  states: [INIT, INTAKE_TASK, NULL_CHECK, READ_SCOUT_REPORT, READ_FORECAST_MEMO,
+           EVALUATE_APPROACHES, LOCK_SCOPE, SET_RUNG_TARGET, BUILD_DECISION_RECORD,
+           SOCRATIC_REVIEW, EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  transitions:
+    - {from: INIT,                  to: INTAKE_TASK,          trigger: capsule_received}
+    - {from: INTAKE_TASK,           to: NULL_CHECK,            trigger: always}
+    - {from: NULL_CHECK,            to: EXIT_NEED_INFO,        trigger: task_null}
+    - {from: NULL_CHECK,            to: READ_SCOUT_REPORT,     trigger: inputs_defined}
+    - {from: READ_SCOUT_REPORT,     to: EXIT_NEED_INFO,        trigger: scout_missing}
+    - {from: READ_SCOUT_REPORT,     to: READ_FORECAST_MEMO,    trigger: scout_valid}
+    - {from: READ_FORECAST_MEMO,    to: EXIT_NEED_INFO,        trigger: forecast_missing}
+    - {from: READ_FORECAST_MEMO,    to: EVALUATE_APPROACHES,   trigger: forecast_valid}
+    - {from: EVALUATE_APPROACHES,   to: EXIT_BLOCKED,          trigger: no_viable_approach}
+    - {from: EVALUATE_APPROACHES,   to: LOCK_SCOPE,            trigger: approach_chosen}
+    - {from: LOCK_SCOPE,            to: SET_RUNG_TARGET,       trigger: always}
+    - {from: SET_RUNG_TARGET,       to: BUILD_DECISION_RECORD, trigger: always}
+    - {from: BUILD_DECISION_RECORD, to: SOCRATIC_REVIEW,       trigger: always}
+    - {from: SOCRATIC_REVIEW,       to: EVALUATE_APPROACHES,   trigger: revision_needed}
+    - {from: SOCRATIC_REVIEW,       to: EXIT_PASS,             trigger: GO_issued}
+    - {from: SOCRATIC_REVIEW,       to: EXIT_BLOCKED,          trigger: NO_GO_issued}
+    - {from: SOCRATIC_REVIEW,       to: EXIT_NEED_INFO,        trigger: NEED_INFO_issued}
+  forbidden_states:
+    - GO_WITHOUT_FORECAST_MEMO
+    - SCOPE_EXPANSION_WITHOUT_EVIDENCE
+    - RUNG_TARGET_NOT_DECLARED
+    - PATCH_ATTEMPT
+    - TEST_ATTEMPT
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE_TASK
+    INTAKE_TASK --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : task_null
+    NULL_CHECK --> READ_SCOUT_REPORT : inputs_defined
+    READ_SCOUT_REPORT --> EXIT_NEED_INFO : scout_missing
+    READ_SCOUT_REPORT --> READ_FORECAST_MEMO : scout_valid
+    READ_FORECAST_MEMO --> EXIT_NEED_INFO : forecast_missing
+    READ_FORECAST_MEMO --> EVALUATE_APPROACHES : forecast_valid
+    EVALUATE_APPROACHES --> EXIT_BLOCKED : no_viable_approach
+    EVALUATE_APPROACHES --> LOCK_SCOPE : approach_chosen
+    LOCK_SCOPE --> SET_RUNG_TARGET
+    SET_RUNG_TARGET --> BUILD_DECISION_RECORD
+    BUILD_DECISION_RECORD --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> EXIT_PASS : GO
+    SOCRATIC_REVIEW --> EXIT_BLOCKED : NO_GO
+    SOCRATIC_REVIEW --> EXIT_NEED_INFO : NEED_INFO
+    classDef forbidden fill:#f55,color:#fff
+    class GO_WITHOUT_FORECAST_MEMO,RUNG_TARGET_NOT_DECLARED,PATCH_ATTEMPT forbidden
+```
+
+---
+
 ## 8) Anti-Patterns
 
 **Rubber Stamp GO:** Issuing GO without reading FORECAST_MEMO failure modes.

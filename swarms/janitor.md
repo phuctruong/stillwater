@@ -238,6 +238,65 @@ RUNG_641 (default):
 
 ---
 
+## 8.0) State Machine (YAML)
+
+```yaml
+state_machine:
+  states: [INIT, INTAKE_TASK, NULL_CHECK, SCAN_WORKSPACE, CLASSIFY_CANDIDATES,
+           BUILD_SCAN_RECEIPT, AWAIT_APPROVAL, APPLY_CLEANUP, POST_CHECK,
+           BUILD_APPLY_RECEIPT, SOCRATIC_REVIEW,
+           EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO, EXIT_AWAITING_APPROVAL]
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO, EXIT_AWAITING_APPROVAL]
+  transitions:
+    - {from: INIT,               to: INTAKE_TASK,          trigger: capsule_received}
+    - {from: INTAKE_TASK,        to: NULL_CHECK,            trigger: always}
+    - {from: NULL_CHECK,         to: EXIT_NEED_INFO,        trigger: scan_root_null}
+    - {from: NULL_CHECK,         to: SCAN_WORKSPACE,        trigger: inputs_defined}
+    - {from: SCAN_WORKSPACE,     to: CLASSIFY_CANDIDATES,   trigger: always}
+    - {from: CLASSIFY_CANDIDATES,to: BUILD_SCAN_RECEIPT,    trigger: always}
+    - {from: BUILD_SCAN_RECEIPT, to: AWAIT_APPROVAL,        trigger: mode_MANUAL}
+    - {from: BUILD_SCAN_RECEIPT, to: APPLY_CLEANUP,         trigger: mode_AUTO}
+    - {from: AWAIT_APPROVAL,     to: EXIT_AWAITING_APPROVAL,trigger: no_approval}
+    - {from: AWAIT_APPROVAL,     to: APPLY_CLEANUP,         trigger: approved}
+    - {from: APPLY_CLEANUP,      to: POST_CHECK,            trigger: always}
+    - {from: POST_CHECK,         to: EXIT_BLOCKED,          trigger: regressions_detected}
+    - {from: POST_CHECK,         to: BUILD_APPLY_RECEIPT,   trigger: post_check_passed}
+    - {from: BUILD_APPLY_RECEIPT,to: SOCRATIC_REVIEW,       trigger: always}
+    - {from: SOCRATIC_REVIEW,    to: EXIT_PASS,             trigger: receipts_complete}
+    - {from: SOCRATIC_REVIEW,    to: EXIT_BLOCKED,          trigger: invariant_violated}
+  forbidden_states:
+    - DELETE_WITHOUT_APPROVAL
+    - OVERWRITE_WITHOUT_ARCHIVE
+    - OPERATION_WITHOUT_RECEIPT
+    - POST_CHECK_SKIPPED
+    - SCOPE_EXPANSION
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE_TASK
+    INTAKE_TASK --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : scan_root_null
+    NULL_CHECK --> SCAN_WORKSPACE : inputs_defined
+    SCAN_WORKSPACE --> CLASSIFY_CANDIDATES
+    CLASSIFY_CANDIDATES --> BUILD_SCAN_RECEIPT
+    BUILD_SCAN_RECEIPT --> AWAIT_APPROVAL : mode_MANUAL
+    BUILD_SCAN_RECEIPT --> APPLY_CLEANUP : mode_AUTO
+    AWAIT_APPROVAL --> EXIT_AWAITING_APPROVAL : no_approval
+    AWAIT_APPROVAL --> APPLY_CLEANUP : approved
+    APPLY_CLEANUP --> POST_CHECK
+    POST_CHECK --> EXIT_BLOCKED : regressions
+    POST_CHECK --> BUILD_APPLY_RECEIPT : passed
+    BUILD_APPLY_RECEIPT --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> EXIT_PASS : receipts_complete
+    SOCRATIC_REVIEW --> EXIT_BLOCKED : invariant_violated
+    classDef forbidden fill:#f55,color:#fff
+    class DELETE_WITHOUT_APPROVAL,OVERWRITE_WITHOUT_ARCHIVE,POST_CHECK_SKIPPED forbidden
+```
+
+---
+
 ## 8) Anti-Patterns
 
 **Silent Delete:** Removing a file without archiving it first.

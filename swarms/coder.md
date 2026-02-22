@@ -272,6 +272,69 @@ RUNG_65537 (promotion):
 
 ---
 
+## 8.0) State Machine (YAML)
+
+```yaml
+state_machine:
+  states: [INIT, INTAKE_TASK, NULL_CHECK, READ_DECISION_RECORD, LOCALIZE_FILES,
+           RED_GATE, PATCH, TEST, SECURITY_GATE, EVIDENCE_BUILD, FINAL_SEAL,
+           EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  transitions:
+    - {from: INIT,                to: INTAKE_TASK,          trigger: capsule_received}
+    - {from: INTAKE_TASK,         to: NULL_CHECK,            trigger: always}
+    - {from: NULL_CHECK,          to: EXIT_NEED_INFO,        trigger: decision_record_missing}
+    - {from: NULL_CHECK,          to: READ_DECISION_RECORD,  trigger: inputs_defined}
+    - {from: READ_DECISION_RECORD,to: EXIT_BLOCKED,          trigger: verdict_is_NO_GO}
+    - {from: READ_DECISION_RECORD,to: LOCALIZE_FILES,        trigger: verdict_is_GO}
+    - {from: LOCALIZE_FILES,      to: RED_GATE,              trigger: bugfix_task}
+    - {from: LOCALIZE_FILES,      to: PATCH,                 trigger: feature_task}
+    - {from: RED_GATE,            to: EXIT_BLOCKED,          trigger: not_reproducible}
+    - {from: RED_GATE,            to: PATCH,                 trigger: red_confirmed}
+    - {from: PATCH,               to: TEST,                  trigger: always}
+    - {from: TEST,                to: SECURITY_GATE,         trigger: security_triggered}
+    - {from: TEST,                to: EVIDENCE_BUILD,        trigger: tests_pass}
+    - {from: TEST,                to: EXIT_BLOCKED,          trigger: invariant_violation}
+    - {from: SECURITY_GATE,       to: EXIT_BLOCKED,          trigger: security_failed}
+    - {from: SECURITY_GATE,       to: EVIDENCE_BUILD,        trigger: security_passed}
+    - {from: EVIDENCE_BUILD,      to: FINAL_SEAL,            trigger: always}
+    - {from: FINAL_SEAL,          to: EXIT_PASS,             trigger: evidence_complete}
+    - {from: FINAL_SEAL,          to: EXIT_BLOCKED,          trigger: evidence_incomplete}
+  forbidden_states:
+    - PATCH_WITHOUT_RED_GATE
+    - UNWITNESSED_PASS
+    - STACKED_SPECULATIVE_PATCHES
+    - SCOPE_EXPANSION
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE_TASK
+    INTAKE_TASK --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : decision_record_missing
+    NULL_CHECK --> READ_DECISION_RECORD : inputs_defined
+    READ_DECISION_RECORD --> EXIT_BLOCKED : verdict_NO_GO
+    READ_DECISION_RECORD --> LOCALIZE_FILES : verdict_GO
+    LOCALIZE_FILES --> RED_GATE : bugfix_task
+    LOCALIZE_FILES --> PATCH : feature_task
+    RED_GATE --> EXIT_BLOCKED : not_reproducible
+    RED_GATE --> PATCH : red_confirmed
+    PATCH --> TEST
+    TEST --> SECURITY_GATE : security_triggered
+    TEST --> EVIDENCE_BUILD : tests_pass
+    TEST --> EXIT_BLOCKED : invariant_violation
+    SECURITY_GATE --> EXIT_BLOCKED : failed
+    SECURITY_GATE --> EVIDENCE_BUILD : passed
+    EVIDENCE_BUILD --> FINAL_SEAL
+    FINAL_SEAL --> EXIT_PASS : evidence_complete
+    FINAL_SEAL --> EXIT_BLOCKED : evidence_incomplete
+    classDef forbidden fill:#f55,color:#fff
+    class PATCH_WITHOUT_RED_GATE,UNWITNESSED_PASS forbidden
+```
+
+---
+
 ## 8) Anti-Patterns
 
 **Green Without Red:** Claiming the patch works without confirming the bug existed first.

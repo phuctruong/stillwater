@@ -284,6 +284,18 @@ The recipe must output a stable “replay capsule”:
 
 ---
 
+## Three Pillars Mapping
+
+| Pillar | Element | Role in this Combo |
+|--------|---------|-------------------|
+| **L (Logic / Evidence)** | Triage Closure Gate (Node 6): requires FailureSignature + LocalizationReport + repro_red evidence | No fix proposed without deterministic signature and reproduced failure |
+| **E (Execution / Energy)** | Node 4 (Repro Red Run) via Run+Test Harness sub-recipe | Repro-first discipline: energy spent proving failure before proposing fix |
+| **K (Knowledge / Capital)** | FailureSignature.json + LocalizationReport.json + replay capsule | Failure knowledge structured for reuse — CI artifact becomes local repro script |
+
+LEK summary: Knowledge (FailureSignature) localizes the bug; Energy (Repro Red Run) confirms it; Logic (Closure Gate) prevents fixes without proof of failure.
+
+---
+
 ## Why This Combo Is Critical
 
 It prevents the classic agent failure mode:

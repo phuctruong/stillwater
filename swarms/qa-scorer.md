@@ -352,6 +352,59 @@ Error: ModuleNotFoundError: No module named 'stillwater.cli'
 
 ---
 
+## STATE_MACHINE
+
+```yaml
+state_machine:
+  agent: qa-scorer
+  version: 1.0.0
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_NEED_INFO, EXIT_BLOCKED]
+  states:
+    INIT: {on: {capsule_received: INTAKE_QUESTIONS}}
+    INTAKE_QUESTIONS: {on: {always: NULL_CHECK}}
+    NULL_CHECK: {on: {missing: EXIT_NEED_INFO, present: IDENTITY_GATE}}
+    IDENTITY_GATE: {on: {same_agent: EXIT_BLOCKED, different: READ_PROJECT_STATE}}
+    READ_PROJECT_STATE: {on: {always: SCORE_QUESTION}}
+    SCORE_QUESTION: {on: {evidence_gathered: ASSIGN_VERDICT}}
+    ASSIGN_VERDICT: {on: {GREEN: DEFINE_FALSIFIER, not_GREEN: SCORE_QUESTION}}
+    DEFINE_FALSIFIER: {on: {rung_274177: TEST_FALSIFIER, rung_641: SCORE_QUESTION}}
+    TEST_FALSIFIER: {on: {triggered: EXIT_BLOCKED, holds: SCORE_QUESTION}}
+    SCORE_QUESTION: {on: {all_scored: RUN_INTEGRATION_PROBES}}
+    RUN_INTEGRATION_PROBES: {on: {always: ASSEMBLE_SCORECARD}}
+    ASSEMBLE_SCORECARD: {on: {always: WRITE_GAP_REPORT}}
+    WRITE_GAP_REPORT: {on: {always: SOCRATIC_REVIEW}}
+    SOCRATIC_REVIEW: {on: {gaps: SCORE_QUESTION, pass: FINAL_SEAL}}
+    FINAL_SEAL: {on: {rung_met: EXIT_PASS, rung_unmet: EXIT_BLOCKED}}
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> INTAKE_QUESTIONS: capsule received
+    INTAKE_QUESTIONS --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO: questions missing
+    NULL_CHECK --> IDENTITY_GATE: questions present
+    IDENTITY_GATE --> EXIT_BLOCKED: SELF_CONFIRMED_GREEN
+    IDENTITY_GATE --> READ_PROJECT_STATE: identities differ
+    READ_PROJECT_STATE --> SCORE_QUESTION
+    SCORE_QUESTION --> ASSIGN_VERDICT: evidence gathered
+    ASSIGN_VERDICT --> DEFINE_FALSIFIER: GREEN
+    ASSIGN_VERDICT --> SCORE_QUESTION: YELLOW/RED
+    DEFINE_FALSIFIER --> TEST_FALSIFIER: rung≥274177
+    TEST_FALSIFIER --> EXIT_BLOCKED: falsifier triggered
+    TEST_FALSIFIER --> SCORE_QUESTION: holds
+    SCORE_QUESTION --> RUN_INTEGRATION_PROBES: all scored
+    RUN_INTEGRATION_PROBES --> ASSEMBLE_SCORECARD
+    ASSEMBLE_SCORECARD --> WRITE_GAP_REPORT
+    WRITE_GAP_REPORT --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> FINAL_SEAL: pass
+    FINAL_SEAL --> EXIT_PASS: rung met
+    FINAL_SEAL --> EXIT_BLOCKED: rung unmet
+```
+
+---
+
 ## 9) Anti-Patterns
 
 **Confident GREEN:** "I know this code works because I wrote it" or "I read the README and it says it works."

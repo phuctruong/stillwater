@@ -309,6 +309,57 @@ RUNG_65537 (production; adversarial):
 
 ---
 
+## STATE_MACHINE
+
+```yaml
+state_machine:
+  agent: audio-engineer
+  version: 1.0.0
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_NEED_INFO, EXIT_BLOCKED]
+  states:
+    INIT: {on: {capsule_received: INTAKE_SPEC}}
+    INTAKE_SPEC: {on: {always: NULL_CHECK}}
+    NULL_CHECK: {on: {null_found: EXIT_NEED_INFO, valid: SEED_VALIDATE}}
+    SEED_VALIDATE: {on: {invalid: EXIT_BLOCKED, valid: SYNTHESIZE}}
+    SYNTHESIZE: {on: {always: WAV_WRITE}}
+    WAV_WRITE: {on: {always: STT_VERIFY}}
+    STT_VERIFY: {on: {wer_exceeded: EXIT_BLOCKED, rung_274177: SPECTRAL_ANALYZE, rung_641: EVIDENCE_BUILD}}
+    SPECTRAL_ANALYZE: {on: {fail: EXIT_BLOCKED, rung_274177: SEED_SWEEP}}
+    SEED_SWEEP: {on: {fail: EXIT_BLOCKED, rung_65537: ADVERSARIAL_SWEEP, rung_274177: EVIDENCE_BUILD}}
+    ADVERSARIAL_SWEEP: {on: {fail: EXIT_BLOCKED, pass: EVIDENCE_BUILD}}
+    EVIDENCE_BUILD: {on: {always: SOCRATIC_REVIEW}}
+    SOCRATIC_REVIEW: {on: {revision_needed: SYNTHESIZE, pass: FINAL_SEAL}}
+    FINAL_SEAL: {on: {complete: EXIT_PASS, incomplete: EXIT_BLOCKED}}
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> INTAKE_SPEC: capsule received
+    INTAKE_SPEC --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO: seed/input null
+    NULL_CHECK --> SEED_VALIDATE: valid
+    SEED_VALIDATE --> EXIT_BLOCKED: invalid seed
+    SEED_VALIDATE --> SYNTHESIZE: valid
+    SYNTHESIZE --> WAV_WRITE
+    WAV_WRITE --> STT_VERIFY
+    STT_VERIFY --> EXIT_BLOCKED: WER exceeded
+    STT_VERIFY --> SPECTRAL_ANALYZE: rung≥274177
+    STT_VERIFY --> EVIDENCE_BUILD: rung 641
+    SPECTRAL_ANALYZE --> SEED_SWEEP: pass
+    SEED_SWEEP --> ADVERSARIAL_SWEEP: rung 65537
+    SEED_SWEEP --> EVIDENCE_BUILD: rung 274177
+    ADVERSARIAL_SWEEP --> EVIDENCE_BUILD: pass
+    EVIDENCE_BUILD --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> SYNTHESIZE: revision
+    SOCRATIC_REVIEW --> FINAL_SEAL: pass
+    FINAL_SEAL --> EXIT_PASS: manifest complete
+    FINAL_SEAL --> EXIT_BLOCKED: incomplete
+```
+
+---
+
 ## 8) Anti-Patterns
 
 **The Whisper Shortcut:** Running whisper without recording the exact model size and version.

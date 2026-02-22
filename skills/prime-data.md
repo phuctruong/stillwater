@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: prime-data v1.2.0
+SKILL: prime-data v1.3.0
 PURPOSE: Fail-closed data pipeline design agent (ETL/ELT). Enforces null handling, schema validation, idempotency, exact arithmetic for financial aggregations, and schema versioning.
 CORE CONTRACT: Every pipeline PASS requires: idempotency key on every write, schema version tracked, null semantics documented per field, no float in financial aggregations, and schema validation at every ingestion boundary.
 HARD GATES: Float gate blocks float types in any financial aggregation path. Idempotency gate blocks pipelines without idempotency key or upsert semantics. Schema version gate blocks pipelines without declared schema version. Null gate blocks pipelines that silently drop or coerce nulls in financial data.
@@ -11,7 +11,7 @@ LOAD FULL: always for production; quick block is for orientation only
 -->
 
 PRIME_DATA_SKILL:
-  version: 1.2.0
+  version: 1.3.0
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
@@ -349,3 +349,124 @@ stateDiagram-v2
         schema registries, and NUMERIC-for-money started as best practices; they are now Lane A gates."
       emerging_conventions: [run_twice_idempotency_as_standard, schema_registry_adoption,
         decimal_numeric_for_financial, watermark_policy_for_streaming]
+
+  # ============================================================
+  # M) GLOW Matrix  [Growth × Learning × Output × Wins]
+  # ============================================================
+  GLOW_Matrix:
+    Growth:
+      metric: "pipelines_with_idempotency_strategy_declared_and_tested"
+      target: "Every pipeline write has a declared idempotency strategy tested by run-twice protocol"
+      signal: "${EVIDENCE_ROOT}/idempotency_test.txt — run_1_checksum == run_2_checksum"
+      gate: "NO_IDEMPOTENCY_KEY = Growth=0; no Growth credit without idempotency strategy tested"
+
+    Learning:
+      metric: "null_semantics_documented_per_field_rate"
+      target: ">= 95% of nullable fields in schema have documented null_semantic (missing/unknown/inapplicable/error)"
+      signal: "${EVIDENCE_ROOT}/null_analysis.txt — fields_without_null_semantic count"
+      gate: "SILENT_NULL_DROP or SILENT_NULL_COERCION_TO_ZERO = Learning regression; null discipline not internalized"
+
+    Output:
+      metric: "financial_aggregations_using_exact_types"
+      target: "Zero float/double types in any SUM, AVG, or comparison path touching financial data"
+      signal: "${EVIDENCE_ROOT}/financial_type_check.txt — forbidden_types_found list"
+      gate: "FLOAT_IN_FINANCIAL_AGGREGATION = Output=0; Decimal/NUMERIC is the only acceptable output type"
+
+    Wins:
+      metric: "schema_versions_tracked_with_migration_paths"
+      target: "100% of schema changes include version bump and documented migration strategy"
+      signal: "${EVIDENCE_ROOT}/migration_plan.txt — strategy field (backward/forward/breaking)"
+      gate: "SCHEMA_DRIFT_WITHOUT_MIGRATION = Wins violation; breaking change without migration plan = EXIT_BLOCKED"
+
+  # ============================================================
+  # N) Northstar Alignment  [Phuc_Forecast + Max_Love]
+  # ============================================================
+  Northstar_Alignment:
+    northstar: "Phuc_Forecast + Max_Love"
+    metric: "Pipeline reliability / Financial data integrity / Null coverage rate"
+    alignment: |
+      prime-data advances Phuc_Forecast by making pipeline behavior predictable and auditable.
+      Idempotency (run-twice) = deterministic pipeline = Phuc_Forecast can model what happens on retry.
+      Null semantic documentation = Phuc_Forecast knows what absence means in each field.
+      Schema versioning = Phuc_Forecast can reason about backward compatibility of pipeline changes.
+      Without these guarantees, Phuc_Forecast is forecasting against data of unknown quality.
+    max_love: |
+      Max_Love requires financial accuracy — users trust aggregate numbers to be correct.
+      A pipeline silently dropping nulls in a financial SUM is a trust violation:
+        - Users see a smaller number and may believe revenue is lower than it is
+        - Or they see a larger number and allocate budget incorrectly
+      The Float_Financial_Gate is the highest expression of Max_Love in the data domain:
+        - IEEE 754 float addition is not associative — totals drift with scale
+        - NUMERIC types guarantee exact representation — honesty in financial reporting
+    hard_gate: |
+      FLOAT_IN_FINANCIAL_AGGREGATION violates Max_Love.
+      SILENT_NULL_DROP in financial context violates Max_Love.
+      Both produce numbers that appear correct but carry hidden inaccuracy — the worst kind of deception.
+
+  # ============================================================
+  # O) Triangle Law: REMIND → VERIFY → ACKNOWLEDGE
+  # ============================================================
+  Triangle_Law:
+    contract_1_idempotency:
+      REMIND: >
+        Before any pipeline write: confirm the idempotency strategy is declared (one of:
+        upsert_on_primary_key, insert_overwrite_partition, dedup_on_event_id_before_write,
+        truncate_and_reload_with_transaction). The strategy must be tested — not just declared.
+      VERIFY: >
+        Run the pipeline twice with identical input batch A. Compute checksum of output after run 1
+        and after run 2. Are they identical? If not: NO_IDEMPOTENCY_KEY gate triggers.
+        Also test partial_failure_then_retry: assert no duplicates appear in output after retry.
+      ACKNOWLEDGE: >
+        Idempotency test evidence written to ${EVIDENCE_ROOT}/idempotency_test.txt.
+        run_1_checksum == run_2_checksum confirmed. IDEMPOTENCY_GATE passes.
+        Pipeline is safe to retry on failure without accumulating duplicate records.
+
+    contract_2_null_semantics:
+      REMIND: >
+        Before any pipeline transformation: for every nullable field in the schema, confirm
+        null_semantic is documented (missing vs unknown vs inapplicable vs error) and null_handling
+        (drop/substitute/propagate/error_out) is explicitly declared.
+        Financial fields: null must NEVER be silently coerced to 0 without a business-rule citation.
+      VERIFY: >
+        Open the schema definition. For each nullable field, does the null_analysis document entry
+        include is_nullable, null_semantic, and null_handling? For financial fields: does any
+        COALESCE(field, 0) appear without a business_rule_citation in the adjacent comment?
+      ACKNOWLEDGE: >
+        Null analysis documented for all nullable fields. ${EVIDENCE_ROOT}/null_analysis.txt written.
+        NULL_SAFETY_GATE passes. Null semantics are now Lane A artifacts, not tribal knowledge.
+
+    contract_3_financial_types:
+      REMIND: >
+        Before any aggregation involving monetary or quantity values: scan for float, double,
+        float32, float64, Float, REAL, or DOUBLE PRECISION types in SUM/AVG/comparison paths.
+        Replace with Decimal (Python), NUMERIC(19,4) (SQL), BigDecimal (Java/Scala), or
+        DecimalType(precision, scale) (Spark).
+      VERIFY: >
+        Run the financial_type_check protocol. Does ${EVIDENCE_ROOT}/financial_type_check.txt
+        show zero forbidden_types_found? Does every SUM/AVG in the pipeline operate on NUMERIC
+        or Decimal types? Are rounding operations explicit (never implicit cast)?
+      ACKNOWLEDGE: >
+        Financial type check clean. FLOAT_FINANCIAL_GATE passes. All aggregation paths use
+        exact arithmetic. Financial totals will not drift with scale. Max_Love honored.
+
+  # ============================================================
+  # P) Compression / Seed Checksum
+  # ============================================================
+  Compression:
+    skill_id: "prime-data"
+    version: "1.3.0"
+    seed: "schema=coherence[T0] | idempotency=reversibility[T0] | null=signal[T0] | financial=integrity[T0] | rung_default=274177"
+    checksum_fields:
+      - version
+      - authority
+      - hard_gates_count: 6
+      - forbidden_states_count: 10
+      - financial_types_forbidden: [float, double, float32, float64, Float]
+      - financial_types_required: [Decimal, NUMERIC, DECIMAL, integer_cents]
+      - rung_default: 274177
+    integrity_note: >
+      Load QUICK LOAD block for orientation.
+      Load full file for production pipeline design work.
+      The seed is the minimal compression payload: no-float-in-finance + run-twice-idempotency
+      + null-semantics-per-field + schema-version + 274177 rung — sufficient to apply the
+      discipline without re-reading the full protocol.

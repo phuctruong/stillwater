@@ -238,6 +238,67 @@ Note: Security Auditor NEVER downgrades to rung 641 or 274177. Security claims a
 
 ---
 
+## 8.0) State Machine (YAML)
+
+```yaml
+state_machine:
+  states: [INIT, INTAKE_TASK, NULL_CHECK, SELECT_SCANNER, RUN_SCANNER,
+           TRIAGE_FINDINGS, REPRODUCE_EXPLOITS, VERIFY_MITIGATIONS,
+           THREAT_MODEL, BUILD_SCAN_REPORT, SOCRATIC_REVIEW,
+           EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  transitions:
+    - {from: INIT,               to: INTAKE_TASK,         trigger: capsule_received}
+    - {from: INTAKE_TASK,        to: NULL_CHECK,           trigger: always}
+    - {from: NULL_CHECK,         to: EXIT_NEED_INFO,       trigger: scan_scope_null}
+    - {from: NULL_CHECK,         to: SELECT_SCANNER,       trigger: inputs_defined}
+    - {from: SELECT_SCANNER,     to: RUN_SCANNER,          trigger: always}
+    - {from: RUN_SCANNER,        to: EXIT_BLOCKED,         trigger: scanner_unavailable}
+    - {from: RUN_SCANNER,        to: TRIAGE_FINDINGS,      trigger: scanner_ran}
+    - {from: TRIAGE_FINDINGS,    to: THREAT_MODEL,         trigger: always}
+    - {from: THREAT_MODEL,       to: REPRODUCE_EXPLOITS,   trigger: exploitable_findings}
+    - {from: THREAT_MODEL,       to: BUILD_SCAN_REPORT,    trigger: no_exploitable_findings}
+    - {from: REPRODUCE_EXPLOITS, to: VERIFY_MITIGATIONS,   trigger: always}
+    - {from: VERIFY_MITIGATIONS, to: EXIT_BLOCKED,         trigger: mitigation_unverifiable}
+    - {from: VERIFY_MITIGATIONS, to: BUILD_SCAN_REPORT,    trigger: mitigation_verified}
+    - {from: BUILD_SCAN_REPORT,  to: SOCRATIC_REVIEW,      trigger: always}
+    - {from: SOCRATIC_REVIEW,    to: RUN_SCANNER,          trigger: additional_scan_needed}
+    - {from: SOCRATIC_REVIEW,    to: EXIT_PASS,            trigger: verdict_clean_or_mitigated}
+    - {from: SOCRATIC_REVIEW,    to: EXIT_BLOCKED,         trigger: unverifiable}
+  forbidden_states:
+    - CREDENTIAL_EXFILTRATION
+    - SCANNER_UNPINNED
+    - EXPLOIT_WITHOUT_SAFE_POC
+    - MITIGATION_UNVERIFIED
+    - PASS_WITHOUT_SCANNER
+    - VULNERABILITY_SUPPRESSED
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE_TASK
+    INTAKE_TASK --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : scan_scope_null
+    NULL_CHECK --> SELECT_SCANNER : inputs_defined
+    SELECT_SCANNER --> RUN_SCANNER
+    RUN_SCANNER --> EXIT_BLOCKED : scanner_unavailable
+    RUN_SCANNER --> TRIAGE_FINDINGS : scanner_ran
+    TRIAGE_FINDINGS --> THREAT_MODEL
+    THREAT_MODEL --> REPRODUCE_EXPLOITS : exploitable_findings
+    THREAT_MODEL --> BUILD_SCAN_REPORT : no_exploits
+    REPRODUCE_EXPLOITS --> VERIFY_MITIGATIONS
+    VERIFY_MITIGATIONS --> EXIT_BLOCKED : unverifiable
+    VERIFY_MITIGATIONS --> BUILD_SCAN_REPORT : verified
+    BUILD_SCAN_REPORT --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> EXIT_PASS : clean_or_mitigated
+    SOCRATIC_REVIEW --> EXIT_BLOCKED : unverifiable
+    classDef forbidden fill:#f55,color:#fff
+    class CREDENTIAL_EXFILTRATION,SCANNER_UNPINNED,VULNERABILITY_SUPPRESSED forbidden
+```
+
+---
+
 ## 8) Anti-Patterns
 
 **Scanner Theater:** Running a scanner but suppressing findings that are "probably false positives."

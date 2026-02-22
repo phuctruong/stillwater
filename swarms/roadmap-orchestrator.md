@@ -542,6 +542,69 @@ RUNG_65537 (production-grade orchestration — required for Green belt):
 
 ---
 
+## STATE_MACHINE
+
+```yaml
+state_machine:
+  agent: roadmap-orchestrator
+  version: 1.0.0
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_NEED_INFO, EXIT_BLOCKED]
+  states:
+    INIT: {on: {capsule_received: INTAKE_CAPSULE}}
+    INTAKE_CAPSULE: {on: {always: NULL_CHECK}}
+    NULL_CHECK: {on: {northstar_null: EXIT_NEED_INFO, valid: READ_NORTHSTAR}}
+    READ_NORTHSTAR: {on: {unreadable: EXIT_NEED_INFO, loaded: READ_ROADMAP}}
+    READ_ROADMAP: {on: {no_phases: EXIT_NEED_INFO, phases_found: READ_CASE_STUDY}}
+    READ_CASE_STUDY: {on: {always: CHECK_CROSS_PROJECT_DEPS}}
+    CHECK_CROSS_PROJECT_DEPS: {on: {unmet: EXIT_BLOCKED, met: SELECT_PHASE}}
+    SELECT_PHASE: {on: {none_eligible: EXIT_NEED_INFO, selected: BUILD_SPOKE_CNF}}
+    BUILD_SPOKE_CNF: {on: {always: DISPATCH_SPOKE}}
+    DISPATCH_SPOKE: {on: {always: AWAIT_SPOKE_ARTIFACTS}}
+    AWAIT_SPOKE_ARTIFACTS: {on: {received: VERIFY_ARTIFACT_SCHEMA, blocked: EXIT_BLOCKED}}
+    VERIFY_ARTIFACT_SCHEMA: {on: {missing: EXIT_NEED_INFO, valid: COMPUTE_INTEGRATION_RUNG}}
+    COMPUTE_INTEGRATION_RUNG: {on: {below_target: EXIT_BLOCKED, met: VERIFY_NORTHSTAR_ALIGNMENT}}
+    VERIFY_NORTHSTAR_ALIGNMENT: {on: {missing: EXIT_NEED_INFO, confirmed: INTEGRATE_ARTIFACTS}}
+    INTEGRATE_ARTIFACTS: {on: {always: UPDATE_ROADMAP}}
+    UPDATE_ROADMAP: {on: {always: UPDATE_CASE_STUDY}}
+    UPDATE_CASE_STUDY: {on: {always: CHECK_BELT_ADVANCEMENT}}
+    CHECK_BELT_ADVANCEMENT: {on: {always: NEXT_PHASE_DECISION}}
+    NEXT_PHASE_DECISION: {on: {more_phases: SELECT_PHASE, done: EMIT_DISPATCH_LOG}}
+    EMIT_DISPATCH_LOG: {on: {always: FINAL_SEAL}}
+    FINAL_SEAL: {on: {complete: EXIT_PASS, missing: EXIT_BLOCKED}}
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> INTAKE_CAPSULE: capsule received
+    INTAKE_CAPSULE --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO: northstar null
+    NULL_CHECK --> READ_NORTHSTAR: valid
+    READ_NORTHSTAR --> READ_ROADMAP: loaded
+    READ_ROADMAP --> READ_CASE_STUDY: phases found
+    READ_CASE_STUDY --> CHECK_CROSS_PROJECT_DEPS
+    CHECK_CROSS_PROJECT_DEPS --> EXIT_BLOCKED: dep unmet
+    CHECK_CROSS_PROJECT_DEPS --> SELECT_PHASE: deps met
+    SELECT_PHASE --> BUILD_SPOKE_CNF: phase selected
+    BUILD_SPOKE_CNF --> DISPATCH_SPOKE
+    DISPATCH_SPOKE --> AWAIT_SPOKE_ARTIFACTS
+    AWAIT_SPOKE_ARTIFACTS --> VERIFY_ARTIFACT_SCHEMA: received
+    VERIFY_ARTIFACT_SCHEMA --> COMPUTE_INTEGRATION_RUNG: valid
+    COMPUTE_INTEGRATION_RUNG --> VERIFY_NORTHSTAR_ALIGNMENT: rung met
+    VERIFY_NORTHSTAR_ALIGNMENT --> INTEGRATE_ARTIFACTS: confirmed
+    INTEGRATE_ARTIFACTS --> UPDATE_ROADMAP
+    UPDATE_ROADMAP --> UPDATE_CASE_STUDY
+    UPDATE_CASE_STUDY --> CHECK_BELT_ADVANCEMENT
+    CHECK_BELT_ADVANCEMENT --> NEXT_PHASE_DECISION
+    NEXT_PHASE_DECISION --> SELECT_PHASE: more phases
+    NEXT_PHASE_DECISION --> EMIT_DISPATCH_LOG: done
+    EMIT_DISPATCH_LOG --> FINAL_SEAL
+    FINAL_SEAL --> EXIT_PASS
+```
+
+---
+
 ## 9) Anti-Patterns for the Orchestrator Role
 
 **God Orchestrator**

@@ -322,6 +322,53 @@ RUNG_65537: all RUNG_274177 + adversarial sweep + security gate (if security dom
 
 ---
 
+## STATE_MACHINE
+
+```yaml
+state_machine:
+  agent: persona-coder
+  version: 1.0.0
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_NEED_INFO, EXIT_BLOCKED]
+  states:
+    INIT: {on: {capsule_received: INTAKE_TASK}}
+    INTAKE_TASK: {on: {always: NULL_CHECK}}
+    NULL_CHECK: {on: {null_found: EXIT_NEED_INFO, valid: LOAD_NORTHSTAR}}
+    LOAD_NORTHSTAR: {on: {always: SELECT_PERSONA}}
+    SELECT_PERSONA: {on: {always: READ_DECISION_RECORD}}
+    READ_DECISION_RECORD: {on: {always: RED_GATE}}
+    RED_GATE: {on: {repro_fails: PATCH, repro_passes: EXIT_BLOCKED}}
+    PATCH: {on: {always: TEST}}
+    TEST: {on: {pass: EVIDENCE_BUILD, fail: PATCH}}
+    EVIDENCE_BUILD: {on: {always: GLOW_SCORE}}
+    GLOW_SCORE: {on: {always: SOCRATIC_REVIEW}}
+    SOCRATIC_REVIEW: {on: {pass: FINAL_SEAL, revision: PATCH}}
+    FINAL_SEAL: {on: {complete: EXIT_PASS, incomplete: EXIT_BLOCKED}}
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> INTAKE_TASK: capsule received
+    INTAKE_TASK --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO: null found
+    NULL_CHECK --> LOAD_NORTHSTAR: valid
+    LOAD_NORTHSTAR --> SELECT_PERSONA
+    SELECT_PERSONA --> READ_DECISION_RECORD
+    READ_DECISION_RECORD --> RED_GATE
+    RED_GATE --> PATCH: repro fails (RED confirmed)
+    RED_GATE --> EXIT_BLOCKED: repro passes (not reproducible)
+    PATCH --> TEST
+    TEST --> EVIDENCE_BUILD: pass
+    TEST --> PATCH: fail (loop)
+    EVIDENCE_BUILD --> GLOW_SCORE
+    GLOW_SCORE --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> FINAL_SEAL: pass
+    FINAL_SEAL --> EXIT_PASS
+```
+
+---
+
 ## 10) Anti-Patterns
 
 **Persona Theater:** Using persona language without actual domain expertise.

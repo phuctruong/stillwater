@@ -216,6 +216,64 @@ RUNG_641 (default):
 
 ---
 
+## 8.0) State Machine (YAML)
+
+```yaml
+state_machine:
+  states: [INIT, INTAKE_SESSION, NULL_CHECK, SCAN_SESSION_HISTORY, CLASSIFY_ITEMS,
+           APPLY_COMPACTION, LOG_COMPACTION_EVENTS, BUILD_CAPSULE,
+           VALIDATE_CAPSULE_COMPLETENESS, SOCRATIC_REVIEW,
+           EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  transitions:
+    - {from: INIT,                          to: INTAKE_SESSION,               trigger: context_received}
+    - {from: INTAKE_SESSION,               to: NULL_CHECK,                    trigger: always}
+    - {from: NULL_CHECK,                   to: EXIT_NEED_INFO,                trigger: task_request_null}
+    - {from: NULL_CHECK,                   to: SCAN_SESSION_HISTORY,          trigger: inputs_defined}
+    - {from: SCAN_SESSION_HISTORY,         to: CLASSIFY_ITEMS,                trigger: always}
+    - {from: CLASSIFY_ITEMS,               to: APPLY_COMPACTION,              trigger: compaction_triggered}
+    - {from: CLASSIFY_ITEMS,               to: BUILD_CAPSULE,                 trigger: no_compaction}
+    - {from: APPLY_COMPACTION,             to: LOG_COMPACTION_EVENTS,         trigger: always}
+    - {from: LOG_COMPACTION_EVENTS,        to: BUILD_CAPSULE,                 trigger: always}
+    - {from: BUILD_CAPSULE,                to: VALIDATE_CAPSULE_COMPLETENESS, trigger: always}
+    - {from: VALIDATE_CAPSULE_COMPLETENESS,to: EXIT_BLOCKED,                  trigger: required_fields_missing}
+    - {from: VALIDATE_CAPSULE_COMPLETENESS,to: SOCRATIC_REVIEW,               trigger: capsule_complete}
+    - {from: SOCRATIC_REVIEW,              to: BUILD_CAPSULE,                 trigger: revision_needed}
+    - {from: SOCRATIC_REVIEW,              to: EXIT_PASS,                     trigger: capsule_valid}
+    - {from: SOCRATIC_REVIEW,              to: EXIT_BLOCKED,                  trigger: budget_exceeded}
+  forbidden_states:
+    - SILENT_TRUNCATION
+    - SUMMARIZED_FROM_MEMORY
+    - PRIOR_REASONING_AS_FACTS
+    - CAPSULE_WITHOUT_TASK_REQUEST
+    - INCOMPLETE_COMPACTION_LOG
+    - ARTIFACT_MODIFICATION
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE_SESSION
+    INTAKE_SESSION --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : task_null
+    NULL_CHECK --> SCAN_SESSION_HISTORY : inputs_defined
+    SCAN_SESSION_HISTORY --> CLASSIFY_ITEMS
+    CLASSIFY_ITEMS --> APPLY_COMPACTION : compaction_triggered
+    CLASSIFY_ITEMS --> BUILD_CAPSULE : no_compaction
+    APPLY_COMPACTION --> LOG_COMPACTION_EVENTS
+    LOG_COMPACTION_EVENTS --> BUILD_CAPSULE
+    BUILD_CAPSULE --> VALIDATE_CAPSULE_COMPLETENESS
+    VALIDATE_CAPSULE_COMPLETENESS --> EXIT_BLOCKED : fields_missing
+    VALIDATE_CAPSULE_COMPLETENESS --> SOCRATIC_REVIEW : complete
+    SOCRATIC_REVIEW --> BUILD_CAPSULE : revision_needed
+    SOCRATIC_REVIEW --> EXIT_PASS : capsule_valid
+    SOCRATIC_REVIEW --> EXIT_BLOCKED : budget_exceeded
+    classDef forbidden fill:#f55,color:#fff
+    class SILENT_TRUNCATION,SUMMARIZED_FROM_MEMORY,ARTIFACT_MODIFICATION forbidden
+```
+
+---
+
 ## 8) Anti-Patterns
 
 **Context Smuggling:** Including "as we discussed earlier, X is true" in the capsule without a source artifact.

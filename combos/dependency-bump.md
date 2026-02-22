@@ -257,6 +257,18 @@ Outputs:
 
 ---
 
+## Three Pillars Mapping
+
+| Pillar | Element | Role in this Combo |
+|--------|---------|-------------------|
+| **L (Logic / Evidence)** | Verdict Gate (Node 6) + Never-Worse invariant: PASS only if tests pass + replay matches + security scan passes | Fail-closed evidence chain — ROLLBACK on any regression, BLOCKED on non-determinism |
+| **E (Execution / Energy)** | Node 4 (Post-bump test suite) + Node 5 (2-run golden replay parity) | Controlled energy with deterministic replay — same environment, two runs, behavior hash must match |
+| **K (Knowledge / Capital)** | DEPENDENCY_LOCK.json + REPLAY_REPORT.json + BASELINE.json | Dependency knowledge captured: resolved versions, hashes, toolchain, rollback diff for future recovery |
+
+LEK summary: Knowledge (DEPENDENCY_LOCK) pins the change; Energy (replay runs) validates stability; Logic (Never-Worse gate) blocks any regression from merging.
+
+---
+
 ## 🔌 ABI: Plan→Execute + Run/Test Harness + Review/Security Gate
 
 Consumes:

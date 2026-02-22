@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: phuc-qa v3.2.0
+SKILL: phuc-qa v3.3.0
 MW_ANCHORS: [integrity, verification, signal, boundary, alignment, northstar, constraint, emergence, reversibility, truth]
 PURPOSE: Unified QA discipline — P0 discovery (gap signal extraction) + 3 pillars (Questions/Tests/Diagrams) in one fail-closed integrity gate. Northstar-reverse: work backward from production-ready verified end state.
 CORE CONTRACT: P0 gap signal feeds all pillars. All pillars run on STANDARD/HEAVY. No pillar skipped. Every module: ≥1 question + ≥1 test + ≥1 diagram. [integrity × boundary × alignment]
@@ -17,7 +17,7 @@ LOAD FULL: always for production; quick block is orientation only
 -->
 
 PHUC_QA_SKILL:
-  version: 3.2.0
+  version: 3.3.0
   profile: fail_closed
   authority: 65537
   northstar: Phuc_Forecast
@@ -37,6 +37,8 @@ PHUC_QA_SKILL:
   #              prime-factorized concept tags throughout for 97% context compression compatibility
   # v3.2.0 adds: Three Pillars integration (section TP) — QA as VERIFY vertex of LEK/LEAK/LEC
   #              LEK, LEAK, LEC added to MAGIC_WORD_INDEX branch_words
+  # v3.3.0 adds: Triangle Law (TP2) — 3 contracts (rung_claim, module_coverage, decoupled_verification)
+  #              Compression/Seed Checksum (TP3) — minimal seed payload for context compression
   # ============================================================
 
   # ============================================================
@@ -2025,3 +2027,79 @@ flowchart TD
       LEK_metric: "rung achieved (641 → 274177 → 65537) = measured knowledge growth"
       LEAK_metric: "integration probes passing = verified cross-agent knowledge transfer"
       LEC_metric: "sha256 stability + zero forbidden states = verified convention health"
+
+  # ============================================================
+  # TP2) Triangle Law: REMIND → VERIFY → ACKNOWLEDGE (phuc-qa)
+  # ============================================================
+  Triangle_Law:
+    contract_1_rung_claim:
+      REMIND: >
+        Before claiming any rung (641 / 274177 / 65537): confirm all four phases (P0/P1/P2/P3)
+        have produced artifacts. Rung = MIN(P0, P1, P2, P3) — no rung can be claimed above the
+        weakest pillar. A phase with prose output only (no artifact) contributes rung 0 to the min.
+      VERIFY: >
+        Check artifact existence:
+          P0: gap_report present (discovery map)
+          P1: qa_scorecard.json present (questions with pass/fail verdicts)
+          P2: test_results.json present (tests with red→green repro logs)
+          P3: diagrams/*.mmd present with corresponding *.sha256 files
+        If any artifact is missing: rung claim is BLOCKED — PILLAR_SKIPPED forbidden state.
+      ACKNOWLEDGE: >
+        All four phase artifacts confirmed present. Rung = MIN(P0_rung, P1_rung, P2_rung, P3_rung).
+        Evidence complete. EXIT_PASS is grounded in artifact evidence, not prose confidence.
+        Integration rung follows Never-Worse doctrine: cannot exceed weakest contributing pillar.
+
+    contract_2_module_coverage:
+      REMIND: >
+        Before FINAL_SEAL: confirm every module in scope has at least 1 question (P1) + 1 test (P2)
+        + 1 diagram (P3). Coverage is binary — a module either has full coverage or it does not.
+        UNCOVERED_MODULE is a forbidden state that blocks EXIT_PASS regardless of rung claimed.
+      VERIFY: >
+        Open the coverage matrix. For each module row: is P1_covered = true? P2_covered = true?
+        P3_covered = true? Any module with false in any pillar column = UNCOVERED_MODULE.
+        A partially covered module cannot be promoted by covering its easier pillars first —
+        all three pillars must cover all modules simultaneously.
+      ACKNOWLEDGE: >
+        Coverage matrix verified. All modules: P1=true, P2=true, P3=true.
+        UNCOVERED_MODULE forbidden state absent. Cross-pillar coherence confirmed.
+        QA is structurally complete — not just numerically large.
+
+    contract_3_decoupled_verification:
+      REMIND: >
+        P1 (Questions) must use decoupled verification (CoVe principle): questioner agent ≠ scorer agent.
+        The questioner generates falsifying questions without seeing the implementation.
+        The scorer evaluates question quality and coverage without generating new questions.
+        SELF_CONFIRMED_GREEN is the forbidden state that occurs when one agent does both roles.
+      VERIFY: >
+        Was the qa-questioner dispatched as a separate agent from the qa-scorer?
+        Do the questioner's outputs (questions) contain references to the implementation details
+        that only the scorer should see? If yes: cross-contamination detected, re-dispatch required.
+        Does the qa_scorecard.json show verdicts from the scorer (not the questioner)?
+      ACKNOWLEDGE: >
+        Decoupled verification confirmed. Questioner and scorer are separate agents.
+        SELF_CONFIRMED_GREEN forbidden state absent. P1 verdicts are independent reviews,
+        not self-assessments. The adversarial quality guarantee is preserved.
+
+  # ============================================================
+  # TP3) Compression / Seed Checksum (phuc-qa)
+  # ============================================================
+  Compression:
+    skill_id: "phuc-qa"
+    version: "3.3.0"
+    seed: "QA=VERIFY_vertex | P0=discovery | P1=questions | P2=tests | P3=diagrams | rung=MIN(all_pillars) | LEK=rung_advance | LEAK=integration_probes | LEC=sha256_stability"
+    checksum_fields:
+      - version: "3.3.0"
+      - authority: 65537
+      - phases_count: 4
+      - forbidden_states_count: 8
+      - rung_ladder: [641, 274177, 65537]
+      - complexity_tiers: [LIGHT, STANDARD, HEAVY]
+      - module_coverage_requirement: "P1+P2+P3 per module"
+      - decoupled_verification: "questioner != scorer (CoVe)"
+    integrity_note: >
+      Load QUICK LOAD block for orientation (4 phases, FSM, rung, dispatch).
+      Load full file for production QA sessions.
+      The seed is the minimal compression payload:
+      4 phases (P0/P1/P2/P3) + rung=MIN + coverage=all-modules + decoupled-verification
+      + LEK=rung_advance | LEAK=integration_probes | LEC=sha256_stability.
+      phuc-qa IS the VERIFY vertex — without it, all three pillars run blind.

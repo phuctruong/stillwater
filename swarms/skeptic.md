@@ -263,6 +263,73 @@ RUNG_65537 (promotion):
 
 ---
 
+## 8.0) State Machine (YAML)
+
+```yaml
+state_machine:
+  states: [INIT, INTAKE_TASK, NULL_CHECK, READ_CODER_ARTIFACTS, NULL_EDGE_SWEEP,
+           SEED_SWEEP, REPLAY_CHECK, REGRESSION_CHECK, CHALLENGE, ADVERSARIAL_SWEEP,
+           SECURITY_CHECK, BUILD_VERDICT, EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  transitions:
+    - {from: INIT,                 to: INTAKE_TASK,           trigger: capsule_received}
+    - {from: INTAKE_TASK,          to: NULL_CHECK,             trigger: always}
+    - {from: NULL_CHECK,           to: EXIT_NEED_INFO,         trigger: patch_or_tests_missing}
+    - {from: NULL_CHECK,           to: READ_CODER_ARTIFACTS,   trigger: inputs_defined}
+    - {from: READ_CODER_ARTIFACTS, to: EXIT_NEED_INFO,         trigger: repro_green_missing}
+    - {from: READ_CODER_ARTIFACTS, to: NULL_EDGE_SWEEP,        trigger: artifacts_valid}
+    - {from: NULL_EDGE_SWEEP,      to: SEED_SWEEP,             trigger: always}
+    - {from: SEED_SWEEP,           to: EXIT_BLOCKED,           trigger: seed_agreement_false}
+    - {from: SEED_SWEEP,           to: REPLAY_CHECK,           trigger: seed_agreement_true}
+    - {from: REPLAY_CHECK,         to: EXIT_BLOCKED,           trigger: hash_unstable}
+    - {from: REPLAY_CHECK,         to: REGRESSION_CHECK,       trigger: hash_stable}
+    - {from: REGRESSION_CHECK,     to: EXIT_BLOCKED,           trigger: regressions_found}
+    - {from: REGRESSION_CHECK,     to: CHALLENGE,              trigger: no_regressions}
+    - {from: CHALLENGE,            to: ADVERSARIAL_SWEEP,      trigger: rung_65537}
+    - {from: CHALLENGE,            to: SECURITY_CHECK,         trigger: security_triggered}
+    - {from: CHALLENGE,            to: BUILD_VERDICT,          trigger: rung_274177}
+    - {from: ADVERSARIAL_SWEEP,    to: EXIT_BLOCKED,           trigger: paraphrase_fails}
+    - {from: ADVERSARIAL_SWEEP,    to: BUILD_VERDICT,          trigger: all_pass}
+    - {from: SECURITY_CHECK,       to: EXIT_BLOCKED,           trigger: security_failed}
+    - {from: SECURITY_CHECK,       to: BUILD_VERDICT,          trigger: security_passed}
+    - {from: BUILD_VERDICT,        to: EXIT_PASS,              trigger: verdict_PASS}
+    - {from: BUILD_VERDICT,        to: EXIT_BLOCKED,           trigger: verdict_FAIL}
+  forbidden_states:
+    - PASS_WITHOUT_SEED_SWEEP
+    - PASS_WITHOUT_REPLAY
+    - PATCH_ATTEMPT
+    - APPROVE_ATTEMPT
+    - CONFIDENT_PASS_WITHOUT_FALSIFIER_SEARCH
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE_TASK
+    INTAKE_TASK --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : artifacts_missing
+    NULL_CHECK --> READ_CODER_ARTIFACTS : inputs_defined
+    READ_CODER_ARTIFACTS --> NULL_EDGE_SWEEP : artifacts_valid
+    NULL_EDGE_SWEEP --> SEED_SWEEP
+    SEED_SWEEP --> EXIT_BLOCKED : seed_disagreement
+    SEED_SWEEP --> REPLAY_CHECK : seeds_agree
+    REPLAY_CHECK --> EXIT_BLOCKED : hash_unstable
+    REPLAY_CHECK --> REGRESSION_CHECK : hash_stable
+    REGRESSION_CHECK --> EXIT_BLOCKED : regressions_found
+    REGRESSION_CHECK --> CHALLENGE : no_regressions
+    CHALLENGE --> ADVERSARIAL_SWEEP : rung_65537
+    CHALLENGE --> SECURITY_CHECK : security_triggered
+    CHALLENGE --> BUILD_VERDICT : rung_274177
+    ADVERSARIAL_SWEEP --> BUILD_VERDICT : all_pass
+    SECURITY_CHECK --> BUILD_VERDICT : security_passed
+    BUILD_VERDICT --> EXIT_PASS : verdict_PASS
+    BUILD_VERDICT --> EXIT_BLOCKED : verdict_FAIL
+    classDef forbidden fill:#f55,color:#fff
+    class PASS_WITHOUT_SEED_SWEEP,PATCH_ATTEMPT,APPROVE_ATTEMPT forbidden
+```
+
+---
+
 ## 8) Anti-Patterns
 
 **Skeptic Theater:** Running trivial tests and claiming PASS without adversarial search.

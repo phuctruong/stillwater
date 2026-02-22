@@ -623,6 +623,53 @@ rationalize a PASS.
 
 ---
 
+## STATE_MACHINE
+
+```yaml
+state_machine:
+  agent: learner
+  version: 1.0.0
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_NOTHING_LEARNED, EXIT_BLOCKED]
+  states:
+    INIT: {on: {capsule_received: INTAKE_SESSION}}
+    INTAKE_SESSION: {on: {always: NULL_CHECK}}
+    NULL_CHECK: {on: {missing: EXIT_NEED_INFO, valid: SCAN_TOOL_CALLS}}
+    SCAN_TOOL_CALLS: {on: {always: SCAN_CORRECTIONS}}
+    SCAN_CORRECTIONS: {on: {always: SCAN_ARTIFACTS}}
+    SCAN_ARTIFACTS: {on: {always: CLASSIFY_DISCOVERIES}}
+    CLASSIFY_DISCOVERIES: {on: {candidates: QUALITY_GATE, zero: EXIT_NOTHING_LEARNED}}
+    QUALITY_GATE: {on: {all_fail: EXIT_NOTHING_LEARNED, any_pass: FORMAT_AS_SKILL}}
+    FORMAT_AS_SKILL: {on: {always: VERIFICATION_RUNG}}
+    VERIFICATION_RUNG: {on: {fail: EXIT_BLOCKED, pass: EMIT_SKILL_FILE}}
+    EMIT_SKILL_FILE: {on: {always: SOCRATIC_REVIEW}}
+    SOCRATIC_REVIEW: {on: {false_positive: QUALITY_GATE, valid: EXIT_PASS, violation: EXIT_BLOCKED}}
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> INTAKE_SESSION: capsule received
+    INTAKE_SESSION --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO: session_date/log missing
+    NULL_CHECK --> SCAN_TOOL_CALLS: valid
+    SCAN_TOOL_CALLS --> SCAN_CORRECTIONS
+    SCAN_CORRECTIONS --> SCAN_ARTIFACTS
+    SCAN_ARTIFACTS --> CLASSIFY_DISCOVERIES
+    CLASSIFY_DISCOVERIES --> QUALITY_GATE: candidates found
+    CLASSIFY_DISCOVERIES --> EXIT_NOTHING_LEARNED: zero candidates
+    QUALITY_GATE --> FORMAT_AS_SKILL: any pass
+    QUALITY_GATE --> EXIT_NOTHING_LEARNED: all fail
+    FORMAT_AS_SKILL --> VERIFICATION_RUNG
+    VERIFICATION_RUNG --> EMIT_SKILL_FILE: pass
+    VERIFICATION_RUNG --> EXIT_BLOCKED: frontmatter/lane violation
+    EMIT_SKILL_FILE --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> EXIT_PASS: LEARNER_REPORT complete
+    SOCRATIC_REVIEW --> EXIT_BLOCKED: invariant violation
+```
+
+---
+
 ## 14) Anti-Patterns
 
 **Knowledge Theater:** Extracting 10 items with one-sentence bodies and no

@@ -341,6 +341,67 @@ RUNG_641 (default):
 
 ---
 
+## 8.0) State Machine (YAML)
+
+```yaml
+state_machine:
+  states: [INIT, INTAKE_TASK, NULL_CHECK, DEFINE_PROMISE, FORECAST_RETENTION_RISKS,
+           DRAFT_HOOK, DRAFT_TITLES, DRAFT_THUMBNAIL, DRAFT_BRIEF,
+           RETENTION_ANALYSIS, SOCRATIC_REVIEW,
+           EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  transitions:
+    - {from: INIT,                     to: INTAKE_TASK,              trigger: capsule_received}
+    - {from: INTAKE_TASK,              to: NULL_CHECK,                trigger: always}
+    - {from: NULL_CHECK,               to: EXIT_NEED_INFO,            trigger: topic_or_platform_null}
+    - {from: NULL_CHECK,               to: DEFINE_PROMISE,            trigger: inputs_defined}
+    - {from: DEFINE_PROMISE,           to: EXIT_NEED_INFO,            trigger: promise_not_one_sentence}
+    - {from: DEFINE_PROMISE,           to: FORECAST_RETENTION_RISKS,  trigger: promise_defined}
+    - {from: FORECAST_RETENTION_RISKS, to: DRAFT_HOOK,                trigger: always}
+    - {from: DRAFT_HOOK,               to: EXIT_BLOCKED,              trigger: hook_misses_promise}
+    - {from: DRAFT_HOOK,               to: DRAFT_TITLES,              trigger: hook_validates}
+    - {from: DRAFT_TITLES,             to: DRAFT_THUMBNAIL,           trigger: always}
+    - {from: DRAFT_THUMBNAIL,          to: DRAFT_BRIEF,               trigger: always}
+    - {from: DRAFT_BRIEF,              to: RETENTION_ANALYSIS,        trigger: always}
+    - {from: RETENTION_ANALYSIS,       to: SOCRATIC_REVIEW,           trigger: always}
+    - {from: SOCRATIC_REVIEW,          to: DRAFT_HOOK,                trigger: hook_revision_needed}
+    - {from: SOCRATIC_REVIEW,          to: EXIT_PASS,                 trigger: all_artifacts_complete}
+    - {from: SOCRATIC_REVIEW,          to: EXIT_BLOCKED,              trigger: promise_undeliverable}
+  forbidden_states:
+    - HOOK_WITHOUT_PROMISE
+    - THUMBNAIL_WITHOUT_ONE_FRAME_STORY
+    - MISLEADING_HOOK
+    - BAIT_AND_SWITCH
+    - RETENTION_ANALYSIS_SKIPPED
+    - NULL_CTA
+    - CONFIDENT_METRIC_CLAIM
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE_TASK
+    INTAKE_TASK --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : topic_or_platform_null
+    NULL_CHECK --> DEFINE_PROMISE : inputs_defined
+    DEFINE_PROMISE --> EXIT_NEED_INFO : not_one_sentence
+    DEFINE_PROMISE --> FORECAST_RETENTION_RISKS : promise_defined
+    FORECAST_RETENTION_RISKS --> DRAFT_HOOK
+    DRAFT_HOOK --> EXIT_BLOCKED : hook_misses_promise
+    DRAFT_HOOK --> DRAFT_TITLES : hook_validates
+    DRAFT_TITLES --> DRAFT_THUMBNAIL
+    DRAFT_THUMBNAIL --> DRAFT_BRIEF
+    DRAFT_BRIEF --> RETENTION_ANALYSIS
+    RETENTION_ANALYSIS --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> DRAFT_HOOK : revision_needed
+    SOCRATIC_REVIEW --> EXIT_PASS : all_complete
+    SOCRATIC_REVIEW --> EXIT_BLOCKED : promise_undeliverable
+    classDef forbidden fill:#f55,color:#fff
+    class HOOK_WITHOUT_PROMISE,MISLEADING_HOOK,BAIT_AND_SWITCH,RETENTION_ANALYSIS_SKIPPED forbidden
+```
+
+---
+
 ## 8) Anti-Patterns
 
 **The Slow Build:** Starting with "Hey everyone, welcome back to the channel, today we're going

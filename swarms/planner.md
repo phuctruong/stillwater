@@ -243,6 +243,65 @@ RUNG_641 (default):
 
 ---
 
+## 8.0) State Machine (YAML)
+
+```yaml
+state_machine:
+  states: [INIT, INTAKE_TASK, NULL_CHECK, BUILD_CNF_CAPSULE, DREAM_STEP,
+           FORECAST_STEP, DECIDE_STEP, ACT_STEP, VERIFY_STEP, SOCRATIC_REVIEW,
+           FINAL_SEAL, EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  transitions:
+    - {from: INIT,            to: INTAKE_TASK,      trigger: capsule_received}
+    - {from: INTAKE_TASK,     to: NULL_CHECK,        trigger: always}
+    - {from: NULL_CHECK,      to: EXIT_NEED_INFO,    trigger: task_or_stakes_null}
+    - {from: NULL_CHECK,      to: BUILD_CNF_CAPSULE, trigger: inputs_defined}
+    - {from: BUILD_CNF_CAPSULE,to: DREAM_STEP,       trigger: always}
+    - {from: DREAM_STEP,      to: FORECAST_STEP,     trigger: always}
+    - {from: FORECAST_STEP,   to: DECIDE_STEP,       trigger: always}
+    - {from: DECIDE_STEP,     to: EXIT_BLOCKED,      trigger: no_viable_approach}
+    - {from: DECIDE_STEP,     to: ACT_STEP,          trigger: approach_chosen}
+    - {from: ACT_STEP,        to: VERIFY_STEP,       trigger: always}
+    - {from: VERIFY_STEP,     to: SOCRATIC_REVIEW,   trigger: always}
+    - {from: SOCRATIC_REVIEW, to: DREAM_STEP,        trigger: revision_needed}
+    - {from: SOCRATIC_REVIEW, to: FINAL_SEAL,        trigger: plan_complete}
+    - {from: FINAL_SEAL,      to: EXIT_PASS,         trigger: plan_complete_with_stop_rules}
+    - {from: FINAL_SEAL,      to: EXIT_NEED_INFO,    trigger: missing_inputs}
+    - {from: FINAL_SEAL,      to: EXIT_BLOCKED,      trigger: unsafe_or_unverifiable}
+  forbidden_states:
+    - STOP_RULES_ABSENT
+    - UNBOUNDED_PLAN
+    - NON_GOALS_ABSENT
+    - FALSIFIERS_ABSENT
+    - DREAM_STEP_SKIPPED
+    - CONTEXT_ROT
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE_TASK
+    INTAKE_TASK --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : task_or_stakes_null
+    NULL_CHECK --> BUILD_CNF_CAPSULE : inputs_defined
+    BUILD_CNF_CAPSULE --> DREAM_STEP
+    DREAM_STEP --> FORECAST_STEP
+    FORECAST_STEP --> DECIDE_STEP
+    DECIDE_STEP --> EXIT_BLOCKED : no_viable_approach
+    DECIDE_STEP --> ACT_STEP : approach_chosen
+    ACT_STEP --> VERIFY_STEP
+    VERIFY_STEP --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> DREAM_STEP : revision_needed
+    SOCRATIC_REVIEW --> FINAL_SEAL : plan_complete
+    FINAL_SEAL --> EXIT_PASS : stop_rules_defined
+    FINAL_SEAL --> EXIT_NEED_INFO : missing_inputs
+    FINAL_SEAL --> EXIT_BLOCKED : unsafe
+    classDef forbidden fill:#f55,color:#fff
+    class STOP_RULES_ABSENT,UNBOUNDED_PLAN,DREAM_STEP_SKIPPED forbidden
+```
+
+---
+
 ## 8) Anti-Patterns
 
 **Vague Steps:** Act steps that say "implement the feature" without a concrete action or artifact.

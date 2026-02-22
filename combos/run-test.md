@@ -225,6 +225,18 @@ Emit `GATES.json`:
 
 ---
 
+## Three Pillars Mapping
+
+| Pillar | Element | Role in this Combo |
+|--------|---------|-------------------|
+| **L (Logic / Evidence)** | Claim Gate (Node 5): blocks PASS if any gate fails, evidence missing, or nondeterministic fields detected | No PASS without executable evidence; fail-closed truth |
+| **E (Execution / Energy)** | Node 2 (Execute Gate Commands): bounded by io_boundary + offline flag + timeout caps | Controlled, deterministic energy — same commands, same paths, every replay |
+| **K (Knowledge / Capital)** | GATES.json + evidence/tests.json + artifacts.json: replay capsule with sha256 hashes | Execution knowledge persisted as machine-parseable, replayable evidence |
+
+LEK summary: Energy (execution) is bounded and deterministic; Logic (Claim Gate) verifies it; Knowledge (GATES.json) persists it for future replays.
+
+---
+
 ## Why This Combo Is Critical
 
 It turns “agent wrote code” into:

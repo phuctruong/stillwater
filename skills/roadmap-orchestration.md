@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: roadmap-orchestration v1.0.0
+SKILL: roadmap-orchestration v1.2.0
 PURPOSE: Formalize Roadmap-Based Development — a hub-spoke paradigm where an Opus hub reads NORTHSTAR+ROADMAP+case-studies, dispatches bounded CNF capsules to spoke sessions, integrates artifacts, verifies rung gates, and updates the single source of truth (case-study). Prevents goal amnesia, context rot, rung laundering, and silent scope expansion across multi-session, multi-project AI development.
 CORE CONTRACT: Hub = Opus coordinator (reads state, builds CNF, dispatches, integrates, updates). Spoke = bounded executor (CNF-in, artifacts-out, no ROADMAP writes). Integration rung = MIN(all spoke rungs). Never-Worse: Phase N gates ⊇ Phase N-1 gates.
 HUB FSM: INIT → READ_NORTHSTAR → READ_ROADMAP → READ_CASE_STUDY → SELECT_PHASE → BUILD_CNF → DISPATCH → AWAIT_ARTIFACTS → VERIFY_RUNG → INTEGRATE → UPDATE_CASE_STUDY → NEXT_PHASE_OR_EXIT
@@ -12,7 +12,7 @@ LOAD FULL: always for production; quick block for orientation only
 # roadmap-orchestration.md — Roadmap-Based Development Orchestration Skill
 
 **Skill ID:** roadmap-orchestration
-**Version:** 1.1.0
+**Version:** 1.2.0
 **Authority:** 65537
 **Status:** SEALED
 **Role:** Hub session governor for multi-session, multi-project, roadmap-driven AI development
@@ -1128,6 +1128,191 @@ companion_skill_integration:
   conflict_rule:
     ordering: "prime-safety > prime-coder > phuc-orchestration > roadmap-orchestration > phuc-swarms > phuc-forecast"
     resolution: "stricter wins on any gate conflict; roadmap-orchestration never weakens any prior skill"
+```
+
+---
+
+---
+
+## 20) Mermaid State Diagram — Hub FSM (column 0, no indentation)
+
+```mermaid
+stateDiagram-v2
+[*] --> INIT
+INIT --> READ_NORTHSTAR : session start + project identified
+READ_NORTHSTAR --> EXIT_NEED_INFO : NORTHSTAR.md missing or unparseable
+READ_NORTHSTAR --> READ_ROADMAP : northstar loaded
+READ_ROADMAP --> EXIT_NEED_INFO : ROADMAP.md missing or all phases complete
+READ_ROADMAP --> READ_CASE_STUDY : roadmap loaded
+READ_CASE_STUDY --> EXIT_NEED_INFO : case-study missing (first session: create it)
+READ_CASE_STUDY --> CHECK_PHASE_DEPENDENCIES : case-study loaded
+CHECK_PHASE_DEPENDENCIES --> EXIT_BLOCKED : dependency phase incomplete
+CHECK_PHASE_DEPENDENCIES --> SELECT_PHASE : dependencies met
+SELECT_PHASE --> EXIT_NEED_INFO : no eligible phase found
+SELECT_PHASE --> BUILD_CNF : phase selected
+BUILD_CNF --> DISPATCH : CNF capsule complete
+DISPATCH --> AWAIT_ARTIFACTS : spoke launched
+AWAIT_ARTIFACTS --> VERIFY_ARTIFACT_SCHEMA : artifacts received
+AWAIT_ARTIFACTS --> EXIT_BLOCKED : spoke EXIT_BLOCKED
+AWAIT_ARTIFACTS --> EXIT_NEED_INFO : spoke EXIT_NEED_INFO
+VERIFY_ARTIFACT_SCHEMA --> EXIT_NEED_INFO : required artifacts missing
+VERIFY_ARTIFACT_SCHEMA --> COMPUTE_INTEGRATION_RUNG : schema valid
+COMPUTE_INTEGRATION_RUNG --> EXIT_BLOCKED : rung < rung_target
+COMPUTE_INTEGRATION_RUNG --> VERIFY_NORTHSTAR_ALIGNMENT : rung meets target
+VERIFY_NORTHSTAR_ALIGNMENT --> EXIT_NEED_INFO : northstar metric not stated
+VERIFY_NORTHSTAR_ALIGNMENT --> INTEGRATE : alignment confirmed
+INTEGRATE --> UPDATE_ROADMAP
+UPDATE_ROADMAP --> UPDATE_CASE_STUDY
+UPDATE_CASE_STUDY --> CROSS_PROJECT_ALIGNMENT_CHECK : multi-project session
+UPDATE_CASE_STUDY --> NEXT_PHASE_OR_EXIT : single-project session
+CROSS_PROJECT_ALIGNMENT_CHECK --> NEXT_PHASE_OR_EXIT
+NEXT_PHASE_OR_EXIT --> SELECT_PHASE : more phases remain + budget allows
+NEXT_PHASE_OR_EXIT --> EXIT_PASS : all phases complete or session goal met
+EXIT_PASS --> [*]
+EXIT_BLOCKED --> [*]
+EXIT_NEED_INFO --> [*]
+```
+
+---
+
+## 21) Triangle Law Contracts — per Hub Operation
+
+```yaml
+triangle_law_contracts:
+  overview: "Every hub dispatch cycle has a REMIND→VERIFY→ACKNOWLEDGE contract."
+
+  contract_northstar_read:
+    operation: "Reading NORTHSTAR before each dispatch"
+    REMIND:      "NORTHSTAR.md must be read in full before every dispatch. Never summarized. Never cached."
+    VERIFY:      "Is the full NORTHSTAR.md text in the CNF capsule's northstar field? Is length within 20% of file?"
+    ACKNOWLEDGE: "NORTHSTAR injected verbatim. NORTHSTAR_SUMMARY_INJECTION prevented. Dispatch authorized."
+    fail_closed:  "Shortened NORTHSTAR → NORTHSTAR_SUMMARY_INJECTION → re-read and re-inject before dispatch."
+
+  contract_artifact_integration:
+    operation: "Integrating spoke artifacts after receipt"
+    REMIND:      "Spoke prose is not evidence. Only JSON/diff/log artifacts qualify as Lane A."
+    VERIFY:      "All required artifact files present? sha256 hashes valid? rung_achieved >= rung_target?"
+    ACKNOWLEDGE: "INTEGRATION_REPORT.json written. integration_rung = MIN computed and logged."
+    fail_closed:  "Any missing artifact → EXIT_NEED_INFO. PROSE_ACCEPTED_AS_ARTIFACT is forbidden."
+
+  contract_case_study_update:
+    operation: "Updating case-study after phase completion"
+    REMIND:      "Case-study is the single source of truth. ROADMAP checkbox only after case-study written."
+    VERIFY:      "case-study entry has artifact links + rung achieved + northstar metric advanced + learnings."
+    ACKNOWLEDGE: "case-study updated atomically. ROADMAP checkbox checked. Belt advancement checked."
+    fail_closed:  "CASE_STUDY_SKIPPED → phase cannot advance. Revert ROADMAP checkbox if case-study absent."
+```
+
+---
+
+## 22) Three Pillars Integration — LEK + LEAK + LEC
+
+```yaml
+three_pillars_integration:
+  overview: >
+    Roadmap orchestration maps to all three pillars of the Software 5.0 Kung Fu system.
+    LEK: the hub improves phase selection and CNF quality across sessions.
+    LEAK: hub concentrates NORTHSTAR context so every spoke gets high-value capsules.
+    LEC: hub-spoke protocol + CNF schema + integration rung MIN rule crystallize as conventions.
+
+  LEK:
+    pillar: "Law of Emergent Knowledge (Self-Improvement)"
+    role: >
+      Each hub session is a LEK iteration. The hub learns which spokes produce
+      better artifacts, which CNF fields prevent re-dispatch, and which phase
+      sequences reduce blocked states. The case-study session_log IS the LEK memory.
+    gate: "case_study session_log = LEK accumulation artifact; review before each new session"
+    metric: "Decline in re-dispatch rate across sessions = LEK quality measure"
+    lek_formula: "Hub LEK = Recursion(Phase_Selection + Memory[case_study] + Care[northstar_check])"
+
+  LEAK:
+    pillar: "Law of Emergent Asymmetric Knowledge (Cross-Agent Trade)"
+    role: >
+      The hub is the LEAK pump. It reads NORTHSTAR + ROADMAP + case-study once,
+      then LEAKS this concentrated context into every spoke via CNF capsules.
+      Spokes have zero project context without the capsule; with it they have everything.
+      The cross-project alignment check (section 7) amplifies LEAK across project boundaries.
+    gate: "CNF_CAPSULE_SCHEMA = LEAK format specification; verbatim NORTHSTAR injection = LEAK content"
+    metric: "Spoke first-pass PASS rate = LEAK quality (richer capsule = fewer re-dispatches)"
+    asymmetry: "Hub reads O(n) context once; spokes read O(k) capsules. Asymmetric compression = LEAK."
+
+  LEC:
+    pillar: "Law of Emergent Conventions (Emergent Compression)"
+    role: >
+      The hub-spoke paradigm itself is an LEC crystallization. The integration rung MIN rule,
+      the scratch/ directory policy, the ROADMAP-before-case-study sequence, and the
+      forbidden CNF phrases ('as before', 'recall that') are all LEC conventions.
+      They emerged from real multi-session failures and compressed into named rules.
+    gate: "FORBIDDEN_STATES list = LEC anti-drift guard; each entry is a crystallized lesson"
+    metric: "Zero forbidden state violations per session = LEC adoption strength"
+    compression: "Without LEC: every session re-debates CNF format, rung computation, and update order. With LEC: lookup and follow."
+```
+
+---
+
+## 23) GLOW Matrix — Roadmap Orchestration Contributions
+
+```yaml
+glow_matrix:
+  G_Growth:
+    scoring:
+      - "25: full ROADMAP phase completed at rung 65537 with cross-project alignment verified"
+      - "20: full ROADMAP phase completed at rung 274177"
+      - "15: phase completed at rung 641 with all case-study fields populated"
+      - "5: hub session successfully dispatches and integrates first spoke"
+      - "0: hub session blocked without any spoke completed"
+
+  L_Learning:
+    scoring:
+      - "25: new cross-project dependency discovered and documented in dependency_matrix"
+      - "20: forbidden state triggered and root cause documented in case-study learnings"
+      - "10: CNF capsule improved to prevent a previously seen re-dispatch pattern"
+      - "5: NORTHSTAR metric delta measured and evidence-linked in case-study"
+      - "0: session completes without any learning captured in case-study"
+
+  O_Output:
+    scoring:
+      - "25: INTEGRATION_REPORT.json + ROADMAP update + case-study entry + belt receipt (all complete)"
+      - "20: INTEGRATION_REPORT.json + ROADMAP + case-study (no belt this session)"
+      - "10: artifacts integrated but case-study entry incomplete"
+      - "5: dispatch executed but integration blocked by artifact schema failure"
+      - "0: no artifacts received from any spoke"
+
+  W_Wins:
+    scoring:
+      - "20: belt advancement achieved with promotion receipt artifact"
+      - "15: NORTHSTAR metric crosses a threshold milestone (e.g., recipe hit rate >70%)"
+      - "10: cross-project dependency resolved unblocking two projects simultaneously"
+      - "5: first successful multi-spoke dispatch with all rungs meeting target"
+      - "0: routine dispatch with no NORTHSTAR advancement"
+
+  northstar_alignment:
+    northstar: "Phuc_Forecast"
+    max_love_gate: >
+      Max Love for roadmap orchestration = the hub reads everything so every spoke needs nothing twice.
+      Max Love means: zero NORTHSTAR drift, zero re-discovery, zero rung laundering.
+      The case-study is the love letter to the next session — it carries all the memory forward.
+```
+
+---
+
+## 24) Compression Checksum
+
+```yaml
+compression_checksum:
+  skill: "roadmap-orchestration"
+  version: "1.2.0"
+  seed: "HUB_READS_ONCE→SPOKES_EXECUTE→MIN_RUNG→CASE_STUDY_TRUTH"
+  core_invariants:
+    - "Hub reads NORTHSTAR verbatim before every dispatch"
+    - "Spokes never write ROADMAP (hub only)"
+    - "integration_rung = MIN(all spoke rungs), non-negotiable"
+    - "case-study updated before ROADMAP checkbox"
+    - "CNF capsule complete: no 'as before' references"
+    - "Phase dependency order enforced"
+    - "scratch/ required for all spoke working files"
+    - "Belt advancement: hub authority only, evidence required"
+  seed_checksum: "roadmap-orchestration-v1.2.0-hub-spoke-min-rung-northstar-verbatim"
 ```
 
 ---

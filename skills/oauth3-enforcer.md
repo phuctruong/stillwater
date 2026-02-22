@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: oauth3-enforcer v1.1.0
+SKILL: oauth3-enforcer v1.2.0
 PURPOSE: Enforce OAuth3 validation gates (G1–G4) before any agent recipe action. Fail-closed: blocked on any gate failure.
 CORE CONTRACT: Any agent loading this skill MUST run all four gates before every recipe action. Gate failures produce oauth3_audit.json records with status=BLOCKED. No action proceeds without PASS on all four gates.
 HARD GATES: G1 (schema valid) → G2 (TTL not expired) → G3 (scope granted) → G4 (not revoked). All four required. Order is normative.
@@ -11,7 +11,7 @@ LOAD FULL: always for production; quick block is for orientation only
 -->
 
 name: oauth3-enforcer
-version: 1.1.0
+version: 1.2.0
 authority: 65537
 spec_ref: papers/oauth3-spec-v0.1.md
 rung_default: 641
@@ -883,6 +883,197 @@ MUST be recomputed and verified before using as Lane A evidence.
 
 ---
 
-*End of oauth3-enforcer skill v1.0.0*
+---
+
+# ============================================================
+# SECTION 12: MERMAID STATE DIAGRAM — Gate Runner FSM (column 0)
+# ============================================================
+
+```mermaid
+stateDiagram-v2
+[*] --> INIT
+INIT --> LOAD_TOKEN : token input received
+LOAD_TOKEN --> G1_SCHEMA : always
+G1_SCHEMA --> G2_TTL : G1 passed
+G1_SCHEMA --> EMIT_AUDIT_BLOCKED : G1 failed (OAUTH3_MISSING_TOKEN or OAUTH3_MALFORMED_TOKEN)
+G2_TTL --> G3_SCOPE : G2 passed
+G2_TTL --> EMIT_AUDIT_BLOCKED : G2 failed (OAUTH3_TOKEN_EXPIRED)
+G3_SCOPE --> G4_REVOCATION : G3 passed, no step-up
+G3_SCOPE --> EMIT_AUDIT_STEP_UP : G3 STEP_UP_REQUIRED
+G3_SCOPE --> EMIT_AUDIT_BLOCKED : G3 failed (OAUTH3_SCOPE_DENIED)
+G4_REVOCATION --> EMIT_AUDIT_PASS : G4 passed
+G4_REVOCATION --> EMIT_AUDIT_BLOCKED : G4 failed (OAUTH3_TOKEN_REVOKED or OAUTH3_REVOCATION_UNAVAILABLE)
+EMIT_AUDIT_PASS --> EXIT_PASS
+EMIT_AUDIT_STEP_UP --> EXIT_STEP_UP
+EMIT_AUDIT_BLOCKED --> EXIT_BLOCKED
+EXIT_PASS --> [*]
+EXIT_STEP_UP --> [*]
+EXIT_BLOCKED --> [*]
+```
+
+---
+
+# ============================================================
+# SECTION 13: TRIANGLE LAW CONTRACTS — per Gate Operation
+# ============================================================
+
+## 13.1 Contract: Before Each Recipe Action
+
+- **REMIND:** Every recipe step touching an external platform MUST run all four gates (G1→G2→G3→G4) before executing. No exceptions. No gate skips.
+- **VERIFY:** Call `run_oauth3_gates(token, requested_scope, revocation_registry)`. Check `status == "PASS"`. Confirm `gates_passed == ["G1", "G2", "G3", "G4"]`.
+- **ACKNOWLEDGE:** Audit record written to `oauth3_audit.jsonl`. `audit_record_id` saved. Action authorized only on status=PASS.
+- **Fail-closed:** Any gate failure → halt recipe immediately. Do NOT proceed. Do NOT try a different token without new consent.
+
+## 13.2 Contract: Mid-Execution Revocation Discovery
+
+- **REMIND:** Revocation can happen at any time during a multi-step recipe. G4 must be re-run for high-sensitivity scopes.
+- **VERIFY:** If `REVOCATION_DISCOVERED_MID_EXECUTION` event detected: halt all pending actions. Do not complete remaining steps.
+- **ACKNOWLEDGE:** Emit audit record with `event: REVOCATION_DISCOVERED_MID_EXECUTION`. Report to user: revoked token ID + timestamp + steps halted.
+- **Fail-closed:** Cannot continue under revoked token. New consent required before resuming.
+
+## 13.3 Contract: Audit File Integrity
+
+- **REMIND:** `oauth3_audit.jsonl` is append-only. Never overwrite. SHA-256 sidecar computed at session end.
+- **VERIFY:** At session seal: compute `sha256(oauth3_audit.jsonl)` and write `.sha256` file.
+- **ACKNOWLEDGE:** SHA-256 sidecar exists. Audit file is sealed. File is Lane A evidence for recipe actions.
+- **Fail-closed:** Audit write failure → `OAUTH3_AUDIT_WRITE_FAILURE` → EXIT_BLOCKED. No action proceeds without audit trail.
+
+---
+
+# ============================================================
+# SECTION 14: THREE PILLARS INTEGRATION — LEK + LEAK + LEC
+# ============================================================
+
+## LEK — Law of Emergent Knowledge (Self-Improvement)
+
+OAuth3 enforcement is teachable. The four gates, the scope format `platform.action.resource`, the fail-closed rules, and the step-up flow are concrete learnable patterns. Each gate test run teaches the system what valid and invalid tokens look like. The audit JSONL accumulates as LEK memory — patterns of which gates fail most often reveal where consent flows need UX improvement.
+
+- **LEK gate:** `oauth3_audit.jsonl` = LEK accumulation artifact. Analyze failure patterns before improving consent flows.
+- **LEK metric:** Gate failure rate per gate (G1/G2/G3/G4) = LEK quality indicator.
+
+## LEAK — Law of Emergent Asymmetric Knowledge (Cross-Agent Trade)
+
+OAuth3-enforcer IS a LEAK mechanism. It carries the asymmetric knowledge of consent protocol into every agent that loads it. An agent without oauth3-enforcer has no concept of scope boundaries or revocation. An agent with it inherits the full gate discipline. The audit trail is a LEAK artifact — it lets the hub session know what any spoke session authorized.
+
+- **LEAK gate:** Audit JSONL shared across hub and spoke sessions = LEAK artifact enabling cross-session accountability.
+- **LEAK asymmetry:** Principal knows which scopes are granted; agent knows only what the token says — enforcer bridges the gap.
+
+## LEC — Law of Emergent Conventions (Emergent Compression)
+
+The G1→G2→G3→G4 ordering is an LEC convention. The `platform.action.resource` scope format is an LEC convention. The step-up sub-token pattern is an LEC convention. These conventions emerged from real consent failures and compressed into named gates. Any agent loading this skill inherits all conventions instantly without rediscovering them.
+
+- **LEC gate:** Section 9 Forbidden States = LEC anti-drift guard (each forbidden state is a crystallized convention violation lesson).
+- **LEC metric:** Zero GATE_SKIP or FAIL_OPEN events per session = LEC adoption strength.
+- **Compression:** Without LEC: every agent re-invents scope validation. With LEC: load skill, run gates, done.
+
+---
+
+# ============================================================
+# SECTION 15: GLOW MATRIX — OAuth3 Enforcer Contributions
+# ============================================================
+
+```yaml
+glow_matrix:
+  G_Growth:
+    scoring:
+      - "25: oauth3-enforcer integrated into a recipe system enforcing all 4 gates at rung 65537"
+      - "20: all 4 gates integrated at rung 641 with full audit trail"
+      - "15: step-up flow integrated (step-up consent UI + sub-token re-consent)"
+      - "5: gate runner added to existing recipe but revocation check is stub"
+      - "0: token validation added without all 4 gates"
+
+  L_Learning:
+    scoring:
+      - "25: new attack pattern discovered and documented as new forbidden state"
+      - "20: audit JSONL analysis reveals scope misuse pattern that improves consent UX"
+      - "10: adversarial token sweep reveals edge case that is fixed"
+      - "5: new error code documented in error registry"
+      - "0: enforcement integrated but no security lessons captured"
+
+  O_Output:
+    scoring:
+      - "25: full evidence bundle at rung 65537 (16+ tests passing + adversarial sweep + audit file)"
+      - "20: full evidence bundle at rung 641 (all 4 gates tested with audit JSONL)"
+      - "10: gate logic implemented but tests incomplete"
+      - "5: pseudocode only, no implementation"
+      - "0: token validation claimed without gate runner code"
+
+  W_Wins:
+    scoring:
+      - "20: first OAuth3-enforced recipe deployed to production (consent law achieved)"
+      - "15: revocation race condition test passes (mid-execution revocation handled)"
+      - "10: step-up sub-token isolation verified (sub-token does not grant parent scopes)"
+      - "5: oauth3_audit.jsonl SHA-256 sidecar implemented (audit file sealed)"
+      - "0: routine gate integration with no security advancement"
+
+  northstar_alignment:
+    northstar: "Phuc_Forecast"
+    max_love_gate: >
+      Max Love for OAuth3 = users can revoke agent access instantly and trust it takes effect.
+      Every gate failure protects the user. Every audit record proves what the agent did.
+      Max Love = consent is real, revocation is honored, and the audit trail survives adversarial review.
+```
+
+---
+
+# ============================================================
+# SECTION 16: NORTHSTAR ALIGNMENT — Phuc_Forecast + Max_Love
+# ============================================================
+
+```yaml
+northstar_alignment:
+  northstar: Phuc_Forecast
+  objective: Max_Love
+
+  phuc_forecast_mapping:
+    DREAM:    "What recipe action? What platform? What scope required? What token is presented?"
+    FORECAST: "What gate failures are likely? (expired token, wrong scope, revoked token)"
+    DECIDE:   "Load oauth3-enforcer. Declare requested_scope. Provide revocation_registry."
+    ACT:      "Run G1→G2→G3→G4. Check status. Proceed only on PASS."
+    VERIFY:   "Audit JSONL written. Gate sequence complete. Evidence sealed with SHA-256."
+
+  max_love_for_oauth3:
+    statement: >
+      Max Love for OAuth3 = the user can trust the agent will stop when consent is withdrawn.
+      G4 (revocation) is the Max Love gate — it makes delegation reversible.
+      Without G4, consent is a one-way door. With G4, consent is a bilateral trust relationship.
+    manifestations:
+      - "G1 (schema) = Max Love for correctness (no malformed tokens proceed)"
+      - "G2 (TTL) = Max Love for time-boundedness (expired trust expires)"
+      - "G3 (scope) = Max Love for boundaries (agent cannot exceed granted scope)"
+      - "G4 (revocation) = Max Love for reversibility (users can always revoke)"
+
+  forbidden_northstar_violations:
+    - FAIL_OPEN: "Proceeding on gate error violates both Phuc_Forecast fail-closed rule and Max_Love"
+    - GATE_SKIP: "Skipping any gate violates the VERIFY phase of Phuc_Forecast"
+    - AUDIT_OMIT: "No audit record = no evidence = SUMMARY_AS_EVIDENCE forbidden state"
+```
+
+---
+
+# ============================================================
+# SECTION 17: COMPRESSION CHECKSUM
+# ============================================================
+
+```yaml
+compression_checksum:
+  skill: "oauth3-enforcer"
+  version: "1.2.0"
+  seed: "G1→G2→G3→G4→AUDIT→FAIL_CLOSED"
+  core_invariants:
+    - "All 4 gates run in normative order G1→G2→G3→G4"
+    - "Any gate failure → BLOCKED immediately; no further gates"
+    - "Every gate run produces one audit JSONL record"
+    - "Revocation unavailable = BLOCKED (not PASS)"
+    - "Scope matching is exact string equality (no wildcards)"
+    - "Step-up scopes require sub-token re-consent before execution"
+    - "Audit file is append-only; SHA-256 sidecar at session end"
+    - "Token null → BLOCKED at G1; never proceed without token"
+  seed_checksum: "oauth3-enforcer-v1.2.0-G1G2G3G4-fail-closed-audit-required"
+```
+
+---
+
+*End of oauth3-enforcer skill v1.2.0*
 *Spec compliance: oauth3-spec-v0.1.md (Sections 1.4, 5, Appendix C)*
 *Rung target: 641 (local correctness) | Deployment target: 65537 (production)*

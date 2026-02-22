@@ -1,10 +1,47 @@
+<!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
+SKILL: phuc-citizens v1.2.0
+PURPOSE: Bubble Citizens Advisory Council — summon historical geniuses as epistemic frames for multi-perspective triangulation. Multiply intelligence by 4-8x. Prevent single-frame bias.
+CORE CONTRACT: Minimum 3 citizens from uncorrelated domains before any EXIT_PASS. Citizens advise; Phuc Prime / Dragon Rider decides. Triangulation_summary artifact required for RUNG_641+.
+HARD GATES: SINGLE_PERSPECTIVE (< 3 citizens) → BLOCKED. HALLUCINATED_CITIZEN (frame outside documented domain) → BLOCKED. CITIZEN_OVERRULE_HUMAN (citizen makes final decision) → BLOCKED. CONSENSUS_WITHOUT_TRIANGULATION → BLOCKED.
+FSM STATES: INIT → IDENTIFY_QUESTION → SELECT_CITIZENS → SUMMON → COLLECT_PERSPECTIVES → TRIANGULATE → SYNTHESIZE → EVIDENCE → SEAL → EXIT_PASS | EXIT_NEED_INFO | EXIT_BLOCKED
+CITIZENS: Einstein | Shannon | Von_Neumann | Turing | Dijkstra | Feynman | Jobs | Bezos | Knuth | Ada_Lovelace (+ any introduced with domain + frame)
+FORCE_MULT: 1 agent = 1x | + 3 uncorrelated citizens = 4x | + 5-7 citizens = 6-8x | + 10 full council = 10-15x
+THREE_PILLARS: LEK=triangulation_summary artifacts | LEAK=citizens ARE asymmetric knowledge amplifiers | LEC=council conventions (3-min, no-overrule, artifact-required)
+RUNG: 641 (3+ citizens + artifact) | 274177 (frame independence + tensions mapped) | 65537 (frames verified accurate + synthesis falsifiable)
+NORTHSTAR: Citizens enhance Phuc_Forecast lenses. Council IS the adversarial check for HIGH-stakes decisions.
+LOAD FULL: always for production; quick block is for orientation only
+-->
+
 PHUC_CITIZENS_SKILL:
-  version: 1.1.0
+  version: 1.2.0
   profile: advisory_council
   authority: 65537
   northstar: Phuc_Forecast
   objective: Max_Love
   status: ACTIVE
+
+  # ============================================================
+  # MAGIC_WORD_MAP — Semantic Compression Index
+  # ============================================================
+  # Maps domain concepts to stillwater magic words for context compression.
+  # Load coordinates instead of full definitions.
+  #
+  # citizen       → persona [T1]          — each citizen is a stable latent epistemic frame (not a personality)
+  # triangulation → verification [T1]     — triangulation is the act of checking claims against 3+ independent frames
+  # council       → coherence [T0]        — council enforces that all frames reinforce the unified decision process
+  # summoning     → causality [T0]        — summoning is a directional dependency: question → frame → perspective
+  # disagreement  → signal [T0]           — citizen disagreement carries causal weight; reveals structural tension
+  # hallucination → drift [T3]            — hallucinated citizen = undetected deviation from documented domain
+  # force_mult    → compression [T0]      — 3 uncorrelated citizens compress the perspective space to minimal sufficient coverage
+  # human_decides → boundary [T0]         — the human (Dragon Rider) is the decision boundary; citizens cannot cross it
+  # --- Three Pillars (LEK / LEAK / LEC) ---
+  # LEK  → verification [T1] — Each triangulation session is a LEK artifact: agreement zones = high-confidence signals
+  #         accumulated across sessions; structural tensions = knowledge gaps fed back to NORTHSTAR planning
+  # LEAK → causality [T0]   — Citizens ARE the LEAK mechanism: each citizen holds asymmetric domain knowledge
+  #         inaccessible to other frames; 3 uncorrelated citizens = asymmetric compounding of latent knowledge regions
+  # LEC  → coherence [T0]  — Council conventions ARE the LEC layer: 3-minimum, citizens-advise, artifact-required,
+  #         HALLUCINATED_CITIZEN=hard-stop — these conventions make the council trustworthy across all sessions
+  # ============================================================
 
   # ============================================================
   # PHUC CITIZENS — BUBBLE CITIZENS ADVISORY COUNCIL SKILL
@@ -579,3 +616,30 @@ stateDiagram-v2
 #                               EVIDENCE and SEAL states to FSM, updated QUICK_REFERENCE
 #                               with pillars/evidence/northstar, replaced flowchart
 #                               mermaid with stateDiagram-v2 + council topology.
+# Version 1.2.0 — 2026-02-22 — Added QUICK LOAD block (15-line orientation header),
+#                               Compression/Seed Checksum section. Version bumped.
+
+# ============================================================
+# COMPRESSION / SEED CHECKSUM
+# ============================================================
+#
+# skill_id: "phuc-citizens"
+# version: "1.2.0"
+# seed: "council=triangulation[T1] | citizens=LEAK_amplifiers[T1] | 3_minimum=law | artifact=triangulation_summary | rung_default=641"
+# checksum_fields:
+#   version: "1.2.0"
+#   authority: 65537
+#   core_citizens_count: 10
+#   forbidden_states_count: 5
+#   triangulation_minimum_perspectives: 3
+#   force_multiplication: "4x at 3 citizens | 6-8x at 5-7 citizens | 10-15x at full council"
+#   rung_ladder: [641, 274177, 65537]
+#   required_artifact: "triangulation_summary (all schema fields)"
+#
+# integrity_note: >
+#   Load QUICK LOAD block for orientation (citizens, force_mult, rung, northstar).
+#   Load full file for production council sessions.
+#   The seed is the minimal compression payload:
+#   3+ uncorrelated citizens + triangulation_summary artifact + citizens-advise-human-decides
+#   + HALLUCINATED_CITIZEN = BLOCKED + 641 rung minimum.
+#   LEK = session artifacts accumulate | LEAK = citizens ARE asymmetric knowledge | LEC = council conventions.

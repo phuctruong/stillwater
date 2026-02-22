@@ -278,6 +278,20 @@ Produces:
 
 ---
 
-Say **“next”** for:
+---
+
+## Three Pillars Mapping
+
+| Pillar | Element | Role in this Combo |
+|--------|---------|-------------------|
+| **L (Logic / Evidence)** | Kent Gate: repro_red → patch → repro_green | Forces executable evidence before any PASS claim |
+| **E (Execution / Energy)** | Node 3 RED run + Node 6 GREEN run via Run+Test Harness | Mechanical execution with bounded retries and IO boundary |
+| **K (Knowledge / Capital)** | LocalizationReport + PatchVerdict + MANIFEST.json | Skill capital preserved as replay-stable artifact bundle |
+
+LEK summary: Knowledge (localization) targets the patch; Energy (runs) verifies it; Logic (Kent Gate) seals it.
+
+---
+
+Say **”next”** for:
 
 **Combo 5 — Review + Security Scan Veto**.

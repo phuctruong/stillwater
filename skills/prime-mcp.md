@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: prime-mcp v1.1.0
+SKILL: prime-mcp v1.2.0
 PURPOSE: Fail-closed Model Context Protocol (MCP) server creation skill with security gates; every tool must declare auth_required, data_classification, network_access, and destructive_ops before implementation.
 CORE CONTRACT: MCP servers are trusted to call tools — ALL tool implementations MUST apply prime-safety constraints. Tool schemas are public API surfaces; breaking changes require major semver bump. Security manifest is mandatory evidence.
 HARD GATES: Any tool without an explicit security declaration → BLOCKED. Unvalidated input to subprocess/eval → BLOCKED. Secrets in schemas → BLOCKED. API surface changes without semver plan → BLOCKED. Network access not declared → BLOCKED.
@@ -9,7 +9,7 @@ VERIFY: rung_641 (schema valid + handlers tested + security manifest present) | 
 LOAD FULL: always for production; quick block is for orientation only
 -->
 PRIME_MCP_SKILL:
-  version: 1.1.0
+  version: 1.2.0
   profile: strict
   authority: 65537
   northstar: Phuc_Forecast
@@ -720,3 +720,190 @@ PRIME_MCP_SKILL:
     conflict_rule:
       ordering: "prime-safety > prime-mcp > prime-coder > phuc-* skills"
       resolution: "stricter wins on any gate conflict"
+
+  # ------------------------------------------------------------
+  # 15) Mermaid State Diagram — MCP Server FSM (column 0)
+  # ------------------------------------------------------------
+
+```mermaid
+stateDiagram-v2
+[*] --> INIT
+INIT --> INTAKE_SPEC : SERVER_SPEC received
+INTAKE_SPEC --> NULL_CHECK : always
+NULL_CHECK --> EXIT_NEED_INFO : spec_null OR tools_undefined
+NULL_CHECK --> DESIGN_API_SURFACE : inputs_defined
+DESIGN_API_SURFACE --> SECURITY_GATE : always
+SECURITY_GATE --> EXIT_BLOCKED : any_tool_missing_security_declaration
+SECURITY_GATE --> EXIT_BLOCKED : high_risk_tool_without_mitigation_plan
+SECURITY_GATE --> IMPLEMENT_HANDLERS : all_tools_security_declared_and_approved
+IMPLEMENT_HANDLERS --> TEST_PROTOCOL : always
+TEST_PROTOCOL --> EXIT_BLOCKED : protocol_tests_fail OR null_input_handling_missing
+TEST_PROTOCOL --> EVIDENCE_BUILD : tests_pass
+EVIDENCE_BUILD --> SOCRATIC_CHECK : always
+SOCRATIC_CHECK --> IMPLEMENT_HANDLERS : critique_requires_revision AND budgets_allow
+SOCRATIC_CHECK --> EMIT_MCP_SERVER : all checks pass
+EMIT_MCP_SERVER --> EXIT_PASS : evidence_complete AND rung_target_met
+EMIT_MCP_SERVER --> EXIT_BLOCKED : evidence_incomplete OR rung_not_met
+EXIT_PASS --> [*]
+EXIT_BLOCKED --> [*]
+EXIT_NEED_INFO --> [*]
+```
+
+  # ------------------------------------------------------------
+  # 16) Triangle Law Contracts — per MCP Server Operation
+  # ------------------------------------------------------------
+  Triangle_Law_Contracts:
+    overview: "Every MCP server phase has a REMIND→VERIFY→ACKNOWLEDGE contract."
+
+    contract_security_gate:
+      operation: "Security declaration review before implementation begins"
+      REMIND:      "Every tool MUST have auth_required, data_classification, network_access, destructive_ops declared BEFORE writing a single line of handler code."
+      VERIFY:      "Check each tool entry in security_manifest.json. All four fields non-null? secret-classified tools have auth_required=true? destructive tools have rollback_plan?"
+      ACKNOWLEDGE: "security_manifest.json written. SECURITY_GATE passed. IMPLEMENT_HANDLERS authorized."
+      fail_closed:  "Any null declaration → BLOCKED. No partial declarations accepted. No retrofitting after implementation."
+
+    contract_api_surface:
+      operation: "Detecting and documenting API surface changes"
+      REMIND:      "Tool schemas are public API. Any breaking change requires a MAJOR version bump. Document before shipping."
+      VERIFY:      "Run api_surface_before.json vs api_surface_after.json diff. Any breaking change detected?"
+      ACKNOWLEDGE: "API surface snapshots committed. Semver bump documented if breaking. SCHEMA_BREAKING_CHANGE_WITHOUT_MAJOR_BUMP prevented."
+      fail_closed:  "Breaking change without major bump → EXIT_BLOCKED. API surface lock is non-negotiable."
+
+    contract_null_validation:
+      operation: "Input validation for every tool handler"
+      REMIND:      "Null ≠ empty string ≠ zero. Every handler must explicitly check null before acting. Unvalidated input to subprocess = BLOCKED."
+      VERIFY:      "null_checks.json lists every tool + every input field + null/zero/empty handling. coercion_violations_detected = 0."
+      ACKNOWLEDGE: "null_checks.json committed. All handlers validated. HANDLER_WITHOUT_INPUT_VALIDATION prevented."
+      fail_closed:  "Any unvalidated path to subprocess/eval/filesystem → EXIT_BLOCKED immediately."
+
+  # ------------------------------------------------------------
+  # 17) Three Pillars Integration — LEK + LEAK + LEC
+  # ------------------------------------------------------------
+  Three_Pillars_Integration:
+    overview: >
+      prime-mcp maps to all three pillars. LEK: security patterns improve with each server built.
+      LEAK: security manifest is traded between MCP server builder and consumer agents.
+      LEC: declare-before-implement + null-check-every-input conventions crystallize across servers.
+
+    LEK:
+      pillar: "Law of Emergent Knowledge (Self-Improvement)"
+      role: >
+        Each MCP server built with prime-mcp improves the pattern library. The security manifest
+        schema teaches what properties matter. The Socratic check questions teach what to look for.
+        The forbidden states list grows with each new vulnerability discovered.
+      gate: "security_scan.json + security_manifest.json = LEK artifacts (patterns to reuse next server)"
+      metric: "Reduction in SECURITY_GATE violations per server iteration = LEK quality measure"
+      lek_formula: "MCP LEK = Recursion(Tool_Patterns + Memory[security_manifests] + Care[null_checks])"
+
+    LEAK:
+      pillar: "Law of Emergent Asymmetric Knowledge (Cross-Agent Trade)"
+      role: >
+        The security manifest IS the LEAK artifact. A server built with prime-mcp exports its
+        security properties to any consuming agent via security_manifest.json. The API surface
+        snapshots let prime-reviewer perform API surface lock checks without reading the source.
+        Tool schemas are LEAK outputs: structured knowledge tradeable across LLM boundaries.
+      gate: "security_manifest.json + api_surface_after.json = LEAK export artifacts"
+      metric: "Reuse of security_manifest patterns in subsequent servers = LEAK adoption"
+      asymmetry: "Server builder has implementation knowledge; consumer has only schema. LEAK bridges the gap."
+
+    LEC:
+      pillar: "Law of Emergent Conventions (Emergent Compression)"
+      role: >
+        The four security declaration fields (auth_required, data_classification, network_access,
+        destructive_ops) are LEC conventions. The `platform.action.resource` scope format is LEC.
+        The `declare-before-implement` principle is LEC. These compressed from real security failures
+        into named mandatory fields. Any server built with prime-mcp inherits all conventions.
+      gate: "FORBIDDEN_STATES list = LEC anti-drift guard; each forbidden state is a lesson crystallized"
+      metric: "Zero security declaration violations across all tools per server = LEC strength"
+      compression: "Without LEC: every MCP server re-debates security properties. With LEC: fill the manifest, ship."
+
+  # ------------------------------------------------------------
+  # 18) GLOW Matrix — MCP Server Contributions
+  # ------------------------------------------------------------
+  GLOW_Matrix:
+    G_Growth:
+      scoring:
+        - "25: full MCP server at rung 65537 with security scanner PASS and adversarial sweep"
+        - "20: MCP server at rung 274177 (replay stable + null edge sweep + auth tested)"
+        - "15: MCP server at rung 641 (security manifest + protocol tests passing)"
+        - "5: security manifest template created for future server"
+        - "0: MCP server implemented without security declarations"
+
+    L_Learning:
+      scoring:
+        - "25: security scan reveals new vulnerability class that adds a new forbidden state"
+        - "20: Socratic check exposes a tool design flaw that is corrected before shipping"
+        - "10: adversarial input sweep reveals null handling gap that is fixed"
+        - "5: API surface snapshot comparison catches unintended breaking change"
+        - "0: server shipped without any security learning captured"
+
+    O_Output:
+      scoring:
+        - "25: complete evidence bundle (security_manifest + scan + null_checks + api_surface + tests)"
+        - "20: server code + test suite + security_manifest (scan pending)"
+        - "10: server code + test suite only (security manifest incomplete)"
+        - "5: tool schemas defined but handlers not implemented"
+        - "0: server claimed but no security manifest produced"
+
+    W_Wins:
+      scoring:
+        - "20: MCP server enables a NORTHSTAR metric (e.g., recipe hit rate improvement via tool)"
+        - "15: security scan identifies and resolves a HIGH severity finding before deploy"
+        - "10: first destructive tool with working rollback_plan + user_confirmation_required"
+        - "5: network isolation test passes (allowlist-only domains contacted)"
+        - "0: routine server implementation with no security advancement"
+
+    northstar_alignment:
+      northstar: "Phuc_Forecast"
+      max_love_gate: >
+        Max Love for MCP = every tool declares what it can do before doing it.
+        Users trust MCP servers because the security manifest tells them exactly what
+        each tool can access, destroy, or transmit. Max Love = declared capability.
+
+  # ------------------------------------------------------------
+  # 19) Northstar Alignment — Phuc_Forecast + Max_Love
+  # ------------------------------------------------------------
+  NORTHSTAR_Alignment:
+    northstar: Phuc_Forecast
+    objective: Max_Love
+
+    phuc_forecast_mapping:
+      DREAM:    "What MCP server? What tools? What security properties? What rung target?"
+      FORECAST: "What failure modes? (undeclared tools, unvalidated input, secret in schema)"
+      DECIDE:   "Tool design + security declarations + API surface lock strategy."
+      ACT:      "IMPLEMENT_HANDLERS → TEST_PROTOCOL → EVIDENCE_BUILD."
+      VERIFY:   "SOCRATIC_CHECK + security scan + null checks + rung verification."
+
+    max_love_for_mcp:
+      statement: >
+        Max Love for MCP = the user knows exactly what doors each tool can open.
+        No hidden capabilities. No silent network access. No undeclared destructive operations.
+        Every tool's security properties are machine-readable, auditable, and permanent.
+      manifestations:
+        - "security_manifest.json = Max Love for transparency (all capabilities declared)"
+        - "null_checks.json = Max Love for robustness (every edge case handled)"
+        - "api_surface_lock = Max Love for reliability (no silent breaking changes)"
+        - "security scan = Max Love for trust (adversarial review before deployment)"
+
+    forbidden_northstar_violations:
+      - TOOL_WITHOUT_AUTH_DECLARATION: "Undeclared tool violates both Phuc_Forecast FORECAST and Max_Love transparency"
+      - SECRET_IN_SCHEMA: "Secret in public schema violates Max_Love and prime-safety"
+      - SILENT_CAPABILITY_EXPANSION: "Undeclared capability expansion violates the declare-before-implement contract"
+
+  # ------------------------------------------------------------
+  # 20) Compression Checksum
+  # ------------------------------------------------------------
+  Compression_Checksum:
+    skill: "prime-mcp"
+    version: "1.2.0"
+    seed: "DECLARE_BEFORE_IMPLEMENT→SECURITY_GATE→NULL_CHECK→API_SURFACE_LOCK"
+    core_invariants:
+      - "Every tool has auth_required, data_classification, network_access, destructive_ops"
+      - "SECURITY_GATE before IMPLEMENT_HANDLERS (no retrofitting)"
+      - "Null ≠ zero ≠ empty string in all handler paths"
+      - "Unvalidated input to subprocess/eval = BLOCKED"
+      - "Secret-classified tools require auth_required=true"
+      - "Destructive tools require rollback_plan or user_confirmation_required"
+      - "API surface lock: breaking changes require MAJOR semver bump"
+      - "Security scan required at rung 65537"
+    seed_checksum: "prime-mcp-v1.2.0-declare-first-security-gate-null-check-api-lock"

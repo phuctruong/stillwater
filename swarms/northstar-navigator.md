@@ -388,6 +388,53 @@ RUNG_65537 (production planning — required for belt advancement decisions):
 
 ---
 
+## STATE_MACHINE
+
+```yaml
+state_machine:
+  agent: northstar-navigator
+  version: 1.0.0
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_NEED_INFO, EXIT_BLOCKED]
+  states:
+    INIT: {on: {capsule_received: INTAKE_CAPSULE}}
+    INTAKE_CAPSULE: {on: {always: NULL_CHECK}}
+    NULL_CHECK: {on: {northstar_null: EXIT_NEED_INFO, valid: READ_NORTHSTAR}}
+    READ_NORTHSTAR: {on: {no_metric: EXIT_NEED_INFO, metric_found: SUMMIT_DEFINE}}
+    SUMMIT_DEFINE: {on: {vague: EXIT_NEED_INFO, measurable: SUMMIT_STEPS}}
+    SUMMIT_STEPS: {on: {insufficient: EXIT_NEED_INFO, identified: BACKWARD_CHAIN}}
+    BACKWARD_CHAIN: {on: {unverifiable: EXIT_BLOCKED, connected: CONNECT_TO_CURRENT}}
+    CONNECT_TO_CURRENT: {on: {floating_nodes: EXIT_BLOCKED, connected: CRITICAL_PATH}}
+    CRITICAL_PATH: {on: {always: FORWARD_PLAN}}
+    FORWARD_PLAN: {on: {always: VERIFY_CHAIN}}
+    VERIFY_CHAIN: {on: {pass: SOCRATIC_REVIEW, fail: EXIT_BLOCKED}}
+    SOCRATIC_REVIEW: {on: {revision: SUMMIT_DEFINE, complete: FINAL_SEAL}}
+    FINAL_SEAL: {on: {complete: EXIT_PASS, ambiguous: EXIT_NEED_INFO, unsafe: EXIT_BLOCKED}}
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> INTAKE_CAPSULE: capsule received
+    INTAKE_CAPSULE --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO: northstar null
+    NULL_CHECK --> READ_NORTHSTAR: valid
+    READ_NORTHSTAR --> SUMMIT_DEFINE: metric found
+    READ_NORTHSTAR --> EXIT_NEED_INFO: no metric
+    SUMMIT_DEFINE --> SUMMIT_STEPS: measurable
+    SUMMIT_STEPS --> BACKWARD_CHAIN: preconditions identified
+    BACKWARD_CHAIN --> CONNECT_TO_CURRENT: chain reaches current state
+    BACKWARD_CHAIN --> EXIT_BLOCKED: unverifiable link
+    CONNECT_TO_CURRENT --> CRITICAL_PATH: fully connected
+    CRITICAL_PATH --> FORWARD_PLAN
+    FORWARD_PLAN --> VERIFY_CHAIN
+    VERIFY_CHAIN --> SOCRATIC_REVIEW: pass
+    SOCRATIC_REVIEW --> FINAL_SEAL: complete
+    FINAL_SEAL --> EXIT_PASS: artifacts complete
+```
+
+---
+
 ## 9) Anti-Patterns
 
 **FORWARD_FIRST (The Primary Anti-Pattern)**

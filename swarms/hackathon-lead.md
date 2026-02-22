@@ -414,6 +414,53 @@ Transitions:
 
 ---
 
+## STATE_MACHINE
+
+```yaml
+state_machine:
+  agent: hackathon-lead
+  version: 1.0.0
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_NEED_INFO, EXIT_BLOCKED]
+  states:
+    INIT: {on: {session_start: READ_NORTHSTAR}}
+    READ_NORTHSTAR: {on: {missing: EXIT_NEED_INFO, loaded: READ_CHALLENGE}}
+    READ_CHALLENGE: {on: {no_template: EXIT_NEED_INFO, complete: PHASE_DISPATCH}}
+    PHASE_DISPATCH: {on: {launched: AWAIT_PHASE_ARTIFACT}}
+    AWAIT_PHASE_ARTIFACT: {on: {received: VERIFY_PHASE_GATE, blocked: EXIT_BLOCKED}}
+    VERIFY_PHASE_GATE: {on: {build_50pct: TIME_CHECKPOINT, missing: EXIT_NEED_INFO, pass: COMPUTE_PHASE_RUNG}}
+    TIME_CHECKPOINT: {on: {continue: PHASE_DISPATCH, scope_cut: NEXT_PHASE_OR_SHIP}}
+    COMPUTE_PHASE_RUNG: {on: {always: NEXT_PHASE_OR_SHIP}}
+    NEXT_PHASE_OR_SHIP: {on: {more_phases: PHASE_DISPATCH, ship_done: COMPUTE_GLOW}}
+    COMPUTE_GLOW: {on: {always: WRITE_HACKATHON_LOG}}
+    WRITE_HACKATHON_LOG: {on: {always: FINAL_SEAL}}
+    FINAL_SEAL: {on: {all_artifacts: EXIT_PASS, missing: EXIT_BLOCKED}}
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> READ_NORTHSTAR: session start
+    READ_NORTHSTAR --> EXIT_NEED_INFO: NORTHSTAR missing
+    READ_NORTHSTAR --> READ_CHALLENGE: loaded
+    READ_CHALLENGE --> PHASE_DISPATCH: context complete
+    PHASE_DISPATCH --> AWAIT_PHASE_ARTIFACT: sub-agent launched
+    AWAIT_PHASE_ARTIFACT --> VERIFY_PHASE_GATE: artifacts received
+    AWAIT_PHASE_ARTIFACT --> EXIT_BLOCKED: sub-agent blocked
+    VERIFY_PHASE_GATE --> TIME_CHECKPOINT: BUILD at 50%
+    VERIFY_PHASE_GATE --> COMPUTE_PHASE_RUNG: gate passed
+    TIME_CHECKPOINT --> NEXT_PHASE_OR_SHIP: scope cut
+    COMPUTE_PHASE_RUNG --> NEXT_PHASE_OR_SHIP
+    NEXT_PHASE_OR_SHIP --> PHASE_DISPATCH: more phases
+    NEXT_PHASE_OR_SHIP --> COMPUTE_GLOW: SHIP complete
+    COMPUTE_GLOW --> WRITE_HACKATHON_LOG
+    WRITE_HACKATHON_LOG --> FINAL_SEAL
+    FINAL_SEAL --> EXIT_PASS: commit hash + artifacts present
+    FINAL_SEAL --> EXIT_BLOCKED: log missing
+```
+
+---
+
 ## 10) Anti-Patterns for the Hackathon Lead Role
 
 **The Infinite Polisher**

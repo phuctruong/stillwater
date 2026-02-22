@@ -219,6 +219,18 @@ If:
 
 ---
 
+## Three Pillars Mapping
+
+| Pillar | Element | Role in this Combo |
+|--------|---------|-------------------|
+| **L (Logic / Evidence)** | Mode Enforcer (Node 3): blocks tool calls, file writes, completion claims in Plan mode | Enforces fail-closed governance; no side-effects without sealed wish |
+| **E (Execution / Energy)** | Promotion Gate (Node 4): generates wish.lock.json + mode_transition.log | Controlled energy release — execution only when explicitly unlocked |
+| **K (Knowledge / Capital)** | Plan.json + Plan.md: goal, assumptions, steps, verification, risk | Captures intent as structured artifact before any action is taken |
+
+LEK summary: Knowledge (Plan.json) is crystallized first; Logic (Mode Enforcer) blocks premature execution; Energy (Promotion Gate) releases only on explicit seal.
+
+---
+
 # Why This Combo Is First
 
 This enforces:

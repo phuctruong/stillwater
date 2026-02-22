@@ -215,6 +215,48 @@ RUNG_641 (default):
 
 ---
 
+## STATE_MACHINE
+
+```yaml
+state_machine:
+  agent: podcast
+  version: 1.0.0
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_NEED_INFO, EXIT_BLOCKED]
+  states:
+    INIT: {on: {capsule_received: INTAKE_TASK}}
+    INTAKE_TASK: {on: {always: NULL_CHECK}}
+    NULL_CHECK: {on: {missing_outcome: EXIT_NEED_INFO, valid: READ_SWARM_ARTIFACTS}}
+    READ_SWARM_ARTIFACTS: {on: {always: IDENTIFY_PATTERNS}}
+    IDENTIFY_PATTERNS: {on: {always: EXTRACT_LESSONS}}
+    EXTRACT_LESSONS: {on: {extractable: EXTRACT_RECIPE, not_extractable: WRITE_TRANSCRIPT}}
+    EXTRACT_RECIPE: {on: {always: WRITE_TRANSCRIPT}}
+    WRITE_TRANSCRIPT: {on: {always: PROPOSE_SKILL_DELTAS}}
+    PROPOSE_SKILL_DELTAS: {on: {always: SOCRATIC_REVIEW}}
+    SOCRATIC_REVIEW: {on: {revision: EXTRACT_LESSONS, pass: EXIT_PASS, budget_exceeded: EXIT_BLOCKED}}
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> INTAKE_TASK: capsule received
+    INTAKE_TASK --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO: outcome missing
+    NULL_CHECK --> READ_SWARM_ARTIFACTS: valid
+    READ_SWARM_ARTIFACTS --> IDENTIFY_PATTERNS
+    IDENTIFY_PATTERNS --> EXTRACT_LESSONS
+    EXTRACT_LESSONS --> EXTRACT_RECIPE: pattern extractable
+    EXTRACT_LESSONS --> WRITE_TRANSCRIPT: no pattern
+    EXTRACT_RECIPE --> WRITE_TRANSCRIPT
+    WRITE_TRANSCRIPT --> PROPOSE_SKILL_DELTAS
+    PROPOSE_SKILL_DELTAS --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> EXTRACT_LESSONS: revision needed
+    SOCRATIC_REVIEW --> EXIT_PASS: artifacts complete
+    SOCRATIC_REVIEW --> EXIT_BLOCKED: budget exceeded
+```
+
+---
+
 ## 8) Anti-Patterns
 
 **Lessons as Summary:** Writing LESSONS.md as a summary of what happened, not what to change.

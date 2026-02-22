@@ -238,6 +238,64 @@ RUNG_65537 (for competition/benchmark claims):
 
 ---
 
+## 8.0) State Machine (YAML)
+
+```yaml
+state_machine:
+  states: [INIT, INTAKE_PROBLEM, NULL_CHECK, CLASSIFY_PROBLEM, PLAN_PROOF,
+           EXECUTE_PROOF, CONVERGENCE_CHECK, VERIFY_PROOF, SOCRATIC_REVIEW,
+           BUILD_CERTIFICATE, EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO, EXIT_UNKNOWN]
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO, EXIT_UNKNOWN]
+  transitions:
+    - {from: INIT,              to: INTAKE_PROBLEM,    trigger: problem_received}
+    - {from: INTAKE_PROBLEM,    to: NULL_CHECK,         trigger: always}
+    - {from: NULL_CHECK,        to: EXIT_NEED_INFO,     trigger: problem_null}
+    - {from: NULL_CHECK,        to: CLASSIFY_PROBLEM,   trigger: inputs_defined}
+    - {from: CLASSIFY_PROBLEM,  to: EXIT_UNKNOWN,       trigger: open_research_problem}
+    - {from: CLASSIFY_PROBLEM,  to: PLAN_PROOF,         trigger: in_scope}
+    - {from: PLAN_PROOF,        to: EXECUTE_PROOF,      trigger: always}
+    - {from: EXECUTE_PROOF,     to: CONVERGENCE_CHECK,  trigger: iterative_method}
+    - {from: EXECUTE_PROOF,     to: VERIFY_PROOF,       trigger: non_iterative}
+    - {from: CONVERGENCE_CHECK, to: EXIT_PASS,          trigger: lane_A_or_B}
+    - {from: CONVERGENCE_CHECK, to: EXIT_BLOCKED,       trigger: timeout_or_diverged}
+    - {from: VERIFY_PROOF,      to: SOCRATIC_REVIEW,    trigger: always}
+    - {from: SOCRATIC_REVIEW,   to: EXECUTE_PROOF,      trigger: revision_needed}
+    - {from: SOCRATIC_REVIEW,   to: BUILD_CERTIFICATE,  trigger: proof_passes}
+    - {from: BUILD_CERTIFICATE, to: EXIT_PASS,          trigger: certificate_complete}
+    - {from: BUILD_CERTIFICATE, to: EXIT_BLOCKED,       trigger: certificate_incomplete}
+  forbidden_states:
+    - FLOAT_IN_FINAL_ANSWER
+    - FLOAT_IN_VERIFICATION
+    - CONVERGENCE_WITHOUT_CERTIFICATE
+    - ORACLE_MODE
+    - PROOF_WITHOUT_DERIVATION_CHAIN
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE_PROBLEM
+    INTAKE_PROBLEM --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : problem_null
+    NULL_CHECK --> CLASSIFY_PROBLEM : inputs_defined
+    CLASSIFY_PROBLEM --> EXIT_UNKNOWN : open_research
+    CLASSIFY_PROBLEM --> PLAN_PROOF : in_scope
+    PLAN_PROOF --> EXECUTE_PROOF
+    EXECUTE_PROOF --> CONVERGENCE_CHECK : iterative
+    EXECUTE_PROOF --> VERIFY_PROOF : non_iterative
+    CONVERGENCE_CHECK --> EXIT_PASS : lane_A_or_B
+    CONVERGENCE_CHECK --> EXIT_BLOCKED : timeout_diverged
+    VERIFY_PROOF --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> EXECUTE_PROOF : revision_needed
+    SOCRATIC_REVIEW --> BUILD_CERTIFICATE : proof_passes
+    BUILD_CERTIFICATE --> EXIT_PASS : complete
+    BUILD_CERTIFICATE --> EXIT_BLOCKED : incomplete
+    classDef forbidden fill:#f55,color:#fff
+    class FLOAT_IN_FINAL_ANSWER,ORACLE_MODE,PROOF_WITHOUT_DERIVATION_CHAIN forbidden
+```
+
+---
+
 ## 8) Anti-Patterns
 
 **Float Smuggling:** Using `1.0 / 3.0` in a computation and presenting the result as exact.

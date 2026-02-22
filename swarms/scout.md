@@ -227,6 +227,57 @@ RUNG_274177 (if stability required):
 
 ---
 
+## 8.0) State Machine (YAML)
+
+```yaml
+state_machine:
+  states: [INIT, INTAKE_TASK, NULL_CHECK, REPO_MAP, LOCALIZE_FILES,
+           SCORE_COMPLETENESS, IDENTIFY_GAPS, BUILD_REPORT, SOCRATIC_REVIEW,
+           EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  transitions:
+    - {from: INIT,              to: INTAKE_TASK,        trigger: capsule_received}
+    - {from: INTAKE_TASK,       to: NULL_CHECK,          trigger: always}
+    - {from: NULL_CHECK,        to: EXIT_NEED_INFO,      trigger: task_or_repo_null}
+    - {from: NULL_CHECK,        to: REPO_MAP,            trigger: inputs_defined}
+    - {from: REPO_MAP,          to: LOCALIZE_FILES,      trigger: always}
+    - {from: LOCALIZE_FILES,    to: SCORE_COMPLETENESS,  trigger: always}
+    - {from: SCORE_COMPLETENESS,to: IDENTIFY_GAPS,       trigger: always}
+    - {from: IDENTIFY_GAPS,     to: BUILD_REPORT,        trigger: always}
+    - {from: BUILD_REPORT,      to: SOCRATIC_REVIEW,     trigger: always}
+    - {from: SOCRATIC_REVIEW,   to: LOCALIZE_FILES,      trigger: revision_needed}
+    - {from: SOCRATIC_REVIEW,   to: EXIT_PASS,           trigger: report_complete}
+    - {from: SOCRATIC_REVIEW,   to: EXIT_BLOCKED,        trigger: budget_exceeded}
+  forbidden_states:
+    - CLAIM_WITHOUT_FILE_WITNESS
+    - IMPLICIT_COMPLETENESS
+    - PATCH_ATTEMPT
+    - DECISION_ATTEMPT
+    - NULL_ZERO_CONFUSION
+    - STACKED_SPECULATION
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE_TASK
+    INTAKE_TASK --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : task_or_repo_null
+    NULL_CHECK --> REPO_MAP : inputs_defined
+    REPO_MAP --> LOCALIZE_FILES
+    LOCALIZE_FILES --> SCORE_COMPLETENESS
+    SCORE_COMPLETENESS --> IDENTIFY_GAPS
+    IDENTIFY_GAPS --> BUILD_REPORT
+    BUILD_REPORT --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> LOCALIZE_FILES : revision_needed
+    SOCRATIC_REVIEW --> EXIT_PASS : report_complete
+    SOCRATIC_REVIEW --> EXIT_BLOCKED : budget_exceeded
+    classDef forbidden fill:#f55,color:#fff
+    class CLAIM_WITHOUT_FILE_WITNESS,PATCH_ATTEMPT,DECISION_ATTEMPT forbidden
+```
+
+---
+
 ## 8) Anti-Patterns
 
 **Map Theater:** Producing a beautiful tree listing but not scoring completeness dimensions.

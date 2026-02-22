@@ -223,6 +223,60 @@ RUNG_274177 (if stability required):
 
 ---
 
+## 8.0) State Machine (YAML)
+
+```yaml
+state_machine:
+  states: [INIT, INTAKE_TASK, NULL_CHECK, READ_SCOUT_REPORT, DREAM_STEP,
+           FORECAST_STEP, CLASSIFY_RISK, DEFINE_STOP_RULES, BUILD_MEMO,
+           SOCRATIC_REVIEW, EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  initial: INIT
+  terminal: [EXIT_PASS, EXIT_BLOCKED, EXIT_NEED_INFO]
+  transitions:
+    - {from: INIT,             to: INTAKE_TASK,       trigger: capsule_received}
+    - {from: INTAKE_TASK,      to: NULL_CHECK,         trigger: always}
+    - {from: NULL_CHECK,       to: EXIT_NEED_INFO,     trigger: task_null}
+    - {from: NULL_CHECK,       to: READ_SCOUT_REPORT,  trigger: inputs_defined}
+    - {from: READ_SCOUT_REPORT,to: EXIT_NEED_INFO,     trigger: scout_report_missing}
+    - {from: READ_SCOUT_REPORT,to: DREAM_STEP,         trigger: scout_report_valid}
+    - {from: DREAM_STEP,       to: FORECAST_STEP,      trigger: always}
+    - {from: FORECAST_STEP,    to: CLASSIFY_RISK,      trigger: always}
+    - {from: CLASSIFY_RISK,    to: DEFINE_STOP_RULES,  trigger: always}
+    - {from: DEFINE_STOP_RULES,to: BUILD_MEMO,         trigger: always}
+    - {from: BUILD_MEMO,       to: SOCRATIC_REVIEW,    trigger: always}
+    - {from: SOCRATIC_REVIEW,  to: FORECAST_STEP,      trigger: revision_needed}
+    - {from: SOCRATIC_REVIEW,  to: EXIT_PASS,          trigger: memo_complete}
+    - {from: SOCRATIC_REVIEW,  to: EXIT_BLOCKED,       trigger: budget_exceeded}
+  forbidden_states:
+    - FAILURE_MODE_WITHOUT_MITIGATION
+    - STOP_RULES_ABSENT
+    - PROMOTING_FORECAST_TO_FACT
+    - PATCH_ATTEMPT
+    - NULL_ZERO_CONFUSION
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> INTAKE_TASK
+    INTAKE_TASK --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : task_null
+    NULL_CHECK --> READ_SCOUT_REPORT : inputs_defined
+    READ_SCOUT_REPORT --> EXIT_NEED_INFO : scout_missing
+    READ_SCOUT_REPORT --> DREAM_STEP : scout_valid
+    DREAM_STEP --> FORECAST_STEP
+    FORECAST_STEP --> CLASSIFY_RISK
+    CLASSIFY_RISK --> DEFINE_STOP_RULES
+    DEFINE_STOP_RULES --> BUILD_MEMO
+    BUILD_MEMO --> SOCRATIC_REVIEW
+    SOCRATIC_REVIEW --> FORECAST_STEP : revision_needed
+    SOCRATIC_REVIEW --> EXIT_PASS : memo_complete
+    SOCRATIC_REVIEW --> EXIT_BLOCKED : budget_exceeded
+    classDef forbidden fill:#f55,color:#fff
+    class FAILURE_MODE_WITHOUT_MITIGATION,STOP_RULES_ABSENT,PROMOTING_FORECAST_TO_FACT forbidden
+```
+
+---
+
 ## 8) Anti-Patterns
 
 **Failure Mode Theater:** Listing failure modes without concrete mitigations (test commands, checks).

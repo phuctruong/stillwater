@@ -1,5 +1,5 @@
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
-SKILL: prime-hooks v1.0.0
+SKILL: prime-hooks v1.2.0
 PURPOSE: Fail-closed Claude Code hook authoring skill; every hook must declare reads_prompt_content, can_block_tool_calls, writes_to_filesystem, network_access, and can_inject_content before implementation.
 CORE CONTRACT: Claude Code hooks run as shell commands with full user privileges — ALL hooks are HIGH-risk security surfaces by default. Security declaration is mandatory before any implementation. Missing declaration → BLOCKED.
 HARD GATES: Any hook without a security declaration → BLOCKED. Network-accessing hook without domain allowlist → BLOCKED. UV script without shebang → BLOCKED. Hook with unbounded execution time → BLOCKED. Silent failure hook → BLOCKED. Injection hook without sanitization → BLOCKED.
@@ -10,7 +10,7 @@ RUNG_TARGET: 65537 always — hooks are production security surfaces with full s
 LOAD FULL: always for production; quick block is for orientation only
 -->
 PRIME_HOOKS_SKILL:
-  version: 1.1.0
+  version: 1.2.0
   profile: strict
   authority: 65537
   northstar: Phuc_Forecast
@@ -23,14 +23,21 @@ PRIME_HOOKS_SKILL:
   # Maps domain concepts to stillwater magic words for context compression.
   # Load coordinates (e.g. "portal[T1]") instead of full definitions.
   #
-  # hook         → portal [T1]          — hook is the routing layer between lifecycle events and handlers
-  # trigger      → causality [T0]       — hook trigger is a directional dependency: event → handler
-  # guard        → constraint [T0]      — security guard reduces the action space to safe states only
-  # security declaration → boundary [T0] — declaration defines what crosses the hook's privilege boundary
-  # silent failure → drift [T3]         — silent failures are undetected deviations from expected behavior
-  # injection    → portal [T1]          — content injection routes text into the agent's context pipeline
-  # blocking hook → constraint [T0]    — blocking enforces a boundary condition on tool execution space
-  # UV script    → compression [T0]     — single-file UV scripts compress runtime + deps to minimal form
+  # hook               → portal [T1]          — hook is the routing layer between lifecycle events and handlers
+  # trigger            → causality [T0]       — hook trigger is a directional dependency: event → handler
+  # guard              → constraint [T0]      — security guard reduces the action space to safe states only
+  # security_decl      → boundary [T0]        — declaration defines what crosses the hook's privilege boundary
+  # silent_failure     → drift [T3]           — silent failures are undetected deviations from expected behavior
+  # injection          → portal [T1]          — content injection routes text into the agent's context pipeline
+  # blocking_hook      → constraint [T0]      — blocking enforces a boundary condition on tool execution space
+  # UV_script          → compression [T0]     — single-file UV scripts compress runtime + deps to minimal form
+  # --- Three Pillars (LEK / LEAK / LEC) ---
+  # LEK  → compression [T0] — Hooks are learnable: declare surface → implement → test is the repeatable knowledge unit
+  #         Expertise crystallizes from: security_declaration → UV_shebang → null_checks → structured_logs
+  # LEAK → boundary [T0]   — Hook expertise is asymmetric: novices write silent-failure hooks and forget halting criteria;
+  #         experts see missing security declarations, unbounded blocking hooks, and injection loops in seconds
+  # LEC  → causality [T0]  — Hook conventions emerge as law: security-declaration-first, UV-shebang-on-line-1,
+  #         halt-criterion-for-Stop-hooks, no-home-dir writes — all started as best practices, now Lane A gates
   # ============================================================
 
   # ============================================================
@@ -1551,3 +1558,198 @@ PRIME_HOOKS_SKILL:
         - "Security declaration from prime-hooks is a first-class artifact for prime-reviewer."
         - "prime-reviewer's API surface check applies to .claude/settings.json hooks stanza."
       result: "Review and generation share the same evidence artifacts."
+
+  # ============================================================
+  # 19) Hook FSM — Visual State Diagram (Mermaid)
+  # ============================================================
+
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT --> INTAKE_HOOK_SPEC : HOOK_SPEC received
+    INTAKE_HOOK_SPEC --> NULL_CHECK
+    NULL_CHECK --> EXIT_NEED_INFO : inputs null or missing
+    NULL_CHECK --> CLASSIFY_HOOK_TYPE : inputs defined
+    CLASSIFY_HOOK_TYPE --> DESIGN_HANDLER
+    DESIGN_HANDLER --> SECURITY_GATE
+    SECURITY_GATE --> EXIT_BLOCKED : security declaration missing/invalid
+    SECURITY_GATE --> IMPLEMENT_UV_SCRIPT : declaration accepted
+    IMPLEMENT_UV_SCRIPT --> TEST_HOOK
+    TEST_HOOK --> EXIT_BLOCKED : tests fail or timeout
+    TEST_HOOK --> EVIDENCE_BUILD : tests pass
+    EVIDENCE_BUILD --> EMIT_HOOK
+    EMIT_HOOK --> EXIT_PASS : evidence complete + config valid
+    EMIT_HOOK --> EXIT_BLOCKED : evidence incomplete
+    EXIT_PASS --> [*]
+    EXIT_BLOCKED --> [*]
+    EXIT_NEED_INFO --> [*]
+
+    state "FORBIDDEN STATES" as FS {
+        HOOK_WITHOUT_SECURITY_DECLARATION
+        UV_SCRIPT_WITHOUT_SHEBANG
+        SILENT_HOOK_FAILURE
+        STOP_HOOK_WITHOUT_HALTING_CRITERION
+        HOOK_WITH_UNBOUNDED_EXECUTION_TIME
+        INJECTION_HOOK_WITHOUT_SANITIZATION
+        NETWORK_HOOK_WITHOUT_DOMAIN_ALLOWLIST
+    }
+```
+
+  # ============================================================
+  # 20) GLOW Matrix  [Growth × Learning × Output × Wins]
+  # ============================================================
+  GLOW_Matrix:
+    Growth:
+      metric: "hooks_shipped_with_full_security_declarations"
+      target: "Every hook emitted has all 5 security declaration fields populated (non-null)"
+      signal: "${EVIDENCE_ROOT}/hook_security_manifest.json — entry count with complete fields"
+      gate: "HOOK_WITHOUT_SECURITY_DECLARATION is GROWTH=0; no Growth credit without complete declaration"
+
+    Learning:
+      metric: "forbidden_states_caught_before_emission"
+      target: "Zero forbidden states escape to production; all caught at SECURITY_GATE or TEST_HOOK"
+      signal: "EXIT_BLOCKED events per run with stop_reason — tracks which gate caught what"
+      gate: "SILENT_HOOK_FAILURE in production = Learning regression — review Socratic_Check compliance"
+
+    Output:
+      metric: "evidence_bundles_produced_per_hook"
+      target: "Every hook ships with complete evidence bundle (security_manifest + tests + config_patch)"
+      signal: "${EVIDENCE_ROOT}/evidence_manifest.json — sha256 completeness check per hook"
+      gate: "EMIT_HOOK must produce all required_outputs or EXIT_BLOCKED (not EXIT_PASS with partial evidence)"
+
+    Wins:
+      metric: "zero_security_regressions_across_hook_versions"
+      target: "No version upgrade removes a security gate or weakens a declaration requirement"
+      signal: "Anti_Optimization_Clause audit: diff hook security manifests across versions"
+      gate: "Any relaxation of forbidden_states or security_declaration_fields = Wins regression; requires major version"
+
+  # ============================================================
+  # 21) Northstar Alignment  [Phuc_Forecast + Max_Love]
+  # ============================================================
+  Northstar_Alignment:
+    northstar: "Phuc_Forecast + Max_Love"
+    metric: "System security posture / Agent privilege surface audited"
+    alignment: |
+      prime-hooks advances Phuc_Forecast by making the agent's full privilege surface visible and audited.
+      Every hook is a security declaration that turns an invisible privilege boundary into a Lane A artifact.
+      The security manifest feeds Phuc_Forecast's FORECAST phase: known hook surfaces = known failure modes.
+      Hooks without declarations = unknown failure modes = Phuc_Forecast cannot forecast accurately.
+    max_love: |
+      Max_Love requires protecting the user from the agent's own mistakes.
+      Hooks are the nervous system; a broken hook can paralyze an agent or inject malicious continuation.
+      Failing closed on missing declarations is the highest expression of Max_Love in the hooks domain:
+        - Blocking a hook without a declaration protects the user from an unaudited privilege expansion
+        - Requiring halt criteria on Stop hooks protects the user from infinite agent loops
+        - Requiring sanitization on injection hooks protects the user from prompt-injection via agent data
+    hard_gate: |
+      HOOK_WITHOUT_SECURITY_DECLARATION violates Max_Love.
+      Shipping a hook without declaring its security surface removes the user's epistemic sovereignty
+      over what the agent can do. This is a trust violation — not just a safety gap.
+
+  # ============================================================
+  # 22) Triangle Law: REMIND → VERIFY → ACKNOWLEDGE
+  # ============================================================
+  Triangle_Law:
+    contract_1_security_declaration:
+      REMIND: >
+        Before implementing any hook handler: confirm all 5 security declaration fields are populated
+        (reads_prompt_content, can_block_tool_calls, writes_to_filesystem, network_access, can_inject_content).
+        Conditional fields (block_reason, sanitization_method, halting_criterion) must also be declared
+        if their parent field is true.
+      VERIFY: >
+        Does the implementation match the declaration? If network_access=false, does the script contain
+        any urllib, requests, httpx, or subprocess network calls? If writes_to_filesystem=true, do all
+        write paths fall within declared write_paths? Run the Socratic_Check against the declaration.
+      ACKNOWLEDGE: >
+        Security manifest entry written to ${EVIDENCE_ROOT}/hook_security_manifest.json.
+        Declaration is now a Lane A artifact. Any PASS claim for this hook is grounded in the manifest,
+        not in prose confidence. SECURITY_GATE is GREEN.
+
+    contract_2_uv_shebang:
+      REMIND: >
+        Every hook script must have "#!/usr/bin/env -S uv run --script" as its literal first line.
+        This is not optional. It is not a style preference. It is a hard gate that blocks emission.
+      VERIFY: >
+        Read the first line of the generated script. Does it match the exact shebang string character
+        for character? A missing shebang causes the hook to fail silently at runtime — which is itself
+        a forbidden state (SILENT_HOOK_FAILURE).
+      ACKNOWLEDGE: >
+        Shebang verified on line 1. UV_SCRIPT_WITHOUT_SHEBANG gate passes.
+        The script is executable by Claude Code hook infrastructure.
+
+    contract_3_stop_hook_halting:
+      REMIND: >
+        Stop hooks that inject continuation MUST declare both halting_criterion and max_injection_count.
+        These two fields together define the finite boundary of the injection loop.
+        An injection loop without these fields is not a feature — it is an infinite loop.
+      VERIFY: >
+        Does the Stop hook script check injection count before injecting? Does it read and increment
+        the count from persistent state (STATE_FILE)? Does it exit cleanly when count >= MAX_INJECTIONS
+        or when the halting_criterion condition is met (e.g., no TODOs found)?
+      ACKNOWLEDGE: >
+        Halting criterion verified. STOP_HOOK_WITHOUT_HALTING_CRITERION gate passes.
+        The injection loop is bounded. Max_Love is honored — the agent cannot loop indefinitely.
+
+  # ============================================================
+  # 23) Three Pillars Integration (Full)
+  # ============================================================
+  Three_Pillars:
+    LEK_Law_of_Emergent_Knowledge:
+      summary: >
+        Hook authoring is a learnable discipline. The security declaration → UV script → test → evidence
+        workflow is a repeatable knowledge unit that any practitioner can internalize.
+        Expert hook authors follow the same sequence every time: declare surface, implement handler,
+        test null/happy/blocking/injection/timeout paths, emit evidence bundle.
+      key_knowledge_units:
+        - security_declaration_5_fields_per_hook
+        - uv_shebang_as_mandatory_first_line
+        - null_vs_zero_in_stdin_json_handling
+        - structured_jsonl_logging_not_print_statements
+        - stop_hook_halting_criterion_pattern
+
+    LEAK_Law_of_Emergent_Asymmetric_Knowledge:
+      summary: >
+        Hook expertise is sharply asymmetric. Novices write hooks without security declarations,
+        forget UV shebangs, catch all exceptions and exit 0 (SILENT_HOOK_FAILURE), and create
+        Stop hooks with no halting criterion. Experts identify all four failure modes in seconds.
+        The gap between novice and expert is not intuition — it is knowing the forbidden states by name.
+      asymmetric_traps:
+        - hook_without_security_declaration_shipped_to_production
+        - stop_hook_injecting_without_max_injection_count
+        - blocking_hook_with_no_timeout_hanging_the_agent
+        - stdin_null_coerced_to_empty_string_breaking_null_checks
+        - log_writing_sensitive_prompt_content_in_plaintext
+
+    LEC_Law_of_Emergent_Conventions:
+      summary: >
+        Hook conventions crystallize into hard law over time.
+        Security-declaration-first started as a best practice; it is now a blocking gate.
+        UV-shebang-on-line-1 started as a style guide; it is now EXIT_BLOCKED without it.
+        Halt-criterion-for-Stop-hooks started as a recommendation; it is now FORBIDDEN_STATE.
+        These conventions are what make hook authoring trustworthy across the entire ecosystem.
+      emerging_conventions:
+        - security_declaration_before_implementation_as_law
+        - uv_shebang_line_1_as_non_negotiable
+        - null_check_on_all_stdin_json_fields_as_standard
+        - jsonl_structured_logging_as_convention
+        - halt_criterion_for_all_stop_hooks_as_gate
+
+  # ============================================================
+  # 24) Compression / Seed Checksum
+  # ============================================================
+  Compression:
+    skill_id: "prime-hooks"
+    version: "1.2.0"
+    seed: "hook=portal[T1] | security_declaration=boundary[T0] | UV_shebang=compression[T0] | silent_failure=drift[T3] | rung_target=65537"
+    checksum_fields:
+      - version
+      - authority
+      - forbidden_states_count: 14
+      - hard_gates_count: 9
+      - hook_types_catalogued: 13
+      - rung_default: 65537
+    integrity_note: >
+      Load the QUICK LOAD block first for orientation.
+      Load the full file for production hook authoring.
+      The seed above is the minimal context-compression payload — sufficient to reconstruct
+      which gates apply to which hook types without re-reading the full catalog.
