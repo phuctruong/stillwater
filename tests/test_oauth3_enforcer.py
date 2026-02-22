@@ -323,7 +323,7 @@ def make_valid_token(
         "issued_at": now.isoformat(),
         "expires_at": (now + expires_delta).isoformat(),
         "scopes": scopes or ["linkedin.read.feed", "linkedin.react.like"],
-        "issuer": "https://solaceagi.com",
+        "issuer": "https://www.solaceagi.com",
         "subject": "user:phuc@example.com",
         "agent_id": "solace-browser:twin:test",
         "step_up_required": step_up_required or [],

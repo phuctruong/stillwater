@@ -192,7 +192,7 @@ The following is a complete AgencyToken with wallet extension for a travel booki
     "travel.book.flight",
     "travel.read.confirmation"
   ],
-  "issuer": "https://solaceagi.com",
+  "issuer": "https://www.solaceagi.com",
   "subject": "user:phuc@example.com",
   "agent_id": "solace-browser:twin:abc123",
   "step_up_required": ["travel.book.flight"],
@@ -650,7 +650,7 @@ All files MUST have a SHA-256 sidecar (`.sha256`) per the base OAuth3 evidence i
   "timestamp": "2026-02-21T10:47:33Z",
   "token_id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
   "subject": "user:phuc@example.com",
-  "issuer": "https://solaceagi.com",
+  "issuer": "https://www.solaceagi.com",
   "scope": "travel.book.flight",
   "platform": "kayak.com",
   "status": "SETTLED",

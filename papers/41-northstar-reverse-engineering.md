@@ -321,9 +321,9 @@ Without this field, the evidence bundle confirms local correctness but not chain
 
 **[A]** From `solace-browser/NORTHSTAR.md`:
 
-> "The North Star is not the features. The North Star is the recipe hit rate — because at 70% hit rate, COGS = $5.75/user/month. Below 70%, the economics break."
+> "The North Star is not the features. The North Star is the recipe hit rate."
 
-**Victory condition (ANCHOR):** recipe hit rate > 70% → COGS = $5.75/user/month → economic moat unlocked
+**Victory condition (ANCHOR):** recipe hit rate > 70% → economic moat unlocked
 
 ### Backward Chain
 
@@ -393,8 +393,8 @@ execution reliability ≥ 85% on live sites
 **[A]** From `solace-browser/NORTHSTAR.md`:
 
 ```
-Recipe hit rate 70% → COGS $5.75/user/month → 70% gross margin at $19/mo
-Recipe hit rate < 70% → COGS $12.75/user/month → 33% margin → not fundable
+Recipe hit rate 70% → unit economics favorable → platform sustainable at scale
+Recipe hit rate < 70% → unit economics unfavorable → not fundable
 ```
 
 **[B]** The economic threshold is a hard gate. Below 70%, the business model does not work at the target pricing tier. This means the 70% threshold is not aspirational — it is the minimum viable northstar. The backward chain from this threshold is the minimum viable plan.

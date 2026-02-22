@@ -11,7 +11,7 @@
 | Phase 0: Audit | DONE | 258 |
 | Phase 1: OAuth3 | DONE | — (included in 258) |
 | Phase 2: Store Client SDK | DONE | 66 |
-| Phase 2.5: Dragon Tip Hooks | DONE | 55 |
+| Phase 2.5: LLM Usage Tracker | DONE | 55 |
 | Phase 3: LLM Portal | DONE | 91 |
 | Phase 4: Rung 65537 CI | DONE | 41 |
 | Phase 5: Persona System | DONE | 50 |
@@ -163,35 +163,34 @@ Evidence required: tests/test_store_client.py passing (pytest -v)
 
 ---
 
-## Phase 2.5: Dragon Tip Integration in LLM Client Library — DONE
+## Phase 2.5: LLM Usage Tracker in LLM Client Library — DONE
 
-**Goal**: Stillwater's LLM client library (`stillwater.llm_client`) includes hooks for the Dragon Tip Program so that solaceagi.com can calculate tips on BYOK API calls routed through the Stillwater stack.
+**Goal**: Stillwater's LLM client library (`stillwater.llm_client`) includes post-call hooks so that integrators can track usage, costs, and recipe savings on API calls routed through the Stillwater stack.
 
-**Result**: 55 tests pass (test_llm_tip_hooks.py). `tip_callback` and `usage_tracker` parameters integrated into `llm_call()`, `llm_chat()`, `LLMClient.complete()`, and `LLMClient.chat()`. All cost math uses exact Decimal arithmetic — no float in any cost path. `SessionTipAccumulator`, `TipConfig`, `SessionUsageTracker` delivered. Rung 641 achieved.
+**Result**: 55 tests pass. `tip_callback` and `usage_tracker` parameters integrated into `llm_call()`, `llm_chat()`, `LLMClient.complete()`, and `LLMClient.chat()`. All cost math uses exact Decimal arithmetic — no float in any cost path. `SessionUsageTracker` delivered. Rung 641 achieved.
 
 ### Tasks
 
 - [x] Add `tip_callback` parameter to `llm_call()` and `llm_chat()` — optional callback invoked after each API call with `{model, input_tokens, output_tokens, cost_hundredths_cent}`
 - [x] Add `usage_tracker` module (`stillwater/usage_tracker.py`): accumulates per-session token usage, recipe hit/miss counts, and estimated savings
 - [x] Ensure cost estimation uses exact Decimal arithmetic (no float in any cost path)
-- [x] `tip_callback` is a no-op by default — only solaceagi.com sets it to route to `tip/engine.py`
-- [x] Tests: `tests/test_llm_tip_hooks.py` — 55 tests: callback invocation, cost estimation accuracy, Decimal-only arithmetic, backward compat
+- [x] `tip_callback` is a no-op by default
 
-### Build Prompt (Phase 2.5 — Tip Hooks)
+### Build Prompt (Phase 2.5 — Usage Tracker)
 
 ```
 Load prime-safety + prime-coder.
-Task: Add Dragon Tip callback hooks to stillwater LLM client library.
+Task: Add post-call callback hooks to stillwater LLM client library.
 Location: stillwater/ (llm_client module)
 Requirements:
   - llm_call() and llm_chat() accept optional tip_callback(cost_report: dict)
   - cost_report: {model, input_tokens, output_tokens, estimated_cost_usd: Decimal}
   - usage_tracker module: accumulate session stats (total calls, recipe hits, tokens saved)
   - All cost estimates: exact Decimal — no float
-  - Callback is no-op by default (zero overhead for non-solaceagi users)
+  - Callback is no-op by default (zero overhead)
   - Zero breaking changes to existing llm_call/llm_chat signatures
 Rung target: 641
-Evidence required: tests/test_llm_tip_hooks.py passing
+Evidence required: tests passing
 ```
 
 ---
@@ -372,7 +371,7 @@ GLOW target: 60+ (warrior pace)
 | Phase 0: Audit | Week 0 | 641 | Baseline audit report — DONE (258 tests, security scan clean) |
 | Phase 1: OAuth3 | Week 1–2 | 641 | `papers/oauth3-spec-v0.1.md` + `skills/oauth3-enforcer.md` — DONE |
 | Phase 2: Store Client | Month 1 | 641 | `store/client.py` + `store/rung_validator.py` — DONE (66 tests, 258 total) |
-| Phase 2.5: Dragon Tip Hooks | Month 1 | 641 | `tip_callback` in llm_call/llm_chat + `usage_tracker` module — DONE (55 tests) |
+| Phase 2.5: LLM Usage Tracker | Month 1 | 641 | `tip_callback` in llm_call/llm_chat + `usage_tracker` module — DONE (55 tests) |
 | Phase 3: LLM Portal | Month 2 | 641 | Multi-provider support + session management — DONE (91 tests) |
 | Phase 4: Rung 65537 | Month 3 | 65537 | Self-verification badge + 30-day CI — DONE (41 tests) |
 | Phase 5: Persona System | Month 2–3 | 641 | 50 personas, 11 categories, persona-engine.md v1.3.0, all 19 swarms enhanced, papers 34-39, +27% A/B avg — DONE (50 tests) |

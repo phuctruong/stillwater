@@ -97,7 +97,7 @@ This is not a critique of those vendors' intentions. It is a structural observat
 
 **Competitors cannot store original records.**
 
-PZip's compression algorithm is private. It is not a published library with a permissive license. Any competitor attempting to match PZip's storage economics on HTML content must either build an equivalent system from scratch — at significant engineering cost — or accept the $146/user/month storage burden that makes ALCOA-O compliance economically unviable.
+PZip's compression approach enables storage economics that make ALCOA-O compliance economically viable at scale. Any competitor attempting to match these storage economics on HTML content must either build an equivalent system from scratch — at significant engineering cost — or accept storage costs that make ALCOA-O compliance economically unviable.
 
 **Governance adds friction; friction reduces conversions; conversions drive revenue.**
 

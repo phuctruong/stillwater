@@ -134,7 +134,7 @@ def _fire_callbacks(
 
     Args:
         response:      Completed LLMResponse.
-        tip_callback:  Optional callable(dict) — Dragon Tip hook.
+        tip_callback:  Optional callable(dict) — post-call hook.
         usage_tracker: Optional SessionUsageTracker (or any object with a
                        usage_callback(dict) method).
     """
@@ -274,7 +274,7 @@ class LLMClient:
             max_tokens: Maximum tokens in response.
             temperature: Sampling temperature.
             timeout: Request timeout in seconds (default: 30).
-            tip_callback: Optional callable(dict) — Dragon Tip hook. Called
+            tip_callback: Optional callable(dict) — post-call hook. Called
                          after each successful response with the result dict.
             usage_tracker: Optional SessionUsageTracker — usage hook. Called
                           after each successful response via usage_callback(dict).
@@ -351,7 +351,7 @@ class LLMClient:
             max_tokens: Maximum tokens in response.
             temperature: Sampling temperature.
             timeout: Request timeout in seconds (default: 30).
-            tip_callback: Optional callable(dict) — Dragon Tip hook. Called
+            tip_callback: Optional callable(dict) — post-call hook. Called
                          after each successful response with the result dict.
             usage_tracker: Optional SessionUsageTracker — usage hook. Called
                           after each successful response via usage_callback(dict).
@@ -508,9 +508,8 @@ def llm_call(
         provider: Override provider (e.g. "anthropic", "openai", "offline").
         model: Override model name.
         system: Optional system prompt.
-        tip_callback: Optional callable(dict) — Dragon Tip hook. Called after
-                     each successful response with the result dict. Use with
-                     SessionTipAccumulator.tip_callback for session tip tracking.
+        tip_callback: Optional callable(dict) — post-call hook. Called after
+                     each successful response with the result dict.
         usage_tracker: Optional SessionUsageTracker instance. Called after each
                       successful response via usage_callback(dict).
 
@@ -521,11 +520,6 @@ def llm_call(
         from stillwater.llm_client import llm_call
         answer = llm_call("What is the capital of France?")
         offline = llm_call("test", provider="offline")
-
-        # With tip tracking:
-        from stillwater.tip_hooks import TipConfig, SessionTipAccumulator
-        acc = SessionTipAccumulator(TipConfig(tip_pct=5))
-        answer = llm_call("hello", tip_callback=acc.tip_callback)
     """
     client = LLMClient(provider=provider)
 
@@ -575,7 +569,7 @@ def llm_chat(
         messages: List of {"role": "user"|"assistant"|"system", "content": str}.
         provider: Override provider.
         model: Override model name.
-        tip_callback: Optional callable(dict) — Dragon Tip hook. Called after
+        tip_callback: Optional callable(dict) — post-call hook. Called after
                      each successful response with the result dict.
         usage_tracker: Optional SessionUsageTracker instance. Called after each
                       successful response via usage_callback(dict).

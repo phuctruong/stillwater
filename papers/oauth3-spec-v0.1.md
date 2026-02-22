@@ -95,7 +95,7 @@ All AgencyTokens MUST conform to the following schema. All required fields MUST 
     },
     "issuer": {
       "type": "string",
-      "description": "Principal who issued the token. For user-issued tokens: URI of the issuing platform (e.g., 'https://solaceagi.com'). For self-issued: 'urn:stillwater:self-issued'."
+      "description": "Principal who issued the token. For user-issued tokens: URI of the issuing platform (e.g., 'https://www.solaceagi.com'). For self-issued: 'urn:stillwater:self-issued'."
     },
     "subject": {
       "type": "string",
@@ -149,7 +149,7 @@ All AgencyTokens MUST conform to the following schema. All required fields MUST 
     "linkedin.react.like",
     "linkedin.read.feed"
   ],
-  "issuer": "https://solaceagi.com",
+  "issuer": "https://www.solaceagi.com",
   "subject": "user:phuc@example.com",
   "agent_id": "solace-browser:twin:abc123",
   "step_up_required": ["linkedin.post.text"],
@@ -299,7 +299,7 @@ The flow has three stages:
 | Parameter | Required | Description |
 |-----------|----------|-------------|
 | `scopes` | REQUIRED | Comma-separated list of requested scopes (platform.action.resource format) |
-| `issuer` | REQUIRED | URI of the requesting platform (e.g., `https://solaceagi.com`) |
+| `issuer` | REQUIRED | URI of the requesting platform (e.g., `https://www.solaceagi.com`) |
 | `subject` | REQUIRED | Identifier of the consenting principal |
 | `ttl_seconds` | OPTIONAL | Requested token lifetime in seconds. Default: 3600. Maximum: 86400. |
 | `agent_id` | OPTIONAL | Agent instance identifier for agent-locked tokens |
@@ -332,10 +332,10 @@ GET /oauth3/consent?scopes=linkedin.post.text,linkedin.read.feed&issuer=https%3A
       "risk_level": "low"
     }
   ],
-  "issuer": "https://solaceagi.com",
+  "issuer": "https://www.solaceagi.com",
   "subject": "user:phuc@example.com",
   "expires_in_seconds": 3600,
-  "consent_ui_url": "https://solaceagi.com/consent/review?consent_id=consent_550e8400-...",
+  "consent_ui_url": "https://www.solaceagi.com/consent/review?consent_id=consent_550e8400-...",
   "state": "csrf_nonce_abc123"
 }
 ```
@@ -386,7 +386,7 @@ Note: `approved_scopes` + `denied_scopes` MUST cover all scopes from the origina
     "issued_at": "2026-02-21T10:00:00Z",
     "expires_at": "2026-02-21T11:00:00Z",
     "scopes": ["linkedin.read.feed"],
-    "issuer": "https://solaceagi.com",
+    "issuer": "https://www.solaceagi.com",
     "subject": "user:phuc@example.com",
     "step_up_required": [],
     "signature_stub": "sha256:b9f3e2a1c7d4e5f6..."
@@ -501,7 +501,7 @@ Revokes ALL tokens for a given subject. MUST be used when a user account is comp
 ```json
 {
   "subject": "user:phuc@example.com",
-  "issuer": "https://solaceagi.com",
+  "issuer": "https://www.solaceagi.com",
   "reason": "Account session terminated"
 }
 ```
@@ -607,7 +607,7 @@ Each token operation produces one `oauth3_audit.json` record. Records for a sess
   "timestamp": "2026-02-21T10:15:32Z",
   "token_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
   "subject": "user:phuc@example.com",
-  "issuer": "https://solaceagi.com",
+  "issuer": "https://www.solaceagi.com",
   "scope": "linkedin.read.feed",
   "platform": "linkedin.com",
   "status": "PASS",
@@ -633,7 +633,7 @@ Each token operation produces one `oauth3_audit.json` record. Records for a sess
   "timestamp": "2026-02-21T11:05:00Z",
   "token_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
   "subject": "user:phuc@example.com",
-  "issuer": "https://solaceagi.com",
+  "issuer": "https://www.solaceagi.com",
   "scope": "linkedin.post.text",
   "platform": "linkedin.com",
   "status": "BLOCKED",
@@ -656,7 +656,7 @@ Each token operation produces one `oauth3_audit.json` record. Records for a sess
   "timestamp": "2026-02-21T10:20:00Z",
   "token_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
   "subject": "user:phuc@example.com",
-  "issuer": "https://solaceagi.com",
+  "issuer": "https://www.solaceagi.com",
   "scope": "linkedin.delete.post",
   "platform": "linkedin.com",
   "status": "BLOCKED",

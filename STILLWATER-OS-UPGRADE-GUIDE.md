@@ -85,9 +85,8 @@ Every project had a monolithic CLAUDE.md:
 |---|---|---|
 | pzip | 793 | ~50 lines |
 | paudio | 1,113 | ~60 lines |
-| pvideo | 816 | ~50 lines |
 | solace-browser | 1,692 | ~80 lines |
-| **Total** | **5,366** | **~280 lines** |
+| **Total** | **4,550** | **~230 lines** |
 
 **93% was copy-pasted Stillwater skill content.** Every copy was potentially stale.
 
@@ -97,14 +96,13 @@ Every project had a monolithic CLAUDE.md:
 |---|---|---|
 | pzip | 66 | 92% ↓ |
 | paudio | 66 | 94% ↓ |
-| pvideo | 66 | 92% ↓ |
 | solaceagi | 66 | 81% ↓ |
 | solace-browser | 60 | 96% ↓ |
 | solace-cli | 71 | 88% ↓ |
 | if | 55 | (new) |
 | phucnet | 44 | (new) |
 
-Total context across 8 projects: **494 lines** vs former 5,366. 91% reduction.
+Total context across 7 projects: **428 lines** vs former 4,550. 91% reduction.
 Skills are always current (copied from installed package on each `stillwater sync`).
 
 ---
@@ -141,7 +139,6 @@ See full recipe: [`recipes/project-onboard.md`](recipes/project-onboard.md)
 |---|---|---|---|
 | **pzip** | prime-safety, prime-coder, prime-math, phuc-forecast | 65537 | Compression + exact arithmetic |
 | **paudio** | prime-safety, prime-coder, prime-math, phuc-forecast | 274177 | Deterministic synthesis |
-| **pvideo** | prime-safety, prime-coder, prime-math, phuc-forecast | 65537 | IF Theory physics |
 | **solaceagi** | prime-safety, prime-coder, phuc-orchestration, phuc-forecast | 65537 | Persistent AGI |
 | **solace-browser** | prime-safety, prime-wishes, phuc-cleanup | 641 | Web automation |
 | **solace-cli** | prime-safety, prime-coder, phuc-orchestration, phuc-context | 65537 | Memory hub |

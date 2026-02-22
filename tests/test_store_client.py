@@ -292,7 +292,7 @@ class TestStillwaterStoreClient:
         with patch("store.client.requests.post", return_value=fake_response) as mock_post:
             client = StillwaterStoreClient(
                 api_key="sw_sk_" + "a" * 32,
-                base_url="https://solaceagi.com",
+                base_url="https://www.solaceagi.com",
             )
             sub_id = client.submit_skill(
                 skill_path=skill_file,
@@ -325,7 +325,7 @@ class TestStillwaterStoreClient:
         with patch("store.client.requests.get", return_value=fake_response):
             client = StillwaterStoreClient(
                 api_key="sw_sk_" + "b" * 32,
-                base_url="https://solaceagi.com",
+                base_url="https://www.solaceagi.com",
             )
             content = client.fetch_skill("skill_xyz")
 
@@ -349,7 +349,7 @@ class TestStillwaterStoreClient:
         with patch("store.client.requests.get", return_value=fake_response):
             client = StillwaterStoreClient(
                 api_key="sw_sk_" + "c" * 32,
-                base_url="https://solaceagi.com",
+                base_url="https://www.solaceagi.com",
             )
             results = client.list_skills(query="prime")
 
@@ -376,7 +376,7 @@ class TestStillwaterStoreClient:
         with patch("store.client.requests.get", return_value=fetch_response):
             client = StillwaterStoreClient(
                 api_key="sw_sk_" + "d" * 32,
-                base_url="https://solaceagi.com",
+                base_url="https://www.solaceagi.com",
             )
             installed_path = client.install_skill("skill_xyz", target_dir=target_dir)
 
@@ -391,13 +391,13 @@ class TestStillwaterStoreClient:
         """Constructing client with empty api_key → ValueError."""
         from store.client import StillwaterStoreClient
         with pytest.raises(ValueError, match="api_key"):
-            StillwaterStoreClient(api_key="", base_url="https://solaceagi.com")
+            StillwaterStoreClient(api_key="", base_url="https://www.solaceagi.com")
 
     def test_client_invalid_api_key_format_raises(self, tmp_path):
         """Constructing client with wrong key prefix → ValueError."""
         from store.client import StillwaterStoreClient
         with pytest.raises(ValueError, match="sw_sk_"):
-            StillwaterStoreClient(api_key="bad_key_format", base_url="https://solaceagi.com")
+            StillwaterStoreClient(api_key="bad_key_format", base_url="https://www.solaceagi.com")
 
     def test_client_submit_401_unauthorized(self, tmp_path):
         """submit_skill() → raises PermissionError on HTTP 401."""
@@ -412,7 +412,7 @@ class TestStillwaterStoreClient:
         with patch("store.client.requests.post", return_value=fake_response):
             client = StillwaterStoreClient(
                 api_key="sw_sk_" + "e" * 32,
-                base_url="https://solaceagi.com",
+                base_url="https://www.solaceagi.com",
             )
             with pytest.raises(PermissionError):
                 client.submit_skill(skill_file, author="test", rung_claimed=641, evidence_dir=ev)
@@ -430,7 +430,7 @@ class TestStillwaterStoreClient:
         with patch("store.client.requests.post", return_value=fake_response):
             client = StillwaterStoreClient(
                 api_key="sw_sk_" + "f" * 32,
-                base_url="https://solaceagi.com",
+                base_url="https://www.solaceagi.com",
             )
             with pytest.raises(ValueError):
                 client.submit_skill(skill_file, author="test", rung_claimed=641, evidence_dir=ev)
@@ -448,7 +448,7 @@ class TestStillwaterStoreClient:
         with patch("store.client.requests.post", return_value=fake_response):
             client = StillwaterStoreClient(
                 api_key="sw_sk_" + "0" * 32,
-                base_url="https://solaceagi.com",
+                base_url="https://www.solaceagi.com",
             )
             with pytest.raises(RuntimeError):
                 client.submit_skill(skill_file, author="test", rung_claimed=641, evidence_dir=ev)
@@ -463,7 +463,7 @@ class TestStillwaterStoreClient:
         with patch("store.client.requests.get", return_value=fake_response):
             client = StillwaterStoreClient(
                 api_key="sw_sk_" + "1" * 32,
-                base_url="https://solaceagi.com",
+                base_url="https://www.solaceagi.com",
             )
             with pytest.raises(LookupError):
                 client.fetch_skill("nonexistent_id")
@@ -472,7 +472,7 @@ class TestStillwaterStoreClient:
         """API key must not appear in repr() or str() of client."""
         from store.client import StillwaterStoreClient
         key = "sw_sk_" + "a" * 32
-        client = StillwaterStoreClient(api_key=key, base_url="https://solaceagi.com")
+        client = StillwaterStoreClient(api_key=key, base_url="https://www.solaceagi.com")
         assert key not in repr(client), "API key leaked in repr()"
         assert key not in str(client), "API key leaked in str()"
 
@@ -492,7 +492,7 @@ class TestStillwaterStoreClient:
 
         key = "sw_sk_" + "2" * 32
         with patch("store.client.requests.post", return_value=fake_response):
-            client = StillwaterStoreClient(api_key=key, base_url="https://solaceagi.com")
+            client = StillwaterStoreClient(api_key=key, base_url="https://www.solaceagi.com")
             try:
                 client.submit_skill(skill_file, author="test", rung_claimed=641, evidence_dir=ev)
             except PermissionError as exc:
@@ -511,7 +511,7 @@ class TestStillwaterStoreClient:
         with patch("store.client.requests.post", return_value=fake_response):
             client = StillwaterStoreClient(
                 api_key="sw_sk_" + "3" * 32,
-                base_url="https://solaceagi.com",
+                base_url="https://www.solaceagi.com",
             )
             with pytest.raises(RuntimeError, match="429"):
                 client.submit_skill(skill_file, author="test", rung_claimed=641, evidence_dir=ev)
@@ -526,7 +526,7 @@ class TestStillwaterStoreClient:
         with patch("store.client.requests.get", return_value=fake_response):
             client = StillwaterStoreClient(
                 api_key="sw_sk_" + "4" * 32,
-                base_url="https://solaceagi.com",
+                base_url="https://www.solaceagi.com",
             )
             with pytest.raises(RuntimeError, match="418"):
                 client.fetch_skill("some_id")

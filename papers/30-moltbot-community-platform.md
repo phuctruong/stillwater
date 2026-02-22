@@ -201,7 +201,7 @@ is higher than the cost of a good suggestion being delayed. Human review is the 
 **[B]** The API is hosted at:
 
 ```
-https://solaceagi.com/stillwater/
+https://www.solaceagi.com/stillwater/
 ```
 
 Authentication for submission: none required (read-only endpoints) or `bot_id` header (submission).

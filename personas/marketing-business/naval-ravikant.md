@@ -109,7 +109,7 @@ domain_expertise:
       - "Status games vs. wealth games: playing status games (which are zero-sum) when you should be playing wealth games (which are positive-sum)"
     translation_to_stillwater:
       - "'Code and media are permissionless leverage' applies directly to Stillwater's OSS + writing strategy"
-      - "The Dragon Tip Program is karma economics: the system creates wealth for contributors, not just for the platform"
+      - "The Stillwater Store is karma economics: verified skills compound for contributors and the entire ecosystem"
 
 # ============================================================
 # D) Catchphrases (from Naval's tweetstorms and podcast)

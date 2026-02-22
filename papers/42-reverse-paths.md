@@ -99,26 +99,26 @@ The bottleneck is not code — it is having something publicly accessible that a
 
 ### Summit State
 
-solaceagi.com has 5,000 active paying subscribers. Monthly recurring revenue (MRR) is at minimum $15,000/month (at a blended average of $3/month for Managed LLM users). Recipe hit rate across the ecosystem is above 70%, meaning COGS is low enough to maintain margin at scale. The billing infrastructure is handling upgrades, downgrades, and churn automatically via Stripe.
+solaceagi.com has a growing subscriber base. Recipe hit rate across the ecosystem is above 70%, meaning per-task cost is low enough to maintain margin at scale. The billing infrastructure is handling upgrades, downgrades, and churn automatically via Stripe.
 
 ### The Last 3 Steps
 
 | Step | State | Precondition |
 |------|-------|--------------|
-| Step -1 | Organic growth sustains 500+ new paying users/month without paid acquisition | Requires: word-of-mouth loop where existing users bring colleagues; Dragon Tip program creating social proof ("I funded 47 OSS commits this month"); store skill submissions generating backlinks |
+| Step -1 | Organic growth sustains 500+ new paying users/month without paid acquisition | Requires: word-of-mouth loop where existing users bring colleagues; store skill submissions generating backlinks |
 | Step -2 | 1,000 paying users reached; Stripe MRR dashboard shows consistent weekly growth curve | Requires: a clear conversion funnel from free tier → Managed LLM or Pro (the free tier must deliver enough value that 5-10% upgrade voluntarily) |
-| Step -3 | Free tier has 5,000+ registered users who have completed at least one task | Requires: solaceagi.com publicly accessible, free tier frictionless (no credit card), and at least one viral distribution event bringing 1,000+ signups |
+| Step -3 | Free tier has 5,000+ registered users who have completed at least one task | Requires: solaceagi.com publicly accessible, free tier frictionless (no credit card), and at least one distribution event bringing new signups |
 
 ### Backward Chain
 
 | Chain Position | State | Action Needed |
 |---------------|-------|---------------|
-| -3 (viral free signup) | 5,000 free users | HN/Product Hunt launch with working demo; "free forever" BYOK tier clearly explained in landing page |
-| -4 (landing page converts) | Landing page converts >8% of visitors to free signups | Brunson Hook/Story/Offer treatment applied to homepage; demo video above the fold; one-click Google sign-in (Firebase Auth — already built) |
+| -3 (free signup) | 5,000 free users | HN/Product Hunt launch with working demo; "free forever" BYOK tier clearly explained in landing page |
+| -4 (landing page converts) | Landing page converts visitors to free signups | Hook/Story/Offer treatment applied to homepage; demo video above the fold; one-click Google sign-in (Firebase Auth — already built) |
 | -5 (free tier works) | Free tier users complete at least one task successfully | Recipe hit rate >0% in production; at least LinkedIn or Gmail recipe working end-to-end via cloud twin |
 | -6 (cloud twin live) | Cloud twin executing recipes reliably | Phase 2 (Cloud Twin) in solaceagi deployed and running; tunnel server at tunnel.solaceagi.com live |
 | -7 (billing operational) | Stripe billing handles upgrades/downgrades automatically | Phase 4 (billing tiers + rate limits + GDPR) complete; Stripe webhook handling churn and upgrades |
-| -8 (Managed LLM working) | Users can run tasks without their own API key | LLM proxy routing Together.ai with 20% markup; tier check enforced; billing by token cost with exact Decimal arithmetic |
+| -8 (Managed LLM working) | Users can run tasks without their own API key | LLM proxy routing upstream providers; tier check enforced; billing by token cost with exact Decimal arithmetic |
 | -9 (today) | 0 paying users | Deploy solaceagi.com Phase 4; establish public URL; begin content distribution |
 
 ### Critical Path
@@ -131,7 +131,6 @@ The conversion funnel must be designed before the launch, not after. The current
 
 - Pricing page A/B copy can be written now
 - BYOK onboarding flow UX design is independent of infrastructure
-- Dragon Tip program (already built in Phase 2.7) needs a landing page section explaining the program
 - Substack "Stillwater Dispatch" audience building can start before platform launch
 
 ### Gaps and Blockers
@@ -209,7 +208,7 @@ The rung ladder is a quality discipline, not a one-time gate. The 30-day continu
 
 ### Summit State
 
-80% of tasks submitted to solaceagi.com are served from cached recipe replay rather than cold LLM calls. Each task costs on average $0.001 (Haiku-level token cost for recipe matching) rather than $0.01-0.10 (cold LLM call). COGS per user is $5.75/month at this hit rate, enabling 70%+ gross margin at $19/month Pro tier. The recipe library covers all major task categories on the 10 most popular platforms.
+80% of tasks submitted to solaceagi.com are served from cached recipe replay rather than cold LLM calls. The recipe library covers all major task categories on the 10 most popular platforms.
 
 ### The Last 3 Steps
 
@@ -332,11 +331,11 @@ Operationally: at least one production task is running at rung 65537 continuousl
 
 | Chain Position | State | Action Needed |
 |---------------|-------|---------------|
-| -3 (25 community skills) | 25 skills in Store from 5+ contributors | Run a "Skill Sprint" — a public hackathon where developers compete to submit skills; GLOW score leaderboard is visible; first prizes are Dragon tier status or Pro account credits |
+| -3 (25 community skills) | 25 skills in Store from 5+ contributors | Run a "Skill Sprint" — a public hackathon where developers compete to submit skills; GLOW score leaderboard is visible; first prizes are Pro account credits |
 | -4 (Store live and enforcing gates) | Stillwater Store enforces rung gate on submission; Store API returning 422 on sub-641 submissions | store/client.py + store/rung_validator.py already built; need the Store server at solaceagi.com/stillwater to enforce gates in CI |
 | -5 (first external Green Belt) | One non-Phuc developer has achieved rung 65537 on a submission | Requires: documentation shows exactly how to achieve rung 65537; the rung_validator.py is runnable locally before submission |
 | -6 (production tasks running) | At least 10 users running recurring tasks via solaceagi.com | Requires: solaceagi.com live with Pro tier; cloud twin executing tasks on schedule; evidence bundles stored for 90 days |
-| -7 (belt progression visible) | Belt XP is publicly visible per contributor on Store profile | Store profile page showing belt, GLOW score, submitted skills, Dragon tier badge |
+| -7 (belt progression visible) | Belt XP is publicly visible per contributor on Store profile | Store profile page showing belt, GLOW score, submitted skills |
 | -8 (Store fully live) | Store is publicly accepting submissions and tracking XP | Store API is live (already built); frontend is live; STORE.md GLOW requirements are published |
 | -9 (today) | Store API built; no public submissions yet; belt tracking exists in spec only | Publish STORE.md with GLOW score requirements; add belt badge to Store profile |
 
@@ -344,7 +343,7 @@ Operationally: at least one production task is running at rung 65537 continuousl
 
 **Deploy Store publicly → publish GLOW score requirements → host first Skill Sprint → accumulate 25 community skills → continuous production traffic → 30-day rung 65537 seal → Black Belt**
 
-The Black Belt is not a technical achievement — it is a cultural one. The skills exist. The code exists. What does not exist yet is a community of practitioners. Building that community requires: public platform, visible progress tracking (GLOW score leaderboard), and a reason to contribute (Dragon Tip social proof + belt XP).
+The Black Belt is not a technical achievement — it is a cultural one. The skills exist. The code exists. What does not exist yet is a community of practitioners. Building that community requires: public platform, visible progress tracking (GLOW score leaderboard), and a reason to contribute (belt XP + skill recognition).
 
 ### Parallelizable Work
 
@@ -404,7 +403,6 @@ BUILD 12 live
                   → COGS drops
                     → Margin enables marketing
                       → More paying users
-                        → More OSS funding (Dragon Tips)
                           → OAuth3 adoption by external platform
 ```
 

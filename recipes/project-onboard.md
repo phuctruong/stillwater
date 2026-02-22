@@ -24,10 +24,9 @@ Every project in the Phuc.Net ecosystem has a massive, monolithic CLAUDE.md:
 |---|---|---|
 | pzip | 793 | ~50 lines |
 | paudio | 1,113 | ~60 lines |
-| pvideo | 816 | ~50 lines |
 | solace-cli | 609 | ~40 lines |
 | solace-browser | 1,692 | ~80 lines |
-| **Total** | **5,023** | **~280 lines** |
+| **Total** | **4,207** | **~230 lines** |
 
 **4,743 lines are copy-pasted Stillwater skill content.** This is the problem.
 
@@ -300,7 +299,6 @@ python -m solace_cli.cli.stillwater_upgrade --all-projects
 |---|---|---|---|
 | **pzip** | prime-safety, prime-coder, prime-math, phuc-forecast | `skills/prime-compression.md` | 274177 |
 | **paudio** | prime-safety, prime-coder, prime-math, phuc-forecast | `skills/prime-audio.md` | 274177 |
-| **pvideo** | prime-safety, prime-coder, prime-math, phuc-forecast | `skills/prime-physics.md` | 274177 |
 | **solaceagi** | prime-safety, prime-coder, phuc-orchestration, phuc-forecast | none | 65537 |
 | **solace-browser** | prime-safety, phuc-cleanup, prime-wishes | `skills/prime-browser.md` | 641 |
 | **solace-cli** | prime-safety, prime-coder, phuc-orchestration, phuc-context | none | 65537 |

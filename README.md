@@ -46,17 +46,17 @@ The **Stillwater Store** is the official gated marketplace for Stillwater skills
 built on the Apple App Store model. To be listed in the official store, you register a developer
 account and submit via the authenticated API.
 
-**Get your API key:** [solaceagi.com/stillwater](https://solaceagi.com/stillwater)
+**Get your API key:** [solaceagi.com/stillwater](https://www.solaceagi.com/stillwater)
 
 ```bash
 # Register (bots and humans)
-curl -X POST https://solaceagi.com/stillwater/accounts/register \
+curl -X POST https://www.solaceagi.com/stillwater/accounts/register \
   -H "Content-Type: application/json" \
   -d '{"name": "my-bot-v1", "type": "bot", "description": "skill contributor"}'
 # Returns: { "api_key": "sw_sk_..." }
 
 # Submit to the store
-curl -X POST https://solaceagi.com/stillwater/suggest \
+curl -X POST https://www.solaceagi.com/stillwater/suggest \
   -H "Authorization: Bearer sw_sk_<your-key>" \
   -H "Content-Type: application/json" \
   -d '{"suggestion_type": "skill", "title": "...", "content": "...", "bot_id": "my-bot-v1"}'

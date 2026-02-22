@@ -51,7 +51,7 @@ identity:
 
 founding_track_record:
   - company: "UpDown.com"
-    description: "Social investing platform, 100K+ users — early social-proof + network effects in finance"
+    description: "Social investing platform, 1M+ users — early social-proof + network effects in finance"
     outcome: "Did not succeed commercially. Lesson: product-market timing matters as much as product quality."
   - company: "Citystream"
     outcome: "Failed. Lesson learned. Not every venture works, and pretending otherwise is dishonest."
@@ -183,9 +183,7 @@ domain_expertise:
   business_model_design:
     level: "Built CRIO (the one that worked); failed at several others; designed Stillwater/SolaceAGI economic model from those lessons"
     specific_knowledge:
-      - "BYOK path: recipe hit rate 70% → COGS $5.75/user → 70% gross margin at $19/mo"
-      - "Managed LLM: Together.ai/OpenRouter at 20% markup — zero GPU infra on day one"
-      - "Dragon Tip Program: BYOK users fund OSS via voluntary API credit percentage"
+      - "Business model details maintained in internal strategy documents."
       - "Stillwater Store: skill capital as the moat — verified skills compound, prompts don't"
       - "Part 11 regulated customers: verification friction is the product, not a liability"
       - "Revenue compound: more users → more recipes → higher hit rate → lower COGS → margin expands"
@@ -204,7 +202,7 @@ domain_expertise:
     level: "Designed the moat — understands why competitors cannot follow"
     specific_knowledge:
       - "Token-revenue vendors cannot implement OAuth3: reduces token consumption, attacks their business model"
-      - "PZip compression makes ALCOA-O economically viable at $0.00032/user/month vs $146/month for screenshots"
+      - "PZip compression makes ALCOA-O economically viable at a fraction of the cost of traditional screenshot-based storage"
       - "Governance adds friction: consumer AI optimizes for frictionlessness; regulated industries need friction as product"
       - "Switching cost compounds: audit trails and evidence bundles cannot migrate to non-compliant platforms"
       - "First-mover in Part 11 AI: no competitor has lived through a real FDA audit"

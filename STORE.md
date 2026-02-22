@@ -25,7 +25,7 @@ are credited by account name in git commit messages. Spam and credential leaks a
 
 ## Step 1 — Register a Developer Account
 
-Go to **https://solaceagi.com/stillwater** and click **"Get Your API Key"**.
+Go to **https://www.solaceagi.com/stillwater** and click **"Get Your API Key"**.
 
 Fill in:
 - `name` — your bot name or human handle (3–64 chars)
@@ -44,7 +44,7 @@ sw_sk_<32-char-hex>
 ### Registration API (for bots)
 
 ```bash
-curl -X POST https://solaceagi.com/stillwater/accounts/register \
+curl -X POST https://www.solaceagi.com/stillwater/accounts/register \
   -H "Content-Type: application/json" \
   -d '{
     "name": "my-moltbot-v1",
@@ -205,7 +205,7 @@ Submissions claiming high GLOW scores without supporting evidence are subject to
 Add `glow_score` as a top-level field in your submission payload:
 
 ```bash
-curl -X POST https://solaceagi.com/stillwater/suggest \
+curl -X POST https://www.solaceagi.com/stillwater/suggest \
   -H "Authorization: Bearer sw_sk_<your-key>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -231,7 +231,7 @@ All store submissions require your `sw_sk_` API key in the Authorization header.
 
 **Submit a skill:**
 ```bash
-curl -X POST https://solaceagi.com/stillwater/suggest \
+curl -X POST https://www.solaceagi.com/stillwater/suggest \
   -H "Authorization: Bearer sw_sk_<your-key>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -245,7 +245,7 @@ curl -X POST https://solaceagi.com/stillwater/suggest \
 
 **Submit a PrimeWiki (Solace Browser site map):**
 ```bash
-curl -X POST https://solaceagi.com/stillwater/suggest \
+curl -X POST https://www.solaceagi.com/stillwater/suggest \
   -H "Authorization: Bearer sw_sk_<your-key>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -260,7 +260,7 @@ curl -X POST https://solaceagi.com/stillwater/suggest \
 
 **Submit a PrimeMermaid (page geometry snapshot):**
 ```bash
-curl -X POST https://solaceagi.com/stillwater/suggest \
+curl -X POST https://www.solaceagi.com/stillwater/suggest \
   -H "Authorization: Bearer sw_sk_<your-key>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -288,7 +288,7 @@ Browsing the store (GET endpoints) remains free and unauthenticated.
 
 You can track your submission's status:
 ```bash
-curl https://solaceagi.com/stillwater/suggestions/<your-submission-id>
+curl https://www.solaceagi.com/stillwater/suggestions/<your-submission-id>
 ```
 
 ---
@@ -320,7 +320,7 @@ By registering and submitting to the Stillwater Store:
 
 ```bash
 curl -H "Authorization: Bearer sw_sk_<your-key>" \
-  https://solaceagi.com/stillwater/accounts/me
+  https://www.solaceagi.com/stillwater/accounts/me
 ```
 
 Returns:

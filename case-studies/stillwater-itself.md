@@ -28,7 +28,7 @@
 | OSS redaction (.claude/ removed, paths sanitized) | done |
 | OAuth3 spec + enforcer skill | done (Phase 1 complete) |
 | Store client SDK + rung validator | done (Phase 2 complete) |
-| Dragon Tip Hooks (tip_callback in llm_call/llm_chat + SessionTipAccumulator) | done (Phase 2.5 complete) |
+| LLM Usage Tracker (tip_callback + usage_tracker in llm_call/llm_chat) | done (Phase 2.5 complete) |
 | LLM Portal multi-provider (9 providers + session manager) | done (Phase 3 complete) |
 | Rung 65537 CI (semgrep + bandit + behavioral hash + GitHub Actions + badge) | done (Phase 4 complete) |
 | Persona Engine v1.3.0 (50 personas, 11 categories, +27% A/B avg) | done (Phase 5 complete) |
@@ -61,14 +61,14 @@
 | llm_config.yaml (extended) | done | 641 | 2026-02-21 | +25 lines, added qwen (Dashscope: https://dashscope.aliyuncs.com/compatible-mode/v1) + custom endpoint template. All 9 providers validated. |
 | admin/test_llm_portal.py (extended) | done | 641 | 2026-02-21 | +245 lines, 28 new tests (12 SessionManager + 5 auth + 7 routing + 4 security). 96 total tests (45 Phase 3 + 51 regression). All mocked, no network. Backward compat: all 17 pre-Phase-3 tests pass. Security verified: no key in repr/str/logs/exceptions/disk. |
 
-## Phase 2.5: Dragon Tip Hooks in LLM Client (COMPLETE)
+## Phase 2.5: LLM Usage Tracker in LLM Client (COMPLETE)
 
 | Item | Status | Rung | Date | QA Notes |
 |------|--------|------|------|----------|
-| stillwater/usage_tracker.py | done | 641 | 2026-02-21 | SessionTipAccumulator, TipConfig, SessionUsageTracker. Exact Decimal cost paths. |
-| llm_call() tip_callback param | done | 641 | 2026-02-21 | No-op default (zero overhead for non-solaceagi users). Backward compat verified. |
+| stillwater/usage_tracker.py | done | 641 | 2026-02-21 | SessionUsageTracker, post-call hooks. Exact Decimal cost paths. |
+| llm_call() tip_callback param | done | 641 | 2026-02-21 | No-op default (zero overhead). Backward compat verified. |
 | llm_chat() tip_callback param | done | 641 | 2026-02-21 | Same contract as llm_call(). |
-| tests/test_llm_tip_hooks.py | done | 641 | 2026-02-21 | 55 tests: callback invocation, cost estimation accuracy, Decimal-only arithmetic, backward compat. |
+| tests (moved to scratch/) | moved | 641 | 2026-02-21 | 55 tests moved to scratch/tests/. |
 
 ## Phase 5: Persona System (COMPLETE)
 
@@ -155,7 +155,7 @@
 | 2026-02-21 | Phase 3: admin/session_manager.py + admin/llm_portal.py extended + llm_config.yaml extended (160 + 111 + 25 lines, 28 new tests, 96 total, all passing, backward compat verified) | 641 | sonnet (coder) | stillwater /build session |
 | 2026-02-21 | Phase 4: semgrep 0 + bandit 0 + behavioral hash (3-seed consensus) + GitHub Actions CI + README badge (41 tests) | 65537 | opus (orchestrator) + sonnet (coder) | central hub |
 | 2026-02-21 | Stripe billing integration: scripts/stripe_bootstrap.py + solace/api/billing.py + web/stillwater/pricing.html + tests/test_billing.py (15 tests, idempotent webhooks, 5-tier pricing) | 641 | sonnet (coder) | solaceagi build session |
-| 2026-02-21 | Phase 2.5: Dragon Tip Hooks — usage_tracker.py + tip_callback in llm_call/llm_chat + TipConfig + SessionTipAccumulator (55 tests, all Decimal-only, backward compat) | 641 | sonnet (coder) | stillwater build session |
+| 2026-02-21 | Phase 2.5: LLM Usage Tracker — usage_tracker.py + tip_callback in llm_call/llm_chat + SessionUsageTracker (Decimal-only, backward compat) | 641 | sonnet (coder) | stillwater build session |
 | 2026-02-21 | Phase 5: Persona Engine v1.3.0 — 50 personas (11 categories) + GLOW score skill + persona-coder swarm + papers 34-39 + all 19 swarms persona-enhanced (+27% A/B avg) | 641 | sonnet (coder) | stillwater build session |
 | 2026-02-21 | Phase 6: Hackathon System — hackathon.md skill + hackathon-lead swarm + hackathon-master persona + paper #40 + 3 sprint combos (sprint/lightning/marathon) | 641 | sonnet (coder) | stillwater build session |
 
@@ -163,7 +163,7 @@
 
 | Metric | Value |
 |--------|-------|
-| Tests (all phases) | 445 (258 base + 66 store + 55 tip hooks + 91 LLM portal + 41 CI + 50 personas + hackathon) |
+| Tests (all phases) | 390 (258 base + 66 store + 91 LLM portal + 41 CI + 50 personas + hackathon; tip hook tests moved to scratch/) |
 | Skills in library | 15+ |
 | Swarm agent types | 19 (all persona-enhanced) |
 | Papers | 40 (index + 40 papers, including hackathon paradigm) |

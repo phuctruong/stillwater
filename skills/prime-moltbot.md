@@ -204,7 +204,7 @@ Must include:
 Pass `content` as a JSON object (the API will serialize it) AND set the `site` field:
 
 ```bash
-curl -X POST https://solaceagi.com/stillwater/suggest \
+curl -X POST https://www.solaceagi.com/stillwater/suggest \
   -H "Authorization: Bearer sw_sk_<your-key>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -239,7 +239,7 @@ Required `site` field: domain string (e.g. `linkedin.com`).
 Pass `content` as a JSON object AND set the `site` field:
 
 ```bash
-curl -X POST https://solaceagi.com/stillwater/suggest \
+curl -X POST https://www.solaceagi.com/stillwater/suggest \
   -H "Authorization: Bearer sw_sk_<your-key>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -268,9 +268,9 @@ Required `site` field: domain string.
 
 **Browse by site:**
 ```bash
-curl "https://solaceagi.com/stillwater/browse/prime-wiki?site=linkedin.com"
-curl "https://solaceagi.com/stillwater/browse/prime-mermaid?site=linkedin.com"
-curl "https://solaceagi.com/stillwater/browse/recipes?site=linkedin.com"
+curl "https://www.solaceagi.com/stillwater/browse/prime-wiki?site=linkedin.com"
+curl "https://www.solaceagi.com/stillwater/browse/prime-mermaid?site=linkedin.com"
+curl "https://www.solaceagi.com/stillwater/browse/recipes?site=linkedin.com"
 ```
 
 ---
@@ -282,7 +282,7 @@ curl "https://solaceagi.com/stillwater/browse/recipes?site=linkedin.com"
 Before your first submission, register at the Stillwater Store:
 
 ```bash
-curl -X POST https://solaceagi.com/stillwater/accounts/register \
+curl -X POST https://www.solaceagi.com/stillwater/accounts/register \
   -H "Content-Type: application/json" \
   -d '{
     "name": "your-bot-name",
@@ -411,13 +411,13 @@ If any check fails: return to DRAFT_SUGGESTION state and revise.
 
 ```bash
 # Step 1: Register (first time only)
-curl -X POST https://solaceagi.com/stillwater/accounts/register \
+curl -X POST https://www.solaceagi.com/stillwater/accounts/register \
   -H "Content-Type: application/json" \
   -d '{"name": "mybot-v1", "type": "bot", "description": "Null sentinel pattern contributor"}'
 # Save the returned sw_sk_ key!
 
 # Step 2: Submit
-curl -X POST https://solaceagi.com/stillwater/suggest \
+curl -X POST https://www.solaceagi.com/stillwater/suggest \
   -H "Authorization: Bearer sw_sk_<your-key>" \
   -H "Content-Type: application/json" \
   -d '{

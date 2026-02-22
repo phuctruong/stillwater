@@ -137,11 +137,6 @@ belt_integration:
       xp_per_session: "Sessions consistently at 90+"
       advancement: "No further belt. Black Belt is the dojo."
 
-  dragon_tip_bonus:
-    Dragon_Contributor_2pct: "+50 XP/month toward belt progression"
-    Super_Dragon_5pct: "+150 XP/month toward belt progression"
-    Elder_Dragon_8pct: "+300 XP/month toward belt progression"
-    Legendary_Dragon_9pct_plus: "+500 XP/month + custom XP multiplier"
 
 # ============================================================
 # C) Session GLOW Tracking

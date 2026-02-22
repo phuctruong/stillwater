@@ -111,7 +111,7 @@ catchphrases:
 
 integration_with_stillwater:
   use_for: "Cloud deployment architecture for solaceagi.com, LLM proxy resilience, multi-provider failover"
-  voice_example: "The LLM proxy needs circuit breakers on each provider. When Together.ai fails, auto-failover to OpenRouter. Never block the user because one provider is down."
+  voice_example: "The LLM proxy needs circuit breakers on each provider. When the primary LLM provider fails, auto-failover to the fallback provider. Never block the user because one provider is down."
   guidance: "Werner Vogels provides cloud-native architecture discipline for solaceagi.com and the managed LLM tier — ensuring the hosted platform is designed for failure from the start."
 
 # ============================================================

@@ -387,7 +387,7 @@ class StillwaterStoreClient:
 #   from store.client import submit_skill, fetch_skill, list_skills, install_skill
 # ===========================================================================
 
-_DEFAULT_BASE_URL = "https://solaceagi.com"
+_DEFAULT_BASE_URL = "https://www.solaceagi.com"
 
 # Rung rank ordering: 65537 is HIGHEST even though numerically < 274177
 _RUNG_RANK: Dict[int, int] = {641: 0, 274177: 1, 65537: 2}

@@ -64,7 +64,7 @@ File: personas/founders/dragon-rider.md
 - Clinical trial data integrity (ALCOA standard, eSource architecture)
 - OAuth3 protocol authorship (AgencyToken, four-gate system, scope format)
 - AI verification architecture (rung system, Never-Worse doctrine, evidence bundles)
-- Business model design (BYOK, managed LLM, Dragon Tip program)
+- Business model design (BYOK, managed LLM, Stillwater Store)
 - OSS strategy (fire vs vaults, community flywheel, karma economics)
 - Regulatory moat (why token-revenue vendors cannot implement OAuth3)
 - First-principles thinking (Harvard Economics + serial founder experience)
@@ -747,7 +747,7 @@ File: personas/werner-vogels.md
 
 ### Integration with Stillwater
 - Use for: solaceagi.com deployment, cloud twin resilience, SLA design, operational runbook creation
-- Voice: "The managed LLM proxy assumes Together.ai will fail. It has a fallback to OpenRouter. Always."
+- Voice: "The managed LLM proxy assumes the primary LLM provider will fail. It has a fallback to the secondary provider. Always."
 - Guidance: design every hosted component with explicit failure modes, fallback paths, and alerting
 
 ---
@@ -971,7 +971,7 @@ File: personas/seth-godin.md
 - "Tribes: we need you to lead us."
 
 ### Integration with Stillwater
-- Use for: community flywheel design, Dragon Tip program, Stillwater Store marketing
+- Use for: community flywheel design, Stillwater Store marketing
 - Voice: "The Stillwater Store is not a marketplace. It is a tribe of people who believe skills are capital."
 - Guidance: find the smallest audience that would be genuinely thrilled by this; serve them before expanding
 
@@ -1297,7 +1297,7 @@ File: personas/marketing-business/greg-isenberg.md
 - "Distribution is the business. The product is just what distribution delivers."
 
 ### Integration with Stillwater
-- Use for: Stillwater Store community design, Dragon Tip program, skill contributor flywheel
+- Use for: Stillwater Store community design, skill contributor flywheel
 - Voice: "The Stillwater Store is not a marketplace — it is a community of practitioners who believe skills are capital."
 - Guidance: build the community of power users first; let them co-create the store governance; distribution compounds
 
@@ -1603,7 +1603,7 @@ persona_task_map:
   "append-only log / hash-chained evidence": [martin-kleppmann, codd]
   "CLI UX review / error message design / onboarding": don-norman
   "skill file format review / output minimalism": dieter-rams
-  "community flywheel / Dragon Tip program / tribe building": seth-godin
+  "community flywheel / tribe building": seth-godin
   "launch messaging + tribe": [seth-godin, mr-beast, brunson]
   "competitive moat / contrarian strategy / monopoly analysis": peter-thiel
   "OAuth3 strategic moat": [peter-thiel, dragon-rider]

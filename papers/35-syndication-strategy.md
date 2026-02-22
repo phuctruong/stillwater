@@ -5,7 +5,7 @@
 **Status:** STABLE
 **Authority:** 641
 **Tags:** marketing, syndication, content, LinkedIn, Substack, HackerNews, SEO, Brunson
-**Related:** `papers/34-persona-glow-paradigm.md`, `NORTHSTAR.md`, solace-marketing/STRATEGY.md v3.0
+**Related:** `papers/34-persona-glow-paradigm.md`, `NORTHSTAR.md`, internal marketing strategy document
 
 ---
 
@@ -144,7 +144,7 @@ Target: 8/10 or above before publishing.
 The Stillwater brand has a powerful authentic story. Use it:
 
 ```
-THE STORY: Harvard '98 → UpDown.com (100K users) → Citystream (acquired) →
+THE STORY: Harvard '98 → UpDown.com (1M+ users) → Citystream (failed) →
   CRIO (Clinical Research IO, #1 eSource in FDA-regulated clinical trials,
   360+ customers, 40% higher enrollment, 70% FDA audit risk reduction) →
   "What if I applied FDA-grade verification to AI development?" →
@@ -282,9 +282,6 @@ PHASE 2 (build next):
 PHASE 3 (later):
   phuc.net → Twitter/X thread recipe (build: twitter-thread.json)
   phuc.net → Reddit recipe (build: reddit-post.json)
-
-PHASE 4 (avatar system):
-  Paper → paudio script → pvideo render → YouTube upload recipe
 ```
 
 ### 5.2 Recipe Format for Content Pipeline
@@ -385,7 +382,7 @@ YouTube:         1x per month (quality > quantity)
 9. Substack #1: "The dojo protocol: how we turned AI verification into a belt system"
 
 **Week 4 — Competitive and Community**
-10. "Why OpenClaw has 512 security vulnerabilities and why it matters" (competitive-analysis → blog)
+10. "Why AI agent authorization matters and what to look for" (competitive-analysis → blog)
 11. "The GLOW score: making AI development gamified and evidence-grounded" (34 → blog)
 12. Substack #2: "Month 1 retrospective: what GLOW scores reveal about actual progress"
 
@@ -522,7 +519,7 @@ Ship the first issue.
 - `./papers/34-persona-glow-paradigm.md` — Dojo Protocol (GLOW scores)
 - `./skills/glow-score.md` — GLOW scoring for content sessions
 - `/home/phuc/projects/phucnet/articles/WHERE-TO-SYNDICATE.md` — Source syndication list
-- `solace-marketing/STRATEGY.md` v3.0 — Full marketing strategy
+- Internal marketing strategy document — Full marketing strategy
 - `solace-browser/` — LinkedIn and Substack recipes (automation layer)
 - `case-studies/stillwater-itself.md` — Content session tracking
 

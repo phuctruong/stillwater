@@ -47,7 +47,7 @@ In the Stillwater persona system, Kernighan is loadable as `kernighan.md`. The s
 
 After Harvard, Phuc built multiple companies. Most failed. The failures are part of the story — not something to hide:
 
-- **UpDown.com** — a social investing platform with over 100,000 users. Early experiment in social-proof investing. Did not succeed commercially.
+- **UpDown.com** — a social investing platform with over 1 million users. Early experiment in social-proof investing. Did not succeed commercially.
 - **Citystream** and other ventures — failed. Each failure sharpened judgment about what matters: evidence over hope, architecture over hype, humility over narrative.
 - **Clinical Research IO (CRIO)** — the one that worked. The defining company of Phuc's career. Founded 2015 with Raymond Nomizu. More on CRIO below.
 

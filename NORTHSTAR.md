@@ -178,8 +178,7 @@ SolaceAGI is the first AI agent platform architected for FDA 21 CFR Part 11 comp
 - PZip HTML snapshots = Original records (what the agent actually saw)
 - Rung system = Phase gates (like clinical trial Phase I/II/III)
 
-No competitor has this. OpenClaw has 512 security vulnerabilities and 824 malicious skills.
-Token-revenue vendors (OpenAI) cannot implement OAuth3 — it reduces token consumption.
+Stillwater is the only framework that provides evidence-gated verification for AI agent actions.
 
 ---
 
@@ -190,7 +189,7 @@ Phuc Truong (Harvard '98). Serial founder.
 - 360+ customers, 40% higher enrollment, 70% FDA audit risk reduction
 - Built software that survives real FDA audits — that experience is in the architecture
 - "In clinical trials, 'trust me' is not evidence. Only the original, timestamped, attributable record is evidence."
-- Previously: UpDown.com (100K users), Citystream (acquired), Phuc Labs (MIT AMD winner)
+- Previously: UpDown.com (1M+ users), Citystream (failed), Phuc Labs (MIT AMD winner)
 - Harvard University, A.B. Economics, Class of 1998
 
 ---
@@ -231,123 +230,15 @@ PUBLIC (OSS):
 PRIVATE:
   solace-cli     — extends stillwater/cli with OAuth3 vault + twin + cloud
   solaceagi      — hosted platform (solaceagi.com)
-  pvideo         — physics-based video/avatar generation (secret sauce)
+  pvideo         — physics-based video/avatar generation (private)
   solace-marketing — marketing intelligence
 
-AVATAR SYSTEM (solaceagi.com):
-  paudio (voice) + pvideo (visual) + stillwater (verification) = AI Avatar
-  → Phase 1: Cute cartoon avatar + deterministic voice
-  → Phase 2: Lip-sync + expressions
-  → Phase 3: Full avatar on solaceagi.com (your AI agent has a face and voice)
+> *Avatar system details are maintained privately.*
 
-MASTER PLAN (pvideo):
-  → Protein folding (compete with DeepMind AlphaFold)
-  → Material science simulation
-  → Physics simulation (compete with specialized solvers)
-  → 3D printing (export STL from physics sim)
-  → Video generation (compete with Sora/VEO)
-  → Video encoding (replace H.265)
-  → Zoom replacement (pvideo-powered conferencing)
-  → Metaverse (solaceagi.com metaverse powered by pvideo + paudio)
+> *Private product plans are maintained in separate repositories.*
 ```
 
-## Dragon Tip Program — BYOK Users Fund Open Source
-
-> "Every drop fills the river." — The Dragon Tip Program turns free-tier users into open-source contributors.
-
-### The Tip Architecture
-
-BYOK (Bring Your Own Key) users on solaceagi.com pay nothing to the platform — they bring their own Anthropic/OpenAI/Llama API keys. The Dragon Tip Program lets them voluntarily contribute a small percentage of their API credits to fund open-source projects in the Stillwater ecosystem.
-
-```
-BYOK user sends request → solaceagi.com services it (recipe match, OAuth3 gate, evidence bundle)
-  → API call goes to user's own LLM provider (zero platform cost)
-    → After completion, tip % of the API credit cost is allocated to OSS fund
-      → Every tip-funded API call is Part 11 logged with hash-chained audit trail
-        → User can verify exactly what their contribution built
-```
-
-### Dragon Tiers
-
-| Tier | Tip % | Motto | Badge |
-|------|-------|-------|-------|
-| Dragon Contributor | 2% | "Every drop fills the river" | Dragon |
-| Super Dragon | 5% | "The river that gives, grows" | Super Dragon |
-| Elder Dragon | 8% | "Ancient wisdom funds the future" | Elder Dragon |
-| Legendary Dragon | 9%+ (custom) | "Your generosity builds the dojo" | Legendary Dragon |
-
-### What Tips Fund
-
-Tips flow directly to OSS projects in the Stillwater ecosystem:
-
-```
-Tip fund allocation (transparent, Part 11 audited):
-  paudio    — deterministic speech synthesis + community voices
-  pvideo    — physics-based video/avatar generation
-  stillwater — verification OS itself (skills, store, governance)
-  solace-browser — OAuth3 reference implementation
-  pzip      — universal compression engine
-  Community bounties — bug fixes, new skills, new recipes
-```
-
-### Stillwater Store Integration
-
-Dragon tippers earn Dragon badges displayed on their Stillwater Store profile:
-- Badge appears on all skills they submit (social proof)
-- Dragon-badged skill authors get priority review in the Store submission queue
-- Legendary Dragons get a permanent "Dojo Patron" marker on their Store profile
-
-### Belt Progression Enhancement
-
-Dragon contributions count toward belt XP in the Stillwater belt system:
-
-```
-Belt XP from Dragon Tips:
-  Dragon Contributor (2%) → +50 XP/month
-  Super Dragon (5%)       → +150 XP/month
-  Elder Dragon (8%)       → +300 XP/month
-  Legendary Dragon (9%+)  → +500 XP/month + custom XP multiplier
-
-XP stacks with existing belt progression:
-  Skill submissions + rung achievements + recipe contributions + Dragon tips
-  → Accelerated path from White Belt to Black Belt
-```
-
-### Part 11 Transparency — The Trust Enabler
-
-"Your tips don't disappear into a corporate treasury. Every hundredth of a cent is Part 11 logged. You can verify exactly what your contribution built. This is open-source funding with FDA-grade transparency."
-
-```
-Part 11 audit trail for every tip:
-  tip_id:          SHA-256 hash (unique, content-addressed)
-  user_id:         anonymized (privacy-preserving)
-  tip_amount_usd:  exact Decimal (no float)
-  api_call_cost:   upstream LLM cost that triggered the tip
-  tip_percentage:  user's chosen tier (2%, 5%, 8%, or custom)
-  funded_project:  which OSS project received the allocation
-  funded_task:     specific commit/PR/bounty the tip contributed to
-  timestamp:       ISO8601, append-only ledger
-  chain_hash:      SHA-256(previous_entry + this_entry) — tamper-evident
-
-Savings Dashboard (user-facing):
-  - Recipe hit rate: "Your recipes saved X calls this month"
-  - Tokens saved: "Y tokens not consumed thanks to cached recipes"
-  - Money saved: "$Z.ZZ saved vs cold LLM calls"
-  - Tips given: "$W.WW contributed to OSS this month"
-  - Impact: "Your tips funded N commits across M projects"
-```
-
-### Revenue Projection
-
-```
-At 10,000 BYOK users with average 3% tip rate:
-  Average BYOK user API spend: ~$15/month
-  Average tip per user: $0.45/month
-  Total monthly OSS fund: $4,500/month = $54,000/year
-  → Funds 2-3 full-time OSS maintainers
-  → Or 50+ community bounties per month
-  → All verifiable via Part 11 audit trail
-```
+> Dragon Tip Program details are maintained in internal strategy documents.
 
 ---
 
@@ -472,7 +363,6 @@ RECIPE AUTOMATION:
   Phase 1 (available): LinkedIn recipe (solace-browser, BUILT)
   Phase 2 (build):     Substack recipe, dev.to recipe
   Phase 3 (build):     Twitter thread recipe, Reddit post recipe
-  Phase 4 (planned):   YouTube upload with paudio narration + pvideo avatar
 
 CONTENT NORTHSTAR METRICS:
   GitHub stars:        50 → 1,000 (Q2) → 10,000 (end 2026)
