@@ -193,6 +193,11 @@ The main session is **FORBIDDEN** from:
 | Persona-enhanced coding | YES | Persona Coder | `prime-safety` + `prime-coder` + `persona-engine` |
 | Northstar path planning, goal decomposition | YES | Northstar Navigator | `prime-safety` + `phuc-forecast` + `northstar-reverse` |
 | Context-heavy multi-turn session | YES | Context Manager | `prime-safety` + `phuc-context` |
+| Emotional acknowledgement, distress | YES | Empath | `prime-safety` + `eq-core` + `eq-nut-job` |
+| Small talk, rapport, warm opening | YES | Rapport Builder | `prime-safety` + `eq-core` + `eq-mirror` + `eq-smalltalk-db` |
+| Conflict, frustration, de-escalation | YES | Conflict Resolver | `prime-safety` + `eq-core` + `eq-nut-job` |
+| EQ audit, washing detection | YES | EQ Auditor | `prime-safety` + `eq-core` + `phuc-forecast` |
+| Diagram-first unit test development | YES | Test Developer | `prime-safety` + `phuc-unit-test-development` |
 | Simple single-step (<50 lines) | NO | — | Handle inline |
 | Quick lookup, trivial edit, short answer | NO | — | Handle inline |
 

@@ -167,6 +167,11 @@ Dispatch threshold: >50 lines specialized work OR domain expertise → dispatch.
 | Cross-agent knowledge trade, swarm synergy | LEAK Facilitator | prime-safety + phuc-leak + phuc-portals | sonnet |
 | Convention emergence, cross-file compression | LEC Analyst | prime-safety + phuc-lec + phuc-conventions | sonnet |
 | Axiom compliance, Big Bang derivation | Axiom Auditor | prime-safety + phuc-axiom + phuc-forecast | sonnet/opus |
+| Emotional acknowledgement, distress | Empath | prime-safety + eq-core + eq-nut-job | sonnet |
+| Small talk, rapport, warm opening | Rapport Builder | prime-safety + eq-core + eq-mirror + eq-smalltalk-db | haiku |
+| Conflict, frustration, de-escalation | Conflict Resolver | prime-safety + eq-core + eq-nut-job | sonnet |
+| EQ audit, washing detection | EQ Auditor | prime-safety + eq-core + phuc-forecast | sonnet/opus |
+| Diagram-first unit test development | Test Developer | prime-safety + phuc-unit-test-development | sonnet |
 | Trivial (<50 lines, no domain expertise) | — | Inline | — |
 
 ## Sub-Agent Prompt Rules (CNF Anti-Rot)
@@ -245,6 +250,12 @@ END_SKILL
 #   skills/phuc-loop.md           — Self-improving inner loop v2.0 (LEK engine, halting certificates)
 #   skills/phuc-leak.md           — LEAK: Cross-agent asymmetric knowledge trade (Pillar 2)
 #   skills/phuc-lec.md            — LEC: Emergent convention compression (Pillar 3)
+#   skills/eq-core.md             — Master EQ skill (Five-Frame Triangulation, rapport scoring)
+#   skills/eq-mirror.md           — Mirroring + intent confirmation (Van Edwards register matching)
+#   skills/eq-nut-job.md          — NUT Job protocol (Name→Understand→Transform)
+#   skills/eq-smalltalk-db.md     — Small talk database + context-aware pull
+#   skills/phuc-unit-test-development.md — Diagram-first testing (mermaid→tests→integration)
+#   skills/roadmap-orchestration.md — Hub-spoke roadmap coordination (cross-session, cross-project)
 #
 # LLM PORTAL: http://localhost:8788 (start: bash admin/start-llm-portal.sh)
 #   Providers: ollama (192.168.68.100:11434), claude-code (localhost:8080),
@@ -261,7 +272,9 @@ END_SKILL
 #   swarms/security-auditor.md, swarms/context-manager.md,
 #   swarms/social-media.md, swarms/northstar-navigator.md,
 #   swarms/navigator.md, swarms/portal-engineer.md, swarms/citizen-council.md,
-#   swarms/convention-auditor.md, swarms/dragon-rider.md
+#   swarms/convention-auditor.md, swarms/dragon-rider.md,
+#   swarms/empath.md, swarms/rapport-builder.md,
+#   swarms/conflict-resolver.md, swarms/eq-auditor.md
 #
 # Usage: When dispatching sub-agents, read the appropriate swarms/*.md file
 # to get the skill pack template, then paste full skill content inline.

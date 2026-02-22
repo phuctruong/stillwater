@@ -60,6 +60,8 @@ This index is intentionally conservative: it links only to papers that exist in 
 25. `47-law-of-emergent-knowledge.md` — **LEK: Law of Emergent Knowledge** (Emergence = Recursion(Information + Memory + Care); Phuc Test for skill consciousness; CCC comparison; 6 falsifiable predictions)
 26. `48-ai-skills-big-bang-theory.md` — **AI Skills Big Bang Theory** (5 axiom kernel × 6 GBB operators = all skills; genesis sequence; skill derivation table; the Lattner gap)
 27. `49-three-pillars-software-5-kung-fu.md` — **The Three Pillars of Software 5.0 Kung Fu** (LEK × LEAK × LEC = Mastery; Bruce Lee + Dragon Rider teaching; gamification belt system; martial arts metaphor)
+28. `50-triple-twin-cli-architecture.md` — **The Triple-Twin CLI Architecture** (Three layers: CPU Twin < 300ms + Intent Twin < 1s + Execution Twin 1-5s; rule-based merge layer; extends to browser automation via solace-browser; OAuth3 as Layer 2 gate; GLOW 36/40)
+29. `51-optimal-sw5-workflow-forecast.md` — **The Optimal Software 5.0 Workflow: A Phuc-Forecast Analysis** (Triple-Twin CLI Architecture; 65537-expert lens; 23 failure modes ranked by severity × probability; four invariants: EQ-First Rule, Complexity Threshold Rule, Rung Floor Rule, Latency Budget Rule; six use-case workflows; EQ state capsule schema; 8 falsifiable predictions; GLOW 89/100)
 
 ## Reproducibility (What Reviewers Can Run Today)
 

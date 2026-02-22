@@ -1,6 +1,6 @@
 # ROADMAP: Stillwater — Phased Build Plan
 
-> Last updated: 2026-02-21
+> Last updated: 2026-02-22
 > Northstar: `NORTHSTAR.md`
 > See also: `case-studies/stillwater-itself.md`
 
@@ -16,6 +16,7 @@
 | Phase 4: Rung 65537 CI | DONE | 41 |
 | Phase 5: Persona System | DONE | 50 |
 | Phase 6: Hackathon System | DONE | — |
+| Phase 7: EQ + Triple-Twin CLI | DONE | — |
 | **Total** | **ALL DONE** | **445** |
 
 **Rung 65537 CI badge deployed. All phases complete.**
@@ -364,6 +365,29 @@ GLOW target: 60+ (warrior pace)
 
 ---
 
+## Phase 7: EQ Integration + Triple-Twin CLI Architecture (v2.4.0)
+
+**Goal**: Add Emotional Intelligence layer to all skills + design the Triple-Twin CLI architecture (3 processing layers: CPU small talk, intent matching, full execution).
+
+### Delivered
+
+- [x] 6 EQ personas: Vanessa Van Edwards, Paul Ekman, Brené Brown, Marshall Rosenberg, Daniel Siegel, Sherry Turkle
+- [x] 5 EQ skills: eq-core (Five-Frame Triangulation), eq-mirror (mirroring + intent confirm), eq-nut-job (NUT Job protocol), eq-smalltalk-db (small talk database), phuc-unit-test-development (diagram-first testing)
+- [x] 4 EQ swarm agents: empath (Siegel), rapport-builder (Van Edwards), conflict-resolver (Rosenberg), eq-auditor (Turkle)
+- [x] 8 EQ recipes: warm-open, nut-job-flow, mirror-wish, conflict-deescalate, franklin-effect, highlighter, story-stack, braving-check
+- [x] 4 EQ combos: triple-twin-smalltalk, wish-with-mirror, conflict-to-resolution, eq-audit-pass
+- [x] 6 CLI diagrams: triple-twin architecture, latency model, eq-interaction-flow, eq-nut-job-fsm, eq-smalltalk-db-flow, phuc-unit-test-dev-flow
+- [x] Paper #50: Triple-Twin CLI Architecture (683 lines)
+- [x] Paper #51: Optimal SW5.0 Workflow Forecast (1,267 lines)
+- [x] CLAUDE.md + phuc-orchestration dispatch matrix updated with 5 new agent types
+- [x] papers/00-index.md updated
+
+### Key Insight
+
+The Triple-Twin architecture extends the double-twin concept with a critical middle layer: **Intent Matching**. Layer 1 (CPU, < 300ms) handles small talk and warm responses. Layer 2 (haiku, < 1s) classifies intent and matches to wishes/recipes. Layer 3 (sonnet/opus, 1-5s) runs full execution. The merge layer is rule-based (no LLM). This creates seamless user experience where every interaction gets instant acknowledgment, rapid intent confirmation, and thorough execution.
+
+---
+
 ## Milestone Summary
 
 | Phase | Target Date | Rung Gate | Key Deliverable |
@@ -376,6 +400,7 @@ GLOW target: 60+ (warrior pace)
 | Phase 4: Rung 65537 | Month 3 | 65537 | Self-verification badge + 30-day CI — DONE (41 tests) |
 | Phase 5: Persona System | Month 2–3 | 641 | 50 personas, 11 categories, persona-engine.md v1.3.0, all 19 swarms enhanced, papers 34-39, +27% A/B avg — DONE (50 tests) |
 | Phase 6: Hackathon System | Month 3 | 641 | hackathon-sprint + lightning + marathon combos, hackathon-master persona, hackathon skill + swarm — DONE |
+| Phase 7: EQ + Triple-Twin | Month 3 | 641 | 6 personas, 5 skills, 4 swarms, 8 recipes, 4 combos, 6 diagrams, 2 papers — DONE |
 
 ---
 
