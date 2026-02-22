@@ -157,6 +157,7 @@ Dispatch threshold: >50 lines specialized work OR domain expertise → dispatch.
 | Workspace cleanup | Janitor | prime-safety + phuc-cleanup | haiku |
 | Wish contract, backlog | Wish Manager | prime-safety + prime-wishes + prime-mermaid | sonnet |
 | Adversarial review | Skeptic | prime-safety + prime-coder + phuc-forecast | sonnet/opus |
+| Northstar path planning, goal decomposition | Northstar Navigator | prime-safety + phuc-forecast + northstar-reverse | sonnet |
 | Trivial (<50 lines, no domain expertise) | — | Inline | — |
 
 ## Sub-Agent Prompt Rules (CNF Anti-Rot)
@@ -221,6 +222,7 @@ END_SKILL
 #   skills/prime-wishes.md        — Wish Manager agent
 #   skills/software5.0-paradigm.md — Writer agent
 #   skills/prime-mermaid.md       — Graph Designer agent
+#   skills/northstar-reverse.md   — Northstar Reverse Engineering (backward chaining from goal)
 #   skills/phuc-orchestration.md  — Full orchestration skill (reference)
 #
 # LLM PORTAL: http://localhost:8788 (start: bash admin/start-llm-portal.sh)
@@ -236,7 +238,7 @@ END_SKILL
 #   swarms/forecaster.md, swarms/judge.md, swarms/podcast.md,
 #   swarms/writer.md, swarms/janitor.md, swarms/wish-manager.md,
 #   swarms/security-auditor.md, swarms/context-manager.md,
-#   swarms/social-media.md
+#   swarms/social-media.md, swarms/northstar-navigator.md
 #
 # Usage: When dispatching sub-agents, read the appropriate swarms/*.md file
 # to get the skill pack template, then paste full skill content inline.

@@ -119,6 +119,7 @@ The main session is **FORBIDDEN** from:
 | Workspace cleanup, archival | YES | Janitor | `prime-safety` + `phuc-cleanup` |
 | Wish contract, backlog management | YES | Wish Manager | `prime-safety` + `prime-wishes` + `prime-mermaid` |
 | Adversarial review, verification | YES | Skeptic | `prime-safety` + `prime-coder` + `phuc-forecast` |
+| Northstar path planning, goal decomposition | YES | Northstar Navigator | `prime-safety` + `phuc-forecast` + `northstar-reverse` |
 | Context-heavy multi-turn session | YES | Context Manager | `prime-safety` + `phuc-context` |
 | Simple single-step (<50 lines) | NO | — | Handle inline |
 | Quick lookup, trivial edit, short answer | NO | — | Handle inline |
@@ -191,6 +192,12 @@ skill_packs:
     model_preferred: sonnet
     rung_default: 641
     artifacts: [context_capsule.json, compaction_log.txt]
+
+  northstar_navigator:
+    skills: [prime-safety, phuc-forecast, northstar-reverse]
+    model_preferred: sonnet
+    rung_default: 641
+    artifacts: [REVERSE_MAP.json, CRITICAL_PATH.json, FORWARD_PLAN.json]
 ```
 
 ---

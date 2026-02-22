@@ -72,6 +72,8 @@ usage() {
   echo "  solaceagi       cloud-twin         Build headless browser cloud twin"
   echo "  stillwater      oauth3-spec        Write oauth3-spec-v0.1.md + oauth3-enforcer skill"
   echo "  stillwater      store-api          Build Stillwater Store FastAPI endpoints"
+  echo "  stillwater      northstar-reverse  Reverse-engineer path to any Northstar goal"
+  echo "  ANY_PROJECT     northstar-path     Apply reverse engineering to project Northstar"
   echo "  paudio          audit              Phase 0: Audit & baseline (gap analysis)"
   echo "  paudio          engine-harden      Phase 1: Core engine hardening (100% determinism)"
   echo "  paudio          compute-grid       Phase 2: Volunteer compute network (PAudio Grid)"

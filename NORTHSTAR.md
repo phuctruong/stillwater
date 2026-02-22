@@ -84,6 +84,37 @@ ACT → Ship Store flywheel + LLM Portal + case studies per project
 VERIFY → GitHub stars + Store submissions + rung achievements + recipe hit rate
 ```
 
+## Northstar Reverse Engineering
+
+> "When I was younger I thought about the next 3 steps. Now I figure out the LAST 3 steps and work backwards." — Phuc Truong
+
+```
+FORWARD (young entrepreneur):
+  Current State → ??? → ??? → ??? → Northstar
+  Problem: Combinatorial explosion. Many paths, most dead ends.
+
+REVERSE (wise entrepreneur):
+  Current State ← ←← ←←← ←←← Northstar
+  Advantage: Constraints propagate backward, pruning the search space.
+
+THE MAZE INSIGHT:
+  Start from the END of the maze → draw back to the beginning.
+  AI excels at this: hold the entire goal state in context,
+  reason about preconditions, identify the critical path.
+
+THE ALGORITHM:
+  1. DEFINE THE SUMMIT — concrete, measurable Northstar victory condition
+  2. LAST 3 STEPS — what MUST be true immediately before the Northstar?
+  3. CHAIN BACKWARD — for each step, what must be true before it?
+  4. CONNECT TO CURRENT — chain reaches present state or reveals a gap
+  5. FORWARD PLAN — reverse the chain → the first action is clear
+
+FULL SKILL: skills/northstar-reverse.md
+SWARM AGENT: swarms/northstar-navigator.md (persona: Sun Tzu)
+PAPER: papers/36-northstar-reverse-engineering.md
+APPLIED: papers/37-reverse-paths.md (concrete paths for each metric above)
+```
+
 ## What Stillwater Powers (Case Studies)
 
 Track in case-studies/:
