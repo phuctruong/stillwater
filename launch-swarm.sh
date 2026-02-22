@@ -19,6 +19,17 @@ set -euo pipefail
 PROJECTS_ROOT="$HOME/projects"
 STILLWATER="$PROJECTS_ROOT/stillwater"
 
+# GLOW Score target (default: 60 = warrior pace)
+# Override per session: GLOW_TARGET=70 ./launch-swarm.sh <project> <phase>
+# GLOW = Growth + Learning + Output + Wins (0-25 each, total 0-100)
+# Persona selection: auto-detected from task domain (see skills/persona-engine.md)
+#   linus   → CLI, systems, OSS architecture
+#   schneier → security, OAuth3, cryptography
+#   knuth   → algorithms, formal proofs, verification math
+#   bruce-lee → gamification, belt system, dojo design
+#   brunson → pricing, conversion, launch copy
+GLOW_TARGET="${GLOW_TARGET:-60}"
+
 show_prompt() {
   local project="$1"
   local phase="$2"
@@ -28,11 +39,32 @@ show_prompt() {
   echo "═══════════════════════════════════════════════════════"
   echo "  PHUC SWARM LAUNCH PROMPT"
   echo "  Project: $project | Phase: $phase"
+  echo "  GLOW Target: $GLOW_TARGET (override: GLOW_TARGET=70 ./launch-swarm.sh ...)"
   echo "═══════════════════════════════════════════════════════"
   echo ""
   echo "Copy everything between the ─── lines into a new haiku/sonnet Claude session:"
   echo ""
   echo "────────────────────────────────────────────────────────"
+  echo ""
+  echo "## PERSONA SELECTION"
+  echo "# Auto-select based on task domain (skills/persona-engine.md):"
+  echo "#   CLI / systems / OSS   → linus"
+  echo "#   Security / OAuth3     → schneier"
+  echo "#   Algorithms / proofs   → knuth"
+  echo "#   Gamification / belt   → bruce-lee"
+  echo "#   Pricing / copy        → brunson"
+  echo "#   Multi-domain task     → load 2+ personas, prime-safety always first"
+  echo "# Inject persona voice rules inline after loading prime-safety in your skill pack."
+  echo ""
+  echo "## GLOW SCORE REQUIREMENT"
+  echo "# GLOW target for this session: $GLOW_TARGET"
+  echo "# Required artifact: glow_score.json"
+  echo "# Format: {\"G\": <0-25>, \"L\": <0-25>, \"O\": <0-25>, \"W\": <0-25>, \"total\": <0-100>}"
+  echo "# Commit format: feat: {description}"
+  echo "#                GLOW $GLOW_TARGET [G:? L:? O:? W:?]"
+  echo "# Anti-patterns: GLOW_INFLATED | GLOW_WITHOUT_NORTHSTAR_ALIGNMENT | WINS_BY_NARRATIVE"
+  echo ""
+  echo "---"
   echo ""
   echo "## NORTHSTAR — Read this first. All work must align with it."
   echo ""
@@ -825,7 +857,11 @@ echo ""
 echo "═══════════════════════════════════════════════════════"
 echo "  After the session completes:"
 echo "  1. Report the rung achieved back here"
-echo "  2. Update: $STILLWATER/case-studies/${PROJECT}.md"
-echo "  3. Commit: cd $PROJECTS_ROOT/$PROJECT && git add -A && git commit"
+echo "  2. Report your GLOW score (target: $GLOW_TARGET)"
+echo "     Artifact: evidence/glow_score.json"
+echo "  3. Update: $STILLWATER/case-studies/${PROJECT}.md"
+echo "  4. Commit: cd $PROJECTS_ROOT/$PROJECT && git add -A && git commit"
+echo "     Commit format: feat: {description}"
+echo "                    GLOW <total> [G:<g> L:<l> O:<o> W:<w>]"
 echo "═══════════════════════════════════════════════════════"
 echo ""

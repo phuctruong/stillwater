@@ -1,9 +1,10 @@
 # Case Study: SolaceAGI — Hosted Platform for Verified Delegated Intelligence
 
 **Tracking since**: 2026-02-21
-**Status**: ALL PHASES DONE (0–5 + GA4 Analytics + Persona) — 955 tests total
+**Status**: ALL PHASES DONE (0–6 + GA4 Analytics + Persona + Stripe + Social Share) — 955/955 tests passing
 **Rung**: 65537 (tunnel server) / 641 (all other phases)
 **Belt**: Orange
+**Deployments**: QA + Prod pushed (2026-02-22)
 
 ## Architecture
 
@@ -43,8 +44,12 @@ stillwater/cli (OSS)           ← base CLI, lives inside stillwater repo; anyon
 | PZip storage layer | **DONE** — snapshot.py + history.py + compression.py + history API + Kanban UI | 2.5 | 81 |
 | Dragon Tip Program | **DONE** — tip/engine.py + transparency.py + tiers.py + tracking/usage.py + api/tips.py | 2.7 | 83 |
 | Stillwater Store frontend | **DONE** — store/api.py + publish.py + attribution.py + registry.py | 3 | 71 |
-| Persona System integration | IN PROGRESS — POST /persona/select + LLM proxy persona_hint | 3.5 | — |
-| Launch (billing tiers + rate limits + GDPR) | IN PROGRESS | 4 | — |
+| Persona System integration | **DONE** — POST /persona/select + LLM proxy persona_hint | 3.5 | — |
+| Launch (billing tiers + rate limits + GDPR) | **DONE** | 4 | — |
+| GA4 Analytics integration | **DONE** | 5 | — |
+| Social share registration | **DONE** — social share endpoints registered | 6 | — |
+| Stripe billing (4 products, 4 prices, webhooks) | **DONE** — checkout, webhook (prod + QA), portal, status | — | 15 |
+| Docker import fix (store modules) | **DONE** — missing store modules resolved | — | — |
 
 ## Refactor Plan (Before Build)
 
@@ -123,15 +128,23 @@ Phase 1 (core backend) MUST include `api/llm.py`:
 | Phase 2.5: PZip Storage Layer | 2026-02-21 | 81/81 | 641 | — |
 | Phase 2.7: Dragon Tip Program | 2026-02-21 | 83/83 | 641 | — |
 | Phase 3: Stillwater Store Frontend | 2026-02-21 | 71/71 | 641 | — |
+| Phase 3.5: Persona System | 2026-02-21 | — | 641 | — |
+| Phase 4: Launch (billing tiers + rate limits + GDPR) | 2026-02-21 | — | 641 | — |
+| Phase 5: GA4 Analytics | 2026-02-21 | — | 641 | — |
+| Phase 6: Social share registration | 2026-02-22 | — | 641 | 9b577af |
+| Stripe: 4 products + 4 prices + webhook (prod + QA) | 2026-02-22 | 15/15 | 641 | — |
+| Docker import fix (missing store modules) | 2026-02-22 | — | 641 | — |
+| Full suite green (955/955) | 2026-02-22 | 955/955 | 641 | — |
+| QA + Prod deployment | 2026-02-22 | 955/955 | 641 | — |
 
 ## Metrics
 
 | Metric | Now | Target Q2 | Target EOY |
 |--------|-----|-----------|-----------|
-| Tests | 671+ | 800+ | 1,000+ |
-| Phases complete | 6/8 (0–3 done, 3.5+4 in progress) | 8/8 | 8/8 |
+| Tests | 955/955 | 1,000+ | 1,200+ |
+| Phases complete | 8/8 (0–6 + Persona + GA4 all DONE) | 8/8 | 8/8 |
 | API endpoints | 35+ | 50+ | 70+ |
-| Stripe products | 4 | 4 | 4 |
+| Stripe products | 4 (prod + QA webhooks live) | 4 | 4 |
 | Paying users | 0 | growing | growing |
 | Recipe hit rate | 0% | 50% | 80% |
 | API uptime | N/A | 99% | 99.9% |

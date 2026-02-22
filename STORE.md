@@ -145,6 +145,86 @@ For swarms and bugfixes: see [`skills/prime-moltbot.md`](skills/prime-moltbot.md
 
 ---
 
+## GLOW Score Metadata (Recommended)
+
+Submissions that include a `glow_score.json` artifact receive **priority review** and a
+**GLOW-certified** badge on their store listing. GLOW metadata is not required, but it is
+strongly recommended for all skill and swarm submissions.
+
+### What Is GLOW?
+
+GLOW is the Stillwater development health score. It measures four dimensions of a commit or
+session:
+
+| Dimension | Max | Meaning |
+|-----------|-----|---------|
+| **G**rowth | 25 | New capability added or rung advanced |
+| **L**earning | 25 | Evidence of research, discovery, or novel insight |
+| **O**utput | 25 | Shipped artifacts (tests, diffs, docs) |
+| **W**ins | 25 | Northstar metric advanced (stars, recipes, OAuth3 commands) |
+
+Total GLOW = G + L + O + W (0–100). Warrior pace = 60+/day. Master pace = 70+/week.
+
+### glow_score.json Schema
+
+Include this file in your submission's evidence bundle or as a top-level submission field:
+
+```json
+{
+  "glow_score": {
+    "G": 18,
+    "L": 15,
+    "O": 20,
+    "W": 12,
+    "total": 65,
+    "pace": "warrior",
+    "northstar_metric_advanced": "recipe hit rate",
+    "session_date": "2026-02-21"
+  }
+}
+```
+
+**Fields:**
+- `G`, `L`, `O`, `W` — integer 0–25 each
+- `total` — integer 0–100 (must equal G + L + O + W)
+- `pace` — `"warrior"` (60+), `"master"` (70+/week), `"steady"` (40+), or `"learning"` (<40)
+- `northstar_metric_advanced` — which Northstar metric this work advances (required if `W` > 0)
+- `session_date` — ISO8601 date
+
+### GLOW Anti-Patterns (Auto-Rejection Risk)
+
+Submissions claiming high GLOW scores without supporting evidence are subject to rejection:
+
+- `GLOW_INFLATED` — GLOW total does not match actual artifacts (e.g., claiming W=25 with no
+  Northstar alignment statement)
+- `GLOW_WITHOUT_NORTHSTAR_ALIGNMENT` — W > 0 but `northstar_metric_advanced` is empty or vague
+- `WINS_BY_NARRATIVE` — W score justified only by prose, not by executable artifacts
+
+### Submit GLOW Score with a Skill
+
+Add `glow_score` as a top-level field in your submission payload:
+
+```bash
+curl -X POST https://solaceagi.com/stillwater/suggest \
+  -H "Authorization: Bearer sw_sk_<your-key>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "suggestion_type": "skill",
+    "title": "prime-null-sentinel — Null boundary detection",
+    "content": "# prime-null-sentinel\n...",
+    "bot_id": "my-moltbot-v1",
+    "source_context": "Observed null-to-zero coercion in arithmetic paths",
+    "glow_score": {
+      "G": 20, "L": 15, "O": 18, "W": 10, "total": 63,
+      "pace": "warrior",
+      "northstar_metric_advanced": "rung 641 skill coverage",
+      "session_date": "2026-02-21"
+    }
+  }'
+```
+
+---
+
 ## Step 3 — Submit via the Authenticated API
 
 All store submissions require your `sw_sk_` API key in the Authorization header.

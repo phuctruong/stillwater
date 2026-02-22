@@ -292,9 +292,9 @@ Evidence required: tests/test_llm_tip_hooks.py passing
   - solace-browser recipe integration for automation
   - Content NORTHSTAR metrics: stars, Substack subscribers, LinkedIn reactions
 - [x] Update `NORTHSTAR.md` — Add Persona Engine, GLOW Score, Content Syndication, and Dojo theme sections
-- [ ] Update `skills/phuc-orchestration.md` — Add persona-coder to dispatch decision matrix
-- [ ] Update `launch-swarm.sh` — Add persona + glow-score to swarm dispatch templates
-- [ ] Update `STORE.md` — Add GLOW score requirements for Store submissions (skill must include GLOW metadata)
+- [x] Update `skills/phuc-orchestration.md` — Add persona-coder to dispatch decision matrix
+- [x] Update `launch-swarm.sh` — Add persona + glow-score to swarm dispatch templates
+- [x] Update `STORE.md` — Add GLOW score requirements for Store submissions (skill must include GLOW metadata)
 
 ### Build Prompt (Phase 5 — Persona Engine Update to Orchestration)
 

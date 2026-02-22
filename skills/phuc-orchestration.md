@@ -119,6 +119,7 @@ The main session is **FORBIDDEN** from:
 | Workspace cleanup, archival | YES | Janitor | `prime-safety` + `phuc-cleanup` |
 | Wish contract, backlog management | YES | Wish Manager | `prime-safety` + `prime-wishes` + `prime-mermaid` |
 | Adversarial review, verification | YES | Skeptic | `prime-safety` + `prime-coder` + `phuc-forecast` |
+| Persona-enhanced coding | YES | Persona Coder | `prime-safety` + `prime-coder` + `persona-engine` |
 | Northstar path planning, goal decomposition | YES | Northstar Navigator | `prime-safety` + `phuc-forecast` + `northstar-reverse` |
 | Context-heavy multi-turn session | YES | Context Manager | `prime-safety` + `phuc-context` |
 | Simple single-step (<50 lines) | NO | — | Handle inline |
@@ -192,6 +193,13 @@ skill_packs:
     model_preferred: sonnet
     rung_default: 641
     artifacts: [context_capsule.json, compaction_log.txt]
+
+  persona_coder:
+    skills: [prime-safety, prime-coder, persona-engine]
+    model_preferred: sonnet
+    rung_default: 641
+    artifacts: [PATCH_DIFF, repro_red.log, repro_green.log, tests.json, evidence/plan.json, glow_score.json]
+    notes: "Use when task domain benefits from a domain-expert persona (e.g. linus for CLI, schneier for security, knuth for algorithms). Persona is injected after prime-safety; persona NEVER overrides prime-safety."
 
   northstar_navigator:
     skills: [prime-safety, phuc-forecast, northstar-reverse]
@@ -465,7 +473,7 @@ null_vs_zero_orchestration:
 output_contract:
   on_DISPATCH:
     required:
-      - agent_role: "[Coder|Planner|Mathematician|Graph_Designer|Swarm_Orchestrator|Writer|Skeptic|Janitor|Wish_Manager|Context_Manager]"
+      - agent_role: "[Coder|Planner|Mathematician|Graph_Designer|Swarm_Orchestrator|Writer|Skeptic|Janitor|Wish_Manager|Context_Manager|Persona_Coder|Northstar_Navigator]"
       - skill_pack_files: "list of skill files included"
       - rung_target: "[641|274177|65537]"
       - cnf_capsule_complete: true
