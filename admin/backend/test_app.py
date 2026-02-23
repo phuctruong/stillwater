@@ -48,6 +48,20 @@ class TestConfig:
 class TestDataEndpoints:
     """Test data CRUD endpoints."""
 
+    def test_get_facts(self):
+        """GET /api/data/facts should return facts list."""
+        resp = client.get("/api/data/facts")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "facts" in data
+        assert isinstance(data["facts"], list)
+        # Verify facts have expected structure
+        if data["facts"]:
+            fact = data["facts"][0]
+            assert "title" in fact
+            assert "fact" in fact
+            assert "category" in fact
+
     def test_get_jokes(self):
         """GET /api/data/jokes should return joke list."""
         resp = client.get("/api/data/jokes")

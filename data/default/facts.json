@@ -1,0 +1,162 @@
+[
+  {
+    "id": "fact_001",
+    "title": "Stillwater: Origin of the Name",
+    "fact": "Stillwater refers to calm, flowing water that moves steadily but appears still. It represents the balance between motion and stability — the Stillwater project embodies this: local-first with optional cloud sync.",
+    "category": "stillwater",
+    "source": "Project Philosophy",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "fact_002",
+    "title": "Did You Know? CPU-LLM Twin Architecture",
+    "fact": "Stillwater uses a triple-twin architecture where CPU (deterministic) and LLM (Haiku validator) work together. CPU makes fast decisions; LLM validates and learns. This reduces token costs by ~50% while improving accuracy.",
+    "category": "stillwater",
+    "source": "Orchestration Design",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "fact_003",
+    "title": "OAuth3: The Next Generation",
+    "fact": "OAuth2 (used everywhere) has limitations for AI agents. OAuth3 (coming with Stillwater) is a valet key pattern where AI agents can delegate to sub-agents without exposing master credentials. First open standard for AI agency.",
+    "category": "security",
+    "source": "Competitive Analysis",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "fact_004",
+    "title": "Data: The Filing Cabinet Metaphor",
+    "fact": "Your Stillwater data is organized like a filing cabinet with two drawers: data/default (factory templates) and data/custom (your personal drawer). Git pulls update the factory drawer safely; your personal drawer is never touched.",
+    "category": "stillwater",
+    "source": "Data Architecture",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "fact_005",
+    "title": "Did You Know? LEAK: Asymmetric Knowledge Transfer",
+    "fact": "LEAK is Stillwater's learning protocol: LLM teaches CPU new patterns through learned_*.jsonl files. It's asymmetric because CPU doesn't teach LLM; LLM only validates and learns. This prevents feedback loops and token waste.",
+    "category": "stillwater",
+    "source": "Three Pillars Architecture",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "fact_006",
+    "title": "Confidence Gates Prevent Hallucinations",
+    "fact": "Each phase in Stillwater has a confidence threshold: Phase 1 (0.70), Phase 2 (0.80), Phase 3 (0.90). Only high-confidence patterns are learned. This is why Stillwater rarely makes mistakes despite using cheaper Haiku models.",
+    "category": "stillwater",
+    "source": "Orchestration Design",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "fact_007",
+    "title": "Did You Know? API Key Format Matters",
+    "fact": "Stillwater API keys use sw_sk_ prefix (54 chars total, 192-bit entropy). Only the hash is stored in Firestore, never the raw key. This means a Firestore breach cannot leak usable API keys. Security by design.",
+    "category": "security",
+    "source": "API Key System",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "fact_008",
+    "title": "Local-First, Cloud-Optional",
+    "fact": "Stillwater works completely offline. Your jokes, wishes, preferences live in data/. Cloud sync to Firestore is optional. This is why Stillwater is cheaper than cloud-only solutions: you only pay for what you use.",
+    "category": "stillwater",
+    "source": "Architecture Philosophy",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "fact_009",
+    "title": "Did You Know? The Never-Worse Doctrine",
+    "fact": "Stillwater follows the Never-Worse principle: each update must maintain or improve functionality. No breaking changes. This is enforced through rung ladders (641 → 274177 → 65537) and comprehensive testing.",
+    "category": "stillwater",
+    "source": "Development Philosophy",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "fact_010",
+    "title": "Rung Target: How Stillwater Measures Quality",
+    "fact": "Stillwater uses 'rung targets' to measure code quality: 641 (deterministic, testable), 274177 (irreversible ops, audited), 65537 (production/security). Each rung is a quality gate. Higher rung = higher confidence.",
+    "category": "stillwater",
+    "source": "Quality Assurance",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "fact_011",
+    "title": "Did You Know? Swarms Beat Individuals",
+    "fact": "Stillwater's swarm architecture (combining multiple agents: coder, skeptic, mathematician, writer) outperforms single LLM models by 30-40% on complex tasks. This is why Stillwater can use cheaper models without sacrificing quality.",
+    "category": "stillwater",
+    "source": "Swarm Architecture",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "fact_012",
+    "title": "Firestore: Pay-as-You-Go Pricing",
+    "fact": "Stillwater uses Firestore for cloud storage. Cost: ~$0.0001 per document read/write. A typical session costs ~$0.001. Compare: API-only solutions cost $0.005+ per request. Stillwater saves 80% on cloud costs.",
+    "category": "economics",
+    "source": "Cost Analysis",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "fact_013",
+    "title": "Did You Know? Mermaid Diagrams are Executable",
+    "fact": "All Stillwater workflows (wishes, combos, orchestration) are stored as Mermaid diagrams. This means they're both human-readable and machine-executable. State machines can be auto-validated without parsing custom DSLs.",
+    "category": "stillwater",
+    "source": "Workflow Design",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "fact_014",
+    "title": "Skills are Composable Building Blocks",
+    "fact": "Stillwater ships with 30+ skills (prime-safety, prime-coder, phuc-forecast, eq-core, etc.). Skills are composable: you combine them into recipes (bugfix, qa-audit, ci-triage). Recipes combine into combos. Modularity = reusability.",
+    "category": "stillwater",
+    "source": "Skill Architecture",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "fact_015",
+    "title": "Did You Know? Personal Data Never Leaves Your Machine (Unless You Sync)",
+    "fact": "Your jokes, wishes, identity, preferences stay in data/default and data/custom locally. Firestore sync is optional and requires explicit API key configuration. This is why Stillwater can never accidentally leak your data.",
+    "category": "privacy",
+    "source": "Data Architecture",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "fact_016",
+    "title": "The Belt System: Progress Tracking",
+    "fact": "Stillwater users earn belts as they progress: White (first recipe), Yellow (PM triplets), Orange (submit to store), Green (rung 65537), Blue (cloud 24/7), Black (mastery). Your belt represents your Stillwater journey.",
+    "category": "gamification",
+    "source": "User Progression",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "fact_017",
+    "title": "Did You Know? Stillwater is Open Source First",
+    "fact": "Stillwater core (CLI, skills, recipes) is open source (OSS). Users can self-host everything. The paid tier (solaceagi.com) is optional cloud convenience. This is why Stillwater has no vendor lock-in.",
+    "category": "stillwater",
+    "source": "Business Model",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "fact_018",
+    "title": "Performance: Why Stillwater is Fast",
+    "fact": "Stillwater achieves sub-second response times because: (1) Local-first (no network latency), (2) Learned patterns are cached, (3) Confidence gates skip unnecessary LLM calls, (4) Haiku is 10x faster than larger models.",
+    "category": "performance",
+    "source": "Architecture Design",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "fact_019",
+    "title": "Did You Know? Silence is Data",
+    "fact": "In Stillwater, when LLM confidence is LOW, learning is SKIPPED. This is intentional: low-confidence patterns pollute future decisions. It's better to learn nothing than to learn poorly. This is called 'silence is data'.",
+    "category": "stillwater",
+    "source": "Learning Philosophy",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "fact_020",
+    "title": "The Paradox: Fewer Tokens = Better Results",
+    "fact": "Conventional wisdom: more LLM calls = better results. Stillwater flips this: by using CPU for fast decisions + LLM for validation (not generation), Stillwater uses 50% fewer tokens but achieves 30% better accuracy. Quality ≠ cost.",
+    "category": "economics",
+    "source": "Research Findings",
+    "added_at": "2026-02-23"
+  }
+]

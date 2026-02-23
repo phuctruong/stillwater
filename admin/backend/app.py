@@ -47,6 +47,25 @@ async def get_config():
         "api_url": SOLACEAGI_API_URL
     }
 
+@app.get("/api/data/facts")
+async def get_facts():
+    """Load interesting facts from DataRegistry."""
+    import json
+    data = registry.load_data_file("facts.json")
+    if not data:
+        return {"facts": []}
+    try:
+        parsed = json.loads(data)
+        # facts.json is a direct array
+        if isinstance(parsed, list):
+            return {"facts": parsed}
+        elif isinstance(parsed, dict):
+            return {"facts": parsed.get("facts", [])}
+        else:
+            return {"facts": []}
+    except json.JSONDecodeError:
+        return {"facts": []}
+
 @app.get("/api/data/jokes")
 async def get_jokes():
     """Load jokes from DataRegistry."""
