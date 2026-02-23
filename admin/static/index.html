@@ -14,7 +14,7 @@
     <div class="bg-overlay"></div>
     <header class="topbar">
       <div class="topbar-left">
-        <img id="dropletLogo" src="/images/droplet-kungfu.png" alt="Droplet doing Kungfu" class="droplet-icon" onload="setupGifSwitch()">
+        <img id="dropletLogo" src="/images/droplet-logo-merge.gif" alt="Droplet Logo" class="droplet-icon" onload="setupGifSwitch()">
         <div>
           <h1>Stillwater Software 5.0 Dojo</h1>
           <p>Linux for AI: Teach your AI Kungfu.</p>
@@ -212,10 +212,12 @@
       </section>
 
       <section class="panel">
-        <h2>CLI Chat Interface</h2>
-        <p class="sub">Execute <code>stillwater cli</code> commands interactively. All commands are server-side allowlisted.</p>
+        <div style="display: flex; gap: 2rem; align-items: flex-start;">
+          <div style="flex: 1;">
+            <h2>CLI Chat Interface</h2>
+            <p class="sub">Execute <code>stillwater cli</code> commands interactively. All commands are server-side allowlisted.</p>
 
-        <div id="cli-chat-container">
+            <div id="cli-chat-container">
           <div id="cli-output"></div>
           <div id="cli-input-area">
             <input type="text" id="cli-input" placeholder="$ stillwater skills list" autocomplete="off">
@@ -227,6 +229,10 @@
             <a onclick="document.getElementById('cli-input').value='skills list'; document.getElementById('cli-send-btn').click();">skills list</a>
             <a onclick="document.getElementById('cli-input').value='recipes list'; document.getElementById('cli-send-btn').click();">recipes list</a>
             <a onclick="document.getElementById('cli-input').value='help'; document.getElementById('cli-send-btn').click();">help</a>
+          </div>
+          </div>
+          <div style="flex-shrink: 0;">
+            <img src="/images/droplet-kungfu.png" alt="Droplet Kung-Fu" style="max-width: 200px; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
           </div>
         </div>
       </section>
@@ -244,8 +250,10 @@
     <script>
         function setupGifSwitch() {
             const dropletLogo = document.getElementById('dropletLogo');
-            // Kung fu image is static (no animation needed)
-            // If needed in future, can switch to other animations here
+            // Merge animation is 8 seconds, then switch to rotating animation
+            setTimeout(() => {
+                dropletLogo.src = '/images/droplet-logo-rotating.gif';
+            }, 8200);
         }
     </script>
 
