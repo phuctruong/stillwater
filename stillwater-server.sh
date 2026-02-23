@@ -140,18 +140,35 @@ cmd_start() {
 cmd_stop() {
     local pid
     pid=$(_read_pid)
+
+    # Kill any existing uvicorn processes on the port
+    if command -v lsof &>/dev/null; then
+        local port_pid
+        port_pid=$(lsof -ti :"$PORT" 2>/dev/null | head -1)
+        if [[ -n "$port_pid" ]] && [[ "$port_pid" != "$pid" ]]; then
+            _log "Found orphan process on port $PORT (pid=$port_pid), killing..."
+            kill -9 "$port_pid" 2>/dev/null || true
+        fi
+    fi
+
     if [[ -z "$pid" ]] || ! _pid_running "$pid"; then
         _log "Not running"
         rm -f "$PID_FILE"
         return 0
     fi
+
     _log "Stopping server (pid=$pid)..."
     kill "$pid" 2>/dev/null || true
     sleep 1
+
     if _pid_running "$pid"; then
         _warn "Process didn't stop gracefully, killing it..."
         kill -9 "$pid" 2>/dev/null || true
     fi
+
+    # Kill any child processes that may have been orphaned
+    pkill -P "$pid" 2>/dev/null || true
+
     rm -f "$PID_FILE"
     _success "Stopped (pid=$pid)"
 }
