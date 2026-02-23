@@ -283,9 +283,9 @@ flowchart TD
 
 ## Source Files
 
-- `/home/phuc/projects/stillwater/skills/persona-engine.md` — full persona registry (v1.4.0): all personas, voice rules, domain expertise, catchphrases, integration with Stillwater, layering rules, forbidden states
-- `/home/phuc/projects/stillwater/skills/phuc-orchestration.md` — §3 Canonical Skill Packs: `persona_coder` pack definition
-- `/home/phuc/projects/stillwater/CLAUDE.md` — condensed persona registry reference
+- `~/projects/stillwater/skills/persona-engine.md` — full persona registry (v1.4.0): all personas, voice rules, domain expertise, catchphrases, integration with Stillwater, layering rules, forbidden states
+- `~/projects/stillwater/skills/phuc-orchestration.md` — §3 Canonical Skill Packs: `persona_coder` pack definition
+- `~/projects/stillwater/CLAUDE.md` — condensed persona registry reference
 
 ## Coverage
 

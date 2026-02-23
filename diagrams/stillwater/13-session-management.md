@@ -187,9 +187,9 @@ flowchart TD
 
 ## Source Files
 
-- `/home/phuc/projects/stillwater/cli/src/stillwater/session_manager.py` — full `SessionManager` class: `Session` dataclass, `create_session()`, `get_session()`, `close_session()`, `list_active()`, `list_all()`, `purge_expired()`, `session_count()`
-- `/home/phuc/projects/stillwater/admin/session_manager.py` — admin variant
-- `/home/phuc/projects/stillwater/store/rung_validator.py` — `RungValidator.verify_evidence()` used with session's evidence_dir
+- `~/projects/stillwater/cli/src/stillwater/session_manager.py` — full `SessionManager` class: `Session` dataclass, `create_session()`, `get_session()`, `close_session()`, `list_active()`, `list_all()`, `purge_expired()`, `session_count()`
+- `~/projects/stillwater/admin/session_manager.py` — admin variant
+- `~/projects/stillwater/store/rung_validator.py` — `RungValidator.verify_evidence()` used with session's evidence_dir
 
 ## Coverage
 

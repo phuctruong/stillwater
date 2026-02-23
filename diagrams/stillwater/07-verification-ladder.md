@@ -120,10 +120,10 @@ flowchart TD
 
 ## Source Files
 
-- `/home/phuc/projects/stillwater/store/rung_validator.py` — `RungValidator` class, gate logic, `VALID_RUNGS`, `REQUIRED_EVIDENCE_FILES`, `verify_evidence()`, `verify_rung()`, `validate_bundle()`
-- `/home/phuc/projects/stillwater/skills/phuc-orchestration.md` — §7 Verification Ladder (orchestration rungs)
-- `/home/phuc/projects/stillwater/skills/phuc-qa.md` — §F Verification Ladder (QA rungs)
-- `/home/phuc/projects/stillwater/CLAUDE.md` — condensed rung defaults
+- `~/projects/stillwater/store/rung_validator.py` — `RungValidator` class, gate logic, `VALID_RUNGS`, `REQUIRED_EVIDENCE_FILES`, `verify_evidence()`, `verify_rung()`, `validate_bundle()`
+- `~/projects/stillwater/skills/phuc-orchestration.md` — §7 Verification Ladder (orchestration rungs)
+- `~/projects/stillwater/skills/phuc-qa.md` — §F Verification Ladder (QA rungs)
+- `~/projects/stillwater/CLAUDE.md` — condensed rung defaults
 
 ## Coverage
 

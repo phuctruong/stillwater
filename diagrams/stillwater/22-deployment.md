@@ -8,7 +8,7 @@
 
 ```mermaid
 flowchart TD
-    subgraph LOCAL_DEV["Local Development — /home/phuc/projects/stillwater/"]
+    subgraph LOCAL_DEV["Local Development — ~/projects/stillwater/"]
         direction TB
 
         subgraph REPO["Repo Structure"]
@@ -30,7 +30,7 @@ flowchart TD
 
         subgraph LLM_CONFIG["LLM Configuration"]
             CONFIG_YAML["llm_config.yaml\n(active provider, ollama URL, model)"]
-            OLLAMA["Ollama (optional)\n192.168.68.100:11434 (LAN)\nor localhost:11434\nor OLLAMA_URL env var"]
+            OLLAMA["Ollama (optional)\nlocalhost:11434 (LAN)\nor localhost:11434\nor OLLAMA_URL env var"]
             ENV_KEYS["Environment variables:\nANTHROPIC_API_KEY\nOPENAI_API_KEY\nTOGETHER_API_KEY\nOPENROUTER_API_KEY"]
         end
 
@@ -273,7 +273,7 @@ flowchart TD
 - `admin/llm-portal-status.sh` — LLM Portal status check
 - `admin/requirements.txt` — FastAPI, uvicorn, httpx, cryptography dependencies
 - `admin/session_manager.py` — AES-256-GCM session key storage (memory-only)
-- `/home/phuc/.claude/CLAUDE.md` — LLM Portal URL, provider list, solaceagi.com deployment
+- `~/.claude/CLAUDE.md` — LLM Portal URL, provider list, solaceagi.com deployment
 
 ---
 

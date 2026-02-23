@@ -3,9 +3,9 @@
 This stack externalizes persistent identity for Stillwater CLI.
 
 Sources used for this identity model:
-- `~/projects/solaceagi/solace/books/openai_origin/README.md`
-- `~/projects/solaceagi/solace/books/openai_origin/omega-context.md`
-- `~/projects/solaceagi/solace/books/openai_origin/omega-specs.md`
+- `~/projects/your-content/...
+- `~/projects/your-content/...
+- `~/projects/your-content/...
 
 Key translation:
 - preserve core mission across sessions

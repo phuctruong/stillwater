@@ -301,9 +301,9 @@ class TestSkillManifest:
     def test_prime_coder_skill_exists(self):
         assert (SKILLS_DIR / "prime-coder.md").exists(), "prime-coder.md missing from skills/"
 
-    def test_phuc_orchestration_skill_exists(self):
-        assert (SKILLS_DIR / "phuc-orchestration.md").exists(), (
-            "phuc-orchestration.md missing from skills/"
+    def test_prime_test_skill_exists(self):
+        assert (SKILLS_DIR / "prime-test.md").exists(), (
+            "prime-test.md missing from skills/"
         )
 
 

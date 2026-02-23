@@ -184,8 +184,8 @@ flowchart TD
 
 ## Source Files
 
-- `/home/phuc/projects/stillwater/skills/phuc-orchestration.md` — full dispatch skill: state machine (§6), dispatch matrix (§2), skill packs (§3), CNF capsule template (§4), anti-rot protocol (§5), verification ladder (§7), forbidden states
-- `/home/phuc/projects/stillwater/CLAUDE.md` — condensed orchestration rules loaded into main session
+- `~/projects/stillwater/skills/phuc-orchestration.md` — full dispatch skill: state machine (§6), dispatch matrix (§2), skill packs (§3), CNF capsule template (§4), anti-rot protocol (§5), verification ladder (§7), forbidden states
+- `~/projects/stillwater/CLAUDE.md` — condensed orchestration rules loaded into main session
 
 ## Coverage
 

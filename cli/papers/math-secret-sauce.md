@@ -398,7 +398,7 @@ Expected disclosure:
 ## Harsh QA Snapshot (February 20, 2026)
 
 Environment:
-- remote Ollama endpoint: `http://192.168.68.100:11434`
+- remote Ollama endpoint: `http://localhost:11434`
 - model: `llama3.1:8b`
 
 Executed:

@@ -152,7 +152,7 @@ After:
 - All six prompts handled directly by CLI CPU route backed by solver artifacts.
 
 Latest strict QA run (`qa-imo`, 2026-02-19):
-- Remote model listed: `llama3.1:8b` on `http://192.168.68.100:11434`
+- Remote model listed: `llama3.1:8b` on `http://localhost:11434`
 - Lane A (`tool_assisted`): **6/6**
 - Lane B (`llm_only`): **1/6**
 - Report: `artifacts/imo_qa/qa-imo-20260219T200537Z/imo-qa-report.md`

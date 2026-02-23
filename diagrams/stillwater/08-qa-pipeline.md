@@ -203,10 +203,10 @@ flowchart TD
 
 ## Source Files
 
-- `/home/phuc/projects/stillwater/skills/phuc-qa.md` — full QA skill: state machine, decoupled verification (CoVe), falsifier requirement, integration probes, evidence schema, GLOW taxonomy, ecosystem boundaries
-- `/home/phuc/projects/stillwater/skills/prime-coder.md` — red-green gate, evidence bundle requirements
-- `/home/phuc/projects/stillwater/skills/prime-mermaid.md` — diagram-as-code standard, canonical format, SHA-256 identity
-- `/home/phuc/projects/stillwater/store/rung_validator.py` — rung validation logic
+- `~/projects/stillwater/skills/phuc-qa.md` — full QA skill: state machine, decoupled verification (CoVe), falsifier requirement, integration probes, evidence schema, GLOW taxonomy, ecosystem boundaries
+- `~/projects/stillwater/skills/prime-coder.md` — red-green gate, evidence bundle requirements
+- `~/projects/stillwater/skills/prime-mermaid.md` — diagram-as-code standard, canonical format, SHA-256 identity
+- `~/projects/stillwater/store/rung_validator.py` — rung validation logic
 
 ## Coverage
 

@@ -108,8 +108,8 @@ flowchart LR
 
 ## Source Files
 
-- `/home/phuc/projects/stillwater/CLAUDE.md` — 9-project architecture description
-- `/home/phuc/.claude/CLAUDE.md` — ecosystem hub memory, pricing tiers, project locations
+- `~/projects/stillwater/CLAUDE.md` — 9-project architecture description
+- `~/.claude/CLAUDE.md` — ecosystem hub memory, pricing tiers, project locations
 - `store/auth.py` — `sw_sk_` key format, HMAC validation
 - `admin/llm_portal.py` — LLM provider routing documentation
 - `cli/src/stillwater/provider_registry.py` — Together.ai, OpenRouter, Anthropic, OpenAI providers

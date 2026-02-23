@@ -278,7 +278,7 @@ claude-code:                # Local Claude CLI wrapper
 
 ollama:                     # Remote Ollama server
   type: "http"
-  url: "http://192.168.68.100:11434"
+  url: "http://localhost:11434"
   model: "llama3.1:8b"
   requires_api_key: false
 

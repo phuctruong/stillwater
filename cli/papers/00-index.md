@@ -52,9 +52,9 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q cli/tests
 - Root papers: `papers/*.md` (especially `papers/05-software-5.0.md`)
 - Root books: `books/PERSISTENT-INTELLIGENCE.md`, `books/HOW-HUMANS-OUTSOURCED-THEIR-MINDS.md`
 - Solace canon signals:
-  - `~/projects/solace-cli/canon/cli/wishes/phase13/improvements2.md`
-  - `~/projects/solace-cli/canon/cli/wishes/phase7/improvements2.md`
-  - `~/projects/solace-cli/canon/prime-mermaid/papers/cli-plan.md`
-  - `~/projects/solace-cli/canon/prime-wishes/papers/wish-theory.md`
+  - `~/projects/your-private-extension/...
+  - `~/projects/your-private-extension/...
+  - `~/projects/your-private-extension/...
+  - `~/projects/your-private-extension/...
 - External market signal:
   - https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/debt-spiral-or-new-golden-age-super-bowl-insider-trading-booming-token-budgets-ferrari-s-new-ev

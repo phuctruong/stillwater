@@ -350,7 +350,7 @@ END_SKILL
 #   skills/roadmap-orchestration.md — Hub-spoke roadmap coordination (cross-session, cross-project)
 #
 # LLM PORTAL: http://localhost:8788 (start: bash admin/start-llm-portal.sh)
-#   Providers: ollama (192.168.68.100:11434), claude-code (localhost:8080),
+#   Providers: ollama (localhost:11434), claude-code (localhost:8080),
 #              claude API, openai, openrouter, gemini, togetherai
 #   Universal LLM client: from stillwater.llm_client import llm_call, llm_chat
 #   Example: llm_call("ping", provider="offline")  # works immediately

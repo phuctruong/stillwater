@@ -17,11 +17,11 @@ def test_update_llm_config_text_updates_provider_and_ollama_fields() -> None:
     new = llm.update_llm_config_text(
         old,
         provider="ollama",
-        ollama_url="192.168.68.100:11434",
+        ollama_url="localhost:11434",
         ollama_model="qwen2.5-coder:7b",
     )
     assert 'provider: "ollama"' in new
-    assert '  url: "http://192.168.68.100:11434"' in new
+    assert '  url: "http://localhost:11434"' in new
     assert '  model: "qwen2.5-coder:7b"' in new
 
 
@@ -34,7 +34,7 @@ def test_candidate_ollama_urls_reads_solace_settings(tmp_path: Path) -> None:
     )
     solace_settings = tmp_path / "settings.json"
     solace_settings.write_text(
-        json.dumps({"ollama_host": "192.168.68.100", "ollama_port": 11434}),
+        json.dumps({"ollama_host": "localhost", "ollama_port": 11434}),
         encoding="utf-8",
     )
     urls = llm.candidate_ollama_urls(
@@ -44,12 +44,12 @@ def test_candidate_ollama_urls_reads_solace_settings(tmp_path: Path) -> None:
         solace_settings_path=solace_settings,
     )
     assert "http://localhost:11434" in urls
-    assert "http://192.168.68.100:11434" in urls
+    assert "http://localhost:11434" in urls
 
 
 def test_choose_preferred_ollama_url_prefers_localhost() -> None:
     probes = [
-        {"url": "http://192.168.68.100:11434", "reachable": True, "host": "192.168.68.100"},
+        {"url": "http://localhost:11434", "reachable": True, "host": "localhost"},
         {"url": "http://localhost:11434", "reachable": True, "host": "localhost"},
     ]
     assert llm.choose_preferred_ollama_url(probes) == "http://localhost:11434"

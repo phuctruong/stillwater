@@ -250,9 +250,9 @@ class TestSolaceRemoteUrl:
 
     def test_custom_host_and_port(self, tmp_path):
         p = tmp_path / "settings.json"
-        p.write_text(json.dumps({"ollama_host": "192.168.68.100", "ollama_port": 11434}))
+        p.write_text(json.dumps({"ollama_host": "localhost", "ollama_port": 11434}))
         result = _solace_remote_url(p)
-        assert result == "http://192.168.68.100:11434"
+        assert result == "http://localhost:11434"
 
     def test_missing_port_defaults_to_11434(self, tmp_path):
         p = tmp_path / "settings.json"

@@ -13,7 +13,7 @@ key_id:   acct_<uuid4 hex>   (stored in DB, returned to developer)
 key_hash: HMAC-SHA256(raw_key, HMAC_SECRET)   (stored in DB, raw key never stored)
 
 HMAC_SECRET: env STILLWATER_HMAC_SECRET
-             default: "stillwater-store-v1-secret" (override in production)
+             default: "[SET VIA ENV: STILLWATER_HMAC_SECRET]" (override in production)
 ```
 
 ## Key Generation Flow
@@ -138,7 +138,7 @@ flowchart LR
     C4["RATE_LIMIT_WINDOW_SECONDS = 86400\n(24 hours)"]
     C5["REPUTATION_ACCEPT = +1.0"]
     C6["REPUTATION_REJECT = -0.5"]
-    C7["HMAC: sha256\nenv: STILLWATER_HMAC_SECRET\ndefault: 'stillwater-store-v1-secret'"]
+    C7["HMAC: sha256\nenv: STILLWATER_HMAC_SECRET\ndefault: '[SET VIA ENV: STILLWATER_HMAC_SECRET]'"]
 
     class C1,C2,C3,C4,C5,C6,C7 const
 ```

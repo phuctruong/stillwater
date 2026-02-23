@@ -131,16 +131,6 @@
 - [ ] Persona system integration into launch-swarm.sh (auto-detect domain → inject persona)
 - [ ] STORE.md GLOW score requirements for skill submissions
 
-## Stripe Billing Integration (solaceagi)
-
-| Item | Status | Rung | Date | QA Notes |
-|------|--------|------|------|----------|
-| scripts/stripe_bootstrap.py | done | 641 | 2026-02-21 | 4 products + 4 prices created in Stripe live account |
-| solace/api/billing.py | done | 641 | 2026-02-21 | ~370 lines, 4 endpoints (checkout/webhook/portal/status), fail-closed tier mapping |
-| web/stillwater/pricing.html | done | 641 | 2026-02-21 | 5-tier pricing page, dark theme, checkout integration |
-| tests/test_billing.py | done | 641 | 2026-02-21 | 15 tests, all mocked, idempotent webhooks, no float gate |
-| web/ infra patches | done | 641 | 2026-02-21 | api_server.py + nginx.conf + Dockerfile + requirements.txt |
-
 ## Build Log
 
 | Date | What | Rung | Agent | Session |
@@ -154,7 +144,7 @@
 | 2026-02-21 | QA postmortem pm-2026-02-21-003 — added 429 rate-limit test + unexpected status test (35 tests, 51/51 total) | 641 | opus (QA) | central hub |
 | 2026-02-21 | Phase 3: admin/session_manager.py + admin/llm_portal.py extended + llm_config.yaml extended (160 + 111 + 25 lines, 28 new tests, 96 total, all passing, backward compat verified) | 641 | sonnet (coder) | stillwater /build session |
 | 2026-02-21 | Phase 4: semgrep 0 + bandit 0 + behavioral hash (3-seed consensus) + GitHub Actions CI + README badge (41 tests) | 65537 | opus (orchestrator) + sonnet (coder) | central hub |
-| 2026-02-21 | Stripe billing integration: scripts/stripe_bootstrap.py + solace/api/billing.py + web/stillwater/pricing.html + tests/test_billing.py (15 tests, idempotent webhooks, 5-tier pricing) | 641 | sonnet (coder) | solaceagi build session |
+| 2026-02-21 | Billing integration (15 tests, idempotent webhooks) | 641 | sonnet (coder) | solaceagi build session |
 | 2026-02-21 | Phase 2.5: LLM Usage Tracker — usage_tracker.py + tip_callback in llm_call/llm_chat + SessionUsageTracker (Decimal-only, backward compat) | 641 | sonnet (coder) | stillwater build session |
 | 2026-02-21 | Phase 5: Persona Engine v1.3.0 — 50 personas (11 categories) + GLOW score skill + persona-coder swarm + papers 34-39 + all 19 swarms persona-enhanced (+27% A/B avg) | 641 | sonnet (coder) | stillwater build session |
 | 2026-02-21 | Phase 6: Hackathon System — hackathon.md skill + hackathon-lead swarm + hackathon-master persona + paper #40 + 3 sprint combos (sprint/lightning/marathon) | 641 | sonnet (coder) | stillwater build session |
@@ -178,11 +168,10 @@
 | Phases complete | 7 / 7 — ALL DONE |
 | Rung of Stillwater itself | 65537 CI badge deployed |
 | Community contributors | 1 (Phuc) |
-| Store API live | YES — www.solaceagi.com/stillwater (prod) + qa.solaceagi.com/stillwater (QA). 12 endpoints, Firestore, sw_sk_ auth, store.html frontend |
+| Store API live | YES — 12 endpoints, Firestore, sw_sk_ auth, store.html frontend |
 | LLM Portal providers | 9 (claude-code, offline, openai, claude, openrouter, togetherai, gemini, ollama, qwen, custom) |
 | Ecosystem projects | 9 (6 OSS + 3 private) |
-| Stripe products | 4 (student/$8 + warrior/$48 + master/$88 + grandmaster/$188) |
-| Billing endpoints | 4 (checkout/webhook/portal/status) |
+| Billing integration | Complete (see private repo for details) |
 | GLOW A/B improvement | +27% average across persona-enhanced swarms |
 | Hackathon combos | 3 (standard 4h, lightning 2h, marathon 8h) |
 | Mermaid diagrams | 22 files, 92 mermaid blocks (system architecture → deployment) |

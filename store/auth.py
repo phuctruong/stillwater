@@ -26,7 +26,10 @@ from .models import APIKey
 
 # HMAC secret for key hashing. In production this would be an env secret.
 # For v1 (local dev / tests) we use a fixed string that can be overridden by env.
-_HMAC_SECRET = os.environ.get("STILLWATER_HMAC_SECRET", "stillwater-store-v1-secret").encode()
+_HMAC_SECRET_RAW = os.environ.get("STILLWATER_HMAC_SECRET", "")
+if not _HMAC_SECRET_RAW:
+    raise RuntimeError("STILLWATER_HMAC_SECRET env var must be set. No default allowed.")
+_HMAC_SECRET = _HMAC_SECRET_RAW.encode()
 
 # Rate limit: max submissions per rolling 24-hour window
 RATE_LIMIT_MAX = 10

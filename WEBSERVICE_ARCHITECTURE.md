@@ -85,7 +85,7 @@ Both scripts follow the same pattern for consistency.
 ### Stillwater Server Management
 
 ```bash
-cd /home/phuc/projects/stillwater
+cd ~/projects/stillwater
 
 # Start server (opens admin UI at localhost:8000)
 ./stillwater-server.sh start
@@ -109,7 +109,7 @@ cd /home/phuc/projects/stillwater
 ### Solace Browser Server Management
 
 ```bash
-cd /home/phuc/projects/solace-browser
+cd ~/projects/solace-browser
 
 # Start in HEADED mode (shows browser window)
 ./solace-browser-server.sh start
