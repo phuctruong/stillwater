@@ -1,0 +1,512 @@
+{
+  "variants": [
+    {
+      "id": "A",
+      "name": "version-command",
+      "config": {
+        "command": "version",
+        "endpoint": "http://127.0.0.1:60441/api/cli/run"
+      }
+    },
+    {
+      "id": "B",
+      "name": "doctor-command",
+      "config": {
+        "command": "doctor",
+        "endpoint": "http://127.0.0.1:60441/api/cli/run"
+      }
+    },
+    {
+      "id": "C",
+      "name": "llm-status-command",
+      "config": {
+        "command": "llm-status",
+        "endpoint": "http://127.0.0.1:60441/api/cli/run"
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "id": "t1",
+      "prompt": "Check system health",
+      "expected_output": null,
+      "tags": [
+        "health"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "t2",
+      "prompt": "Verify installation",
+      "expected_output": null,
+      "tags": [
+        "installation"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "t3",
+      "prompt": "List capabilities",
+      "expected_output": null,
+      "tags": [
+        "capabilities"
+      ],
+      "metadata": {}
+    }
+  ],
+  "summary": {
+    "A": {
+      "variant_name": "version-command",
+      "n_total": 9,
+      "n_success": 9,
+      "success_rate": 1.0,
+      "mean_quality": 1.0,
+      "std_quality": 0.0,
+      "mean_latency_ms": 53.29,
+      "p50_latency_ms": 52.55,
+      "p95_latency_ms": 56.94,
+      "total_tokens": 0,
+      "total_cost_usd": 0.0
+    },
+    "B": {
+      "variant_name": "doctor-command",
+      "n_total": 9,
+      "n_success": 9,
+      "success_rate": 1.0,
+      "mean_quality": 0.0,
+      "std_quality": 0.0,
+      "mean_latency_ms": 52.38,
+      "p50_latency_ms": 51.78,
+      "p95_latency_ms": 55.98,
+      "total_tokens": 0,
+      "total_cost_usd": 0.0
+    },
+    "C": {
+      "variant_name": "llm-status-command",
+      "n_total": 9,
+      "n_success": 9,
+      "success_rate": 1.0,
+      "mean_quality": 1.0,
+      "std_quality": 0.0,
+      "mean_latency_ms": 102.7,
+      "p50_latency_ms": 101.54,
+      "p95_latency_ms": 105.49,
+      "total_tokens": 0,
+      "total_cost_usd": 0.0
+    }
+  },
+  "pairwise": {
+    "A_vs_B": {
+      "n": 3,
+      "mean_diff": 1.0,
+      "t_stat": 0.0,
+      "p_value": 1.0,
+      "significant": false,
+      "confidence_interval_95": [
+        0.0,
+        0.0
+      ],
+      "effect_size": 0.0,
+      "error": null
+    },
+    "A_vs_C": {
+      "n": 3,
+      "mean_diff": 0.0,
+      "t_stat": 0.0,
+      "p_value": 1.0,
+      "significant": false,
+      "confidence_interval_95": [
+        0.0,
+        0.0
+      ],
+      "effect_size": 0.0,
+      "error": null
+    },
+    "B_vs_C": {
+      "n": 3,
+      "mean_diff": -1.0,
+      "t_stat": 0.0,
+      "p_value": 1.0,
+      "significant": false,
+      "confidence_interval_95": [
+        0.0,
+        0.0
+      ],
+      "effect_size": 0.0,
+      "error": null
+    }
+  },
+  "bonferroni": {
+    "pairs": [
+      "A_vs_B",
+      "A_vs_C",
+      "B_vs_C"
+    ],
+    "adjusted_p_values": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "adjusted_alpha": 0.016667,
+    "significant_mask": [
+      false,
+      false,
+      false
+    ],
+    "num_tests": 3
+  },
+  "winner": "A",
+  "raw_results": [
+    {
+      "variant_id": "A",
+      "task_id": "t1",
+      "repeat_index": 0,
+      "output": "{\"ok\": true, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"--version\"], \"command\": \"version\", \"ok\": true, \"returncode\": 0, \"stderr\": \"\", \"stdout\": \"stillwater 1.5.0\\n\"}}",
+      "latency_ms": 58.468,
+      "tokens": 0,
+      "quality_score": 1.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:18.317548Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "A",
+      "task_id": "t2",
+      "repeat_index": 0,
+      "output": "{\"ok\": true, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"--version\"], \"command\": \"version\", \"ok\": true, \"returncode\": 0, \"stderr\": \"\", \"stdout\": \"stillwater 1.5.0\\n\"}}",
+      "latency_ms": 52.801,
+      "tokens": 0,
+      "quality_score": 1.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:18.370373Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "A",
+      "task_id": "t3",
+      "repeat_index": 0,
+      "output": "{\"ok\": true, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"--version\"], \"command\": \"version\", \"ok\": true, \"returncode\": 0, \"stderr\": \"\", \"stdout\": \"stillwater 1.5.0\\n\"}}",
+      "latency_ms": 52.312,
+      "tokens": 0,
+      "quality_score": 1.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:18.422707Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "B",
+      "task_id": "t1",
+      "repeat_index": 0,
+      "output": "{\"ok\": false, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"doctor\"], \"command\": \"doctor\", \"ok\": false, \"returncode\": 2, \"stderr\": \"usage: stillwater [-h] [--version]\\n                  {paths,print,init,skills-ab,llm,twin,skills,wish,stack,recipe,books,papers,math-universal,imo-phuc,imo-history,oolong,learn,cleanup,replay,gen-ai-steroids-readme,demo,run,evidence,data}\\n                  ...\\nstillwater: error: argument cmd: invalid choice: 'doctor' (choose from 'paths', 'print', 'init', 'skills-ab', 'llm', 'twin', 'skills', 'wish', 'stack', 'recipe', 'books', 'papers', 'math-universal', 'imo-phuc', 'imo-history', 'oolong', 'learn', 'cleanup', 'replay', 'gen-ai-steroids-readme', 'demo', 'run', 'evidence', 'data')\\n\", \"stdout\": \"\"}}",
+      "latency_ms": 50.28,
+      "tokens": 0,
+      "quality_score": 0.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:18.473010Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "B",
+      "task_id": "t2",
+      "repeat_index": 0,
+      "output": "{\"ok\": false, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"doctor\"], \"command\": \"doctor\", \"ok\": false, \"returncode\": 2, \"stderr\": \"usage: stillwater [-h] [--version]\\n                  {paths,print,init,skills-ab,llm,twin,skills,wish,stack,recipe,books,papers,math-universal,imo-phuc,imo-history,oolong,learn,cleanup,replay,gen-ai-steroids-readme,demo,run,evidence,data}\\n                  ...\\nstillwater: error: argument cmd: invalid choice: 'doctor' (choose from 'paths', 'print', 'init', 'skills-ab', 'llm', 'twin', 'skills', 'wish', 'stack', 'recipe', 'books', 'papers', 'math-universal', 'imo-phuc', 'imo-history', 'oolong', 'learn', 'cleanup', 'replay', 'gen-ai-steroids-readme', 'demo', 'run', 'evidence', 'data')\\n\", \"stdout\": \"\"}}",
+      "latency_ms": 50.825,
+      "tokens": 0,
+      "quality_score": 0.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:18.523856Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "B",
+      "task_id": "t3",
+      "repeat_index": 0,
+      "output": "{\"ok\": false, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"doctor\"], \"command\": \"doctor\", \"ok\": false, \"returncode\": 2, \"stderr\": \"usage: stillwater [-h] [--version]\\n                  {paths,print,init,skills-ab,llm,twin,skills,wish,stack,recipe,books,papers,math-universal,imo-phuc,imo-history,oolong,learn,cleanup,replay,gen-ai-steroids-readme,demo,run,evidence,data}\\n                  ...\\nstillwater: error: argument cmd: invalid choice: 'doctor' (choose from 'paths', 'print', 'init', 'skills-ab', 'llm', 'twin', 'skills', 'wish', 'stack', 'recipe', 'books', 'papers', 'math-universal', 'imo-phuc', 'imo-history', 'oolong', 'learn', 'cleanup', 'replay', 'gen-ai-steroids-readme', 'demo', 'run', 'evidence', 'data')\\n\", \"stdout\": \"\"}}",
+      "latency_ms": 56.689,
+      "tokens": 0,
+      "quality_score": 0.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:18.580566Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "C",
+      "task_id": "t1",
+      "repeat_index": 0,
+      "output": "{\"ok\": true, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"llm\", \"status\"], \"command\": \"llm-status\", \"ok\": true, \"returncode\": 0, \"stderr\": \"\", \"stdout\": \"provider: claude-code\\nname: Claude Code Haiku (Legacy Server)\\nurl: http://localhost:8080\\nmodel: claude-haiku-4-5-20251001\\nstatus: \\u2705 Claude Code Haiku (Legacy Server) is running\\n\"}}",
+      "latency_ms": 100.904,
+      "tokens": 0,
+      "quality_score": 1.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:18.681493Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "C",
+      "task_id": "t2",
+      "repeat_index": 0,
+      "output": "{\"ok\": true, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"llm\", \"status\"], \"command\": \"llm-status\", \"ok\": true, \"returncode\": 0, \"stderr\": \"\", \"stdout\": \"provider: claude-code\\nname: Claude Code Haiku (Legacy Server)\\nurl: http://localhost:8080\\nmodel: claude-haiku-4-5-20251001\\nstatus: \\u2705 Claude Code Haiku (Legacy Server) is running\\n\"}}",
+      "latency_ms": 105.522,
+      "tokens": 0,
+      "quality_score": 1.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:18.787041Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "C",
+      "task_id": "t3",
+      "repeat_index": 0,
+      "output": "{\"ok\": true, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"llm\", \"status\"], \"command\": \"llm-status\", \"ok\": true, \"returncode\": 0, \"stderr\": \"\", \"stdout\": \"provider: claude-code\\nname: Claude Code Haiku (Legacy Server)\\nurl: http://localhost:8080\\nmodel: claude-haiku-4-5-20251001\\nstatus: \\u2705 Claude Code Haiku (Legacy Server) is running\\n\"}}",
+      "latency_ms": 101.539,
+      "tokens": 0,
+      "quality_score": 1.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:18.888605Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "A",
+      "task_id": "t1",
+      "repeat_index": 1,
+      "output": "{\"ok\": true, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"--version\"], \"command\": \"version\", \"ok\": true, \"returncode\": 0, \"stderr\": \"\", \"stdout\": \"stillwater 1.5.0\\n\"}}",
+      "latency_ms": 53.503,
+      "tokens": 0,
+      "quality_score": 1.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:18.942130Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "A",
+      "task_id": "t2",
+      "repeat_index": 1,
+      "output": "{\"ok\": true, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"--version\"], \"command\": \"version\", \"ok\": true, \"returncode\": 0, \"stderr\": \"\", \"stdout\": \"stillwater 1.5.0\\n\"}}",
+      "latency_ms": 52.418,
+      "tokens": 0,
+      "quality_score": 1.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:18.994571Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "A",
+      "task_id": "t3",
+      "repeat_index": 1,
+      "output": "{\"ok\": true, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"--version\"], \"command\": \"version\", \"ok\": true, \"returncode\": 0, \"stderr\": \"\", \"stdout\": \"stillwater 1.5.0\\n\"}}",
+      "latency_ms": 52.55,
+      "tokens": 0,
+      "quality_score": 1.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:19.047144Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "B",
+      "task_id": "t1",
+      "repeat_index": 1,
+      "output": "{\"ok\": false, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"doctor\"], \"command\": \"doctor\", \"ok\": false, \"returncode\": 2, \"stderr\": \"usage: stillwater [-h] [--version]\\n                  {paths,print,init,skills-ab,llm,twin,skills,wish,stack,recipe,books,papers,math-universal,imo-phuc,imo-history,oolong,learn,cleanup,replay,gen-ai-steroids-readme,demo,run,evidence,data}\\n                  ...\\nstillwater: error: argument cmd: invalid choice: 'doctor' (choose from 'paths', 'print', 'init', 'skills-ab', 'llm', 'twin', 'skills', 'wish', 'stack', 'recipe', 'books', 'papers', 'math-universal', 'imo-phuc', 'imo-history', 'oolong', 'learn', 'cleanup', 'replay', 'gen-ai-steroids-readme', 'demo', 'run', 'evidence', 'data')\\n\", \"stdout\": \"\"}}",
+      "latency_ms": 50.261,
+      "tokens": 0,
+      "quality_score": 0.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:19.097426Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "B",
+      "task_id": "t2",
+      "repeat_index": 1,
+      "output": "{\"ok\": false, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"doctor\"], \"command\": \"doctor\", \"ok\": false, \"returncode\": 2, \"stderr\": \"usage: stillwater [-h] [--version]\\n                  {paths,print,init,skills-ab,llm,twin,skills,wish,stack,recipe,books,papers,math-universal,imo-phuc,imo-history,oolong,learn,cleanup,replay,gen-ai-steroids-readme,demo,run,evidence,data}\\n                  ...\\nstillwater: error: argument cmd: invalid choice: 'doctor' (choose from 'paths', 'print', 'init', 'skills-ab', 'llm', 'twin', 'skills', 'wish', 'stack', 'recipe', 'books', 'papers', 'math-universal', 'imo-phuc', 'imo-history', 'oolong', 'learn', 'cleanup', 'replay', 'gen-ai-steroids-readme', 'demo', 'run', 'evidence', 'data')\\n\", \"stdout\": \"\"}}",
+      "latency_ms": 51.061,
+      "tokens": 0,
+      "quality_score": 0.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:19.148509Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "B",
+      "task_id": "t3",
+      "repeat_index": 1,
+      "output": "{\"ok\": false, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"doctor\"], \"command\": \"doctor\", \"ok\": false, \"returncode\": 2, \"stderr\": \"usage: stillwater [-h] [--version]\\n                  {paths,print,init,skills-ab,llm,twin,skills,wish,stack,recipe,books,papers,math-universal,imo-phuc,imo-history,oolong,learn,cleanup,replay,gen-ai-steroids-readme,demo,run,evidence,data}\\n                  ...\\nstillwater: error: argument cmd: invalid choice: 'doctor' (choose from 'paths', 'print', 'init', 'skills-ab', 'llm', 'twin', 'skills', 'wish', 'stack', 'recipe', 'books', 'papers', 'math-universal', 'imo-phuc', 'imo-history', 'oolong', 'learn', 'cleanup', 'replay', 'gen-ai-steroids-readme', 'demo', 'run', 'evidence', 'data')\\n\", \"stdout\": \"\"}}",
+      "latency_ms": 54.913,
+      "tokens": 0,
+      "quality_score": 0.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:19.203445Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "C",
+      "task_id": "t1",
+      "repeat_index": 1,
+      "output": "{\"ok\": true, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"llm\", \"status\"], \"command\": \"llm-status\", \"ok\": true, \"returncode\": 0, \"stderr\": \"\", \"stdout\": \"provider: claude-code\\nname: Claude Code Haiku (Legacy Server)\\nurl: http://localhost:8080\\nmodel: claude-haiku-4-5-20251001\\nstatus: \\u2705 Claude Code Haiku (Legacy Server) is running\\n\"}}",
+      "latency_ms": 100.505,
+      "tokens": 0,
+      "quality_score": 1.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:19.303983Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "C",
+      "task_id": "t2",
+      "repeat_index": 1,
+      "output": "{\"ok\": true, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"llm\", \"status\"], \"command\": \"llm-status\", \"ok\": true, \"returncode\": 0, \"stderr\": \"\", \"stdout\": \"provider: claude-code\\nname: Claude Code Haiku (Legacy Server)\\nurl: http://localhost:8080\\nmodel: claude-haiku-4-5-20251001\\nstatus: \\u2705 Claude Code Haiku (Legacy Server) is running\\n\"}}",
+      "latency_ms": 105.452,
+      "tokens": 0,
+      "quality_score": 1.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:19.409457Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "C",
+      "task_id": "t3",
+      "repeat_index": 1,
+      "output": "{\"ok\": true, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"llm\", \"status\"], \"command\": \"llm-status\", \"ok\": true, \"returncode\": 0, \"stderr\": \"\", \"stdout\": \"provider: claude-code\\nname: Claude Code Haiku (Legacy Server)\\nurl: http://localhost:8080\\nmodel: claude-haiku-4-5-20251001\\nstatus: \\u2705 Claude Code Haiku (Legacy Server) is running\\n\"}}",
+      "latency_ms": 100.32,
+      "tokens": 0,
+      "quality_score": 1.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:19.509802Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "A",
+      "task_id": "t1",
+      "repeat_index": 2,
+      "output": "{\"ok\": true, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"--version\"], \"command\": \"version\", \"ok\": true, \"returncode\": 0, \"stderr\": \"\", \"stdout\": \"stillwater 1.5.0\\n\"}}",
+      "latency_ms": 54.649,
+      "tokens": 0,
+      "quality_score": 1.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:19.564481Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "A",
+      "task_id": "t2",
+      "repeat_index": 2,
+      "output": "{\"ok\": true, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"--version\"], \"command\": \"version\", \"ok\": true, \"returncode\": 0, \"stderr\": \"\", \"stdout\": \"stillwater 1.5.0\\n\"}}",
+      "latency_ms": 51.527,
+      "tokens": 0,
+      "quality_score": 1.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:19.616039Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "A",
+      "task_id": "t3",
+      "repeat_index": 2,
+      "output": "{\"ok\": true, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"--version\"], \"command\": \"version\", \"ok\": true, \"returncode\": 0, \"stderr\": \"\", \"stdout\": \"stillwater 1.5.0\\n\"}}",
+      "latency_ms": 51.362,
+      "tokens": 0,
+      "quality_score": 1.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:19.667425Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "B",
+      "task_id": "t1",
+      "repeat_index": 2,
+      "output": "{\"ok\": false, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"doctor\"], \"command\": \"doctor\", \"ok\": false, \"returncode\": 2, \"stderr\": \"usage: stillwater [-h] [--version]\\n                  {paths,print,init,skills-ab,llm,twin,skills,wish,stack,recipe,books,papers,math-universal,imo-phuc,imo-history,oolong,learn,cleanup,replay,gen-ai-steroids-readme,demo,run,evidence,data}\\n                  ...\\nstillwater: error: argument cmd: invalid choice: 'doctor' (choose from 'paths', 'print', 'init', 'skills-ab', 'llm', 'twin', 'skills', 'wish', 'stack', 'recipe', 'books', 'papers', 'math-universal', 'imo-phuc', 'imo-history', 'oolong', 'learn', 'cleanup', 'replay', 'gen-ai-steroids-readme', 'demo', 'run', 'evidence', 'data')\\n\", \"stdout\": \"\"}}",
+      "latency_ms": 51.776,
+      "tokens": 0,
+      "quality_score": 0.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:19.719225Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "B",
+      "task_id": "t2",
+      "repeat_index": 2,
+      "output": "{\"ok\": false, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"doctor\"], \"command\": \"doctor\", \"ok\": false, \"returncode\": 2, \"stderr\": \"usage: stillwater [-h] [--version]\\n                  {paths,print,init,skills-ab,llm,twin,skills,wish,stack,recipe,books,papers,math-universal,imo-phuc,imo-history,oolong,learn,cleanup,replay,gen-ai-steroids-readme,demo,run,evidence,data}\\n                  ...\\nstillwater: error: argument cmd: invalid choice: 'doctor' (choose from 'paths', 'print', 'init', 'skills-ab', 'llm', 'twin', 'skills', 'wish', 'stack', 'recipe', 'books', 'papers', 'math-universal', 'imo-phuc', 'imo-history', 'oolong', 'learn', 'cleanup', 'replay', 'gen-ai-steroids-readme', 'demo', 'run', 'evidence', 'data')\\n\", \"stdout\": \"\"}}",
+      "latency_ms": 53.237,
+      "tokens": 0,
+      "quality_score": 0.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:19.772487Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "B",
+      "task_id": "t3",
+      "repeat_index": 2,
+      "output": "{\"ok\": false, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"doctor\"], \"command\": \"doctor\", \"ok\": false, \"returncode\": 2, \"stderr\": \"usage: stillwater [-h] [--version]\\n                  {paths,print,init,skills-ab,llm,twin,skills,wish,stack,recipe,books,papers,math-universal,imo-phuc,imo-history,oolong,learn,cleanup,replay,gen-ai-steroids-readme,demo,run,evidence,data}\\n                  ...\\nstillwater: error: argument cmd: invalid choice: 'doctor' (choose from 'paths', 'print', 'init', 'skills-ab', 'llm', 'twin', 'skills', 'wish', 'stack', 'recipe', 'books', 'papers', 'math-universal', 'imo-phuc', 'imo-history', 'oolong', 'learn', 'cleanup', 'replay', 'gen-ai-steroids-readme', 'demo', 'run', 'evidence', 'data')\\n\", \"stdout\": \"\"}}",
+      "latency_ms": 52.389,
+      "tokens": 0,
+      "quality_score": 0.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:19.824898Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "C",
+      "task_id": "t1",
+      "repeat_index": 2,
+      "output": "{\"ok\": true, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"llm\", \"status\"], \"command\": \"llm-status\", \"ok\": true, \"returncode\": 0, \"stderr\": \"\", \"stdout\": \"provider: claude-code\\nname: Claude Code Haiku (Legacy Server)\\nurl: http://localhost:8080\\nmodel: claude-haiku-4-5-20251001\\nstatus: \\u2705 Claude Code Haiku (Legacy Server) is running\\n\"}}",
+      "latency_ms": 100.619,
+      "tokens": 0,
+      "quality_score": 1.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:19.925542Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "C",
+      "task_id": "t2",
+      "repeat_index": 2,
+      "output": "{\"ok\": true, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"llm\", \"status\"], \"command\": \"llm-status\", \"ok\": true, \"returncode\": 0, \"stderr\": \"\", \"stdout\": \"provider: claude-code\\nname: Claude Code Haiku (Legacy Server)\\nurl: http://localhost:8080\\nmodel: claude-haiku-4-5-20251001\\nstatus: \\u2705 Claude Code Haiku (Legacy Server) is running\\n\"}}",
+      "latency_ms": 104.46,
+      "tokens": 0,
+      "quality_score": 1.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:20.030027Z",
+      "metadata": {}
+    },
+    {
+      "variant_id": "C",
+      "task_id": "t3",
+      "repeat_index": 2,
+      "output": "{\"ok\": true, \"result\": {\"cmd\": [\"python\", \"-m\", \"stillwater\", \"llm\", \"status\"], \"command\": \"llm-status\", \"ok\": true, \"returncode\": 0, \"stderr\": \"\", \"stdout\": \"provider: claude-code\\nname: Claude Code Haiku (Legacy Server)\\nurl: http://localhost:8080\\nmodel: claude-haiku-4-5-20251001\\nstatus: \\u2705 Claude Code Haiku (Legacy Server) is running\\n\"}}",
+      "latency_ms": 104.938,
+      "tokens": 0,
+      "quality_score": 1.0,
+      "cost_usd": 0.0,
+      "error": null,
+      "timestamp": "2026-02-23T17:54:20.135000Z",
+      "metadata": {}
+    }
+  ]
+}

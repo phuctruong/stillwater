@@ -100,6 +100,17 @@ class ServiceRegistry:
                 )
                 descriptor.last_health_check = health.last_check
                 return health
+        except urllib.error.HTTPError as exc:
+            latency = (time.monotonic() - start) * 1000
+            # Service responded but with an error status code (e.g. 5xx) → DEGRADED
+            new_status = ServiceStatus.DEGRADED if exc.code >= 500 else ServiceStatus.OFFLINE
+            descriptor.status = new_status
+            return ServiceHealth(
+                service_id=service_id,
+                status=new_status,
+                latency_ms=round(latency, 2),
+                details={"error": str(exc), "http_status": exc.code},
+            )
         except Exception as exc:
             latency = (time.monotonic() - start) * 1000
             descriptor.status = ServiceStatus.OFFLINE
@@ -135,6 +146,7 @@ class ServiceRegistry:
                     )
                     desc = self.register(reg)
                     desc.status = ServiceStatus.ONLINE
+                    self.save()
                     discovered.append(desc)
             except Exception:
                 failed_ports.append(port)

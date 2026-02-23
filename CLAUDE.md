@@ -7,10 +7,17 @@
 # ╚══════════════════════════════════════════════════════════════════════╝
 #
 # === SESSION START (once per session, before any task) ===
+# [ ] 0. Run /software5 [goal] — FIRST COMMAND. Boots full SW5.0 stack:
+#        memory, northstar, dragon-rider twin, 4W+H probe, Three Pillars, question capture.
+#        This replaces steps 1-4 below (they are embedded in /software5).
+#        If /software5 is unavailable, fall back to steps 1-4 manually.
 # [ ] 1. Run /northstar — load NORTHSTAR.md, orient all work toward it
 # [ ] 2. Run /remember — load external memory from .claude/memory/context.md
 # [ ] 3. Confirm 4 skills loaded: prime-safety + prime-coder + phuc-forecast + phuc-orchestration
 # [ ] 4. State session goal + which NORTHSTAR metric this session advances
+# [ ] 4b. Dragon Rider twin: ACTIVE (Phuc's digital twin — evidence-first, 4W+H questioning)
+# [ ] 4c. Question capture: ON (every question → questions/stillwater.jsonl, no exceptions)
+# [ ] 4d. Scratch-first: ON (all working files → scratch/ unless verified)
 #
 # === PER TASK (before every dispatch) ===
 # [ ] 5. DREAM: state Goal + success metrics + constraints + non-goals

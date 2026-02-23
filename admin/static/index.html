@@ -296,6 +296,180 @@
             background: #1084d7;
         }
 
+        .status-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .status-online  { background: #1a3a1a; color: #4caf50; border: 1px solid #4caf50; }
+        .status-offline { background: #3a1a1a; color: #f44336; border: 1px solid #f44336; }
+        .status-degraded { background: #3a3a1a; color: #ffeb3b; border: 1px solid #ffeb3b; }
+        .status-starting { background: #1a2a3a; color: #2196f3; border: 1px solid #2196f3; }
+        .status-unknown { background: #2a2a2a; color: #999; border: 1px solid #555; }
+
+        .swarm-toolbar {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .swarm-status-bar {
+            font-size: 0.85rem;
+            color: #999;
+            padding: 0.5rem 0;
+        }
+
+        /* ------------------------------------------------------------------ */
+        /* LLM Settings page styles                                            */
+        /* ------------------------------------------------------------------ */
+
+        .llm-status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .llm-stat-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 1rem 1.2rem;
+        }
+
+        .llm-stat-label {
+            font-size: 0.78rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.3rem;
+        }
+
+        .llm-stat-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #e0e0e0;
+            word-break: break-all;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        .dot-green { background: #4caf50; box-shadow: 0 0 5px #4caf5080; }
+        .dot-red   { background: #f44336; box-shadow: 0 0 5px #f4433680; }
+        .dot-grey  { background: #666; }
+
+        .llm-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .llm-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .llm-form-group label {
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+
+        .llm-form-group select,
+        .llm-form-group input[type="text"],
+        .llm-form-group input[type="password"] {
+            padding: 0.55rem 0.8rem;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: #e0e0e0;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .llm-form-group select:focus,
+        .llm-form-group input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .llm-toolbar {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .llm-probe-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .llm-probe-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid #222;
+            font-size: 0.9rem;
+        }
+
+        .llm-probe-list li:last-child {
+            border-bottom: none;
+        }
+
+        .llm-probe-url {
+            flex: 1;
+            color: #ccc;
+            word-break: break-all;
+        }
+
+        .llm-probe-latency {
+            font-size: 0.8rem;
+            color: #888;
+            white-space: nowrap;
+        }
+
+        .llm-msg-box {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 0.8rem 1rem;
+            font-size: 0.9rem;
+            min-height: 2.5rem;
+        }
+
+        .llm-msg-ok   { color: #4caf50; }
+        .llm-msg-err  { color: #f44336; }
+        .llm-msg-info { color: #aaa; }
+
+        .llm-models-badge {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            color: #ccc;
+            margin: 0.15rem 0.15rem;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
@@ -337,37 +511,82 @@
         <!-- ORCHESTRATION PAGE -->
         <div class="page active" data-page="orchestration">
             <h2>Orchestration</h2>
-            <p>Configure and monitor the Triple Twin: Explorer, Builder, Arbiter</p>
+            <p>Browse and edit skills, swarms, and recipes. Run CLI commands.</p>
 
+            <!-- ── CLI CHAT ── -->
             <div class="section">
-                <div class="section-title">Chat</div>
+                <div class="section-title">CLI Runner</div>
                 <div class="chat-box">
-                    <div class="chat-output" id="chat-orch">Ready for input...</div>
+                    <div class="chat-output" id="chat-orch">Type a command: version / doctor / llm-status</div>
                     <div class="chat-input-row">
-                        <input type="text" class="chat-input" placeholder="Ask orchestration commands..." autocomplete="off">
-                        <button class="chat-btn" onclick="sendChat(this)">Send</button>
-                        <button class="chat-btn secondary" onclick="clearChat(this)">Clear</button>
+                        <input type="text" class="chat-input" id="orch-chat-input" placeholder="version / doctor / llm-status" autocomplete="off">
+                        <button class="chat-btn" onclick="sendOrchChat()">Run</button>
+                        <button class="chat-btn secondary" onclick="document.getElementById('chat-orch').innerHTML='Chat cleared'">Clear</button>
                     </div>
                 </div>
             </div>
 
+            <!-- ── CATALOG STATS ── -->
             <div class="section">
-                <div class="section-title">Reports</div>
-                <div class="reports-grid">
-                    <div class="chart-container"><h3>Rung Progress</h3><div style="height:220px;"></div></div>
-                    <div class="chart-container"><h3>Task Distribution</h3><div style="height:220px;"></div></div>
-                    <div class="chart-container"><h3>System Status</h3><div style="height:220px;"></div></div>
+                <div class="section-title">Catalog Stats</div>
+                <div id="orch-stats-grid" class="llm-status-grid">
+                    <div class="llm-stat-card">
+                        <div class="llm-stat-label">Loading…</div>
+                        <div class="llm-stat-value">—</div>
+                    </div>
                 </div>
             </div>
 
+            <!-- ── CATALOG BROWSER ── -->
             <div class="section">
-                <div class="section-title">Data Table</div>
-                <div class="table-wrapper">
-                    <table class="display" id="table-orch"><thead><tr><th>Role</th><th>Model</th><th>Status</th><th>Last Run</th></tr></thead><tbody>
-                        <tr><td>Explorer</td><td>haiku</td><td>Ready</td><td>2 min ago</td></tr>
-                        <tr><td>Builder</td><td>sonnet</td><td>Running</td><td>now</td></tr>
-                        <tr><td>Arbiter</td><td>sonnet</td><td>Ready</td><td>5 min ago</td></tr>
-                    </tbody></table>
+                <div class="section-title">Catalog Browser</div>
+                <div style="display:flex;gap:1rem;align-items:flex-start;">
+                    <!-- Sidebar: group list -->
+                    <div id="orch-group-sidebar" style="min-width:180px;background:#1a1a1a;border:1px solid #333;border-radius:6px;padding:0.75rem;flex-shrink:0;">
+                        <div style="color:#999;font-size:0.85rem;margin-bottom:0.5rem;">Groups</div>
+                        <div id="orch-group-list" style="display:flex;flex-direction:column;gap:0.25rem;">
+                            <div style="color:#666;font-size:0.85rem;">Loading…</div>
+                        </div>
+                    </div>
+                    <!-- File table + new file button -->
+                    <div style="flex:1;min-width:0;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+                            <span id="orch-group-label" style="font-size:0.95rem;color:#aaa;">Select a group</span>
+                            <button class="chat-btn secondary" id="orch-new-file-btn" onclick="orchNewFile()" style="display:none;font-size:0.85rem;padding:0.4rem 0.8rem;">+ New File</button>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="display" id="table-orch">
+                                <thead><tr><th>Filename</th><th>Group</th><th>Path</th><th>Actions</th></tr></thead>
+                                <tbody id="orch-file-tbody">
+                                    <tr><td colspan="4" style="text-align:center;color:#999;">Select a group to browse files</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── FILE EDITOR ── -->
+            <div class="section" id="orch-editor-section" style="display:none;">
+                <div class="section-title">File Editor — <span id="orch-editor-path" style="color:#ff6b35;font-weight:400;font-size:0.95rem;"></span></div>
+                <textarea id="orch-editor-textarea" spellcheck="false"
+                    style="width:100%;min-height:400px;background:#0f0f0f;color:#e0e0e0;border:1px solid #444;border-radius:4px;padding:1rem;font-family:'Courier New',monospace;font-size:0.88rem;line-height:1.5;resize:vertical;box-sizing:border-box;"></textarea>
+                <div style="display:flex;align-items:center;gap:1rem;margin-top:0.75rem;flex-wrap:wrap;">
+                    <button class="chat-btn" onclick="orchSaveFile()">Save</button>
+                    <button class="chat-btn secondary" onclick="orchCloseEditor()">Close</button>
+                    <span id="orch-editor-meta" style="font-size:0.8rem;color:#666;font-family:'Courier New',monospace;"></span>
+                    <span id="orch-editor-msg" style="font-size:0.85rem;"></span>
+                </div>
+            </div>
+
+            <!-- ── NEW FILE DIALOG ── -->
+            <div class="section" id="orch-newfile-section" style="display:none;">
+                <div class="section-title">New File in <span id="orch-newfile-group-label" style="color:#ff6b35;font-weight:400;"></span></div>
+                <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
+                    <input type="text" id="orch-newfile-input" class="chat-input" style="max-width:320px;" placeholder="filename.md" autocomplete="off">
+                    <button class="chat-btn" onclick="orchCreateFile()">Create</button>
+                    <button class="chat-btn secondary" onclick="document.getElementById('orch-newfile-section').style.display='none'">Cancel</button>
+                    <span id="orch-newfile-msg" style="font-size:0.85rem;"></span>
                 </div>
             </div>
 
@@ -385,9 +604,8 @@
                     <div class="instruction-item">
                         <img src="/images/droplet-kungfu.png" alt="Droplet Kung-Fu">
                         <div class="instruction-text">
-                            <p><strong>Configure Orchestration</strong></p>
-                            <p>Edit your orchestration settings:</p>
-                            <button class="vscode-btn" onclick="openVSCode('data/custom/orchestration.yaml')">🔧 Open in VSCode</button>
+                            <p><strong>Catalog Browser</strong></p>
+                            <p>Click a group in the sidebar to browse files. Click <strong>Open</strong> on any file to view and edit its contents. Use <strong>+ New File</strong> to create a new file in the selected group.</p>
                         </div>
                     </div>
                 </div>
@@ -397,54 +615,53 @@
         <!-- SWARM NODES PAGE -->
         <div class="page" data-page="swarms">
             <h2>Swarm Nodes</h2>
-            <p>Distributed task execution: Coder, Planner, Scout, Skeptic</p>
+            <p>Live service registry: discovered nodes, health status, and latency</p>
 
             <div class="section">
                 <div class="section-title">Chat</div>
                 <div class="chat-box">
-                    <div class="chat-output" id="chat-swarm">Ready for input...</div>
+                    <div class="chat-output" id="chat-swarm">Ready — type a command (e.g. "doctor", "version", "llm-status")</div>
                     <div class="chat-input-row">
-                        <input type="text" class="chat-input" placeholder="Ask a swarm to do something..." autocomplete="off">
-                        <button class="chat-btn" onclick="sendChat(this)">Send</button>
-                        <button class="chat-btn secondary" onclick="clearChat(this)">Clear</button>
+                        <input type="text" class="chat-input" id="swarm-chat-input" placeholder="doctor / version / llm-status" autocomplete="off">
+                        <button class="chat-btn" onclick="sendSwarmChat()">Run</button>
+                        <button class="chat-btn secondary" onclick="clearChat(document.getElementById('swarm-chat-input'))">Clear</button>
                     </div>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">Reports</div>
-                <div class="reports-grid">
-                    <div class="chart-container"><h3>Success Rates</h3><div style="height:220px;"></div></div>
-                    <div class="chart-container"><h3>Token Usage</h3><div style="height:220px;"></div></div>
-                    <div class="chart-container"><h3>Cost Breakdown</h3><div style="height:220px;"></div></div>
+                <div class="section-title">Service Registry</div>
+                <div class="swarm-toolbar">
+                    <button class="chat-btn" id="btn-discover" onclick="discoverServices()">Discover Services</button>
+                    <button class="chat-btn secondary" id="btn-refresh-health" onclick="refreshHealth()">Refresh Health</button>
+                    <span class="swarm-status-bar" id="swarm-status-bar">Loading...</span>
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">Data Table</div>
                 <div class="table-wrapper">
-                    <table class="display" id="table-swarm"><thead><tr><th>Swarm</th><th>Model</th><th>Success Rate</th><th>Tokens Used</th></tr></thead><tbody>
-                        <tr><td>Coder</td><td>sonnet</td><td>92%</td><td>15,000</td></tr>
-                        <tr><td>Planner</td><td>sonnet</td><td>87%</td><td>8,000</td></tr>
-                        <tr><td>Scout</td><td>haiku</td><td>94%</td><td>3,000</td></tr>
-                        <tr><td>Skeptic</td><td>sonnet</td><td>89%</td><td>12,000</td></tr>
-                    </tbody></table>
+                    <table class="display" id="table-swarm">
+                        <thead><tr>
+                            <th>Service ID</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Port</th>
+                            <th>Status</th>
+                            <th>Latency (ms)</th>
+                        </tr></thead>
+                        <tbody id="swarm-tbody">
+                            <tr><td colspan="6" style="text-align:center;color:#999;">Loading service registry...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">Diagram</div>
-                <div class="mermaid-container">
-                    <div class="mermaid">graph TD
-    A["Task"]-->B["Router"]
-    B-->C["Coder"]
-    B-->D["Planner"]
-    B-->E["Scout"]
-    B-->F["Skeptic"]
-    C-->G["Result"]
-    D-->G
-    E-->G
-    F-->G</div>
+                <div class="section-title">Service Map</div>
+                <div class="mermaid-container" id="swarm-diagram-container">
+                    <div id="swarm-mermaid-wrapper">
+                        <div class="mermaid" id="swarm-mermaid-static">graph LR
+    Admin["Admin :8787"]
+    LLMPortal["LLM Portal :8788"]
+    Admin-->LLMPortal</div>
+                    </div>
                 </div>
             </div>
 
@@ -452,11 +669,10 @@
                 <div class="section-title">Instructions</div>
                 <div class="instructions">
                     <div class="instruction-item">
-                        <img src="/images/droplet-kungfu.png" alt="Droplet Kung-Fu">
+                        <img src="/images/swarm-node.png" alt="Swarm Node">
                         <div class="instruction-text">
-                            <p><strong>Configure Swarms</strong></p>
-                            <p>Edit swarm settings and skill packs:</p>
-                            <button class="vscode-btn" onclick="openVSCode('data/custom/orchestration.yaml')">🔧 Open in VSCode</button>
+                            <p><strong>Service Registry</strong></p>
+                            <p>Click <strong>Discover Services</strong> to scan known ports (8787-8792, 9222) for running services. Click <strong>Refresh Health</strong> to check live status and latency for all registered services.</p>
                         </div>
                     </div>
                 </div>
@@ -466,48 +682,58 @@
         <!-- CPU NODES PAGE -->
         <div class="page" data-page="cpu">
             <h2>CPU Nodes</h2>
-            <p>Algorithm performance, latency, and throughput metrics</p>
+            <p>Stillwater service mesh architecture and CLI diagnostics</p>
 
             <div class="section">
                 <div class="section-title">Chat</div>
                 <div class="chat-box">
-                    <div class="chat-output" id="chat-cpu">Ready for input...</div>
+                    <div class="chat-output" id="chat-cpu">Ready — type a command: doctor / version / llm-status</div>
                     <div class="chat-input-row">
-                        <input type="text" class="chat-input" placeholder="Ask about algorithm performance..." autocomplete="off">
-                        <button class="chat-btn" onclick="sendChat(this)">Send</button>
-                        <button class="chat-btn secondary" onclick="clearChat(this)">Clear</button>
+                        <input type="text" class="chat-input" id="cpu-chat-input" placeholder="doctor / version / llm-status" autocomplete="off">
+                        <button class="chat-btn" onclick="sendCpuChat()">Run</button>
+                        <button class="chat-btn secondary" onclick="document.getElementById('chat-cpu').innerHTML='Chat cleared'">Clear</button>
                     </div>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">Reports</div>
-                <div class="reports-grid">
-                    <div class="chart-container"><h3>Latency (ms)</h3><div style="height:220px;"></div></div>
-                    <div class="chart-container"><h3>Throughput</h3><div style="height:220px;"></div></div>
-                    <div class="chart-container"><h3>Error Rate</h3><div style="height:220px;"></div></div>
+                <div class="section-title">CLI Diagnostics</div>
+                <div class="swarm-toolbar">
+                    <button class="chat-btn" onclick="runCpuCliCmd('doctor')">Run Doctor</button>
+                    <button class="chat-btn secondary" onclick="runCpuCliCmd('version')">Check Version</button>
+                    <button class="chat-btn secondary" onclick="runCpuCliCmd('llm-status')">LLM Status</button>
+                    <span class="swarm-status-bar" id="cpu-status-bar"></span>
                 </div>
+                <div class="llm-msg-box llm-msg-info" id="cpu-cli-output" style="min-height:80px;font-family:'Courier New',monospace;font-size:0.85rem;white-space:pre-wrap;display:none;"></div>
             </div>
 
             <div class="section">
-                <div class="section-title">Data Table</div>
+                <div class="section-title">Service Mesh Architecture</div>
                 <div class="table-wrapper">
-                    <table class="display" id="table-cpu"><thead><tr><th>Algorithm</th><th>Complexity</th><th>Avg Time (ms)</th><th>Executions</th></tr></thead><tbody>
-                        <tr><td>Sort</td><td>O(n log n)</td><td>45</td><td>1,234</td></tr>
-                        <tr><td>Search</td><td>O(log n)</td><td>12</td><td>5,678</td></tr>
-                        <tr><td>Hash</td><td>O(1)</td><td>3</td><td>9,876</td></tr>
-                    </tbody></table>
+                    <table class="display" id="table-cpu">
+                        <thead><tr><th>Service</th><th>Port</th><th>Role</th><th>Notes</th></tr></thead>
+                        <tbody>
+                            <tr><td>Admin Dojo</td><td>8787</td><td>Web UI</td><td>This dashboard</td></tr>
+                            <tr><td>LLM Portal</td><td>8788</td><td>LLM Proxy</td><td>Ollama / Claude / OpenAI routing</td></tr>
+                            <tr><td>Stillwater CLI</td><td>—</td><td>CLI Runner</td><td>Safe command execution via /api/cli/run</td></tr>
+                            <tr><td>Service Registry</td><td>8787</td><td>Discovery</td><td>/api/services — port scan 8787-8792, 9222</td></tr>
+                            <tr><td>Chrome DevTools</td><td>9222</td><td>Browser Twin</td><td>Remote debugging endpoint</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">Diagram</div>
+                <div class="section-title">Service Mesh Diagram</div>
                 <div class="mermaid-container">
                     <div class="mermaid">graph TD
-    A["Input"]-->B["Algorithm"]
-    B-->C["Process"]
-    C-->D["Output"]
-    D-->E["Metrics"]</div>
+    CLI["Stillwater CLI"]-->Admin["Admin Dojo :8787"]
+    Admin-->LLM["LLM Portal :8788"]
+    Admin-->Registry["Service Registry"]
+    Admin-->Runner["CLI Runner /api/cli/run"]
+    LLM-->Ollama["Ollama Local"]
+    LLM-->Claude["Claude API"]
+    Registry-->Chrome["Chrome DevTools :9222"]</div>
                 </div>
             </div>
 
@@ -517,9 +743,9 @@
                     <div class="instruction-item">
                         <img src="/images/droplet-kungfu.png" alt="Droplet Kung-Fu">
                         <div class="instruction-text">
-                            <p><strong>Optimize Algorithms</strong></p>
-                            <p>Edit algorithm implementations:</p>
-                            <button class="vscode-btn" onclick="openVSCode('cli/src/stillwater/')">🔧 Open in VSCode</button>
+                            <p><strong>CLI Diagnostics</strong></p>
+                            <p>Use the buttons above to run doctor, version, or llm-status checks via the live CLI runner. Or type a command in the chat box.</p>
+                            <button class="vscode-btn" onclick="openVSCode('cli/src/stillwater/')">Open CLI Source in VSCode</button>
                         </div>
                     </div>
                 </div>
@@ -529,54 +755,138 @@
         <!-- LLM SETTINGS PAGE -->
         <div class="page" data-page="llm">
             <h2>LLM Settings</h2>
-            <p>Model selection, token costs, provider uptime</p>
+            <p>Live provider status, model list, and configuration</p>
 
+            <!-- ── LIVE STATUS CARDS ── -->
             <div class="section">
-                <div class="section-title">Chat</div>
+                <div class="section-title">Provider Status</div>
+                <div class="llm-status-grid" id="llm-status-grid">
+                    <div class="llm-stat-card">
+                        <div class="llm-stat-label">Active Provider</div>
+                        <div class="llm-stat-value" id="llm-provider-name"><span class="dot dot-grey"></span>Loading…</div>
+                    </div>
+                    <div class="llm-stat-card">
+                        <div class="llm-stat-label">Provider URL</div>
+                        <div class="llm-stat-value" id="llm-provider-url" style="font-size:0.85rem;">—</div>
+                    </div>
+                    <div class="llm-stat-card">
+                        <div class="llm-stat-label">Active Model</div>
+                        <div class="llm-stat-value" id="llm-active-model">—</div>
+                    </div>
+                    <div class="llm-stat-card">
+                        <div class="llm-stat-label">Setup Status</div>
+                        <div class="llm-stat-value" id="llm-setup-status">—</div>
+                    </div>
+                </div>
+                <div class="llm-toolbar">
+                    <button class="chat-btn" onclick="loadLLMStatus()">Refresh Status</button>
+                    <span id="llm-refresh-ts" style="font-size:0.82rem;color:#666;"></span>
+                </div>
+            </div>
+
+            <!-- ── OLLAMA PROBES ── -->
+            <div class="section" id="llm-probes-section">
+                <div class="section-title">Ollama Probes</div>
+                <div class="llm-msg-box llm-msg-info" id="llm-probes-loading">Loading probe results…</div>
+                <ul class="llm-probe-list" id="llm-probe-list" style="display:none;"></ul>
+            </div>
+
+            <!-- ── AVAILABLE MODELS TABLE ── -->
+            <div class="section">
+                <div class="section-title">Available Models</div>
+                <div class="table-wrapper">
+                    <table class="display" id="table-llm">
+                        <thead><tr><th>Model Name</th><th>Provider</th><th>Status</th></tr></thead>
+                        <tbody id="llm-models-tbody">
+                            <tr><td colspan="3" style="text-align:center;color:#999;">Loading models…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ── PROVIDER CONFIG FORM ── -->
+            <div class="section">
+                <div class="section-title">Provider Configuration</div>
+                <div class="llm-form-grid">
+                    <div class="llm-form-group">
+                        <label for="llm-cfg-provider">Provider</label>
+                        <select id="llm-cfg-provider" onchange="llmProviderChanged()">
+                            <option value="ollama">Ollama (Local)</option>
+                            <option value="claude-code">Claude Code (Local Wrapper)</option>
+                            <option value="claude">Claude API</option>
+                            <option value="openai">OpenAI API</option>
+                            <option value="openrouter">OpenRouter</option>
+                        </select>
+                    </div>
+                    <div class="llm-form-group" id="llm-url-group">
+                        <label for="llm-cfg-url">Ollama URL</label>
+                        <input type="text" id="llm-cfg-url" placeholder="http://192.168.68.100:11434">
+                    </div>
+                    <div class="llm-form-group">
+                        <label for="llm-cfg-model">Model</label>
+                        <input type="text" id="llm-cfg-model" placeholder="llama3:latest">
+                    </div>
+                </div>
+                <div class="llm-toolbar">
+                    <button class="chat-btn" onclick="saveLLMConfig()">Save Config</button>
+                </div>
+                <div class="llm-msg-box" id="llm-config-msg" style="display:none;margin-top:0.75rem;"></div>
+            </div>
+
+            <!-- ── OLLAMA MANAGEMENT ── -->
+            <div class="section">
+                <div class="section-title">Ollama Management</div>
+
+                <!-- Install Ollama -->
+                <div style="margin-bottom:1.2rem;">
+                    <p style="color:#aaa;font-size:0.9rem;margin-bottom:0.6rem;">
+                        Ollama status: <span id="llm-ollama-installed">checking…</span>
+                    </p>
+                    <div class="llm-form-grid" id="llm-install-form" style="display:none;">
+                        <div class="llm-form-group">
+                            <label for="llm-sudo-pw">Sudo Password (for install)</label>
+                            <input type="password" id="llm-sudo-pw" placeholder="Enter sudo password">
+                        </div>
+                    </div>
+                    <div class="llm-toolbar">
+                        <button class="chat-btn secondary" id="btn-install-ollama" onclick="installOllama()" style="display:none;">Install Ollama</button>
+                    </div>
+                    <div class="llm-msg-box" id="llm-install-msg" style="display:none;margin-top:0.75rem;"></div>
+                </div>
+
+                <!-- Pull Model -->
+                <div>
+                    <div class="llm-form-grid">
+                        <div class="llm-form-group">
+                            <label for="llm-pull-model">Pull Model</label>
+                            <input type="text" id="llm-pull-model" placeholder="llama3:latest">
+                        </div>
+                        <div class="llm-form-group">
+                            <label for="llm-pull-url">Ollama URL</label>
+                            <input type="text" id="llm-pull-url" placeholder="http://localhost:11434">
+                        </div>
+                    </div>
+                    <div class="llm-toolbar">
+                        <button class="chat-btn" onclick="pullOllamaModel()">Pull Model</button>
+                    </div>
+                    <div class="llm-msg-box" id="llm-pull-msg" style="display:none;margin-top:0.75rem;"></div>
+                </div>
+            </div>
+
+            <!-- ── LLM CHAT ── -->
+            <div class="section">
+                <div class="section-title">LLM Chat</div>
                 <div class="chat-box">
-                    <div class="chat-output" id="chat-llm">Ready for input...</div>
+                    <div class="chat-output" id="chat-llm">Type "status" for live status, or any message to chat…</div>
                     <div class="chat-input-row">
-                        <input type="text" class="chat-input" placeholder="Ask about models and configuration..." autocomplete="off">
-                        <button class="chat-btn" onclick="sendChat(this)">Send</button>
-                        <button class="chat-btn secondary" onclick="clearChat(this)">Clear</button>
+                        <input type="text" class="chat-input" id="llm-chat-input" placeholder="status / your message…" autocomplete="off">
+                        <button class="chat-btn" onclick="sendLLMChat()">Send</button>
+                        <button class="chat-btn secondary" onclick="document.getElementById('chat-llm').innerHTML='Chat cleared'">Clear</button>
                     </div>
                 </div>
             </div>
 
-            <div class="section">
-                <div class="section-title">Reports</div>
-                <div class="reports-grid">
-                    <div class="chart-container"><h3>Token Cost</h3><div style="height:220px;"></div></div>
-                    <div class="chart-container"><h3>Model Performance</h3><div style="height:220px;"></div></div>
-                    <div class="chart-container"><h3>Provider Uptime</h3><div style="height:220px;"></div></div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">Data Table</div>
-                <div class="table-wrapper">
-                    <table class="display" id="table-llm"><thead><tr><th>Model</th><th>Provider</th><th>Cost/1M tokens</th><th>Status</th></tr></thead><tbody>
-                        <tr><td>haiku</td><td>Claude</td><td>$0.80</td><td>Active</td></tr>
-                        <tr><td>sonnet</td><td>Claude</td><td>$3.00</td><td>Active</td></tr>
-                        <tr><td>opus</td><td>Claude</td><td>$15.00</td><td>Active</td></tr>
-                    </tbody></table>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">Diagram</div>
-                <div class="mermaid-container">
-                    <div class="mermaid">graph LR
-    A["Request"]-->B["Model Router"]
-    B-->C["Haiku"]
-    B-->D["Sonnet"]
-    B-->E["Opus"]
-    C-->F["Response"]
-    D-->F
-    E-->F</div>
-                </div>
-            </div>
-
+            <!-- ── INSTRUCTIONS ── -->
             <div class="section">
                 <div class="section-title">Instructions</div>
                 <div class="instructions">
@@ -585,7 +895,7 @@
                         <div class="instruction-text">
                             <p><strong>Configure LLM Settings</strong></p>
                             <p>Edit your LLM configuration and model providers:</p>
-                            <button class="vscode-btn" onclick="openVSCode('data/default/llm_config.yaml')">🔧 Open in VSCode</button>
+                            <button class="vscode-btn" onclick="openVSCode('data/default/llm_config.yaml')">Open in VSCode</button>
                         </div>
                     </div>
                 </div>
@@ -595,61 +905,118 @@
         <!-- SOLACE AGI SYNC PAGE -->
         <div class="page" data-page="sync">
             <h2>Solace AGI Sync</h2>
-            <p>Cloud backup, Firestore integration, data sync status</p>
+            <p>Link your Solace AGI account, sync skills and recipes to the cloud</p>
 
+            <!-- ── CHAT ── -->
             <div class="section">
                 <div class="section-title">Chat</div>
                 <div class="chat-box">
-                    <div class="chat-output" id="chat-sync">Ready for input...</div>
+                    <div class="chat-output" id="chat-sync">Ready — type: status / sync / link</div>
                     <div class="chat-input-row">
-                        <input type="text" class="chat-input" placeholder="Ask about cloud sync and backup..." autocomplete="off">
-                        <button class="chat-btn" onclick="sendChat(this)">Send</button>
-                        <button class="chat-btn secondary" onclick="clearChat(this)">Clear</button>
+                        <input type="text" class="chat-input" id="sync-chat-input" placeholder="status / sync / link" autocomplete="off">
+                        <button class="chat-btn" onclick="sendSyncChat()">Send</button>
+                        <button class="chat-btn secondary" onclick="document.getElementById('chat-sync').innerHTML='Chat cleared'">Clear</button>
                     </div>
                 </div>
             </div>
 
+            <!-- ── COMMUNITY STATUS CARDS ── -->
             <div class="section">
-                <div class="section-title">Reports</div>
-                <div class="reports-grid">
-                    <div class="chart-container"><h3>Sync Status</h3><div style="height:220px;"></div></div>
-                    <div class="chart-container"><h3>Data Volume</h3><div style="height:220px;"></div></div>
-                    <div class="chart-container"><h3>Firestore Health</h3><div style="height:220px;"></div></div>
+                <div class="section-title">Community Status</div>
+                <div class="llm-status-grid" id="sync-status-grid">
+                    <div class="llm-stat-card">
+                        <div class="llm-stat-label">Link Status</div>
+                        <div class="llm-stat-value" id="sync-link-status"><span class="dot dot-grey"></span>Loading…</div>
+                    </div>
+                    <div class="llm-stat-card">
+                        <div class="llm-stat-label">Email</div>
+                        <div class="llm-stat-value" id="sync-email">—</div>
+                    </div>
+                    <div class="llm-stat-card">
+                        <div class="llm-stat-label">API Key</div>
+                        <div class="llm-stat-value" id="sync-api-key" style="font-size:0.85rem;">—</div>
+                    </div>
+                    <div class="llm-stat-card">
+                        <div class="llm-stat-label">Sync Events</div>
+                        <div class="llm-stat-value" id="sync-event-count">—</div>
+                    </div>
+                </div>
+                <div class="llm-toolbar">
+                    <button class="chat-btn" onclick="loadCommunityStatus()">Refresh Status</button>
+                    <span id="sync-refresh-ts" style="font-size:0.82rem;color:#666;"></span>
                 </div>
             </div>
 
+            <!-- ── LINK ACCOUNT ── -->
             <div class="section">
-                <div class="section-title">Data Table</div>
+                <div class="section-title">Link Account</div>
+                <div class="llm-form-grid">
+                    <div class="llm-form-group">
+                        <label for="sync-email-input">Email Address</label>
+                        <input type="text" id="sync-email-input" placeholder="you@example.com" autocomplete="off">
+                    </div>
+                </div>
+                <div class="llm-toolbar">
+                    <button class="chat-btn" onclick="linkCommunityAccount()">Link Account</button>
+                </div>
+                <div class="llm-msg-box" id="sync-link-msg" style="display:none;margin-top:0.75rem;white-space:pre-wrap;font-family:'Courier New',monospace;font-size:0.85rem;"></div>
+            </div>
+
+            <!-- ── SYNC NOW ── -->
+            <div class="section">
+                <div class="section-title">Sync Now</div>
+                <div class="llm-form-grid">
+                    <div class="llm-form-group">
+                        <label for="sync-direction">Direction</label>
+                        <select id="sync-direction">
+                            <option value="both">Both (upload + download)</option>
+                            <option value="upload">Upload only</option>
+                            <option value="download">Download only</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="llm-toolbar">
+                    <button class="chat-btn" onclick="runSync()">Sync Now</button>
+                </div>
+                <div class="llm-msg-box" id="sync-result-msg" style="display:none;margin-top:0.75rem;white-space:pre-wrap;font-family:'Courier New',monospace;font-size:0.85rem;"></div>
+            </div>
+
+            <!-- ── SYNC RESULTS TABLE ── -->
+            <div class="section">
+                <div class="section-title">Last Sync Results</div>
                 <div class="table-wrapper">
-                    <table class="display" id="table-sync"><thead><tr><th>Timestamp</th><th>Action</th><th>Status</th><th>Bytes</th></tr></thead><tbody>
-                        <tr><td>2026-02-23 10:45</td><td>Upload</td><td>Success</td><td>1.2 MB</td></tr>
-                        <tr><td>2026-02-23 10:30</td><td>Download</td><td>Success</td><td>0.8 MB</td></tr>
-                        <tr><td>2026-02-23 10:15</td><td>Verify</td><td>Success</td><td>0 MB</td></tr>
-                    </tbody></table>
+                    <table class="display" id="table-sync">
+                        <thead><tr><th>Category</th><th>Direction</th><th>Count</th><th>Details</th></tr></thead>
+                        <tbody id="sync-results-tbody">
+                            <tr><td colspan="4" style="text-align:center;color:#999;">No sync results yet — click "Sync Now" to run a sync.</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
+            <!-- ── DIAGRAM ── -->
             <div class="section">
-                <div class="section-title">Diagram</div>
+                <div class="section-title">Sync Architecture</div>
                 <div class="mermaid-container">
                     <div class="mermaid">graph LR
-    A["Local Data"]-->B["API Gateway"]
-    B-->C["Cloud Storage"]
-    B-->D["Firestore"]
-    C-->E["Sync Status"]
-    D-->E</div>
+    Local["Local Stillwater"]-->Gateway["API Gateway /api/community"]
+    Gateway-->Status["GET /status link + sync events"]
+    Gateway-->Link["POST /link email + magic link"]
+    Gateway-->Sync["POST /sync skills + recipes"]
+    Sync-->Cloud["Solace AGI Cloud Store"]</div>
                 </div>
             </div>
 
+            <!-- ── INSTRUCTIONS ── -->
             <div class="section">
                 <div class="section-title">Instructions</div>
                 <div class="instructions">
                     <div class="instruction-item">
                         <img src="/images/droplet-kungfu.png" alt="Droplet Kung-Fu">
                         <div class="instruction-text">
-                            <p><strong>Configure Cloud Sync</strong></p>
-                            <p>Enable Firestore sync with your API key:</p>
-                            <button class="vscode-btn" onclick="openVSCode('data/custom/settings.md')">🔧 Open in VSCode</button>
+                            <p><strong>Sync Your Skills and Recipes</strong></p>
+                            <p>Enter your email in "Link Account" to get a magic link and API key. Then use "Sync Now" to push your local skills and recipes to the Solace AGI cloud store.</p>
+                            <p>Chat commands: <code>status</code> — fetch live status | <code>sync</code> — run a sync | <code>link</code> — link instructions</p>
                         </div>
                     </div>
                 </div>
@@ -659,10 +1026,14 @@
 
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>
+        // =====================================================================
         // Initialize Mermaid
+        // =====================================================================
         mermaid.initialize({ startOnLoad: true, theme: 'dark' });
 
+        // =====================================================================
         // GIF animation
+        // =====================================================================
         function setupGifSwitch() {
             const dropletLogo = document.getElementById('dropletLogo');
             setTimeout(() => {
@@ -670,7 +1041,9 @@
             }, 8200);
         }
 
+        // =====================================================================
         // Page Navigation
+        // =====================================================================
         document.querySelectorAll('.nav-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const page = e.target.dataset.page;
@@ -679,17 +1052,84 @@
                 document.querySelector(`[data-page="${page}"]`).classList.add('active');
                 e.target.classList.add('active');
                 setTimeout(() => mermaid.contentLoaded(), 100);
+
+                // Load live data when Orchestration page becomes active
+                if (page === 'orchestration') {
+                    loadOrchCatalog();
+                }
+
+                // Load live data when Swarm Nodes page becomes active
+                if (page === 'swarms') {
+                    loadServiceRegistry();
+                }
+
+                // Load live LLM data when LLM Settings page becomes active
+                if (page === 'llm') {
+                    loadLLMStatus();
+                }
+
+                // Load community status when Solace AGI Sync page becomes active
+                if (page === 'sync') {
+                    loadCommunityStatus();
+                }
             });
         });
 
+        // =====================================================================
         // Initialize DataTables
-        ['orch', 'swarm', 'cpu', 'llm', 'sync'].forEach(page => {
-            try {
-                $(`#table-${page}`).DataTable({ paging: false, searching: true, info: false });
-            } catch (e) {}
-        });
+        // cpu: static rows initialized once; sync/llm/swarms/orch managed dynamically
+        // =====================================================================
+        try { $('#table-cpu').DataTable({ paging: false, searching: true, info: false }); } catch(e) {}
 
-        // Chat
+        // Sync results DataTable — re-initialized after each sync
+        let _syncDT = null;
+        function _initOrDestroySyncDT() {
+            if (_syncDT) { try { _syncDT.destroy(); } catch(e) {} _syncDT = null; }
+            try { _syncDT = $('#table-sync').DataTable({ paging: false, searching: false, info: false }); } catch(e) {}
+        }
+
+        // Orch catalog DataTable — initialized and destroyed when group is selected
+        let _orchDT = null;
+
+        function _initOrDestroyOrchDT() {
+            if (_orchDT) {
+                try { _orchDT.destroy(); } catch(e) {}
+                _orchDT = null;
+            }
+            try {
+                _orchDT = $('#table-orch').DataTable({ paging: false, searching: true, info: false });
+            } catch(e) {}
+        }
+
+        // LLM models DataTable — initialized after first data load
+        let _llmDT = null;
+
+        function _initOrDestroyLLMDT() {
+            if (_llmDT) {
+                try { _llmDT.destroy(); } catch(e) {}
+                _llmDT = null;
+            }
+            try {
+                _llmDT = $('#table-llm').DataTable({ paging: false, searching: true, info: false });
+            } catch(e) {}
+        }
+
+        // swarms DataTable — initialized after first data load
+        let _swarmDT = null;
+
+        function _initOrDestroySwarmDT() {
+            if (_swarmDT) {
+                try { _swarmDT.destroy(); } catch(e) {}
+                _swarmDT = null;
+            }
+            try {
+                _swarmDT = $('#table-swarm').DataTable({ paging: false, searching: true, info: false });
+            } catch(e) {}
+        }
+
+        // =====================================================================
+        // Chat helpers (legacy pages)
+        // =====================================================================
         function sendChat(btn) {
             const input = btn.parentElement.querySelector('.chat-input');
             const output = btn.parentElement.parentElement.querySelector('.chat-output');
@@ -703,10 +1143,81 @@
         }
 
         function clearChat(btn) {
-            btn.parentElement.parentElement.querySelector('.chat-output').innerHTML = 'Chat cleared';
+            // btn can be an element or passed from swarm clear handler
+            if (btn && btn.parentElement) {
+                btn.parentElement.parentElement.querySelector('.chat-output').innerHTML = 'Chat cleared';
+            }
         }
 
+        // =====================================================================
+        // Swarm Chat — wired to /api/cli/run
+        // =====================================================================
+        function sendSwarmChat() {
+            const input = document.getElementById('swarm-chat-input');
+            const output = document.getElementById('chat-swarm');
+            const cmd = (input.value || '').trim();
+            if (!cmd) return;
+
+            const cmdLine = document.createElement('div');
+            cmdLine.style.color = '#ff6b35';
+            cmdLine.textContent = `$ ${cmd}`;
+            output.appendChild(cmdLine);
+            output.scrollTop = output.scrollHeight;
+            input.value = '';
+
+            const waitLine = document.createElement('div');
+            waitLine.style.color = '#999';
+            waitLine.textContent = 'Running...';
+            output.appendChild(waitLine);
+            output.scrollTop = output.scrollHeight;
+
+            fetch('/api/cli/run', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ command: cmd })
+            })
+            .then(r => r.json())
+            .then(d => {
+                waitLine.remove();
+                const result = d.result || d;
+                const lines = ((result.stdout || '') + (result.stderr || '')).trim().split('\n');
+                lines.forEach(line => {
+                    const el = document.createElement('div');
+                    el.style.color = result.ok ? '#e0e0e0' : '#f44336';
+                    el.textContent = line;
+                    output.appendChild(el);
+                });
+                if (!lines.length || (lines.length === 1 && !lines[0])) {
+                    const el = document.createElement('div');
+                    el.style.color = result.ok ? '#4caf50' : '#f44336';
+                    el.textContent = result.ok ? '(completed with no output)' : `Error: returncode ${result.returncode}`;
+                    output.appendChild(el);
+                }
+                output.scrollTop = output.scrollHeight;
+            })
+            .catch(err => {
+                waitLine.remove();
+                const el = document.createElement('div');
+                el.style.color = '#f44336';
+                el.textContent = `Network error: ${err.message}`;
+                output.appendChild(el);
+                output.scrollTop = output.scrollHeight;
+            });
+        }
+
+        // Allow Enter key in swarm chat input
+        document.addEventListener('DOMContentLoaded', () => {
+            const swarmInput = document.getElementById('swarm-chat-input');
+            if (swarmInput) {
+                swarmInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') sendSwarmChat();
+                });
+            }
+        });
+
+        // =====================================================================
         // VSCode Integration
+        // =====================================================================
         function openVSCode(file) {
             fetch('/api/vscode/open', {
                 method: 'POST',
@@ -717,9 +1228,1292 @@
             }).catch(e => alert(`Failed: ${e.message}`));
         }
 
+        // =====================================================================
+        // Service Registry — live data wiring
+        // =====================================================================
+
+        // In-memory cache of service descriptors (keyed by service_id)
+        let _serviceCache = {};
+
+        function _statusBadge(status) {
+            const s = (status || 'unknown').toLowerCase();
+            const cls = ['online','offline','degraded','starting'].includes(s) ? s : 'unknown';
+            return `<span class="status-badge status-${cls}">${s}</span>`;
+        }
+
+        function _renderServicesTable(services) {
+            const tbody = document.getElementById('swarm-tbody');
+            if (!services || services.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#999;">No services registered. Click "Discover Services".</td></tr>';
+                _initOrDestroySwarmDT();
+                return;
+            }
+
+            // Destroy DataTable before modifying DOM
+            if (_swarmDT) {
+                try { _swarmDT.destroy(); } catch(e) {}
+                _swarmDT = null;
+            }
+
+            tbody.innerHTML = '';
+            services.forEach(svc => {
+                const tr = document.createElement('tr');
+                tr.id = `svc-row-${svc.service_id}`;
+                tr.innerHTML = `
+                    <td>${svc.service_id}</td>
+                    <td>${svc.name}</td>
+                    <td>${svc.service_type}</td>
+                    <td>${svc.port}</td>
+                    <td id="svc-status-${svc.service_id}">${_statusBadge(svc.status)}</td>
+                    <td id="svc-latency-${svc.service_id}">—</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            _initOrDestroySwarmDT();
+        }
+
+        function _updateStatusBar(msg) {
+            const bar = document.getElementById('swarm-status-bar');
+            if (bar) bar.textContent = msg;
+        }
+
+        function _updateMermaidDiagram(services) {
+            const wrapper = document.getElementById('swarm-mermaid-wrapper');
+            if (!wrapper) return;
+
+            if (!services || services.length === 0) {
+                wrapper.innerHTML = '<div class="mermaid" id="swarm-mermaid-static">graph LR\n    Admin["Admin :8787"]\n    LLMPortal["LLM Portal :8788"]\n    Admin-->LLMPortal</div>';
+                try { mermaid.contentLoaded(); } catch(e) {}
+                return;
+            }
+
+            // Build node definitions
+            const lines = ['graph LR'];
+            const onlineIds = [];
+
+            services.forEach(svc => {
+                const label = `${svc.name} :${svc.port}`;
+                const nodeId = svc.service_id.replace(/-/g, '_');
+                lines.push(`    ${nodeId}["${label}"]`);
+                if ((svc.status || '').toLowerCase() === 'online') {
+                    onlineIds.push(nodeId);
+                }
+            });
+
+            // Wire: admin → everything online
+            const adminId = 'admin';
+            const adminNorm = adminId.replace(/-/g, '_');
+            onlineIds.forEach(nid => {
+                if (nid !== adminNorm) {
+                    lines.push(`    ${adminNorm}-->${nid}`);
+                }
+            });
+
+            const graphDef = lines.join('\n');
+
+            // Mermaid v10: use render API to avoid contentLoaded conflicts
+            const containerId = 'swarm-mermaid-dyn-' + Date.now();
+            wrapper.innerHTML = `<div id="${containerId}" style="width:100%;"></div>`;
+            try {
+                mermaid.render(containerId + '_svg', graphDef).then(({ svg }) => {
+                    const container = document.getElementById(containerId);
+                    if (container) container.innerHTML = svg;
+                }).catch(() => {
+                    // Fallback: show static text
+                    wrapper.innerHTML = `<pre style="color:#999;font-size:0.8rem;">${graphDef}</pre>`;
+                });
+            } catch(e) {
+                wrapper.innerHTML = `<pre style="color:#999;font-size:0.8rem;">${graphDef}</pre>`;
+            }
+        }
+
+        async function loadServiceRegistry() {
+            _updateStatusBar('Discovering services...');
+
+            // Step 1: Auto-discover
+            try {
+                await fetch('/api/services/discover', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+            } catch(e) {
+                // Discovery may fail if service registry not available — continue to list
+            }
+
+            // Step 2: List all registered services
+            try {
+                const resp = await fetch('/api/services');
+                const data = await resp.json();
+                if (data.ok && Array.isArray(data.services)) {
+                    _serviceCache = {};
+                    data.services.forEach(s => { _serviceCache[s.service_id] = s; });
+                    _renderServicesTable(data.services);
+                    _updateMermaidDiagram(data.services);
+                    _updateStatusBar(`${data.services.length} service(s) registered — ${new Date().toLocaleTimeString()}`);
+                } else {
+                    _updateStatusBar('Service registry unavailable.');
+                    _renderServicesTable([]);
+                    _updateMermaidDiagram([]);
+                }
+            } catch(e) {
+                _updateStatusBar(`Error: ${e.message}`);
+                _renderServicesTable([]);
+                _updateMermaidDiagram([]);
+            }
+        }
+
+        async function discoverServices() {
+            const btn = document.getElementById('btn-discover');
+            if (btn) { btn.disabled = true; btn.textContent = 'Scanning...'; }
+            _updateStatusBar('Scanning known ports...');
+
+            try {
+                const resp = await fetch('/api/services/discover', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                const data = await resp.json();
+                if (data.ok && data.discovery) {
+                    const d = data.discovery;
+                    _updateStatusBar(`Scan complete in ${d.scan_duration_ms}ms — ${d.discovered.length} new service(s) found`);
+                } else {
+                    _updateStatusBar('Discovery returned no results.');
+                }
+            } catch(e) {
+                _updateStatusBar(`Discovery error: ${e.message}`);
+            } finally {
+                if (btn) { btn.disabled = false; btn.textContent = 'Discover Services'; }
+            }
+
+            // Reload the full list after discovery
+            await loadServiceRegistry();
+        }
+
+        async function refreshHealth() {
+            const btn = document.getElementById('btn-refresh-health');
+            if (btn) { btn.disabled = true; btn.textContent = 'Checking...'; }
+
+            const ids = Object.keys(_serviceCache);
+            if (ids.length === 0) {
+                _updateStatusBar('No services to check. Run "Discover Services" first.');
+                if (btn) { btn.disabled = false; btn.textContent = 'Refresh Health'; }
+                return;
+            }
+
+            _updateStatusBar(`Checking health of ${ids.length} service(s)...`);
+
+            const checks = ids.map(sid =>
+                fetch(`/api/services/${sid}/health`)
+                    .then(r => r.json())
+                    .catch(() => ({ ok: false, health: { service_id: sid, status: 'offline', latency_ms: 0 } }))
+            );
+
+            const results = await Promise.all(checks);
+            let onlineCount = 0;
+
+            results.forEach(data => {
+                if (!data.ok || !data.health) return;
+                const h = data.health;
+                const sid = h.service_id;
+
+                // Update status cell
+                const statusCell = document.getElementById(`svc-status-${sid}`);
+                if (statusCell) statusCell.innerHTML = _statusBadge(h.status);
+
+                // Update latency cell
+                const latencyCell = document.getElementById(`svc-latency-${sid}`);
+                if (latencyCell) latencyCell.textContent = h.latency_ms > 0 ? `${h.latency_ms}` : '—';
+
+                // Update cache
+                if (_serviceCache[sid]) {
+                    _serviceCache[sid].status = h.status;
+                    _serviceCache[sid].latency_ms = h.latency_ms;
+                }
+
+                if ((h.status || '').toLowerCase() === 'online') onlineCount++;
+            });
+
+            // Refresh diagram with updated statuses
+            _updateMermaidDiagram(Object.values(_serviceCache));
+
+            _updateStatusBar(`Health check done — ${onlineCount}/${ids.length} online — ${new Date().toLocaleTimeString()}`);
+            if (btn) { btn.disabled = false; btn.textContent = 'Refresh Health'; }
+        }
+
+        // =====================================================================
+        // LLM Settings — live API wiring
+        // =====================================================================
+
+        // Cached status for pre-filling forms
+        let _llmStatusCache = null;
+
+        function _llmDot(ok) {
+            return `<span class="dot ${ok ? 'dot-green' : 'dot-red'}"></span>`;
+        }
+
+        function _renderLLMStatus(status) {
+            // Status cards
+            const providerName = status.provider_name || status.provider || '—';
+            document.getElementById('llm-provider-name').innerHTML =
+                _llmDot(status.setup_ok) + providerName;
+            document.getElementById('llm-provider-url').textContent =
+                status.provider_url || '—';
+            document.getElementById('llm-active-model').textContent =
+                status.provider_model || '—';
+
+            const setupEl = document.getElementById('llm-setup-status');
+            setupEl.innerHTML = _llmDot(status.setup_ok) +
+                (status.setup_ok ? 'OK' : (status.setup_msg || 'Error'));
+
+            // Ollama installed badge
+            const ollamaEl = document.getElementById('llm-ollama-installed');
+            if (status.ollama_installed) {
+                ollamaEl.innerHTML = `<span class="dot dot-green"></span><strong style="color:#4caf50;">Installed</strong>`;
+                document.getElementById('btn-install-ollama').style.display = 'none';
+                document.getElementById('llm-install-form').style.display = 'none';
+            } else {
+                ollamaEl.innerHTML = `<span class="dot dot-red"></span><strong style="color:#f44336;">Not Installed</strong>`;
+                document.getElementById('btn-install-ollama').style.display = '';
+                document.getElementById('llm-install-form').style.display = '';
+            }
+
+            // Ollama probes
+            const probesSection = document.getElementById('llm-probes-section');
+            const probesList = document.getElementById('llm-probe-list');
+            const probesLoading = document.getElementById('llm-probes-loading');
+
+            if (Array.isArray(status.probes) && status.probes.length > 0) {
+                probesLoading.style.display = 'none';
+                probesList.style.display = '';
+                probesList.innerHTML = '';
+                status.probes.forEach(p => {
+                    const li = document.createElement('li');
+                    const lat = p.latency_ms != null ? `${p.latency_ms.toFixed(1)} ms` : '—';
+                    const preferred = status.preferred_ollama_url === p.url
+                        ? ' <span style="color:#ff6b35;font-size:0.75rem;">[preferred]</span>' : '';
+                    li.innerHTML = `
+                        <span class="dot ${p.ok ? 'dot-green' : 'dot-red'}"></span>
+                        <span class="llm-probe-url">${p.url}${preferred}</span>
+                        <span class="llm-probe-latency">${p.ok ? lat : 'unreachable'}</span>
+                    `;
+                    probesList.appendChild(li);
+                });
+            } else {
+                probesLoading.className = 'llm-msg-box llm-msg-info';
+                probesLoading.textContent = 'No Ollama probes available (provider may not be Ollama).';
+                probesLoading.style.display = '';
+                probesList.style.display = 'none';
+            }
+
+            // Models table
+            const models = status.models || [];
+            const tbody = document.getElementById('llm-models-tbody');
+
+            if (_llmDT) {
+                try { _llmDT.destroy(); } catch(e) {}
+                _llmDT = null;
+            }
+
+            if (models.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#999;">No models available — check provider connection.</td></tr>';
+            } else {
+                tbody.innerHTML = '';
+                models.forEach(m => {
+                    const isActive = m === status.provider_model;
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><strong>${m}</strong>${isActive ? ' <span style="color:#ff6b35;font-size:0.75rem;">[active]</span>' : ''}</td>
+                        <td>${status.provider_name || status.provider || '—'}</td>
+                        <td>${_llmDot(status.setup_ok)}<span style="color:${status.setup_ok ? '#4caf50' : '#f44336'};">${status.setup_ok ? 'Available' : 'Unavailable'}</span></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            _initOrDestroyLLMDT();
+
+            // Pre-fill config form
+            if (status.provider) {
+                const sel = document.getElementById('llm-cfg-provider');
+                if (sel) {
+                    for (let i = 0; i < sel.options.length; i++) {
+                        if (sel.options[i].value === status.provider) {
+                            sel.selectedIndex = i;
+                            break;
+                        }
+                    }
+                    llmProviderChanged();
+                }
+            }
+            if (status.provider_url) {
+                document.getElementById('llm-cfg-url').value = status.provider_url;
+                document.getElementById('llm-pull-url').value = status.provider_url;
+            }
+            if (status.provider_model) {
+                document.getElementById('llm-cfg-model').value = status.provider_model;
+                document.getElementById('llm-pull-model').value = status.provider_model;
+            }
+
+            // Timestamp
+            document.getElementById('llm-refresh-ts').textContent =
+                `Last refreshed: ${new Date().toLocaleTimeString()}`;
+        }
+
+        async function loadLLMStatus() {
+            document.getElementById('llm-provider-name').innerHTML =
+                '<span class="dot dot-grey"></span>Loading…';
+
+            try {
+                const resp = await fetch('/api/llm/status');
+                const data = await resp.json();
+                if (data.ok && data.status) {
+                    _llmStatusCache = data.status;
+                    _renderLLMStatus(data.status);
+                } else {
+                    document.getElementById('llm-provider-name').innerHTML =
+                        '<span class="dot dot-red"></span>API error';
+                    document.getElementById('llm-setup-status').innerHTML =
+                        '<span class="dot dot-red"></span>' + (data.error || 'Unknown error');
+                }
+            } catch(e) {
+                document.getElementById('llm-provider-name').innerHTML =
+                    '<span class="dot dot-red"></span>Network error';
+                document.getElementById('llm-setup-status').textContent = e.message;
+            }
+        }
+
+        function llmProviderChanged() {
+            const provider = document.getElementById('llm-cfg-provider').value;
+            const urlGroup = document.getElementById('llm-url-group');
+            urlGroup.style.display = provider === 'ollama' ? '' : 'none';
+        }
+
+        async function saveLLMConfig() {
+            const provider   = document.getElementById('llm-cfg-provider').value;
+            const ollamaUrl  = document.getElementById('llm-cfg-url').value.trim();
+            const model      = document.getElementById('llm-cfg-model').value.trim();
+            const msgEl      = document.getElementById('llm-config-msg');
+
+            msgEl.style.display = '';
+            msgEl.className = 'llm-msg-box llm-msg-info';
+            msgEl.textContent = 'Saving…';
+
+            try {
+                const resp = await fetch('/api/llm/config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ provider, ollama_url: ollamaUrl, ollama_model: model })
+                });
+                const data = await resp.json();
+                if (data.ok) {
+                    msgEl.className = 'llm-msg-box llm-msg-ok';
+                    msgEl.textContent = 'Config saved. Refreshing status…';
+                    if (data.status) {
+                        _llmStatusCache = data.status;
+                        _renderLLMStatus(data.status);
+                    } else {
+                        await loadLLMStatus();
+                    }
+                    setTimeout(() => { msgEl.style.display = 'none'; }, 3000);
+                } else {
+                    msgEl.className = 'llm-msg-box llm-msg-err';
+                    msgEl.textContent = 'Error: ' + (data.error || 'Save failed');
+                }
+            } catch(e) {
+                msgEl.className = 'llm-msg-box llm-msg-err';
+                msgEl.textContent = 'Network error: ' + e.message;
+            }
+        }
+
+        async function installOllama() {
+            const password = document.getElementById('llm-sudo-pw').value;
+            const msgEl    = document.getElementById('llm-install-msg');
+            const btn      = document.getElementById('btn-install-ollama');
+
+            msgEl.style.display = '';
+            msgEl.className = 'llm-msg-box llm-msg-info';
+            msgEl.textContent = 'Installing Ollama — this may take a minute…';
+            btn.disabled = true;
+
+            try {
+                const resp = await fetch('/api/system/install-ollama', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sudo_password: password })
+                });
+                const data = await resp.json();
+                if (data.ok) {
+                    msgEl.className = 'llm-msg-box llm-msg-ok';
+                    msgEl.textContent = 'Ollama installed successfully. Refreshing…';
+                    await loadLLMStatus();
+                } else {
+                    msgEl.className = 'llm-msg-box llm-msg-err';
+                    msgEl.textContent = 'Install failed: ' + (data.error || data.msg || 'Unknown error');
+                }
+            } catch(e) {
+                msgEl.className = 'llm-msg-box llm-msg-err';
+                msgEl.textContent = 'Network error: ' + e.message;
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        async function pullOllamaModel() {
+            const model     = document.getElementById('llm-pull-model').value.trim();
+            const ollamaUrl = document.getElementById('llm-pull-url').value.trim();
+            const msgEl     = document.getElementById('llm-pull-msg');
+
+            if (!model) {
+                msgEl.style.display = '';
+                msgEl.className = 'llm-msg-box llm-msg-err';
+                msgEl.textContent = 'Enter a model name to pull.';
+                return;
+            }
+
+            msgEl.style.display = '';
+            msgEl.className = 'llm-msg-box llm-msg-info';
+            msgEl.textContent = `Pulling ${model} — this may take several minutes…`;
+
+            try {
+                const resp = await fetch('/api/ollama/pull', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ model, ollama_url: ollamaUrl })
+                });
+                const data = await resp.json();
+                if (data.ok) {
+                    msgEl.className = 'llm-msg-box llm-msg-ok';
+                    msgEl.textContent = `Model "${model}" pulled successfully. Refreshing…`;
+                    await loadLLMStatus();
+                } else {
+                    msgEl.className = 'llm-msg-box llm-msg-err';
+                    msgEl.textContent = 'Pull failed: ' + (data.error || data.msg || 'Unknown error');
+                }
+            } catch(e) {
+                msgEl.className = 'llm-msg-box llm-msg-err';
+                msgEl.textContent = 'Network error: ' + e.message;
+            }
+        }
+
+        // LLM Chat — "status" fetches live data; other input echoes back
+        function sendLLMChat() {
+            const input  = document.getElementById('llm-chat-input');
+            const output = document.getElementById('chat-llm');
+            const cmd    = (input.value || '').trim();
+            if (!cmd) return;
+
+            const cmdLine = document.createElement('div');
+            cmdLine.style.color = '#ff6b35';
+            cmdLine.textContent = `$ ${cmd}`;
+            output.appendChild(cmdLine);
+            input.value = '';
+            output.scrollTop = output.scrollHeight;
+
+            if (cmd.toLowerCase() === 'status') {
+                const waitLine = document.createElement('div');
+                waitLine.style.color = '#999';
+                waitLine.textContent = 'Fetching status…';
+                output.appendChild(waitLine);
+                output.scrollTop = output.scrollHeight;
+
+                fetch('/api/llm/status')
+                    .then(r => r.json())
+                    .then(data => {
+                        waitLine.remove();
+                        const s = data.ok ? data.status : {};
+                        const lines = [
+                            `provider:      ${s.provider_name || s.provider || '(none)'}`,
+                            `provider_url:  ${s.provider_url || '—'}`,
+                            `model:         ${s.provider_model || '—'}`,
+                            `setup_ok:      ${s.setup_ok}  (${s.setup_msg || ''})`,
+                            `ollama:        ${s.ollama_installed ? 'installed' : 'not installed'}`,
+                            `models:        ${(s.models || []).join(', ') || '(none)'}`,
+                        ];
+                        lines.forEach(line => {
+                            const el = document.createElement('div');
+                            el.style.color = '#e0e0e0';
+                            el.textContent = line;
+                            output.appendChild(el);
+                        });
+                        // Also render probes
+                        if (Array.isArray(s.probes) && s.probes.length > 0) {
+                            s.probes.forEach(p => {
+                                const el = document.createElement('div');
+                                el.style.color = p.ok ? '#4caf50' : '#f44336';
+                                el.textContent = `probe: ${p.url}  ${p.ok ? p.latency_ms.toFixed(1) + 'ms' : 'UNREACHABLE'}`;
+                                output.appendChild(el);
+                            });
+                        }
+                        output.scrollTop = output.scrollHeight;
+                    })
+                    .catch(err => {
+                        waitLine.remove();
+                        const el = document.createElement('div');
+                        el.style.color = '#f44336';
+                        el.textContent = `Error: ${err.message}`;
+                        output.appendChild(el);
+                        output.scrollTop = output.scrollHeight;
+                    });
+            } else {
+                // Echo mode for other commands
+                const el = document.createElement('div');
+                el.style.color = '#aaa';
+                el.textContent = `(echo) ${cmd}  — type "status" to query live provider`;
+                output.appendChild(el);
+                output.scrollTop = output.scrollHeight;
+            }
+        }
+
+        // Allow Enter key in LLM chat input
+        document.addEventListener('DOMContentLoaded', () => {
+            const llmInput = document.getElementById('llm-chat-input');
+            if (llmInput) {
+                llmInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') sendLLMChat();
+                });
+            }
+        });
+
+        // =====================================================================
+        // Orchestration Page — Catalog Browser, File Editor, CLI Chat
+        // =====================================================================
+
+        // In-memory catalog cache
+        let _orchCatalog = null;  // { groups: [...], extras: [...] }
+        let _orchActiveGroup = null;  // group id currently selected
+        let _orchEditorPath = null;   // path of file currently open in editor
+
+        // ── CLI Chat ──
+        function sendOrchChat() {
+            const input  = document.getElementById('orch-chat-input');
+            const output = document.getElementById('chat-orch');
+            const cmd    = (input.value || '').trim();
+            if (!cmd) return;
+
+            const cmdLine = document.createElement('div');
+            cmdLine.style.color = '#ff6b35';
+            cmdLine.textContent = `$ ${cmd}`;
+            output.appendChild(cmdLine);
+            output.scrollTop = output.scrollHeight;
+            input.value = '';
+
+            const ALLOWED = ['version', 'doctor', 'llm-status'];
+            if (!ALLOWED.includes(cmd.toLowerCase())) {
+                const el = document.createElement('div');
+                el.style.color = '#ffeb3b';
+                el.textContent = `Unknown command. Available: ${ALLOWED.join(', ')}`;
+                output.appendChild(el);
+                output.scrollTop = output.scrollHeight;
+                return;
+            }
+
+            const waitLine = document.createElement('div');
+            waitLine.style.color = '#999';
+            waitLine.textContent = 'Running…';
+            output.appendChild(waitLine);
+            output.scrollTop = output.scrollHeight;
+
+            fetch('/api/cli/run', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ command: cmd.toLowerCase() })
+            })
+            .then(r => r.json())
+            .then(d => {
+                waitLine.remove();
+                const result = d.result || d;
+                const out = ((result.stdout || '') + (result.stderr || '')).trim();
+                const lines = out ? out.split('\n') : [];
+                if (lines.length > 0) {
+                    lines.forEach(line => {
+                        const el = document.createElement('div');
+                        el.style.color = (result.returncode === 0) ? '#e0e0e0' : '#f44336';
+                        el.textContent = line;
+                        output.appendChild(el);
+                    });
+                } else {
+                    const el = document.createElement('div');
+                    el.style.color = (result.returncode === 0) ? '#4caf50' : '#f44336';
+                    el.textContent = (result.returncode === 0) ? '(completed with no output)' : `Error: returncode ${result.returncode}`;
+                    output.appendChild(el);
+                }
+                output.scrollTop = output.scrollHeight;
+            })
+            .catch(err => {
+                waitLine.remove();
+                const el = document.createElement('div');
+                el.style.color = '#f44336';
+                el.textContent = `Network error: ${err.message}`;
+                output.appendChild(el);
+                output.scrollTop = output.scrollHeight;
+            });
+        }
+
+        // Allow Enter key in orch chat input
+        document.addEventListener('DOMContentLoaded', () => {
+            const orchInput = document.getElementById('orch-chat-input');
+            if (orchInput) {
+                orchInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') sendOrchChat();
+                });
+            }
+        });
+
+        // ── Load catalog from API ──
+        async function loadOrchCatalog() {
+            // Only fetch once per page load unless forced
+            try {
+                const resp = await fetch('/api/catalog');
+                const data = await resp.json();
+                if (data.ok) {
+                    _orchCatalog = { groups: data.groups || [], extras: data.extras || [] };
+                    _renderOrchStats(_orchCatalog);
+                    _renderOrchSidebar(_orchCatalog);
+                }
+            } catch(e) {
+                console.error('catalog load failed', e);
+            }
+        }
+
+        // ── Stats grid ──
+        function _renderOrchStats(catalog) {
+            const grid = document.getElementById('orch-stats-grid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+            let totalFiles = 0;
+
+            catalog.groups.forEach(g => {
+                if (g.count === 0) return;
+                totalFiles += g.count;
+                const card = document.createElement('div');
+                card.className = 'llm-stat-card';
+                card.style.cursor = 'pointer';
+                card.title = `Click to browse ${g.title}`;
+                card.innerHTML = `
+                    <div class="llm-stat-label">${g.title}</div>
+                    <div class="llm-stat-value" style="color:#ff6b35;">${g.count} file${g.count !== 1 ? 's' : ''}</div>
+                `;
+                card.addEventListener('click', () => orchSelectGroup(g.id));
+                grid.appendChild(card);
+            });
+
+            // Total card
+            const totalCard = document.createElement('div');
+            totalCard.className = 'llm-stat-card';
+            totalCard.innerHTML = `
+                <div class="llm-stat-label">Total Files</div>
+                <div class="llm-stat-value">${totalFiles}</div>
+            `;
+            grid.appendChild(totalCard);
+
+            // Extras card
+            if (catalog.extras && catalog.extras.length > 0) {
+                const extCard = document.createElement('div');
+                extCard.className = 'llm-stat-card';
+                extCard.innerHTML = `
+                    <div class="llm-stat-label">Extra Editables</div>
+                    <div class="llm-stat-value">${catalog.extras.length}</div>
+                `;
+                grid.appendChild(extCard);
+            }
+        }
+
+        // ── Sidebar group list ──
+        function _renderOrchSidebar(catalog) {
+            const list = document.getElementById('orch-group-list');
+            if (!list) return;
+            list.innerHTML = '';
+
+            catalog.groups.forEach(g => {
+                const btn = document.createElement('button');
+                btn.id = `orch-grp-btn-${g.id}`;
+                btn.textContent = `${g.title} (${g.count})`;
+                btn.style.cssText = 'background:#2a2a2a;border:1px solid #444;color:#e0e0e0;padding:0.4rem 0.7rem;border-radius:3px;cursor:pointer;font-size:0.85rem;text-align:left;transition:all 0.15s;';
+                btn.addEventListener('click', () => orchSelectGroup(g.id));
+                btn.addEventListener('mouseover', () => { if (_orchActiveGroup !== g.id) btn.style.background = '#333'; });
+                btn.addEventListener('mouseout', () => { if (_orchActiveGroup !== g.id) btn.style.background = '#2a2a2a'; });
+                list.appendChild(btn);
+            });
+
+            // Extras group button
+            if (catalog.extras && catalog.extras.length > 0) {
+                const btn = document.createElement('button');
+                btn.id = 'orch-grp-btn-extras';
+                btn.textContent = `Extra Editables (${catalog.extras.length})`;
+                btn.style.cssText = 'background:#2a2a2a;border:1px solid #444;color:#e0e0e0;padding:0.4rem 0.7rem;border-radius:3px;cursor:pointer;font-size:0.85rem;text-align:left;transition:all 0.15s;';
+                btn.addEventListener('click', () => orchSelectGroup('extras'));
+                btn.addEventListener('mouseover', () => { if (_orchActiveGroup !== 'extras') btn.style.background = '#333'; });
+                btn.addEventListener('mouseout', () => { if (_orchActiveGroup !== 'extras') btn.style.background = '#2a2a2a'; });
+                list.appendChild(btn);
+            }
+        }
+
+        // ── Select a group → populate file table ──
+        function orchSelectGroup(groupId) {
+            if (!_orchCatalog) return;
+
+            // Update active group highlight
+            if (_orchActiveGroup) {
+                const prev = document.getElementById(`orch-grp-btn-${_orchActiveGroup}`);
+                if (prev) { prev.style.background = '#2a2a2a'; prev.style.borderColor = '#444'; prev.style.color = '#e0e0e0'; }
+            }
+            _orchActiveGroup = groupId;
+            const cur = document.getElementById(`orch-grp-btn-${groupId}`);
+            if (cur) { cur.style.background = '#ff6b35'; cur.style.borderColor = '#ff6b35'; cur.style.color = '#fff'; }
+
+            // Get files for group
+            let files = [];
+            let groupTitle = groupId;
+            if (groupId === 'extras') {
+                files = _orchCatalog.extras || [];
+                groupTitle = 'Extra Editables';
+            } else {
+                const g = _orchCatalog.groups.find(x => x.id === groupId);
+                if (g) { files = g.files; groupTitle = g.title; }
+            }
+
+            // Update label
+            const label = document.getElementById('orch-group-label');
+            if (label) label.textContent = `${groupTitle} — ${files.length} file${files.length !== 1 ? 's' : ''}`;
+
+            // Show/hide New File button (not for extras)
+            const newBtn = document.getElementById('orch-new-file-btn');
+            if (newBtn) newBtn.style.display = (groupId !== 'extras') ? '' : 'none';
+
+            // Destroy DataTable before modifying DOM
+            if (_orchDT) {
+                try { _orchDT.destroy(); } catch(e) {}
+                _orchDT = null;
+            }
+
+            const tbody = document.getElementById('orch-file-tbody');
+            if (files.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#999;">No files in this group.</td></tr>';
+                _initOrDestroyOrchDT();
+                return;
+            }
+
+            tbody.innerHTML = '';
+            files.forEach(f => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${f.name}</td>
+                    <td>${f.group}</td>
+                    <td style="font-size:0.82rem;color:#aaa;font-family:'Courier New',monospace;">${f.path}</td>
+                    <td><button class="chat-btn secondary" style="font-size:0.8rem;padding:0.3rem 0.6rem;" onclick="orchOpenFile(${JSON.stringify(f.path)})">Open</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            _initOrDestroyOrchDT();
+
+            // Hide new file dialog if open
+            document.getElementById('orch-newfile-section').style.display = 'none';
+        }
+
+        // ── Open file in editor ──
+        async function orchOpenFile(filePath) {
+            const editorSection = document.getElementById('orch-editor-section');
+            const editorTextarea = document.getElementById('orch-editor-textarea');
+            const editorPathEl = document.getElementById('orch-editor-path');
+            const editorMeta = document.getElementById('orch-editor-meta');
+            const editorMsg = document.getElementById('orch-editor-msg');
+
+            editorPathEl.textContent = filePath;
+            editorTextarea.value = 'Loading…';
+            editorMeta.textContent = '';
+            editorMsg.textContent = '';
+            editorSection.style.display = '';
+
+            // Scroll editor into view
+            editorSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            try {
+                const resp = await fetch(`/api/file?path=${encodeURIComponent(filePath)}`);
+                const data = await resp.json();
+                if (data.ok) {
+                    editorTextarea.value = data.content;
+                    _orchEditorPath = data.path;
+                    editorMeta.textContent = `size: ${data.size} bytes  |  sha256: ${data.sha256.slice(0, 16)}…`;
+                } else {
+                    editorTextarea.value = '';
+                    editorMsg.style.color = '#f44336';
+                    editorMsg.textContent = `Error: ${data.error}`;
+                }
+            } catch(e) {
+                editorTextarea.value = '';
+                editorMsg.style.color = '#f44336';
+                editorMsg.textContent = `Network error: ${e.message}`;
+            }
+        }
+
+        // ── Save file from editor ──
+        async function orchSaveFile() {
+            const editorTextarea = document.getElementById('orch-editor-textarea');
+            const editorMeta = document.getElementById('orch-editor-meta');
+            const editorMsg = document.getElementById('orch-editor-msg');
+
+            if (!_orchEditorPath) return;
+
+            editorMsg.style.color = '#aaa';
+            editorMsg.textContent = 'Saving…';
+
+            try {
+                const resp = await fetch('/api/file/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ path: _orchEditorPath, content: editorTextarea.value })
+                });
+                const data = await resp.json();
+                if (data.ok) {
+                    editorMsg.style.color = '#4caf50';
+                    editorMsg.textContent = 'Saved.';
+                    editorMeta.textContent = `size: ${data.size} bytes  |  sha256: ${data.sha256.slice(0, 16)}…`;
+                    setTimeout(() => { editorMsg.textContent = ''; }, 2500);
+                } else {
+                    editorMsg.style.color = '#f44336';
+                    editorMsg.textContent = `Error: ${data.error}`;
+                }
+            } catch(e) {
+                editorMsg.style.color = '#f44336';
+                editorMsg.textContent = `Network error: ${e.message}`;
+            }
+        }
+
+        // ── Close editor ──
+        function orchCloseEditor() {
+            document.getElementById('orch-editor-section').style.display = 'none';
+            _orchEditorPath = null;
+        }
+
+        // ── Show new file dialog ──
+        function orchNewFile() {
+            if (!_orchActiveGroup || _orchActiveGroup === 'extras') return;
+            const catalog = _orchCatalog;
+            const g = catalog ? catalog.groups.find(x => x.id === _orchActiveGroup) : null;
+            const label = document.getElementById('orch-newfile-group-label');
+            if (label) label.textContent = g ? g.title : _orchActiveGroup;
+
+            document.getElementById('orch-newfile-input').value = '';
+            document.getElementById('orch-newfile-msg').textContent = '';
+            document.getElementById('orch-newfile-section').style.display = '';
+            document.getElementById('orch-newfile-input').focus();
+        }
+
+        // ── Create file ──
+        async function orchCreateFile() {
+            const filenameInput = document.getElementById('orch-newfile-input');
+            const msgEl = document.getElementById('orch-newfile-msg');
+            const filename = filenameInput.value.trim();
+            if (!filename) {
+                msgEl.style.color = '#f44336';
+                msgEl.textContent = 'Enter a filename.';
+                return;
+            }
+            if (!_orchActiveGroup) return;
+
+            msgEl.style.color = '#aaa';
+            msgEl.textContent = 'Creating…';
+
+            try {
+                const resp = await fetch('/api/file/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ group: _orchActiveGroup, filename })
+                });
+                const data = await resp.json();
+                if (data.ok) {
+                    msgEl.style.color = '#4caf50';
+                    msgEl.textContent = `Created: ${data.path}`;
+                    filenameInput.value = '';
+                    // Reload catalog to reflect new file
+                    _orchCatalog = null;
+                    await loadOrchCatalog();
+                    // Re-select current group to refresh table
+                    orchSelectGroup(_orchActiveGroup);
+                    // Open the new file in editor
+                    await orchOpenFile(data.path);
+                    setTimeout(() => {
+                        document.getElementById('orch-newfile-section').style.display = 'none';
+                    }, 1500);
+                } else {
+                    msgEl.style.color = '#f44336';
+                    msgEl.textContent = `Error: ${data.error}`;
+                }
+            } catch(e) {
+                msgEl.style.color = '#f44336';
+                msgEl.textContent = `Network error: ${e.message}`;
+            }
+        }
+
+        // =====================================================================
+        // CPU Nodes — CLI runner buttons + chat
+        // =====================================================================
+        function runCpuCliCmd(cmd) {
+            const outputEl = document.getElementById('cpu-cli-output');
+            const statusBar = document.getElementById('cpu-status-bar');
+            outputEl.style.display = '';
+            outputEl.className = 'llm-msg-box llm-msg-info';
+            outputEl.textContent = 'Running ' + cmd + '...';
+
+            fetch('/api/cli/run', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ command: cmd })
+            })
+            .then(r => r.json())
+            .then(d => {
+                const result = d.result || d;
+                const text = ((result.stdout || '') + (result.stderr || '')).trim();
+                outputEl.className = 'llm-msg-box ' + (result.ok ? 'llm-msg-ok' : 'llm-msg-err');
+                outputEl.textContent = text || (result.ok ? '(completed with no output)' : 'Error: returncode ' + result.returncode);
+                statusBar.textContent = cmd + ' — ' + (result.ok ? 'OK' : 'FAILED') + ' — ' + new Date().toLocaleTimeString();
+            })
+            .catch(err => {
+                outputEl.className = 'llm-msg-box llm-msg-err';
+                outputEl.textContent = 'Network error: ' + err.message;
+                statusBar.textContent = 'Error: ' + err.message;
+            });
+        }
+
+        function sendCpuChat() {
+            const input = document.getElementById('cpu-chat-input');
+            const output = document.getElementById('chat-cpu');
+            const cmd = (input.value || '').trim();
+            if (!cmd) return;
+
+            const cmdLine = document.createElement('div');
+            cmdLine.style.color = '#ff6b35';
+            cmdLine.textContent = '$ ' + cmd;
+            output.appendChild(cmdLine);
+            output.scrollTop = output.scrollHeight;
+            input.value = '';
+
+            const waitLine = document.createElement('div');
+            waitLine.style.color = '#999';
+            waitLine.textContent = 'Running...';
+            output.appendChild(waitLine);
+            output.scrollTop = output.scrollHeight;
+
+            fetch('/api/cli/run', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ command: cmd })
+            })
+            .then(r => r.json())
+            .then(d => {
+                waitLine.remove();
+                const result = d.result || d;
+                const text = ((result.stdout || '') + (result.stderr || '')).trim();
+                const lines = text ? text.split('\n') : [];
+                lines.forEach(line => {
+                    const el = document.createElement('div');
+                    el.style.color = result.ok ? '#e0e0e0' : '#f44336';
+                    el.textContent = line;
+                    output.appendChild(el);
+                });
+                if (!lines.length) {
+                    const el = document.createElement('div');
+                    el.style.color = result.ok ? '#4caf50' : '#f44336';
+                    el.textContent = result.ok ? '(completed with no output)' : 'Error: returncode ' + result.returncode;
+                    output.appendChild(el);
+                }
+                output.scrollTop = output.scrollHeight;
+            })
+            .catch(err => {
+                waitLine.remove();
+                const el = document.createElement('div');
+                el.style.color = '#f44336';
+                el.textContent = 'Network error: ' + err.message;
+                output.appendChild(el);
+                output.scrollTop = output.scrollHeight;
+            });
+        }
+
+        // Allow Enter key in CPU chat input
+        document.addEventListener('DOMContentLoaded', () => {
+            const cpuInput = document.getElementById('cpu-chat-input');
+            if (cpuInput) {
+                cpuInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') sendCpuChat();
+                });
+            }
+        });
+
+        // =====================================================================
+        // Solace AGI Sync — live API wiring
+        // =====================================================================
+
+        function _maskApiKey(key) {
+            if (!key) return '—';
+            if (key.length <= 12) return key;
+            return key.slice(0, 8) + '••••••••' + key.slice(-4);
+        }
+
+        function _renderCommunityStatus(community) {
+            const linked = community.linked || false;
+            const linkStatus = community.link_status || 'not_linked';
+            const dotCls = linked ? 'dot-green' : 'dot-red';
+            document.getElementById('sync-link-status').innerHTML =
+                '<span class="dot ' + dotCls + '"></span>' + (linked ? 'Linked' : linkStatus.replace(/_/g, ' '));
+            document.getElementById('sync-email').textContent = community.email || '—';
+            document.getElementById('sync-api-key').textContent = _maskApiKey(community.api_key);
+            document.getElementById('sync-event-count').textContent =
+                community.sync_events != null ? String(community.sync_events) : '—';
+            document.getElementById('sync-refresh-ts').textContent =
+                'Last refreshed: ' + new Date().toLocaleTimeString();
+        }
+
+        async function loadCommunityStatus() {
+            document.getElementById('sync-link-status').innerHTML =
+                '<span class="dot dot-grey"></span>Loading…';
+            try {
+                const resp = await fetch('/api/community/status');
+                const data = await resp.json();
+                if (data.ok && data.community) {
+                    _renderCommunityStatus(data.community);
+                } else {
+                    document.getElementById('sync-link-status').innerHTML =
+                        '<span class="dot dot-red"></span>API error';
+                }
+            } catch(e) {
+                document.getElementById('sync-link-status').innerHTML =
+                    '<span class="dot dot-red"></span>Network error';
+            }
+        }
+
+        async function linkCommunityAccount() {
+            const email = document.getElementById('sync-email-input').value.trim();
+            const msgEl = document.getElementById('sync-link-msg');
+
+            if (!email) {
+                msgEl.style.display = '';
+                msgEl.className = 'llm-msg-box llm-msg-err';
+                msgEl.textContent = 'Enter an email address to link.';
+                return;
+            }
+
+            msgEl.style.display = '';
+            msgEl.className = 'llm-msg-box llm-msg-info';
+            msgEl.textContent = 'Sending magic link…';
+
+            try {
+                const resp = await fetch('/api/community/link', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const data = await resp.json();
+                if (data.ok && data.link) {
+                    const lnk = data.link;
+                    msgEl.className = 'llm-msg-box llm-msg-ok';
+                    const keyLine = lnk.api_key ? '\nAPI Key: ' + lnk.api_key : '';
+                    const statusLine = lnk.status ? '\nStatus: ' + lnk.status : '';
+                    msgEl.textContent = 'Linked: ' + lnk.email + keyLine + statusLine;
+                    await loadCommunityStatus();
+                } else {
+                    msgEl.className = 'llm-msg-box llm-msg-err';
+                    msgEl.textContent = 'Link failed: ' + (data.error || 'Unknown error');
+                }
+            } catch(e) {
+                msgEl.className = 'llm-msg-box llm-msg-err';
+                msgEl.textContent = 'Network error: ' + e.message;
+            }
+        }
+
+        function _renderSyncResultsTable(sync) {
+            const tbody = document.getElementById('sync-results-tbody');
+            if (_syncDT) { try { _syncDT.destroy(); } catch(e) {} _syncDT = null; }
+
+            const uploaded = sync.uploaded || {};
+            const remote = sync.remote_available || [];
+            const rows = [];
+
+            if (uploaded.recipes != null) {
+                rows.push({ cat: 'Recipes', dir: 'Uploaded', count: uploaded.recipes, details: 'to Solace AGI cloud' });
+            }
+            if (uploaded.skills != null) {
+                rows.push({ cat: 'Skills', dir: 'Uploaded', count: uploaded.skills, details: 'to Solace AGI cloud' });
+            }
+            if (remote.length > 0) {
+                rows.push({ cat: 'Remote', dir: 'Available', count: remote.length,
+                    details: remote.slice(0, 5).join(', ') + (remote.length > 5 ? '…' : '') });
+            }
+            if (sync.status) {
+                rows.push({ cat: 'Sync', dir: 'Status', count: '—', details: sync.status });
+            }
+
+            tbody.innerHTML = '';
+            if (rows.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#999;">No results.</td></tr>';
+            } else {
+                rows.forEach(r => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = '<td>' + r.cat + '</td><td>' + r.dir + '</td><td>' + r.count + '</td><td style="color:#aaa;font-size:0.88rem;">' + r.details + '</td>';
+                    tbody.appendChild(tr);
+                });
+            }
+            _initOrDestroySyncDT();
+        }
+
+        async function runSync() {
+            const direction = document.getElementById('sync-direction').value;
+            const msgEl = document.getElementById('sync-result-msg');
+
+            msgEl.style.display = '';
+            msgEl.className = 'llm-msg-box llm-msg-info';
+            msgEl.textContent = 'Syncing (' + direction + ')…';
+
+            try {
+                const resp = await fetch('/api/community/sync', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ direction })
+                });
+                const data = await resp.json();
+                if (data.ok && data.sync) {
+                    const s = data.sync;
+                    msgEl.className = 'llm-msg-box llm-msg-ok';
+                    const uploaded = s.uploaded || {};
+                    const remote = s.remote_available || [];
+                    msgEl.textContent =
+                        'Status: ' + (s.status || 'done') + '\n' +
+                        'Uploaded — recipes: ' + (uploaded.recipes != null ? uploaded.recipes : '—') +
+                        ', skills: ' + (uploaded.skills != null ? uploaded.skills : '—') + '\n' +
+                        'Remote available: ' + (remote.length > 0 ? remote.join(', ') : '(none)');
+                    _renderSyncResultsTable(s);
+                    await loadCommunityStatus();
+                } else {
+                    msgEl.className = 'llm-msg-box llm-msg-err';
+                    msgEl.textContent = 'Sync failed: ' + (data.error || 'Unknown error');
+                }
+            } catch(e) {
+                msgEl.className = 'llm-msg-box llm-msg-err';
+                msgEl.textContent = 'Network error: ' + e.message;
+            }
+        }
+
+        function sendSyncChat() {
+            const input = document.getElementById('sync-chat-input');
+            const output = document.getElementById('chat-sync');
+            const cmd = (input.value || '').trim().toLowerCase();
+            if (!cmd) return;
+
+            const cmdLine = document.createElement('div');
+            cmdLine.style.color = '#ff6b35';
+            cmdLine.textContent = '$ ' + cmd;
+            output.appendChild(cmdLine);
+            input.value = '';
+            output.scrollTop = output.scrollHeight;
+
+            const waitLine = document.createElement('div');
+            waitLine.style.color = '#999';
+            waitLine.textContent = 'Fetching…';
+            output.appendChild(waitLine);
+            output.scrollTop = output.scrollHeight;
+
+            let p;
+            if (cmd === 'status') {
+                p = fetch('/api/community/status')
+                    .then(r => r.json())
+                    .then(data => {
+                        waitLine.remove();
+                        const c = (data.ok && data.community) ? data.community : {};
+                        [
+                            'linked:       ' + (c.linked || false),
+                            'link_status:  ' + (c.link_status || '—'),
+                            'email:        ' + (c.email || '—'),
+                            'api_key:      ' + _maskApiKey(c.api_key),
+                            'sync_events:  ' + (c.sync_events != null ? c.sync_events : '—'),
+                        ].forEach(line => {
+                            const el = document.createElement('div');
+                            el.style.color = '#e0e0e0';
+                            el.textContent = line;
+                            output.appendChild(el);
+                        });
+                        output.scrollTop = output.scrollHeight;
+                    });
+            } else if (cmd === 'sync') {
+                p = fetch('/api/community/sync', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ direction: 'both' })
+                })
+                .then(r => r.json())
+                .then(data => {
+                    waitLine.remove();
+                    if (data.ok && data.sync) {
+                        const s = data.sync;
+                        const u = s.uploaded || {};
+                        [
+                            'status:           ' + (s.status || '—'),
+                            'uploaded.recipes: ' + (u.recipes != null ? u.recipes : '—'),
+                            'uploaded.skills:  ' + (u.skills != null ? u.skills : '—'),
+                            'remote_available: ' + ((s.remote_available || []).join(', ') || '(none)'),
+                        ].forEach(line => {
+                            const el = document.createElement('div');
+                            el.style.color = '#4caf50';
+                            el.textContent = line;
+                            output.appendChild(el);
+                        });
+                        _renderSyncResultsTable(s);
+                    } else {
+                        const el = document.createElement('div');
+                        el.style.color = '#f44336';
+                        el.textContent = 'Sync error: ' + (data.error || 'Unknown');
+                        output.appendChild(el);
+                    }
+                    output.scrollTop = output.scrollHeight;
+                });
+            } else if (cmd === 'link') {
+                waitLine.remove();
+                const el = document.createElement('div');
+                el.style.color = '#aaa';
+                el.textContent = 'Use the "Link Account" form below — enter your email and click "Link Account".';
+                output.appendChild(el);
+                output.scrollTop = output.scrollHeight;
+                p = Promise.resolve();
+            } else {
+                waitLine.remove();
+                const el = document.createElement('div');
+                el.style.color = '#aaa';
+                el.textContent = 'Unknown command: ' + cmd + '  — try: status / sync / link';
+                output.appendChild(el);
+                output.scrollTop = output.scrollHeight;
+                p = Promise.resolve();
+            }
+
+            p.catch(err => {
+                waitLine.remove();
+                const el = document.createElement('div');
+                el.style.color = '#f44336';
+                el.textContent = 'Error: ' + err.message;
+                output.appendChild(el);
+                output.scrollTop = output.scrollHeight;
+            });
+        }
+
+        // Allow Enter key in Sync chat input
+        document.addEventListener('DOMContentLoaded', () => {
+            const syncInput = document.getElementById('sync-chat-input');
+            if (syncInput) {
+                syncInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') sendSyncChat();
+                });
+            }
+        });
+
+        // =====================================================================
         // Init on load
+        // =====================================================================
         document.addEventListener('DOMContentLoaded', () => {
             mermaid.contentLoaded();
+            // Load orchestration catalog on initial page load (orchestration is the default active page)
+            loadOrchCatalog();
         });
     </script>
 </body>

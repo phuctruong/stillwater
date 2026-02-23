@@ -147,6 +147,9 @@ ARTIFACT_DIR = REPO_ROOT / "artifacts" / "admin"
 COMMUNITY_LINK_FILE = ARTIFACT_DIR / "community_link.json"
 COMMUNITY_SYNC_LOG = ARTIFACT_DIR / "community_sync.jsonl"
 
+MAX_BODY_SIZE = 2_000_000  # 2 MB — reject request bodies larger than this
+COMMUNITY_SYNC_TAIL = 100  # max JSONL lines read from community sync log
+
 
 def _utc_now() -> str:
     return dt.datetime.now(tz=dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -184,7 +187,9 @@ def _allowed_paths() -> list[Path]:
 
 def _safe_resolve_repo_path(raw: str) -> Path:
     candidate = (REPO_ROOT / raw).resolve()
-    if not str(candidate).startswith(str(REPO_ROOT.resolve())):
+    try:
+        candidate.relative_to(REPO_ROOT.resolve())
+    except ValueError:
         raise ValueError("path escapes repo")
     return candidate
 
@@ -196,8 +201,12 @@ def _is_allowed_edit_path(path: Path) -> bool:
     for allowed in _allowed_paths():
         if allowed.is_file() and resolved == allowed:
             return True
-        if allowed.is_dir() and str(resolved).startswith(str(allowed) + os.sep):
-            return True
+        if allowed.is_dir():
+            try:
+                resolved.relative_to(allowed)
+                return True
+            except ValueError:
+                pass
     return False
 
 
@@ -420,7 +429,10 @@ def _community_status() -> dict:
             link = {}
     sync_count = 0
     if COMMUNITY_SYNC_LOG.exists():
-        sync_count = sum(1 for _ in COMMUNITY_SYNC_LOG.open("r", encoding="utf-8"))
+        with COMMUNITY_SYNC_LOG.open("r", encoding="utf-8") as _fh:
+            lines = _fh.readlines()
+        sync_count = len(lines)
+        lines = lines[-COMMUNITY_SYNC_TAIL:]  # tail last N entries to cap memory
     return {
         "linked": bool(link.get("api_key")),
         "email": link.get("email", ""),
@@ -524,6 +536,8 @@ class AdminHandler(BaseHTTPRequestHandler):
 
     def _read_json_body(self) -> dict:
         length = int(self.headers.get("Content-Length", "0"))
+        if length > MAX_BODY_SIZE:
+            raise ValueError(f"request body too large ({length} > {MAX_BODY_SIZE})")
         raw = self.rfile.read(length) if length > 0 else b"{}"
         try:
             payload = json.loads(raw.decode("utf-8"))
@@ -544,7 +558,12 @@ class AdminHandler(BaseHTTPRequestHandler):
             rel = path[len("/static/") :]
             file_path = (REPO_ROOT / "admin" / "static" / rel).resolve()
             static_root = (REPO_ROOT / "admin" / "static").resolve()
-            if not str(file_path).startswith(str(static_root)) or not file_path.exists():
+            try:
+                file_path.relative_to(static_root)
+            except ValueError:
+                self._send_json({"ok": False, "error": "not found"}, status=404)
+                return
+            if not file_path.exists():
                 self._send_json({"ok": False, "error": "not found"}, status=404)
                 return
             ctype, _ = mimetypes.guess_type(str(file_path))
@@ -579,8 +598,8 @@ class AdminHandler(BaseHTTPRequestHandler):
                 services = [s.model_dump() for s in _SERVICE_REGISTRY.list_all()]
                 self._send_json({"ok": True, "services": services})
                 return
-            if path.startswith("/api/services/") and "/health" in path:
-                sid = path.split("/api/services/")[1].split("/health")[0]
+            if path.startswith("/api/services/") and path.endswith("/health"):
+                sid = path[len("/api/services/"):-len("/health")]
                 health = _SERVICE_REGISTRY.health_check(sid)
                 self._send_json({"ok": True, "health": health.model_dump()})
                 return
