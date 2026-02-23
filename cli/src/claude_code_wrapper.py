@@ -167,12 +167,20 @@ class ClaudeCodeCLI:
             env = os.environ.copy()
             env.pop('CLAUDECODE', None)  # Remove nested session blocker
 
+            # Run from isolated wrapper directory to avoid picking up root CLAUDE.md
+            wrapper_work_dir = os.path.join(
+                os.path.dirname(__file__),
+                "..", "..", "admin", "wrapper-work"
+            )
+            os.makedirs(wrapper_work_dir, exist_ok=True)
+
             result = subprocess.run(
                 cmd,
                 capture_output=True,
                 text=True,
                 timeout=timeout,
-                env=env  # Use cleaned environment
+                env=env,  # Use cleaned environment
+                cwd=wrapper_work_dir  # Run from isolated directory
             )
 
             if result.returncode == 0:
