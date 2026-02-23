@@ -1,0 +1,46 @@
+---
+api_key: sw_sk_[24_random_bytes]
+firestore_project: stillwater-prod
+firestore_enabled: false
+sync_interval_seconds: 300
+last_sync_timestamp: null
+last_sync_status: pending
+---
+
+# Data Settings
+
+## API Key
+
+Generate your key at https://solaceagi.com/account/api-keys
+
+Replace `sw_sk_[24_random_bytes]` with your actual API key. The key format
+is `sw_sk_` followed by 48 hexadecimal characters (24 random bytes encoded
+as hex).
+
+Example:
+```
+api_key: sw_sk_a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6
+```
+
+Set `api_key: null` (or omit the field) if you are using stillwater
+without cloud sync.
+
+## Firestore Sync
+
+`firestore_project` — your Google Cloud project ID that hosts the
+Firestore database. Leave as `stillwater-prod` to use the shared hosted
+instance, or set your own project ID for self-hosting.
+
+`firestore_enabled` — set to `true` to enable automatic cloud backup of
+skills, recipes, and wishes. Requires a valid `api_key`.
+
+`sync_interval_seconds` — how often (in seconds) the background sync
+runs. Minimum recommended: 60. Default: 300 (5 minutes).
+
+## Sync Status (managed automatically)
+
+`last_sync_timestamp` — ISO-8601 UTC timestamp of the last successful
+sync. Updated automatically. Do not edit manually.
+
+`last_sync_status` — one of `pending`, `ok`, or `error`. Updated
+automatically after each sync attempt.

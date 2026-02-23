@@ -5820,6 +5820,14 @@ def main(argv: list[str] | None = None) -> int:
         help="Verification rung target (default: 641).",
     )
 
+    # data sync subcommands
+    p_data = sub.add_parser("data", help="Manage cloud data sync (push/pull learned data).")
+    p_data_sub = p_data.add_subparsers(dest="data_cmd", required=True)
+    p_data_sync = p_data_sub.add_parser("sync", help="Cloud sync operations: push, pull, status, configure.")
+    p_data_sync_sub = p_data_sync.add_subparsers(dest="sync_cmd", required=True)
+    from stillwater.cli_sync import add_sync_subcommands as _add_sync  # noqa: PLC0415
+    _add_sync(p_data_sync_sub)
+
     ns = parser.parse_args(argv)
 
     root = _repo_root()
@@ -10125,6 +10133,10 @@ def main(argv: list[str] | None = None) -> int:
                 print("  stop_reason: EVIDENCE_INCOMPLETE")
                 print(f"  failing_checks: {failures}")
                 return 1
+
+    if ns.cmd == "data":
+        from stillwater.cli_sync import handle_sync as _handle_sync  # noqa: PLC0415
+        return _handle_sync(ns)
 
     # Default: print quick directions.
     if ns.cmd == "print" or ns.cmd is None:

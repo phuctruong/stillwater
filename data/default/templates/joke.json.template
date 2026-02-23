@@ -1,0 +1,11 @@
+{
+  "id": "joke_XXXX",
+  "joke": "Your joke text here.",
+  "tags": ["humor", "general"],
+  "min_glow": 0.0,
+  "max_glow": 0.5,
+  "confidence": 0.80,
+  "freshness_days": 90,
+  "added_by": "your-name",
+  "added_at": "YYYY-MM-DD"
+}

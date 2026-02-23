@@ -2,7 +2,30 @@ const state = {
   catalog: null,
   group: null,
   activePath: "",
+  user: null,
+  idToken: null,
 };
+
+// Firebase initialization (lazy-loaded)
+let auth = null;
+let firebaseConfig = null;
+
+async function initializeFirebase() {
+  if (auth) return; // Already initialized
+
+  try {
+    const configResp = await fetch("/config");
+    const config = await configResp.json();
+    firebaseConfig = config.firebase;
+
+    firebase.initializeApp(firebaseConfig);
+    auth = firebase.auth();
+    auth.onAuthStateChanged(handleAuthStateChanged);
+    logLine("[Firebase] Initialized with project: " + firebaseConfig.projectId);
+  } catch (e) {
+    logLine("[Firebase] Initialization warning: " + e.message, "err");
+  }
+}
 
 const PRIMARY_GROUP_IDS = ["root_skills", "swarms", "root_recipes", "papers", "recipes", "skills", "personas", "identity"];
 
@@ -295,6 +318,212 @@ async function runCliCommand() {
   logLine(`CLI ${command}: ${data.ok ? "OK" : "FAIL"} (rc=${r.returncode})`);
 }
 
+// ============= Firebase Auth Functions =============
+
+async function handleAuthStateChanged(user) {
+  state.user = user;
+  updateAuthUI();
+
+  if (user) {
+    try {
+      state.idToken = await user.getIdToken();
+      logLine(`[Auth] Logged in as ${user.email}`);
+    } catch (e) {
+      logLine(`[Auth] Failed to get ID token: ${e.message}`, "err");
+    }
+  }
+}
+
+function updateAuthUI() {
+  const loginBtn = document.getElementById("loginBtn");
+  const userMenu = document.getElementById("userMenu");
+  const userEmail = document.getElementById("userEmail");
+
+  if (state.user) {
+    loginBtn.style.display = "none";
+    userMenu.style.display = "flex";
+    userEmail.textContent = state.user.email;
+  } else {
+    loginBtn.style.display = "block";
+    userMenu.style.display = "none";
+  }
+}
+
+function openAuthModal() {
+  const modal = document.getElementById("authModal");
+  modal.classList.add("active");
+}
+
+function closeAuthModal() {
+  const modal = document.getElementById("authModal");
+  modal.classList.remove("active");
+}
+
+async function loginWithGoogle() {
+  if (!auth) await initializeFirebase();
+  if (!auth) {
+    logLine("Firebase not available", "err");
+    return;
+  }
+  try {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope("profile");
+    provider.addScope("email");
+    await auth.signInWithPopup(provider);
+    closeAuthModal();
+  } catch (e) {
+    logLine(`[Auth] Google login failed: ${e.message}`, "err");
+  }
+}
+
+async function loginWithGitHub() {
+  if (!auth) await initializeFirebase();
+  if (!auth) {
+    logLine("Firebase not available", "err");
+    return;
+  }
+  try {
+    const provider = new firebase.auth.GithubAuthProvider();
+    await auth.signInWithPopup(provider);
+    closeAuthModal();
+  } catch (e) {
+    logLine(`[Auth] GitHub login failed: ${e.message}`, "err");
+  }
+}
+
+async function logout() {
+  try {
+    await auth.signOut();
+    state.idToken = null;
+    logLine("[Auth] Logged out");
+  } catch (e) {
+    logLine(`[Auth] Logout failed: ${e.message}`, "err");
+  }
+}
+
+// ============= API Key Generation Functions =============
+
+function openApiKeyModal() {
+  const modal = document.getElementById("apiKeyModal");
+  modal.classList.add("active");
+  resetApiKeyFlow();
+}
+
+function closeApiKeyModal() {
+  const modal = document.getElementById("apiKeyModal");
+  modal.classList.remove("active");
+  resetApiKeyFlow();
+}
+
+function resetApiKeyFlow() {
+  document.getElementById("verificationStep").style.display = "block";
+  document.getElementById("socialVerifyStep").style.display = "none";
+  document.getElementById("apiKeyStep").style.display = "none";
+  document.getElementById("verifySocial").checked = false;
+  document.getElementById("verifyPaid").checked = true;
+  document.getElementById("socialPostUrl").value = "";
+}
+
+function showSocialVerifyStep() {
+  document.getElementById("verificationStep").style.display = "none";
+  document.getElementById("socialVerifyStep").style.display = "block";
+}
+
+function backToVerifyMethod() {
+  document.getElementById("verificationStep").style.display = "block";
+  document.getElementById("socialVerifyStep").style.display = "none";
+}
+
+async function proceedWithVerification() {
+  const method = document.querySelector('input[name="verifyMethod"]:checked').value;
+
+  if (method === "social") {
+    showSocialVerifyStep();
+  } else if (method === "paid") {
+    // For MVP: assume paid account, skip validation and generate key
+    await generateApiKeyAfterVerification();
+  }
+}
+
+async function verifySocialPost() {
+  const url = document.getElementById("socialPostUrl").value.trim();
+  if (!url) {
+    logLine("Please enter a URL", "err");
+    return;
+  }
+
+  try {
+    logLine("Verifying social post...");
+    // Call backend to verify social post
+    const response = await api("/api/verify/social", "POST", { url }, state.idToken);
+    logLine(`Social post verification: ${response.status}`);
+    await generateApiKeyAfterVerification();
+  } catch (e) {
+    logLine(`Verification failed: ${e.message}`, "err");
+  }
+}
+
+async function generateApiKeyAfterVerification() {
+  if (!state.idToken) {
+    logLine("Not authenticated", "err");
+    return;
+  }
+
+  try {
+    logLine("Generating API key...");
+    const response = await api("/api/keys/generate", "POST", {}, state.idToken);
+
+    // Show API key
+    document.getElementById("verificationStep").style.display = "none";
+    document.getElementById("socialVerifyStep").style.display = "none";
+    document.getElementById("apiKeyStep").style.display = "block";
+
+    document.getElementById("apiKeyValue").textContent = response.api_key;
+    document.getElementById("keyIdValue").textContent = response.key_id;
+    document.getElementById("keyCreatedValue").textContent = new Date(response.created_at).toLocaleString();
+
+    logLine(`[API Key] Generated key: ${response.key_prefix}...`);
+  } catch (e) {
+    logLine(`Failed to generate API key: ${e.message}`, "err");
+  }
+}
+
+function copyApiKey() {
+  const apiKey = document.getElementById("apiKeyValue").textContent;
+  navigator.clipboard.writeText(apiKey).then(() => {
+    logLine("API key copied to clipboard");
+    document.getElementById("copyApiKeyBtn").textContent = "✓ Copied!";
+    setTimeout(() => {
+      document.getElementById("copyApiKeyBtn").textContent = "📋 Copy";
+    }, 2000);
+  });
+}
+
+// ============= Updated API helper with auth =============
+
+async function api(path, method = "GET", body = null, idToken = null) {
+  const opts = { method, headers: {} };
+
+  if (idToken) {
+    opts.headers["Authorization"] = `Bearer ${idToken}`;
+  }
+
+  if (body !== null && Object.keys(body).length > 0) {
+    opts.headers["Content-Type"] = "application/json";
+    opts.body = JSON.stringify(body);
+  }
+
+  const resp = await fetch(path, opts);
+  const data = await resp.json().catch(() => ({}));
+
+  if (!resp.ok || data.ok === false) {
+    const err = data.error || data.detail || `${resp.status} ${resp.statusText}`;
+    throw new Error(err);
+  }
+
+  return data;
+}
+
 function bindEvents() {
   document.getElementById("refreshCatalogBtn").onclick = () => run(refreshCatalog);
   document.getElementById("saveFileBtn").onclick = () => run(saveFile);
@@ -308,6 +537,20 @@ function bindEvents() {
   document.getElementById("linkCommunityBtn").onclick = () => run(linkCommunity);
   document.getElementById("syncCommunityBtn").onclick = () => run(syncCommunity);
   document.getElementById("runCliBtn").onclick = () => run(runCliCommand);
+
+  // Auth UI events
+  document.getElementById("loginBtn").onclick = openAuthModal;
+  document.getElementById("googleLoginBtn").onclick = loginWithGoogle;
+  document.getElementById("githubLoginBtn").onclick = loginWithGitHub;
+  document.getElementById("logoutBtn").onclick = logout;
+
+  // API Key events
+  document.getElementById("getApiKeyBtn").onclick = openApiKeyModal;
+  document.getElementById("proceedVerifyBtn").onclick = proceedWithVerification;
+  document.getElementById("verifySocialBtn").onclick = verifySocialPost;
+  document.getElementById("backToMethodBtn").onclick = backToVerifyMethod;
+  document.getElementById("copyApiKeyBtn").onclick = copyApiKey;
+  document.getElementById("doneKeyBtn").onclick = closeApiKeyModal;
 }
 
 async function run(fn) {
@@ -318,10 +561,28 @@ async function run(fn) {
   }
 }
 
+// Close modals when clicking outside
+document.addEventListener("click", (e) => {
+  const authModal = document.getElementById("authModal");
+  const apiKeyModal = document.getElementById("apiKeyModal");
+
+  if (e.target === authModal) {
+    closeAuthModal();
+  }
+  if (e.target === apiKeyModal) {
+    closeApiKeyModal();
+  }
+});
+
 async function boot() {
   setClock();
   setInterval(setClock, 1000);
   bindEvents();
+
+  // Initialize Firebase in background
+  await run(initializeFirebase);
+  updateAuthUI();
+
   await run(refreshCatalog);
   await run(refreshLlmStatus);
   await run(refreshCommunity);
@@ -337,6 +598,9 @@ async function boot() {
     }
   });
   logLine("Stillwater Admin Dojo v0.2 ready.");
+  if (auth) {
+    logLine("Click 'Login with Google' in the header to connect your solaceagi.com account.");
+  }
 }
 
 boot();

@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Stillwater Admin Dojo</title>
     <link rel="stylesheet" href="/static/app.css" />
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
   </head>
   <body>
     <div class="bg-overlay"></div>
@@ -13,8 +16,117 @@
         <h1>Stillwater Admin Dojo</h1>
         <p>Kernel controls, ripple editing, and PHUC operations from one board.</p>
       </div>
-      <div class="status-chip" id="serverClock">--</div>
+      <div class="header-controls">
+        <div class="status-chip" id="serverClock">--</div>
+        <div id="authSection" class="auth-section">
+          <button id="loginBtn" class="auth-btn">Login with Google</button>
+          <div id="userMenu" class="user-menu" style="display:none;">
+            <span id="userEmail" class="user-email"></span>
+            <button id="getApiKeyBtn" class="auth-btn highlight">Get API Key</button>
+            <button id="logoutBtn" class="auth-btn">Logout</button>
+          </div>
+        </div>
+      </div>
     </header>
+
+    <!-- Firebase Login Modal -->
+    <div id="authModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Stillwater API Access</h2>
+          <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>Sign in with your email to get API access for syncing your data to solaceagi.com</p>
+          <div id="firebaseAuthContainer"></div>
+          <div class="auth-options">
+            <button id="googleLoginBtn" class="login-provider">
+              <span>Login with Google</span>
+            </button>
+            <button id="githubLoginBtn" class="login-provider">
+              <span>Login with GitHub</span>
+            </button>
+          </div>
+          <p class="auth-note">No payment required. API key lets you sync your data to the cloud.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- API Key Generation Modal -->
+    <div id="apiKeyModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>API Key Setup</h2>
+          <button class="modal-close" onclick="closeApiKeyModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div id="verificationFlow">
+            <!-- Step 1: Verification Method Selection (assume paid for MVP) -->
+            <div id="verificationStep" class="setup-step">
+              <h3>Verify Your Account</h3>
+              <p class="step-desc">For MVP testing, we assume you have a paid account. Your API key will be generated automatically.</p>
+              <div class="verify-options">
+                <div class="verify-option">
+                  <input type="radio" name="verifyMethod" id="verifyPaid" value="paid" checked />
+                  <label for="verifyPaid">
+                    <strong>Paid Account (Recommended)</strong>
+                    <span>Fastest option - auto-verified</span>
+                  </label>
+                </div>
+                <div class="verify-option">
+                  <input type="radio" name="verifyMethod" id="verifySocial" value="social" />
+                  <label for="verifySocial">
+                    <strong>Social Post</strong>
+                    <span>Post "@solaceagi is great I just joined" publicly</span>
+                  </label>
+                </div>
+                <div class="verify-option">
+                  <input type="radio" name="verifyMethod" id="verifyFollow" value="follow" />
+                  <label for="verifyFollow">
+                    <strong>Social Follow</strong>
+                    <span>Follow @solaceagi on Twitter/LinkedIn</span>
+                  </label>
+                </div>
+              </div>
+              <button id="proceedVerifyBtn" class="action-btn">Continue</button>
+            </div>
+
+            <!-- Step 2: Social Post Verification (stub) -->
+            <div id="socialVerifyStep" class="setup-step" style="display:none;">
+              <h3>Verify with Public Post</h3>
+              <p class="step-desc">Post something like this publicly on Twitter, Facebook, or LinkedIn:</p>
+              <div class="code-block">@solaceagi is great I just joined</div>
+              <p class="step-desc">Then paste the link to your post:</p>
+              <input id="socialPostUrl" type="url" placeholder="https://twitter.com/yourname/status/..." />
+              <button id="verifySocialBtn" class="action-btn">Verify Post</button>
+              <button id="backToMethodBtn" class="action-btn secondary">Back</button>
+            </div>
+
+            <!-- Step 3: API Key Display -->
+            <div id="apiKeyStep" class="setup-step" style="display:none;">
+              <h3>Your API Key</h3>
+              <p class="step-desc">Save this key now. It will not be shown again.</p>
+              <div class="api-key-display">
+                <code id="apiKeyValue"></code>
+                <button id="copyApiKeyBtn" class="copy-btn">📋 Copy</button>
+              </div>
+              <div class="key-info">
+                <p><strong>Key ID:</strong> <code id="keyIdValue"></code></p>
+                <p><strong>Created:</strong> <span id="keyCreatedValue"></span></p>
+              </div>
+              <p class="warning">⚠️ This key provides access to your data. Keep it secret!</p>
+              <p>Next steps:</p>
+              <ol>
+                <li>Save the key to <code>data/settings.md</code> in your local stillwater repo</li>
+                <li>Run <code>stillwater sync pull</code> to download your data</li>
+                <li>Data will be synced every 5 minutes</li>
+              </ol>
+              <button id="doneKeyBtn" class="action-btn">Done</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <main class="layout">
       <section class="panel">

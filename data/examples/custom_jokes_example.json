@@ -1,0 +1,46 @@
+[
+  {
+    "id": "joke_001",
+    "joke": "Why do programmers prefer dark mode? Because light attracts bugs.",
+    "tags": ["programming", "humor", "general"],
+    "min_glow": 0.0,
+    "max_glow": 0.4,
+    "confidence": 0.85,
+    "freshness_days": 90,
+    "added_by": "stillwater-default",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "joke_mine_001",
+    "joke": "I asked the AI to tell me a joke. It said: Have you heard the one about the chatbot who took a coffee break? It was unresponsive for 20 minutes.",
+    "tags": ["ai", "humor", "general"],
+    "min_glow": 0.0,
+    "max_glow": 0.5,
+    "confidence": 0.85,
+    "freshness_days": 90,
+    "added_by": "your-name",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "joke_mine_002",
+    "joke": "My team's sprint planning meeting could have been an email. The email could have been a sticky note. The sticky note could have been silence.",
+    "tags": ["agile", "humor", "meetings", "general"],
+    "min_glow": 0.0,
+    "max_glow": 0.5,
+    "confidence": 0.80,
+    "freshness_days": 60,
+    "added_by": "your-name",
+    "added_at": "2026-02-23"
+  },
+  {
+    "id": "joke_mine_003",
+    "joke": "A developer and a designer walk into a bar. The developer says: This place has great ambiance. The designer says: The kerning is terrible.",
+    "tags": ["design", "humor", "frontend", "general"],
+    "min_glow": 0.1,
+    "max_glow": 0.5,
+    "confidence": 0.78,
+    "freshness_days": 90,
+    "added_by": "your-name",
+    "added_at": "2026-02-23"
+  }
+]

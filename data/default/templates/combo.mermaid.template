@@ -1,0 +1,19 @@
+---
+id: combo-YOUR-ID-v1
+format: mermaid-flowchart
+source: custom
+added_at: YYYY-MM-DD
+description: Brief description of what this combo executes
+---
+
+```mermaid
+flowchart TD
+    Wish([Wish Received]) --> Agent[your-swarm-role\nprime-safety + prime-coder + your-skill]
+    Agent --> Done([Task Complete])
+```
+
+## Combo Entry
+
+| wish_id | swarm | recipe | confidence | category |
+|---------|-------|--------|------------|----------|
+| your-wish-id | coder | prime-safety, prime-coder, your-skill | 0.85 | your-category |

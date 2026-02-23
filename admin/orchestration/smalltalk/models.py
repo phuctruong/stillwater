@@ -17,6 +17,76 @@ from pydantic import BaseModel, Field, field_validator
 
 
 # ---------------------------------------------------------------------------
+# LearnedSmallTalk — new learned pattern (Phase 1 persistence equivalent)
+# ---------------------------------------------------------------------------
+
+class LearnedSmallTalk(BaseModel):
+    """
+    A new banter pattern discovered by the LLM and persisted.
+
+    Stored as JSONL in ~/stillwater/data/smalltalk/learned_smalltalk.jsonl.
+    Merged into the in-memory PatternRepo at startup.
+
+    Symmetric to LearnedWish (intent/models.py) and LearnedCombo (execute/models.py).
+
+    Sync fields (added here, as in LearnedWish and LearnedCombo):
+      synced_to_firestore  — True once the Firestore write succeeds
+      sync_timestamp       — UTC ISO timestamp of successful Firestore sync
+      sync_attempt_count   — Number of sync attempts (capped at 5)
+    """
+
+    pattern_id: str
+    """Stable identifier for this banter pattern, e.g. 'joke_016'."""
+
+    response_template: str
+    """Template string for the banter response. May contain {placeholders}."""
+
+    keywords: List[str] = Field(default_factory=list)
+    """Trigger keywords for CPU matching. Always lowercase."""
+
+    tags: List[str] = Field(default_factory=list)
+    """Category tags, e.g. ['support', 'encouragement']."""
+
+    min_glow: float = Field(default=0.0, ge=0.0, le=1.0)
+    """Minimum GLOW score for this pattern to be applicable."""
+
+    max_glow: float = Field(default=1.0, ge=0.0, le=1.0)
+    """Maximum GLOW score for this pattern to be applicable."""
+
+    confidence: float = Field(default=0.7, ge=0.0, le=1.0)
+    """Confidence in this learned pattern."""
+
+    source: Literal["llm", "manual"] = "llm"
+    """Who generated this entry."""
+
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    """
+    When this entry was created locally.
+    Immutable: set once, never overwritten (conflict-resolution key).
+    """
+
+    session_id: str = ""
+    """Session that generated this entry."""
+
+    # --- Sync fields (3 fields, same pattern as LearnedWish / LearnedCombo) ---
+
+    synced_to_firestore: bool = False
+    """True once successfully synced to Firestore."""
+
+    sync_timestamp: Optional[str] = None
+    """UTC ISO timestamp of the successful Firestore write. None = not yet synced."""
+
+    sync_attempt_count: int = 0
+    """Number of Firestore sync attempts. Capped at 5 by the sync worker."""
+
+    @field_validator("keywords", mode="before")
+    @classmethod
+    def normalize_keywords(cls, v: List[str]) -> List[str]:
+        """Force all keywords to lowercase and strip whitespace."""
+        return [kw.lower().strip() for kw in v if kw.strip()]
+
+
+# ---------------------------------------------------------------------------
 # Register Profile — user's communication register
 # ---------------------------------------------------------------------------
 

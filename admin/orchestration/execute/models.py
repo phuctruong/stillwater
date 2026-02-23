@@ -206,6 +206,11 @@ class LearnedCombo(BaseModel):
 
     Stored as JSONL in learned_combos.jsonl.
     Loaded and merged into ComboDatabase on startup.
+
+    Sync fields (backward-compatible: optional on deserialization from old JSONL):
+      synced_to_firestore  — True once the Firestore write succeeds
+      sync_timestamp       — UTC ISO timestamp of successful sync (None = not yet synced)
+      sync_attempt_count   — Number of sync attempts (capped at 5 by sync worker)
     """
 
     wish_id: str
@@ -226,6 +231,17 @@ class LearnedCombo(BaseModel):
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
     session_id: str = ""
+
+    # --- Sync fields (optional; default to unsynced for backward compat) ---
+
+    synced_to_firestore: bool = False
+    """True once successfully synced to Firestore."""
+
+    sync_timestamp: Optional[str] = None
+    """UTC ISO timestamp of the successful Firestore write. None = not yet synced."""
+
+    sync_attempt_count: int = 0
+    """Number of Firestore sync attempts. Capped at 5 by the sync worker."""
 
     @field_validator("wish_id")
     @classmethod

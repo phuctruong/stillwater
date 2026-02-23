@@ -1,0 +1,25 @@
+---
+id: wish-YOUR-ID-v1
+format: mermaid-statechart
+source: custom
+added_at: YYYY-MM-DD
+description: Brief description of what this wish handles
+---
+
+```mermaid
+stateDiagram-v2
+    [*] --> Idle
+    Idle --> Processing : wish_received
+    Processing --> Matched : skill_found
+    Processing --> Blocked : no_match
+    Matched --> Dispatched : agent_launched
+    Dispatched --> Done : task_complete
+    Blocked --> [*]
+    Done --> [*]
+```
+
+## Wish Entry
+
+| wish_id | name | category | swarm | skill_pack_hint | confidence |
+|---------|------|----------|-------|-----------------|------------|
+| your-wish-id | Your Wish Name | category | coder | coder | 0.85 |

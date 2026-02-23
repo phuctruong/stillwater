@@ -24,7 +24,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from .models import BanterQueueEntry, JokeEntry, SmallTalkPattern, TechFactEntry
+from .models import BanterQueueEntry, JokeEntry, LearnedSmallTalk, SmallTalkPattern, TechFactEntry
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -410,3 +410,196 @@ class TechFactRepo:
 
     def all(self) -> List[TechFactEntry]:
         return list(self._facts)
+
+
+# ---------------------------------------------------------------------------
+# SmallTalkDB — facade combining BanterQueueDB + PatternRepo + learned persistence
+# ---------------------------------------------------------------------------
+
+class SmallTalkDB:
+    """
+    Main database class for the Small Talk Twin.
+
+    Mirrors the structure of WishDB (intent/database.py) and ComboDB (execute/database.py).
+
+    Startup sequence:
+      1. Load canonical patterns from patterns_path (if supplied)
+      2. Load learned_smalltalk.jsonl from learned_smalltalk_path and merge into PatternRepo
+      3. Hot path: in-memory only (no disk I/O)
+
+    append_learned_smalltalk():
+      - Persists entry to learned_smalltalk.jsonl (atomic append)
+      - Immediately merges into live PatternRepo (keyword union for existing pattern_id)
+      - Thread-safe via threading.Lock
+
+    Backward compatibility:
+      - learned_smalltalk_path is optional; if absent, learned persistence is skipped
+      - Existing tests that create SmallTalkDB without learned_smalltalk_path are unaffected
+    """
+
+    def __init__(
+        self,
+        patterns_path: Optional[str] = None,
+        learned_smalltalk_path: Optional[str] = None,
+        db_path: str = _DEFAULT_DB_PATH,
+    ) -> None:
+        """
+        Args:
+            patterns_path:          Path to canonical patterns JSONL (optional).
+            learned_smalltalk_path: Path to learned_smalltalk.jsonl (optional).
+            db_path:                SQLite path for BanterQueueDB (default: :memory:).
+        """
+        self._learned_path = (
+            Path(learned_smalltalk_path) if learned_smalltalk_path else None
+        )
+        self._lock = threading.Lock()
+
+        # In-memory repos
+        self.pattern_repo = PatternRepo()
+        self.banter_queue = BanterQueueDB(db_path=db_path)
+
+        # Load canonical patterns
+        if patterns_path:
+            self.pattern_repo.load_jsonl(patterns_path)
+
+        # Load and merge learned patterns
+        if self._learned_path:
+            self._load_learned()
+
+    # ------------------------------------------------------------------
+    # Public API
+    # ------------------------------------------------------------------
+
+    def append_learned_smalltalk(self, entry: LearnedSmallTalk) -> None:
+        """
+        Persist a new learned smalltalk entry and merge into the live PatternRepo.
+
+        Thread-safe (acquired lock).
+        Merge semantics:
+          - If pattern_id already exists in PatternRepo: new keywords are unioned in.
+          - If pattern_id does not exist: a new SmallTalkPattern is created from this entry.
+
+        Mirrors WishDB.append_learned_wish() and ComboDB.append_learned_combo().
+        """
+        with self._lock:
+            # Persist to disk (atomic append via temp+rename)
+            if self._learned_path:
+                self._append_jsonl(self._learned_path, entry)
+
+            # Merge into live PatternRepo immediately
+            self._merge_learned(entry)
+
+    # ------------------------------------------------------------------
+    # Internal loading
+    # ------------------------------------------------------------------
+
+    def _load_learned(self) -> int:
+        """
+        Load learned smalltalk entries from learned_smalltalk.jsonl.
+
+        Returns number of entries applied.
+        Silently skips malformed lines (append-only safety).
+        """
+        applied = 0
+        if not self._learned_path or not self._learned_path.exists():
+            return 0
+        with self._learned_path.open("r", encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                try:
+                    data = json.loads(line)
+                    entry = LearnedSmallTalk(**data)
+                    self._merge_learned(entry)
+                    applied += 1
+                except Exception:
+                    pass  # malformed line — skip
+        return applied
+
+    def _merge_learned(self, entry: LearnedSmallTalk) -> None:
+        """
+        Merge a learned smalltalk entry into the in-memory PatternRepo.
+
+        If pattern_id already exists:
+          - Keywords are union-merged (no duplicates, existing order preserved first)
+          - response_template is updated if different
+        If pattern_id does not exist:
+          - A new SmallTalkPattern is created and added to the repo.
+
+        The PatternRepo stores SmallTalkPattern objects (canonical model).
+        LearnedSmallTalk fields map 1:1 to SmallTalkPattern fields.
+        """
+        existing_patterns = {p.id: p for p in self.pattern_repo.all()}
+
+        if entry.pattern_id in existing_patterns:
+            existing = existing_patterns[entry.pattern_id]
+            # Union keywords
+            existing_kws = set(existing.keywords)
+            new_kws = [kw for kw in entry.keywords if kw not in existing_kws]
+            merged_keywords = existing.keywords + new_kws
+
+            # Rebuild pattern with merged keywords
+            merged = SmallTalkPattern(
+                id=existing.id,
+                keywords=merged_keywords,
+                response_template=entry.response_template or existing.response_template,
+                priority=existing.priority,
+                freshness_days=existing.freshness_days,
+                min_glow=entry.min_glow,
+                max_glow=entry.max_glow,
+                confidence=max(existing.confidence, entry.confidence),
+                formality=existing.formality,
+                response_type=existing.response_type,
+            )
+            self.pattern_repo._patterns[merged.id] = merged
+        else:
+            # Create new SmallTalkPattern from learned entry
+            new_pattern = SmallTalkPattern(
+                id=entry.pattern_id,
+                keywords=list(entry.keywords),
+                response_template=entry.response_template,
+                min_glow=entry.min_glow,
+                max_glow=entry.max_glow,
+                confidence=entry.confidence,
+            )
+            self.pattern_repo._patterns[new_pattern.id] = new_pattern
+
+    # ------------------------------------------------------------------
+    # Persistence helpers
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _append_jsonl(path: Path, obj: LearnedSmallTalk) -> None:
+        """
+        Atomically append a LearnedSmallTalk as a JSON line to path.
+
+        Uses temp file + os.replace() for atomicity (same as LocalStore).
+        """
+        import os
+        import tempfile
+
+        path.parent.mkdir(parents=True, exist_ok=True)
+
+        # Read existing
+        existing = ""
+        if path.exists():
+            try:
+                existing = path.read_text(encoding="utf-8")
+            except OSError:
+                existing = ""
+
+        if existing and not existing.endswith("\n"):
+            existing += "\n"
+
+        new_content = existing + obj.model_dump_json() + "\n"
+
+        fd, tmp_path = tempfile.mkstemp(
+            dir=str(path.parent), prefix=".tmp_", suffix=".jsonl"
+        )
+        try:
+            os.write(fd, new_content.encode("utf-8"))
+            os.fsync(fd)
+        finally:
+            os.close(fd)
+        os.replace(tmp_path, str(path))

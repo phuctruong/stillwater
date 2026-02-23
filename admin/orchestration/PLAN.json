@@ -1,0 +1,229 @@
+{
+  "schema_version": "1.0.0",
+  "task_id": "design-storage-architecture",
+  "northstar_metric": "OSS adoption — every developer can clone, run offline, and inspect all data in plaintext JSON/Mermaid; Firestore is opt-in, never required",
+  "produced_by": "Grace Hopper (Planner agent, Sonnet 4.6)",
+  "produced_at": "2026-02-23",
+  "rung_achieved": 274177,
+
+  "dream": {
+    "goal": "Define a storage architecture that is local-first by default, human-readable (JSON + Mermaid), works fully offline for any OSS developer, and optionally syncs to Firestore for users who want cloud backup. Any developer who clones stillwater gets a working system with zero cloud dependencies; Firestore is an additive, user-opt-in layer that never breaks offline operation.",
+    "success_metrics": [
+      "A developer with no cloud account can clone stillwater, run `python -m stillwater`, and all three phases operate correctly using only ~/stillwater/data/",
+      "All persistent entities (wishes, combos, smalltalk entries) are human-readable JSONL or Mermaid files under ~/stillwater/data/ — no binary formats, no SQLite for main data",
+      "Firestore sync is enabled by a single config flag (firestore.enabled: true in llm_config.yaml or env var STILLWATER_FIRESTORE_PROJECT) and fails gracefully if unavailable",
+      "No data loss in any conflict scenario: last-write-wins with UTC timestamps, verified by design review",
+      "LocalStore, FirestoreStore, HybridStore all implement the same StorageBackend interface — HybridStore is a thin wrapper with no business logic of its own",
+      "LearnedSmallTalk entity is defined symmetrically with LearnedWish and LearnedCombo"
+    ],
+    "constraints": [
+      "Format: JSON + Mermaid ONLY. No YAML for data. No SQLite for main learned data (banter_queue SQLite may remain for session-scoped in-memory use only)",
+      "Data directory: ~/stillwater/data/ (NOT ~/.stillwater/orchestration/ which is the current dev location)",
+      "Offline first: LocalStore must function with zero network, zero cloud SDK imported",
+      "OSS default: Firestore SDK (google-cloud-firestore) is NOT imported unless firestore.enabled=true at runtime",
+      "Determinism: file layout is stable, reproducible; no hash-named directories",
+      "rung_target: 274177 (architectural design only — no code produced in this task)"
+    ],
+    "non_goals": [
+      "This task does NOT write any Python code — design only, no implementation",
+      "This task does NOT migrate existing data — migration is a separate task",
+      "This task does NOT design the REST API endpoints — that is task #3",
+      "This task does NOT design Mermaid rendering or display — only the storage format for Mermaid files",
+      "This task does NOT design authentication/authorization beyond IAM role for Firestore",
+      "No real-time sync (WebSockets, Firestore listeners) — sync is batch/on-demand only"
+    ]
+  },
+
+  "forecast": {
+    "failure_modes": [
+      {
+        "mode": "FIRESTORE_BLEEDS_INTO_OFFLINE_PATH",
+        "probability": "HIGH",
+        "consequence": "If HybridStore imports FirestoreStore unconditionally, offline users get ImportError or SDK initialization failure at startup",
+        "mitigation": "Lazy import: FirestoreStore is imported only when firestore.enabled=true. The StorageBackend abstract class lives in a module with zero cloud SDK imports."
+      },
+      {
+        "mode": "SYNC_CONFLICT_DATA_LOSS",
+        "probability": "MED",
+        "consequence": "If two clients write the same wish_id with different keywords simultaneously, one write is silently lost",
+        "mitigation": "Last-write-wins with UTC ISO-8601 timestamps on every entity. Firestore transaction-based merge using set(doc, merge=True) preserves keyword arrays via array_union. Local wins on conflict if timestamps are equal (local is authoritative source)."
+      },
+      {
+        "mode": "MERMAID_FORMAT_UNPROVEN_FOR_MACHINE_READING",
+        "probability": "MED",
+        "consequence": "Mermaid is a rendering format, not a data exchange format. If a parser tries to read recipe steps back from Mermaid, it will be brittle",
+        "mitigation": "Mermaid files are write-only (human display). The authoritative machine-readable data stays in JSONL. Mermaid files are generated from JSONL at read time, not the reverse. This is explicitly a one-way projection."
+      },
+      {
+        "mode": "DIRECTORY_EXPLOSION",
+        "probability": "LOW",
+        "consequence": "If every entity type gets its own subdirectory and every user gets their own path, ~/stillwater/data/ becomes unnavigable for a solo developer",
+        "mitigation": "Flat structure: one JSONL file per entity type, not per user or per session. Users are differentiated by user_id field inside each record, not by directory. Only Firestore uses users/ subcollection hierarchy."
+      },
+      {
+        "mode": "BANTER_QUEUE_SQLITE_DRIFT",
+        "probability": "LOW",
+        "consequence": "Phase 1 uses SQLite for the banter queue (session-scoped, in-memory by default). If this is confused with the ~/stillwater/data/ JSONL store, sync logic will be applied incorrectly",
+        "mitigation": "Explicit separation in design: SQLite banter queue is session-scoped and ephemeral by default. Learned smalltalk patterns (LearnedSmallTalk) that survive sessions are persisted as JSONL in ~/stillwater/data/smalltalk/, analogous to LearnedWish and LearnedCombo."
+      }
+    ],
+    "assumptions": [
+      "Users who enable Firestore already have a GCP project and service account credentials (either GOOGLE_APPLICATION_CREDENTIALS env var or Application Default Credentials)",
+      "The banter queue (SQLite, session-scoped) remains separate from the learned data JSONL store — this design does not replace SQLite for the hot-path banter queue",
+      "All timestamps are UTC ISO-8601 strings in JSONL (not datetime objects) for maximum portability",
+      "A single-user deployment is the primary use case for local storage; multi-user is handled by Firestore with users/ collection hierarchy",
+      "The ~/stillwater/data/ directory is owned by the process user (no root required)",
+      "llm_config.yaml already exists at the project root and can hold firestore config (observed in git status)"
+    ],
+    "unknowns": [
+      "Whether llm_config.yaml will be the config carrier for firestore settings, or whether a separate ~/.stillwater/config.yaml user config is preferred",
+      "Whether the banter queue SQLite should be persisted to ~/stillwater/data/smalltalk/banter_queue.db for cross-session reuse (design leaves this open; recommend starting with persisted SQLite at that path)",
+      "Firestore pricing at scale: if a team deploys stillwater and runs 1000 sessions/day, Firestore read costs may become non-trivial — this is flagged but not blocked"
+    ],
+    "risk_level": "MED"
+  },
+
+  "decide": {
+    "chosen_approach": "Local-first JSONL with lazy Firestore opt-in. The StorageBackend abstract interface has three concrete implementations: LocalStore (always available, no imports), FirestoreStore (imported only when enabled), HybridStore (delegates to LocalStore + queues async sync tasks to FirestoreStore). Mode selection happens once at process startup based on config. The ~/stillwater/data/ directory is the single source of truth for local mode; Firestore is a backup mirror. Conflict resolution is last-write-wins via UTC timestamps on every entity.",
+    "alternatives_considered": [
+      {
+        "name": "SQLite as single local store",
+        "tradeoff": "Rejected. SQLite is binary, not human-readable. OSS contributors cannot inspect or edit data with a text editor. The JSONL + Mermaid format is a core OSS adoption requirement."
+      },
+      {
+        "name": "YAML for data files",
+        "tradeoff": "Rejected per constraint. YAML is config format. JSONL is the existing format for wishes.jsonl, combos.jsonl — maintaining consistency is cheaper than introducing a second format."
+      },
+      {
+        "name": "Firestore as primary (cloud-first)",
+        "tradeoff": "Rejected. Violates offline-first constraint. Requires GCP account for basic operation. Breaks OSS developer experience."
+      },
+      {
+        "name": "Git as sync layer (commit learned data to repo)",
+        "tradeoff": "Interesting but rejected for this design. Git sync would require SSH/HTTPS credentials, introduces merge conflicts in file format, and is asynchronous in a non-standard way. Could be revisited for team sharing of wishes.jsonl."
+      },
+      {
+        "name": "One JSONL file per user (~/stillwater/data/users/<user_id>/wishes_learned.jsonl)",
+        "tradeoff": "Rejected for single-user OSS case. Adds directory complexity for no benefit when user_id is implicit. Multi-user differentiation via Firestore users/ collection, not local directory structure."
+      }
+    ],
+    "stop_rules": [
+      "If Firestore schema design requires cloud credentials to finalize, EXIT_PASS with a note — Firestore schema is design-time, not runtime-dependent",
+      "If mermaid format is determined to be used as machine-readable input (not just output), STOP and revise — Mermaid must remain write-only display format",
+      "If any entity requires Firestore for its core function (e.g., no local fallback), FAIL the design"
+    ]
+  },
+
+  "act": {
+    "phases": [
+      {
+        "phase": 1,
+        "name": "Define ~/stillwater/data/ local directory structure",
+        "steps": [
+          "Specify top-level directory layout: ~/stillwater/data/{smalltalk,intent,execute}/",
+          "Define canonical JSONL files per phase (kept in repo under admin/orchestration/) vs learned JSONL files (written at runtime to ~/stillwater/data/)",
+          "Define Mermaid output files location: ~/stillwater/data/recipes/ for recipe.*.mermaid files",
+          "Define sync_metadata.json location and schema",
+          "Define lock file convention (sync.lock) to prevent concurrent sync processes"
+        ],
+        "artifacts": [
+          "ASCII directory tree in DESIGN_MEMO.md",
+          "Example ~/stillwater/data/ layout with real file examples",
+          "sync_metadata.json schema"
+        ],
+        "acceptance": "Directory structure is flat enough that `ls ~/stillwater/data/` shows all entity types at a glance. No more than 2 levels of nesting for any entity file."
+      },
+      {
+        "phase": 2,
+        "name": "Define LearnedSmallTalk entity model + all entity sync fields",
+        "steps": [
+          "Define LearnedSmallTalk as symmetrical to LearnedWish and LearnedCombo (same fields: source, timestamp, session_id, confidence)",
+          "Add sync tracking fields to all three learned entity models: synced_to_firestore (bool), sync_timestamp (UTC ISO string or null), sync_attempt_count (int)",
+          "Specify JSONL line format for each entity with sync fields",
+          "Document which fields are immutable after write (id, timestamp) vs mutable (synced_to_firestore, sync_timestamp)"
+        ],
+        "artifacts": [
+          "LearnedSmallTalk example JSONL line in DESIGN_MEMO.md",
+          "LearnedWish + LearnedCombo JSONL lines with sync fields added",
+          "Field mutability table"
+        ],
+        "acceptance": "LearnedSmallTalk can be loaded and merged by a SmallTalkDB class using the same pattern as WishDB.append_learned_wish() and ComboDB.append_learned_combo()."
+      },
+      {
+        "phase": 3,
+        "name": "Define StorageBackend interface + three implementations",
+        "steps": [
+          "Define abstract StorageBackend with methods: load_learned_wishes(), save_learned_wish(), load_learned_combos(), save_learned_combo(), load_learned_smalltalk(), save_learned_smalltalk(), get_sync_metadata(), set_sync_metadata()",
+          "Define LocalStore: reads/writes JSONL from ~/stillwater/data/; no cloud imports",
+          "Define FirestoreStore: reads/writes Firestore collections; lazy-imported when enabled",
+          "Define HybridStore: LocalStore as primary; queues sync tasks to FirestoreStore via async queue; never blocks the caller on network I/O",
+          "Define mode selection logic: read llm_config.yaml (or env STILLWATER_FIRESTORE_PROJECT) at startup; instantiate correct backend"
+        ],
+        "artifacts": [
+          "StorageBackend interface pseudocode in DESIGN_MEMO.md",
+          "Mode selection decision tree (ASCII flow diagram)"
+        ],
+        "acceptance": "HybridStore can be replaced by LocalStore with a single config change and zero code changes in callers."
+      },
+      {
+        "phase": 4,
+        "name": "Define Firestore schema",
+        "steps": [
+          "Define top-level collections: users/, global_wishes/, global_combos/",
+          "Define users/{user_id}/learned_wishes subcollection with document per wish_id",
+          "Define users/{user_id}/learned_combos subcollection with document per wish_id",
+          "Define users/{user_id}/learned_smalltalk subcollection with document per pattern_id",
+          "Define users/{user_id}/sync_metadata document",
+          "Define IAM model: service account with roles/datastore.user scoped to the stillwater Firestore database",
+          "Define Firestore security rules for single-user and multi-user modes"
+        ],
+        "artifacts": [
+          "Firestore collection snapshot examples in DESIGN_MEMO.md",
+          "Security rules pseudocode",
+          "IAM role specification"
+        ],
+        "acceptance": "Firestore schema can be created from Firebase console or terraform without any running code. Schema is portable across GCP projects."
+      },
+      {
+        "phase": 5,
+        "name": "Define sync protocol + conflict resolution",
+        "steps": [
+          "Specify sync trigger: on every LocalStore.save_*() call in HybridStore, enqueue a sync task (non-blocking)",
+          "Specify sync executor: background thread (or asyncio task) drains the queue, batches up to 500 writes per Firestore batch commit",
+          "Specify retry logic: exponential backoff (1s, 2s, 4s, 8s, max 60s), max 5 retries; after 5 failures mark entry as sync_failed=true in local JSONL",
+          "Specify conflict resolution: last-write-wins by comparing updated_at UTC timestamps; Firestore set(merge=True) with array_union for keyword lists",
+          "Specify startup sync: on HybridStore init, compare local sync_metadata.last_synced_at against Firestore sync_metadata; if Firestore is newer, pull and merge"
+        ],
+        "artifacts": [
+          "Sync flow diagram (ASCII) in DESIGN_MEMO.md",
+          "Conflict resolution pseudocode",
+          "Retry state machine description"
+        ],
+        "acceptance": "If Firestore is unavailable at any point, the sync queue grows but local operation is never blocked. On recovery, all queued writes are flushed in order."
+      }
+    ]
+  },
+
+  "verify": {
+    "tests": [
+      "Design review check 1: Can a developer with no GCP account run all 241 existing tests? YES — LocalStore has zero cloud SDK imports.",
+      "Design review check 2: Is Firestore required for any entity to function? NO — all entities have LocalStore fallback.",
+      "Design review check 3: Are all JSONL files human-readable and editable with a text editor? YES — plain UTF-8 JSON lines.",
+      "Design review check 4: Is LearnedSmallTalk symmetric with LearnedWish and LearnedCombo? YES — same 7-field structure.",
+      "Design review check 5: Can sync fail silently without corrupting local data? YES — sync is append to queue; local JSONL is written first.",
+      "Design review check 6: Is Mermaid format used as machine input? NO — Mermaid files are generated output only.",
+      "Firestore schema validation: all collections are creatable via Firebase console without running code.",
+      "Conflict scenario: two writes to same wish_id with different timestamps — higher timestamp wins, no data loss.",
+      "Sync retry scenario: Firestore unavailable for 30 minutes — queue grows, local works, on recovery all writes flush.",
+      "Integration rung check: rung_achieved = 274177 (architectural, reversible — no code written yet)"
+    ],
+    "falsifiers": [
+      "If design requires Firestore to be available for basic CLI operation, FAIL",
+      "If LearnedSmallTalk requires a different load/merge pattern than LearnedWish, FAIL (symmetry broken)",
+      "If any StorageBackend method blocks the caller waiting for Firestore I/O, FAIL",
+      "If Mermaid files are used as input to any storage load method, FAIL",
+      "If ~/stillwater/data/ layout requires more than 2 directory levels to reach any entity file, FAIL (too complex for OSS contributor)"
+    ],
+    "reproducibility": "This design is fully deterministic and can be reviewed independently by any engineer. All decisions are justified by constraints in the task capsule. No external services are required to evaluate this design."
+  }
+}

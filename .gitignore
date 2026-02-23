@@ -17,3 +17,8 @@ scratch/
 .claude/
 # imo/data - competition problem PDFs and parsed data (large, not tracked)
 imo/data/
+
+# Data: user's personal overrides and secrets (never commit)
+data/custom/*
+!data/custom/.gitkeep
+data/settings.md
