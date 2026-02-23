@@ -24,6 +24,7 @@ from .together_provider import TogetherProvider
 from .openrouter_provider import OpenRouterProvider
 from .ollama_provider import OllamaProvider
 from .claude_code_cli_provider import ClaudeCodeCLIProvider
+from .http_provider import HTTPProvider
 
 
 # Registry of all provider classes, keyed by name
@@ -34,6 +35,7 @@ _PROVIDER_CLASSES: dict[str, type[LLMProvider]] = {
     "openrouter": OpenRouterProvider,
     "ollama": OllamaProvider,
     "claude-code-cli": ClaudeCodeCLIProvider,
+    "http": HTTPProvider,
 }
 
 # Provider priority for auto-selection (cheapest first)
@@ -100,6 +102,7 @@ __all__ = [
     "OpenRouterProvider",
     "OllamaProvider",
     "ClaudeCodeCLIProvider",
+    "HTTPProvider",
     "get_provider",
     "list_available_providers",
     "get_cheapest_provider",

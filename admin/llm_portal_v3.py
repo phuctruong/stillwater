@@ -21,6 +21,9 @@ from __future__ import annotations
 import sys
 import json
 import logging
+import asyncio
+import subprocess
+import uuid
 from pathlib import Path
 from typing import Optional, Any
 from datetime import datetime
@@ -87,6 +90,41 @@ class RecipeResponse(BaseModel):
     result: Optional[Any] = None
     error: Optional[str] = None
     recipe: str
+    timestamp: str
+
+
+class WebhookResult(BaseModel):
+    """Webhook callback with result from background process."""
+    request_id: str
+    source: str  # "wrapper", "swarm", etc.
+    status: str  # "success", "error", "timeout"
+    response: Optional[dict] = None
+    error: Optional[str] = None
+    latency_ms: Optional[int] = None
+    timestamp: str
+
+
+class WebhookResultsResponse(BaseModel):
+    """Response containing all webhook results."""
+    total: int
+    results: list[dict]
+    timestamp: str
+
+
+class WrapperRequest(BaseModel):
+    """Request to execute Claude Code wrapper."""
+    prompt: str  # Prompt to send to Claude
+    model: str = "claude-haiku"  # Model to use
+    timeout_seconds: int = 30  # Timeout for wrapper execution
+
+
+class WrapperResponse(BaseModel):
+    """Response from wrapper execution."""
+    success: bool
+    response: Optional[str] = None
+    error: Optional[str] = None
+    model: str
+    latency_ms: Optional[int] = None
     timestamp: str
 
 
@@ -261,6 +299,92 @@ _recipes_dir = _project_root / "recipes"
 swarm_executor = SwarmExecutor(_swarms_dir, _skills_dir)
 recipe_executor = RecipeExecutor(_recipes_dir)
 
+# Webhook results storage (in-memory, keyed by request_id)
+_webhook_results = {}
+
+
+# ============================================================
+# Wrapper Executor
+# ============================================================
+
+class WrapperExecutor:
+    """Executes Claude Code wrapper and waits for response."""
+
+    def __init__(self, wrapper_url: str = "http://127.0.0.1:8080/api/generate"):
+        self.wrapper_url = wrapper_url
+
+    async def execute(
+        self,
+        prompt: str,
+        model: str = "claude-haiku",
+        timeout_seconds: int = 30,
+    ) -> WrapperResponse:
+        """Execute wrapper: call Claude synchronously, return response."""
+        import time
+        start_time = time.time()
+
+        try:
+            logger.info(f"Wrapper execute: {model} | prompt_len={len(prompt)}")
+
+            # Call wrapper using curl (blocking but simple)
+            cmd = [
+                "curl",
+                "-s",
+                "-X", "POST",
+                self.wrapper_url,
+                "-H", "Content-Type: application/json",
+                "-d", json.dumps({
+                    "model": model,
+                    "prompt": prompt,
+                    "stream": False,
+                }),
+                "--max-time", str(timeout_seconds),
+            ]
+
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout_seconds + 5)
+            elapsed = int((time.time() - start_time) * 1000)
+
+            if result.returncode == 0:
+                response = json.loads(result.stdout)
+                return WrapperResponse(
+                    success=True,
+                    response=response.get("response", ""),
+                    model=model,
+                    latency_ms=elapsed,
+                    timestamp=datetime.now().isoformat(),
+                )
+            else:
+                return WrapperResponse(
+                    success=False,
+                    error=result.stderr or f"Exit code {result.returncode}",
+                    model=model,
+                    latency_ms=elapsed,
+                    timestamp=datetime.now().isoformat(),
+                )
+
+        except subprocess.TimeoutExpired:
+            elapsed = int((time.time() - start_time) * 1000)
+            return WrapperResponse(
+                success=False,
+                error=f"Wrapper timeout after {timeout_seconds}s",
+                model=model,
+                latency_ms=elapsed,
+                timestamp=datetime.now().isoformat(),
+            )
+        except Exception as e:
+            elapsed = int((time.time() - start_time) * 1000)
+            logger.error(f"Wrapper execution failed: {e}")
+            return WrapperResponse(
+                success=False,
+                error=str(e),
+                model=model,
+                latency_ms=elapsed,
+                timestamp=datetime.now().isoformat(),
+            )
+
+
+wrapper_executor = WrapperExecutor()
+
 
 # ============================================================
 # Health & Info Endpoints
@@ -356,6 +480,85 @@ async def execute_recipe(request: RecipeRequest) -> RecipeResponse:
         raise HTTPException(status_code=400, detail=response.error)
 
     return response
+
+
+# ============================================================
+# Wrapper Execution Endpoint
+# ============================================================
+
+@app.post("/v1/wrapper/execute")
+async def execute_wrapper(request: WrapperRequest) -> WrapperResponse:
+    """Execute Claude Code wrapper: call internally, wait for result, return."""
+    logger.info(
+        f"Wrapper execute: {request.model} | prompt_len={len(request.prompt)}"
+    )
+
+    response = await wrapper_executor.execute(
+        prompt=request.prompt,
+        model=request.model,
+        timeout_seconds=request.timeout_seconds,
+    )
+
+    if not response.success:
+        raise HTTPException(status_code=400, detail=response.error)
+
+    return response
+
+
+# ============================================================
+# Webhook Endpoints (for background process callbacks)
+# ============================================================
+
+@app.post("/v1/webhook/result")
+async def webhook_result(request: WebhookResult) -> dict:
+    """Receive webhook callback from background process."""
+    logger.info(f"Webhook result: {request.request_id} | {request.source} | {request.status}")
+
+    # Store result
+    _webhook_results[request.request_id] = request.dict()
+
+    return {
+        "success": True,
+        "request_id": request.request_id,
+        "message": "Result stored",
+        "timestamp": datetime.now().isoformat(),
+    }
+
+
+@app.get("/v1/webhook/results")
+async def get_webhook_results() -> WebhookResultsResponse:
+    """Retrieve all webhook results."""
+    results = list(_webhook_results.values())
+    logger.info(f"Retrieving {len(results)} webhook results")
+
+    return WebhookResultsResponse(
+        total=len(results),
+        results=results,
+        timestamp=datetime.now().isoformat(),
+    )
+
+
+@app.get("/v1/webhook/results/{request_id}")
+async def get_webhook_result(request_id: str) -> dict:
+    """Retrieve specific webhook result by ID."""
+    if request_id not in _webhook_results:
+        raise HTTPException(status_code=404, detail=f"Result not found: {request_id}")
+
+    return _webhook_results[request_id]
+
+
+@app.post("/v1/webhook/clear")
+async def clear_webhook_results() -> dict:
+    """Clear all stored webhook results."""
+    count = len(_webhook_results)
+    _webhook_results.clear()
+    logger.info(f"Cleared {count} webhook results")
+
+    return {
+        "success": True,
+        "cleared_count": count,
+        "timestamp": datetime.now().isoformat(),
+    }
 
 
 # ============================================================

@@ -1,4 +1,4 @@
-provider: ollama
+provider: claude-code
 offline:
   name: Offline (Demo Mode)
   type: offline

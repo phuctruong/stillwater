@@ -331,6 +331,10 @@ class OllamaCompatibleHandler(BaseHTTPRequestHandler):
             temperature = float(data.get("temperature", Config.TEMPERATURE))
             max_tokens = int(data.get("max_tokens", Config.MAX_TOKENS))
 
+            # Prepend system prompt if provided
+            if system:
+                prompt = f"{system}\n\n{prompt}"
+
             if not prompt:
                 self.send_response(400)
                 self.send_header('Content-Type', 'application/json')
