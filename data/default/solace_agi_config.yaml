@@ -1,0 +1,19 @@
+# Solace AGI Platform Configuration
+# Default settings (git-tracked)
+# API keys go in data/custom/solace_agi_config.yaml (gitignored)
+
+solace_agi:
+  enabled: false  # User must add API key to enable
+  base_url: "https://api.solaceagi.com"
+  version: "1.0.0"
+  
+  features:
+    firestore_sync: true
+    lmm_proxy: true
+    recipe_store: true
+    oauth3_vault: true
+  
+  security:
+    api_key_encryption: "AES-256-GCM"
+    audit_logging: true
+    rate_limiting: true

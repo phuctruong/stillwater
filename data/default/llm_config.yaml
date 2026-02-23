@@ -1,0 +1,28 @@
+# Stillwater LLM Configuration
+# Default settings (git-tracked)
+# Override in data/custom/llm_config.yaml
+
+llm_models:
+  default: "haiku"
+  available:
+    - "haiku"
+    - "sonnet"
+    - "opus"
+  descriptions:
+    haiku: "Fast, lightweight - for exploration and coordination"
+    sonnet: "Balanced - for coding and planning"
+    opus: "Powerful - for complex math and security audits"
+
+claude_code_wrapper:
+  enabled: true
+  auto_start: true
+  port: 8787
+  cli_path: "cli/src/claude_code_wrapper.py"
+  test_prompt: "Say 'Claude Code wrapper is ready' to verify connection"
+  timeout_seconds: 30
+  retry_attempts: 3
+
+preferences:
+  cache_recipes: true
+  max_history: 100
+  log_level: "INFO"
