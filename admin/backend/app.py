@@ -419,6 +419,11 @@ static_path = REPO_ROOT / "admin" / "static"
 if static_path.exists():
     app.mount("/static", StaticFiles(directory=str(static_path)), name="static")
 
+# Mount images (route admin/images to /images for website)
+images_path = REPO_ROOT / "admin" / "images"
+if images_path.exists():
+    app.mount("/images", StaticFiles(directory=str(images_path)), name="images")
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

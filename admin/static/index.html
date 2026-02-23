@@ -14,10 +14,10 @@
     <div class="bg-overlay"></div>
     <header class="topbar">
       <div class="topbar-left">
-        <img id="dropletLogo" src="/static/images/droplet-logo-merge.gif" alt="Droplet Logo" class="droplet-icon">
+        <img id="dropletLogo" src="/images/droplet-kungfu.png" alt="Droplet doing Kungfu" class="droplet-icon" onload="setupGifSwitch()">
         <div>
           <h1>Stillwater Software 5.0 Dojo</h1>
-          <p>The OS for Agentic Delegation. Skills, Recipes, and Orchestration.</p>
+          <p>Linux for AI: Teach your AI Kungfu.</p>
         </div>
       </div>
       <div class="header-controls">
@@ -239,6 +239,15 @@
 
     <script src="/static/app.js"></script>
     <script src="/static/js/cli-chat.js"></script>
+
+    <!-- Droplet Logo GIF Transition -->
+    <script>
+        function setupGifSwitch() {
+            const dropletLogo = document.getElementById('dropletLogo');
+            // Kung fu image is static (no animation needed)
+            // If needed in future, can switch to other animations here
+        }
+    </script>
 
   </body>
 </html>

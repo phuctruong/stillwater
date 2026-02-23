@@ -24,7 +24,7 @@
 body {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: 2rem;
+  font-size: 1rem;
   color: var(--text-primary);
   background:
     radial-gradient(circle at 12% 10%, #3b82f62b 0%, transparent 28%),
@@ -72,20 +72,60 @@ body {
   backdrop-filter: blur(10px);
 }
 
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.droplet-icon {
+  height: 128px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
+  flex-shrink: 0;
+}
+
 .topbar h1 {
   margin: 0;
-  font-size: 3.5rem;
+  font-size: 2.1rem;
   letter-spacing: 0.04em;
   background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  display: inline;
 }
 
 .topbar p {
-  margin: 0.45rem 0 0;
+  margin: 0;
   color: var(--text-secondary);
-  font-size: 1.7rem;
+  font-size: 1.1rem;
+  display: inline;
+  margin-left: 0.5rem;
+}
+
+.topbar-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.topbar-left > div {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-left: auto;
 }
 
 .header-controls {
