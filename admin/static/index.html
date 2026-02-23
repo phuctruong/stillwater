@@ -470,6 +470,91 @@
             margin: 0.15rem 0.15rem;
         }
 
+        /* ------------------------------------------------------------------ */
+        /* OAuth3 / Personas / Store page styles                               */
+        /* ------------------------------------------------------------------ */
+
+        .page-hero {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .page-hero img {
+            max-width: 200px;
+            flex-shrink: 0;
+            border-radius: 6px;
+        }
+
+        .page-hero-text h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-hero-text p {
+            color: #aaa;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .feature-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 1.2rem 1.5rem;
+        }
+
+        .feature-card h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ff6b35;
+            margin-bottom: 0.4rem;
+        }
+
+        .feature-card p {
+            color: #aaa;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .persona-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .persona-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 1rem 1.2rem;
+        }
+
+        .persona-card .persona-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ff6b35;
+            margin-bottom: 0.25rem;
+        }
+
+        .persona-card .persona-domain {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .comparison-highlight-green {
+            color: #4caf50;
+            font-weight: 600;
+        }
+
+        .comparison-highlight-red {
+            color: #f44336;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
@@ -483,6 +568,12 @@
             }
             .reports-grid {
                 grid-template-columns: 1fr;
+            }
+            .page-hero {
+                flex-direction: column;
+            }
+            .page-hero img {
+                max-width: 120px;
             }
         }
     </style>
@@ -503,6 +594,9 @@
                 <button class="nav-btn" data-page="cpu">CPU Nodes</button>
                 <button class="nav-btn" data-page="llm">LLM Settings</button>
                 <button class="nav-btn" data-page="sync">Solace AGI Sync</button>
+                <button class="nav-btn" data-page="oauth3">OAuth3 Security</button>
+                <button class="nav-btn" data-page="personas">Personas</button>
+                <button class="nav-btn" data-page="store">Stillwater Store</button>
             </div>
         </div>
     </div>
@@ -602,7 +696,7 @@
                 <div class="section-title">Instructions</div>
                 <div class="instructions">
                     <div class="instruction-item">
-                        <img src="/images/droplet-kungfu.png" alt="Droplet Kung-Fu">
+                        <img src="/images/droplets/orchestration.png" alt="Orchestration">
                         <div class="instruction-text">
                             <p><strong>Catalog Browser</strong></p>
                             <p>Click a group in the sidebar to browse files. Click <strong>Open</strong> on any file to view and edit its contents. Use <strong>+ New File</strong> to create a new file in the selected group.</p>
@@ -741,7 +835,7 @@
                 <div class="section-title">Instructions</div>
                 <div class="instructions">
                     <div class="instruction-item">
-                        <img src="/images/droplet-kungfu.png" alt="Droplet Kung-Fu">
+                        <img src="/images/droplets/cpu-node.png" alt="CPU Node">
                         <div class="instruction-text">
                             <p><strong>CLI Diagnostics</strong></p>
                             <p>Use the buttons above to run doctor, version, or llm-status checks via the live CLI runner. Or type a command in the chat box.</p>
@@ -1022,6 +1116,279 @@
                 </div>
             </div>
         </div>
+
+        <!-- OAUTH3 SECURITY PAGE -->
+        <div class="page" data-page="oauth3">
+            <h2>OAuth3 Security</h2>
+            <p>Constitutional AI governance — the thing OpenClaw can never match.</p>
+
+            <!-- ── HERO ── -->
+            <div class="section">
+                <div class="page-hero">
+                    <img src="/images/droplets/oauth3.png" alt="OAuth3 Security">
+                    <div class="page-hero-text">
+                        <h3>OAuth3: Constitutional AI Governance</h3>
+                        <p>Scoped delegation. Step-up consent. Evidence bundles. Synchronous revocation. DPoP binding.</p>
+                        <p style="margin-top:0.75rem;color:#888;font-size:0.9rem;">Every AI action is scoped, consented, hash-chained, and instantly revocable. OpenClaw has none of these.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── FEATURE CARDS ── -->
+            <div class="section">
+                <div class="section-title">Security Features</div>
+                <div class="reports-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+                    <div class="feature-card">
+                        <h4>Scoped Tokens</h4>
+                        <p>Every action requires explicit scope. No wildcards. No implicit inheritance.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Step-Up Consent</h4>
+                        <p>HIGH risk actions pause for human approval. Consent expires. Can't be replayed.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Evidence Bundles</h4>
+                        <p>SHA-256 hash-chained audit trail. Every action produces a signed receipt.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Action Limits</h4>
+                        <p>Per-type budgets. When exhausted, action denied. No refunds.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Revocation</h4>
+                        <p>O(1) synchronous revocation. Instant token kill across all devices.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>DPoP Binding</h4>
+                        <p>Cryptographic proof of possession. Timing-safe comparison. No replay.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── COMPARISON TABLE ── -->
+            <div class="section">
+                <div class="section-title">Stillwater vs OpenClaw</div>
+                <div class="table-wrapper">
+                    <table class="display" id="table-oauth3-compare">
+                        <thead><tr><th>Feature</th><th>Stillwater</th><th>OpenClaw</th></tr></thead>
+                        <tbody>
+                            <tr>
+                                <td>Evidence trail</td>
+                                <td class="comparison-highlight-green">Rung 65537 hash-chained</td>
+                                <td class="comparison-highlight-red">None</td>
+                            </tr>
+                            <tr>
+                                <td>Consent model</td>
+                                <td class="comparison-highlight-green">Step-up + time-bound</td>
+                                <td class="comparison-highlight-red">None</td>
+                            </tr>
+                            <tr>
+                                <td>Token revocation</td>
+                                <td class="comparison-highlight-green">O(1) synchronous</td>
+                                <td class="comparison-highlight-red">Manual per-device</td>
+                            </tr>
+                            <tr>
+                                <td>Credential storage</td>
+                                <td class="comparison-highlight-green">AES-256-GCM vault</td>
+                                <td class="comparison-highlight-red">Plaintext files</td>
+                            </tr>
+                            <tr>
+                                <td>Skill governance</td>
+                                <td class="comparison-highlight-green">Rung-gated + human review</td>
+                                <td class="comparison-highlight-red">Open marketplace (824 malicious)</td>
+                            </tr>
+                            <tr>
+                                <td>Prompt injection defense</td>
+                                <td class="comparison-highlight-green">prime-safety god-skill</td>
+                                <td class="comparison-highlight-red">"Out of scope"</td>
+                            </tr>
+                            <tr>
+                                <td>CVEs</td>
+                                <td class="comparison-highlight-green">0</td>
+                                <td class="comparison-highlight-red">512</td>
+                            </tr>
+                            <tr>
+                                <td>Compliance</td>
+                                <td class="comparison-highlight-green">FDA Part 11 ready</td>
+                                <td class="comparison-highlight-red">Fails SEC/FINRA/HIPAA</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ── INSTRUCTIONS ── -->
+            <div class="section">
+                <div class="section-title">Instructions</div>
+                <div class="instructions">
+                    <div class="instruction-item">
+                        <img src="/images/droplets/fda-part11-approved-ai.png" alt="FDA Part 11 Approved AI">
+                        <div class="instruction-text">
+                            <p><strong>OAuth3 Constitutional Governance</strong></p>
+                            <p>Stillwater is the first open standard for AI agency delegation with built-in constitutional governance. Every skill dispatch is scoped, consented, and hash-chained. Regulators can audit every AI action end-to-end.</p>
+                            <p style="margin-top:0.5rem;color:#888;font-size:0.85rem;">FDA 21 CFR Part 11 · SEC Rule 17a-4 · HIPAA · FINRA — all require tamper-evident audit trails. Stillwater delivers this at Rung 65537.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PERSONAS PAGE -->
+        <div class="page" data-page="personas">
+            <h2>Domain Expert Personas</h2>
+            <p>Scientifically measured AI uplift. Not decoration — vector search into LLM latent memory.</p>
+
+            <!-- ── HERO ── -->
+            <div class="section">
+                <div class="page-hero">
+                    <img src="/images/droplets/famous-personas.png" alt="Famous Personas">
+                    <div class="page-hero-text">
+                        <h3>Domain Expert Personas</h3>
+                        <p>Scientifically measured AI uplift. Not decoration — vector search into LLM latent memory.</p>
+                        <p style="margin-top:0.75rem;color:#888;font-size:0.9rem;">Each persona activates a dense cluster of domain-specific knowledge in the model's latent space. Linus for kernel architecture. Knuth for algorithms. Schneier for security.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── PERSONA GRID ── -->
+            <div class="section">
+                <div class="section-title">12 Core Personas</div>
+                <div class="persona-grid">
+                    <div class="persona-card">
+                        <div class="persona-name">Linus</div>
+                        <div class="persona-domain">OSS kernel architecture</div>
+                    </div>
+                    <div class="persona-card">
+                        <div class="persona-name">Mr. Beast</div>
+                        <div class="persona-domain">Viral content, audience growth</div>
+                    </div>
+                    <div class="persona-card">
+                        <div class="persona-name">Brunson</div>
+                        <div class="persona-domain">Hook+Story+Offer, conversion</div>
+                    </div>
+                    <div class="persona-card">
+                        <div class="persona-name">Bruce Lee</div>
+                        <div class="persona-domain">Martial arts philosophy, dojo training</div>
+                    </div>
+                    <div class="persona-card">
+                        <div class="persona-name">Brendan Eich</div>
+                        <div class="persona-domain">Browser architecture, JavaScript</div>
+                    </div>
+                    <div class="persona-card">
+                        <div class="persona-name">Codd</div>
+                        <div class="persona-domain">Relational theory, normalization</div>
+                    </div>
+                    <div class="persona-card">
+                        <div class="persona-name">Knuth</div>
+                        <div class="persona-domain">Algorithms, formal proofs</div>
+                    </div>
+                    <div class="persona-card">
+                        <div class="persona-name">Schneier</div>
+                        <div class="persona-domain">Applied cryptography, security</div>
+                    </div>
+                    <div class="persona-card">
+                        <div class="persona-name">FDA Auditor</div>
+                        <div class="persona-domain">21 CFR Part 11, ALCOA</div>
+                    </div>
+                    <div class="persona-card">
+                        <div class="persona-name">Torvalds</div>
+                        <div class="persona-domain">Linux governance, OSS community</div>
+                    </div>
+                    <div class="persona-card">
+                        <div class="persona-name">Paul Graham</div>
+                        <div class="persona-domain">Startup strategy, first principles</div>
+                    </div>
+                    <div class="persona-card">
+                        <div class="persona-name">Sifu</div>
+                        <div class="persona-domain">Kung fu master, training discipline</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── INSTRUCTIONS ── -->
+            <div class="section">
+                <div class="section-title">Instructions</div>
+                <div class="instructions">
+                    <div class="instruction-item">
+                        <img src="/images/droplets/ai-kung-fu.png" alt="AI Kung Fu">
+                        <div class="instruction-text">
+                            <p><strong>How Personas Work</strong></p>
+                            <p>Personas are loaded at dispatch time. The hub selects the matching persona based on task domain. A Coder agent dispatched for kernel work gets Linus. A security audit gets Schneier. A marketing task gets Brunson.</p>
+                            <p style="margin-top:0.5rem;color:#888;font-size:0.85rem;">Persona injection activates 10–30% measurable uplift in domain-specific benchmarks by priming the model's latent memory before the first token is generated.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STILLWATER STORE PAGE -->
+        <div class="page" data-page="store">
+            <h2>Stillwater Store</h2>
+            <p>Rung-gated skill governance. Human review. Belt progression.</p>
+
+            <!-- ── HERO ── -->
+            <div class="section">
+                <div class="page-hero">
+                    <img src="/images/droplets/recipes.png" alt="Recipes">
+                    <div class="page-hero-text">
+                        <h3>Stillwater Store: Skills as Capital</h3>
+                        <p>Rung-gated skill governance. Human review. API keys. Belt progression.</p>
+                        <p style="margin-top:0.75rem;color:#888;font-size:0.9rem;">The Apple App Store model for AI skills. Every skill is verified before publishing. No untested code enters the store. Malicious skills: 0. OpenClaw ClawHub malicious skills: 824.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── STATS CARDS ── -->
+            <div class="section">
+                <div class="section-title">Store Stats</div>
+                <div class="llm-status-grid">
+                    <div class="llm-stat-card">
+                        <div class="llm-stat-label">Skills Submitted</div>
+                        <div class="llm-stat-value">4</div>
+                    </div>
+                    <div class="llm-stat-card">
+                        <div class="llm-stat-label">Verification Rungs</div>
+                        <div class="llm-stat-value" style="font-size:0.9rem;">641 / 274177 / 65537</div>
+                    </div>
+                    <div class="llm-stat-card">
+                        <div class="llm-stat-label">Malicious Skills</div>
+                        <div class="llm-stat-value"><span style="color:#4caf50;">0</span> <span style="font-size:0.75rem;color:#888;">(vs 824 in ClawHub)</span></div>
+                    </div>
+                    <div class="llm-stat-card">
+                        <div class="llm-stat-label">Belt System</div>
+                        <div class="llm-stat-value" style="font-size:0.8rem;">White → Yellow → Orange → Green → Blue → Black</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── STORE ARCHITECTURE DIAGRAM ── -->
+            <div class="section">
+                <div class="section-title">Store Architecture</div>
+                <div class="mermaid-container" id="store-diagram-container">
+                    <div class="mermaid" id="store-mermaid">graph LR
+    Dev["Developer"]-->Submit["POST /suggest"]
+    Submit-->Review["Human Review"]
+    Review-->RungGate["Rung Gate<br/>641 / 274177 / 65537"]
+    RungGate-->Store["Stillwater Store"]
+    Store-->Users["All Users Benefit"]</div>
+                </div>
+            </div>
+
+            <!-- ── INSTRUCTIONS ── -->
+            <div class="section">
+                <div class="section-title">Instructions</div>
+                <div class="instructions">
+                    <div class="instruction-item">
+                        <img src="/images/droplets/enterprise-grade-ai.png" alt="Enterprise Grade AI">
+                        <div class="instruction-text">
+                            <p><strong>How the Store Works</strong></p>
+                            <p>Every skill is verified before publishing. No untested code enters the store. Developers submit skills via <code>POST /suggest</code>. Human reviewers verify at the appropriate rung level (641 for utilities, 274177 for integrations, 65537 for security-sensitive).</p>
+                            <p style="margin-top:0.5rem;color:#888;font-size:0.85rem;">Belt progression: Complete skills at each rung level to advance from White Belt to Black Belt. Skills = Capital. The store compounds your AI's capabilities over time.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
@@ -1072,6 +1439,18 @@
                 if (page === 'sync') {
                     loadCommunityStatus();
                 }
+
+                // Re-render mermaid when Store page becomes active
+                if (page === 'store') {
+                    setTimeout(() => {
+                        try {
+                            const el = document.getElementById('store-mermaid');
+                            if (el && !el.getAttribute('data-processed')) {
+                                mermaid.init(undefined, el);
+                            }
+                        } catch(e) {}
+                    }, 150);
+                }
             });
         });
 
@@ -1080,6 +1459,9 @@
         // cpu: static rows initialized once; sync/llm/swarms/orch managed dynamically
         // =====================================================================
         try { $('#table-cpu').DataTable({ paging: false, searching: true, info: false }); } catch(e) {}
+
+        // OAuth3 comparison DataTable — static rows initialized once
+        try { $('#table-oauth3-compare').DataTable({ paging: false, searching: false, info: false }); } catch(e) {}
 
         // Sync results DataTable — re-initialized after each sync
         let _syncDT = null;
