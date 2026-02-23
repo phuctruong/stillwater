@@ -6,6 +6,9 @@
     <title>Stillwater Admin Dojo</title>
     <link rel="stylesheet" href="/static/app.css" />
     <link rel="stylesheet" href="/static/css/cli-chat.css" />
+    <link rel="stylesheet" href="/static/css/mermaid-interactive.css" />
+    <!-- Mermaid Diagram Library -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
@@ -17,7 +20,7 @@
         <img id="dropletLogo" src="/images/droplet-logo-merge.gif" alt="Droplet Logo" class="droplet-icon" onload="setupGifSwitch()">
         <div>
           <h1>Stillwater Software 5.0 Dojo</h1>
-          <p>Linux for AI: Teach your AI Kungfu.</p>
+          <p>Linux for AI: Teach your AI Kung-fu.</p>
         </div>
       </div>
       <div class="header-controls">
@@ -132,92 +135,28 @@
       </div>
     </div>
 
-    <main class="layout">
-      <section class="panel">
-        <h2>Skills / Swarms / Recipes / Papers</h2>
-        <p class="sub">Select a file, edit, and save. New groups: Skills, Swarms, Recipes, Papers available as primary tabs.</p>
+    <main class="layout" style="padding: 2rem;">
+      <!-- Section 1: Mermaid Orchestration Diagram -->
+      <section id="mermaid-section">
+        <h2>Orchestration Diagram</h2>
+        <p class="sub">Click on a node to view details. Hover for quick info.</p>
+        <div id="mermaid-diagram"></div>
+      </section>
 
-        <div class="file-controls">
-          <div id="groupTabs" class="tabs"></div>
-          <button id="refreshCatalogBtn">Refresh</button>
-        </div>
-
-        <div class="file-controls">
-          <input id="newFilename" type="text" placeholder="new-file.md" />
-          <button id="createFileBtn">Create</button>
-        </div>
-
-        <div class="file-grid">
-          <aside>
-            <ul id="fileList"></ul>
-            <div class="quick-files">
-              <h3>Quick Files</h3>
-              <ul id="extraList"></ul>
-            </div>
-          </aside>
-          <div>
-            <div class="editor-head">
-              <code id="activePath">(none)</code>
-              <button id="saveFileBtn">Save</button>
-            </div>
-            <textarea id="fileEditor" spellcheck="false"></textarea>
-          </div>
+      <!-- Section 2: Node Details Panel -->
+      <section id="details-section">
+        <h2>Node Details</h2>
+        <div id="node-details-panel">
+          <p class="sub">Click a node in the diagram above to see details...</p>
         </div>
       </section>
 
-      <section class="panel">
-        <h2>LLM + Ollama Ops</h2>
-        <p class="sub">Probe status, change providers, install Ollama, and pull models.</p>
-
-        <div id="llmSummary" class="summary-box"></div>
-        <button id="refreshLlmBtn">Refresh LLM Status</button>
-
-        <div class="form-row">
-          <input id="providerInput" placeholder="provider (ollama/openai/claude...)" />
-          <input id="ollamaUrlInput" placeholder="ollama url (http://host:11434)" />
-          <input id="ollamaModelInput" placeholder="ollama model (llama3.1:8b)" />
-          <button id="saveLlmConfigBtn">Save LLM Config</button>
-        </div>
-
-        <div class="form-row">
-          <input id="installSudoPwd" type="password" placeholder="sudo password for install" />
-          <button id="installOllamaBtn">Install Ollama</button>
-        </div>
-
-        <div class="form-row">
-          <input id="pullModelInput" placeholder="model to pull (qwen2.5-coder:7b)" />
-          <button id="pullModelBtn">Pull Model</button>
-        </div>
-      </section>
-
-      <section class="panel">
-        <h2>Community Hub (Mock)</h2>
-        <p class="sub">Prepare for recipe/skill marketplace and extension sync.</p>
-
-        <div id="communitySummary" class="summary-box"></div>
-
-        <div class="form-row">
-          <input id="communityEmail" placeholder="you@company.com" />
-          <button id="linkCommunityBtn">Send Magic Link + Get API Key (Stub)</button>
-        </div>
-
-        <div class="form-row">
-          <select id="syncDirection">
-            <option value="both">Sync Both Ways</option>
-            <option value="upload">Upload Local to Community</option>
-            <option value="download">Download Community to Local</option>
-          </select>
-          <button id="syncCommunityBtn">Sync Recipes/Skills (Mock)</button>
-        </div>
-      </section>
-
-      <section class="panel">
-        <div style="display: flex; gap: 2rem; align-items: flex-start;">
-          <div style="flex: 1;">
-            <h2>CLI Chat Interface</h2>
-            <p class="sub">Execute <code>stillwater cli</code> commands interactively. All commands are server-side allowlisted.</p>
-
-            <div id="cli-chat-container">
+      <!-- Section 3: CLI Chat Interface -->
+      <section id="cli-section">
+        <h2>CLI Chat Interface</h2>
+        <p class="sub">Execute <code>stillwater cli</code> commands interactively.</p>
+        <div id="cli-swarm-selector-container"></div>
+        <div id="cli-chat-container">
           <div id="cli-output"></div>
           <div id="cli-input-area">
             <input type="text" id="cli-input" placeholder="$ stillwater skills list" autocomplete="off">
@@ -230,21 +169,13 @@
             <a onclick="document.getElementById('cli-input').value='recipes list'; document.getElementById('cli-send-btn').click();">recipes list</a>
             <a onclick="document.getElementById('cli-input').value='help'; document.getElementById('cli-send-btn').click();">help</a>
           </div>
-          </div>
-          <div style="flex-shrink: 0;">
-            <img src="/images/droplet-kungfu.png" alt="Droplet Kung-Fu" style="max-width: 200px; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
-          </div>
         </div>
-      </section>
-
-      <section class="panel logs">
-        <h2>Operations Log</h2>
-        <pre id="logBox"></pre>
       </section>
     </main>
 
     <script src="/static/app.js"></script>
     <script src="/static/js/cli-chat.js"></script>
+    <script src="/static/js/mermaid-interactive.js"></script>
 
     <!-- Droplet Logo GIF Transition -->
     <script>

@@ -188,6 +188,124 @@ class TestApiKeyEndpoints:
         assert resp.status_code != 401
 
 
+class TestMermaidEndpoints:
+    """Test Mermaid-Interactive orchestration endpoints."""
+
+    def test_get_orchestration_mermaid(self):
+        """GET /api/orchestration/mermaid should return Mermaid diagram syntax."""
+        resp = client.get("/api/orchestration/mermaid")
+        assert resp.status_code == 200
+        data = resp.json()
+
+        # Check structure
+        assert "mermaid" in data
+        assert "nodes" in data
+        assert "status" in data
+        assert data["status"] == "ok"
+
+        # Check Mermaid syntax
+        mermaid_syntax = data["mermaid"]
+        assert "graph LR" in mermaid_syntax
+        assert "explorer" in mermaid_syntax.lower()
+        assert "builder" in mermaid_syntax.lower()
+        assert "arbiter" in mermaid_syntax.lower()
+
+        # Check nodes list
+        nodes = data["nodes"]
+        assert isinstance(nodes, list)
+        assert "explorer" in nodes
+        assert "builder" in nodes
+        assert "arbiter" in nodes
+
+    def test_get_node_details_explorer(self):
+        """GET /api/orchestration/node/explorer should return explorer node details."""
+        resp = client.get("/api/orchestration/node/explorer")
+        assert resp.status_code == 200
+        data = resp.json()
+
+        # Check required fields
+        assert data["id"] == "explorer"
+        assert data["name"] == "Explorer"
+        assert data["role"] == "scout"
+        assert data["model"] == "haiku"
+        assert data["type"] == "CPU"
+        assert data["status"] == "ok"
+
+        # Check metadata
+        assert "persona" in data
+        assert "responsibility" in data
+        assert "description" in data
+        assert "strengths" in data
+        assert isinstance(data["strengths"], list)
+        assert "tools" in data
+        assert isinstance(data["tools"], list)
+
+        # Check algorithm and examples
+        assert "algorithm" in data
+        assert "examples" in data
+        assert isinstance(data["examples"], list)
+        assert len(data["examples"]) > 0
+
+        # Check config path
+        assert "config_path" in data
+        assert "rung_target" in data
+        assert data["rung_target"] == 641
+
+    def test_get_node_details_builder(self):
+        """GET /api/orchestration/node/builder should return builder node details."""
+        resp = client.get("/api/orchestration/node/builder")
+        assert resp.status_code == 200
+        data = resp.json()
+
+        # Check required fields
+        assert data["id"] == "builder"
+        assert data["name"] == "Builder"
+        assert data["role"] == "coder"
+        assert data["model"] == "sonnet"
+        assert data["type"] == "Swarm"
+        assert data["status"] == "ok"
+
+        # Check examples are present
+        assert len(data["examples"]) > 0
+        assert any("implement" in ex.lower() for ex in data["examples"])
+
+    def test_get_node_details_arbiter(self):
+        """GET /api/orchestration/node/arbiter should return arbiter node details."""
+        resp = client.get("/api/orchestration/node/arbiter")
+        assert resp.status_code == 200
+        data = resp.json()
+
+        # Check required fields
+        assert data["id"] == "arbiter"
+        assert data["name"] == "Arbiter"
+        assert data["role"] == "skeptic"
+        assert data["model"] == "sonnet"
+        assert data["type"] == "Swarm"
+        assert data["status"] == "ok"
+
+        # Check examples are present
+        assert len(data["examples"]) > 0
+        assert any("review" in ex.lower() or "verify" in ex.lower() for ex in data["examples"])
+
+    def test_get_node_details_invalid_node(self):
+        """GET /api/orchestration/node/invalid should return 404."""
+        resp = client.get("/api/orchestration/node/invalid")
+        assert resp.status_code == 404
+
+    def test_mermaid_diagram_completeness(self):
+        """Verify mermaid diagram has all required edges."""
+        resp = client.get("/api/orchestration/mermaid")
+        assert resp.status_code == 200
+        data = resp.json()
+
+        mermaid_syntax = data["mermaid"]
+        # Should have edges between nodes (explorer->builder->arbiter)
+        assert "-->" in mermaid_syntax
+        # Count arrows - should have 2 edges
+        arrow_count = mermaid_syntax.count("-->")
+        assert arrow_count >= 2
+
+
 class TestStaticFiles:
     """Test static file serving."""
 
@@ -197,6 +315,18 @@ class TestStaticFiles:
         assert resp.status_code == 200
         # Should contain HTML content
         assert b"html" in resp.content or b"Stillwater" in resp.content
+
+    def test_mermaid_css_served(self):
+        """GET /static/css/mermaid-interactive.css should be served."""
+        resp = client.get("/static/css/mermaid-interactive.css")
+        assert resp.status_code == 200
+        assert b"mermaid" in resp.content.lower()
+
+    def test_mermaid_js_served(self):
+        """GET /static/js/mermaid-interactive.js should be served."""
+        resp = client.get("/static/js/mermaid-interactive.js")
+        assert resp.status_code == 200
+        assert b"mermaid" in resp.content.lower()
 
 
 if __name__ == "__main__":
