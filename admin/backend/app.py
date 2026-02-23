@@ -322,6 +322,87 @@ async def list_api_keys(request: Request):
         except httpx.RequestError:
             raise HTTPException(503, "Cloud API unavailable")
 
+# -- CLI Execution (Bridge to stillwater CLI) --------------------------------
+
+import subprocess
+import json
+from datetime import datetime
+
+@app.post("/api/cli/execute")
+async def execute_cli_command(request: Request):
+    """Execute stillwater CLI command from browser
+
+    Request body:
+    {
+        "command": "skills list",
+        "args": []
+    }
+
+    Returns:
+    {
+        "success": true,
+        "output": "...",
+        "status": 0,
+        "duration_ms": 123,
+        "timestamp": "2026-02-23T09:00:00Z"
+    }
+    """
+    try:
+        body = await request.json()
+        command = body.get("command", "").strip()
+        args = body.get("args", [])
+
+        if not command:
+            return {
+                "success": False,
+                "error": "command is required",
+                "output": ""
+            }
+
+        # Build full command: python -m stillwater.cli <command> <args>
+        full_cmd = ["python", "-m", "stillwater.cli", command] + args
+
+        # Execute with timeout
+        start_time = datetime.utcnow()
+        try:
+            result = subprocess.run(
+                full_cmd,
+                capture_output=True,
+                text=True,
+                timeout=30,
+                cwd=str(REPO_ROOT)
+            )
+            elapsed_ms = int((datetime.utcnow() - start_time).total_seconds() * 1000)
+
+            return {
+                "success": result.returncode == 0,
+                "output": result.stdout or result.stderr,
+                "status": result.returncode,
+                "duration_ms": elapsed_ms,
+                "timestamp": start_time.isoformat() + "Z"
+            }
+        except subprocess.TimeoutExpired:
+            elapsed_ms = int((datetime.utcnow() - start_time).total_seconds() * 1000)
+            return {
+                "success": False,
+                "error": "Command timed out (30s max)",
+                "output": "",
+                "status": 124,
+                "duration_ms": elapsed_ms
+            }
+    except json.JSONDecodeError:
+        return {
+            "success": False,
+            "error": "Invalid JSON in request body",
+            "output": ""
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "output": ""
+        }
+
 # -- Static files (admin UI) --------------------------------------------------
 
 @app.get("/")

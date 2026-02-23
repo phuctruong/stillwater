@@ -1,0 +1,191 @@
+/**
+ * Stillwater CLI Chat Styling
+ * Convention over Configuration - simple, clean interface
+ */
+
+#cli-chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 600px;
+    background: #1e1e1e;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: #d4d4d4;
+}
+
+#cli-output {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    background: #0d0d0d;
+    border-bottom: 1px solid #333;
+}
+
+#cli-output::-webkit-scrollbar {
+    width: 8px;
+}
+
+#cli-output::-webkit-scrollbar-track {
+    background: #1e1e1e;
+}
+
+#cli-output::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 4px;
+}
+
+#cli-output::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.cli-command {
+    color: #4ec9b0;
+    margin: 4px 0;
+    display: flex;
+    gap: 8px;
+}
+
+.cli-prompt {
+    color: #6a9955;
+    font-weight: bold;
+}
+
+.cli-output {
+    color: #d4d4d4;
+    margin: 4px 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.cli-output pre {
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #1e1e1e;
+    padding: 8px;
+    border-left: 3px solid #4ec9b0;
+}
+
+.cli-error {
+    color: #f48771;
+    margin: 4px 0;
+}
+
+.cli-error pre {
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #1e1e1e;
+    padding: 8px;
+    border-left: 3px solid #f48771;
+}
+
+.cli-loading {
+    color: #856db8;
+    font-style: italic;
+    margin: 4px 0;
+}
+
+.cli-status {
+    color: #858585;
+    font-size: 11px;
+    margin: 4px 0;
+}
+
+/* Input area */
+#cli-input-area {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    background: #1e1e1e;
+    border-top: 1px solid #333;
+}
+
+#cli-input {
+    flex: 1;
+    background: #0d0d0d;
+    color: #d4d4d4;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    outline: none;
+}
+
+#cli-input:focus {
+    border-color: #4ec9b0;
+    box-shadow: 0 0 0 2px rgba(78, 201, 176, 0.1);
+}
+
+#cli-input::placeholder {
+    color: #666;
+}
+
+#cli-send-btn,
+#cli-clear-btn {
+    background: #0e639c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#cli-send-btn:hover {
+    background: #1177bb;
+}
+
+#cli-send-btn:active {
+    background: #0a5a99;
+}
+
+#cli-clear-btn {
+    background: #6a6a6a;
+}
+
+#cli-clear-btn:hover {
+    background: #7a7a7a;
+}
+
+#cli-clear-btn:active {
+    background: #5a5a5a;
+}
+
+/* Hint text */
+#cli-hint {
+    padding: 8px 12px;
+    background: #0d0d0d;
+    color: #666;
+    font-size: 12px;
+    border-top: 1px solid #333;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+#cli-hint a {
+    color: #4ec9b0;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#cli-hint a:hover {
+    text-decoration: underline;
+}
+
+/* Tab pane for CLI */
+.tab-pane.active #cli-chat-container {
+    display: flex;
+}
+
+.tab-pane #cli-chat-container {
+    display: none;
+}

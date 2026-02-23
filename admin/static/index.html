@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Stillwater Admin Dojo</title>
     <link rel="stylesheet" href="/static/app.css" />
+    <link rel="stylesheet" href="/static/css/cli-chat.css" />
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
@@ -12,9 +13,12 @@
   <body>
     <div class="bg-overlay"></div>
     <header class="topbar">
-      <div>
-        <h1>Stillwater Admin Dojo</h1>
-        <p>Kernel controls, ripple editing, and PHUC operations from one board.</p>
+      <div class="topbar-left">
+        <img id="dropletLogo" src="/static/images/droplet-logo-merge.gif" alt="Droplet Logo" class="droplet-icon">
+        <div>
+          <h1>Stillwater Software 5.0 Dojo</h1>
+          <p>The OS for Agentic Delegation. Skills, Recipes, and Orchestration.</p>
+        </div>
       </div>
       <div class="header-controls">
         <div class="status-chip" id="serverClock">--</div>
@@ -208,19 +212,23 @@
       </section>
 
       <section class="panel">
-        <h2>CLI Runner</h2>
-        <p class="sub">Run allowlisted <code>stillwater</code> commands from the web. All commands are server-side allowlisted — no arbitrary execution.</p>
+        <h2>CLI Chat Interface</h2>
+        <p class="sub">Execute <code>stillwater cli</code> commands interactively. All commands are server-side allowlisted.</p>
 
-        <div class="form-row">
-          <select id="cliCommand">
-            <option value="version">version</option>
-            <option value="doctor">doctor</option>
-            <option value="llm-status">llm-status</option>
-          </select>
-          <button id="runCliBtn">Run Command</button>
+        <div id="cli-chat-container">
+          <div id="cli-output"></div>
+          <div id="cli-input-area">
+            <input type="text" id="cli-input" placeholder="$ stillwater skills list" autocomplete="off">
+            <button id="cli-send-btn">Send</button>
+            <button id="cli-clear-btn">Clear</button>
+          </div>
+          <div id="cli-hint">
+            <span>Try:</span>
+            <a onclick="document.getElementById('cli-input').value='skills list'; document.getElementById('cli-send-btn').click();">skills list</a>
+            <a onclick="document.getElementById('cli-input').value='recipes list'; document.getElementById('cli-send-btn').click();">recipes list</a>
+            <a onclick="document.getElementById('cli-input').value='help'; document.getElementById('cli-send-btn').click();">help</a>
+          </div>
         </div>
-
-        <pre id="cliOutput" class="summary-box" style="min-height:4rem;white-space:pre-wrap;"></pre>
       </section>
 
       <section class="panel logs">
@@ -230,5 +238,7 @@
     </main>
 
     <script src="/static/app.js"></script>
+    <script src="/static/js/cli-chat.js"></script>
+
   </body>
 </html>
