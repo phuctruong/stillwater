@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-02-22T21:26:42.682498",
+  "model": "mistral:7b",
+  "baseline_pass_rate": 0.0,
+  "skills_pass_rate": 0.0,
+  "uplift_percentage": 0.0,
+  "results": [
+    {
+      "task": "task_1_sum",
+      "with_skills": false,
+      "success": false,
+      "error": "timed out",
+      "latency_ms": 60064
+    },
+    {
+      "task": "task_1_sum",
+      "with_skills": true,
+      "success": false,
+      "error": "timed out",
+      "latency_ms": 60023
+    },
+    {
+      "task": "task_2_palindrome",
+      "with_skills": false,
+      "success": false,
+      "error": "timed out",
+      "latency_ms": 60059
+    },
+    {
+      "task": "task_2_palindrome",
+      "with_skills": true,
+      "success": false,
+      "error": "timed out",
+      "latency_ms": 60060
+    },
+    {
+      "task": "task_3_fibonacci",
+      "with_skills": false,
+      "success": false,
+      "error": "timed out",
+      "latency_ms": 60001
+    },
+    {
+      "task": "task_3_fibonacci",
+      "with_skills": true,
+      "success": false,
+      "error": "timed out",
+      "latency_ms": 60041
+    }
+  ]
+}

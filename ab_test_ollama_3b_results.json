@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-02-22T21:33:44.293426",
+  "model": "qwen2.5-coder:3b",
+  "baseline_pass_rate": 0.0,
+  "skills_pass_rate": 0.0,
+  "uplift_percentage": 0.0,
+  "results": [
+    {
+      "task": "task_1_sum",
+      "with_skills": false,
+      "success": false,
+      "error": "timed out",
+      "latency_ms": 30036
+    },
+    {
+      "task": "task_1_sum",
+      "with_skills": true,
+      "success": false,
+      "error": "timed out",
+      "latency_ms": 30029
+    },
+    {
+      "task": "task_2_palindrome",
+      "with_skills": false,
+      "success": false,
+      "error": "timed out",
+      "latency_ms": 30029
+    },
+    {
+      "task": "task_2_palindrome",
+      "with_skills": true,
+      "success": false,
+      "error": "timed out",
+      "latency_ms": 30032
+    },
+    {
+      "task": "task_3_fibonacci",
+      "with_skills": false,
+      "success": false,
+      "error": "timed out",
+      "latency_ms": 30029
+    },
+    {
+      "task": "task_3_fibonacci",
+      "with_skills": true,
+      "success": false,
+      "error": "timed out",
+      "latency_ms": 30030
+    }
+  ]
+}
