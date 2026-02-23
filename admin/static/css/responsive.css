@@ -1,0 +1,276 @@
+/**
+ * Responsive Breakpoints for Stillwater Dashboard
+ * Mobile-first approach
+ */
+
+/* ============================================================================
+   TABLET (768px)
+   ============================================================================ */
+
+@media (max-width: 768px) {
+    .topbar {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .header-controls {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .page-nav {
+        width: 100%;
+        overflow-x: auto;
+        flex-wrap: wrap;
+    }
+
+    .nav-button {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .main-container {
+        padding: 1rem;
+        gap: 1.5rem;
+    }
+
+    .page-section {
+        padding: 1rem;
+    }
+
+    .page-section h2 {
+        font-size: 1.3rem;
+    }
+
+    .reports-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .instructions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chat-box {
+        height: 280px;
+    }
+
+    .chat-input-area {
+        flex-direction: column;
+    }
+
+    .chat-button {
+        width: 100%;
+    }
+}
+
+/* ============================================================================
+   MOBILE (480px)
+   ============================================================================ */
+
+@media (max-width: 480px) {
+    :root {
+        --spacing-md: 1rem;
+        --spacing-lg: 1.5rem;
+        --spacing-xl: 2rem;
+    }
+
+    .topbar {
+        padding: 1rem;
+    }
+
+    .topbar-left {
+        gap: 0.8rem;
+    }
+
+    .droplet-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .topbar-left h1 {
+        font-size: 1.3rem;
+    }
+
+    .topbar-left p {
+        font-size: 0.8rem;
+    }
+
+    .page-nav {
+        gap: 0.3rem;
+    }
+
+    .nav-button {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.6rem;
+    }
+
+    .status-chip {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.6rem;
+    }
+
+    .main-container {
+        padding: 0.8rem;
+        gap: 1rem;
+    }
+
+    .page-section {
+        padding: 0.8rem;
+        border-radius: 6px;
+    }
+
+    .page-section h2 {
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .chat-box {
+        height: 250px;
+    }
+
+    .chat-header {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .chat-output {
+        padding: 0.8rem;
+    }
+
+    .chat-input {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.85rem;
+    }
+
+    .chat-button {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    .report-card {
+        min-height: 280px;
+    }
+
+    .table-wrapper thead th {
+        padding: 0.8rem 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .table-wrapper tbody td {
+        padding: 0.8rem 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .mermaid-container {
+        padding: 1rem;
+        min-height: 300px;
+    }
+
+    .instruction-card {
+        padding: 0.8rem;
+    }
+
+    .instruction-card h4 {
+        font-size: 0.9rem;
+    }
+
+    .instruction-step {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+    }
+
+    .instruction-card p {
+        font-size: 0.85rem;
+    }
+
+    .instruction-code {
+        padding: 0.6rem;
+        font-size: 0.75rem;
+    }
+
+    .instruction-button {
+        font-size: 0.8rem;
+        padding: 0.5rem 0.8rem;
+    }
+
+    /* Hide some columns on mobile */
+    .table-wrapper th:nth-child(n+3),
+    .table-wrapper td:nth-child(n+3) {
+        display: none;
+    }
+}
+
+/* ============================================================================
+   SMALL MOBILE (320px)
+   ============================================================================ */
+
+@media (max-width: 320px) {
+    .topbar-left h1 {
+        font-size: 1rem;
+    }
+
+    .page-nav {
+        gap: 0.2rem;
+    }
+
+    .nav-button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.65rem;
+    }
+
+    .page-section h2 {
+        font-size: 1rem;
+    }
+
+    .chat-box {
+        height: 220px;
+    }
+
+    .mermaid-container {
+        min-height: 250px;
+    }
+}
+
+/* ============================================================================
+   PRINT STYLES
+   ============================================================================ */
+
+@media print {
+    .topbar,
+    .nav-button,
+    .chat-button,
+    .instruction-button {
+        display: none;
+    }
+
+    .main-container {
+        max-width: 100%;
+        padding: 0;
+    }
+
+    .page-section {
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ddd;
+        margin-bottom: 1cm;
+    }
+
+    body {
+        background: white;
+    }
+}
+
+/* ============================================================================
+   HIGH DPI DISPLAYS
+   ============================================================================ */
+
+@media (-webkit-min-device-pixel-ratio: 2),
+       (min-resolution: 192dpi) {
+    .nav-button,
+    .chat-button,
+    .instruction-button {
+        border-width: 1px;
+    }
+}

@@ -13,6 +13,7 @@ sys.path.insert(0, str(REPO_ROOT / "cli" / "src"))
 from stillwater.data_registry import DataRegistry
 from stillwater.settings_loader import SettingsLoader
 from .mermaid_routes import create_mermaid_routes
+from .pages_routes import router as pages_router
 
 app = FastAPI(title="Stillwater Admin", version="1.0.0")
 
@@ -20,8 +21,9 @@ app = FastAPI(title="Stillwater Admin", version="1.0.0")
 registry = DataRegistry()
 settings = SettingsLoader()
 
-# Register Mermaid-Interactive routes
+# Register routes
 create_mermaid_routes(app, REPO_ROOT)
+app.include_router(pages_router)
 
 # Proxy target for cloud APIs (configurable for local dev vs production)
 SOLACEAGI_API_URL = os.getenv("SOLACEAGI_API_URL", "https://www.solaceagi.com")

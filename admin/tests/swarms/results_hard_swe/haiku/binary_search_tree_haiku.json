@@ -2,9 +2,9 @@
   "model": "haiku",
   "task_name": "binary_search_tree",
   "syntax_valid": true,
-  "functional_pass": true,
+  "functional_pass": false,
   "complexity_score": 0.55,
   "edge_cases_score": 0.6499999999999999,
-  "code_length": 15350,
-  "timestamp": "2026-02-22T17:38:45.197330"
+  "code_length": 16794,
+  "timestamp": "2026-02-23T08:13:41.864871"
 }

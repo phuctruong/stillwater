@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Stillwater LLM Portal - Setup and Configuration">
+    <title>Stillwater Admin Dojo — LLM Portal</title>
+
+    <!-- Bootstrap 5 CSS from CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Mermaid.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <!-- Custom stylesheet -->
+    <link href="/static/app.css" rel="stylesheet">
+</head>
+<body>
+    <!-- TOPBAR / NAVIGATION -->
+    <nav class="topbar">
+        <div class="container-fluid">
+            <div class="topbar-content">
+                <div class="topbar-left">
+                    <img id="dropletLogo" src="../images/droplet-logo-merge.gif" alt="Droplet Logo" class="droplet-icon" onload="setupGifSwitch()">
+                    <span class="topbar-logo">🌊 Stillwater</span>
+                    <span class="topbar-title">Admin Dojo</span>
+                </div>
+                <div class="topbar-right">
+                    <span class="server-status" id="serverStatus">● Connecting...</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <div class="main-container">
+        <!-- LEFT SIDEBAR: Status Cards -->
+        <aside class="status-sidebar">
+            <div class="sidebar-header">
+                <h5>System Status</h5>
+            </div>
+
+            <!-- LLM Portal Status Card -->
+            <div class="status-card card-llm" id="cardLLM">
+                <div class="status-dot llm"></div>
+                <div class="status-content">
+                    <h6>🔌 LLM Portal</h6>
+                    <p class="status-text" id="llmStatus">Loading...</p>
+                    <p class="status-detail" id="llmDetail"></p>
+                    <button class="btn-configure" onclick="openLLMWizard()">Configure</button>
+                </div>
+            </div>
+
+            <!-- Solace AGI Status Card -->
+            <div class="status-card card-solace" id="cardSolace">
+                <div class="status-dot solace"></div>
+                <div class="status-content">
+                    <h6>☁️ Solace AGI</h6>
+                    <p class="status-text" id="solaceStatus">Loading...</p>
+                    <p class="status-detail" id="solaceDetail"></p>
+                    <button class="btn-configure" onclick="openSolaceWizard()">Configure</button>
+                </div>
+            </div>
+
+            <!-- Skills Ecosystem Status Card -->
+            <div class="status-card card-skills" id="cardSkills">
+                <div class="status-dot skills"></div>
+                <div class="status-content">
+                    <h6>📊 Skills Ecosystem</h6>
+                    <p class="status-text" id="skillsStatus">Loading...</p>
+                    <p class="status-detail" id="skillsDetail"></p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="main-content">
+            <!-- TAB NAVIGATION -->
+            <div class="tab-navigation">
+                <button class="tab-btn active" data-tab="dashboard" onclick="switchTab('dashboard')">Dashboard</button>
+                <button class="tab-btn" data-tab="skills" onclick="switchTab('skills')">Skills</button>
+                <button class="tab-btn" data-tab="recipes" onclick="switchTab('recipes')">Recipes</button>
+                <button class="tab-btn" data-tab="swarms" onclick="switchTab('swarms')">Swarms</button>
+                <button class="tab-btn" data-tab="personas" onclick="switchTab('personas')">Personas</button>
+            </div>
+
+            <!-- TAB 1: DASHBOARD -->
+            <div class="tab-pane active" id="tab-dashboard">
+                <div class="tab-header">
+                    <h2>Setup & Configuration</h2>
+                    <p>Configure your LLM models and Solace AGI connection below.</p>
+                </div>
+
+                <div class="setup-wizards-container">
+                    <!-- LLM Wizard Placeholder -->
+                    <div class="wizard-card">
+                        <h4>🔌 Configure LLM Portal</h4>
+                        <p>Set up your Claude Code wrapper and select your default model (Haiku, Sonnet, or Opus).</p>
+                        <button class="btn-primary" onclick="openLLMWizard()">Start Setup</button>
+                    </div>
+
+                    <!-- Solace AGI Wizard Placeholder -->
+                    <div class="wizard-card">
+                        <h4>☁️ Connect to Solace AGI</h4>
+                        <p>Enable cloud features: skill submission, cloud sync, and agent orchestration.</p>
+                        <button class="btn-primary" onclick="openSolaceWizard()">Start Setup</button>
+                    </div>
+                </div>
+
+                <!-- Quick Start Guide -->
+                <div class="quick-start">
+                    <h5>📖 Quick Start</h5>
+                    <ol>
+                        <li>Configure LLM Portal to select your preferred Claude model</li>
+                        <li>(Optional) Connect Solace AGI for cloud features</li>
+                        <li>Explore the Skills, Recipes, Swarms, and Personas tabs</li>
+                        <li>Start using Stillwater!</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- TAB 2: SKILLS -->
+            <div class="tab-pane" id="tab-skills">
+                <div class="tab-header">
+                    <h2>Skills Ecosystem</h2>
+                    <p>Dependencies and relationships between all Stillwater skills.</p>
+                </div>
+                <div class="mermaid-container" id="mermaid-skills">
+                    <p class="loading-text">Loading skill graph...</p>
+                </div>
+            </div>
+
+            <!-- TAB 3: RECIPES -->
+            <div class="tab-pane" id="tab-recipes">
+                <div class="tab-header">
+                    <h2>Recipes & Combos</h2>
+                    <p>Recipe compositions and workflow combinations.</p>
+                </div>
+                <div class="mermaid-container" id="mermaid-recipes">
+                    <p class="loading-text">Loading recipe graph...</p>
+                </div>
+            </div>
+
+            <!-- TAB 4: SWARMS -->
+            <div class="tab-pane" id="tab-swarms">
+                <div class="tab-header">
+                    <h2>Agent Dispatch Matrix</h2>
+                    <p>Agent roles and their assigned skill packs.</p>
+                </div>
+                <div class="mermaid-container" id="mermaid-swarms">
+                    <p class="loading-text">Loading swarm matrix...</p>
+                </div>
+            </div>
+
+            <!-- TAB 5: PERSONAS -->
+            <div class="tab-pane" id="tab-personas">
+                <div class="tab-header">
+                    <h2>Persona State Machines</h2>
+                    <p>State diagrams for various personas.</p>
+                </div>
+                <div class="mermaid-container" id="mermaid-personas">
+                    <p class="loading-text">Loading persona FSMs...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- LLM CONFIG WIZARD MODAL -->
+    <div class="modal" id="llmModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">LLM Configuration Wizard</h5>
+                    <button type="button" class="btn-close" onclick="closeLLMModal()"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="wizard-steps" id="llmWizardSteps">
+                        <!-- Step 1: Introduction -->
+                        <div class="wizard-step active" id="llmStep1">
+                            <h6>Step 1 of 4: Welcome</h6>
+                            <p>This wizard will help you configure your LLM Portal and select your default model.</p>
+                            <p>You can choose between:</p>
+                            <ul>
+                                <li><strong>Haiku</strong> - Fast and efficient</li>
+                                <li><strong>Sonnet</strong> - Balanced performance</li>
+                                <li><strong>Opus</strong> - Most capable</li>
+                            </ul>
+                            <div class="wizard-buttons">
+                                <button class="btn btn-primary" onclick="goToLLMStep(2)">Next</button>
+                                <button class="btn btn-secondary" onclick="closeLLMModal()">Cancel</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Model Selection -->
+                        <div class="wizard-step" id="llmStep2">
+                            <h6>Step 2 of 4: Select Default Model</h6>
+                            <p>Which model would you like to use by default?</p>
+                            <div class="model-selection">
+                                <label class="model-option">
+                                    <input type="radio" name="model" value="haiku" checked>
+                                    <span class="model-name">Haiku (Fast)</span>
+                                    <span class="model-desc">Fastest and most cost-effective</span>
+                                </label>
+                                <label class="model-option">
+                                    <input type="radio" name="model" value="sonnet">
+                                    <span class="model-name">Sonnet (Balanced)</span>
+                                    <span class="model-desc">Good balance of speed and capability</span>
+                                </label>
+                                <label class="model-option">
+                                    <input type="radio" name="model" value="opus">
+                                    <span class="model-name">Opus (Powerful)</span>
+                                    <span class="model-desc">Most capable, slower</span>
+                                </label>
+                            </div>
+                            <div class="wizard-options">
+                                <label>
+                                    <input type="checkbox" id="autoStart" checked>
+                                    Auto-start wrapper on boot
+                                </label>
+                            </div>
+                            <div class="wizard-buttons">
+                                <button class="btn btn-secondary" onclick="goToLLMStep(1)">Back</button>
+                                <button class="btn btn-primary" onclick="goToLLMStep(3)">Next</button>
+                                <button class="btn btn-secondary" onclick="closeLLMModal()">Cancel</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Review & Save -->
+                        <div class="wizard-step" id="llmStep3">
+                            <h6>Step 3 of 4: Review Configuration</h6>
+                            <p>Please review your settings before saving:</p>
+                            <div class="config-summary">
+                                <div class="summary-item">
+                                    <span class="summary-label">Default Model:</span>
+                                    <span class="summary-value" id="reviewModel">Haiku</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Auto-start:</span>
+                                    <span class="summary-value" id="reviewAutoStart">Enabled</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Config File:</span>
+                                    <span class="summary-value">data/custom/llm_config.yaml</span>
+                                </div>
+                            </div>
+                            <div class="wizard-buttons">
+                                <button class="btn btn-secondary" onclick="goToLLMStep(2)">Back</button>
+                                <button class="btn btn-success" onclick="saveLLMConfig()" id="btnSaveLLM">Save Configuration</button>
+                                <button class="btn btn-secondary" onclick="closeLLMModal()">Cancel</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Success -->
+                        <div class="wizard-step" id="llmStep4">
+                            <h6>✓ Success!</h6>
+                            <p>Your LLM configuration has been saved.</p>
+                            <div class="success-message">
+                                <p>Configuration saved to: <code>data/custom/llm_config.yaml</code></p>
+                                <p>The dashboard will update automatically with your new settings.</p>
+                            </div>
+                            <div class="wizard-buttons">
+                                <button class="btn btn-primary" onclick="closeLLMModal()">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SOLACE AGI CONFIG WIZARD MODAL -->
+    <div class="modal" id="solaceModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Solace AGI Connection Wizard</h5>
+                    <button type="button" class="btn-close" onclick="closeSolaceModal()"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="wizard-steps" id="solaceWizardSteps">
+                        <!-- Step 1: Welcome -->
+                        <div class="wizard-step active" id="solaceStep1">
+                            <h6>Step 1 of 5: Welcome</h6>
+                            <p>Solace AGI is an optional cloud platform that enables:</p>
+                            <ul>
+                                <li>Skill submission to the Store</li>
+                                <li>Cloud sync and backup</li>
+                                <li>Recipe sharing with the community</li>
+                                <li>Twin browser orchestration</li>
+                            </ul>
+                            <p><strong>Cost:</strong> Free tier (local only) or paid tiers for cloud features.</p>
+                            <div class="wizard-buttons">
+                                <button class="btn btn-primary" onclick="goToSolaceStep(2)">Get Started</button>
+                                <button class="btn btn-secondary" onclick="closeSolaceModal()">Skip for Now</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Sign Up -->
+                        <div class="wizard-step" id="solaceStep2">
+                            <h6>Step 2 of 5: Get API Key</h6>
+                            <p>First, you need an API key from Solace AGI (takes 1 minute).</p>
+                            <p>You'll receive a key like: <code>sk_test_abc123...</code></p>
+                            <div class="wizard-buttons">
+                                <button class="btn btn-info" onclick="window.open('https://solaceagi.com', '_blank')">
+                                    Open solaceagi.com
+                                </button>
+                                <button class="btn btn-secondary" onclick="goToSolaceStep(3)">Already Have Key</button>
+                                <button class="btn btn-secondary" onclick="closeSolaceModal()">Cancel</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Paste API Key -->
+                        <div class="wizard-step" id="solaceStep3">
+                            <h6>Step 3 of 5: Paste API Key</h6>
+                            <p>Paste your API key here (will be encrypted before saving):</p>
+                            <input type="password" class="form-control" id="apiKeyInput" placeholder="sk_..." maxlength="100">
+                            <small class="text-muted">Your key will be encrypted using AES-256-GCM</small>
+                            <div class="wizard-buttons">
+                                <button class="btn btn-secondary" onclick="goToSolaceStep(2)">Back</button>
+                                <button class="btn btn-primary" onclick="goToSolaceStep(4)">Next</button>
+                                <button class="btn btn-secondary" onclick="closeSolaceModal()">Cancel</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Test Connection -->
+                        <div class="wizard-step" id="solaceStep4">
+                            <h6>Step 4 of 5: Test Connection</h6>
+                            <p id="testMessage">Testing Solace AGI connection...</p>
+                            <div id="testResults" class="test-results"></div>
+                            <div class="wizard-buttons" id="testButtons" style="display: none;">
+                                <button class="btn btn-secondary" onclick="goToSolaceStep(3)">Back</button>
+                                <button class="btn btn-primary" onclick="goToSolaceStep(5)">Next</button>
+                                <button class="btn btn-secondary" onclick="closeSolaceModal()">Cancel</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 5: Review & Save -->
+                        <div class="wizard-step" id="solaceStep5">
+                            <h6>Step 5 of 5: Confirm & Save</h6>
+                            <p>Ready to save your Solace AGI configuration?</p>
+                            <div class="config-summary">
+                                <div class="summary-item">
+                                    <span class="summary-label">Service:</span>
+                                    <span class="summary-value">solaceagi.com</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">API Key:</span>
+                                    <span class="summary-value" id="reviewApiKey">••••••••••</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Encryption:</span>
+                                    <span class="summary-value">AES-256-GCM</span>
+                                </div>
+                            </div>
+                            <div class="wizard-buttons">
+                                <button class="btn btn-secondary" onclick="goToSolaceStep(4)">Back</button>
+                                <button class="btn btn-success" onclick="saveSolaceConfig()" id="btnSaveSolace">Save Configuration</button>
+                                <button class="btn btn-secondary" onclick="closeSolaceModal()">Cancel</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 6: Success -->
+                        <div class="wizard-step" id="solaceStep6">
+                            <h6>✓ Success!</h6>
+                            <p>Your Solace AGI configuration has been saved.</p>
+                            <div class="success-message">
+                                <p>Configuration saved to: <code>data/custom/solace_agi_config.yaml</code></p>
+                                <p>API key has been encrypted using AES-256-GCM.</p>
+                                <p>The dashboard will update automatically.</p>
+                            </div>
+                            <div class="wizard-buttons">
+                                <button class="btn btn-primary" onclick="closeSolaceModal()">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="/static/app.js"></script>
+    <script src="/static/wizards.js"></script>
+    <script src="/static/mermaid-handler.js"></script>
+
+    <!-- Droplet Logo GIF Switch -->
+    <script>
+        function setupGifSwitch() {
+            const dropletLogo = document.getElementById('dropletLogo');
+            let animationCount = 0;
+
+            // Track animation end events
+            dropletLogo.addEventListener('animationend', () => {
+                animationCount++;
+            });
+
+            // Switch to rotating GIF after merge animation completes
+            // Check every 100ms if we should switch (after ~3-4 seconds)
+            setTimeout(() => {
+                dropletLogo.src = '../images/droplet-logo-rotating.gif';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

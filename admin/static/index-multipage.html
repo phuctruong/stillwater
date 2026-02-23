@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stillwater Admin Dashboard</title>
+
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="/static/app.css" />
+    <link rel="stylesheet" href="/static/css/pages.css" />
+    <link rel="stylesheet" href="/static/css/responsive.css" />
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+
+    <!-- AmCharts -->
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/4/themes/animated.css" />
+
+    <!-- Mermaid -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
+</head>
+<body>
+    <div class="bg-overlay"></div>
+
+    <!-- Header Navigation -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <img id="dropletLogo" src="/images/droplet-logo-merge.gif" alt="Droplet Logo" class="droplet-icon" onload="setupGifSwitch()">
+            <div>
+                <h1>Stillwater Dashboard</h1>
+                <p id="pageSubtitle">Linux for AI: Metrics, Orchestration, Cloud</p>
+            </div>
+        </div>
+        <div class="header-controls">
+            <nav class="page-nav">
+                <button class="nav-button active" data-page="orchestration">Orchestration</button>
+                <button class="nav-button" data-page="swarms">Swarm Nodes</button>
+                <button class="nav-button" data-page="cpu">CPU Nodes</button>
+                <button class="nav-button" data-page="llm">LLM Settings</button>
+                <button class="nav-button" data-page="sync">Solace AGI Sync</button>
+            </nav>
+            <div class="status-chip" id="serverClock">--</div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-container">
+        <!-- Chat Box Section -->
+        <section id="chat-section" class="page-section">
+            <h2>Chat Interface</h2>
+            <div class="chat-box">
+                <div class="chat-header">
+                    <span id="chatPrompt">Ask me anything...</span>
+                </div>
+                <div id="chatOutput" class="chat-output">
+                    <div class="chat-message system">Ready for input...</div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" class="chat-input" placeholder="Type your command..." autocomplete="off">
+                    <button id="chatSendBtn" class="chat-button">Send</button>
+                    <button id="chatClearBtn" class="chat-button secondary">Clear</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reports Section (AmCharts) -->
+        <section id="reports-section" class="page-section">
+            <h2>Metrics & Reports</h2>
+            <div id="reportsContainer" class="reports-grid">
+                <!-- Charts will be dynamically added here -->
+            </div>
+        </section>
+
+        <!-- DataTable Section -->
+        <section id="table-section" class="page-section">
+            <h2>Data Table</h2>
+            <div class="table-wrapper">
+                <table id="dataTable" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <!-- Columns added dynamically -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data added dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Mermaid Diagram Section -->
+        <section id="diagram-section" class="page-section">
+            <h2>Diagram</h2>
+            <div id="mermaidContainer" class="mermaid-container">
+                <!-- Mermaid diagram rendered here -->
+            </div>
+        </section>
+
+        <!-- Instructions Section -->
+        <section id="instructions-section" class="page-section">
+            <h2>Instructions</h2>
+            <div id="instructionsContainer" class="instructions-grid">
+                <!-- Instructions added dynamically -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://www.amcharts.com/lib/4/core.min.js"></script>
+    <script src="https://www.amcharts.com/lib/4/charts.min.js"></script>
+    <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+
+    <script src="/static/app.js"></script>
+    <script src="/static/js/page-config.js"></script>
+    <script src="/static/js/pages.js"></script>
+
+    <!-- Droplet Logo GIF Transition -->
+    <script>
+        function setupGifSwitch() {
+            const dropletLogo = document.getElementById('dropletLogo');
+            setTimeout(() => {
+                dropletLogo.src = '/images/droplet-logo-rotating.gif';
+            }, 8200);
+        }
+    </script>
+</body>
+</html>

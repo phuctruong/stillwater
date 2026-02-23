@@ -34,6 +34,7 @@ from typing import Any, AsyncGenerator, Dict, List, Optional
 
 from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 # ---------------------------------------------------------------------------
@@ -49,6 +50,7 @@ if str(_REPO_ROOT) not in sys.path:
 
 from stillwater.data_registry import DataRegistry  # noqa: E402
 from stillwater.settings_loader import SettingsLoader  # noqa: E402
+from admin.backend.homepage_routes import router as homepage_router  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # App factory
@@ -122,7 +124,25 @@ def create_app(
         return response
 
     # ------------------------------------------------------------------
-    # Register routers
+    # Mount static files for frontend (CSS, JS)
+    # ------------------------------------------------------------------
+
+    frontend_static = (_REPO_ROOT / "admin" / "frontend").resolve()
+    if frontend_static.exists():
+        app.mount(
+            "/static",
+            StaticFiles(directory=str(frontend_static)),
+            name="static"
+        )
+
+    # ------------------------------------------------------------------
+    # Include homepage router (new endpoints)
+    # ------------------------------------------------------------------
+
+    app.include_router(homepage_router)
+
+    # ------------------------------------------------------------------
+    # Register legacy routes
     # ------------------------------------------------------------------
 
     _register_routes(app)

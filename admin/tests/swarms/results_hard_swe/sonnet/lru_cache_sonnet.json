@@ -2,9 +2,9 @@
   "model": "sonnet",
   "task_name": "lru_cache",
   "syntax_valid": true,
-  "functional_pass": true,
+  "functional_pass": false,
   "complexity_score": 0.7,
   "edge_cases_score": 0.8,
-  "code_length": 6160,
-  "timestamp": "2026-02-22T17:40:52.695244"
+  "code_length": 5895,
+  "timestamp": "2026-02-23T08:15:11.675712"
 }

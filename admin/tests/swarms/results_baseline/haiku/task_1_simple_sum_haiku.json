@@ -4,7 +4,7 @@
   "syntax_valid": true,
   "functional_pass": true,
   "quality_score": 0.6,
-  "timestamp": "2026-02-22T17:36:10.969876",
-  "code": "def sum_integers(numbers: list[int]) -> int:\n    \"\"\"\n    Sum all integers in a list.\n    \n    Args:\n        numbers: A list of integers\n        \n    Returns:\n        The sum of all integers in the list. Returns 0 for empty lists.\n        \n    Examples:\n        >>> sum_integers([1, 2, 3])\n        6\n        >>> sum_integers([])\n        0\n    \"\"\"\n    return sum(numbers)\n\n\n# Test cases\nif __name__ == \"__main__\":\n    # Test with positive integers\n    assert sum_integers([1, 2, 3]) == 6\n    \n    # Test with empty list\n    assert sum_integers([]) == 0\n    \n    # Test with negative integers\n    assert sum_integers([-1, -2, -3]) == -6\n    \n    # Test with mixed integers\n    assert sum_integers([-1, 0, 1, 2]) == 2\n    \n    # Test with single element\n    assert sum_integers([5]) == 5\n    \n    print(\"All test cases passed!\")",
+  "timestamp": "2026-02-23T08:08:52.561844",
+  "code": "def sum_integers(numbers: list[int]) -> int:\n    \"\"\"\n    Sum all integers in a list.\n    \n    Args:\n        numbers: A list of integers\n        \n    Returns:\n        The sum of all integers in the list. Returns 0 for empty lists.\n    \"\"\"\n    return sum(numbers)\n\n\n# Test cases\nif __name__ == \"__main__\":\n    assert sum_integers([1, 2, 3]) == 6\n    assert sum_integers([]) == 0\n    assert sum_integers([10]) == 10\n    assert sum_integers([-1, -2, -3]) == -6\n    assert sum_integers([0, 0, 0]) == 0\n    assert sum_integers([-5, 5]) == 0\n    print(\"All tests passed!\")",
   "baseline": true
 }
