@@ -47,6 +47,30 @@ async def get_config():
         "api_url": SOLACEAGI_API_URL
     }
 
+@app.get("/api/data/identity")
+async def get_identity():
+    """Load user identity from DataRegistry."""
+    data = registry.load_data_file("identity.json")
+    if not data:
+        return {}
+    import json
+    try:
+        return json.loads(data)
+    except json.JSONDecodeError:
+        return {}
+
+@app.get("/api/data/preferences")
+async def get_preferences():
+    """Load user preferences from DataRegistry."""
+    data = registry.load_data_file("preferences.md")
+    return {"content": data or ""}
+
+@app.get("/api/data/orchestration")
+async def get_orchestration():
+    """Load orchestration workflow from DataRegistry."""
+    data = registry.load_data_file("orchestration.md")
+    return {"content": data or ""}
+
 @app.get("/api/data/facts")
 async def get_facts():
     """Load interesting facts from DataRegistry."""
