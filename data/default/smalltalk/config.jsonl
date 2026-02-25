@@ -1,0 +1,13 @@
+{"key": "cpu_first", "value": true, "description": "Always try CPU response first"}
+{"key": "fallback_to_jokes", "value": true, "description": "Use jokes/facts when low confidence"}
+{"key": "llm_enrichment", "value": true, "description": "LLM runs in parallel to enrich DB"}
+{"key": "llm_enrichment_target", "value": "next_turn", "description": "LLM responses saved for next turn, not current"}
+{"key": "max_warmth_level", "value": 3, "description": "Default max warmth (1-5, calibrated like watering plants)"}
+{"key": "response_max_words", "value": 25, "description": "Max words in non-task response"}
+{"key": "redirect_after_exchanges", "value": 2, "description": "Max non-task exchanges before forcing redirect"}
+{"key": "compliment_frequency", "value": 3, "description": "Max compliments per session (don't over-water)"}
+{"key": "reminder_at_session_start", "value": true, "description": "Show past-session reminder at start"}
+{"key": "joke_on_low_confidence", "value": true, "description": "Serve joke when classification confidence is low"}
+{"key": "fact_on_low_confidence", "value": true, "description": "Serve fact when classification confidence is low"}
+{"key": "brevity_match", "value": true, "description": "Match user's brevity level (short input = short response)"}
+{"key": "formality_match", "value": true, "description": "Match user's formality level"}

@@ -1,0 +1,61 @@
+{"keyword": "asap", "label": "urgent", "count": 14, "confidence": 0.8077, "examples": ["asap response needed"], "phase": "custom"}
+{"keyword": "emergency", "label": "urgent", "count": 14, "confidence": 0.8077, "examples": ["production emergency"], "phase": "custom"}
+{"keyword": "deadline", "label": "urgent", "count": 14, "confidence": 0.8077, "examples": ["deadline today"], "phase": "custom"}
+{"keyword": "critical", "label": "urgent", "count": 14, "confidence": 0.8077, "examples": ["critical blocker"], "phase": "custom"}
+{"keyword": "urgent", "label": "urgent", "count": 14, "confidence": 0.8077, "examples": ["urgent request"], "phase": "custom"}
+{"keyword": "immediately", "label": "urgent", "count": 14, "confidence": 0.8077, "examples": ["fix immediately"], "phase": "custom"}
+{"keyword": "time-sensitive", "label": "urgent", "count": 14, "confidence": 0.8077, "examples": ["time-sensitive notice"], "phase": "custom"}
+{"keyword": "overdue", "label": "urgent", "count": 14, "confidence": 0.8077, "examples": ["overdue invoice"], "phase": "custom"}
+{"keyword": "escalated", "label": "urgent", "count": 14, "confidence": 0.8077, "examples": ["escalated issue"], "phase": "custom"}
+{"keyword": "blocked", "label": "urgent", "count": 14, "confidence": 0.8077, "examples": ["team blocked"], "phase": "custom"}
+{"keyword": "please", "label": "action-required", "count": 14, "confidence": 0.8077, "examples": ["please review"], "phase": "custom"}
+{"keyword": "review", "label": "action-required", "count": 14, "confidence": 0.8077, "examples": ["review requested"], "phase": "custom"}
+{"keyword": "approve", "label": "action-required", "count": 14, "confidence": 0.8077, "examples": ["approve this"], "phase": "custom"}
+{"keyword": "sign", "label": "action-required", "count": 14, "confidence": 0.8077, "examples": ["sign contract"], "phase": "custom"}
+{"keyword": "confirm", "label": "action-required", "count": 14, "confidence": 0.8077, "examples": ["confirm details"], "phase": "custom"}
+{"keyword": "schedule", "label": "action-required", "count": 14, "confidence": 0.8077, "examples": ["schedule meeting"], "phase": "custom"}
+{"keyword": "respond", "label": "action-required", "count": 14, "confidence": 0.8077, "examples": ["respond by friday"], "phase": "custom"}
+{"keyword": "reply", "label": "action-required", "count": 14, "confidence": 0.8077, "examples": ["reply all"], "phase": "custom"}
+{"keyword": "feedback", "label": "action-required", "count": 14, "confidence": 0.8077, "examples": ["share feedback"], "phase": "custom"}
+{"keyword": "decision", "label": "action-required", "count": 14, "confidence": 0.8077, "examples": ["decision needed"], "phase": "custom"}
+{"keyword": "update", "label": "informational", "count": 14, "confidence": 0.8077, "examples": ["status update"], "phase": "custom"}
+{"keyword": "announcement", "label": "informational", "count": 14, "confidence": 0.8077, "examples": ["team announcement"], "phase": "custom"}
+{"keyword": "report", "label": "informational", "count": 14, "confidence": 0.8077, "examples": ["weekly report"], "phase": "custom"}
+{"keyword": "summary", "label": "informational", "count": 14, "confidence": 0.8077, "examples": ["meeting summary"], "phase": "custom"}
+{"keyword": "status", "label": "informational", "count": 14, "confidence": 0.8077, "examples": ["status email"], "phase": "custom"}
+{"keyword": "progress", "label": "informational", "count": 14, "confidence": 0.8077, "examples": ["progress note"], "phase": "custom"}
+{"keyword": "changelog", "label": "informational", "count": 14, "confidence": 0.8077, "examples": ["release changelog"], "phase": "custom"}
+{"keyword": "release-notes", "label": "informational", "count": 14, "confidence": 0.8077, "examples": ["release notes"], "phase": "custom"}
+{"keyword": "metrics", "label": "informational", "count": 14, "confidence": 0.8077, "examples": ["monthly metrics"], "phase": "custom"}
+{"keyword": "digest", "label": "informational", "count": 14, "confidence": 0.8077, "examples": ["daily digest"], "phase": "custom"}
+{"keyword": "fyi", "label": "fyi", "count": 14, "confidence": 0.8077, "examples": ["fyi only"], "phase": "custom"}
+{"keyword": "forwarded", "label": "fyi", "count": 14, "confidence": 0.8077, "examples": ["forwarded note"], "phase": "custom"}
+{"keyword": "sharing", "label": "fyi", "count": 14, "confidence": 0.8077, "examples": ["sharing context"], "phase": "custom"}
+{"keyword": "no-action", "label": "fyi", "count": 14, "confidence": 0.8077, "examples": ["no action needed"], "phase": "custom"}
+{"keyword": "automated", "label": "fyi", "count": 14, "confidence": 0.8077, "examples": ["automated notification"], "phase": "custom"}
+{"keyword": "notification", "label": "fyi", "count": 14, "confidence": 0.8077, "examples": ["system notification"], "phase": "custom"}
+{"keyword": "reminder", "label": "fyi", "count": 14, "confidence": 0.8077, "examples": ["calendar reminder"], "phase": "custom"}
+{"keyword": "heads-up", "label": "fyi", "count": 14, "confidence": 0.8077, "examples": ["heads-up message"], "phase": "custom"}
+{"keyword": "cc", "label": "fyi", "count": 14, "confidence": 0.8077, "examples": ["copied on thread"], "phase": "custom"}
+{"keyword": "for-reference", "label": "fyi", "count": 14, "confidence": 0.8077, "examples": ["for reference"], "phase": "custom"}
+{"keyword": "unsubscribe", "label": "spam", "count": 14, "confidence": 0.8077, "examples": ["click unsubscribe"], "phase": "custom"}
+{"keyword": "offer", "label": "spam", "count": 14, "confidence": 0.8077, "examples": ["special offer"], "phase": "custom"}
+{"keyword": "discount", "label": "spam", "count": 14, "confidence": 0.8077, "examples": ["discount code"], "phase": "custom"}
+{"keyword": "limited-time", "label": "spam", "count": 14, "confidence": 0.8077, "examples": ["limited-time deal"], "phase": "custom"}
+{"keyword": "free", "label": "spam", "count": 14, "confidence": 0.8077, "examples": ["free gift"], "phase": "custom"}
+{"keyword": "winner", "label": "spam", "count": 14, "confidence": 0.8077, "examples": ["you are a winner"], "phase": "custom"}
+{"keyword": "congratulations", "label": "spam", "count": 14, "confidence": 0.8077, "examples": ["congratulations selected"], "phase": "custom"}
+{"keyword": "exclusive", "label": "spam", "count": 14, "confidence": 0.8077, "examples": ["exclusive deal"], "phase": "custom"}
+{"keyword": "deal", "label": "spam", "count": 14, "confidence": 0.8077, "examples": ["today's deal"], "phase": "custom"}
+{"keyword": "promo", "label": "spam", "count": 14, "confidence": 0.8077, "examples": ["promo alert"], "phase": "custom"}
+{"keyword": "newsletter", "label": "newsletter", "count": 14, "confidence": 0.8077, "examples": ["weekly newsletter"], "phase": "custom"}
+{"keyword": "weekly-roundup", "label": "newsletter", "count": 14, "confidence": 0.8077, "examples": ["weekly roundup"], "phase": "custom"}
+{"keyword": "bulletin", "label": "newsletter", "count": 14, "confidence": 0.8077, "examples": ["company bulletin"], "phase": "custom"}
+{"keyword": "subscription", "label": "newsletter", "count": 14, "confidence": 0.8077, "examples": ["subscription update"], "phase": "custom"}
+{"keyword": "curated", "label": "newsletter", "count": 14, "confidence": 0.8077, "examples": ["curated links"], "phase": "custom"}
+{"keyword": "top-stories", "label": "newsletter", "count": 14, "confidence": 0.8077, "examples": ["top stories"], "phase": "custom"}
+{"keyword": "roundup", "label": "newsletter", "count": 14, "confidence": 0.8077, "examples": ["monthly roundup"], "phase": "custom"}
+{"keyword": "edition", "label": "newsletter", "count": 14, "confidence": 0.8077, "examples": ["latest edition"], "phase": "custom"}
+{"keyword": "issue", "label": "newsletter", "count": 14, "confidence": 0.8077, "examples": ["this issue"], "phase": "custom"}
+{"keyword": "digest-email", "label": "newsletter", "count": 14, "confidence": 0.8077, "examples": ["digest email"], "phase": "custom"}
+

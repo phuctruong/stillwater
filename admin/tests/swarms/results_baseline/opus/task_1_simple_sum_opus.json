@@ -3,8 +3,8 @@
   "task_name": "task_1_simple_sum",
   "syntax_valid": true,
   "functional_pass": true,
-  "quality_score": 0.6,
-  "timestamp": "2026-02-23T08:09:59.768431",
-  "code": "def sum_integers(numbers: list[int]) -> int:\n    \"\"\"\n    Sum all integers in a list.\n    \n    Args:\n        numbers: A list of integers to sum.\n    \n    Returns:\n        The sum of all integers in the list. Returns 0 for empty lists.\n    \n    Examples:\n        >>> sum_integers([1, 2, 3])\n        6\n        >>> sum_integers([])\n        0\n    \"\"\"\n    return sum(numbers)\n\n\n# Test cases\nif __name__ == \"__main__\":\n    # Test with positive integers\n    assert sum_integers([1, 2, 3]) == 6\n    print(\"\u2713 sum_integers([1, 2, 3]) == 6\")\n    \n    # Test with empty list\n    assert sum_integers([]) == 0\n    print(\"\u2713 sum_integers([]) == 0\")\n    \n    # Test with negative integers\n    assert sum_integers([-1, -2, -3]) == -6\n    print(\"\u2713 sum_integers([-1, -2, -3]) == -6\")\n    \n    # Test with mixed integers\n    assert sum_integers([1, -2, 3, -4, 5]) == 3\n    print(\"\u2713 sum_integers([1, -2, 3, -4, 5]) == 3\")\n    \n    # Test with single integer\n    assert sum_integers([42]) == 42\n    print(\"\u2713 sum_integers([42]) == 42\")\n    \n    # Test with zeros\n    assert sum_integers([0, 0, 0]) == 0\n    print(\"\u2713 sum_integers([0, 0, 0]) == 0\")\n    \n    print(\"\\nAll tests passed!\")",
+  "quality_score": 0.5,
+  "timestamp": "2026-02-24T15:32:04.947206",
+  "code": "def sum_integers(numbers: list[int]) -> int:\n    \"\"\"Sum all integers in a list.\n\n    Args:\n        numbers: A list of integers to sum.\n\n    Returns:\n        The sum of all integers, or 0 for an empty list.\n    \"\"\"\n    return sum(numbers)\n\n\nif __name__ == \"__main__\":\n    assert sum_integers([1, 2, 3]) == 6\n    assert sum_integers([]) == 0\n    assert sum_integers([-1, 1]) == 0\n    assert sum_integers([10]) == 10\n    assert sum_integers([-5, -3, -2]) == -10\n    print(\"All tests passed.\")",
   "baseline": true
 }

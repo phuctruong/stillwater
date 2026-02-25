@@ -7,9 +7,10 @@ In-memory storage with optional JSON persistence.
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+import hashlib
 import json
 import uuid
 
@@ -24,6 +25,7 @@ app = FastAPI(title="Stillwater OAuth3 Authority Service", version=VERSION)
 
 _tokens: dict[str, dict] = {}
 _consent_log: list[dict] = []
+_step_up_log: dict[str, dict[str, Any]] = {}
 
 # Default scope registry
 _scopes: dict[str, dict] = {
@@ -67,7 +69,50 @@ _scopes: dict[str, dict] = {
         "description": "Write tokens to the OAuth3 vault",
         "risk": "high",
     },
+    "gmail.read.inbox": {
+        "id": "gmail.read.inbox",
+        "description": "Read inbox message list and metadata",
+        "risk": "low",
+    },
+    "gmail.read.labels": {
+        "id": "gmail.read.labels",
+        "description": "Read Gmail labels",
+        "risk": "low",
+    },
+    "gmail.read.thread": {
+        "id": "gmail.read.thread",
+        "description": "Read full Gmail thread content",
+        "risk": "low",
+    },
+    "gmail.modify.label": {
+        "id": "gmail.modify.label",
+        "description": "Apply or remove Gmail labels",
+        "risk": "medium",
+    },
+    "gmail.modify.archive": {
+        "id": "gmail.modify.archive",
+        "description": "Archive Gmail messages",
+        "risk": "high",
+    },
+    "gmail.send.reply": {
+        "id": "gmail.send.reply",
+        "description": "Send reply in existing Gmail thread",
+        "risk": "high",
+    },
+    "gmail.send.compose": {
+        "id": "gmail.send.compose",
+        "description": "Compose and send new Gmail message",
+        "risk": "high",
+    },
+    "gmail.delete.message": {
+        "id": "gmail.delete.message",
+        "description": "Delete Gmail message",
+        "risk": "high",
+    },
 }
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+AUDIT_PATH = REPO_ROOT / "artifacts" / "oauth3" / "oauth3_audit.jsonl"
 
 # --- Models ---
 
@@ -125,6 +170,32 @@ class ConsentRecord(BaseModel):
     recorded_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     metadata: dict = Field(default_factory=dict)
 
+
+class GrantRequest(BaseModel):
+    principal_id: str
+    agent_id: str
+    scopes: list[str]
+    expires_at: str | None = None
+    ttl_seconds: int | None = None
+    metadata: dict = Field(default_factory=dict)
+
+
+class ValidateRequest(BaseModel):
+    token_id: str
+    required_scope: str
+    action_risk: str = "low"
+
+
+class RevokeRequest(BaseModel):
+    token_id: str
+
+
+class StepUpRequest(BaseModel):
+    token_id: str
+    scopes: list[str]
+    approver: str = "api:user"
+    metadata: dict = Field(default_factory=dict)
+
 # --- Helpers ---
 
 def _is_expired(token: dict) -> bool:
@@ -145,6 +216,33 @@ def _scope_sufficient(token_scopes: list[str], required_scopes: list[str]) -> bo
 def _action_is_destructive(action_risk: str) -> bool:
     """Return True if action risk level triggers step-up auth."""
     return action_risk == "high"
+
+
+def _token_hash(token_id: str) -> str:
+    return hashlib.sha256(token_id.encode("utf-8")).hexdigest()[:12]
+
+
+def _write_audit(event: str, token_id: str, details: dict[str, Any] | None = None) -> None:
+    row = {
+        "ts": datetime.now(timezone.utc).isoformat(),
+        "event": event,
+        "token_hash": _token_hash(token_id),
+        "details": details or {},
+    }
+    AUDIT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with AUDIT_PATH.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(row, sort_keys=True) + "\n")
+
+
+def _require_existing_active_token(token_id: str) -> dict[str, Any]:
+    token = _tokens.get(token_id)
+    if token is None:
+        raise HTTPException(status_code=401, detail="token not found")
+    if token.get("revoked"):
+        raise HTTPException(status_code=401, detail="token revoked")
+    if _is_expired(token):
+        raise HTTPException(status_code=401, detail="token expired")
+    return token
 
 # --- Endpoints ---
 
@@ -181,6 +279,16 @@ async def issue_token(req: TokenIssueRequest):
         metadata=req.metadata,
     )
     _tokens[token.token_id] = token.model_dump()
+    _write_audit(
+        "grant",
+        token.token_id,
+        {
+            "principal_id": req.principal_id,
+            "agent_id": req.agent_id,
+            "scopes": req.scopes,
+            "expires_at": req.expires_at,
+        },
+    )
     return token
 
 @app.get("/oauth3/tokens/{token_id}", response_model=AgencyToken)
@@ -202,6 +310,7 @@ async def revoke_token(token_id: str):
     if not token.get("revoked"):
         token["revoked"] = True
         token["revoked_at"] = now
+        _write_audit("revoke", token_id, {"revoked_at": now})
 
     return RevokeResponse(ok=True, token_id=token_id, revoked_at=token["revoked_at"])
 
@@ -308,3 +417,84 @@ async def get_consent_history(token_id: str):
         "count": len(history),
         "history": history,
     }
+
+
+# --- TASK-029 API aliases ---
+
+@app.post("/api/oauth3/grant", status_code=201)
+async def api_grant(req: GrantRequest):
+    expires_at = req.expires_at
+    if not expires_at:
+        ttl = int(req.ttl_seconds if req.ttl_seconds is not None else 3600)
+        if ttl <= 0:
+            raise HTTPException(status_code=400, detail="ttl_seconds must be > 0")
+        expires_at = (datetime.now(timezone.utc) + timedelta(seconds=ttl)).isoformat()
+
+    token = await issue_token(
+        TokenIssueRequest(
+            principal_id=req.principal_id,
+            agent_id=req.agent_id,
+            scopes=req.scopes,
+            expires_at=expires_at,
+            metadata=req.metadata,
+        ),
+    )
+    return {
+        "ok": True,
+        "token_id": token.token_id,
+        "token_hash": _token_hash(token.token_id),
+        "scopes": token.scopes,
+        "expires_at": token.expires_at,
+    }
+
+
+@app.post("/api/oauth3/step-up")
+async def api_step_up(req: StepUpRequest):
+    token = _require_existing_active_token(req.token_id)
+    granted_scopes = set(token.get("scopes", []))
+    for scope in req.scopes:
+        if scope not in granted_scopes:
+            raise HTTPException(status_code=403, detail=f"scope not granted in token: {scope}")
+    _step_up_log[req.token_id] = {
+        "scopes": sorted(set(req.scopes)),
+        "approved_at": datetime.now(timezone.utc).isoformat(),
+        "approver": req.approver,
+        "metadata": req.metadata,
+    }
+    _write_audit("step_up", req.token_id, {"scopes": sorted(set(req.scopes)), "approver": req.approver})
+    return {"ok": True, "token_id": req.token_id, "step_up": _step_up_log[req.token_id]}
+
+
+@app.post("/api/oauth3/validate")
+async def api_validate(req: ValidateRequest):
+    token = _require_existing_active_token(req.token_id)
+    scopes = token.get("scopes", [])
+    if req.required_scope not in scopes:
+        _write_audit("validate_denied", req.token_id, {"reason": "scope_mismatch", "required_scope": req.required_scope})
+        raise HTTPException(status_code=403, detail=f"scope denied: {req.required_scope}")
+
+    if _action_is_destructive(req.action_risk):
+        step_up = _step_up_log.get(req.token_id, {})
+        step_up_scopes = set(step_up.get("scopes", []))
+        if req.required_scope not in step_up_scopes:
+            _write_audit(
+                "validate_denied",
+                req.token_id,
+                {"reason": "step_up_required", "required_scope": req.required_scope},
+            )
+            raise HTTPException(status_code=401, detail=f"step-up required for scope: {req.required_scope}")
+
+    _write_audit("validate_ok", req.token_id, {"required_scope": req.required_scope, "action_risk": req.action_risk})
+    return {
+        "ok": True,
+        "token_id": req.token_id,
+        "token_hash": _token_hash(req.token_id),
+        "required_scope": req.required_scope,
+        "action_risk": req.action_risk,
+    }
+
+
+@app.post("/api/oauth3/revoke")
+async def api_revoke(req: RevokeRequest):
+    result = await revoke_token(req.token_id)
+    return {"ok": result.ok, "token_id": result.token_id, "revoked_at": result.revoked_at}

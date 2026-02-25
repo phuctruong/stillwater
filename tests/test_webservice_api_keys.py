@@ -35,7 +35,7 @@ import pytest
 # ---------------------------------------------------------------------------
 
 _REPO_ROOT = Path(__file__).resolve().parents[1]
-_CLI_SRC = _REPO_ROOT / "cli" / "src"
+_CLI_SRC = _REPO_ROOT / "src" / "cli" / "src"
 _ADMIN = _REPO_ROOT / "admin"
 
 for p in [str(_CLI_SRC), str(_REPO_ROOT)]:

@@ -20,8 +20,8 @@ import secrets
 import sys
 from pathlib import Path
 
-# Ensure cli/src is on the path before importing portal
-_CLI_SRC = Path(__file__).parent.parent / "cli" / "src"
+# Ensure src/cli/src is on the path before importing portal
+_CLI_SRC = Path(__file__).parent.parent / "src" / "cli" / "src"
 if str(_CLI_SRC) not in sys.path:
     sys.path.insert(0, str(_CLI_SRC))
 

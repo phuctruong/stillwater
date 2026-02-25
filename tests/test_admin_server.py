@@ -21,7 +21,7 @@ import pytest
 # Import target module
 # ---------------------------------------------------------------------------
 sys.path.insert(0, "/home/phuc/projects/stillwater")
-sys.path.insert(0, "/home/phuc/projects/stillwater/cli/src")
+sys.path.insert(0, "/home/phuc/projects/stillwater/src/cli/src")
 
 from admin.server import (  # noqa: E402
     ALLOWED_WRITE_SUFFIXES,
@@ -162,7 +162,7 @@ class TestAppendJsonl:
 
 class TestSafeResolveRepoPath:
     def test_normal_path_resolves_inside_repo(self):
-        result = _safe_resolve_repo_path("skills/prime-docker.md")
+        result = _safe_resolve_repo_path("data/default/skills/prime-docker.md")
         assert str(result).startswith(str(REPO_ROOT))
 
     def test_dotdot_traversal_raises_value_error(self):
@@ -176,18 +176,18 @@ class TestSafeResolveRepoPath:
     def test_dotdot_inside_path_raises_value_error(self):
         """Traversal hidden inside a plausible subdirectory prefix."""
         with pytest.raises(ValueError, match="path escapes repo"):
-            _safe_resolve_repo_path("skills/../../etc/passwd")
+            _safe_resolve_repo_path("data/default/skills/../../../../../etc/passwd")
 
     def test_absolute_outside_repo_raises_value_error(self):
         with pytest.raises(ValueError, match="path escapes repo"):
             _safe_resolve_repo_path("/etc/passwd")
 
     def test_result_type_is_path(self):
-        result = _safe_resolve_repo_path("skills/prime-docker.md")
+        result = _safe_resolve_repo_path("data/default/skills/prime-docker.md")
         assert isinstance(result, Path)
 
     def test_nested_valid_path_resolves(self):
-        result = _safe_resolve_repo_path("cli/recipes")
+        result = _safe_resolve_repo_path("src/cli/recipes")
         assert str(result).startswith(str(REPO_ROOT))
 
 
@@ -198,19 +198,19 @@ class TestSafeResolveRepoPath:
 
 class TestIsAllowedEditPath:
     def test_md_file_in_skills_is_allowed(self):
-        skills_dir = REPO_ROOT / "skills"
+        skills_dir = REPO_ROOT / "data" / "default" / "skills"
         first_skill = next(skills_dir.glob("*.md"), None)
         assert first_skill is not None, "skills/ directory must contain at least one .md"
         assert _is_allowed_edit_path(first_skill) is True
 
     def test_py_file_in_skills_dir_is_disallowed(self):
         """Python files must never be editable via the admin UI."""
-        fake_py = REPO_ROOT / "skills" / "injected.py"
+        fake_py = REPO_ROOT / "data" / "default" / "skills" / "injected.py"
         assert _is_allowed_edit_path(fake_py) is False
 
     def test_sh_file_is_disallowed(self):
         """Shell scripts must never be editable via the admin UI."""
-        fake_sh = REPO_ROOT / "skills" / "inject.sh"
+        fake_sh = REPO_ROOT / "data" / "default" / "skills" / "inject.sh"
         assert _is_allowed_edit_path(fake_sh) is False
 
     def test_md_outside_any_allowed_dir_is_disallowed(self):
@@ -230,8 +230,11 @@ class TestIsAllowedEditPath:
             assert _is_allowed_edit_path(llm_config) is True
 
     def test_swarms_md_is_allowed(self):
-        swarms_dir = REPO_ROOT / "swarms"
-        first_swarm = next(swarms_dir.glob("*.md"), None)
+        swarms_dir = REPO_ROOT / "data" / "default" / "swarms"
+        first_swarm = next(
+            (p for p in swarms_dir.rglob("*.md") if not p.name.startswith("README")),
+            None,
+        )
         assert first_swarm is not None, "swarms/ directory must contain at least one .md"
         assert _is_allowed_edit_path(first_swarm) is True
 
@@ -276,7 +279,7 @@ class TestCatalog:
                 assert not missing, f"File entry missing fields: {missing} in group {group['id']!r}"
 
     def test_root_skills_group_has_files(self):
-        """The root_skills group (skills/*.md) should have at least one file."""
+        """The root_skills group (data/default/skills/*.md) should have at least one file."""
         result = _catalog()
         root_skills = next((g for g in result["groups"] if g["id"] == "root_skills"), None)
         assert root_skills is not None
@@ -318,7 +321,7 @@ class TestCreateFile:
 
     def test_existing_filename_raises_file_exists_error(self):
         """Creating a file that already exists must raise FileExistsError."""
-        skills_dir = REPO_ROOT / "skills"
+        skills_dir = REPO_ROOT / "data" / "default" / "skills"
         existing = next(skills_dir.glob("*.md"), None)
         assert existing is not None
         with pytest.raises(FileExistsError):
@@ -332,7 +335,7 @@ class TestCreateFile:
         import admin.server as srv
 
         fake_root = tmp_path
-        (fake_root / "skills").mkdir(parents=True)
+        (fake_root / "data" / "default" / "skills").mkdir(parents=True)
 
         original_root = srv.REPO_ROOT
         monkeypatch.setattr(srv, "REPO_ROOT", fake_root)
@@ -350,7 +353,7 @@ class TestCreateFile:
         import admin.server as srv
 
         fake_root = tmp_path
-        (fake_root / "skills").mkdir(parents=True)
+        (fake_root / "data" / "default" / "skills").mkdir(parents=True)
 
         original_root = srv.REPO_ROOT
         monkeypatch.setattr(srv, "REPO_ROOT", fake_root)
@@ -408,21 +411,46 @@ class TestRunCliCommand:
 
 
 class TestCommunityLink:
-    def test_valid_email_returns_payload_dict(self):
+    def test_valid_email_returns_payload_dict(self, monkeypatch):
+        monkeypatch.setattr("admin.server._cloud_health", lambda: {"status": "ok", "tier": "yellow"})
+        monkeypatch.setattr(
+            "admin.server._load_cloud_config",
+            lambda: {"enabled": True, "api_key": "k", "api_url": "https://example.com"},
+        )
+        monkeypatch.setattr("admin.server._request_cloud", lambda *_args, **_kwargs: (200, {"ok": True}, None))
+        monkeypatch.setattr("admin.server._write_json", lambda *_args, **_kwargs: None)
         result = _community_link("user@example.com")
         assert isinstance(result, dict)
 
-    def test_valid_email_is_normalized_lowercase(self):
+    def test_valid_email_is_normalized_lowercase(self, monkeypatch):
+        monkeypatch.setattr("admin.server._cloud_health", lambda: {"status": "ok", "tier": "yellow"})
+        monkeypatch.setattr(
+            "admin.server._load_cloud_config",
+            lambda: {"enabled": True, "api_key": "k", "api_url": "https://example.com"},
+        )
+        monkeypatch.setattr("admin.server._request_cloud", lambda *_args, **_kwargs: (200, {"ok": True}, None))
+        monkeypatch.setattr("admin.server._write_json", lambda *_args, **_kwargs: None)
         result = _community_link("User@Example.COM")
         assert result["email"] == "user@example.com"
 
-    def test_valid_email_status_is_magic_link_sent_mock(self):
+    def test_valid_email_status_is_linked(self, monkeypatch):
+        monkeypatch.setattr("admin.server._cloud_health", lambda: {"status": "ok", "tier": "yellow"})
+        monkeypatch.setattr(
+            "admin.server._load_cloud_config",
+            lambda: {"enabled": True, "api_key": "k", "api_url": "https://example.com"},
+        )
+        monkeypatch.setattr("admin.server._request_cloud", lambda *_args, **_kwargs: (200, {"ok": True}, None))
+        monkeypatch.setattr("admin.server._write_json", lambda *_args, **_kwargs: None)
         result = _community_link("user@example.com")
-        assert result["status"] == "magic_link_sent_mock"
+        assert result["status"] == "linked"
 
-    def test_valid_email_api_key_starts_with_sw_live_mock(self):
+    def test_cloud_not_configured_passes_through(self, monkeypatch):
+        monkeypatch.setattr(
+            "admin.server._cloud_health",
+            lambda: {"status": "not_configured", "message": "configure key"},
+        )
         result = _community_link("user@example.com")
-        assert result["api_key"].startswith("sw_live_mock_")
+        assert result["status"] == "not_configured"
 
     def test_invalid_email_no_at_raises_value_error(self):
         with pytest.raises(ValueError, match="valid email required"):
@@ -440,50 +468,60 @@ class TestCommunityLink:
         with pytest.raises(ValueError, match="valid email required"):
             _community_link("user @example.com")
 
-    def test_result_contains_login_link_stub(self):
-        result = _community_link("user@example.com")
-        assert "login_link_stub" in result
-        assert "https://" in result["login_link_stub"]
-
-
 # ===========================================================================
 # 10. _community_sync — counts local recipes/skills
 # ===========================================================================
 
 
 class TestCommunitySync:
-    def test_sync_returns_required_keys(self):
+    def test_sync_returns_required_keys(self, monkeypatch):
+        monkeypatch.setattr("admin.server._cloud_health", lambda: {"status": "ok", "tier": "yellow"})
+        monkeypatch.setattr(
+            "admin.server._load_cloud_config",
+            lambda: {"enabled": True, "api_key": "k", "api_url": "https://example.com"},
+        )
+        monkeypatch.setattr("admin.server._request_cloud", lambda *_args, **_kwargs: (200, {"ok": True}, None))
+        monkeypatch.setattr("admin.server._append_jsonl", lambda *_args, **_kwargs: None)
         result = _community_sync("both")
-        required = {"timestamp_utc", "direction", "uploaded", "remote_available", "status"}
+        required = {"status", "direction", "synced_at", "response"}
         assert required <= set(result.keys())
 
-    def test_sync_status_is_mock_sync_complete(self):
+    def test_sync_status_is_ok(self, monkeypatch):
+        monkeypatch.setattr("admin.server._cloud_health", lambda: {"status": "ok", "tier": "yellow"})
+        monkeypatch.setattr(
+            "admin.server._load_cloud_config",
+            lambda: {"enabled": True, "api_key": "k", "api_url": "https://example.com"},
+        )
+        monkeypatch.setattr("admin.server._request_cloud", lambda *_args, **_kwargs: (200, {"ok": True}, None))
+        monkeypatch.setattr("admin.server._append_jsonl", lambda *_args, **_kwargs: None)
         result = _community_sync("both")
-        assert result["status"] == "mock_sync_complete"
+        assert result["status"] == "ok"
 
-    def test_sync_uploaded_has_count_fields(self):
-        result = _community_sync("both")
-        uploaded = result["uploaded"]
-        assert "recipes" in uploaded
-        assert "skills" in uploaded
-        assert "cli_recipes" in uploaded
-
-    def test_sync_counts_are_non_negative(self):
-        result = _community_sync("both")
-        for key, val in result["uploaded"].items():
-            assert val >= 0, f"Count for {key!r} is negative: {val}"
-
-    def test_empty_direction_normalizes_to_both(self):
+    def test_empty_direction_normalizes_to_both(self, monkeypatch):
+        monkeypatch.setattr("admin.server._cloud_health", lambda: {"status": "ok", "tier": "yellow"})
+        monkeypatch.setattr(
+            "admin.server._load_cloud_config",
+            lambda: {"enabled": True, "api_key": "k", "api_url": "https://example.com"},
+        )
+        monkeypatch.setattr("admin.server._request_cloud", lambda *_args, **_kwargs: (200, {"ok": True}, None))
+        monkeypatch.setattr("admin.server._append_jsonl", lambda *_args, **_kwargs: None)
         result = _community_sync("")
         assert result["direction"] == "both"
 
-    def test_upload_direction_preserved(self):
-        result = _community_sync("upload")
-        assert result["direction"] == "upload"
+    def test_up_direction_preserved(self, monkeypatch):
+        monkeypatch.setattr("admin.server._cloud_health", lambda: {"status": "ok", "tier": "yellow"})
+        monkeypatch.setattr(
+            "admin.server._load_cloud_config",
+            lambda: {"enabled": True, "api_key": "k", "api_url": "https://example.com"},
+        )
+        monkeypatch.setattr("admin.server._request_cloud", lambda *_args, **_kwargs: (200, {"ok": True}, None))
+        monkeypatch.setattr("admin.server._append_jsonl", lambda *_args, **_kwargs: None)
+        result = _community_sync("up")
+        assert result["direction"] == "up"
 
-    def test_remote_available_is_list(self):
-        result = _community_sync("both")
-        assert isinstance(result["remote_available"], list)
+    def test_invalid_direction_raises_value_error(self):
+        with pytest.raises(ValueError, match="direction must be one of"):
+            _community_sync("upload")
 
 
 # ===========================================================================

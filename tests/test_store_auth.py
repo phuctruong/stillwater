@@ -1,5 +1,5 @@
 """
-tests/test_store_auth.py — Security-auditor QA for store/auth.py
+tests/test_store_auth.py — Security-auditor QA for src/store/auth.py
 
 Persona: Security Auditor
 Approach: Adversarial. Every test assumes the implementation is subtly broken
@@ -9,7 +9,7 @@ Approach: Adversarial. Every test assumes the implementation is subtly broken
 
 Rung target: 641
 Network: OFF — all DB calls are mocked via unittest.mock.patch
-Red-Green gate: tests must FAIL before store/auth.py exists, PASS after.
+Red-Green gate: tests must FAIL before src/store/auth.py exists, PASS after.
 """
 
 from __future__ import annotations
@@ -23,7 +23,7 @@ from fastapi import HTTPException
 from fastapi.security import HTTPAuthorizationCredentials
 
 # ---------------------------------------------------------------------------
-# Path setup — store/ lives at the project root
+# Path setup — src/store/ lives at the project root
 # ---------------------------------------------------------------------------
 from pathlib import Path
 

@@ -9,13 +9,16 @@ import mimetypes
 import os
 from pathlib import Path
 import re
-import secrets
 import shutil
 import subprocess
 import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 import webbrowser
+try:
+    import yaml
+except Exception:  # pragma: no cover
+    yaml = None  # type: ignore
 
 try:
     import requests
@@ -32,7 +35,7 @@ except Exception:  # pragma: no cover
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-CLI_SRC = REPO_ROOT / "cli" / "src"
+CLI_SRC = REPO_ROOT / "src" / "cli" / "src"
 if str(CLI_SRC) not in sys.path:
     sys.path.insert(0, str(CLI_SRC))
 
@@ -59,21 +62,21 @@ CATALOG_GROUPS = [
     {
         "id": "root_skills",
         "title": "Skills",
-        "dirs": ["skills"],
+        "dirs": ["data/default/skills"],
         "patterns": ["*.md"],
         "create_template": "---\nskill_id: new-skill\nversion: 1.0.0\n---\n\n# New Skill\n",
     },
     {
         "id": "swarms",
         "title": "Swarm Agents",
-        "dirs": ["swarms"],
-        "patterns": ["*.md"],
+        "dirs": ["data/default/swarms"],
+        "patterns": ["**/*.md"],
         "create_template": "---\nagent_type: new-agent\nversion: 1.0.0\n---\n\n# New Swarm Agent\n",
     },
     {
         "id": "root_recipes",
         "title": "Recipes",
-        "dirs": ["recipes"],
+        "dirs": ["data/default/recipes"],
         "patterns": ["*.md"],
         "create_template": "---\nid: recipe.new\nversion: 1.0.0\n---\n\n# New Recipe\n",
     },
@@ -94,35 +97,35 @@ CATALOG_GROUPS = [
     {
         "id": "recipes",
         "title": "CLI Recipes",
-        "dirs": ["cli/recipes", "cli/extensions/recipes"],
+        "dirs": ["src/cli/recipes", "src/cli/extensions/recipes"],
         "patterns": ["*.md"],
         "create_template": "# Recipe\n\n```mermaid\nflowchart TD\n  START --> END\n```\n",
     },
     {
         "id": "skills",
         "title": "CLI Skills",
-        "dirs": ["cli/extensions/skills"],
+        "dirs": ["src/cli/extensions/skills"],
         "patterns": ["*.md"],
         "create_template": "# New Skill\n\nDescribe capability and constraints.\n",
     },
     {
         "id": "personas",
         "title": "Personas",
-        "dirs": ["cli/extensions/personas"],
+        "dirs": ["src/cli/extensions/personas"],
         "patterns": ["*.md"],
         "create_template": "# Persona\n\nStyle:\n- concise\n- evidence-first\n",
     },
     {
         "id": "identity",
         "title": "Identity",
-        "dirs": ["cli/identity", "cli/extensions/identity"],
+        "dirs": ["src/cli/identity", "src/cli/extensions/identity"],
         "patterns": ["*.md"],
         "create_template": "# Identity Note\n\nPurpose:\n- ...\n",
     },
     {
         "id": "settings",
         "title": "Settings",
-        "dirs": ["cli/settings"],
+        "dirs": ["src/cli/settings"],
         "patterns": ["*.md"],
         "create_template": "# Setting\n\nSETTING key = value\n",
     },
@@ -130,7 +133,7 @@ CATALOG_GROUPS = [
 
 EXTRA_EDITABLE_FILES = [
     "llm_config.yaml",
-    "cli/extensions/splash.txt",
+    "src/cli/extensions/splash.txt",
     "CLAUDE.md",
     "admin/README.md",
 ]
@@ -146,9 +149,19 @@ ALLOWED_WRITE_SUFFIXES = {
 ARTIFACT_DIR = REPO_ROOT / "artifacts" / "admin"
 COMMUNITY_LINK_FILE = ARTIFACT_DIR / "community_link.json"
 COMMUNITY_SYNC_LOG = ARTIFACT_DIR / "community_sync.jsonl"
+CLOUD_CONFIG_PATHS = (
+    REPO_ROOT / "data" / "custom" / "solaceagi-config.yaml",
+    REPO_ROOT / "data" / "custom" / "solace_agi_config.yaml",
+    REPO_ROOT / "data" / "default" / "solace_agi_config.yaml",
+)
+DEFAULT_CLOUD_API_URL = "https://www.solaceagi.com/api/v1"
 
 MAX_BODY_SIZE = 2_000_000  # 2 MB — reject request bodies larger than this
 COMMUNITY_SYNC_TAIL = 100  # max JSONL lines read from community sync log
+SWARMS_ROOT = REPO_ROOT / "data" / "default" / "swarms"
+SKILLS_ROOT = REPO_ROOT / "data" / "default" / "skills"
+RECIPES_ROOT = REPO_ROOT / "data" / "default" / "recipes"
+PERSONAS_ROOT = REPO_ROOT / "data" / "default" / "personas"
 
 
 def _utc_now() -> str:
@@ -246,6 +259,334 @@ def _catalog() -> dict:
         if path.exists():
             extras.append({"path": rel, "name": path.name, "group": "extras", "dir": str(path.parent.relative_to(REPO_ROOT))})
     return {"groups": groups, "extras": extras}
+
+
+def _require_yaml() -> None:
+    if yaml is None:
+        raise RuntimeError("pyyaml is required for swarm studio endpoints")
+
+
+def _iter_markdown_rows(base_dir: Path, *, recursive: bool = True) -> list[dict[str, str]]:
+    if not base_dir.exists():
+        return []
+    iterator = base_dir.rglob("*.md") if recursive else base_dir.glob("*.md")
+    rows: list[dict[str, str]] = []
+    for file_path in sorted(iterator):
+        if not file_path.is_file():
+            continue
+        if file_path.name.startswith("README"):
+            continue
+        rel_repo = file_path.relative_to(REPO_ROOT)
+        rel_base = file_path.relative_to(base_dir)
+        category = rel_base.parent.as_posix() if rel_base.parent.as_posix() != "." else ""
+        rows.append(
+            {
+                "id": file_path.stem,
+                "name": file_path.stem.replace("-", " ").title(),
+                "path": str(rel_repo),
+                "category": category,
+            },
+        )
+    return rows
+
+
+def _slugify_token(value: str) -> str:
+    cleaned = re.sub(r"\(.*?\)", "", value).strip()
+    cleaned = cleaned.split(",", 1)[0].strip()
+    return re.sub(r"[^a-z0-9]+", "-", cleaned.lower()).strip("-")
+
+
+def _split_frontmatter(markdown: str) -> tuple[dict, str]:
+    _require_yaml()
+    normalized = markdown.replace("\r\n", "\n")
+    match = re.match(r"^---\n(.*?)\n---\n?(.*)$", normalized, flags=re.DOTALL)
+    if not match:
+        raise ValueError("missing yaml frontmatter")
+    raw_frontmatter = match.group(1)
+    body = match.group(2)
+    parsed = yaml.safe_load(raw_frontmatter)  # type: ignore[arg-type]
+    if not isinstance(parsed, dict):
+        raise ValueError("frontmatter must be a mapping")
+    return parsed, body
+
+
+def _dump_frontmatter(frontmatter: dict) -> str:
+    _require_yaml()
+    payload = yaml.safe_dump(frontmatter, sort_keys=False, allow_unicode=False).strip()  # type: ignore[arg-type]
+    return f"---\n{payload}\n---\n"
+
+
+def _frontmatter_to_spec(
+    swarm_id: str,
+    category: str,
+    rel_path: str,
+    frontmatter: dict,
+) -> dict[str, object]:
+    persona = frontmatter.get("persona", {})
+    persona_primary = ""
+    persona_alternatives: list[str] = []
+    if isinstance(persona, dict):
+        if isinstance(persona.get("primary"), str):
+            persona_primary = str(persona.get("primary")).strip()
+        alt = persona.get("alternatives")
+        if isinstance(alt, list):
+            persona_alternatives = [str(v).strip() for v in alt if str(v).strip()]
+    elif isinstance(persona, str):
+        persona_primary = persona.strip()
+
+    skill_pack = frontmatter.get("skill_pack") or []
+    if not isinstance(skill_pack, list):
+        skill_pack = []
+    skills = [str(v).strip() for v in skill_pack if str(v).strip()]
+
+    recipes = frontmatter.get("recipes")
+    if recipes is None:
+        recipes = frontmatter.get("recipe_pack")
+    if not isinstance(recipes, list):
+        recipes = []
+    recipe_list = [str(v).strip() for v in recipes if str(v).strip()]
+
+    artifacts = frontmatter.get("artifacts", [])
+    if not isinstance(artifacts, list):
+        artifacts = []
+    artifact_list = [str(v).strip() for v in artifacts if str(v).strip()]
+
+    rung_default = frontmatter.get("rung_default", 641)
+    try:
+        rung_default = int(rung_default)
+    except Exception:
+        rung_default = 641
+
+    return {
+        "id": swarm_id,
+        "agent_type": str(frontmatter.get("agent_type", swarm_id)).strip(),
+        "category": category,
+        "path": rel_path,
+        "version": str(frontmatter.get("version", "1.0.0")).strip(),
+        "authority": str(frontmatter.get("authority", "641")).strip(),
+        "model_preferred": str(frontmatter.get("model_preferred", "sonnet")).strip(),
+        "rung_default": rung_default,
+        "skill_pack": skills,
+        "recipes": recipe_list,
+        "persona_primary": persona_primary,
+        "persona_alternatives": persona_alternatives,
+        "artifacts": artifact_list,
+    }
+
+
+def _spec_to_frontmatter(spec: dict[str, object]) -> dict[str, object]:
+    frontmatter: dict[str, object] = {
+        "agent_type": str(spec.get("agent_type", spec.get("id", "new-agent"))).strip(),
+        "version": str(spec.get("version", "1.0.0")).strip(),
+        "authority": str(spec.get("authority", "641")).strip(),
+        "skill_pack": [str(s).strip() for s in (spec.get("skill_pack") or []) if str(s).strip()],
+        "persona": {
+            "primary": str(spec.get("persona_primary", "")).strip(),
+            "alternatives": [
+                str(v).strip()
+                for v in (spec.get("persona_alternatives") or [])
+                if str(v).strip()
+            ],
+        },
+        "model_preferred": str(spec.get("model_preferred", "sonnet")).strip(),
+        "rung_default": int(spec.get("rung_default", 641)),
+        "artifacts": [str(a).strip() for a in (spec.get("artifacts") or []) if str(a).strip()],
+    }
+    recipes = [str(r).strip() for r in (spec.get("recipes") or []) if str(r).strip()]
+    if recipes:
+        frontmatter["recipes"] = recipes
+    return frontmatter
+
+
+def _mmd_safe(label: str) -> str:
+    return label.replace('"', "'")
+
+
+def _swarm_spec_to_mermaid(spec: dict[str, object]) -> str:
+    spec_json = json.dumps(spec, sort_keys=True, separators=(",", ":"))
+    swarm_id = str(spec.get("id", "swarm")).strip() or "swarm"
+    agent_type = str(spec.get("agent_type", swarm_id)).strip() or swarm_id
+    model = str(spec.get("model_preferred", "sonnet")).strip() or "sonnet"
+    rung = int(spec.get("rung_default", 641))
+    lines = [
+        f"%% SWARM_SPEC: {spec_json}",
+        "flowchart TD",
+        f'    SWARM["{_mmd_safe(agent_type)}<br/>model: {_mmd_safe(model)}<br/>rung: {rung}"]',
+    ]
+    persona_primary = str(spec.get("persona_primary", "")).strip()
+    if persona_primary:
+        lines.append(f'    P_PRIMARY["persona: {_mmd_safe(persona_primary)}"]')
+        lines.append("    P_PRIMARY --> SWARM")
+
+    for idx, skill in enumerate(spec.get("skill_pack") or []):
+        skill_name = str(skill).strip()
+        if not skill_name:
+            continue
+        lines.append(f'    SK_{idx}["skill: {_mmd_safe(skill_name)}"]')
+        lines.append(f"    SK_{idx} --> SWARM")
+
+    for idx, recipe in enumerate(spec.get("recipes") or []):
+        recipe_name = str(recipe).strip()
+        if not recipe_name:
+            continue
+        lines.append(f'    RC_{idx}["recipe: {_mmd_safe(recipe_name)}"]')
+        lines.append(f"    RC_{idx} --> SWARM")
+
+    for idx, artifact in enumerate(spec.get("artifacts") or []):
+        artifact_name = str(artifact).strip()
+        if not artifact_name:
+            continue
+        lines.append(f'    AR_{idx}["artifact: {_mmd_safe(artifact_name)}"]')
+        lines.append(f"    SWARM --> AR_{idx}")
+
+    return "\n".join(lines)
+
+
+def _extract_spec_from_mermaid(diagram_mermaid: str) -> dict[str, object]:
+    for raw_line in diagram_mermaid.splitlines():
+        line = raw_line.strip()
+        if line.startswith("%% SWARM_SPEC:"):
+            payload = line.split("%% SWARM_SPEC:", 1)[1].strip()
+            spec = json.loads(payload)
+            if not isinstance(spec, dict):
+                raise ValueError("SWARM_SPEC must be a json object")
+            return spec
+    raise ValueError("diagram is missing %% SWARM_SPEC JSON comment")
+
+
+def _swarm_catalog_payload() -> dict[str, object]:
+    return {
+        "swarms": _iter_markdown_rows(SWARMS_ROOT, recursive=True),
+        "skills": _iter_markdown_rows(SKILLS_ROOT, recursive=True),
+        "recipes": _iter_markdown_rows(RECIPES_ROOT, recursive=True),
+        "personas": _iter_markdown_rows(PERSONAS_ROOT, recursive=True),
+    }
+
+
+def _validate_swarm_spec(spec: dict[str, object], catalog: dict[str, object]) -> dict[str, object]:
+    errors: list[str] = []
+    warnings: list[str] = []
+
+    swarm_id = str(spec.get("id", "")).strip()
+    if not swarm_id:
+        errors.append("spec.id is required")
+
+    agent_type = str(spec.get("agent_type", "")).strip()
+    if not agent_type:
+        errors.append("spec.agent_type is required")
+
+    model = str(spec.get("model_preferred", "")).strip()
+    if not model:
+        errors.append("spec.model_preferred is required")
+
+    rung = spec.get("rung_default")
+    try:
+        int(rung)
+    except Exception:
+        errors.append("spec.rung_default must be an integer")
+
+    skill_ids = {row["id"] for row in catalog["skills"]}  # type: ignore[index]
+    recipe_ids = {row["id"] for row in catalog["recipes"]}  # type: ignore[index]
+    persona_ids = {row["id"] for row in catalog["personas"]}  # type: ignore[index]
+    persona_slugs = {_slugify_token(pid) for pid in persona_ids}
+
+    for skill in spec.get("skill_pack") or []:
+        skill_name = str(skill).strip()
+        if skill_name and skill_name not in skill_ids:
+            errors.append(f"unknown skill: {skill_name}")
+
+    for recipe in spec.get("recipes") or []:
+        recipe_name = str(recipe).strip()
+        if recipe_name and recipe_name not in recipe_ids:
+            warnings.append(f"unknown recipe: {recipe_name}")
+
+    persona_values = []
+    primary = str(spec.get("persona_primary", "")).strip()
+    if primary:
+        persona_values.append(primary)
+    for alt in spec.get("persona_alternatives") or []:
+        token = str(alt).strip()
+        if token:
+            persona_values.append(token)
+
+    for token in persona_values:
+        token_slug = _slugify_token(token)
+        if token in persona_ids or token_slug in persona_slugs:
+            continue
+        warnings.append(f"unknown persona: {token}")
+
+    return {
+        "ok": len(errors) == 0,
+        "errors": errors,
+        "warnings": warnings,
+    }
+
+
+def _resolve_swarm_path(swarm_id: str) -> Path:
+    swarm_norm = swarm_id.strip()
+    if not swarm_norm:
+        raise ValueError("swarm_id is required")
+    matches = sorted(
+        p
+        for p in SWARMS_ROOT.rglob(f"{swarm_norm}.md")
+        if p.is_file() and not p.name.startswith("README")
+    )
+    if not matches:
+        raise FileNotFoundError(f"swarm not found: {swarm_norm}")
+    if len(matches) > 1:
+        dup = ", ".join(str(p.relative_to(REPO_ROOT)) for p in matches)
+        raise ValueError(f"duplicate swarm id '{swarm_norm}': {dup}")
+    return matches[0]
+
+
+def _load_swarm_studio_payload(swarm_id: str) -> dict[str, object]:
+    swarm_path = _resolve_swarm_path(swarm_id)
+    markdown = swarm_path.read_text(encoding="utf-8")
+    frontmatter, body = _split_frontmatter(markdown)
+    category = swarm_path.parent.relative_to(SWARMS_ROOT).as_posix()
+    rel_path = str(swarm_path.relative_to(REPO_ROOT))
+    spec = _frontmatter_to_spec(swarm_id, category, rel_path, frontmatter)
+    catalog = _swarm_catalog_payload()
+    validation = _validate_swarm_spec(spec, catalog)
+    diagram_mermaid = _swarm_spec_to_mermaid(spec)
+    return {
+        "id": swarm_id,
+        "path": rel_path,
+        "category": category,
+        "markdown": markdown,
+        "frontmatter": frontmatter,
+        "body": body,
+        "spec": spec,
+        "diagram_mermaid": diagram_mermaid,
+        "validation": validation,
+    }
+
+
+def _compile_main_swarms_diagram() -> str:
+    swarms = _iter_markdown_rows(SWARMS_ROOT, recursive=True)
+    by_category: dict[str, list[dict[str, str]]] = {}
+    for row in swarms:
+        by_category.setdefault(row["category"] or "root", []).append(row)
+
+    lines = ["graph TD"]
+    node_by_id: dict[str, str] = {}
+    for category in sorted(by_category.keys()):
+        cat_safe = re.sub(r"[^A-Za-z0-9_]", "_", category)
+        cat_title = category.replace("-", " ").title()
+        lines.append(f'  subgraph CAT_{cat_safe}["{_mmd_safe(cat_title)}"]')
+        for row in sorted(by_category[category], key=lambda r: r["id"]):
+            node_id = f"N_{cat_safe}_{re.sub(r'[^A-Za-z0-9_]', '_', row['id'])}"
+            node_by_id[row["id"]] = node_id
+            lines.append(f'    {node_id}["{_mmd_safe(row["id"])}"]')
+        lines.append("  end")
+
+    core_spine = ["scout", "forecaster", "judge", "planner", "coder", "skeptic", "final-audit"]
+    for src, dst in zip(core_spine, core_spine[1:]):
+        if src in node_by_id and dst in node_by_id:
+            lines.append(f"  {node_by_id[src]} --> {node_by_id[dst]}")
+    if "security-auditor" in node_by_id and "final-audit" in node_by_id:
+        lines.append(f"  {node_by_id['security-auditor']} --> {node_by_id['final-audit']}")
+    return "\n".join(lines)
 
 
 def _file_payload(rel_path: str) -> dict:
@@ -382,6 +723,17 @@ def _run_command(cmd: list[str], *, input_text: str = "", timeout: float = 600.0
     }
 
 
+def _open_vscode_path(rel_path: str) -> dict:
+    path = _safe_resolve_repo_path(rel_path)
+    if not path.exists():
+        return {"success": False, "message": f"path not found: {rel_path}"}
+    code_bin = shutil.which("code")
+    if code_bin is None:
+        return {"success": False, "message": f"VSCode 'code' binary not found. Path: {path}"}
+    subprocess.Popen([code_bin, str(path)], cwd=str(REPO_ROOT))
+    return {"success": True, "message": f"Opening {rel_path} in VSCode"}
+
+
 def _install_ollama(sudo_password: str) -> dict:
     if shutil.which("ollama"):
         return {"ok": True, "message": "Ollama already installed.", "changed": False}
@@ -421,7 +773,7 @@ def _pull_ollama_model(model: str, ollama_url: str) -> dict:
 
 
 def _community_status() -> dict:
-    link = {}
+    link: dict[str, str] = {}
     if COMMUNITY_LINK_FILE.exists():
         try:
             link = _load_json(COMMUNITY_LINK_FILE)
@@ -432,60 +784,187 @@ def _community_status() -> dict:
         with COMMUNITY_SYNC_LOG.open("r", encoding="utf-8") as _fh:
             lines = _fh.readlines()
         sync_count = len(lines)
-        lines = lines[-COMMUNITY_SYNC_TAIL:]  # tail last N entries to cap memory
-    return {
-        "linked": bool(link.get("api_key")),
+    cloud = _cloud_health()
+    linked = cloud.get("status") == "ok"
+    out: dict[str, object] = {
+        "linked": linked,
         "email": link.get("email", ""),
-        "api_key": link.get("api_key", ""),
-        "link_status": link.get("status", "not_linked"),
-        "login_link_stub": link.get("login_link_stub", ""),
+        "api_key": "",
+        "link_status": cloud.get("status", "not_configured"),
         "sync_events": sync_count,
+        "cloud": cloud,
     }
+    if "tier" in cloud:
+        out["tier"] = cloud.get("tier")
+    return out
+
+
+def _extract_yaml_bool(content: str, key: str) -> bool | None:
+    pattern = rf"^\s*{re.escape(key)}\s*:\s*(true|false)\s*$"
+    match = re.search(pattern, content, flags=re.IGNORECASE | re.MULTILINE)
+    if not match:
+        return None
+    return match.group(1).lower() == "true"
+
+
+def _extract_yaml_str(content: str, keys: tuple[str, ...]) -> str:
+    for key in keys:
+        pattern = rf'^\s*{re.escape(key)}\s*:\s*"?([^"\n#]+)"?\s*$'
+        match = re.search(pattern, content, flags=re.IGNORECASE | re.MULTILINE)
+        if match:
+            value = match.group(1).strip()
+            if value:
+                return value
+    return ""
+
+
+def _normalize_cloud_url(url: str) -> str:
+    clean = url.strip().rstrip("/")
+    if not clean:
+        return DEFAULT_CLOUD_API_URL
+    if clean.endswith("/api"):
+        return f"{clean}/v1"
+    return clean
+
+
+def _load_cloud_config() -> dict[str, object]:
+    env_key = os.getenv("SOLACEAGI_API_KEY", "").strip()
+    content = ""
+    for path in CLOUD_CONFIG_PATHS:
+        if path.exists():
+            content = path.read_text(encoding="utf-8")
+            if content:
+                break
+    enabled = _extract_yaml_bool(content, "enabled")
+    if enabled is None:
+        enabled = bool(env_key)
+    api_key = env_key or _extract_yaml_str(content, ("api_key",))
+    api_url = _extract_yaml_str(content, ("api_url", "base_url"))
+    return {
+        "enabled": bool(enabled),
+        "api_key": api_key,
+        "api_url": _normalize_cloud_url(api_url),
+    }
+
+
+def _request_cloud(
+    method: str,
+    endpoint: str,
+    api_key: str,
+    payload: dict[str, object] | None = None,
+    timeout: float = 8.0,
+) -> tuple[int, object, str | None]:
+    if requests is None:
+        return 0, {}, "requests dependency unavailable"
+    cfg = _load_cloud_config()
+    url = f"{_normalize_cloud_url(str(cfg.get('api_url', DEFAULT_CLOUD_API_URL)))}{endpoint}"
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    try:
+        response = requests.request(method, url, headers=headers, json=payload, timeout=timeout)
+    except requests.exceptions.Timeout:
+        return 0, {}, "connection timeout to www.solaceagi.com"
+    except requests.exceptions.RequestException as exc:
+        return 0, {}, f"connection error to www.solaceagi.com: {exc}"
+    try:
+        body = response.json()
+    except ValueError:
+        body = {"raw": response.text}
+    return response.status_code, body, None
+
+
+def _cloud_health() -> dict:
+    cfg = _load_cloud_config()
+    if not cfg["enabled"] or not cfg["api_key"]:
+        return {
+            "status": "not_configured",
+            "message": "run: PUT /api/llm/keys/solaceagi to configure",
+        }
+
+    status, body, error = _request_cloud("GET", "/health", str(cfg["api_key"]), payload=None)
+    if error:
+        return {"status": "unreachable", "error": error}
+    if status in (401, 403):
+        return {"status": "auth_failed", "error": "invalid API key"}
+    if status < 200 or status >= 300:
+        return {"status": "error", "error": f"cloud health http {status}"}
+
+    tier = "unknown"
+    if isinstance(body, dict):
+        raw_tier = body.get("tier")
+        if isinstance(raw_tier, str) and raw_tier.strip():
+            tier = raw_tier.strip()
+    if tier == "unknown":
+        tier_status, tier_body, tier_error = _request_cloud("GET", "/account/tier", str(cfg["api_key"]), payload=None)
+        if tier_error is None and tier_status == 200 and isinstance(tier_body, dict):
+            raw_tier = tier_body.get("tier")
+            if isinstance(raw_tier, str) and raw_tier.strip():
+                tier = raw_tier.strip()
+    return {"status": "ok", "tier": tier, "api_url": cfg["api_url"]}
 
 
 def _community_link(email: str) -> dict:
     email_norm = email.strip().lower()
     if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", email_norm):
         raise ValueError("valid email required")
-    token = secrets.token_urlsafe(24)
-    api_key = f"sw_live_mock_{secrets.token_hex(16)}"
-    payload = {
+
+    cloud = _cloud_health()
+    if cloud.get("status") != "ok":
+        return cloud
+
+    cfg = _load_cloud_config()
+    status, body, error = _request_cloud(
+        "POST",
+        "/auth/link",
+        str(cfg["api_key"]),
+        payload={"email": email_norm},
+    )
+    if error:
+        return {"status": "unreachable", "error": error}
+    if status in (401, 403):
+        return {"status": "auth_failed", "error": "invalid API key"}
+    if status < 200 or status >= 300:
+        return {"status": "error", "error": f"cloud link http {status}", "response": body}
+
+    linked = {
         "email": email_norm,
-        "status": "magic_link_sent_mock",
-        "requested_at_utc": _utc_now(),
-        "login_link_stub": f"https://community.stillwater.local/magic?token={token}",
-        "api_key": api_key,
-        "note": "Stub flow only. Real email delivery/API auth will be wired later.",
+        "status": "linked",
+        "linked_at": _utc_now(),
+        "tier": str(cloud.get("tier", "unknown")),
     }
-    _write_json(COMMUNITY_LINK_FILE, payload)
-    return payload
+    _write_json(COMMUNITY_LINK_FILE, linked)
+    return {"status": "linked", "email": email_norm, "tier": linked["tier"], "response": body}
 
 
 def _community_sync(direction: str) -> dict:
     direction_norm = direction.strip().lower() or "both"
-    cli_recipes = sorted((REPO_ROOT / "cli" / "recipes").glob("*.md"))
-    root_recipes = sorted((REPO_ROOT / "recipes").glob("*.md")) if (REPO_ROOT / "recipes").exists() else []
-    recipes = cli_recipes + root_recipes
-    skills = sorted((REPO_ROOT / "skills").glob("*.md"))
-    mock_remote = [
-        "recipe.counter_bypass_v2.prime-mermaid.md",
-        "skill.prime-math-proofs.md",
-        "persona.scope-police-plus.md",
-    ]
-    row = {
-        "timestamp_utc": _utc_now(),
+    if direction_norm not in {"up", "down", "both"}:
+        raise ValueError("direction must be one of: up, down, both")
+
+    cloud = _cloud_health()
+    if cloud.get("status") != "ok":
+        return cloud
+
+    cfg = _load_cloud_config()
+    status, body, error = _request_cloud(
+        "POST",
+        "/sync/skills",
+        str(cfg["api_key"]),
+        payload={"direction": direction_norm},
+    )
+    if error:
+        return {"status": "unreachable", "error": error}
+    if status in (401, 403):
+        return {"status": "auth_failed", "error": "invalid API key"}
+    if status < 200 or status >= 300:
+        return {"status": "error", "error": f"cloud sync http {status}", "response": body}
+
+    event = {
+        "ts": _utc_now(),
         "direction": direction_norm,
-        "uploaded": {
-            "recipes": len(recipes),
-            "cli_recipes": len(cli_recipes),
-            "root_recipes": len(root_recipes),
-            "skills": len(skills),
-        },
-        "remote_available": mock_remote,
-        "status": "mock_sync_complete",
+        "status": "ok",
     }
-    _append_jsonl(COMMUNITY_SYNC_LOG, row)
-    return row
+    _append_jsonl(COMMUNITY_SYNC_LOG, event)
+    return {"status": "ok", "direction": direction_norm, "synced_at": event["ts"], "response": body}
 
 
 SAFE_CLI_COMMANDS = {
@@ -550,6 +1029,26 @@ class AdminHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:  # noqa: N802
         parsed = urlparse(self.path)
         path = parsed.path
+        if path == "/api/health":
+            services_registered = 0
+            if _SERVICE_REGISTRY is not None:
+                try:
+                    services_registered = len(_SERVICE_REGISTRY.list_all())
+                except Exception:
+                    services_registered = 0
+            self._send_json(
+                {
+                    "status": "ok",
+                    "service_id": "admin-server",
+                    "service_type": "admin",
+                    "services_registered": services_registered,
+                },
+            )
+            return
+        if path == "/api/health/cloud":
+            cloud = _cloud_health()
+            self._send_json({"ok": cloud.get("status") == "ok", "cloud": cloud})
+            return
         if path == "/":
             file_path = REPO_ROOT / "admin" / "static" / "index.html"
             self._send_bytes(file_path.read_bytes(), "text/html; charset=utf-8")
@@ -572,6 +1071,29 @@ class AdminHandler(BaseHTTPRequestHandler):
 
         if path == "/api/catalog":
             self._send_json({"ok": True, **_catalog()})
+            return
+        if path == "/api/swarms/studio/catalog":
+            try:
+                catalog = _swarm_catalog_payload()
+                self._send_json({"ok": True, **catalog})
+            except Exception as ex:
+                self._send_json({"ok": False, "error": str(ex)}, status=400)
+            return
+        if path == "/api/swarms/studio/main-diagram":
+            try:
+                diagram = _compile_main_swarms_diagram()
+                self._send_json({"ok": True, "diagram_mermaid": diagram})
+            except Exception as ex:
+                self._send_json({"ok": False, "error": str(ex)}, status=400)
+            return
+        if path == "/api/swarms/studio/swarm":
+            try:
+                query = parse_qs(parsed.query)
+                swarm_id = (query.get("swarm_id", [""])[0] or "").strip()
+                payload = _load_swarm_studio_payload(swarm_id)
+                self._send_json({"ok": True, **payload})
+            except Exception as ex:
+                self._send_json({"ok": False, "error": str(ex)}, status=400)
             return
         if path == "/api/file":
             query = parse_qs(parsed.query)
@@ -623,6 +1145,98 @@ class AdminHandler(BaseHTTPRequestHandler):
             return
 
         try:
+            if path == "/api/vscode/open":
+                rel_path = str(payload.get("file", "")).strip()
+                if not rel_path:
+                    raise ValueError("file is required")
+                result = _open_vscode_path(rel_path)
+                self._send_json(result, status=200 if result.get("success") else 400)
+                return
+            if path == "/api/swarms/studio/compile-diagram":
+                markdown = str(payload.get("markdown", ""))
+                if not markdown.strip():
+                    raise ValueError("markdown is required")
+                frontmatter, body = _split_frontmatter(markdown)
+                swarm_id = str(payload.get("swarm_id", frontmatter.get("agent_type", ""))).strip()
+                if not swarm_id:
+                    raise ValueError("swarm_id is required (or frontmatter.agent_type)")
+                rel_path = str(payload.get("path", "")).strip()
+                category = str(payload.get("category", "")).strip()
+                if not category and rel_path:
+                    rel_obj = Path(rel_path)
+                    if rel_obj.suffix == ".md":
+                        parts = rel_obj.parts
+                        if len(parts) >= 5 and parts[:3] == ("data", "default", "swarms"):
+                            category = "/".join(parts[3:-1])
+                if not category:
+                    category = "uncategorized"
+                if not rel_path:
+                    rel_path = f"data/default/swarms/{category}/{swarm_id}.md"
+                spec = _frontmatter_to_spec(swarm_id, category, rel_path, frontmatter)
+                validation = _validate_swarm_spec(spec, _swarm_catalog_payload())
+                diagram_mermaid = _swarm_spec_to_mermaid(spec)
+                self._send_json(
+                    {
+                        "ok": True,
+                        "spec": spec,
+                        "frontmatter": frontmatter,
+                        "body": body,
+                        "diagram_mermaid": diagram_mermaid,
+                        "validation": validation,
+                    },
+                )
+                return
+            if path == "/api/swarms/studio/compile-swarm":
+                diagram_mermaid = str(payload.get("diagram_mermaid", ""))
+                if not diagram_mermaid.strip():
+                    raise ValueError("diagram_mermaid is required")
+                spec = _extract_spec_from_mermaid(diagram_mermaid)
+                validation = _validate_swarm_spec(spec, _swarm_catalog_payload())
+                frontmatter = _spec_to_frontmatter(spec)
+                default_title = str(spec.get("agent_type", spec.get("id", "new-swarm"))).replace("-", " ").title()
+                body = str(payload.get("body", "")).strip()
+                if not body:
+                    body = (
+                        f"# {default_title} Agent Type\n\n"
+                        "## Role\n"
+                        "Describe role, constraints, and expected artifacts.\n"
+                    )
+                markdown = _dump_frontmatter(frontmatter) + "\n" + body.strip() + "\n"
+                self._send_json(
+                    {
+                        "ok": True,
+                        "spec": spec,
+                        "frontmatter": frontmatter,
+                        "markdown": markdown,
+                        "validation": validation,
+                    },
+                )
+                return
+            if path == "/api/swarms/studio/validate":
+                catalog = _swarm_catalog_payload()
+                source = "unknown"
+                spec: dict[str, object]
+                if str(payload.get("markdown", "")).strip():
+                    source = "markdown"
+                    frontmatter, _body = _split_frontmatter(str(payload.get("markdown", "")))
+                    swarm_id = str(payload.get("swarm_id", frontmatter.get("agent_type", ""))).strip()
+                    if not swarm_id:
+                        swarm_id = "unknown"
+                    rel_path = str(payload.get("path", f"data/default/swarms/unknown/{swarm_id}.md")).strip()
+                    category = str(payload.get("category", "unknown")).strip() or "unknown"
+                    spec = _frontmatter_to_spec(swarm_id, category, rel_path, frontmatter)
+                elif str(payload.get("diagram_mermaid", "")).strip():
+                    source = "diagram"
+                    spec = _extract_spec_from_mermaid(str(payload.get("diagram_mermaid", "")))
+                else:
+                    swarm_id = str(payload.get("swarm_id", "")).strip()
+                    if not swarm_id:
+                        raise ValueError("provide markdown, diagram_mermaid, or swarm_id")
+                    source = "swarm_id"
+                    spec = _load_swarm_studio_payload(swarm_id)["spec"]  # type: ignore[index]
+                validation = _validate_swarm_spec(spec, catalog)
+                self._send_json({"ok": True, "source": source, "spec": spec, "validation": validation})
+                return
             if path == "/api/file/save":
                 rel_path = str(payload.get("path", "")).strip()
                 content = str(payload.get("content", ""))
@@ -656,12 +1270,14 @@ class AdminHandler(BaseHTTPRequestHandler):
             if path == "/api/community/link":
                 email = str(payload.get("email", ""))
                 result = _community_link(email)
-                self._send_json({"ok": True, "link": result})
+                ok = result.get("status") in {"linked", "ok"}
+                self._send_json({"ok": ok, "link": result}, status=200 if ok else 503)
                 return
             if path == "/api/community/sync":
                 direction = str(payload.get("direction", "both"))
                 result = _community_sync(direction)
-                self._send_json({"ok": True, "sync": result})
+                ok = result.get("status") == "ok"
+                self._send_json({"ok": ok, "sync": result}, status=200 if ok else 503)
                 return
             if path == "/api/cli/run":
                 command = str(payload.get("command", "")).strip()

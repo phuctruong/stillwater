@@ -1,0 +1,106 @@
+{
+  "id": "recipe.gmail-archive-batch",
+  "version": "1.0.0",
+  "type": "gmail-automation",
+  "authority": 65537,
+  "description": "Archive multiple emails with safety constraints (from primewiki-gmail-automation-100)",
+  "source": "solace-browser:primewiki/gmail/gmail-automation-100.primewiki.md",
+  "confidence": 0.95,
+  "test_evidence": "100+ archive operations successful",
+  "safety_constraints": {
+    "archive_budget_per_session": 10,
+    "oauth3_scope_required": "gmail.archive",
+    "pre_action_snapshot_required": true,
+    "confirmation_gate_threshold": 5,
+    "note": "Summer Yue incident (Feb 22, 2026): 200+ emails deleted by silent fallback. This recipe prevents it via 4 halt paths."
+  },
+  "steps": [
+    {
+      "name": "validate_oauth3_scope",
+      "action": "check_token_scope",
+      "required_scope": "gmail.archive",
+      "confidence": 1.0,
+      "halt_if_denied": true,
+      "description": "Verify OAuth3 token has archive scope (exits with EXIT_SCOPE_DENIED if not)"
+    },
+    {
+      "name": "check_archive_budget",
+      "action": "check_budget",
+      "budget_type": "archive",
+      "limit_per_session": 10,
+      "confidence": 1.0,
+      "halt_if_exceeded": true,
+      "description": "Check archive budget counter (exits with EXIT_BUDGET_EXCEEDED if exhausted)"
+    },
+    {
+      "name": "require_confirmation",
+      "action": "require_human_confirmation",
+      "threshold_emails": 5,
+      "description": "If archiving >5 emails, require human confirmation (exits with EXIT_CONFIRMATION_DENIED if not approved)"
+    },
+    {
+      "name": "take_snapshot",
+      "action": "snapshot_pre_action",
+      "target": "selected_emails",
+      "confidence": 1.0,
+      "storage": "/home/phuc/.solace/audit/",
+      "halt_if_failed": true,
+      "description": "Capture email state before archive (required for rollback)"
+    },
+    {
+      "name": "select_emails",
+      "action": "select_by_filter",
+      "filter": "email_ids (provided in inputs)",
+      "description": "Select specified emails for archiving"
+    },
+    {
+      "name": "click_archive_button",
+      "action": "click",
+      "selector": "div[aria-label='Archive']",
+      "confidence": 0.95,
+      "description": "Click archive button (portal from ADVANCED tier)"
+    },
+    {
+      "name": "verify_archive",
+      "action": "verify",
+      "check": "emails removed from inbox",
+      "timeout_ms": 3000,
+      "description": "Verify emails are no longer in inbox"
+    },
+    {
+      "name": "log_audit",
+      "action": "log_to_part11",
+      "event_type": "ARCHIVE_BATCH",
+      "fields": {
+        "email_count": "count of archived emails",
+        "snapshot_hash": "SHA256 of pre-action snapshot",
+        "timestamp": "ISO8601",
+        "oauth3_token_id": "token used"
+      },
+      "confidence": 1.0,
+      "description": "Write ALCOA+ compliant audit log (hash-chained to previous event)"
+    }
+  ],
+  "inputs": {
+    "email_ids": "array of email UIDs (required)",
+    "reason": "string (optional) - reason for archiving"
+  },
+  "outputs": {
+    "success": "boolean",
+    "archived_count": "integer",
+    "budget_remaining": "integer",
+    "snapshot_hash": "string (SHA256)",
+    "audit_event_id": "string (e.g., 'e000043')",
+    "part11_event": "hash (SHA256)"
+  },
+  "rung": 641,
+  "cost_tokens": 0,
+  "cost_usd": 0,
+  "halt_paths": [
+    "EXIT_SCOPE_DENIED - if token lacks gmail.archive scope",
+    "EXIT_BUDGET_EXCEEDED - if archive_budget >= 10",
+    "EXIT_CONFIRMATION_DENIED - if batch > 5 and user denies",
+    "EXIT_SNAPSHOT_FAILED - if pre-action snapshot cannot be captured"
+  ],
+  "note": "Safety-first recipe. All 4 halt paths active (no fallbacks). Selectors from verified primewiki with 0.95+ confidence. Implements email-triage skill constraints."
+}

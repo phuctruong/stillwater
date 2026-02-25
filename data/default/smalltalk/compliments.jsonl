@@ -1,0 +1,30 @@
+{"id": "comp_001", "trigger": "task_completed", "compliment": "Nice execution on that one.", "warmth": 3, "tags": ["generic", "completion"]}
+{"id": "comp_002", "trigger": "task_completed", "compliment": "That was clean work.", "warmth": 3, "tags": ["generic", "completion"]}
+{"id": "comp_003", "trigger": "task_completed", "compliment": "Shipped. That's the milestone that matters.", "warmth": 4, "tags": ["shipping", "completion"]}
+{"id": "comp_004", "trigger": "task_completed", "compliment": "Your future self will thank you for this.", "warmth": 4, "tags": ["long-term", "completion"]}
+{"id": "comp_005", "trigger": "task_completed", "compliment": "That's solid craftsmanship.", "warmth": 4, "tags": ["quality", "completion"]}
+{"id": "comp_006", "trigger": "task_completed", "compliment": "One less thing on the list. Good work.", "warmth": 3, "tags": ["progress", "completion"]}
+{"id": "comp_007", "trigger": "task_completed", "compliment": "Tested and working. That's the standard.", "warmth": 3, "tags": ["quality", "completion"]}
+{"id": "comp_008", "trigger": "task_completed", "compliment": "You make it look easy.", "warmth": 4, "tags": ["skill", "completion"]}
+{"id": "comp_009", "trigger": "task_completed", "compliment": "Another green check. Keep it up.", "warmth": 3, "tags": ["testing", "completion"]}
+{"id": "comp_010", "trigger": "task_completed", "compliment": "That's the kind of code that survives reviews.", "warmth": 4, "tags": ["quality", "completion"]}
+{"id": "comp_011", "trigger": "momentum", "compliment": "You're in a flow state. Don't stop.", "warmth": 4, "tags": ["flow", "momentum"]}
+{"id": "comp_012", "trigger": "momentum", "compliment": "Three in a row. You're on fire.", "warmth": 4, "tags": ["streak", "momentum"]}
+{"id": "comp_013", "trigger": "momentum", "compliment": "This is what momentum looks like.", "warmth": 3, "tags": ["generic", "momentum"]}
+{"id": "comp_014", "trigger": "momentum", "compliment": "Keep going \u2014 you're building something real.", "warmth": 4, "tags": ["motivation", "momentum"]}
+{"id": "comp_015", "trigger": "momentum", "compliment": "Every commit counts. This one more than most.", "warmth": 4, "tags": ["git", "momentum"]}
+{"id": "comp_016", "trigger": "momentum", "compliment": "You're stacking wins today.", "warmth": 4, "tags": ["streak", "momentum"]}
+{"id": "comp_017", "trigger": "momentum", "compliment": "That's the velocity I like to see.", "warmth": 3, "tags": ["speed", "momentum"]}
+{"id": "comp_018", "trigger": "momentum", "compliment": "Productive session. You've earned this.", "warmth": 4, "tags": ["session", "momentum"]}
+{"id": "comp_019", "trigger": "momentum", "compliment": "Look at you go. What's next?", "warmth": 4, "tags": ["energy", "momentum"]}
+{"id": "comp_020", "trigger": "momentum", "compliment": "You're ahead of schedule. Keep building.", "warmth": 3, "tags": ["progress", "momentum"]}
+{"id": "comp_021", "trigger": "resilience", "compliment": "Bugs don't stand a chance when you're focused like this.", "warmth": 4, "tags": ["debugging", "resilience"]}
+{"id": "comp_022", "trigger": "resilience", "compliment": "That was a tough one, but you nailed it.", "warmth": 5, "tags": ["difficulty", "resilience"]}
+{"id": "comp_023", "trigger": "resilience", "compliment": "Persistence pays. Look at this result.", "warmth": 4, "tags": ["persistence", "resilience"]}
+{"id": "comp_024", "trigger": "resilience", "compliment": "From broken to working. That's engineering.", "warmth": 3, "tags": ["fix", "resilience"]}
+{"id": "comp_025", "trigger": "resilience", "compliment": "You didn't give up, and it paid off.", "warmth": 5, "tags": ["persistence", "resilience"]}
+{"id": "comp_026", "trigger": "resilience", "compliment": "Every error message was a clue. You followed them all.", "warmth": 4, "tags": ["debugging", "resilience"]}
+{"id": "comp_027", "trigger": "resilience", "compliment": "That debugging took patience. Well done.", "warmth": 4, "tags": ["debugging", "resilience"]}
+{"id": "comp_028", "trigger": "resilience", "compliment": "Stuck \u2192 fixed \u2192 shipped. The full cycle.", "warmth": 3, "tags": ["cycle", "resilience"]}
+{"id": "comp_029", "trigger": "resilience", "compliment": "Hard problems are just unsolved problems. You solved this one.", "warmth": 4, "tags": ["difficulty", "resilience"]}
+{"id": "comp_030", "trigger": "resilience", "compliment": "That fix shows real understanding of the system.", "warmth": 5, "tags": ["depth", "resilience"]}

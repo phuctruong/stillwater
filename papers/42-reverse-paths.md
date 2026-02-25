@@ -35,7 +35,7 @@ Before reverse engineering begins, the current state must be established precise
 |---------|------|------|-----------|
 | stillwater | Orange | 65537 CI | 445 tests, 15+ skills, 19 swarm types, 50 personas, CI badge live |
 | solace-browser | Orange | 274177 | 2,441 tests, OAuth3 core complete, 5 platforms, machine access layer done |
-| solaceagi | Orange | 641 | 955 tests, FastAPI + Stripe + Firebase + LLM proxy + cloud twin all built |
+| solaceagi | Orange | 641 | 955 tests, FastAPI + Stripe + LLM proxy + cloud twin all built |
 | solace-cli | White | — | ROADMAP written, no code yet |
 | GitHub stars | — | — | ~50 stars |
 | Paying users | — | — | 0 |
@@ -114,7 +114,7 @@ solaceagi.com has a growing subscriber base. Recipe hit rate across the ecosyste
 | Chain Position | State | Action Needed |
 |---------------|-------|---------------|
 | -3 (free signup) | 5,000 free users | HN/Product Hunt launch with working demo; "free forever" BYOK tier clearly explained in landing page |
-| -4 (landing page converts) | Landing page converts visitors to free signups | Hook/Story/Offer treatment applied to homepage; demo video above the fold; one-click Google sign-in (Firebase Auth — already built) |
+| -4 (landing page converts) | Landing page converts visitors to free signups | Hook/Story/Offer treatment applied to homepage; demo video above the fold; one-click Google sign-in |
 | -5 (free tier works) | Free tier users complete at least one task successfully | Recipe hit rate >0% in production; at least LinkedIn or Gmail recipe working end-to-end via cloud twin |
 | -6 (cloud twin live) | Cloud twin executing recipes reliably | Phase 2 (Cloud Twin) in solaceagi deployed and running; tunnel server at tunnel.solaceagi.com live |
 | -7 (billing operational) | Stripe billing handles upgrades/downgrades automatically | Phase 4 (billing tiers + rate limits + GDPR) complete; Stripe webhook handling churn and upgrades |
@@ -332,7 +332,7 @@ Operationally: at least one production task is running at rung 65537 continuousl
 | Chain Position | State | Action Needed |
 |---------------|-------|---------------|
 | -3 (25 community skills) | 25 skills in Store from 5+ contributors | Run a "Skill Sprint" — a public hackathon where developers compete to submit skills; GLOW score leaderboard is visible; first prizes are Pro account credits |
-| -4 (Store live and enforcing gates) | Stillwater Store enforces rung gate on submission; Store API returning 422 on sub-641 submissions | store/client.py + store/rung_validator.py already built; need the Store server at solaceagi.com/stillwater to enforce gates in CI |
+| -4 (Store live and enforcing gates) | Stillwater Store enforces rung gate on submission; Store API returning 422 on sub-641 submissions | src/store/client.py + src/store/rung_validator.py already built; need the Store server at solaceagi.com/stillwater to enforce gates in CI |
 | -5 (first external Green Belt) | One non-Phuc developer has achieved rung 65537 on a submission | Requires: documentation shows exactly how to achieve rung 65537; the rung_validator.py is runnable locally before submission |
 | -6 (production tasks running) | At least 10 users running recurring tasks via solaceagi.com | Requires: solaceagi.com live with Pro tier; cloud twin executing tasks on schedule; evidence bundles stored for 90 days |
 | -7 (belt progression visible) | Belt XP is publicly visible per contributor on Store profile | Store profile page showing belt, GLOW score, submitted skills |

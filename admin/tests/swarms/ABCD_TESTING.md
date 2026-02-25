@@ -194,7 +194,7 @@ The test checks:
 
 ```bash
 # Terminal 1: Start wrapper
-python3 cli/src/claude_code_wrapper.py --port 8080
+python3 src/cli/src/claude_code_wrapper.py --port 8080
 
 # Terminal 2: Verify it's running
 curl http://localhost:8080/api/generate -X POST \
@@ -357,7 +357,7 @@ curl http://localhost:8080/api/generate -X POST \
 
 **Check 3**: Verify wrapper supports system prompt
 ```python
-# In cli/src/claude_code_wrapper.py, check:
+# In src/cli/src/claude_code_wrapper.py, check:
 # - Does POST /api/generate accept "system" parameter?
 # - Does wrapper prepend system to prompt?
 ```

@@ -1,0 +1,15 @@
+{"id": "rem_001", "trigger": "session_start", "template": "Last session you were working on {last_task}. Want to pick up where you left off?", "warmth": 4, "requires": ["last_task"]}
+{"id": "rem_002", "trigger": "session_start", "template": "You had {open_tasks} open tasks from last time. Ready to tackle them?", "warmth": 4, "requires": ["open_tasks"]}
+{"id": "rem_003", "trigger": "reassurance", "template": "Remember that {bug_type} you fixed last time? Your tests are still green.", "warmth": 4, "requires": ["bug_type"]}
+{"id": "rem_004", "trigger": "re-engagement", "template": "Your {project_name} project has been quiet for {days} days. Want to check on it?", "warmth": 3, "requires": ["project_name", "days"]}
+{"id": "rem_005", "trigger": "follow-through", "template": "Last time you deployed {feature}. Any follow-up needed?", "warmth": 3, "requires": ["feature"]}
+{"id": "rem_006", "trigger": "memory", "template": "You mentioned wanting to try {idea} last session. Still interested?", "warmth": 4, "requires": ["idea"]}
+{"id": "rem_007", "trigger": "progress", "template": "Your test coverage went from {before}% to {after}% last session. Nice trend.", "warmth": 4, "requires": ["before", "after"]}
+{"id": "rem_008", "trigger": "re-engagement", "template": "It's been {days} days since your last commit to {repo}. Everything okay?", "warmth": 3, "requires": ["days", "repo"]}
+{"id": "rem_009", "trigger": "session_start", "template": "Last session ended with a green build. Let's keep that streak.", "warmth": 3, "requires": []}
+{"id": "rem_010", "trigger": "follow-up", "template": "You were debugging {issue} when we last talked. Did it get resolved?", "warmth": 4, "requires": ["issue"]}
+{"id": "rem_011", "trigger": "observation", "template": "Your {skill_name} skill has been getting a lot of use lately.", "warmth": 3, "requires": ["skill_name"]}
+{"id": "rem_012", "trigger": "progress", "template": "You've shipped {count} features this week. Strong pace.", "warmth": 4, "requires": ["count"]}
+{"id": "rem_013", "trigger": "connection", "template": "Remember when {past_achievement}? You're building on that now.", "warmth": 5, "requires": ["past_achievement"]}
+{"id": "rem_014", "trigger": "progress", "template": "Your code quality has been improving \u2014 fewer bugs per commit.", "warmth": 4, "requires": []}
+{"id": "rem_015", "trigger": "team-awareness", "template": "The team's been busy. {repo} got {commits} commits since your last session.", "warmth": 3, "requires": ["repo", "commits"]}

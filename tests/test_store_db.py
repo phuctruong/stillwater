@@ -1,5 +1,5 @@
 """
-tests/test_store_db.py — Unit tests for store/db.py (_Store, get_store).
+tests/test_store_db.py — Unit tests for src/store/db.py (_Store, get_store).
 
 Coverage:
   - reset(): clears all data

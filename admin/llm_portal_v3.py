@@ -33,7 +33,7 @@ logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 logger = logging.getLogger(__name__)
 
 # Add CLI to path
-_CLI_SRC = Path(__file__).parent.parent / "cli" / "src"
+_CLI_SRC = Path(__file__).parent.parent / "src" / "cli" / "src"
 if str(_CLI_SRC) not in sys.path:
     sys.path.insert(0, str(_CLI_SRC))
 
@@ -257,15 +257,19 @@ class RecipeExecutor:
                 raise ValueError(f"Recipe not found: {recipe_name}")
 
             # Load recipe
-            recipe = json.loads(recipe_file.read_text())
+            _ = json.loads(recipe_file.read_text())
+            del task, context
 
-            # TODO: Execute recipe with given task and context
-            # This is a placeholder for actual CPU recipe execution
-            logger.info(f"Executing recipe: {recipe_name}")
+            logger.info(f"Recipe execution not implemented: {recipe_name}")
 
             return RecipeResponse(
-                success=True,
-                result={"status": "placeholder", "recipe": recipe_name},
+                success=False,
+                result={
+                    "status": "not_implemented",
+                    "error": "recipe execution not yet implemented",
+                    "recipe": recipe_name,
+                },
+                error="recipe execution not yet implemented",
                 recipe=recipe_name,
                 timestamp=datetime.now().isoformat(),
             )
@@ -292,9 +296,9 @@ app = FastAPI(
 
 # Initialize executors
 _project_root = Path(__file__).parent.parent  # admin/llm_portal_v3.py -> admin -> stillwater
-_swarms_dir = _project_root / "swarms"
-_skills_dir = _project_root / "skills"
-_recipes_dir = _project_root / "recipes"
+_swarms_dir = _project_root / "data" / "default" / "swarms"
+_skills_dir = _project_root / "data" / "default" / "skills"
+_recipes_dir = _project_root / "data" / "default" / "recipes"
 
 swarm_executor = SwarmExecutor(_swarms_dir, _skills_dir)
 recipe_executor = RecipeExecutor(_recipes_dir)
@@ -477,7 +481,7 @@ async def execute_recipe(request: RecipeRequest) -> RecipeResponse:
     )
 
     if not response.success:
-        raise HTTPException(status_code=400, detail=response.error)
+        raise HTTPException(status_code=501, detail=response.error or "recipe execution not implemented")
 
     return response
 

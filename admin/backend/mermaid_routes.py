@@ -24,6 +24,13 @@ def create_mermaid_routes(app: FastAPI, repo_root: Path):
             data = yaml.safe_load(f)
         return data
 
+    def resolve_swarm_config_path(role: str) -> str:
+        swarms_root = repo_root / "data" / "default" / "swarms"
+        matches = sorted(swarms_root.rglob(f"{role}.md"))
+        if matches:
+            return str(matches[0].relative_to(repo_root))
+        return f"data/default/swarms/**/{role}.md"
+
     @app.get("/api/orchestration/mermaid")
     async def get_orchestration_mermaid():
         """
@@ -92,7 +99,7 @@ def create_mermaid_routes(app: FastAPI, repo_root: Path):
             "strengths": ["pattern_recognition", "breadth_search", "web_research", "file_navigation"],
             "tools": ["web_search", "grep", "glob", "read_files"],
             "rung_target": 641,
-            "config_path": "swarms/scout.md",
+                "config_path": resolve_swarm_config_path("scout"),
             "algorithm": "graph TD\n    A[Input] --> B[Research] --> C[Output]",
             "examples": [
                 "Explore codebase for pattern XYZ",
@@ -117,12 +124,7 @@ def create_mermaid_routes(app: FastAPI, repo_root: Path):
             node_type = "CPU" if role == "scout" else "Swarm"
 
             # Get config file path (based on role)
-            config_paths = {
-                "scout": "swarms/scout.md",
-                "coder": "swarms/coder.md",
-                "skeptic": "swarms/skeptic.md"
-            }
-            config_path = config_paths.get(role, f"swarms/{role}.md")
+            config_path = resolve_swarm_config_path(role)
 
             # Example algorithms (simple flowcharts for each node)
             algorithms = {

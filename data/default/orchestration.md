@@ -32,8 +32,8 @@ graph TB
         DATA["data/custom/"]
     end
 
-    subgraph "Cloud Sync (Optional)"
-        CLOUD["Firestore"]
+    subgraph "Cloud Sync (Optional, via solace-cli)"
+        CLOUD["Cloud API"]
     end
 
     User --> CPU1
@@ -331,16 +331,12 @@ graph TB
 
     Admin -->|Bearer token| Cloud["Solaceagi API<br/>https://solaceagi.com"]
     Cloud -->|API keys| Cloud
-    Cloud -->|Firestore| FS["Google Firestore"]
-
-    Cloud -->|Firebase Auth| FA["Firebase Auth"]
-    FA -->|OAuth| Google["Google/GitHub"]
+    Cloud -->|Cloud API| SA["solaceagi.com API"]
 
     style Admin fill:#0d1120
     style CLI fill:#0d1120
     style Cloud fill:#1a3a63
-    style FS fill:#1a3a63
-    style FA fill:#1a3a63
+    style SA fill:#1a3a63
 ```
 
 ### Request Counts (Per Session)
@@ -350,8 +346,8 @@ graph TB
 | Stillwater Admin | /api/data/* | 5-10 | $0 (local) |
 | Stillwater CLI | read/write | 2-5 | $0 (local) |
 | Haiku Validators | small-talk, intent, exec | 3 | ~$0.001 |
-| Firestore | read learned entries | 1 | ~$0.0001 |
-| Firestore | sync push (optional) | 1 | ~$0.0001 |
+| Cloud API | read learned entries | 1 | ~$0.0001 |
+| Cloud API | sync push (optional) | 1 | ~$0.0001 |
 | **TOTAL per session** | | ~12-20 | ~$0.0011 |
 
 ---
@@ -408,8 +404,8 @@ batch_every_n_requests: 10
 At startup, CPU loads and merges learned patterns:
 
 ```python
-# 1. Load shared patterns (cloud, if configured)
-shared = load_firestore("learned_*.jsonl")
+# 1. Load shared patterns (cloud, if configured via solace-cli)
+shared = load_cloud("learned_*.jsonl")
 
 # 2. Load user's local patterns
 local = load_local("data/custom/learned_*.jsonl")

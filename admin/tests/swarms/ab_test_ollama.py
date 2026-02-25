@@ -15,7 +15,7 @@ import ast
 from pathlib import Path
 from datetime import datetime
 
-_CLI_SRC = Path(__file__).parent / "cli" / "src"
+_CLI_SRC = Path(__file__).parent / "src" / "cli" / "src"
 if str(_CLI_SRC) not in sys.path:
     sys.path.insert(0, str(_CLI_SRC))
 

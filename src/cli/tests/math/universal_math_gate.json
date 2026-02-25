@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "description": "Universal math claim gate config: breadth + proof artifacts + no-oracle generalization + model/provider stability.",
+  "defaults": {
+    "from_year": 1959,
+    "to_year": 2025,
+    "lang": "eng",
+    "model": "llama3.1:8b",
+    "url": "",
+    "timeout": 45.0,
+    "max_problems": 0,
+    "fetch_missing": false,
+    "oracles_file": "src/cli/tests/math/imo_history_oracles.json"
+  },
+  "heldout_profiles": [
+    {
+      "label": "imo_history_full_65537",
+      "from_year": 1959,
+      "to_year": 2025,
+      "required_rung": 65537,
+      "oracles_file": "src/cli/tests/math/imo_history_oracles.json",
+      "min_pass_ratio": 1.0,
+      "require_strict": true
+    }
+  ],
+  "proof_artifacts": {
+    "required": true,
+    "cases_file": "src/cli/tests/math/proof_artifact_cases.json",
+    "required_min_pass_ratio": 1.0
+  },
+  "generalization_profiles": [
+    {
+      "label": "imo_history_no_oracle_recent_641",
+      "from_year": 2020,
+      "to_year": 2025,
+      "required_rung": 641,
+      "oracles_file": "src/cli/tests/math/imo_history_oracles.empty.json",
+      "min_pass_ratio": 0.9,
+      "require_strict": false
+    }
+  ],
+  "stability": {
+    "profile": {
+      "label": "imo_history_stability_slice_641",
+      "from_year": 2020,
+      "to_year": 2024,
+      "required_rung": 641,
+      "oracles_file": "src/cli/tests/math/imo_history_oracles.empty.json",
+      "min_pass_ratio": 0.9,
+      "require_strict": false
+    },
+    "models": [
+      "llama3.1:8b"
+    ],
+    "urls": [],
+    "required_all": true
+  }
+}

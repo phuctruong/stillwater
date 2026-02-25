@@ -37,7 +37,7 @@ from typing import NamedTuple
 import pytest
 import yaml
 
-_CLI_SRC = Path(__file__).parent.parent.parent / "cli" / "src"
+_CLI_SRC = Path(__file__).parent.parent.parent / "src" / "cli" / "src"
 if str(_CLI_SRC) not in sys.path:
     sys.path.insert(0, str(_CLI_SRC))
 
@@ -149,9 +149,16 @@ def llm_client() -> LLMClient:
 def get_all_swarms(swarms_dir: Path) -> list[str]:
     """Get all swarm names."""
     return sorted([
-        f.stem for f in swarms_dir.glob("*.md")
-        if f.name != "README.md"
+        f.stem for f in swarms_dir.rglob("*.md")
+        if not f.name.startswith("README")
     ])
+
+
+def resolve_swarm_file(swarms_dir: Path, swarm_name: str) -> Path:
+    matches = sorted(swarms_dir.rglob(f"{swarm_name}.md"))
+    if not matches:
+        raise FileNotFoundError(f"Swarm file not found: {swarm_name}")
+    return matches[0]
 
 
 def load_swarm_metadata(swarm_file: Path) -> dict:
@@ -186,15 +193,15 @@ class TestPromptVariants:
         "b": "Design a REST API endpoint for user registration with validation",
     }
 
-    @pytest.mark.parametrize("swarm_name", get_all_swarms(Path(__file__).parent.parent.parent.parent / "swarms"))
+    @pytest.mark.parametrize("swarm_name", get_all_swarms(Path(__file__).parent.parent.parent.parent / "data" / "default" / "swarms"))
     def test_prompt_variants(
         self,
         swarm_name: str,
         llm_client: LLMClient,
     ):
         """Compare responses to prompt A (factual) vs B (domain-specific)."""
-        swarms_dir = Path(__file__).parent.parent.parent.parent / "swarms"
-        swarm_file = swarms_dir / f"{swarm_name}.md"
+        swarms_dir = Path(__file__).parent.parent.parent.parent / "data" / "default" / "swarms"
+        swarm_file = resolve_swarm_file(swarms_dir, swarm_name)
         metadata = load_swarm_metadata(swarm_file)
 
         results = {}
@@ -257,15 +264,15 @@ class TestPromptVariants:
 class TestTemperatureConsistency:
     """A|B test: deterministic vs creative responses."""
 
-    @pytest.mark.parametrize("swarm_name", get_all_swarms(Path(__file__).parent.parent.parent.parent / "swarms")[:5])
+    @pytest.mark.parametrize("swarm_name", get_all_swarms(Path(__file__).parent.parent.parent.parent / "data" / "default" / "swarms")[:5])
     def test_temperature_consistency(
         self,
         swarm_name: str,
         llm_client: LLMClient,
     ):
         """Test temperature=0 (deterministic) vs temperature=0.5 (creative)."""
-        swarms_dir = Path(__file__).parent.parent.parent.parent / "swarms"
-        swarm_file = swarms_dir / f"{swarm_name}.md"
+        swarms_dir = Path(__file__).parent.parent.parent.parent / "data" / "default" / "swarms"
+        swarm_file = resolve_swarm_file(swarms_dir, swarm_name)
         metadata = load_swarm_metadata(swarm_file)
 
         prompt = "What is the capital of France?"
@@ -309,16 +316,16 @@ class TestTemperatureConsistency:
 class TestPersonaImpact:
     """A|B test: with vs without persona."""
 
-    @pytest.mark.parametrize("swarm_name", get_all_swarms(Path(__file__).parent.parent.parent.parent / "swarms")[:3])
+    @pytest.mark.parametrize("swarm_name", get_all_swarms(Path(__file__).parent.parent.parent.parent / "data" / "default" / "swarms")[:3])
     def test_persona_impact(
         self,
         swarm_name: str,
         llm_client: LLMClient,
     ):
         """Test impact of persona on response style."""
-        swarms_dir = Path(__file__).parent.parent.parent.parent / "swarms"
-        personas_dir = Path(__file__).parent.parent.parent.parent / "personas"
-        swarm_file = swarms_dir / f"{swarm_name}.md"
+        swarms_dir = Path(__file__).parent.parent.parent.parent / "data" / "default" / "swarms"
+        personas_dir = Path(__file__).parent.parent.parent.parent / "data" / "default" / "personas"
+        swarm_file = resolve_swarm_file(swarms_dir, swarm_name)
         metadata = load_swarm_metadata(swarm_file)
 
         prompt = "What is the capital of France?"

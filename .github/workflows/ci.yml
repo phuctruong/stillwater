@@ -20,7 +20,7 @@ jobs:
       - name: Lint
         run: |
           pip install ruff -q
-          ruff check cli/src imo swe --select E,F,W --ignore E501
+          ruff check src/cli/src imo swe --select E,F,W --ignore E501
 
       - name: Unit tests
         run: |
@@ -30,11 +30,11 @@ jobs:
           python imo/tests/test-harsh-qa-notebooks.py
       - name: Generated docs up-to-date
         run: |
-          PYTHONPATH=cli/src python -m stillwater.gen_ai_steroids_readme --check
+          PYTHONPATH=src/cli/src python -m stillwater.gen_ai_steroids_readme --check
       - name: Security scan (bandit)
         run: |
           pip install bandit -q
-          bandit -r cli/src --severity-level medium -q
+          bandit -r src/cli/src --severity-level medium -q
 
       - name: Supply chain audit (pip-audit)
         run: |
@@ -43,4 +43,4 @@ jobs:
 
       - name: Compile check
         run: |
-          python -m compileall -q cli/src swe imo
+          python -m compileall -q src/cli/src swe imo

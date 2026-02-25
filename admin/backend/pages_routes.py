@@ -338,7 +338,7 @@ PAGE_DEFINITIONS = {
             {
                 "step": "2",
                 "title": "Edit algorithms",
-                "file": "swarms/scout.md",
+                "file": "data/default/swarms/core/scout.md",
                 "button": "Open in VSCode"
             },
             {

@@ -32,10 +32,10 @@ For the general policy, see `papers/99-claims-and-evidence.md`.
 
 1. Run the notebook: `HOW-TO-OOLONG-BENCHMARK.ipynb`
 2. Read the implementation:
-   - `oolong/src/oolong_solver.py` (deterministic demo)
-   - `oolong/src/solve-oolong.py` (runner)
+   - `src/oolong/src/oolong_solver.py` (deterministic demo)
+   - `src/oolong/src/solve-oolong.py` (runner)
 3. Optional (external tooling):
-   - `oolong/src/oolong_solver_real.py` (requires local wrapper and a Claude Code CLI)
+   - `src/oolong/src/oolong_solver_real.py` (requires local wrapper and a Claude Code CLI)
 
 ---
 
@@ -85,7 +85,7 @@ flowchart TD
 ## 3. What This Repo Actually Demonstrates
 
 The runnable demo in this repo:
-- Implements a parse + index + dispatch pipeline in `oolong/src/oolong_solver.py`.
+- Implements a parse + index + dispatch pipeline in `src/oolong/src/oolong_solver.py`.
 - Includes a 4-case local test harness to exercise the handlers.
 - Runs via `HOW-TO-OOLONG-BENCHMARK.ipynb` and emits a consistent, checkable stdout report.
 

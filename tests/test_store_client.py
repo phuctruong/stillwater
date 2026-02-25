@@ -2,9 +2,9 @@
 tests/test_store_client.py — Integration tests for Stillwater Store Client SDK.
 
 Tests:
-  - store/packager.py  (SkillPackager: bundle, SHA-256 manifest, integrity)
-  - store/rung_validator.py (RungValidator: schema, 3-seed hash replay, fail-closed)
-  - store/client.py    (StillwaterStoreClient: submit, fetch, list, install — all mocked)
+  - src/store/packager.py  (SkillPackager: bundle, SHA-256 manifest, integrity)
+  - src/store/rung_validator.py (RungValidator: schema, 3-seed hash replay, fail-closed)
+  - src/store/client.py    (StillwaterStoreClient: submit, fetch, list, install — all mocked)
 
 Rung target: 641 (local correctness, all mocks, no real HTTP)
 Network: OFF — all HTTP calls are mocked via unittest.mock.patch
@@ -23,7 +23,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-# Ensure the store package is importable (store/ lives at the project root)
+# Ensure the store package is importable (src/store/ lives at the project root)
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
@@ -47,7 +47,7 @@ def _make_evidence_dir(tmp_path: Path, behavior_hash: str = "abc123") -> Path:
         "task_family": "swe_patch",
         "rung_target": 641,
         "design_decisions": ["minimal diff", "fail-closed"],
-        "files_changed": ["store/packager.py"],
+        "files_changed": ["src/store/packager.py"],
     }
     tests_json = {
         "test_command": "pytest tests/test_store_client.py -v",
@@ -76,7 +76,7 @@ def _make_evidence_dir(tmp_path: Path, behavior_hash: str = "abc123") -> Path:
 # ===========================================================================
 
 class TestSkillPackager:
-    """Tests for store/packager.py — SkillPackager."""
+    """Tests for src/store/packager.py — SkillPackager."""
 
     def test_packager_bundle_returns_dict(self, tmp_path):
         """bundle_skill() must return a dict with required keys."""
@@ -162,7 +162,7 @@ class TestSkillPackager:
 # ===========================================================================
 
 class TestRungValidator:
-    """Tests for store/rung_validator.py — RungValidator."""
+    """Tests for src/store/rung_validator.py — RungValidator."""
 
     def test_validator_accepts_valid_evidence(self, tmp_path):
         """verify_evidence() must return 'VALID' for a complete, correct evidence dir."""
@@ -270,7 +270,7 @@ class TestRungValidator:
 # ===========================================================================
 
 class TestStillwaterStoreClient:
-    """Tests for store/client.py — StillwaterStoreClient."""
+    """Tests for src/store/client.py — StillwaterStoreClient."""
 
     # -----------------------------------------------------------------------
     # Happy path

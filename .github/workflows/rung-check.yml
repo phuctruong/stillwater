@@ -29,15 +29,15 @@ jobs:
 
       - name: Security scan
         run: |
-          python scripts/security_scan.py
+          python src/scripts/security_scan.py
 
       - name: Compute behavior hash
         run: |
-          python scripts/behavior_hash.py
+          python src/scripts/behavior_hash.py
 
       - name: Verify hash consistency
         run: |
-          python scripts/verify_hash.py
+          python src/scripts/verify_hash.py
 
       - name: Upload evidence
         uses: actions/upload-artifact@v4

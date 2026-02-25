@@ -300,7 +300,7 @@ THEORETICAL FOUNDATIONS (8 new skills):
   phuc-wish-triangle.md    — Wish + Skill + Recipe execution triangle
 
 DATABASES (2 new databases):
-  magic-words/stillwater.jsonl — 100 magic words classified by tier
+  data/default/magic-words/stillwater.jsonl — 100 magic words classified by tier
   questions/stillwater.jsonl   — 22 QA questions (compounding capital)
 
 PAPERS (3 new papers):
@@ -514,7 +514,7 @@ DRAGON RIDER ROLE:
   The Dragon Rider is the Sifu who has mastered all three pillars.
   They teach by asking, not lecturing (Socratic method).
   They earn their title by creating students who surpass them.
-  SWARM AGENT: swarms/dragon-rider.md
+  SWARM AGENT: data/default/swarms/dragon-rider.md
 ```
 
 **FULL PAPER:** `papers/34-persona-glow-paradigm.md`
@@ -522,25 +522,24 @@ DRAGON RIDER ROLE:
 ---
 
 ## See Also
-- `SOFTWARE-5.0-PARADIGM.md` — paradigm manifesto
 - `STORE.md` — Stillwater Store policy
-- `ROADMAP.md` — phased build plan
+- `scratch/root-cleanup/` — archived roadmap and root planning docs
 - `case-studies/` — per-project tracking
-- `skills/` — the skill library
-- `skills/prime-mermaid.md` — PM triplet standard
-- `skills/persona-engine.md` — Persona Engine (12 domain expert voices)
-- `skills/glow-score.md` — GLOW Score gamification system
-- `swarms/persona-coder.md` — Persona-enhanced coder swarm agent
+- `data/default/skills/` — the skill library
+- `data/default/skills/prime-mermaid.md` — PM triplet standard
+- `data/default/skills/persona-engine.md` — Persona Engine (12 domain expert voices)
+- `data/default/skills/glow-score.md` — GLOW Score gamification system
+- `data/default/swarms/persona-coder.md` — Persona-enhanced coder swarm agent
 - `papers/34-persona-glow-paradigm.md` — The Dojo Protocol
 - `papers/35-syndication-strategy.md` — Content Syndication Strategy
-- `skills/phuc-magic-words.md` — Magic Words coordinate navigation
-- `skills/phuc-portals.md` — Bounded Inference Contexts + Portal Architecture
-- `skills/phuc-triangle-law.md` — Contract stability (Triangle Law)
-- `skills/phuc-prime-compression.md` — Semantic prime compression
-- `skills/phuc-wish-triangle.md` — Wish + Skill + Recipe execution triangle
+- `data/default/skills/phuc-magic-words.md` — Magic Words coordinate navigation
+- `data/default/skills/phuc-portals.md` — Bounded Inference Contexts + Portal Architecture
+- `data/default/skills/phuc-triangle-law.md` — Contract stability (Triangle Law)
+- `data/default/skills/phuc-prime-compression.md` — Semantic prime compression
+- `data/default/skills/phuc-wish-triangle.md` — Wish + Skill + Recipe execution triangle
 - `papers/45-prime-compression-magic-words.md` — Prime Compression theory
 - `papers/46-wish-skill-recipe-triangle.md` — Execution Triangle theory
-- `magic-words/` — Magic Words database (100 words, Tier 0-3)
+- `data/default/magic-words/` — Magic Words database (100 words, Tier 0-3)
 - `questions/` — Question database (compounding QA capital)
 - `skills/phuc-axiom.md` — The axiom kernel (5 irreducibles, load_order=0)
 - `skills/phuc-leak.md` — LEAK: Cross-agent asymmetric knowledge trade

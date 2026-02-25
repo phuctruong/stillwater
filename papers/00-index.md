@@ -74,7 +74,7 @@ This index is intentionally conservative: it links only to papers that exist in 
    - `HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb`
    - `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb`
 2. Unit tests:
-   - `cli/tests/` (67 tests; run with `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest`)
+   - `src/cli/tests/` (67 tests; run with `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest`)
    - `imo/tests/` (notebook QA harness)
 
 Note: if a paper makes empirical claims, it should link to a runnable script or notebook in this repo that reproduces the claim, or it should label the claim as a hypothesis or TODO.

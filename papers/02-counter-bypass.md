@@ -30,10 +30,10 @@ This repo includes a small executable demo and notebook. It does not claim exter
 
 1. Run: `HOW-TO-OOLONG-BENCHMARK.ipynb`
 2. Read:
-   - `oolong/src/oolong_solver.py` (deterministic demo)
-   - `oolong/src/solve-oolong.py` (runner)
+   - `src/oolong/src/oolong_solver.py` (deterministic demo)
+   - `src/oolong/src/solve-oolong.py` (runner)
 3. Optional (external tooling):
-   - `oolong/src/oolong_solver_real.py`
+   - `src/oolong/src/oolong_solver_real.py`
 
 ---
 

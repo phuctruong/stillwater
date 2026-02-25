@@ -34,9 +34,9 @@ See `papers/01-lane-algebra.md` for the formal epistemic typing system.
 
 **[B]** The structural limit for the extension category is Manifest V3 — the browser extension security model introduced by Google. We identify 18 concrete technical constraints imposed by MV3 that collectively prevent extensions from serving as durable AI agent infrastructure. We then identify 18 corresponding capabilities that only a custom browser engine can provide, and map each capability to a specific component of the Solace Browser architecture.
 
-**[A]** Solace Browser is a production-ready custom browser automation platform: aiohttp server on port 9222, 40+ endpoints, 3,542 tests, rung 65537. Its architecture was designed to exploit each of the 18 custom-browser advantages — not as a list of features, but as a set of structural properties that compound into five uncopyable moats: OAuth3 consent governance, the evidence pipeline, the recipe system, the twin architecture, and the self-host gateway.
+**[A]** Solace Browser is a production-ready custom browser automation platform: aiohttp server on port 9222, 40+ endpoints, 3,542 tests, rung 65537. Its architecture was designed to exploit each of the 18 custom-browser advantages — not as a list of features, but as a set of structural properties that compound into five durable moats: OAuth3 consent governance, the evidence pipeline, the recipe system, the twin architecture, and the self-host gateway.
 
-**[B]** We conclude with a business-model analysis: the same token-revenue incentive that drives most AI infrastructure providers also structurally prevents them from implementing OAuth3 consent governance — because OAuth3 reduces token consumption, which reduces their revenue. This creates a permanent strategic gap that only a consent-native, BYOK-friendly architecture can fill.
+**[B]** We conclude with a business-model analysis: token-revenue incentives can conflict with OAuth3 consent governance because OAuth3 can reduce token consumption. This can create a durable strategic gap that favors consent-native, BYOK-friendly architectures.
 
 Endure, excel, evolve. Carpe diem.
 
@@ -403,7 +403,7 @@ graph LR
     subgraph "Moat 1: OAuth3"
         M1A["Custom protocol handler<br/>(oauth3://)"]
         M1B["Consent governance<br/>(scoped, revocable)"]
-        M1C["Revenue misalignment<br/>(token-revenue vendors<br/>cannot implement)"]
+        M1C["Revenue misalignment<br/>(token-revenue vendors<br/>may resist adoption)"]
     end
 
     subgraph "Moat 2: Evidence Pipeline"
@@ -465,7 +465,7 @@ graph LR
 
 **[A]** The evidence pipeline produces, for every action: a timestamped record, a network trace, a DOM snapshot, a SHA-256 hash chaining the record to the previous record, and an ALCOA+ validity check. **[A]** The pipeline is structurally capable of FDA 21 CFR Part 11 compliance.
 
-**[B]** The moat is not just the capability — it is the cost structure. The PZip compression architecture (see `if/` research project) enables evidence storage at $0.00032 per user per month. No competing system has this cost structure because no competing system has the compression architecture. Building the compression layer is a 12–18 month project that requires the underlying IF Theory physics research — which is the `pzip/` and `if/` projects.
+**[B]** The moat is not just the capability — it is the cost structure. The PZip compression architecture (see `if/` research project) enables materially lower evidence storage cost than uncompressed history. Achieving similar economics requires significant engineering investment in the compression layer.
 
 ### Moat 3: Recipe System
 
@@ -497,7 +497,7 @@ graph LR
 
 **[B]** The most durable competitive moats are not purely technical. They are moats where the competitive advantage is structurally aligned with the business model — where doing the right thing for the user is also the economically rational choice for the company.
 
-### 7.1 Why Token-Revenue Vendors Cannot Implement OAuth3
+### 7.1 Why Token-Revenue Incentives Can Conflict with OAuth3
 
 **[B]** The dominant AI infrastructure providers earn revenue based on token consumption. More tokens consumed → more revenue. This creates a structural incentive against any technology that reduces token consumption.
 
@@ -505,7 +505,7 @@ graph LR
 1. Recipe cache hits eliminate LLM calls entirely (70% of known workflows)
 2. Scoped delegation means the agent does only what it is authorized to do — no exploratory token expenditure
 
-**[B]** A provider whose revenue depends on token consumption cannot rationally invest in a system that reduces token consumption by 70%+. The investment would reduce their revenue. This is not a cultural problem or a capability problem — it is an incentive problem baked into their revenue model.
+**[B]** A provider whose revenue depends on token consumption may be disincentivized from aggressively investing in systems that materially reduce token consumption unless offset by alternative service revenue. This is primarily an incentive-structure issue.
 
 **[B]** Solace Browser's revenue model is the inverse: flat-rate subscription plus BYOK. Users pay for the capability (automation, consent governance, evidence, recipes), not for the token consumption. This means every recipe improvement that reduces token consumption is a margin improvement, not a revenue reduction. The incentives are aligned with the user's interest.
 
@@ -526,7 +526,7 @@ graph LR
 
 **[B]** The blocker is the revenue reset. The moment a token-revenue vendor ships a recipe system that achieves 70% hit rate, they have reduced their billed token consumption by 70% — which reduces their revenue by a proportional amount. Their investors, their financial models, their revenue expectations, and their pricing structures are all built around token consumption. They cannot rationally ship the architecture that undermines it.
 
-**[B]** This is not a temporary gap. It is permanent as long as the dominant vendors remain on token-revenue business models. The only path to resolving the misalignment is to change the business model — which requires restructuring pricing, resetting investor expectations, and accepting a revenue step-down in the transition period. Large incumbents do not do this voluntarily.
+**[B]** This is not a short-term gap. As long as dominant vendors remain on token-revenue business models, incentive misalignment can persist. Resolving the misalignment usually requires pricing and packaging changes that are non-trivial for incumbents.
 
 ---
 

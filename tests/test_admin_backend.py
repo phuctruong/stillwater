@@ -26,7 +26,7 @@ import pytest
 
 REPO_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(REPO_ROOT))
-sys.path.insert(0, str(REPO_ROOT / "cli" / "src"))
+sys.path.insert(0, str(REPO_ROOT / "src" / "cli" / "src"))
 
 # Import the app — this must succeed before any test runs
 from admin.backend.app import app  # noqa: E402
@@ -114,14 +114,16 @@ class TestJokes:
         saved = reg.load_data_file("jokes.json")
         assert saved is not None
         data = json.loads(saved)
-        assert any(j["text"] == "Persistent joke" for j in data["jokes"])
+        assert isinstance(data, list)
+        assert any(j["text"] == "Persistent joke" for j in data)
 
     def test_post_multiple_jokes_accumulate(self, client):
         c, reg, _ = client
         c.post("/api/data/jokes", json={"text": "Joke A"})
         c.post("/api/data/jokes", json={"text": "Joke B"})
         saved = json.loads(reg.load_data_file("jokes.json"))
-        texts = [j["text"] for j in saved["jokes"]]
+        assert isinstance(saved, list)
+        texts = [j["text"] for j in saved]
         assert "Joke A" in texts
         assert "Joke B" in texts
 

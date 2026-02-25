@@ -38,7 +38,7 @@ print_warning() {
 check_services() {
   if ! lsof -i :$WRAPPER_PORT >/dev/null 2>&1; then
     print_error "Claude Code wrapper not running on port $WRAPPER_PORT"
-    echo "Start it with: python3 cli/src/claude_code_wrapper.py --port $WRAPPER_PORT"
+    echo "Start it with: python3 src/cli/src/claude_code_wrapper.py --port $WRAPPER_PORT"
     return 1
   fi
 
@@ -60,7 +60,7 @@ start_services() {
   else
     echo "Starting Claude Code wrapper on port $WRAPPER_PORT..."
     cd "$PROJECT_ROOT"
-    python3 cli/src/claude_code_wrapper.py --port $WRAPPER_PORT > /tmp/wrapper.log 2>&1 &
+    python3 src/cli/src/claude_code_wrapper.py --port $WRAPPER_PORT > /tmp/wrapper.log 2>&1 &
     sleep 2
   fi
 

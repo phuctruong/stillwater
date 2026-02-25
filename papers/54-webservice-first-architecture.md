@@ -27,9 +27,9 @@ Core patterns referenced:
 - `admin/llm_portal.py` — LLM Portal on port 8788 (FastAPI, multi-provider LLM routing)
 - `admin/start-admin.sh` — Admin startup sequence
 - `admin/start-llm-portal.sh` — LLM Portal startup sequence
-- `diagrams/stillwater/23-service-registry.md` — Service registry architecture
-- `diagrams/stillwater/24-service-mesh.md` — Inter-service communication
-- `diagrams/stillwater/25-service-types.md` — Per-service endpoint catalog
+- `data/default/diagrams/stillwater/23-service-registry.md` — Service registry architecture
+- `data/default/diagrams/stillwater/24-service-mesh.md` — Inter-service communication
+- `data/default/diagrams/stillwater/25-service-types.md` — Per-service endpoint catalog
 
 ---
 
@@ -536,13 +536,13 @@ flowchart LR
 
 ## 9. Related Work in This Repo
 
-- `diagrams/stillwater/16-admin-server.md` — Admin Server endpoints and security model (Phase 1 service)
-- `diagrams/stillwater/15-llm-portal.md` — LLM Portal architecture (Phase 1 service)
-- `diagrams/stillwater/20-oauth3-flow.md` — OAuth3 token lifecycle (OAuth3 Authority design input)
-- `diagrams/stillwater/22-deployment.md` — Deployment surfaces (self-host / cloud)
-- `diagrams/stillwater/23-service-registry.md` — Service registry architecture (this paper's Phase 2)
-- `diagrams/stillwater/24-service-mesh.md` — Inter-service communication (this paper's full mesh)
-- `diagrams/stillwater/25-service-types.md` — Per-service endpoint catalog (this paper's service catalog)
+- `data/default/diagrams/stillwater/16-admin-server.md` — Admin Server endpoints and security model (Phase 1 service)
+- `data/default/diagrams/stillwater/15-llm-portal.md` — LLM Portal architecture (Phase 1 service)
+- `data/default/diagrams/stillwater/20-oauth3-flow.md` — OAuth3 token lifecycle (OAuth3 Authority design input)
+- `data/default/diagrams/stillwater/22-deployment.md` — Deployment surfaces (self-host / cloud)
+- `data/default/diagrams/stillwater/23-service-registry.md` — Service registry architecture (this paper's Phase 2)
+- `data/default/diagrams/stillwater/24-service-mesh.md` — Inter-service communication (this paper's full mesh)
+- `data/default/diagrams/stillwater/25-service-types.md` — Per-service endpoint catalog (this paper's service catalog)
 - `papers/05-software-5.0.md` — Software 5.0 paradigm (foundational context)
 - `papers/23-software-5.0-extension-economy.md` — Extension economy (economic context)
 - `NORTHSTAR.md` — Platform vision and strategic position

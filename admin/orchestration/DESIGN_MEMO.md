@@ -1,5 +1,5 @@
 # Storage Architecture Design Memo
-## stillwater Hybrid Local + Firestore Storage
+## stillwater Hybrid Local + Cloud Storage
 
 **Version:** 1.0.0
 **Date:** 2026-02-23
@@ -13,7 +13,7 @@
 | Decision | Choice | Rationale |
 |---|---|---|
 | Default storage | `~/stillwater/data/` JSONL | OSS-first, human-readable, no cloud account needed |
-| Firestore | Opt-in only | Never required for basic operation |
+| Cloud sync | Opt-in only (via solace-cli) | Never required for basic operation |
 | Format | JSONL + Mermaid | Consistent with existing wishes.jsonl, combos.jsonl |
 | Conflict resolution | Last-write-wins (UTC timestamp) | Simple, deterministic, no coordination needed |
 | Sync trigger | On every LocalStore write (async queue) | Never blocks the caller |
@@ -75,7 +75,7 @@ Symmetrical to `LearnedWish` and `LearnedCombo`. Persisted to
   "source": "llm",
   "timestamp": "2026-02-23T14:32:11.847Z",
   "session_id": "sess_a3f9c2",
-  "synced_to_firestore": false,
+  "synced_to_cloud": false,
   "sync_timestamp": null,
   "sync_attempt_count": 0
 }
@@ -100,7 +100,7 @@ mirroring `WishDB.append_learned_wish()`.
   "source": "llm",
   "timestamp": "2026-02-23T14:30:00.000Z",
   "session_id": "sess_a3f9c2",
-  "synced_to_firestore": false,
+  "synced_to_cloud": false,
   "sync_timestamp": null,
   "sync_attempt_count": 0
 }
@@ -120,7 +120,7 @@ mirroring `WishDB.append_learned_wish()`.
   "source": "llm",
   "timestamp": "2026-02-23T14:31:05.123Z",
   "session_id": "sess_a3f9c2",
-  "synced_to_firestore": false,
+  "synced_to_cloud": false,
   "sync_timestamp": null,
   "sync_attempt_count": 0
 }
@@ -132,7 +132,7 @@ mirroring `WishDB.append_learned_wish()`.
 
 | Field | Type | Immutable? | Description |
 |---|---|---|---|
-| `synced_to_firestore` | bool | No | True once successfully synced |
+| `synced_to_cloud` | bool | No | True once successfully synced |
 | `sync_timestamp` | string (UTC ISO) or null | No | When sync succeeded |
 | `sync_attempt_count` | int | No | Incremented on each attempt; capped at 5 |
 | `timestamp` | string (UTC ISO) | YES | When entity was created locally |
@@ -141,7 +141,7 @@ mirroring `WishDB.append_learned_wish()`.
 
 **Note:** The `timestamp` field is the conflict-resolution key. It is set once on
 creation and never overwritten. `sync_timestamp` is a separate field that records
-when the Firestore write succeeded.
+when the cloud write succeeded.
 
 ---
 
@@ -154,8 +154,7 @@ Located at `~/stillwater/data/sync_metadata.json`.
 {
   "schema_version": "1.0.0",
   "local_store_path": "/home/phuc/stillwater/data",
-  "firestore_project": "stillwater-prod",
-  "firestore_database": "(default)",
+  "cloud_api": "https://api.solaceagi.com",
   "last_synced_at": "2026-02-23T14:30:00.000Z",
   "last_sync_status": "success",
   "pending_sync_count": 0,
@@ -218,136 +217,25 @@ flowchart LR
 
 ---
 
-## 5. Firestore Schema
+## 5. Cloud Sync Schema
 
-### 5.1 Collection Hierarchy
+**Note:** Cloud sync is handled by solace-cli (private extension) via the
+solaceagi.com REST API. Stillwater OSS does not include any cloud SDK.
+The schema below describes the data format used by the cloud API.
+
+### 5.1 API Endpoints
 
 ```
-Firestore (project: stillwater-prod)
-│
-├── users/
-│   └── {user_id}/                          ← document (profile metadata)
-│       │
-│       ├── learned_wishes/
-│       │   └── {wish_id}/                  ← document per wish
-│       │       ├── wish_id: "oauth-integration"
-│       │       ├── keywords: ["pkce", "device-flow"]  ← array
-│       │       ├── skill_pack_hint: "coder+security"
-│       │       ├── confidence: 0.71
-│       │       ├── source: "llm"
-│       │       ├── updated_at: Timestamp
-│       │       └── session_ids: ["sess_a3f9c2"]       ← array_union accumulation
-│       │
-│       ├── learned_combos/
-│       │   └── {wish_id}/                  ← document per wish_id
-│       │       ├── wish_id: "grpc-service"
-│       │       ├── swarm: "coder"
-│       │       ├── recipe: ["prime-safety", "prime-coder", "software5.0-paradigm"]
-│       │       ├── confidence: 0.70
-│       │       ├── source: "llm"
-│       │       └── updated_at: Timestamp
-│       │
-│       ├── learned_smalltalk/
-│       │   └── {pattern_id}/               ← document per pattern
-│       │       ├── pattern_id: "joke_016"
-│       │       ├── response_template: "Heard you hit a wall..."
-│       │       ├── keywords: ["stuck", "blocked"]     ← array_union on merge
-│       │       ├── tags: ["support"]
-│       │       ├── confidence: 0.72
-│       │       ├── source: "llm"
-│       │       └── updated_at: Timestamp
-│       │
-│       └── sync_metadata/                  ← document (single doc per user)
-│           ├── last_synced_at: Timestamp
-│           ├── total_learned_wishes: 47
-│           ├── total_learned_combos: 23
-│           └── total_learned_smalltalk: 11
-│
-└── global_wishes/                          ← OPTIONAL: community-shared canonical wishes
-    └── {wish_id}/
-        ├── (same fields as users/{user_id}/learned_wishes/{wish_id})
-        └── contributed_by: [user_id_1, user_id_2]
+POST /api/v1/sync/push    <- upload learned_*.jsonl to cloud
+POST /api/v1/sync/pull    <- download learned_*.jsonl from cloud
+GET  /api/v1/sync/status  <- check sync metadata
 ```
 
-**Note:** `global_wishes/` is an optional future collection for community sharing of
-learned wishes across users. It is not required for v1 — it is listed here for
-forward-compatibility. In v1, all learning is per-user.
+### 5.2 Auth Model
 
----
-
-### 5.2 Firestore Document Examples
-
-**`users/user_phuc/learned_wishes/oauth-integration`:**
-```json
-{
-  "wish_id": "oauth-integration",
-  "keywords": ["pkce", "device-flow", "jwks"],
-  "skill_pack_hint": "coder+security",
-  "confidence": 0.82,
-  "source": "llm",
-  "updated_at": "2026-02-23T14:30:00Z",
-  "session_ids": ["sess_a3f9c2", "sess_b1d7e8"]
-}
-```
-
-**`users/user_phuc/learned_combos/grpc-service`:**
-```json
-{
-  "wish_id": "grpc-service",
-  "swarm": "coder",
-  "recipe": ["prime-safety", "prime-coder", "software5.0-paradigm"],
-  "confidence": 0.70,
-  "source": "llm",
-  "updated_at": "2026-02-23T14:31:00Z"
-}
-```
-
-**`users/user_phuc/learned_smalltalk/joke_016`:**
-```json
-{
-  "pattern_id": "joke_016",
-  "response_template": "Heard you hit a wall with {topic}. Coffee break?",
-  "keywords": ["stuck", "blocked", "frustrated", "help"],
-  "tags": ["support", "encouragement"],
-  "confidence": 0.72,
-  "source": "llm",
-  "updated_at": "2026-02-23T14:32:00Z"
-}
-```
-
----
-
-### 5.3 IAM / Auth Model
-
-| Role | Principal | Scope |
-|---|---|---|
-| `roles/datastore.user` | Service account `stillwater-sync@<project>.iam.gserviceaccount.com` | Full read/write to Firestore database |
-| Application Default Credentials | Developer local machine | Used during development (no service account file needed if `gcloud auth application-default login` has been run) |
-
-**Credential loading order (FirestoreStore):**
-1. `GOOGLE_APPLICATION_CREDENTIALS` env var (path to service account JSON)
-2. `STILLWATER_FIRESTORE_CREDENTIALS` env var (alternative env var name)
-3. Application Default Credentials (gcloud login)
-4. If none found: raise `FirestoreCredentialError` and fall back to local-only mode
-
-**Firestore Security Rules (single-user OSS mode):**
-```
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    // Only authenticated service account can read/write
-    match /users/{userId}/{document=**} {
-      allow read, write: if request.auth != null
-                         && request.auth.uid == userId;
-    }
-    // global_wishes: any authenticated user can read, only admin can write
-    match /global_wishes/{wishId} {
-      allow read: if request.auth != null;
-      allow write: if false; // Admin SDK only (server-side)
-    }
-  }
-}
-```
+Authentication uses API keys (`sw_sk_` prefix) generated at solaceagi.com.
+Keys are stored locally in `data/settings.md` (gitignored) and sent as
+Bearer tokens to the cloud API.
 
 ---
 
@@ -379,12 +267,13 @@ class StorageBackend(ABC):
 - `save_learned_wish(entry)` → appends JSON line to `data/intent/learned_wishes.jsonl`, then regenerates Mermaid if this is a new wish_id
 - Thread safety via `threading.Lock()` per file (same pattern as existing WishDB)
 
-**FirestoreStore** — reads/writes Firestore (lazy import: `from google.cloud import firestore`):
-- `save_learned_wish(entry)` → `db.collection('users').document(user_id).collection('learned_wishes').document(entry.wish_id).set(data, merge=True)` using `array_union` for keywords field
-- Never called unless `firestore.enabled: true` in config
+**CloudStore** — handled by solace-cli (private extension):
+- Cloud sync is NOT part of stillwater OSS
+- solace-cli extends stillwater with cloud push/pull via solaceagi.com REST API
+- Never called unless `cloud_sync: true` in config AND solace-cli is installed
 
-**HybridStore** — delegates to both:
-- All `save_*()` calls: write to LocalStore first (synchronous), then enqueue FirestoreStore write to `asyncio.Queue` (non-blocking)
+**HybridStore** — delegates to both (when solace-cli is present):
+- All `save_*()` calls: write to LocalStore first (synchronous), then enqueue cloud write to `asyncio.Queue` (non-blocking)
 - All `load_*()` calls: read from LocalStore only (local is authoritative source)
 - `sync_worker()` background coroutine drains the queue
 
@@ -395,30 +284,30 @@ class StorageBackend(ABC):
 ```
 Startup sequence:
   1. Read llm_config.yaml (or ~/.stillwater/config.yaml)
-  2. Check firestore.enabled (default: false)
-  3. If firestore.enabled = false:
+  2. Check cloud_sync (default: false)
+  3. If cloud_sync = false:
        backend = LocalStore(base_dir="~/stillwater/data/")
-  4. If firestore.enabled = true:
-       4a. Check GOOGLE_APPLICATION_CREDENTIALS (or STILLWATER_FIRESTORE_CREDENTIALS)
-       4b. If credentials found:
-             firestore_store = FirestoreStore(project=config.firestore.project)
-             backend = HybridStore(local=LocalStore(...), remote=firestore_store)
-       4c. If credentials NOT found:
-             log WARNING: "Firestore enabled but no credentials found, falling back to local-only"
+  4. If cloud_sync = true:
+       4a. Check if solace-cli is installed
+       4b. If solace-cli found + API key configured:
+             cloud_store = CloudStore(api_url=config.cloud_api)
+             backend = HybridStore(local=LocalStore(...), remote=cloud_store)
+       4c. If solace-cli NOT found:
+             log WARNING: "Cloud sync enabled but solace-cli not installed, falling back to local-only"
              backend = LocalStore(base_dir="~/stillwater/data/")
   5. Inject backend into WishDB, ComboDB, SmallTalkDB via constructor parameter
 ```
 
 **ASCII Decision Tree:**
 ```
-firestore.enabled?
+cloud_sync?
 ├── NO  → LocalStore (~/stillwater/data/)
 └── YES
-    └── credentials available?
+    └── solace-cli + API key available?
         ├── NO  → LocalStore (warning logged)
         └── YES → HybridStore
                   ├── Primary: LocalStore
-                  └── Async backup: FirestoreStore
+                  └── Async backup: CloudStore (solaceagi.com API)
 ```
 
 ---
@@ -439,9 +328,9 @@ caller calls save_learned_wish(entry)
   └─ Step 2 (async, non-blocking): enqueue to sync_queue
       └─ sync_worker() (background task):
           ├─ Dequeue entry
-          ├─ FirestoreStore.save_learned_wish(entry)
-          │   ├─ set(merge=True) with array_union for keyword arrays
-          │   ├─ On success: update local JSONL entry's synced_to_firestore=true
+          ├─ CloudStore.save_learned_wish(entry)
+          │   ├─ POST to cloud API with merge semantics for keyword arrays
+          │   ├─ On success: update local JSONL entry's synced_to_cloud=true
           │   └─ On failure: retry with exponential backoff (1s, 2s, 4s, 8s, 60s max)
           │       ├─ After 5 failures: mark sync_attempt_count=5, log to sync_metadata.failed_sync_entries
           │       └─ Local data is NOT affected — it is safe
@@ -453,13 +342,13 @@ caller calls save_learned_wish(entry)
 ```
 HybridStore.__init__():
   1. Load LocalStore.get_sync_metadata() → local_meta
-  2. Load FirestoreStore.get_sync_metadata() → remote_meta
+  2. Load CloudStore.get_sync_metadata() → remote_meta
   3. If remote_meta.last_synced_at > local_meta.last_synced_at:
-       Pull all learned entities from Firestore
+       Pull all learned entities from cloud API
        For each pulled entity:
          If local timestamp < remote timestamp: overwrite local JSONL entry
          Else: keep local (local is newer)
-  4. Flush any pending local writes to Firestore (clear failed_sync_entries)
+  4. Flush any pending local writes to cloud (clear failed_sync_entries)
 ```
 
 ### 8.3 Conflict Resolution Algorithm
@@ -493,12 +382,12 @@ canonical update to `wishes.jsonl` in the repo.
 States: PENDING → IN_FLIGHT → SUCCESS | RETRY | EXHAUSTED
 
 PENDING:   Entry is in sync_queue, not yet attempted
-IN_FLIGHT: FirestoreStore.save_*() called, waiting for response
-SUCCESS:   Firestore write succeeded → synced_to_firestore=true
-RETRY:     Firestore error (UNAVAILABLE, DEADLINE_EXCEEDED, 5xx)
+IN_FLIGHT: CloudStore.save_*() called, waiting for response
+SUCCESS:   Cloud write succeeded → synced_to_cloud=true
+RETRY:     Cloud API error (UNAVAILABLE, DEADLINE_EXCEEDED, 5xx)
            → sleep(2^attempt seconds, max 60s) → back to IN_FLIGHT
 EXHAUSTED: attempt_count >= 5 → logged to failed_sync_entries
-           → entry stays in local JSONL with synced_to_firestore=false
+           → entry stays in local JSONL with synced_to_cloud=false
            → periodic background retry every 10 minutes (never gives up fully)
 ```
 
@@ -511,7 +400,7 @@ EXHAUSTED: attempt_count >= 5 → logged to failed_sync_entries
 | `save_learned_wish()` | After LLM override in Phase 2 | Immediate async enqueue |
 | `save_learned_combo()` | After LLM override in Phase 3 | Immediate async enqueue |
 | `save_learned_smalltalk()` | After LLM override in Phase 1 | Immediate async enqueue |
-| Startup | App initialization | Pull from Firestore if remote is newer |
+| Startup | App initialization | Pull from cloud if remote is newer |
 | Manual | `stillwater sync` CLI command (future) | Force-flush sync queue |
 | Periodic | Background timer, every 10 min | Retry EXHAUSTED entries |
 
@@ -532,17 +421,17 @@ EXHAUSTED: attempt_count >= 5 → logged to failed_sync_entries
 │
 ├── smalltalk/
 │   ├── learned_smalltalk.jsonl
-│   │   → {"pattern_id":"joke_016","response_template":"Heard you hit a wall...","keywords":["stuck","blocked"],"tags":["support"],"confidence":0.72,"source":"llm","timestamp":"2026-02-23T14:32:11Z","session_id":"sess_a3f9c2","synced_to_firestore":false,"sync_timestamp":null,"sync_attempt_count":0}
+│   │   → {"pattern_id":"joke_016","response_template":"Heard you hit a wall...","keywords":["stuck","blocked"],"tags":["support"],"confidence":0.72,"source":"llm","timestamp":"2026-02-23T14:32:11Z","session_id":"sess_a3f9c2","synced_to_cloud":false,"sync_timestamp":null,"sync_attempt_count":0}
 │   └── banter_queue.db            ← SQLite, session-scoped banter queue (optional)
 │
 ├── intent/
 │   └── learned_wishes.jsonl
-│       → {"wish_id":"oauth-integration","keywords":["pkce","device-flow"],"skill_pack_hint":"coder+security","confidence":0.71,"source":"llm","timestamp":"2026-02-23T14:30:00Z","session_id":"sess_a3f9c2","synced_to_firestore":true,"sync_timestamp":"2026-02-23T14:30:05Z","sync_attempt_count":1}
-│       → {"wish_id":"grpc-service","keywords":["grpc","protobuf","proto"],"skill_pack_hint":"coder","confidence":0.68,"source":"llm","timestamp":"2026-02-23T14:31:00Z","session_id":"sess_b1d7e8","synced_to_firestore":false,"sync_timestamp":null,"sync_attempt_count":0}
+│       → {"wish_id":"oauth-integration","keywords":["pkce","device-flow"],"skill_pack_hint":"coder+security","confidence":0.71,"source":"llm","timestamp":"2026-02-23T14:30:00Z","session_id":"sess_a3f9c2","synced_to_cloud":true,"sync_timestamp":"2026-02-23T14:30:05Z","sync_attempt_count":1}
+│       → {"wish_id":"grpc-service","keywords":["grpc","protobuf","proto"],"skill_pack_hint":"coder","confidence":0.68,"source":"llm","timestamp":"2026-02-23T14:31:00Z","session_id":"sess_b1d7e8","synced_to_cloud":false,"sync_timestamp":null,"sync_attempt_count":0}
 │
 ├── execute/
 │   └── learned_combos.jsonl
-│       → {"wish_id":"grpc-service","swarm":"coder","recipe":["prime-safety","prime-coder","software5.0-paradigm"],"confidence":0.70,"source":"llm","timestamp":"2026-02-23T14:31:05Z","session_id":"sess_b1d7e8","synced_to_firestore":false,"sync_timestamp":null,"sync_attempt_count":0}
+│       → {"wish_id":"grpc-service","swarm":"coder","recipe":["prime-safety","prime-coder","software5.0-paradigm"],"confidence":0.70,"source":"llm","timestamp":"2026-02-23T14:31:05Z","session_id":"sess_b1d7e8","synced_to_cloud":false,"sync_timestamp":null,"sync_attempt_count":0}
 │
 └── recipes/
     ├── recipe.oauth-integration.mermaid    ← generated, display-only
@@ -574,7 +463,7 @@ EXHAUSTED: attempt_count >= 5 → logged to failed_sync_entries
 | Reversible | YES | Design only, no code written. Can be revised at zero cost. |
 | Deterministic | YES | File paths, sync trigger rules, conflict resolution all specified exactly |
 | No invented facts | YES | All field names derived from existing models.py files |
-| No Firestore required for OSS | YES | LocalStore has zero cloud SDK imports |
+| No cloud SDK required for OSS | YES | LocalStore has zero cloud SDK imports |
 | LearnedSmallTalk symmetric | YES | Same 7 base fields + 3 sync fields as LearnedWish/LearnedCombo |
 | Mermaid is write-only | YES | Explicitly stated in Section 4 and Section 7 |
 
@@ -582,4 +471,4 @@ EXHAUSTED: attempt_count >= 5 → logged to failed_sync_entries
 
 ---
 
-*EXIT_PASS: All 5 DREAM/FORECAST/DECIDE/ACT/VERIFY sections complete. No contradictions. No invented facts. No Firestore required for OSS operation. Mermaid is write-only. LearnedSmallTalk is symmetric. Design is independently reviewable.*
+*EXIT_PASS: All 5 DREAM/FORECAST/DECIDE/ACT/VERIFY sections complete. No contradictions. No invented facts. No cloud SDK required for OSS operation. Mermaid is write-only. LearnedSmallTalk is symmetric. Design is independently reviewable.*

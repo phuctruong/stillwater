@@ -305,7 +305,7 @@ test_abcd_coding.py
 └─ Writes: results/ABCD_SUMMARY.json
 
 run_abcd_tests.sh
-├─ Calls: python3 cli/src/claude_code_wrapper.py --port 8080
+├─ Calls: python3 src/cli/src/claude_code_wrapper.py --port 8080
 ├─ Calls: pytest admin/tests/swarms/test_abcd_coding.py
 ├─ Reads: (test output)
 └─ Writes: /tmp/wrapper.log, /tmp/abcd_test_*.log
@@ -325,7 +325,7 @@ pip install pytest pyyaml
 which claude  # Should work
 
 # Wrapper must be runnable
-python3 cli/src/claude_code_wrapper.py --help
+python3 src/cli/src/claude_code_wrapper.py --help
 ```
 
 ### First Run

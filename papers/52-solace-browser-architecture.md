@@ -251,7 +251,7 @@ The structural difference is significant. OAuth2 grants persistent access. OAuth
 - OAuth3 requires a step-up authentication protocol for scope escalation.
 - OAuth3 requires platforms to accept OAuth3-style agent tokens — which requires Solace Browser to be the first mover in a standards negotiation.
 
-**[C]** The deepest moat: token-revenue vendors (OpenAI, Anthropic, Google) structurally cannot implement OAuth3. OAuth3's recipe system reduces token usage by 70%+ at full recipe hit rate. Implementing OAuth3 cannibalizes the vendors' own token revenue. This is not a strategic choice — it is a structural constraint. An LLM vendor that implements a 70% token reduction system is destroying its own primary revenue stream.
+**[C]** A key moat is incentive alignment: token-revenue vendors may be disincentivized from prioritizing OAuth3 adoption because OAuth3's recipe system can reduce token usage materially at high hit rates. This is an incentive-structure issue, not just a technical one.
 
 **[A]** `OAUTH3-WHITEPAPER.md` contains the full protocol specification. Phase 1.5 (1,466 tests, rung 65537) verified the core OAuth3 implementation.
 
@@ -282,9 +282,9 @@ The structural difference is significant. OAuth2 grants persistent access. OAuth
 
 **[C]** The 40K lines of Python represent approximately 18-24 months of competitive moat — the time required for a well-resourced competitor to rebuild the same functionality. This is a durable moat that compounds with use: every edge case the custom engine handles is one more behavior that competitors' standard wrappers do not handle.
 
-### 3.5 Moat #4: PZip — Infinite Replay at $0.00032/User/Month
+### 3.5 Moat #4: PZip — Infinite Replay with Compression Economics
 
-**[B]** PZip is a proprietary compression engine that achieves industry-leading compression ratios on browser history, making full-history storage economically negligible.
+**[B]** PZip is a specialized compression engine for browser history, making full-history storage materially more economical.
 
 **[A]** The economic impact at scale: `10,000 users × 1,000 pages/user = 7.3TB raw → ~$3.20/month total = $0.00032/user/month.` **[C]** This makes full-history storage economically negligible — which means Solace Browser can offer unlimited browsing history at no meaningful additional cost. No competitor offers this.
 
@@ -460,7 +460,7 @@ graph TB
 
 **No Recipe System**: Most tools re-execute from scratch on every task invocation. There is no concept of "I have seen this task before; here is the deterministic replay." Every task costs full LLM inference. This is economically untenable at scale.
 
-**No PZip**: No proprietary compression layer, no cost-effective long-term storage of agent history.
+**No PZip**: No specialized compression layer, no cost-effective long-term storage of agent history.
 
 **No Twin Architecture**: Most tools run wherever they are deployed and do not synchronize between a local browser and a cloud browser. Fingerprint matching between environments is not addressed.
 
@@ -991,5 +991,5 @@ We made five falsifiable predictions: recipe hit rate compounds, PZip storage sc
 
 *Next papers in this series:*
 - *Paper #53: The OAuth3 Consent Protocol — Formal Specification and Reference Implementation*
-- *Paper #54: PZip Architecture — Proprietary Compression and the Economics of Infinite Replay*
+- *Paper #54: PZip Architecture — Compression and the Economics of Infinite Replay*
 - *Paper #55: Recipe System Theory — PM Triplets, SHA256 Caching, and the Compounding Intelligence Loop*

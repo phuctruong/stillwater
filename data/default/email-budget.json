@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "description": "Default email triage session budget. Hard limits, no fallback.",
+  "limits": {
+    "read": 200,
+    "label": 50,
+    "archive": 10,
+    "send": 0,
+    "delete": 0
+  }
+}
+

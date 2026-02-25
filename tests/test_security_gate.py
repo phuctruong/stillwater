@@ -10,10 +10,10 @@ Tests:
   6.  behavior_hash.json format validation (schema + consensus flag)
   7.  security_scan.json format validation
   8.  No credentials in repr/str outputs (admin/session_manager.py)
-  9.  No .py file in store/ imports os.system directly
+  9.  No .py file in src/store/ imports os.system directly
   10. Skill files contain required header fields
   11. All Python production files compile without errors
-  12. No eval() in store/ at all
+  12. No eval() in src/store/ at all
   13. No hardcoded AWS keys in any production file
   14. behavior_hash.json has 3 matching seeds
   15. security_scan.json status is GREEN or file exists with correct schema
@@ -45,12 +45,12 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 PROD_DIRS = [
-    REPO_ROOT / "store",
-    REPO_ROOT / "cli" / "src" / "stillwater",
+    REPO_ROOT / "src" / "store",
+    REPO_ROOT / "src" / "cli" / "src" / "stillwater",
     REPO_ROOT / "admin",
 ]
 
-SKILLS_DIR = REPO_ROOT / "skills"
+SKILLS_DIR = REPO_ROOT / "data" / "default" / "skills"
 EVIDENCE_DIR = REPO_ROOT / "evidence"
 
 # Canonical evidence files
@@ -165,10 +165,10 @@ class TestNoHardcodedSecrets:
 class TestEvalSafety:
 
     def test_no_unsandboxed_eval_in_store(self):
-        """store/ must contain zero eval() calls."""
-        store_dir = REPO_ROOT / "store"
+        """src/store/ must contain zero eval() calls."""
+        store_dir = REPO_ROOT / "src" / "store"
         if not store_dir.exists():
-            pytest.skip("store/ directory not present")
+            pytest.skip("src/store/ directory not present")
         violations = []
         for path in sorted(store_dir.rglob("*.py")):
             if "__pycache__" in path.parts:
@@ -177,13 +177,13 @@ class TestEvalSafety:
             for i, line in enumerate(src.splitlines(), 1):
                 if _EVAL_ANY_RE.search(line):
                     violations.append(f"{path.relative_to(REPO_ROOT)}:{i}: {line.strip()[:80]}")
-        assert not violations, "eval() found in store/:\n" + "\n".join(violations)
+        assert not violations, "eval() found in src/store/:\n" + "\n".join(violations)
 
     def test_cli_eval_is_sandboxed(self):
-        """The only eval() in cli/ must use the sandboxed pattern (empty __builtins__)."""
-        cli_src = REPO_ROOT / "cli" / "src" / "stillwater"
+        """The only eval() in src/cli/ must use the sandboxed pattern (empty __builtins__)."""
+        cli_src = REPO_ROOT / "src" / "cli" / "src" / "stillwater"
         if not cli_src.exists():
-            pytest.skip("cli/src/stillwater not present")
+            pytest.skip("src/cli/src/stillwater not present")
         violations = []
         for path in sorted(cli_src.rglob("*.py")):
             if "__pycache__" in path.parts:
@@ -198,7 +198,7 @@ class TestEvalSafety:
                                 f"{path.relative_to(REPO_ROOT)}:{i}: {line.strip()[:80]}"
                             )
         assert not violations, (
-            "Unsandboxed eval() found in cli/ (must use empty __builtins__ or # noqa):\n"
+            "Unsandboxed eval() found in src/cli/ (must use empty __builtins__ or # noqa):\n"
             + "\n".join(violations)
         )
 
@@ -210,6 +210,8 @@ class TestEvalSafety:
         violations = []
         for path in sorted(admin_dir.rglob("*.py")):
             if "__pycache__" in path.parts:
+                continue
+            if "tests" in path.parts:
                 continue
             if "test_" in path.name:
                 continue  # skip test files
@@ -240,10 +242,10 @@ class TestOsSystemSafety:
         )
 
     def test_store_does_not_import_os_system_directly(self):
-        """store/ should not call os.system() at all."""
-        store_dir = REPO_ROOT / "store"
+        """src/store/ should not call os.system() at all."""
+        store_dir = REPO_ROOT / "src" / "store"
         if not store_dir.exists():
-            pytest.skip("store/ directory not present")
+            pytest.skip("src/store/ directory not present")
         violations = []
         for path in sorted(store_dir.rglob("*.py")):
             if "__pycache__" in path.parts:
@@ -252,7 +254,7 @@ class TestOsSystemSafety:
             for i, line in enumerate(src.splitlines(), 1):
                 if re.search(r'\bos\.system\s*\(', line):
                     violations.append(f"{path.relative_to(REPO_ROOT)}:{i}: {line.strip()[:80]}")
-        assert not violations, "os.system() found in store/:\n" + "\n".join(violations)
+        assert not violations, "os.system() found in src/store/:\n" + "\n".join(violations)
 
 
 # ===========================================================================
@@ -326,8 +328,8 @@ class TestEvidenceStructure:
     def test_behavior_hash_evidence_exists(self):
         """At least one of the behavior hash files must exist."""
         assert BEHAVIOR_HASH_JSON.exists() or BEHAVIOR_HASH_TXT.exists(), (
-            "No behavior hash file found. Run scripts/behavior_hash.py or "
-            "scripts/generate_behavior_hash.py to generate evidence/behavior_hash.json"
+            "No behavior hash file found. Run src/scripts/behavior_hash.py or "
+            "src/scripts/generate_behavior_hash.py to generate evidence/behavior_hash.json"
         )
 
 
@@ -341,7 +343,7 @@ class TestBehaviorHashJson:
     @pytest.fixture(scope="class")
     def hash_data(self):
         if not BEHAVIOR_HASH_JSON.exists():
-            pytest.skip("evidence/behavior_hash.json not yet generated (run scripts/behavior_hash.py)")
+            pytest.skip("evidence/behavior_hash.json not yet generated (run src/scripts/behavior_hash.py)")
         return json.loads(BEHAVIOR_HASH_JSON.read_text(encoding="utf-8"))
 
     def test_has_required_keys(self, hash_data):
@@ -407,7 +409,7 @@ class TestSecurityScanJson:
     @pytest.fixture(scope="class")
     def scan_data(self):
         if not SECURITY_SCAN_JSON.exists():
-            pytest.skip("evidence/security_scan.json not yet generated (run scripts/security_scan.py)")
+            pytest.skip("evidence/security_scan.json not yet generated (run src/scripts/security_scan.py)")
         return json.loads(SECURITY_SCAN_JSON.read_text(encoding="utf-8"))
 
     def test_has_required_keys(self, scan_data):

@@ -20,7 +20,7 @@ The distinction matters precisely:
 - **Part 11 compliant** — "we have completed the compliance checklist." The customer's responsibility, not the vendor's architecture.
 - **Part 11 Architected** — every component maps to a Part 11 requirement. The audit trail is not a feature; it is the load-bearing wall.
 
-SolaceAGI is Part 11 Architected. This paper explains what that means, why it required building OAuth3, why PZip browsing history makes ALCOA-O economically viable for the first time, and why competitors cannot replicate this architecture even if they wanted to.
+SolaceAGI is Part 11 Architected. This paper explains what that means, why it required building OAuth3, and why PZip browsing history makes ALCOA-O economically viable at practical operating scale.
 
 ---
 
@@ -69,35 +69,35 @@ The mapping is not approximate. The architecture was designed with this table in
 
 ---
 
-## 4. The PZip Secret: Original Records at Economic Scale
+## 4. PZip for Original Records at Economic Scale
 
 The "O" in ALCOA stands for Original. In clinical trials, "original" means the source document — the form the nurse filled out at the bedside, not a transcription, not a summary, not a screenshot of a summary. The original.
 
 For AI agents browsing the web, "original" means the full HTML page the agent saw at the moment of the action — not a description of what it saw, not a compressed thumbnail, not a text extraction. The actual page, preserved in its full fidelity.
 
-Until PZip, this was economically impractical. A standard full-page screenshot runs approximately 800 KB to 2 MB per page. Storing 30 browsing actions per day per user at standard S3 pricing costs roughly $146 per user per month in raw storage alone — before bandwidth, before retrieval, before redundancy. No consumer-grade AI agent product can carry that cost.
+Until PZip, this was often economically impractical at scale. A standard full-page screenshot runs approximately 800 KB to 2 MB per page, and high-frequency retention can quickly become cost-heavy before bandwidth, retrieval, and redundancy overheads.
 
-PZip solves this through a proprietary compression approach that achieves industry-leading compression ratios on HTML content, with a never-worse fallback guarantee. The result: full HTML browsing history at approximately $0.00032 per user per month.
+PZip addresses this through a specialized compression approach for HTML content, with a never-worse fallback guarantee. The result is materially improved storage economics for full HTML browsing history.
 
 The implication is not merely economic. The implication is that ALCOA-O compliance — storing original records — becomes viable at scale for the first time. SolaceAGI can store what the agent actually saw. Not a summary. Not a reconstructed description. The original record.
 
-Competitors using screenshots face a hard economic ceiling. Competitors using text extractions cannot produce the original record at all. Only SolaceAGI can satisfy ALCOA-O at production scale.
+Screenshot-only approaches face economic and evidentiary limits, and text-extraction-only approaches cannot preserve original records. ALCOA-O workflows require full-fidelity record retention.
 
 ---
 
-## 5. Why Competitors Cannot Follow
+## 5. Why Replication Is Non-Trivial
 
 The regulatory moat is not a patent. It is a structural consequence of business model alignment.
 
-**Token-revenue vendors cannot implement OAuth3.**
+**Token-revenue incentives can conflict with OAuth3 adoption.**
 
-OAuth3 is a delegated agency authorization protocol that scopes AI agent actions to the minimum necessary. By construction, OAuth3 reduces the number of LLM calls an agent makes — it replaces speculative multi-step reasoning with verified, cached, scoped action tokens. For a vendor whose revenue is priced per token, OAuth3 is self-destructive. OpenAI cannot implement it without cannibalizing their core revenue stream. Anthropic cannot implement it for the same reason. The economic incentive runs directly counter to the governance architecture.
+OAuth3 is a delegated agency authorization protocol that scopes AI agent actions to the minimum necessary. By construction, OAuth3 can reduce the number of LLM calls an agent makes by replacing speculative multi-step reasoning with verified, cached, scoped action tokens. For vendors priced primarily on token volume, this can create incentive tension unless offset by governance/compliance service value.
 
 This is not a critique of those vendors' intentions. It is a structural observation. The market incentive to maximize token consumption is incompatible with the architectural discipline required for verifiable, scope-bounded agent delegation.
 
-**Competitors cannot store original records.**
+**Original-record retention requires dedicated infrastructure.**
 
-PZip's proprietary compression enables storage economics that make ALCOA-O compliance economically viable at scale. Any competitor attempting to match these storage economics on HTML content must either build an equivalent system from scratch — at significant engineering cost — or accept storage costs that make ALCOA-O compliance economically unviable.
+PZip's compression approach enables storage economics that make ALCOA-O workflows more viable at scale. Any team trying to match these economics on HTML content must invest in dedicated infrastructure or accept materially higher storage costs.
 
 **Governance adds friction; friction reduces conversions; conversions drive revenue.**
 

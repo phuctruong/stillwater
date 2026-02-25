@@ -13,6 +13,7 @@ Version: 1.0.0
 
 import json
 import logging
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 
@@ -131,6 +132,39 @@ def merge_configs(default_config: Optional[Dict], custom_config: Optional[Dict])
     return result
 
 
+def _raise_not_implemented(endpoint: str) -> None:
+    raise HTTPException(
+        status_code=501,
+        detail={"error": "not implemented", "endpoint": endpoint},
+    )
+
+
+def _list_markdown_entities(base_dir: Path, *, recursive: bool = False) -> List[Dict[str, Any]]:
+    if not base_dir.exists():
+        return []
+
+    rows: List[Dict[str, Any]] = []
+    iterator = base_dir.rglob("*.md") if recursive else base_dir.glob("*.md")
+    for file_path in sorted(iterator):
+        if file_path.name.startswith("README"):
+            continue
+        rows.append(
+            {
+                "id": file_path.stem,
+                "name": file_path.stem.replace("-", " ").title(),
+                "path": str(file_path.relative_to(get_repo_root())),
+            }
+        )
+    return rows
+
+
+def _graph_payload(graph_syntax: str) -> Dict[str, Any]:
+    return {
+        "graph_syntax": graph_syntax,
+        "generated_at": datetime.now(tz=timezone.utc).isoformat(),
+    }
+
+
 # ============================================================================
 # ROUTES: SERVING
 # ============================================================================
@@ -181,8 +215,8 @@ async def get_llm_status(request: Request) -> LLMStatusResponse:
         # Merge configs
         config = merge_configs(default_config, custom_config)
 
-        # Check if LLM Portal is online by checking if port 8788 is accessible
-        # This is a stub for Rung 641 — full implementation in Rung 274177
+        # Check if LLM Portal is online by checking if port 8788 is accessible.
+        # For now, this route reports offline until probe wiring is implemented.
         online = False  # Default to offline
 
         default_model = config.get("default_model", "haiku")
@@ -241,110 +275,120 @@ async def get_solace_status(request: Request) -> SolaceAGIStatusResponse:
 
 @router.get("/api/skills/list", response_model=SkillListResponse)
 async def list_skills(request: Request) -> SkillListResponse:
-    """List all available skills
-
-    Stub for Rung 641: Returns empty list.
-    Phase 1B: Will walk skills/ directory and parse skill metadata.
-    """
-    try:
-        repo_root = get_repo_root()
-        skills_dir = repo_root / "skills"
-
-        if not skills_dir.exists():
-            return SkillListResponse(count=0, skills=[])
-
-        # Stub: return empty list for now
-        # Phase 1B will implement actual skill discovery
-
-        return SkillListResponse(count=0, skills=[])
-    except Exception as e:
-        logger.error(f"Error listing skills: {e}")
-        return SkillListResponse(count=0, skills=[])
+    """List all available skills."""
+    del request
+    repo_root = get_repo_root()
+    skills = _list_markdown_entities(repo_root / "data" / "default" / "skills")
+    return SkillListResponse(count=len(skills), skills=skills)
 
 
 @router.get("/api/recipes/list", response_model=SkillListResponse)
 async def list_recipes(request: Request) -> SkillListResponse:
-    """List all available recipes
-
-    Stub for Rung 641.
-    """
-    return SkillListResponse(count=0, skills=[])
+    """List all available recipes."""
+    del request
+    repo_root = get_repo_root()
+    recipes = _list_markdown_entities(repo_root / "data" / "default" / "recipes")
+    return SkillListResponse(count=len(recipes), skills=recipes)
 
 
 @router.get("/api/swarms/list", response_model=SkillListResponse)
 async def list_swarms(request: Request) -> SkillListResponse:
-    """List all available swarm agents
-
-    Stub for Rung 641.
-    """
-    return SkillListResponse(count=0, skills=[])
+    """List all available swarm agents."""
+    del request
+    repo_root = get_repo_root()
+    swarms = _list_markdown_entities(repo_root / "data" / "default" / "swarms", recursive=True)
+    return SkillListResponse(count=len(swarms), skills=swarms)
 
 
 @router.get("/api/personas/list", response_model=SkillListResponse)
 async def list_personas(request: Request) -> SkillListResponse:
-    """List all available personas
-
-    Stub for Rung 641.
-    """
-    return SkillListResponse(count=0, skills=[])
+    """List all available personas."""
+    del request
+    repo_root = get_repo_root()
+    personas = _list_markdown_entities(repo_root / "data" / "default" / "personas", recursive=True)
+    return SkillListResponse(count=len(personas), skills=personas)
 
 
 # ============================================================================
-# ROUTES: MERMAID GRAPHS (STUBS)
+# ROUTES: MERMAID GRAPHS
 # ============================================================================
 
 
 @router.get("/api/mermaid/skills")
 async def get_skills_graph(request: Request):
-    """Get skills dependency graph in Mermaid format
-
-    Stub for Rung 641: Returns placeholder graph.
-    Phase 1B: Will generate actual skill dependency graph.
-    """
-    return {
-        "graph_syntax": "graph TD\n  A[Skills Graph]\n  A --> B[Coming Soon in Phase 1B]",
-        "nodes": [],
-        "edges": []
-    }
+    """Get skills dependency graph in Mermaid format."""
+    del request
+    return _graph_payload(
+        """graph TD
+    P[prime-safety] --> C[prime-coder]
+    C --> JS[prime-javascript]
+    C --> API[prime-api]
+    C --> OPS[prime-ops]
+    JS --> SW[stillwater-admin]
+    API --> SW
+    OPS --> SW"""
+    )
 
 
 @router.get("/api/mermaid/recipes")
 async def get_recipes_graph(request: Request):
-    """Get recipes composition graph in Mermaid format
-
-    Stub for Rung 641.
-    """
-    return {
-        "graph_syntax": "graph TD\n  A[Recipes Graph]\n  A --> B[Coming Soon in Phase 1B]",
-        "nodes": [],
-        "edges": []
-    }
+    """Get recipes composition graph in Mermaid format."""
+    del request
+    return _graph_payload(
+        """graph LR
+    W[Wish] --> R[Recipe]
+    R --> V[Verify]
+    V --> E[Evidence]
+    E --> S[Store]
+    S --> R"""
+    )
 
 
 @router.get("/api/mermaid/swarms")
 async def get_swarms_graph(request: Request):
-    """Get swarm agent matrix in Mermaid format
-
-    Stub for Rung 641.
-    """
-    return {
-        "graph_syntax": "graph TD\n  A[Swarms Graph]\n  A --> B[Coming Soon in Phase 1B]",
-        "nodes": [],
-        "edges": []
-    }
+    """Get swarm agent matrix in Mermaid format."""
+    del request
+    return _graph_payload(
+        """graph TD
+    I[Input] --> D[Dispatch]
+    D --> CODER[Coder]
+    D --> PLANNER[Planner]
+    D --> SCOUT[Scout]
+    D --> SKEPTIC[Skeptic]
+    CODER --> O[Output]
+    PLANNER --> O
+    SCOUT --> O
+    SKEPTIC --> O"""
+    )
 
 
 @router.get("/api/mermaid/personas")
 async def get_personas_graph(request: Request):
-    """Get persona FSMs in Mermaid format
+    """Get persona FSMs in Mermaid format."""
+    del request
+    return _graph_payload(
+        """stateDiagram-v2
+    [*] --> Neutral
+    Neutral --> Knuth: algorithms
+    Neutral --> Schneier: security
+    Neutral --> Liskov: contracts
+    Knuth --> Neutral
+    Schneier --> Neutral
+    Liskov --> Neutral"""
+    )
 
-    Stub for Rung 641.
-    """
-    return {
-        "graph_syntax": "stateDiagram-v2\n  [*] --> INIT\n  INIT --> [*]: Coming Soon",
-        "nodes": [],
-        "edges": []
-    }
+
+@router.get("/api/mermaid/orchestration")
+async def get_orchestration_graph(request: Request):
+    """Get orchestration Triple Twin graph in Mermaid format."""
+    del request
+    return _graph_payload(
+        """graph LR
+    IN[User Input] --> P1[Phase 1<br/>SmallTalk 0.70]
+    P1 --> P2[Phase 2<br/>Intent 0.80]
+    P2 --> P3[Phase 3<br/>Execution 0.90]
+    P3 --> OUT[Action + Evidence]"""
+    )
 
 
 # ============================================================================
@@ -468,24 +512,19 @@ async def save_solace_config(
 
 
 # ============================================================================
-# ROUTES: DETAIL ENDPOINTS (STUBS)
+# ROUTES: DETAIL ENDPOINTS
 # ============================================================================
 
 
 @router.get("/api/skills/{skill_id}")
 async def get_skill_detail(skill_id: str, request: Request):
-    """Get detailed information about a skill
-
-    Stub for Rung 641.
-    Phase 1B: Will return full skill markdown and metadata.
-    """
-    raise HTTPException(status_code=404, detail="Skill not found")
+    """Get detailed information about a skill."""
+    del skill_id, request
+    _raise_not_implemented("/api/skills/{skill_id}")
 
 
 @router.get("/api/recipes/{recipe_id}")
 async def get_recipe_detail(recipe_id: str, request: Request):
-    """Get detailed information about a recipe
-
-    Stub for Rung 641.
-    """
-    raise HTTPException(status_code=404, detail="Recipe not found")
+    """Get detailed information about a recipe."""
+    del recipe_id, request
+    _raise_not_implemented("/api/recipes/{recipe_id}")

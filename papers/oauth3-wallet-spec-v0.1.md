@@ -941,7 +941,7 @@ Every major player in agentic payments has solved a narrow slice of the problem.
 
 **Visa/Mastercard agentic tokens** are virtual cards with merchant category code (MCC) restrictions. They are card-network-specific, do not address non-financial agent actions, cannot express fine-grained action scopes, and have no revocation cascade mechanism.
 
-**The structural reason none can converge on OAuth3 Wallet:** Token-revenue vendors (OpenAI, Anthropic, Google, Mistral) benefit from higher token usage. OAuth3 Wallet enables recipe-based task execution that achieves the same user outcomes with far fewer tokens. These vendors cannot implement OAuth3 Wallet without cannibalizing their primary revenue. Card networks cannot implement it because it requires a consent and revocation infrastructure they do not operate. Only an open, independent standard — issued outside any token-revenue or settlement-revenue interest — can define this layer.
+**The structural reason convergence is difficult:** Token-revenue vendors (for example OpenAI, Anthropic, Google, Mistral) benefit from higher token usage. OAuth3 Wallet enables recipe-based task execution that can achieve the same user outcomes with fewer tokens, which may reduce incentives for fast adoption. Card networks also do not directly operate the consent and revocation infrastructure required here. An open, independent standard helps bridge these incentive boundaries.
 
 ### 10.4 First-Mover Position
 

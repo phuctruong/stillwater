@@ -1,5 +1,5 @@
 """
-tests/test_store_models.py — Unit tests for store/models.py Pydantic models.
+tests/test_store_models.py — Unit tests for src/store/models.py Pydantic models.
 
 PERSONA-BASED QA: Naval Ravikant (investor/philosopher)
 "The model contract IS the product. Every validator is leverage — one line of

@@ -438,7 +438,7 @@ TASK="The function calculate_discount() returns incorrect results when quantity=
 The existing skills A/B harness covers spec-based scoring:
 
 ```bash
-PYTHONPATH=cli/src STILLWATER_AB_BACKEND=mock STILLWATER_AB_CACHE=0 \
+PYTHONPATH=src/cli/src STILLWATER_AB_BACKEND=mock STILLWATER_AB_CACHE=0 \
   python -m stillwater.skills_ab
 # Outputs: artifacts/skills_ab/results.json and report.md
 ```

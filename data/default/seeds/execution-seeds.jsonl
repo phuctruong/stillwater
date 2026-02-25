@@ -1,0 +1,51 @@
+{"keyword": "fix", "label": "bugfix-combo", "count": 35, "confidence": 0.9130, "examples": ["fix the login bug", "fix this error"], "phase": "phase3"}
+{"keyword": "bug", "label": "bugfix-combo", "count": 35, "confidence": 0.9130, "examples": ["there's a bug in auth", "found a bug"], "phase": "phase3"}
+{"keyword": "feature", "label": "feature-combo", "count": 35, "confidence": 0.9130, "examples": ["add a new feature", "build the feature"], "phase": "phase3"}
+{"keyword": "deploy", "label": "deploy-combo", "count": 35, "confidence": 0.9130, "examples": ["deploy to production", "deploy the release"], "phase": "phase3"}
+{"keyword": "test", "label": "test-combo", "count": 35, "confidence": 0.9130, "examples": ["run the tests", "write tests"], "phase": "phase3"}
+{"keyword": "security", "label": "security-combo", "count": 35, "confidence": 0.9130, "examples": ["security review", "check for vulnerabilities"], "phase": "phase3"}
+{"keyword": "performance", "label": "performance-combo", "count": 35, "confidence": 0.9130, "examples": ["optimize performance", "it's too slow"], "phase": "phase3"}
+{"keyword": "document", "label": "docs-combo", "count": 35, "confidence": 0.9130, "examples": ["write documentation", "update the docs"], "phase": "phase3"}
+{"keyword": "refactor", "label": "refactor-combo", "count": 35, "confidence": 0.9130, "examples": ["refactor the auth module", "clean up the code"], "phase": "phase3"}
+{"keyword": "plan", "label": "plan-combo", "count": 35, "confidence": 0.9130, "examples": ["plan the architecture", "design the system"], "phase": "phase3"}
+{"keyword": "debug", "label": "debug-combo", "count": 35, "confidence": 0.9130, "examples": ["debug the crash", "investigate the error"], "phase": "phase3"}
+{"keyword": "review", "label": "review-combo", "count": 35, "confidence": 0.9130, "examples": ["review the code", "check my PR"], "phase": "phase3"}
+{"keyword": "research", "label": "research-combo", "count": 35, "confidence": 0.9130, "examples": ["research alternatives", "explore options"], "phase": "phase3"}
+{"keyword": "help", "label": "support-combo", "count": 35, "confidence": 0.9130, "examples": ["help me with setup", "I need help"], "phase": "phase3"}
+{"keyword": "design", "label": "design-combo", "count": 35, "confidence": 0.9130, "examples": ["design the API", "system design"], "phase": "phase3"}
+{"keyword": "integrate", "label": "integrate-combo", "count": 35, "confidence": 0.9130, "examples": ["integrate the API", "connect to service"], "phase": "phase3"}
+{"keyword": "api", "label": "integrate-combo", "count": 35, "confidence": 0.9130, "examples": ["build the API", "API endpoint"], "phase": "phase3"}
+{"keyword": "webhook", "label": "integrate-combo", "count": 35, "confidence": 0.9130, "examples": ["setup webhook", "webhook handler"], "phase": "phase3"}
+{"keyword": "browse", "label": "browser-combo", "count": 35, "confidence": 0.9130, "examples": ["browse the website", "navigate to page"], "phase": "phase3"}
+{"keyword": "scrape", "label": "browser-combo", "count": 35, "confidence": 0.9130, "examples": ["scrape the data", "web scraping"], "phase": "phase3"}
+{"keyword": "webpage", "label": "browser-combo", "count": 35, "confidence": 0.9130, "examples": ["open the webpage", "load webpage"], "phase": "phase3"}
+{"keyword": "email", "label": "communicate-combo", "count": 35, "confidence": 0.9130, "examples": ["send an email", "email notification"], "phase": "phase3"}
+{"keyword": "notify", "label": "communicate-combo", "count": 35, "confidence": 0.9130, "examples": ["notify the team", "send notification"], "phase": "phase3"}
+{"keyword": "slack", "label": "communicate-combo", "count": 35, "confidence": 0.9130, "examples": ["post to slack", "slack message"], "phase": "phase3"}
+{"keyword": "dataset", "label": "data-combo", "count": 35, "confidence": 0.9130, "examples": ["process the dataset", "build dataset"], "phase": "phase3"}
+{"keyword": "analytics", "label": "data-combo", "count": 35, "confidence": 0.9130, "examples": ["run analytics", "analyze the data"], "phase": "phase3"}
+{"keyword": "etl", "label": "data-combo", "count": 35, "confidence": 0.9130, "examples": ["build ETL pipeline", "extract transform load"], "phase": "phase3"}
+{"keyword": "article", "label": "content-combo", "count": 35, "confidence": 0.9130, "examples": ["write an article", "draft an article"], "phase": "phase3"}
+{"keyword": "blog", "label": "content-combo", "count": 35, "confidence": 0.9130, "examples": ["write a blog post", "blog about this"], "phase": "phase3"}
+{"keyword": "marketing", "label": "content-combo", "count": 35, "confidence": 0.9130, "examples": ["marketing campaign", "create marketing content"], "phase": "phase3"}
+{"keyword": "proof", "label": "math-combo", "count": 35, "confidence": 0.9130, "examples": ["prove the theorem", "mathematical proof"], "phase": "phase3"}
+{"keyword": "theorem", "label": "math-combo", "count": 35, "confidence": 0.9130, "examples": ["prove the theorem", "verify theorem"], "phase": "phase3"}
+{"keyword": "equation", "label": "math-combo", "count": 35, "confidence": 0.9130, "examples": ["solve the equation", "differential equation"], "phase": "phase3"}
+{"keyword": "audit", "label": "audit-combo", "count": 35, "confidence": 0.9130, "examples": ["audit the system", "run an audit"], "phase": "phase3"}
+{"keyword": "optimize", "label": "performance-combo", "count": 35, "confidence": 0.9130, "examples": ["optimize the queries", "optimize speed"], "phase": "phase3"}
+{"keyword": "slow", "label": "performance-combo", "count": 35, "confidence": 0.9130, "examples": ["it's too slow", "app is slow"], "phase": "phase3"}
+{"keyword": "documentation", "label": "docs-combo", "count": 35, "confidence": 0.9130, "examples": ["write documentation", "update documentation"], "phase": "phase3"}
+{"keyword": "docs", "label": "docs-combo", "count": 35, "confidence": 0.9130, "examples": ["update the docs", "API docs"], "phase": "phase3"}
+{"keyword": "readme", "label": "docs-combo", "count": 35, "confidence": 0.9130, "examples": ["update the README", "readme file"], "phase": "phase3"}
+{"keyword": "update", "label": "docs-combo", "count": 35, "confidence": 0.9130, "examples": ["update the docs", "update documentation"], "phase": "phase3"}
+{"keyword": "tests", "label": "test-combo", "count": 35, "confidence": 0.9130, "examples": ["write tests", "run tests"], "phase": "phase3"}
+{"keyword": "add", "label": "feature-combo", "count": 35, "confidence": 0.9130, "examples": ["add a feature", "add dark mode"], "phase": "phase3"}
+{"keyword": "create", "label": "feature-combo", "count": 35, "confidence": 0.9130, "examples": ["create a service", "create new"], "phase": "phase3"}
+{"keyword": "send", "label": "communicate-combo", "count": 35, "confidence": 0.9130, "examples": ["send an email", "send a message"], "phase": "phase3"}
+{"keyword": "data", "label": "data-combo", "count": 35, "confidence": 0.9130, "examples": ["process the data", "data pipeline"], "phase": "phase3"}
+{"keyword": "content", "label": "content-combo", "count": 35, "confidence": 0.9130, "examples": ["create content", "content strategy"], "phase": "phase3"}
+{"keyword": "configure", "label": "support-combo", "count": 35, "confidence": 0.9130, "examples": ["configure the CI", "help me configure"], "phase": "phase3"}
+{"keyword": "connect", "label": "integrate-combo", "count": 35, "confidence": 0.9130, "examples": ["connect to database", "connect the service"], "phase": "phase3"}
+{"keyword": "screenshot", "label": "browser-combo", "count": 35, "confidence": 0.9130, "examples": ["take screenshots", "screenshot the page"], "phase": "phase3"}
+{"keyword": "convergence", "label": "math-combo", "count": 35, "confidence": 0.9130, "examples": ["prove convergence", "convergence theorem"], "phase": "phase3"}
+{"keyword": "prove", "label": "math-combo", "count": 35, "confidence": 0.9130, "examples": ["prove the theorem", "prove convergence"], "phase": "phase3"}

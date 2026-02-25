@@ -1,0 +1,68 @@
+{
+  "id": "recipe.gmail-reply",
+  "version": "1.0.0",
+  "type": "gmail-automation",
+  "authority": 65537,
+  "description": "Reply to an email using Gmail interface (from primewiki-gmail-automation-100)",
+  "source": "solace-browser:primewiki/gmail/gmail-automation-100.primewiki.md",
+  "confidence": 0.94,
+  "test_evidence": "100+ reply operations successful",
+  "steps": [
+    {
+      "name": "open_email",
+      "action": "click",
+      "selector": "[role='row']",
+      "filter_by_subject": "email_subject_to_match",
+      "confidence": 0.96,
+      "wait_after_ms": 2000,
+      "description": "Click on email to open thread"
+    },
+    {
+      "name": "click_reply_button",
+      "action": "click",
+      "selector": "div[aria-label='Reply']",
+      "confidence": 0.94,
+      "wait_after_ms": 1500,
+      "description": "Click reply button to open reply compose window (portal from ADVANCED tier)"
+    },
+    {
+      "name": "fill_reply_body",
+      "action": "type",
+      "selector": "div[aria-label='Message Body']",
+      "confidence": 0.98,
+      "typing_delay_ms": 40,
+      "note": "Faster typing (40ms) - no bot detection on reply body text",
+      "description": "Type reply message body"
+    },
+    {
+      "name": "send_reply",
+      "action": "keyboard_shortcut",
+      "shortcut": "Control+Enter",
+      "confidence": 1.0,
+      "fallback": "click div[aria-label^='Send']",
+      "fallback_confidence": 0.85,
+      "note": "Keyboard shortcut > button click (discovered pattern from primewiki)",
+      "description": "Send reply using Ctrl+Enter"
+    },
+    {
+      "name": "verify_sent",
+      "action": "verify",
+      "check": "reply_message_appears_in_thread",
+      "timeout_ms": 3000,
+      "description": "Verify reply message appears in email thread"
+    }
+  ],
+  "inputs": {
+    "email_subject": "string (required) - subject of email to reply to",
+    "reply_body": "string (required) - reply message text"
+  },
+  "outputs": {
+    "success": "boolean",
+    "sent_at": "timestamp",
+    "part11_event": "hash (SHA256)"
+  },
+  "rung": 641,
+  "cost_tokens": 0,
+  "cost_usd": 0,
+  "note": "CPU-first recipe - zero LLM calls. All selectors from verified primewiki with 0.94+ confidence."
+}

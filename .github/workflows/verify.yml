@@ -44,7 +44,7 @@ jobs:
 
       - name: Security scan — bandit
         run: |
-          bandit -r store/ admin/session_manager.py admin/llm_portal.py --skip B101
+          bandit -r src/store/ admin/session_manager.py admin/llm_portal.py --skip B101
           if [ $? -ne 0 ]; then
             echo "bandit found security issues"
             exit 1
@@ -52,7 +52,7 @@ jobs:
 
       - name: Security scan — semgrep
         run: |
-          semgrep scan --config auto store/ admin/session_manager.py admin/llm_portal.py
+          semgrep scan --config auto src/store/ admin/session_manager.py admin/llm_portal.py
           if [ $? -ne 0 ]; then
             echo "semgrep found issues"
             exit 1
@@ -60,7 +60,7 @@ jobs:
 
       - name: Generate behavioral hash
         run: |
-          python scripts/generate_behavior_hash.py
+          python src/scripts/generate_behavior_hash.py
 
       - name: Verify consensus
         run: |

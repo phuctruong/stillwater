@@ -41,15 +41,15 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Add cli/src to path
-_CLI_SRC = Path(__file__).parent.parent / "cli" / "src"
+# Add src/cli/src to path
+_CLI_SRC = Path(__file__).parent.parent / "src" / "cli" / "src"
 if str(_CLI_SRC) not in sys.path:
     sys.path.insert(0, str(_CLI_SRC))
 
 try:
     from fastapi import FastAPI, HTTPException
     from fastapi.responses import HTMLResponse
-    from pydantic import BaseModel
+    from pydantic import BaseModel, Field
 except ImportError as e:
     logger.error(f"Missing dependencies: {e}")
     logger.error("Install with: pip install 'fastapi[standard]' uvicorn httpx")
@@ -59,7 +59,7 @@ try:
     from stillwater.llm_client import LLMClient, get_call_history
 except ImportError as e:
     logger.error(f"stillwater.llm_client not importable: {e}")
-    logger.error("Install with: pip install -e cli/")
+    logger.error("Install with: pip install -e src/cli/")
     sys.exit(1)
 
 try:
@@ -77,6 +77,22 @@ except ImportError:
         logger.warning("SessionManager not available (Phase 3 features disabled)")
         SessionManager = None
 
+try:
+    from admin.services.key_manager import KeyManager
+    from admin.services.llm_wrapper import LLMWrapper
+except ImportError:
+    try:
+        from services.key_manager import KeyManager
+        from services.llm_wrapper import LLMWrapper
+    except ImportError:
+        KeyManager = None  # type: ignore
+        LLMWrapper = None  # type: ignore
+
+try:
+    from stillwater.audit_logger import AuditLogger
+except ImportError:
+    AuditLogger = None  # type: ignore
+
 
 # ============================================================
 # App + Global State
@@ -90,6 +106,10 @@ app = FastAPI(
 
 _config: Optional[Any] = None
 _session: Optional[Any] = None
+_repo_root = Path(__file__).resolve().parents[1]
+_key_manager = KeyManager(_repo_root) if KeyManager is not None else None
+_llm_wrapper = LLMWrapper(_repo_root) if LLMWrapper is not None else None
+_audit_logger = AuditLogger(_repo_root / "data" / "logs") if AuditLogger is not None else None
 
 
 def _get_session() -> Optional[Any]:
@@ -159,6 +179,41 @@ def _make_client(provider: Optional[str] = None) -> LLMClient:
     return LLMClient(provider="offline", config=config_dict)
 
 
+def _mask_llm_config(config: dict[str, Any]) -> dict[str, Any]:
+    if _key_manager is None:
+        return config
+    masked: dict[str, Any] = {
+        "default_provider": config.get("default_provider", "claude-code"),
+        "providers": {},
+    }
+    providers = config.get("providers", {})
+    if not isinstance(providers, dict):
+        return masked
+    for provider, values in providers.items():
+        row = dict(values) if isinstance(values, dict) else {}
+        api_key = str(row.get("api_key", ""))
+        if api_key:
+            row["api_key"] = _key_manager.mask_key(api_key)
+        masked["providers"][provider] = row
+    return masked
+
+
+def _audit_key_event(user_id: str, field: str, old_value: str, new_value: str, session_id: str) -> None:
+    if _audit_logger is None:
+        return
+    try:
+        _audit_logger.log_config_change(
+            user_id=user_id,
+            field=field,
+            old_value=old_value,
+            new_value=new_value,
+            reason="llm_key_api",
+            session_id=session_id,
+        )
+    except Exception:
+        pass
+
+
 # ============================================================
 # Request/Response Models
 # ============================================================
@@ -176,6 +231,27 @@ class SaveConfigRequest(BaseModel):
     provider: str
     model: str
     url: Optional[str] = None
+
+
+class LLMCompleteRequest(BaseModel):
+    prompt: str
+    model: str = "sonnet"
+    provider: Optional[str] = None
+
+
+class LLMConfigRequest(BaseModel):
+    default_provider: Optional[str] = None
+    providers: dict[str, dict[str, Any]] = Field(default_factory=dict)
+
+
+class LLMKeyRequest(BaseModel):
+    api_key: str
+
+
+class LLMProviderTestRequest(BaseModel):
+    provider: Optional[str] = None
+    prompt: str = "Reply exactly: TEST_OK"
+    model: str = "sonnet"
 
 
 class ChatMessage(BaseModel):
@@ -246,10 +322,10 @@ class ContextLoader:
     """Loads SW5.0 constructs (skills, recipes, swarms, personas) from filesystem."""
 
     TYPE_PATHS = {
-        "skill":   ("skills", "{name}.md"),
-        "recipe":  ("recipes", "recipe.{name}.md"),
-        "swarm":   ("swarms", "{name}.md"),
-        "persona": ("personas", "**/{name}.md"),
+        "skill":   ("data/default/skills", "{name}.md"),
+        "recipe":  ("data/default/recipes", "recipe.{name}.md"),
+        "swarm":   ("data/default/swarms", "**/{name}.md"),
+        "persona": ("data/default/personas", "**/{name}.md"),
     }
 
     def __init__(self, project_root: Path):
@@ -288,16 +364,19 @@ class ContextLoader:
     def catalog(self) -> dict:
         """Return all available constructs by type."""
         return {
-            "skills": self._list("skills", "*.md", exclude=["SKILL-FORMAT", "README"]),
-            "recipes": [f.stem.replace("recipe.", "") for f in (self.root/"recipes").glob("recipe.*.md")],
-            "swarms": self._list("swarms", "*.md", exclude=["README"]),
-            "personas": [f.stem for f in (self.root/"personas").rglob("*.md") if "README" not in f.stem and "index" not in f.stem.lower()],
+            "skills": self._list("data/default/skills", "*.md", exclude=["SKILL-FORMAT", "README"]),
+            "recipes": [f.stem.replace("recipe.", "") for f in (self.root / "data" / "default" / "recipes").glob("recipe.*.md")],
+            "swarms": self._list("data/default/swarms", "*.md", exclude=["README"], recursive=True),
+            "personas": [f.stem for f in (self.root / "data" / "default" / "personas").rglob("*.md") if "README" not in f.stem and "index" not in f.stem.lower()],
         }
 
     def _resolve_path(self, type_: str, name: str) -> Optional[Path]:
         """Resolve filesystem path for a context source."""
         if type_ == "persona":
-            matches = list((self.root / "personas").rglob(f"{name}.md"))
+            matches = list((self.root / "data" / "default" / "personas").rglob(f"{name}.md"))
+            return matches[0] if matches else None
+        if type_ == "swarm":
+            matches = sorted((self.root / "data" / "default" / "swarms").rglob(f"{name}.md"))
             return matches[0] if matches else None
         dir_, pattern = self.TYPE_PATHS[type_]
         p = self.root / dir_ / pattern.format(name=name)
@@ -318,11 +397,12 @@ class ContextLoader:
             return text[start:end+3].strip()
         return ""
 
-    def _list(self, dir_: str, glob_pattern: str, exclude: list[str]) -> list[str]:
+    def _list(self, dir_: str, glob_pattern: str, exclude: list[str], recursive: bool = False) -> list[str]:
         """List files in a directory, excluding patterns."""
         try:
+            iterator = (self.root / dir_).rglob(glob_pattern) if recursive else (self.root / dir_).glob(glob_pattern)
             return sorted([
-                f.stem for f in (self.root / dir_).glob(glob_pattern)
+                f.stem for f in iterator
                 if not any(ex in f.stem for ex in exclude)
             ])
         except Exception as e:
@@ -527,6 +607,140 @@ async def save_config(req: SaveConfigRequest) -> dict:
     except Exception as e:
         logger.error(f"Failed to save config: {e}")
         raise HTTPException(status_code=500, detail=f"Save failed: {e}")
+
+
+@app.post("/api/llm/complete")
+async def llm_complete(req: LLMCompleteRequest) -> dict:
+    if _llm_wrapper is None:
+        raise HTTPException(status_code=503, detail="LLM wrapper unavailable")
+    result = _llm_wrapper.complete(prompt=req.prompt, model=req.model, provider=req.provider)
+    if not result.get("ok"):
+        raise HTTPException(status_code=503, detail="No provider succeeded")
+    return result
+
+
+@app.get("/api/llm/providers")
+async def llm_providers() -> dict:
+    if _llm_wrapper is None:
+        return {"ok": False, "providers": []}
+    providers = _llm_wrapper.list_providers()
+    cfg = _key_manager.load_config() if _key_manager is not None else {}
+    return {
+        "ok": True,
+        "default_provider": cfg.get("default_provider", "claude-code"),
+        "providers": providers,
+    }
+
+
+@app.get("/api/llm/models")
+async def llm_models() -> dict:
+    if _llm_wrapper is None:
+        return {"ok": False, "models": {}}
+    return {"ok": True, "models": _llm_wrapper.list_models()}
+
+
+@app.get("/api/llm/config")
+async def llm_config_get() -> dict:
+    if _key_manager is None:
+        raise HTTPException(status_code=503, detail="Key manager unavailable")
+    config = _key_manager.load_config()
+    return {"ok": True, "config": _mask_llm_config(config)}
+
+
+@app.put("/api/llm/config")
+async def llm_config_put(req: LLMConfigRequest) -> dict:
+    if _key_manager is None:
+        raise HTTPException(status_code=503, detail="Key manager unavailable")
+    config = _key_manager.load_config()
+    if req.default_provider:
+        config["default_provider"] = req.default_provider
+    for provider, values in req.providers.items():
+        row = config.setdefault("providers", {}).setdefault(provider, {})
+        for key in ("enabled", "command", "default_model"):
+            if key in values:
+                row[key] = values[key]
+    _key_manager.save_config(config)
+    return {"ok": True, "config": _mask_llm_config(config)}
+
+
+@app.get("/api/llm/keys")
+async def llm_keys_list() -> dict:
+    if _key_manager is None:
+        raise HTTPException(status_code=503, detail="Key manager unavailable")
+    status = _key_manager.list_key_status()
+    providers = status.get("providers", {})
+    stripped = {
+        name: {
+            "has_key": bool(item.get("has_key")),
+            "source": item.get("source", "none"),
+        }
+        for name, item in providers.items()
+    }
+    return {"ok": True, "providers": stripped}
+
+
+@app.put("/api/llm/keys/{provider}")
+async def llm_key_set(provider: str, req: LLMKeyRequest) -> dict:
+    if _key_manager is None:
+        raise HTTPException(status_code=503, detail="Key manager unavailable")
+    safe_provider = provider.strip().lower()
+    if safe_provider not in {"anthropic", "openai", "gemini-api", "together", "openrouter"}:
+        raise HTTPException(status_code=400, detail=f"Unsupported provider: {provider}")
+    result = _key_manager.set_api_key(safe_provider, req.api_key)
+    _audit_key_event(
+        user_id="api:user",
+        field=f"llm_key:{safe_provider}",
+        old_value="<redacted>",
+        new_value=f"hash:{result.get('key_hash', '')}",
+        session_id="llm-portal",
+    )
+    return {
+        "ok": True,
+        "provider": safe_provider,
+        "has_key": result.get("has_key", False),
+        "key_hash": result.get("key_hash", ""),
+    }
+
+
+@app.delete("/api/llm/keys/{provider}")
+async def llm_key_delete(provider: str) -> dict:
+    if _key_manager is None:
+        raise HTTPException(status_code=503, detail="Key manager unavailable")
+    safe_provider = provider.strip().lower()
+    result = _key_manager.delete_api_key(safe_provider)
+    _audit_key_event(
+        user_id="api:user",
+        field=f"llm_key:{safe_provider}",
+        old_value="<redacted>",
+        new_value="<deleted>",
+        session_id="llm-portal",
+    )
+    return {"ok": True, **result}
+
+
+@app.post("/api/llm/keys/{provider}/test")
+async def llm_key_test(provider: str, req: LLMProviderTestRequest) -> dict:
+    if _llm_wrapper is None:
+        raise HTTPException(status_code=503, detail="LLM wrapper unavailable")
+    result = _llm_wrapper.complete(
+        prompt=req.prompt,
+        model=req.model,
+        provider=provider,
+        strict_provider=True,
+    )
+    if not result.get("ok"):
+        return {"ok": False, "provider": provider, "error": "provider test failed", "attempts": result.get("attempts", [])}
+    return {"ok": True, "provider": result.get("provider"), "model": result.get("model")}
+
+
+@app.post("/api/llm/test")
+async def llm_provider_test(req: LLMProviderTestRequest) -> dict:
+    if _llm_wrapper is None:
+        raise HTTPException(status_code=503, detail="LLM wrapper unavailable")
+    result = _llm_wrapper.complete(prompt=req.prompt, model=req.model, provider=req.provider)
+    if not result.get("ok"):
+        return {"ok": False, "error": "provider test failed", "attempts": result.get("attempts", [])}
+    return {"ok": True, "provider": result.get("provider"), "model": result.get("model")}
 
 
 # ============================================================

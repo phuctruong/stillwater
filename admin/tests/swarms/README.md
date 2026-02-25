@@ -25,7 +25,7 @@ Unit tests for all swarms in `stillwater/swarms/`. Tests validate:
 
 ```bash
 # Start wrapper + portal in background
-python3 cli/src/claude_code_wrapper.py --port 8080 &
+python3 src/cli/src/claude_code_wrapper.py --port 8080 &
 python3 admin/llm_portal_swarms.py &
 
 # Wait for startup

@@ -121,7 +121,7 @@ The key architectural decision that made the February 20 session work was **expl
 
 **[B]** In a naive multi-agent setup, parallel agents writing to the same repository will conflict. The standard solution is a merge queue or a coordinator agent. Both add latency and complexity.
 
-The Phuc Swarms solution is simpler: assign each agent a disjoint set of files before it starts. Agent A writes to `skills/prime-mcp.md`, `skills/prime-reviewer.md`, and `papers/`-assigned files. Agent B writes to `skills/phuc-loop.md`, `skills/prime-hooks.md`. Agent C writes to `skills/domain-*.md`, `ripples/`, `case-studies/`. Agent D writes to `pyproject.toml`, `.github/workflows/`, `cli/`.
+The Phuc Swarms solution is simpler: assign each agent a disjoint set of files before it starts. Agent A writes to `skills/prime-mcp.md`, `skills/prime-reviewer.md`, and `papers/`-assigned files. Agent B writes to `skills/phuc-loop.md`, `skills/prime-hooks.md`. Agent C writes to `skills/domain-*.md`, `ripples/`, `case-studies/`. Agent D writes to `pyproject.toml`, `.github/workflows/`, `src/cli/`.
 
 **[A]** In the February 20 session, zero merge conflicts were observed across all parallel agents. Every agent's output was committed cleanly. This is consistent with the file-boundary isolation design — not a lucky outcome, but a structural property of the approach.
 

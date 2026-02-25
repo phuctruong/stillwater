@@ -76,8 +76,8 @@ STILLWATER_AB_BACKEND=mock stillwater skills-ab --backend mock
 ## 6. Launch the admin UI
 
 ```bash
-bash admin/start-admin.sh
-# Opens http://127.0.0.1:8787 in your browser
+./stillwater-server.sh start
+# Opens http://127.0.0.1:8000 in your browser
 ```
 
 ## 6. Install Stillwater into your own project
@@ -104,7 +104,7 @@ See [`recipes/project-onboard.md`](recipes/project-onboard.md) for the canonical
 
 - Read [`NORTHSTAR.md`](NORTHSTAR.md) — the guiding mission for Stillwater
 - Read [`STILLWATER-OS-UPGRADE-GUIDE.md`](STILLWATER-OS-UPGRADE-GUIDE.md) to upgrade your existing projects
-- Read [`cli/README.md`](cli/README.md) for the full CLI manual
+- Read [`src/cli/README.md`](src/cli/README.md) for the full CLI manual
 - Browse [`skills/`](skills/) for available skills
 - Browse [`combos/`](combos/) for WISH+RECIPE pairs (plan, bugfix, run-test, ci-triage, security, deps)
 - Read [`papers/05-software-5.0.md`](papers/05-software-5.0.md) for the theory

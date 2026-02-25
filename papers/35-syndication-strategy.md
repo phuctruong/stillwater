@@ -111,9 +111,9 @@ HOOK: Software 5.0
  Here's what Software 5.0 looks like in practice."
 
 HOOK: OAuth3
-"OpenAI cannot implement this.
- Anthropic cannot implement this.
- It reduces token consumption. That's their business model.
+"Many token-revenue vendors may not prioritize this quickly.
+ Incentives can conflict with adoption.
+ It reduces token consumption. That affects incumbent pricing models.
  We built it anyway. It's open source."
 
 HOOK: GLOW Score

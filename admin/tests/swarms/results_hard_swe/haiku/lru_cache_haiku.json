@@ -2,9 +2,9 @@
   "model": "haiku",
   "task_name": "lru_cache",
   "syntax_valid": true,
-  "functional_pass": true,
-  "complexity_score": 0.55,
-  "edge_cases_score": 0.8,
-  "code_length": 6607,
-  "timestamp": "2026-02-23T08:12:32.514080"
+  "functional_pass": false,
+  "complexity_score": 0.75,
+  "edge_cases_score": 0.7,
+  "code_length": 6963,
+  "timestamp": "2026-02-24T15:43:18.821141"
 }

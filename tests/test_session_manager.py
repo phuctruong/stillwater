@@ -27,7 +27,7 @@ import pytest
 # Import path setup — must resolve before any stillwater imports
 # ---------------------------------------------------------------------------
 
-CLI_SRC = Path(__file__).resolve().parent.parent / "cli" / "src"
+CLI_SRC = Path(__file__).resolve().parent.parent / "src" / "cli" / "src"
 if str(CLI_SRC) not in sys.path:
     sys.path.insert(0, str(CLI_SRC))
 

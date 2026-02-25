@@ -43,11 +43,11 @@ Documentation = "https://github.com/phuctruong/stillwater/tree/main/docs"
 stillwater = "stillwater.cli:main"
 
 [tool.setuptools.packages.find]
-where = ["cli/src"]
+where = ["src/cli/src"]
 
 [tool.pytest.ini_options]
-testpaths = ["cli/tests", "imo/tests"]
+testpaths = ["src/cli/tests", "imo/tests"]
 addopts = "-q"
 
 [tool.ruff]
-exclude = ["*.ipynb", "wishes/templates"]
+exclude = ["*.ipynb", "src/cli/wishes/templates"]

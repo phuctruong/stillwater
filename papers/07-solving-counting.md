@@ -28,8 +28,8 @@ If you want to publish numeric results, add an in-repo harness and log outputs (
 ## Reproduce / Verify In This Repo
 
 - Notebook: `HOW-TO-OOLONG-BENCHMARK.ipynb`
-- Demo implementation: `oolong/src/oolong_solver.py`
-- Runner: `oolong/src/solve-oolong.py`
+- Demo implementation: `src/oolong/src/oolong_solver.py`
+- Runner: `src/oolong/src/solve-oolong.py`
 
 ---
 

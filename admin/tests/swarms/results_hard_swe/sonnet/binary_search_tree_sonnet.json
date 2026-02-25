@@ -2,9 +2,9 @@
   "model": "sonnet",
   "task_name": "binary_search_tree",
   "syntax_valid": true,
-  "functional_pass": true,
-  "complexity_score": 0.55,
-  "edge_cases_score": 0.6499999999999999,
-  "code_length": 15019,
-  "timestamp": "2026-02-22T17:41:59.202585"
+  "functional_pass": false,
+  "complexity_score": 0.75,
+  "edge_cases_score": 0.55,
+  "code_length": 16363,
+  "timestamp": "2026-02-24T09:59:38.652254"
 }

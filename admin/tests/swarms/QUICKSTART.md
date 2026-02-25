@@ -177,8 +177,8 @@ tail -f admin/logs/llm_portal.log
 
 ### Tests Fail to Import
 ```bash
-# Ensure PYTHONPATH includes cli/src
-export PYTHONPATH=/home/phuc/projects/stillwater/cli/src:$PYTHONPATH
+# Ensure PYTHONPATH includes src/cli/src
+export PYTHONPATH=/home/phuc/projects/stillwater/src/cli/src:$PYTHONPATH
 
 # Try again
 pytest admin/tests/swarms/test_abcd_coding.py -v

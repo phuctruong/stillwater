@@ -1,7 +1,0 @@
-{
-  "seed_42": "199c0a33f439b5ef3d7e9fe44364fcf4025a2a36f2236bb583c1e5589fccf5ae",
-  "seed_137": "199c0a33f439b5ef3d7e9fe44364fcf4025a2a36f2236bb583c1e5589fccf5ae",
-  "seed_9001": "199c0a33f439b5ef3d7e9fe44364fcf4025a2a36f2236bb583c1e5589fccf5ae",
-  "consensus": true,
-  "generated": "2026-02-21T18:11:14Z"
-}

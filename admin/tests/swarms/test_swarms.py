@@ -24,7 +24,7 @@ import pytest
 import yaml
 
 # Add CLI source to path
-_CLI_SRC = Path(__file__).parent.parent.parent / "cli" / "src"
+_CLI_SRC = Path(__file__).parent.parent.parent / "src" / "cli" / "src"
 if str(_CLI_SRC) not in sys.path:
     sys.path.insert(0, str(_CLI_SRC))
 
@@ -38,19 +38,19 @@ from stillwater.llm_client import LLMClient
 @pytest.fixture(scope="session")
 def swarms_dir():
     """Get path to swarms directory."""
-    return Path(__file__).parent.parent.parent.parent / "swarms"
+    return Path(__file__).parent.parent.parent.parent / "data" / "default" / "swarms"
 
 
 @pytest.fixture(scope="session")
 def skills_dir():
     """Get path to skills directory."""
-    return Path(__file__).parent.parent.parent.parent / "skills"
+    return Path(__file__).parent.parent.parent.parent / "data" / "default" / "skills"
 
 
 @pytest.fixture(scope="session")
 def personas_dir():
     """Get path to personas directory."""
-    return Path(__file__).parent.parent.parent.parent / "personas"
+    return Path(__file__).parent.parent.parent.parent / "data" / "default" / "personas"
 
 
 @pytest.fixture(scope="session")
@@ -62,9 +62,16 @@ def llm_client():
 def get_all_swarms(swarms_dir: Path) -> list[str]:
     """Get all available swarm names."""
     return sorted([
-        f.stem for f in swarms_dir.glob("*.md")
-        if f.name != "README.md"
+        f.stem for f in swarms_dir.rglob("*.md")
+        if not f.name.startswith("README")
     ])
+
+
+def resolve_swarm_file(swarms_dir: Path, swarm_name: str) -> Path:
+    matches = sorted(swarms_dir.rglob(f"{swarm_name}.md"))
+    if not matches:
+        raise FileNotFoundError(f"Swarm file not found: {swarm_name}")
+    return matches[0]
 
 
 def load_swarm_metadata(swarm_file: Path) -> dict:
@@ -130,10 +137,10 @@ def load_persona(persona_name: str, personas_dir: Path) -> str:
 class TestSwarmMetadata:
     """Test swarm metadata validation."""
 
-    @pytest.mark.parametrize("swarm_name", get_all_swarms(Path(__file__).parent.parent.parent.parent / "swarms"))
+    @pytest.mark.parametrize("swarm_name", get_all_swarms(Path(__file__).parent.parent.parent.parent / "data" / "default" / "swarms"))
     def test_swarm_metadata_valid(self, swarm_name: str, swarms_dir: Path):
         """Test that swarm metadata is valid."""
-        swarm_file = swarms_dir / f"{swarm_name}.md"
+        swarm_file = resolve_swarm_file(swarms_dir, swarm_name)
         assert swarm_file.exists(), f"Swarm file not found: {swarm_name}"
 
         metadata = load_swarm_metadata(swarm_file)
@@ -160,10 +167,10 @@ class TestSwarmMetadata:
 class TestSwarmSkills:
     """Test that swarm skill packs are loadable."""
 
-    @pytest.mark.parametrize("swarm_name", get_all_swarms(Path(__file__).parent.parent.parent.parent / "swarms"))
+    @pytest.mark.parametrize("swarm_name", get_all_swarms(Path(__file__).parent.parent.parent.parent / "data" / "default" / "swarms"))
     def test_swarm_skills_exist(self, swarm_name: str, swarms_dir: Path, skills_dir: Path):
         """Test that all skills referenced in swarm exist."""
-        swarm_file = swarms_dir / f"{swarm_name}.md"
+        swarm_file = resolve_swarm_file(swarms_dir, swarm_name)
         metadata = load_swarm_metadata(swarm_file)
         skill_pack = metadata.get("skill_pack", [])
 
@@ -176,10 +183,10 @@ class TestSwarmSkills:
 class TestSwarmPersonas:
     """Test that swarm personas are loadable."""
 
-    @pytest.mark.parametrize("swarm_name", get_all_swarms(Path(__file__).parent.parent.parent.parent / "swarms"))
+    @pytest.mark.parametrize("swarm_name", get_all_swarms(Path(__file__).parent.parent.parent.parent / "data" / "default" / "swarms"))
     def test_swarm_persona_exists(self, swarm_name: str, swarms_dir: Path, personas_dir: Path):
         """Test that persona (if specified) exists."""
-        swarm_file = swarms_dir / f"{swarm_name}.md"
+        swarm_file = resolve_swarm_file(swarms_dir, swarm_name)
         metadata = load_swarm_metadata(swarm_file)
 
         persona_config = metadata.get("persona", {})
@@ -200,7 +207,7 @@ class TestSwarmPersonas:
 class TestSwarmInvocation:
     """Test swarm invocation with haiku and test prompts A | B."""
 
-    @pytest.mark.parametrize("swarm_name", get_all_swarms(Path(__file__).parent.parent.parent.parent / "swarms"))
+    @pytest.mark.parametrize("swarm_name", get_all_swarms(Path(__file__).parent.parent.parent.parent / "data" / "default" / "swarms"))
     @pytest.mark.parametrize("test_variant", ["a", "b"])
     def test_swarm_invoke_haiku(
         self,
@@ -212,7 +219,7 @@ class TestSwarmInvocation:
         llm_client: LLMClient,
     ):
         """Test invoking swarm with haiku model."""
-        swarm_file = swarms_dir / f"{swarm_name}.md"
+        swarm_file = resolve_swarm_file(swarms_dir, swarm_name)
         metadata = load_swarm_metadata(swarm_file)
 
         # Select test prompt (A or B)
@@ -269,7 +276,7 @@ class TestSwarmInvocation:
 class TestSwarmConsistency:
     """Test that swarms are consistent across models."""
 
-    @pytest.mark.parametrize("swarm_name", get_all_swarms(Path(__file__).parent.parent.parent.parent / "swarms")[:3])
+    @pytest.mark.parametrize("swarm_name", get_all_swarms(Path(__file__).parent.parent.parent.parent / "data" / "default" / "swarms")[:3])
     def test_swarm_response_consistency(
         self,
         swarm_name: str,
@@ -279,7 +286,7 @@ class TestSwarmConsistency:
         llm_client: LLMClient,
     ):
         """Test that same prompt produces response with swarm (smoke test)."""
-        swarm_file = swarms_dir / f"{swarm_name}.md"
+        swarm_file = resolve_swarm_file(swarms_dir, swarm_name)
         metadata = load_swarm_metadata(swarm_file)
 
         prompt = "What is the capital of France?"

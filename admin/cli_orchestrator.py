@@ -138,7 +138,7 @@ def check_portal_health() -> bool:
     try:
         response = requests.get(f"{PORTAL_URL}/health", timeout=5)
         return response.status_code == 200
-    except:
+    except (requests.exceptions.RequestException, OSError, TimeoutError):
         return False
 
 

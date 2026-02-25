@@ -50,7 +50,7 @@ check_dependencies() {
     die "Missing dependencies. Run: pip install 'fastapi[standard]' uvicorn httpx"
 
   python3 -c "from stillwater.llm_client import llm_call" 2>/dev/null || \
-    die "stillwater.llm_client not importable. Run: pip install -e cli/ --quiet"
+    die "stillwater.llm_client not importable. Run: pip install -e src/cli/ --quiet"
 }
 
 # ============================================================

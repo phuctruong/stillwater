@@ -13,7 +13,7 @@
 | 19 swarm agent types (all persona-enhanced, NORTHSTAR injection in all 19) | done |
 | LLM Portal (stillwater.py) — 9 providers, AES-256-GCM session encryption | done |
 | Prime Mermaid standard | done |
-| Stillwater Store client SDK (store/client.py + rung_validator.py + packager.py) | done |
+| Stillwater Store client SDK (src/store/client.py + rung_validator.py + packager.py) | done |
 | PHUC-ORCHESTRATION skill | done |
 | Roadmap-orchestration skill (1,121 lines) | done |
 | Papers #32 roadmap-based development | done |
@@ -47,9 +47,9 @@
 
 | Item | Status | Rung | Date | QA Notes |
 |------|--------|------|------|----------|
-| store/packager.py | done | 641 | 2026-02-21 | 137 lines, bundles skill + evidence with SHA-256 manifest. Fail-closed: invalid rung raises ValueError; null != zero enforced. |
-| store/rung_validator.py | done | 641 | 2026-02-21 | 153 lines, 7-gate verification (rung check → dir → files → JSON → plan schema → tests schema → 3-seed consensus). Returns "VALID"/"INVALID" string (no bool coercion). |
-| store/client.py | done | 641 | 2026-02-21 | 360 lines, HTTP client: submit_skill, fetch_skill, list_skills, install_skill. API key (sw_sk_) never logged. 401/404/422/500 error handling. |
+| src/store/packager.py | done | 641 | 2026-02-21 | 137 lines, bundles skill + evidence with SHA-256 manifest. Fail-closed: invalid rung raises ValueError; null != zero enforced. |
+| src/store/rung_validator.py | done | 641 | 2026-02-21 | 153 lines, 7-gate verification (rung check → dir → files → JSON → plan schema → tests schema → 3-seed consensus). Returns "VALID"/"INVALID" string (no bool coercion). |
+| src/store/client.py | done | 641 | 2026-02-21 | 360 lines, HTTP client: submit_skill, fetch_skill, list_skills, install_skill. API key (sw_sk_) never logged. 401/404/422/500 error handling. |
 | tests/test_store_client.py | done | 641 | 2026-02-21 | 546 lines, 35 tests (7 packager + 10 validator + 14 client + 4 import). All mocked HTTP. Red→green gate: 33/33 fail before impl, pass after. QA added: T-429 (rate limit) + T-418 (unexpected status). No regressions (51/51 total). |
 
 ## Phase 3: LLM Portal Multi-Provider Support (COMPLETE)
@@ -99,7 +99,7 @@
 
 - [x] OAuth3 spec document: `papers/oauth3-spec-v0.1.md` (rung 641, 2026-02-21)
 - [x] OAuth3 enforcer skill: `skills/oauth3-enforcer.md` (rung 641, 2026-02-21)
-- [x] Stillwater Store client SDK: store/client.py + store/rung_validator.py + store/packager.py (rung 641, 2026-02-21)
+- [x] Stillwater Store client SDK: src/store/client.py + src/store/rung_validator.py + src/store/packager.py (rung 641, 2026-02-21)
 - [x] LLM Portal multi-provider: admin/session_manager.py + admin/llm_portal.py extended + 9 providers (rung 641, 2026-02-21)
 - [x] Self-verification at rung 65537 — CI badge deployed, daily verification active
 - [ ] GitHub stars: 1,000
@@ -108,9 +108,9 @@
 
 | Item | Status | Rung | Date | QA Notes |
 |------|--------|------|------|----------|
-| Semgrep scan | done | 641 | 2026-02-21 | 0 findings on production code (store/ + admin/) |
+| Semgrep scan | done | 641 | 2026-02-21 | 0 findings on production code (src/store/ + admin/) |
 | Bandit scan | done | 641 | 2026-02-21 | 0 findings (1 intentional B110 nosec'd in llm_portal.py:104) |
-| scripts/generate_behavior_hash.py | done | 641 | 2026-02-21 | 3-seed consensus (42, 137, 9001), SHA-256, output normalization (timing/paths stripped) |
+| src/scripts/generate_behavior_hash.py | done | 641 | 2026-02-21 | 3-seed consensus (42, 137, 9001), SHA-256, output normalization (timing/paths stripped) |
 | .github/workflows/verify.yml | done | 641 | 2026-02-21 | Daily cron + push + PR triggers. Tests + bandit + semgrep + behavioral hash. Evidence artifact upload. |
 | README verification badge | done | 641 | 2026-02-21 | Badge links to verify.yml workflow |
 | admin/llm_portal.py nosec | done | 641 | 2026-02-21 | B110 annotated (intentional try/except/pass for optional config) |
@@ -140,7 +140,7 @@
 | 2026-02-21 | skills/oauth3-enforcer.md — G1-G4 gates, fail-closed contract, FSM, audit schema, integration pattern (876 lines) | 641 | sonnet (coder) | stillwater /build session |
 | 2026-02-21 | tests/test_oauth3_enforcer.py — 16 tests (G1:5, G2:2, G3:3, G4:4, integration:2), reference implementation | 641 | sonnet (coder) | stillwater /build session |
 | 2026-02-21 | QA postmortem pm-2026-02-21-002 — fixed test count in evidence contract, added T13b for BrokenRevocationRegistry | 641 | opus (QA) | central hub |
-| 2026-02-21 | Phase 2: store/packager.py + store/rung_validator.py + store/client.py + tests/test_store_client.py (33 tests, 3-seed validation, no regressions) | 641 | sonnet (coder) | stillwater /build session |
+| 2026-02-21 | Phase 2: src/store/packager.py + src/store/rung_validator.py + src/store/client.py + tests/test_store_client.py (33 tests, 3-seed validation, no regressions) | 641 | sonnet (coder) | stillwater /build session |
 | 2026-02-21 | QA postmortem pm-2026-02-21-003 — added 429 rate-limit test + unexpected status test (35 tests, 51/51 total) | 641 | opus (QA) | central hub |
 | 2026-02-21 | Phase 3: admin/session_manager.py + admin/llm_portal.py extended + llm_config.yaml extended (160 + 111 + 25 lines, 28 new tests, 96 total, all passing, backward compat verified) | 641 | sonnet (coder) | stillwater /build session |
 | 2026-02-21 | Phase 4: semgrep 0 + bandit 0 + behavioral hash (3-seed consensus) + GitHub Actions CI + README badge (41 tests) | 65537 | opus (orchestrator) + sonnet (coder) | central hub |
@@ -152,7 +152,7 @@
 | 2026-02-22 | QA Infrastructure: phuc-qa.md skill, qa-questioner + qa-scorer swarms, qa-audit combo (question-based QA paradigm) | 641 | sonnet (researcher + coder) | QA session |
 | 2026-02-22 | Tests: 324 new tests across 5 modules (usage_tracker, session_manager, store_auth, store_db, store_models), persona-based QA approach, db.py datetime bug fix, 19 obsolete files cleaned | 641 | sonnet (coder x5) | QA session |
 | 2026-02-22 | Mermaid QA: 22 diagram files (92 mermaid blocks), phuc-qa skill (3-pillar QA), qa-diagrammer swarm, mermaid-qa combo, paper #43 (diagram-first QA), context file | 641 | sonnet (diagrammer x3) + opus (orchestrator) | QA session |
-| 2026-02-22 | Lint cleanup: 387 ruff errors → 0 across entire repo (cli/src, store, admin, tests, swe, imo, oolong, scripts). Added ruff config to pyproject.toml. | 641 | sonnet (coder) + opus (orchestrator) | QA session |
+| 2026-02-22 | Lint cleanup: 387 ruff errors → 0 across entire repo (src/cli/src, store, admin, tests, swe, imo, oolong, scripts). Added ruff config to pyproject.toml. | 641 | sonnet (coder) + opus (orchestrator) | QA session |
 | 2026-02-22 | Test coverage expansion: 298 new tests — provider implementations (169), claude_code_wrapper (66), llm_config_manager (63). Total: 802 → 1100 tests. | 641 | sonnet (coder x3) | QA session |
 
 ## Metrics
@@ -168,7 +168,7 @@
 | Phases complete | 7 / 7 — ALL DONE |
 | Rung of Stillwater itself | 65537 CI badge deployed |
 | Community contributors | 1 (Phuc) |
-| Store API live | YES — 12 endpoints, Firestore, sw_sk_ auth, store.html frontend |
+| Store API live | YES — 12 endpoints, cloud API, sw_sk_ auth, store.html frontend |
 | LLM Portal providers | 9 (claude-code, offline, openai, claude, openrouter, togetherai, gemini, ollama, qwen, custom) |
 | Ecosystem projects | 9 (6 OSS + 3 private) |
 | Billing integration | Complete (see private repo for details) |
@@ -186,7 +186,7 @@
 | Tests after | 802 |
 | New test files | 7 (usage_tracker, session_manager, store_auth, store_db, store_models, llm_cli_support, admin_server) |
 | Personas used | Werner Vogels, Skeptic Auditor, Security Auditor, Dragon Rider, Naval Ravikant |
-| Bugs found | 1 (store/db.py datetime parsing on Python 3.10 — Z suffix) |
+| Bugs found | 1 (src/store/db.py datetime parsing on Python 3.10 — Z suffix) |
 | Obsolete files removed | 19 (pre-reorganization vestiges) |
 | URL fixes | 55+ across 4 repos (solaceagi.com → www.solaceagi.com) |
 | Trade secrets redacted | 8 categories, 30+ files moved or sanitized |
@@ -199,7 +199,7 @@
 
 | Metric | Value |
 |--------|-------|
-| Diagram files | 22 (diagrams/stillwater/01-22) |
+| Diagram files | 22 (data/default/diagrams/stillwater/01-22) |
 | Mermaid blocks | 92 total across all files |
 | Diagram categories | 8/8 (architecture, data flow, state, sequence, class, journey, deployment, dependency) |
 | New skills | 1 (phuc-qa.md — 942-line consolidated 3-pillar QA) |
@@ -257,7 +257,7 @@ All three pillars use Northstar Reverse Engineering.
 
 | Metric | Value |
 |--------|-------|
-| Ruff errors before | 387 (across cli/src, store, admin, tests, swe, imo, oolong, scripts) |
+| Ruff errors before | 387 (across src/cli/src, store, admin, tests, swe, imo, oolong, scripts) |
 | Ruff errors after | 0 |
 | Auto-fixed | 209 (unused imports, f-string placeholders) |
 | Manual fixes | 56 (bare-except→Exception, unused vars, ambiguous names, noqa for late imports) |

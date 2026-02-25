@@ -26,7 +26,7 @@ import pytest
 # Import path setup — must resolve before any stillwater imports
 # ---------------------------------------------------------------------------
 
-CLI_SRC = Path(__file__).resolve().parent.parent / "cli" / "src"
+CLI_SRC = Path(__file__).resolve().parent.parent / "src" / "cli" / "src"
 if str(CLI_SRC) not in sys.path:
     sys.path.insert(0, str(CLI_SRC))
 
@@ -46,7 +46,7 @@ _VALID_SETTINGS_CONTENT = """\
 ---
 api_key: sw_sk_aabbccddeeff00112233445566778899aabbccddeeff0011
 firestore_project: my-project
-firestore_enabled: true
+cloud_sync: true
 sync_interval_seconds: 60
 last_sync_timestamp: 2026-01-01T00:00:00Z
 last_sync_status: ok
@@ -61,7 +61,7 @@ _NO_API_KEY_CONTENT = """\
 ---
 api_key: null
 firestore_project: stillwater-prod
-firestore_enabled: false
+cloud_sync: false
 sync_interval_seconds: 300
 last_sync_timestamp: null
 last_sync_status: pending
@@ -72,7 +72,7 @@ _PLACEHOLDER_API_KEY_CONTENT = """\
 ---
 api_key: sw_sk_[24_random_bytes]
 firestore_project: stillwater-prod
-firestore_enabled: false
+cloud_sync: false
 sync_interval_seconds: 300
 last_sync_timestamp: null
 last_sync_status: pending
@@ -103,7 +103,7 @@ class TestParseYamlFrontmatter:
         parsed = _parse_yaml_frontmatter(_VALID_SETTINGS_CONTENT)
         assert parsed["api_key"] == "sw_sk_aabbccddeeff00112233445566778899aabbccddeeff0011"
         assert parsed["firestore_project"] == "my-project"
-        assert parsed["firestore_enabled"] is True
+        assert parsed["cloud_sync"] is True
         assert parsed["sync_interval_seconds"] == 60
         assert parsed["last_sync_timestamp"] == "2026-01-01T00:00:00Z"
         assert parsed["last_sync_status"] == "ok"
@@ -115,7 +115,7 @@ class TestParseYamlFrontmatter:
 
     def test_boolean_false_parses_correctly(self) -> None:
         parsed = _parse_yaml_frontmatter(_NO_API_KEY_CONTENT)
-        assert parsed["firestore_enabled"] is False
+        assert parsed["cloud_sync"] is False
 
     def test_integer_values_parse_correctly(self) -> None:
         parsed = _parse_yaml_frontmatter(_VALID_SETTINGS_CONTENT)
@@ -191,7 +191,7 @@ class TestSettingsLoaderDefaults:
         loader = SettingsLoader(str(tmp_path / "nonexistent.md"))
         assert loader.file_loaded is False
         settings = loader.parse_settings()
-        assert settings["firestore_enabled"] is False
+        assert settings["cloud_sync"] is False
         assert settings["sync_interval_seconds"] == 300
         assert settings["last_sync_status"] == "pending"
 
@@ -208,8 +208,7 @@ class TestSettingsLoaderDefaults:
         settings = loader.parse_settings()
         expected_keys = {
             "api_key",
-            "firestore_project",
-            "firestore_enabled",
+            "cloud_sync",
             "sync_interval_seconds",
             "last_sync_timestamp",
             "last_sync_status",
@@ -221,8 +220,8 @@ class TestSettingsLoaderDefaults:
         s1 = loader.parse_settings()
         s2 = loader.parse_settings()
         # Mutating one copy does not affect the other or the loader's internal state
-        s1["firestore_enabled"] = True
-        assert loader.parse_settings()["firestore_enabled"] is False
+        s1["cloud_sync"] = True
+        assert loader.parse_settings()["cloud_sync"] is False
 
 
 # ===========================================================================
@@ -244,7 +243,7 @@ class TestSettingsLoaderValidFile:
         s = loader.parse_settings()
         assert s["api_key"] == "sw_sk_aabbccddeeff00112233445566778899aabbccddeeff0011"
         assert s["firestore_project"] == "my-project"
-        assert s["firestore_enabled"] is True
+        assert s["cloud_sync"] is True
         assert s["sync_interval_seconds"] == 60
         assert s["last_sync_timestamp"] == "2026-01-01T00:00:00Z"
         assert s["last_sync_status"] == "ok"
@@ -383,7 +382,7 @@ class TestIsSyncEnabled:
 ---
 api_key: null
 firestore_project: stillwater-prod
-firestore_enabled: true
+cloud_sync: true
 sync_interval_seconds: 300
 last_sync_timestamp: null
 last_sync_status: pending
@@ -544,7 +543,7 @@ class TestRebuildFile:
         updated = {
             "api_key": "sw_sk_aabbccddeeff00112233445566778899aabbccddeeff0011",
             "firestore_project": "my-project",
-            "firestore_enabled": True,
+            "cloud_sync": True,
             "sync_interval_seconds": 60,
             "last_sync_timestamp": "2026-02-23T00:00:00Z",
             "last_sync_status": "error",
@@ -607,7 +606,7 @@ class TestEdgeCases:
         loader = SettingsLoader(str(p))
         s = loader.parse_settings()
         # All defaults should be present since front-matter is empty
-        assert s["firestore_enabled"] is False
+        assert s["cloud_sync"] is False
         assert s["sync_interval_seconds"] == 300
 
     def test_settings_with_extra_unknown_keys(self, tmp_path: Path) -> None:
@@ -615,7 +614,7 @@ class TestEdgeCases:
 ---
 api_key: null
 custom_field: hello
-firestore_enabled: false
+cloud_sync: false
 sync_interval_seconds: 300
 last_sync_timestamp: null
 last_sync_status: pending
@@ -658,7 +657,7 @@ firestore_project: stillwater-prod
 # This is a comment
 api_key: null
 
-firestore_enabled: false
+cloud_sync: false
 sync_interval_seconds: 300
 last_sync_timestamp: null
 last_sync_status: pending
@@ -709,7 +708,7 @@ firestore_project: stillwater-prod
         loader = SettingsLoader(str(p))
         # Inject a truthy non-bool value — should coerce to True, but still
         # return False because no api_key is present.
-        loader._settings["firestore_enabled"] = 1
+        loader._settings["cloud_sync"] = 1
         assert loader.is_sync_enabled() is False
         # Now also add a key to confirm coercion path goes all the way to key check
         loader._settings["api_key"] = "sw_sk_aabbccddeeff00112233445566778899aabbccddeeff0011"

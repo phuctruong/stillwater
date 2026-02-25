@@ -18,7 +18,7 @@ from datetime import datetime
 
 import pytest
 
-_CLI_SRC = Path(__file__).parent.parent.parent / "cli" / "src"
+_CLI_SRC = Path(__file__).parent.parent.parent / "src" / "cli" / "src"
 if str(_CLI_SRC) not in sys.path:
     sys.path.insert(0, str(_CLI_SRC))
 
@@ -97,7 +97,7 @@ def calculate_complexity_score(code: str) -> float:
 
     try:
         tree = ast.parse(code)
-    except:
+    except Exception:
         return 0.0
 
     if ast.get_docstring(tree) is not None:

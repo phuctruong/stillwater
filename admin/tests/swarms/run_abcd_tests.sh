@@ -6,7 +6,7 @@
 
 set -e
 
-# Find project root by looking for cli/src/claude_code_wrapper.py
+# Find project root by looking for src/cli/src/claude_code_wrapper.py
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Try different path levels to find project root
@@ -15,14 +15,14 @@ for i in 1 2 3 4 5; do
     for j in $(seq 1 $i); do
         TEST_ROOT="$(cd "$TEST_ROOT/.." && pwd)"
     done
-    if [ -f "$TEST_ROOT/cli/src/claude_code_wrapper.py" ]; then
+    if [ -f "$TEST_ROOT/src/cli/src/claude_code_wrapper.py" ]; then
         PROJECT_ROOT="$TEST_ROOT"
         break
     fi
 done
 
 if [ -z "$PROJECT_ROOT" ]; then
-    echo "ERROR: Could not find project root (cli/src/claude_code_wrapper.py not found)"
+    echo "ERROR: Could not find project root (src/cli/src/claude_code_wrapper.py not found)"
     exit 1
 fi
 
@@ -89,7 +89,7 @@ start_wrapper() {
     sleep 1
 
     # Start wrapper in background (use absolute path)
-    python3 "$PROJECT_ROOT/cli/src/claude_code_wrapper.py" --port 8080 > /tmp/wrapper.log 2>&1 &
+    python3 "$PROJECT_ROOT/src/cli/src/claude_code_wrapper.py" --port 8080 > /tmp/wrapper.log 2>&1 &
     WRAPPER_PID=$!
     echo "Wrapper PID: $WRAPPER_PID"
 
@@ -214,7 +214,7 @@ fi
 if ! check_wrapper; then
     echo ""
     echo -e "${YELLOW}[TIP]${NC} Start wrapper with:"
-    echo "  python3 cli/src/claude_code_wrapper.py --port 8080"
+    echo "  python3 src/cli/src/claude_code_wrapper.py --port 8080"
     echo ""
     echo "Or use: bash run_abcd_tests.sh --setup"
     exit 1

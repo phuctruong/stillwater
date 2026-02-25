@@ -1,0 +1,79 @@
+{
+  "id": "recipe.gmail-compose",
+  "version": "1.0.0",
+  "type": "gmail-automation",
+  "authority": 65537,
+  "description": "Compose and send email using Gmail interface (from primewiki-gmail-automation-100)",
+  "source": "solace-browser:primewiki/gmail/gmail-automation-100.primewiki.md",
+  "confidence": 0.98,
+  "test_evidence": "47 successful cookies, 100+ operations",
+  "steps": [
+    {
+      "name": "open_compose",
+      "action": "click",
+      "selector": "[gh='cm']",
+      "confidence": 0.98,
+      "wait_after_ms": 3000,
+      "description": "Click compose button (portal from COMPOSE tier)"
+    },
+    {
+      "name": "fill_to_field",
+      "action": "type",
+      "selector": "input[aria-autocomplete='list']",
+      "confidence": 1.0,
+      "typing_delay_ms": [80, 200],
+      "critical_pattern": "MUST press Enter after typing to accept autocomplete",
+      "failure_case": "Autocomplete dropdown blocks next field clicks",
+      "fix": "await page.keyboard.press('Enter')",
+      "description": "Type recipient email with human-like delays"
+    },
+    {
+      "name": "accept_autocomplete",
+      "action": "press_key",
+      "key": "Enter",
+      "description": "Close autocomplete dropdown (discovered pattern from primewiki)"
+    },
+    {
+      "name": "fill_subject",
+      "action": "type",
+      "selector": "input[name='subjectbox']",
+      "confidence": 0.98,
+      "typing_delay_ms": 80,
+      "prerequisite": "to_field must be completed + Enter pressed",
+      "description": "Type email subject"
+    },
+    {
+      "name": "fill_body",
+      "action": "type",
+      "selector": "div[aria-label='Message Body']",
+      "confidence": 0.98,
+      "typing_delay_ms": 40,
+      "note": "Faster typing (40ms) - no bot detection on body text",
+      "description": "Type email body"
+    },
+    {
+      "name": "send_email",
+      "action": "keyboard_shortcut",
+      "shortcut": "Control+Enter",
+      "confidence": 1.0,
+      "fallback": "click div[aria-label^='Send']",
+      "fallback_confidence": 0.85,
+      "note": "Keyboard shortcut > button click (more reliable)",
+      "description": "Send email using Ctrl+Enter"
+    }
+  ],
+  "inputs": {
+    "to_email": "string (required)",
+    "subject": "string (required)",
+    "body": "string (required)"
+  },
+  "outputs": {
+    "success": "boolean",
+    "sent_at": "timestamp",
+    "part11_event": "hash (SHA256)"
+  },
+  "rung": 641,
+  "cost_tokens": 0,
+  "cost_usd": 0,
+  "note": "CPU-first recipe - zero LLM calls. All selectors from verified primewiki."
+}

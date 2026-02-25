@@ -3,8 +3,8 @@
   "task_name": "binary_search_tree",
   "syntax_valid": true,
   "functional_pass": false,
-  "complexity_score": 0.55,
-  "edge_cases_score": 0.6499999999999999,
-  "code_length": 16794,
-  "timestamp": "2026-02-23T08:13:41.864871"
+  "complexity_score": 0.75,
+  "edge_cases_score": 0.7,
+  "code_length": 13940,
+  "timestamp": "2026-02-24T15:19:21.039625"
 }

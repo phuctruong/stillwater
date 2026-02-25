@@ -1,0 +1,68 @@
+{
+  "id": "recipe.gmail-search",
+  "version": "1.0.0",
+  "type": "gmail-automation",
+  "authority": 65537,
+  "description": "Search emails in Gmail inbox (from primewiki-gmail-automation-100)",
+  "source": "solace-browser:primewiki/gmail/gmail-automation-100.primewiki.md",
+  "confidence": 0.96,
+  "test_evidence": "100+ search operations successful",
+  "steps": [
+    {
+      "name": "navigate_inbox",
+      "action": "navigate",
+      "url": "https://mail.google.com/mail/u/0/#inbox",
+      "description": "Navigate to Gmail inbox"
+    },
+    {
+      "name": "click_search_field",
+      "action": "click",
+      "selector": "input[aria-label='Search mail']",
+      "confidence": 0.96,
+      "description": "Click search field"
+    },
+    {
+      "name": "type_search_query",
+      "action": "type",
+      "selector": "input[aria-label='Search mail']",
+      "typing_delay_ms": [100, 150],
+      "confidence": 0.96,
+      "description": "Type search query with human-like delays"
+    },
+    {
+      "name": "execute_search",
+      "action": "press_key",
+      "key": "Enter",
+      "confidence": 0.96,
+      "wait_for_results_ms": 2000,
+      "description": "Execute search and wait for results"
+    },
+    {
+      "name": "extract_results",
+      "action": "extract",
+      "selector": "[role='row']",
+      "fields": {
+        "subject": "[role='heading']",
+        "sender": "[email]",
+        "unread": "[aria-label*='Unread']",
+        "starred": "[aria-label*='Starred']"
+      },
+      "confidence": 0.96,
+      "description": "Extract all email results from search"
+    }
+  ],
+  "inputs": {
+    "query": "string (required) - search query",
+    "max_results": "integer (optional, default 50)"
+  },
+  "outputs": {
+    "results": "array of emails",
+    "count": "integer",
+    "execution_time_ms": "integer",
+    "part11_event": "hash (SHA256)"
+  },
+  "rung": 641,
+  "cost_tokens": 0,
+  "cost_usd": 0,
+  "note": "CPU-first recipe - zero LLM calls. All selectors from verified primewiki with 0.96+ confidence."
+}

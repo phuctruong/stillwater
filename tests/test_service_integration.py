@@ -196,11 +196,21 @@ def _start_tunnel(service_id: str, port: int = 8792,
 
 
 def _bridge_connect(tier: str = "pro") -> dict:
-    resp = bridge_client.post("/api/bridge/connect", json={
-        "api_key": "test-api-key",
-        "instance_id": "test-instance",
-        "tier": tier,
-    })
+    # Integration tests run fully local/offline: force deterministic cloud status.
+    with patch.object(
+        bridge_module,
+        "_cloud_status",
+        return_value={
+            "status": "ok",
+            "tier": tier,
+            "api_url": "https://test.solace.local/api/v1",
+        },
+    ):
+        resp = bridge_client.post("/api/bridge/connect", json={
+            "api_key": "test-api-key",
+            "instance_id": "test-instance",
+            "tier": tier,
+        })
     assert resp.status_code == 200, resp.text
     return resp.json()
 

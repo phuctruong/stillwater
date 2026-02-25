@@ -1,14 +1,14 @@
 # ABCD Test Report
 
-**Generated**: 2026-02-23T17:54:20.136508Z
+**Generated**: 2026-02-24T20:42:42.116110Z
 
 ## Summary
 
 | Variant | Name | Success Rate | Mean Quality | Mean Latency (ms) | Total Cost ($) |
 |---------|------|-------------|-------------|-------------------|----------------|
-| A | version-command | 100.0% | 1.0000 | 53.3 | 0.000000 |
-| B | doctor-command | 100.0% | 0.0000 | 52.4 | 0.000000 |
-| C | llm-status-command | 100.0% | 1.0000 | 102.7 | 0.000000 |
+| A | version-command | 100.0% | 1.0000 | 61.5 | 0.000000 |
+| B | doctor-command | 100.0% | 0.0000 | 61.1 | 0.000000 |
+| C | llm-status-command | 100.0% | 1.0000 | 1791.5 | 0.000000 |
 
 **Winner**: `A` (version-command)
 

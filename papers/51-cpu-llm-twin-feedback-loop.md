@@ -9,7 +9,7 @@
 **GLOW:** W (Wisdom)
 **Related papers:** #49 (Three Pillars — LEK/LEAK/LEC), #50 (Triple-Twin), #47 (Law of Emergent Knowledge)
 **Related skills:** `eq-core.md`, `eq-mirror.md`, `eq-smalltalk-db.md`, `phuc-orchestration.md`, `prime-safety.md`
-**Related diagrams:** `diagrams/cli/cli-twin-orchestration-v2.md`
+**Related diagrams:** `data/default/diagrams/cli/cli-twin-orchestration-v2.md`
 
 ---
 

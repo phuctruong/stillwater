@@ -34,8 +34,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-# Ensure the cli/src package is importable without installing
-CLI_SRC = Path(__file__).resolve().parent.parent / "cli" / "src"
+# Ensure the src/cli/src package is importable without installing
+CLI_SRC = Path(__file__).resolve().parent.parent / "src" / "cli" / "src"
 if str(CLI_SRC) not in sys.path:
     sys.path.insert(0, str(CLI_SRC))
 

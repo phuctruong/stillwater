@@ -96,8 +96,8 @@ To add a new benchmark to this directory:
 | `artifacts/skills_ab/` | Receipt-based [A] | Automated A/B harness output (mock backend) |
 | `PHUC-SKILLS-SECRET-SAUCE.ipynb` | Demonstration [A] | Live skill loading walkthrough |
 | `imo/` | Task-specific [A] | IMO math problem performance with prime-math loaded |
-| `oolong/` | Task-specific [A] | Oolong benchmark performance with skill stack |
-| `swe/` | Task-specific [A] | SWE-bench performance with prime-coder loaded |
+| `src/oolong/` | Task-specific [A] | Oolong benchmark performance with skill stack |
+| `src/swe/` | Task-specific [A] | SWE-bench performance with prime-coder loaded |
 
 **[B]** These sources are complementary, not redundant. Spec-based scoring tells you what to expect. Receipt-based scoring tells you what happened. Behavioral benchmarks tell you why it happened.
 
@@ -126,7 +126,7 @@ Contributions to any of these are welcome. Open an issue or submit a PR with a b
 cat benchmarks/ai-uplift-benchmark.md
 
 # Run the existing automated harness (mock backend)
-PYTHONPATH=cli/src STILLWATER_AB_BACKEND=mock STILLWATER_AB_CACHE=0 \
+PYTHONPATH=src/cli/src STILLWATER_AB_BACKEND=mock STILLWATER_AB_CACHE=0 \
   python -m stillwater.skills_ab
 
 # Check ai-steroids-results for spec-based scoring comparisons

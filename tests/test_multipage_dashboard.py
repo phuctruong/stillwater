@@ -242,7 +242,7 @@ def test_vscode_open_with_different_files():
     test_files = [
         "data/default/llm_config.yaml",
         "data/default/solace_agi_config.yaml",
-        "swarms/scout.md"
+        "data/default/swarms/core/scout.md"
     ]
 
     for file_path in test_files:

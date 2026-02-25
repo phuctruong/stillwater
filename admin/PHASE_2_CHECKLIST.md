@@ -48,7 +48,7 @@
   - Swarms: Swarm dispatch flowchart ✓
   - CPU: Algorithm performance diagram ✓
   - LLM: Model routing diagram ✓
-  - Sync: Sync flow diagram (Local → API → Firestore) ✓
+  - Sync: Sync flow diagram (Local → API → Cloud) ✓
 
 - [x] Diagrams have valid syntax (graph TD, connections, nodes)
 - [x] Diagrams are responsive and centered
@@ -271,7 +271,7 @@ Total:           ~74 KB (will be minified/gzipped for production)
 1. Sample data only (Phase 3: real data integration)
 2. No real-time updates (Phase 3: WebSocket)
 3. No user authentication (Phase 3: OAuth3)
-4. No data persistence (Phase 3: Firestore integration)
+4. No data persistence (Phase 3: cloud sync integration)
 5. No advanced filtering (Phase 3: custom queries)
 
 ---

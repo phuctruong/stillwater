@@ -20,7 +20,7 @@ import time
 
 import pytest
 
-sys.path.insert(0, "/home/phuc/projects/stillwater/cli/src")
+sys.path.insert(0, "/home/phuc/projects/stillwater/src/cli/src")
 from stillwater.usage_tracker import SessionUsageTracker, SW5_ITERATION_REDUCTION_PCT
 
 

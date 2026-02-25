@@ -283,7 +283,7 @@ sequenceDiagram
 
     User->>Browser: Click "Sync"
     Browser->>AdminServer: POST /api/community/sync<br/>{direction:"both"}
-    AdminServer->>FileSystem: Scan cli/recipes, recipes, skills
+    AdminServer->>FileSystem: Scan src/cli/recipes, recipes, skills
     FileSystem-->>AdminServer: File counts
     AdminServer->>FileSystem: Append sync event to COMMUNITY_SYNC_LOG
     AdminServer-->>Browser: {"ok":true,"sync":{uploaded:{...},remote_available:[...]}}
@@ -359,16 +359,16 @@ Root:
   - community/                 → Community Docs (*.md)
 
 CLI Extensions:
-  - cli/recipes/               → CLI Recipes (*.md)
-  - cli/extensions/skills/     → CLI Skills (*.md)
-  - cli/extensions/personas/   → Personas (*.md)
-  - cli/identity/              → Identity Notes (*.md)
-  - cli/extensions/identity/   → Extended Identity (*.md)
-  - cli/settings/              → Settings (*.md)
+  - src/cli/recipes/               → CLI Recipes (*.md)
+  - src/cli/extensions/skills/     → CLI Skills (*.md)
+  - src/cli/extensions/personas/   → Personas (*.md)
+  - src/cli/identity/              → Identity Notes (*.md)
+  - src/cli/extensions/identity/   → Extended Identity (*.md)
+  - src/cli/settings/              → Settings (*.md)
 
 Editable Files (Extra):
   - llm_config.yaml
-  - cli/extensions/splash.txt
+  - src/cli/extensions/splash.txt
   - CLAUDE.md
   - admin/README.md
 ```

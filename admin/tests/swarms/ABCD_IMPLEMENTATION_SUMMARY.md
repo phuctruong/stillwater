@@ -136,7 +136,7 @@ Aggregated summary: `results/ABCD_SUMMARY.json`
 
 ```bash
 # Terminal 1: Start wrapper
-python3 cli/src/claude_code_wrapper.py --port 8080
+python3 src/cli/src/claude_code_wrapper.py --port 8080
 
 # Terminal 2: Run all tests
 bash admin/tests/swarms/run_abcd_tests.sh --setup
@@ -242,7 +242,7 @@ Assuming:
 Before considering this "done", verify:
 
 - [ ] `test_abcd_coding.py` loads correctly: `python3 -m pytest admin/tests/swarms/test_abcd_coding.py --collect-only`
-- [ ] Wrapper can be started: `python3 cli/src/claude_code_wrapper.py --port 8080`
+- [ ] Wrapper can be started: `python3 src/cli/src/claude_code_wrapper.py --port 8080`
 - [ ] Quick test runs: `bash admin/tests/swarms/run_abcd_tests.sh --model haiku --task task_1` (< 2 minutes)
 - [ ] Results are saved: `ls admin/tests/swarms/results/`
 - [ ] Summary is generated: `cat admin/tests/swarms/results/ABCD_SUMMARY.json`

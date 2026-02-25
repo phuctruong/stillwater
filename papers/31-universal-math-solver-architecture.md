@@ -166,7 +166,7 @@ Following the epistemic standards established in paper 07 ("Have We Solved Math 
 ## 6. Verification Ladder Application
 
 **Rung 641 (local correctness):**
-- `60 passed, 4 skipped` in `pytest -q cli/tests`
+- `60 passed, 4 skipped` in `pytest -q src/cli/tests`
 - Tool-assisted lane: deterministic, reproducible
 - LLM-only lane: honest 1/6 disclosure
 
@@ -206,7 +206,7 @@ The oracle file is auditable training data. Every entry has a quality tier, sema
 
 ```bash
 # Cold-start convergence sweep (full IMO corpus)
-./cli/stillwater-cli.sh imo-history autolearn \
+./src/cli/stillwater-cli.sh imo-history autolearn \
   --from-year 1959 --to-year 2025 \
   --required-rung 65537 \
   --max-iterations 3 \
@@ -214,18 +214,18 @@ The oracle file is auditable training data. Every entry has a quality tier, sema
   --json
 
 # Verify learned snapshot (rung 65537)
-./cli/stillwater-cli.sh imo-history bench \
+./src/cli/stillwater-cli.sh imo-history bench \
   --from-year 1959 --to-year 2025 \
   --required-rung 65537 \
   --oracles-file artifacts/imo_convergence/oracles-empty-1959-2025-patched.json \
   --json
 
 # Universal math gate suite
-./cli/stillwater-cli.sh math-universal \
-  --config cli/tests/math/universal_math_gate.json --json
+./src/cli/stillwater-cli.sh math-universal \
+  --config src/cli/tests/math/universal_math_gate.json --json
 
 # IMO 2024 live (lane-disclosed)
-./cli/stillwater-cli.sh qa-imo
+./src/cli/stillwater-cli.sh qa-imo
 ```
 
 All artifacts land in `artifacts/`. All rungs are declared before being claimed. All lanes are disclosed in every report.
@@ -256,8 +256,8 @@ Following the roadmap in paper 07:
 
 ## References
 
-- Paper 07: `cli/papers/07-have-we-solved-math-for-llms.md`
-- Paper 08: `cli/papers/08-imo-history-convergence-results.md`
+- Paper 07: `src/cli/papers/07-have-we-solved-math-for-llms.md`
+- Paper 08: `src/cli/papers/08-imo-history-convergence-results.md`
 - Paper 05: `papers/05-software-5.0.md` (Software 5.0 paradigm)
 - Paper 03: `papers/03-verification-ladder.md` (verification ladder)
 - Skill: `skills/prime-math.md` v2.2.0 (Emmy Noether persona; exact arithmetic; lemma library)

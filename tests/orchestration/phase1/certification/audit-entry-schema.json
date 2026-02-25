@@ -1,0 +1,458 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stillwater.ai/schemas/part11-audit-entry/v1.0.0",
+  "title": "Part11AuditEntry",
+  "description": "JSON Schema for FDA 21 CFR Part 11 compliant audit trail entries. Each entry represents a single auditable event within the Stillwater AI orchestration engine. Entries form a hash chain for tamper evidence. This schema satisfies audit trail requirements for FDA Part 11, HIPAA, SOC 2 Type II, ISO 27001, ISO 42001, EU AI Act, FedRAMP, PCI DSS, and all other certifications tracked in compliance-matrix.md.",
+  "type": "object",
+  "required": [
+    "entry_id",
+    "timestamp",
+    "event_type",
+    "actor_id",
+    "actor_name",
+    "action",
+    "resource_type",
+    "resource_id",
+    "reason",
+    "hash",
+    "previous_hash",
+    "system_id",
+    "session_id",
+    "integrity_status"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "entry_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Globally unique identifier for this audit entry (UUID v4). Must be generated at the time of event capture and must never be reused."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp of the event in ISO 8601 format with millisecond precision. Must be computer-generated (not user-supplied) per FDA Part 11 requirements. Clock source must be NTP-synchronized per PCI DSS Requirement 10.4."
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "RECORD_CREATE",
+        "RECORD_MODIFY",
+        "RECORD_DELETE",
+        "RECORD_VIEW",
+        "USER_LOGIN",
+        "USER_LOGOUT",
+        "USER_LOGIN_FAILED",
+        "SIGNATURE_APPLY",
+        "SIGNATURE_VERIFY",
+        "SIGNATURE_REVOKE",
+        "ACCESS_GRANT",
+        "ACCESS_REVOKE",
+        "ACCESS_DENIED",
+        "CONFIG_CHANGE",
+        "MODEL_INFERENCE",
+        "MODEL_UPDATE",
+        "MODEL_DEPLOY",
+        "MODEL_ROLLBACK",
+        "MODEL_FREEZE",
+        "MODEL_UNFREEZE",
+        "SYSTEM_START",
+        "SYSTEM_STOP",
+        "SYSTEM_ERROR",
+        "SECURITY_EVENT",
+        "BACKUP_CREATE",
+        "BACKUP_RESTORE",
+        "AUDIT_VERIFY",
+        "AUDIT_EXPORT",
+        "DATA_EXPORT",
+        "DATA_IMPORT",
+        "CONSENT_GRANT",
+        "CONSENT_REVOKE",
+        "BREACH_DETECT",
+        "BREACH_NOTIFY",
+        "CHANGE_REQUEST",
+        "CHANGE_APPROVE",
+        "CHANGE_REJECT",
+        "CHANGE_DEPLOY"
+      ],
+      "description": "Category of the auditable event. This enumeration covers all event types required by FDA Part 11 (create, modify, delete with reason), HIPAA (access to PHI), SOC 2 (security events), EU AI Act (AI system operations), FedRAMP (AU control family), PCI DSS (access to cardholder data), and GDPR (consent and breach events)."
+    },
+    "actor_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique identifier of the user or system component performing the action. For human users, this is the unique user ID from the IAM system. For system processes, use the format 'system-<component-name>'. Per FDA Part 11 Section 11.10(d), this must be linked to a unique individual or validated system."
+    },
+    "actor_name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable name of the actor. For human users, this is the full legal name (printed name per FDA Part 11 Section 11.50). For system processes, use the descriptive component name."
+    },
+    "actor_role": {
+      "type": ["string", "null"],
+      "description": "The role of the actor at the time of the event (e.g., 'Administrator', 'Operator', 'AI Engineer'). Captures the authorization context per SOC 2 CC6.1 and ISO 27001 A.5.15."
+    },
+    "action": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable description of the action performed. Must be specific enough to reconstruct the event during audit review. Per FDA Part 11 Section 11.10(e), must describe the nature of the action taken on the electronic record."
+    },
+    "resource_type": {
+      "type": "string",
+      "enum": [
+        "electronic_record",
+        "model",
+        "model_artifact",
+        "configuration",
+        "user_account",
+        "service_account",
+        "api_key",
+        "session",
+        "database_record",
+        "file",
+        "certificate",
+        "encryption_key",
+        "audit_trail",
+        "backup",
+        "network_rule",
+        "deployment",
+        "pipeline",
+        "dataset",
+        "report",
+        "notification",
+        "consent_record",
+        "signature",
+        "system_component"
+      ],
+      "description": "Type of resource affected by the event. Used for filtering, access control auditing, and certification-specific reporting."
+    },
+    "resource_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique identifier of the affected resource. Must be resolvable to a specific resource instance in the system. Format varies by resource_type."
+    },
+    "resource_name": {
+      "type": ["string", "null"],
+      "description": "Human-readable name of the affected resource, for audit readability."
+    },
+    "old_value": {
+      "type": ["string", "null"],
+      "description": "Previous value before modification. Required for RECORD_MODIFY and CONFIG_CHANGE events per FDA Part 11 Section 11.10(e). Must capture the full previous value (or a secure hash for large values). Set to null for create events or when not applicable."
+    },
+    "new_value": {
+      "type": ["string", "null"],
+      "description": "New value after modification. Required for RECORD_MODIFY, RECORD_CREATE, and CONFIG_CHANGE events per FDA Part 11 Section 11.10(e). Must capture the full new value (or a secure hash for large values). Set to null for delete events or when not applicable."
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Reason for the action. REQUIRED for all events per FDA Part 11 Section 11.10(e) which mandates 'the reason for inclusion or change.' This field must contain a meaningful justification, not a generic placeholder."
+    },
+    "signature": {
+      "type": ["object", "null"],
+      "description": "Electronic signature details. Required when event_type is SIGNATURE_APPLY. Per FDA Part 11 Section 11.50, electronic signatures must include the printed name of the signer, the date and time of signing, and the meaning of the signature.",
+      "properties": {
+        "signer_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Unique identifier of the signer. Must match a valid, active user account in the IAM system."
+        },
+        "signer_name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full legal name (printed name) of the signer per FDA Part 11 Section 11.50(a)."
+        },
+        "signature_meaning": {
+          "type": "string",
+          "enum": [
+            "AUTHORED",
+            "REVIEWED",
+            "APPROVED",
+            "VERIFIED",
+            "REJECTED",
+            "WITNESSED",
+            "ACKNOWLEDGED"
+          ],
+          "description": "The meaning associated with the signature per FDA Part 11 Section 11.50(b). Indicates the signer's intent and authority."
+        },
+        "signature_timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "UTC timestamp when the signature was applied, per FDA Part 11 Section 11.50(a). Must be computer-generated."
+        },
+        "authentication_method": {
+          "type": "string",
+          "enum": [
+            "password_totp",
+            "password_fido2",
+            "biometric_pin",
+            "certificate_pin",
+            "fido2_only"
+          ],
+          "description": "Authentication method used to verify the signer's identity at the time of signing. Per FDA Part 11 Section 11.200, electronic signatures based on two distinct identification components (e.g., password + TOTP) are required."
+        },
+        "signature_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 hash binding the signature to the signed content. Computed over the record content at the time of signing to ensure non-repudiation."
+        }
+      },
+      "required": [
+        "signer_id",
+        "signer_name",
+        "signature_meaning",
+        "signature_timestamp",
+        "authentication_method",
+        "signature_hash"
+      ],
+      "additionalProperties": false
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 hash of the audit entry content. Computed over all fields except 'hash', 'previous_hash', and 'integrity_status'. Fields are serialized in canonical JSON form (sorted keys, no whitespace) before hashing. This forms part of the hash chain for tamper evidence per FDA Part 11 Section 11.10(e) and HIPAA Security Rule audit controls."
+    },
+    "previous_hash": {
+      "type": ["string", "null"],
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 hash of the immediately preceding audit entry in the chain. Null for the first entry in a new chain. This field, combined with 'hash', creates a blockchain-like tamper-evident structure. Any modification to a previous entry breaks the chain, which is detected by integrity verification procedures (SOP-001 Section 6)."
+    },
+    "system_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Identifier of the system or service instance generating this audit entry. Format: '<system-name>-<environment>-<instance>'. Used for log correlation across distributed systems per FedRAMP AU-3 and PCI DSS Requirement 10.1."
+    },
+    "session_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Session identifier linking related audit events within a single user session or system operation. Enables reconstruction of complete user activity sequences during audit review."
+    },
+    "ip_address": {
+      "type": ["string", "null"],
+      "description": "IP address of the actor at the time of the event. Null for system-generated events with no network origin. Per PCI DSS Requirement 10.3.1 and HIPAA Security Rule, network origin must be captured for access events.",
+      "oneOf": [
+        {
+          "format": "ipv4"
+        },
+        {
+          "format": "ipv6"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "user_agent": {
+      "type": ["string", "null"],
+      "description": "User agent string or client identifier. Captures the client software used to perform the action. Useful for forensic analysis and anomaly detection."
+    },
+    "geo_location": {
+      "type": ["object", "null"],
+      "description": "Geographic location derived from the IP address. Used for anomaly detection (unusual login locations) and compliance with data residency requirements.",
+      "properties": {
+        "country_code": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}$",
+          "description": "ISO 3166-1 alpha-2 country code."
+        },
+        "region": {
+          "type": ["string", "null"],
+          "description": "State, province, or region name."
+        },
+        "city": {
+          "type": ["string", "null"],
+          "description": "City name."
+        }
+      },
+      "required": ["country_code"],
+      "additionalProperties": false
+    },
+    "integrity_status": {
+      "type": "string",
+      "enum": [
+        "VALID",
+        "TAMPERED",
+        "UNVERIFIED"
+      ],
+      "description": "Result of the most recent integrity verification for this entry. VALID: hash chain intact. TAMPERED: hash mismatch detected (requires immediate investigation per SOP-001 and SOP-005). UNVERIFIED: entry has not yet been verified (temporary state for newly created entries before first verification cycle)."
+    },
+    "compliance_tags": {
+      "type": ["array", "null"],
+      "items": {
+        "type": "string",
+        "enum": [
+          "FDA_PART11",
+          "HIPAA",
+          "SOC2",
+          "ISO27001",
+          "ISO42001",
+          "EU_AI_ACT",
+          "FEDRAMP",
+          "PCI_DSS",
+          "GDPR",
+          "CCPA",
+          "SOX",
+          "CMMC",
+          "HITRUST",
+          "NIST_AI_RMF",
+          "GLBA",
+          "PIPEDA",
+          "LGPD",
+          "ITAR"
+        ]
+      },
+      "uniqueItems": true,
+      "description": "Certifications for which this audit entry provides evidence. Used for certification-specific log filtering, reporting, and retention management. An entry may satisfy requirements for multiple certifications simultaneously."
+    },
+    "data_classification": {
+      "type": ["string", "null"],
+      "enum": [
+        "PUBLIC",
+        "INTERNAL",
+        "CONFIDENTIAL",
+        "RESTRICTED",
+        "PHI",
+        "PII",
+        "CHD",
+        "CUI",
+        null
+      ],
+      "description": "Data classification of the affected resource. Determines handling requirements and notification obligations in case of breach. PHI=Protected Health Information (HIPAA), PII=Personally Identifiable Information (GDPR/CCPA), CHD=Cardholder Data (PCI DSS), CUI=Controlled Unclassified Information (CMMC)."
+    },
+    "correlation_id": {
+      "type": ["string", "null"],
+      "description": "Optional identifier linking this entry to a broader operation, workflow, or change request (e.g., CR-2026-0001). Enables cross-referencing with change management (SOP-002), incident response (SOP-005), and model version control (SOP-004) records."
+    },
+    "metadata": {
+      "type": ["object", "null"],
+      "description": "Additional context-specific metadata. Schema varies by event_type. This field accommodates certification-specific data requirements without modifying the core schema. Keys must be lowercase alphanumeric with underscores.",
+      "additionalProperties": {
+        "type": ["string", "number", "boolean", "null"]
+      }
+    }
+  },
+  "$defs": {
+    "hash_computation": {
+      "description": "Hash computation specification: 1. Collect all fields except 'hash', 'previous_hash', and 'integrity_status'. 2. Serialize to canonical JSON (RFC 8785): sorted keys, no whitespace, UTF-8 encoding. 3. Compute SHA-256 over the UTF-8 byte representation. 4. Encode as lowercase hexadecimal (64 characters). This ensures deterministic, reproducible hash values for chain verification."
+    },
+    "chain_verification": {
+      "description": "Chain verification procedure: 1. Retrieve entries ordered by timestamp ascending. 2. For each entry, recompute 'hash' per the hash_computation specification. 3. Compare computed hash with stored hash. If mismatch, entry is TAMPERED. 4. Compare entry's 'previous_hash' with the preceding entry's 'hash'. If mismatch, chain is BROKEN. 5. First entry must have 'previous_hash' = null. See SOP-001 Section 6 for full verification procedures."
+    },
+    "retention_policy": {
+      "description": "Unified retention policy: All Part11AuditEntry records are retained for a minimum of 10 years per the unified retention policy in SOP-001 Section 5.2. This satisfies all certification minimums including EU AI Act (10 years), FDA Part 11 (7 years), HIPAA (6 years), SOX (7 years), and all others."
+    }
+  },
+  "examples": [
+    {
+      "entry_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+      "timestamp": "2026-02-24T14:30:00.000Z",
+      "event_type": "RECORD_MODIFY",
+      "actor_id": "user-1234",
+      "actor_name": "Jane Smith",
+      "actor_role": "Operator",
+      "action": "Updated patient record field: dosage",
+      "resource_type": "electronic_record",
+      "resource_id": "record-5678",
+      "resource_name": "Patient Record #5678",
+      "old_value": "50mg",
+      "new_value": "75mg",
+      "reason": "Dosage adjustment per physician order #789",
+      "signature": null,
+      "hash": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2",
+      "previous_hash": "d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5",
+      "system_id": "stillwater-orchestrator-prod-01",
+      "session_id": "sess-abcd-1234",
+      "ip_address": "192.168.1.100",
+      "user_agent": "StillwaterCLI/1.5.0",
+      "geo_location": {
+        "country_code": "US",
+        "region": "California",
+        "city": "San Francisco"
+      },
+      "integrity_status": "VALID",
+      "compliance_tags": ["FDA_PART11", "HIPAA"],
+      "data_classification": "PHI",
+      "correlation_id": "CR-2026-0042",
+      "metadata": {
+        "field_name": "dosage",
+        "record_section": "medication_orders"
+      }
+    },
+    {
+      "entry_id": "b21f5e3a-9c7d-4e8b-af12-3c6d8e9f0a1b",
+      "timestamp": "2026-02-24T15:00:00.000Z",
+      "event_type": "SIGNATURE_APPLY",
+      "actor_id": "user-5678",
+      "actor_name": "Dr. Robert Chen",
+      "actor_role": "Compliance Officer",
+      "action": "Applied approval signature to change request CR-2026-0042",
+      "resource_type": "signature",
+      "resource_id": "sig-9012",
+      "resource_name": "Approval Signature for CR-2026-0042",
+      "old_value": null,
+      "new_value": "APPROVED",
+      "reason": "Change request CR-2026-0042 reviewed and approved per SOP-002",
+      "signature": {
+        "signer_id": "user-5678",
+        "signer_name": "Dr. Robert Chen",
+        "signature_meaning": "APPROVED",
+        "signature_timestamp": "2026-02-24T15:00:00.000Z",
+        "authentication_method": "password_totp",
+        "signature_hash": "e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2"
+      },
+      "hash": "c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4",
+      "previous_hash": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2",
+      "system_id": "stillwater-orchestrator-prod-01",
+      "session_id": "sess-efgh-5678",
+      "ip_address": "10.0.1.50",
+      "user_agent": "StillwaterWebUI/2.1.0",
+      "geo_location": {
+        "country_code": "US",
+        "region": "New York",
+        "city": "New York"
+      },
+      "integrity_status": "VALID",
+      "compliance_tags": ["FDA_PART11", "SOC2", "ISO27001"],
+      "data_classification": "CONFIDENTIAL",
+      "correlation_id": "CR-2026-0042",
+      "metadata": {
+        "change_request_id": "CR-2026-0042",
+        "approval_step": "final"
+      }
+    },
+    {
+      "entry_id": "d93a7c2e-1b4f-4d6a-8e9c-5f0a1b2c3d4e",
+      "timestamp": "2026-02-24T16:45:00.000Z",
+      "event_type": "MODEL_DEPLOY",
+      "actor_id": "user-3456",
+      "actor_name": "Alex Kim",
+      "actor_role": "Release Manager",
+      "action": "Deployed model risk-scorer v2.1.0 to production environment",
+      "resource_type": "model",
+      "resource_id": "model-risk-scorer-v2.1.0",
+      "resource_name": "Risk Scorer Model v2.1.0",
+      "old_value": "v2.0.3",
+      "new_value": "v2.1.0",
+      "reason": "Scheduled model update per CR-2026-0055 to incorporate Q4 2025 training data",
+      "signature": null,
+      "hash": "f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1",
+      "previous_hash": "c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4",
+      "system_id": "stillwater-orchestrator-prod-01",
+      "session_id": "sess-ijkl-3456",
+      "ip_address": "10.0.2.25",
+      "user_agent": "StillwaterCLI/1.5.0",
+      "geo_location": {
+        "country_code": "US",
+        "region": "California",
+        "city": "San Jose"
+      },
+      "integrity_status": "VALID",
+      "compliance_tags": ["ISO42001", "EU_AI_ACT", "SOC2"],
+      "data_classification": "CONFIDENTIAL",
+      "correlation_id": "CR-2026-0055",
+      "metadata": {
+        "model_framework": "pytorch",
+        "training_run_id": "train-20260220-003",
+        "validation_rung": "274177"
+      }
+    }
+  ]
+}

@@ -2,10 +2,10 @@
   "model": "haiku",
   "task_name": "async_rate_limiter",
   "syntax_valid": true,
-  "functional_pass": false,
-  "complexity_score": 0.7,
-  "edge_cases_score": 0.6,
-  "code_length": 11066,
-  "timestamp": "2026-02-22T17:52:35.593489",
+  "functional_pass": true,
+  "complexity_score": 0.75,
+  "edge_cases_score": 0.5,
+  "code_length": 5563,
+  "timestamp": "2026-02-24T15:31:59.664167",
   "baseline": true
 }

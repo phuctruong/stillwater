@@ -1,0 +1,11 @@
+{
+  "model": "opus",
+  "task_name": "async_rate_limiter",
+  "syntax_valid": true,
+  "functional_pass": true,
+  "complexity_score": 0.8,
+  "edge_cases_score": 0.6,
+  "code_length": 6495,
+  "timestamp": "2026-02-24T15:40:17.871034",
+  "baseline": true
+}

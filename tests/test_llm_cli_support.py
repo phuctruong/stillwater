@@ -21,7 +21,7 @@ import pytest
 # ---------------------------------------------------------------------------
 # Path setup — same pattern used by other test files in this repo.
 # ---------------------------------------------------------------------------
-CLI_SRC = Path(__file__).resolve().parent.parent / "cli" / "src"
+CLI_SRC = Path(__file__).resolve().parent.parent / "src" / "cli" / "src"
 if str(CLI_SRC) not in sys.path:
     sys.path.insert(0, str(CLI_SRC))
 

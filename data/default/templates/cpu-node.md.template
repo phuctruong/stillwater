@@ -1,0 +1,95 @@
+---
+# CPU Node Template
+# Copy this file to data/default/cpu-nodes/your-node-name.md
+# Or to data/custom/cpu-nodes/your-node-name.md for user overrides
+
+id: cpu-node-YOUR-NAME-v1          # Unique identifier (convention: cpu-node-{name}-v{version})
+type: cpu-node                      # Must be "cpu-node"
+phase: 4                            # Phase number (1=small-talk, 2=intent, 3=execution, 4+=custom)
+name: "Your Node Name"             # Human-readable name
+threshold: 0.80                     # Confidence threshold [0.0-1.0] before CPU handles independently
+                                    #   0.70 = permissive (Phase 1 default)
+                                    #   0.80 = moderate (Phase 2 default)
+                                    #   0.90 = strict (Phase 3 default)
+                                    #   Higher = more LLM validation, slower learning, fewer mistakes
+seeds_file: "seeds/your-seeds.jsonl"          # Day-1 baseline patterns (JSONL format)
+learnings_file: "learned_your_node.jsonl"     # Runtime learned patterns (grows over time)
+validator_model: "haiku"            # LLM model for validation: "haiku" | "sonnet" | "opus"
+                                    #   haiku = fast + cheap ($0.0003/call)
+                                    #   sonnet = balanced ($0.003/call)
+                                    #   opus = deep reasoning ($0.015/call)
+labels: [label_a, label_b, label_c] # Classification labels this node can produce
+---
+
+# Phase N: Your Node Name
+
+Brief description of what this CPU node does. What decisions does it make? What inputs does it receive? What outputs does it produce?
+
+## State Machine
+
+```mermaid
+stateDiagram-v2
+    [*] --> Extract : input received
+    Extract --> Predict : keywords extracted
+    Predict --> Confident : confidence >= threshold
+    Predict --> Uncertain : confidence < threshold
+    Confident --> Handle : CPU handles directly
+    Uncertain --> LLM_Validate : delegate to validator
+    LLM_Validate --> Learn : store correction
+    Learn --> Handle : use validated result
+    Handle --> [*] : output produced
+```
+
+## Keyword Rules
+
+Map keyword groups to labels. The CPU uses these for prediction.
+
+| Keyword Group | Label | Examples |
+|---------------|-------|----------|
+| word1, word2, word3 | label_a | "example sentence with word1" |
+| word4, word5, word6 | label_b | "example sentence with word4" |
+| word7, word8, word9 | label_c | "example sentence with word7" |
+
+## Confidence Curve
+
+The CPU confidence grows with observation count:
+
+```
+confidence(keyword) = 1 - 1/(1 + 0.3 * count)
+```
+
+At your threshold of 0.80, the CPU needs ~14 observations before handling independently.
+
+| Count | Confidence | Behavior |
+|-------|------------|----------|
+| 0 | 0.0000 | Unknown -- delegate |
+| 5 | 0.6000 | Low -- delegate |
+| 10 | 0.7500 | Approaching -- delegate |
+| 14 | 0.8077 | Above 0.80 -- handle |
+| 25 | 0.8824 | Confident |
+| 50 | 0.9375 | Learned |
+
+## Learning Protocol
+
+1. **Extract**: Pull keywords from input using stop-word filtering.
+2. **Predict**: Look up keywords in learned patterns, return highest-confidence match.
+3. **Gate**: If confidence >= threshold, handle directly. Otherwise, delegate to validator.
+4. **Learn**: When the LLM validator returns a label, reinforce all extracted keywords.
+5. **Persist**: Append to learnings file, optionally sync to cloud.
+6. **Merge**: On startup, load seeds then overlay learned patterns.
+
+## Seeds File Format
+
+Create your seeds file at the path specified in `seeds_file`. Format is JSONL (one JSON object per line):
+
+```json
+{"keyword": "word1", "label": "label_a", "count": 25, "confidence": 0.8824, "examples": ["example one", "example two"], "phase": "phase4"}
+```
+
+Fields:
+- `keyword` (string): the keyword to match
+- `label` (string): the classification label (must be in the `labels` list above)
+- `count` (int): simulated observation count (determines initial confidence)
+- `confidence` (float): pre-calculated confidence value
+- `examples` (list[string]): example sentences containing this keyword
+- `phase` (string): which phase this seed belongs to

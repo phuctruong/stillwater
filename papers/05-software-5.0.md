@@ -617,9 +617,9 @@ stillwater/
     04-red-green-gate.md
     05-software-5.0.md      ← this paper
 
-  oolong/src/               ← Counter Bypass recipe (LLM classify + CPU enumerate)
+  src/oolong/src/               ← Counter Bypass recipe (LLM classify + CPU enumerate)
   imo/src/                  ← exact arithmetic solver (verification ladder demo)
-  swe/src/                  ← patch pipeline (red/green gate demo)
+  src/swe/src/                  ← patch pipeline (red/green gate demo)
 
   *.ipynb                   ← runnable recipes (human-readable + executable)
   llm_config.yaml           ← model configuration (swappable, no lock-in)
@@ -631,13 +631,13 @@ stillwater/
 The following results are referenced in this repo's notebooks and README. Each is labeled with its evidence lane:
 
 **OOLONG Benchmark:**
-**[A]** The Counter Bypass pattern (LLM classify + CPU enumerate) is demonstrated in `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb` with a runnable solver. The solver demonstrates the architectural pattern; numerical benchmark scores against the OOLONG leaderboard require the full external harness in `oolong/src/oolong_solver_real.py`.
+**[A]** The Counter Bypass pattern (LLM classify + CPU enumerate) is demonstrated in `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb` with a runnable solver. The solver demonstrates the architectural pattern; numerical benchmark scores against the OOLONG leaderboard require the full external harness in `src/oolong/src/oolong_solver_real.py`.
 
 **IMO 2024:**
 **[A]** A solver demonstrating exact arithmetic + lemma-based verification for IMO-style problems is in `imo/src/` and runnable via `HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb`. This demonstrates the verification discipline; claims about official IMO grading are **[*]** (not verified in this repo).
 
 **SWE-bench:**
-**[A]** A patch pipeline demonstrating the red/green gate pattern is in `swe/src/` and runnable via `HOW-TO-CRUSH-SWE-BENCHMARK.ipynb`. Official SWE-bench leaderboard numbers require the full external harness; in-repo demonstrations show the architectural pattern.
+**[A]** A patch pipeline demonstrating the red/green gate pattern is in `src/swe/src/` and runnable via `HOW-TO-CRUSH-SWE-BENCHMARK.ipynb`. Official SWE-bench leaderboard numbers require the full external harness; in-repo demonstrations show the architectural pattern.
 
 **Claim hygiene note:** "10/10 on hardest" and "IMO 2024 6/6" are claimed in the repo's README and notebooks but are not independently verified in this paper. They are **[C]** pending external reproduction with logged artifacts. See `papers/99-claims-and-evidence.md` for the full claim hygiene policy.
 

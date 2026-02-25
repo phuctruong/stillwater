@@ -8,7 +8,7 @@
 
 ```bash
 # 1. Start wrapper (Terminal 1)
-python3 cli/src/claude_code_wrapper.py --port 8080
+python3 src/cli/src/claude_code_wrapper.py --port 8080
 
 # 2. Run tests (Terminal 2)
 bash admin/tests/swarms/run_abcd_tests.sh --setup
@@ -313,7 +313,7 @@ lsof -i :8080
 pkill -f "claude_code_wrapper.py"
 
 # Start manually
-python3 cli/src/claude_code_wrapper.py --port 8080
+python3 src/cli/src/claude_code_wrapper.py --port 8080
 ```
 
 ### Tests hanging

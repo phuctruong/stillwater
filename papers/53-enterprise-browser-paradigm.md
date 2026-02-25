@@ -50,11 +50,11 @@ Endure, excel, evolve. Carpe diem.
 
 **[B]** The AI browser automation market is currently dominated by tool-first approaches: products that accomplish tasks but cannot serve regulated industries because they lack consent governance, evidence trails, or regulatory compliance architecture. This paper presents the enterprise-grade paradigm — the five pillars that transform browser automation from a productivity toy into a system suitable for FDA clinical trials, financial compliance monitoring, and government document processing.
 
-**[B]** The five pillars are: OAuth3 Consent Governance (scoped, revocable, auditable delegation), Evidence Bundles (ALCOA+ compliant original records), PZip Infinite Replay (Part 11 "enduring" records at $0.00032/user/month — what it does, not how), Twin Architecture (local + cloud, fingerprint-synchronized), and Recipe Determinism (same input → same output, deterministic audit trail).
+**[B]** The five pillars are: OAuth3 Consent Governance (scoped, revocable, auditable delegation), Evidence Bundles (ALCOA+ compliant original records), PZip Infinite Replay (Part 11 "enduring" records with compression-backed storage economics — what it does, not how), Twin Architecture (local + cloud, fingerprint-synchronized), and Recipe Determinism (same input → same output, deterministic audit trail).
 
 **[A]** We map the five pillars against FDA 21 CFR Part 11 requirements, showing a one-to-one architectural correspondence — not a feature-layer approximation but a structural implementation of each Part 11 section. **[C]** We extend the analysis to pharmaceutical, financial services, government, healthcare, and legal use cases, showing that the same architecture that satisfies Part 11 also satisfies SOC2, HIPAA, FRE 901 chain-of-custody, and FINRA trade documentation requirements.
 
-**[B]** The strategic moat is not feature-based. It is architecture-based. Axioms — once embedded in a system's structure — take years to retrofit. Token-revenue vendors cannot implement OAuth3 without cannibalizing their own revenue. PZip's compression economics are proprietary. The combination is uncopyable in the medium term.
+**[B]** The strategic moat is not feature-based. It is architecture-based. Axioms — once embedded in a system's structure — take years to retrofit. Token-revenue vendors may face incentives against OAuth3-style governance, and compression economics depend on implementation-specific optimization. The combination is difficult to replicate in the medium term.
 
 The paper yields five falsifiable predictions, three mermaid diagrams, and a GLOW self-assessment.
 
@@ -246,9 +246,9 @@ graph TD
 
 **[B]** FDA 21 CFR Part 11 requires records that are "enduring" — capable of being retrieved and reviewed over the lifetime of the regulated product, which in pharmaceutical contexts can be decades.
 
-**[B]** For AI agent sessions, "enduring" means storing the full HTML pages the agent saw, for every session, for every user, indefinitely. At standard cloud storage economics with uncompressed HTML, this cost is prohibitive for consumer-grade products — roughly $146 per user per month at typical browsing volumes.
+**[B]** For AI agent sessions, "enduring" means storing the full HTML pages the agent saw, for every session, for every user, indefinitely. At standard cloud storage economics with uncompressed HTML, this cost can be prohibitive at typical browsing volumes.
 
-**[A]** PZip is a proprietary compression system optimized for HTML content. It achieves storage economics that reduce full HTML browsing history to approximately $0.00032 per user per month — a reduction of five orders of magnitude compared to uncompressed HTML at standard storage pricing. **[*]** The precise compression ratio is not disclosed in this paper; the storage cost figure is derived from the `case-studies/pzip-built-by-stillwater.md` analysis.
+**[A]** PZip is a specialized compression system optimized for HTML content. It significantly reduces full-history storage overhead versus uncompressed HTML. **[*]** Detailed implementation specifics and exact ratio internals are intentionally out of scope for this paper.
 
 **[B]** The consequence: ALCOA-O compliance — storing original records — is economically viable at production scale for the first time. The agent can store what it actually saw, not a summary or a screenshot. The original record is the record. This is not an approximation; it is the document.
 
@@ -421,7 +421,7 @@ graph TD
 
 2. **Evidence bundles** require replacing screenshot-based session recording with full HTML capture and SHA256 chaining. This is not an upgrade; it is a different data model for session history.
 
-3. **PZip** requires a proprietary compression engine for HTML content that achieves specific storage economics. This cannot be purchased off the shelf.
+3. **PZip** requires a dedicated HTML compression layer tuned for audit-grade replay economics. This is not a drop-in commodity component.
 
 4. **Twin architecture** requires building two synchronized browser instances with fingerprint management, state synchronization, and scoped revocation. This is a distributed systems problem on top of the browser automation problem.
 
@@ -429,25 +429,25 @@ graph TD
 
 **[C]** An experienced engineering team would estimate 18-24 months to build all five pillars from scratch, assuming they understood the architecture. Without that understanding, the estimate is indeterminate — because the hard part is not the code; it is the architecture decisions that make the code hang together.
 
-### 5.2 Token-Revenue Vendors Cannot Follow
+### 5.2 Token-Revenue Incentive Misalignment
 
-**[B]** There is a deeper reason the five-pillar architecture is uncopyable by a specific class of competitor: token-revenue vendors cannot implement OAuth3 without cannibalizing their own revenue.
+**[B]** There is a deeper reason this architecture can be difficult for some competitors to prioritize: business-model incentives may not align with reduced token usage.
 
 **[B]** OAuth3, by design, reduces the number of LLM inference calls an agent makes. When a recipe hit occurs, no LLM call is made — the recipe executes deterministically from the vault. When OAuth3 scope enforcement rejects an out-of-scope action before it reaches the LLM, no LLM call is made. The more complete the recipe library, the fewer LLM calls the platform makes.
 
-**[B]** For a vendor whose revenue model is priced per token, this is self-destructive. OAuth3 and recipe determinism reduce their COGS while simultaneously reducing their revenue. The economic incentive to maximize token consumption is structurally incompatible with the governance architecture that enterprise compliance requires.
+**[B]** For vendors priced primarily on token volume, OAuth3 and recipe determinism can reduce usage-driven revenue unless offset by governance and compliance services. This creates incentive friction with enterprise governance architecture.
 
 **[C]** This is not a critique of any vendor's intentions. It is a structural observation about business model alignment. The enterprise compliance market and the consumer AI market have opposite incentive structures. A platform optimized for one cannot efficiently serve the other.
 
-### 5.3 PZip Cannot Be Replicated Without the Code
+### 5.3 PZip Requires Significant Engineering Investment
 
 **[B]** PZip's storage economics are the enabling mechanism for ALCOA-O compliance at scale. A competitor who wants to match this must either:
 
 1. Build an equivalent HTML compression system from scratch — at significant research and engineering cost, with no guarantee of reaching equivalent ratios; or
-2. Accept the $146/user/month storage cost of uncompressed HTML — which makes the product economically unviable at consumer scale; or
+2. Accept materially higher storage costs for uncompressed HTML, which constrains large-scale deployment economics; or
 3. Use screenshots instead of full HTML — which does not satisfy ALCOA-O and cannot produce the original record.
 
-**[C]** Option 3 is the most likely path for competitors. It means they can approximate some Part 11 requirements but cannot satisfy ALCOA-O. For pharmaceutical and other strictly regulated use cases, ALCOA-O is non-negotiable. The gap is permanent as long as PZip remains proprietary.
+**[C]** Option 3 is a likely path for cost-constrained competitors. It can approximate some Part 11 requirements but may not satisfy ALCOA-O for stricter regulated use cases.
 
 ### 5.4 The Full Stack Moat
 
@@ -499,7 +499,7 @@ solaceagi.com (PAID)
 | Dimension | Score | Honest Assessment |
 |---|---|---|
 | Ground-truth | 8/10 | Part 11 mapping is accurate. ALCOA+ mapping is accurate. PZip storage figure is documented in case studies. Storage cost comparison ($146/month) is a calculation, not a vendor claim — it should be cited with methodology. |
-| Logical coherence | 9/10 | The five-gap → five-pillar → CFR mapping is logically tight. The business model alignment argument (token-revenue vendors cannot implement OAuth3) is derived from first principles, not asserted. |
+| Logical coherence | 9/10 | The five-gap → five-pillar → CFR mapping is logically tight. The business model alignment argument (token-revenue incentives can conflict with OAuth3 adoption) is derived from first principles, not asserted. |
 | Originality | 9/10 | The framing of Part 11 Architected vs. Part 11 capable vs. Part 11 compliant is novel. The ALCOA+ to browser automation mapping is novel. The business model alignment argument as a structural moat (not a patent claim) is novel. |
 | Wisdom | 8/10 | The "first completer, not first mover" framing is historically grounded and avoids the naive first-mover-advantage argument. The lock-in mechanism (evidence vault switching costs) is durable, not trend-dependent. |
 | **Overall** | **8.5/10** | Honest assessment. The paper needs the $146/month calculation published as a separate artifact to upgrade Ground-truth to 9/10. |
@@ -520,7 +520,7 @@ No AI vendor whose primary revenue model is token-consumption will ship a produc
 In regulated-industry enterprise deployments with high-repetition workflows (clinical data entry, trade reconciliation, government form filing), recipe hit rates will exceed 80% within 18 months of deployment — significantly above the 70% general consumer projection. If the recipe hit rate in the first three regulated enterprise deployments falls below 60% after 12 months, this prediction is falsified.
 
 **Prediction 4 (Storage moat, 24-month horizon):**
-No competitor will reach full HTML browsing history storage at under $0.01 per user per month using an off-the-shelf compression solution without building custom infrastructure. If an open-source HTML compression tool reaches the required ratios and is deployed by a competitor within 24 months, this prediction is partially falsified — though the proprietary optimizations may sustain a narrower gap.
+Competitors relying only on off-the-shelf compression are unlikely to sustain full HTML browsing history storage at enterprise-friendly cost without custom infrastructure. If an open-source HTML compression tool reaches comparable ratios and is deployed by a competitor within 24 months, this prediction is partially falsified.
 
 **Prediction 5 (Evidence vault lock-in, 36-month horizon):**
 Regulated enterprise customers who deploy for 12+ months will exhibit churn rates below 5% per year, driven by evidence vault lock-in. If the measured annual churn rate in regulated enterprise segments exceeds 15% in the 24–36 month post-deployment period, the lock-in mechanism is weaker than this paper claims.
@@ -535,7 +535,7 @@ The FDA 21 CFR Part 11 mapping is not an approximation. It is a one-to-one struc
 
 The strategic moat is not primarily a patent portfolio or a head start. It is the combination of:
 - A business model aligned with governance (not opposed to it)
-- A proprietary compression engine that makes ALCOA-O viable at scale
+- A specialized compression layer that makes ALCOA-O viable at scale
 - An OSS foundation that creates community trust and developer ecosystem
 - An evidence vault that compounds switching costs over time
 

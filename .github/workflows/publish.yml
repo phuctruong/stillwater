@@ -28,7 +28,7 @@ jobs:
       - name: Security scan (bandit) — blocks publish on medium+ severity
         run: |
           pip install bandit -q
-          bandit -r cli/src --severity-level medium -q
+          bandit -r src/cli/src --severity-level medium -q
 
       - name: Supply chain audit (pip-audit)
         run: |

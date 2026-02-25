@@ -18,7 +18,7 @@ def calculate_code_quality_score(code: str) -> float:
     # Parse code
     try:
         tree = ast.parse(code)
-    except:
+    except Exception:
         return 0.0
 
     # Has docstrings (+0.1)

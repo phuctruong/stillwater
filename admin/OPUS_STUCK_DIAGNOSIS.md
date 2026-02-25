@@ -222,7 +222,7 @@ curl -v http://localhost:8080/v1/chat/completions 2>&1 | head -20
 ## Files Affected
 
 - `admin/tests/swarms/test_hard_swe.py` - Uses HTTP provider (line 387)
-- `cli/src/stillwater/providers/http_provider.py` - Calls /api/generate endpoint
+- `src/cli/src/stillwater/providers/http_provider.py` - Calls /api/generate endpoint
 - localhost:8080 - Claude Code server not responding to /api/generate
 
 ---

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-tests/test_claude_code_wrapper.py — Comprehensive test suite for cli/src/claude_code_wrapper.py
+tests/test_claude_code_wrapper.py — Comprehensive test suite for src/cli/src/claude_code_wrapper.py
 
 Tests cover:
   - ClaudeCodeCLI._find_cli() — PATH probing, fallback logic
@@ -33,7 +33,7 @@ import pytest
 # ---------------------------------------------------------------------------
 # Path setup — same pattern as other test files in this repo.
 # ---------------------------------------------------------------------------
-CLI_SRC = Path(__file__).resolve().parent.parent / "cli" / "src"
+CLI_SRC = Path(__file__).resolve().parent.parent / "src" / "cli" / "src"
 if str(CLI_SRC) not in sys.path:
     sys.path.insert(0, str(CLI_SRC))
 

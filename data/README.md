@@ -303,8 +303,7 @@ Open `data/settings.md` and fill in your key:
 ```yaml
 ---
 api_key: sw_sk_a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6
-firestore_project: stillwater-prod
-firestore_enabled: true
+cloud_sync: true
 sync_interval_seconds: 300
 last_sync_timestamp: null
 last_sync_status: pending
@@ -312,7 +311,7 @@ last_sync_status: pending
 ```
 
 Replace the example `sw_sk_a1b2...` value with your actual key. Set
-`firestore_enabled: true` to turn on automatic sync.
+`cloud_sync: true` to turn on automatic sync.
 
 > 🔑 Your `data/settings.md` file is gitignored — it will never be uploaded
 > to GitHub. Your API key stays private on your machine.
@@ -342,7 +341,7 @@ This shows you:
 - Which files are in sync vs. which have local changes waiting to upload
 - Any errors (for example, if your API key is wrong)
 
-Once `firestore_enabled: true` is set, Stillwater also syncs automatically in
+Once `cloud_sync: true` is set, Stillwater also syncs automatically in
 the background every 5 minutes. You do not need to remember to push — it
 happens on its own.
 
@@ -358,7 +357,7 @@ on your desktop too.**
 ### On your laptop (where you added the jokes)
 
 Your `data/custom/jokes.json` already exists. Sync happens automatically if
-you have `firestore_enabled: true`. To push immediately:
+you have `cloud_sync: true`. To push immediately:
 
 ```bash
 stillwater data sync push
@@ -531,7 +530,7 @@ file types it recognizes and ignores others.
 ### Self-hosting cloud sync
 
 If you want to run your own cloud backend instead of using solaceagi.com, set
-`firestore_project` in `data/settings.md` to your own Google Cloud project ID.
+the cloud API URL in `data/settings.md` to your own server.
 See the [self-hosting guide](https://github.com/stillwater-oss/stillwater/blob/main/docs/self-hosting.md)
 for the full setup.
 

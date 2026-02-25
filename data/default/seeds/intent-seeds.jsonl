@@ -1,0 +1,52 @@
+{"keyword": "fix", "label": "bugfix", "count": 25, "confidence": 0.8824, "examples": ["fix the login bug", "fix this error"], "phase": "phase2"}
+{"keyword": "bug", "label": "bugfix", "count": 25, "confidence": 0.8824, "examples": ["there's a bug in auth", "found a bug"], "phase": "phase2"}
+{"keyword": "add", "label": "feature", "count": 25, "confidence": 0.8824, "examples": ["add dark mode", "add a new endpoint"], "phase": "phase2"}
+{"keyword": "create", "label": "feature", "count": 25, "confidence": 0.8824, "examples": ["create a new service", "create the migration"], "phase": "phase2"}
+{"keyword": "deploy", "label": "deploy", "count": 25, "confidence": 0.8824, "examples": ["deploy to production", "deploy the release"], "phase": "phase2"}
+{"keyword": "ship", "label": "deploy", "count": 25, "confidence": 0.8824, "examples": ["ship the release", "ship it to staging"], "phase": "phase2"}
+{"keyword": "test", "label": "test", "count": 25, "confidence": 0.8824, "examples": ["write tests for auth", "run the test suite"], "phase": "phase2"}
+{"keyword": "security", "label": "security", "count": 25, "confidence": 0.8824, "examples": ["security vulnerability found", "run security audit"], "phase": "phase2"}
+{"keyword": "docs", "label": "docs", "count": 25, "confidence": 0.8824, "examples": ["update the docs", "write API documentation"], "phase": "phase2"}
+{"keyword": "refactor", "label": "refactor", "count": 25, "confidence": 0.8824, "examples": ["refactor the auth module", "refactor utils"], "phase": "phase2"}
+{"keyword": "design", "label": "design", "count": 25, "confidence": 0.8824, "examples": ["design the API", "system design"], "phase": "phase2"}
+{"keyword": "audit", "label": "audit", "count": 25, "confidence": 0.8824, "examples": ["audit the codebase", "security audit"], "phase": "phase2"}
+{"keyword": "architecture", "label": "design", "count": 25, "confidence": 0.8824, "examples": ["design the architecture", "architecture review"], "phase": "phase2"}
+{"keyword": "browse", "label": "browser", "count": 25, "confidence": 0.8824, "examples": ["browse the website", "navigate to page"], "phase": "phase2"}
+{"keyword": "scrape", "label": "browser", "count": 25, "confidence": 0.8824, "examples": ["scrape the data", "web scraping"], "phase": "phase2"}
+{"keyword": "email", "label": "communicate", "count": 25, "confidence": 0.8824, "examples": ["send an email", "email notification"], "phase": "phase2"}
+{"keyword": "message", "label": "communicate", "count": 25, "confidence": 0.8824, "examples": ["send a message", "message the team"], "phase": "phase2"}
+{"keyword": "notify", "label": "communicate", "count": 25, "confidence": 0.8824, "examples": ["notify the team", "send notification"], "phase": "phase2"}
+{"keyword": "data", "label": "data", "count": 25, "confidence": 0.8824, "examples": ["process the data", "data pipeline"], "phase": "phase2"}
+{"keyword": "analytics", "label": "data", "count": 25, "confidence": 0.8824, "examples": ["run analytics", "analyze the data"], "phase": "phase2"}
+{"keyword": "pipeline", "label": "data", "count": 25, "confidence": 0.8824, "examples": ["build a pipeline", "data pipeline"], "phase": "phase2"}
+{"keyword": "content", "label": "content", "count": 25, "confidence": 0.8824, "examples": ["create content", "write a blog post"], "phase": "phase2"}
+{"keyword": "article", "label": "content", "count": 25, "confidence": 0.8824, "examples": ["write an article", "draft an article"], "phase": "phase2"}
+{"keyword": "proof", "label": "math", "count": 25, "confidence": 0.8824, "examples": ["prove the theorem", "mathematical proof"], "phase": "phase2"}
+{"keyword": "theorem", "label": "math", "count": 25, "confidence": 0.8824, "examples": ["prove the theorem", "verify theorem"], "phase": "phase2"}
+{"keyword": "calculate", "label": "math", "count": 25, "confidence": 0.8824, "examples": ["calculate the result", "compute the answer"], "phase": "phase2"}
+{"keyword": "performance", "label": "performance", "count": 25, "confidence": 0.8824, "examples": ["optimize performance", "it's too slow"], "phase": "phase2"}
+{"keyword": "optimize", "label": "performance", "count": 25, "confidence": 0.8824, "examples": ["optimize the query", "optimize speed"], "phase": "phase2"}
+{"keyword": "slow", "label": "performance", "count": 25, "confidence": 0.8824, "examples": ["the app is slow", "too slow"], "phase": "phase2"}
+{"keyword": "plan", "label": "plan", "count": 25, "confidence": 0.8824, "examples": ["plan the architecture", "plan the v2"], "phase": "phase2"}
+{"keyword": "roadmap", "label": "plan", "count": 25, "confidence": 0.8824, "examples": ["create a roadmap", "what's on the roadmap"], "phase": "phase2"}
+{"keyword": "debug", "label": "debug", "count": 25, "confidence": 0.8824, "examples": ["debug the crash", "debug the memory leak"], "phase": "phase2"}
+{"keyword": "diagnose", "label": "debug", "count": 25, "confidence": 0.8824, "examples": ["diagnose the issue", "trace the error"], "phase": "phase2"}
+{"keyword": "review", "label": "review", "count": 25, "confidence": 0.8824, "examples": ["review my PR", "code review needed"], "phase": "phase2"}
+{"keyword": "research", "label": "research", "count": 25, "confidence": 0.8824, "examples": ["research alternatives", "research frameworks"], "phase": "phase2"}
+{"keyword": "explore", "label": "research", "count": 25, "confidence": 0.8824, "examples": ["explore options", "explore alternatives"], "phase": "phase2"}
+{"keyword": "help", "label": "support", "count": 25, "confidence": 0.8824, "examples": ["help me with setup", "I need help"], "phase": "phase2"}
+{"keyword": "stuck", "label": "support", "count": 25, "confidence": 0.8824, "examples": ["I'm stuck on this", "stuck on setup"], "phase": "phase2"}
+{"keyword": "integrate", "label": "integrate", "count": 25, "confidence": 0.8824, "examples": ["integrate the API", "integrate Stripe"], "phase": "phase2"}
+{"keyword": "connect", "label": "integrate", "count": 25, "confidence": 0.8824, "examples": ["connect to database", "connect the service"], "phase": "phase2"}
+{"keyword": "tests", "label": "test", "count": 25, "confidence": 0.8824, "examples": ["write tests", "run the tests"], "phase": "phase2"}
+{"keyword": "documentation", "label": "docs", "count": 25, "confidence": 0.8824, "examples": ["update documentation", "API documentation"], "phase": "phase2"}
+{"keyword": "readme", "label": "docs", "count": 25, "confidence": 0.8824, "examples": ["update the README", "readme needs updating"], "phase": "phase2"}
+{"keyword": "update", "label": "docs", "count": 25, "confidence": 0.8824, "examples": ["update the docs", "update documentation"], "phase": "phase2"}
+{"keyword": "blog", "label": "content", "count": 25, "confidence": 0.8824, "examples": ["write a blog post", "blog about this"], "phase": "phase2"}
+{"keyword": "convergence", "label": "math", "count": 25, "confidence": 0.8824, "examples": ["prove convergence", "convergence theorem"], "phase": "phase2"}
+{"keyword": "prove", "label": "math", "count": 25, "confidence": 0.8824, "examples": ["prove the theorem", "prove convergence"], "phase": "phase2"}
+{"keyword": "screenshot", "label": "browser", "count": 25, "confidence": 0.8824, "examples": ["take screenshots", "screenshot the page"], "phase": "phase2"}
+{"keyword": "pull", "label": "review", "count": 25, "confidence": 0.8824, "examples": ["review my pull request", "pull request review"], "phase": "phase2"}
+{"keyword": "configure", "label": "support", "count": 25, "confidence": 0.8824, "examples": ["configure the CI", "help me configure"], "phase": "phase2"}
+{"keyword": "send", "label": "communicate", "count": 25, "confidence": 0.8824, "examples": ["send an email", "send notification"], "phase": "phase2"}
+{"keyword": "dataset", "label": "data", "count": 25, "confidence": 0.8824, "examples": ["process the dataset", "build dataset"], "phase": "phase2"}

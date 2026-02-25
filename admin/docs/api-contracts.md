@@ -847,7 +847,7 @@ Synchronize skills and recipes with the community hub.
 - `"both"` → Bidirectional sync (stub)
 
 **Behavior**:
-- Counts files in cli/recipes, recipes/, and skills/
+- Counts files in src/cli/recipes, recipes/, and skills/
 - Appends sync event to COMMUNITY_SYNC_LOG
 - **Note**: Currently a mock implementation; real upload/download pending
 

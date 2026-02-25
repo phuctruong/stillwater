@@ -718,13 +718,13 @@ NORTHSTAR metrics can become CI checks:
 ```yaml
 # .github/workflows/northstar-check.yml
 - name: Recipe hit rate check
-  run: python scripts/measure_recipe_hit_rate.py --threshold 0.40
+  run: python src/scripts/measure_recipe_hit_rate.py --threshold 0.40
 
 - name: Rung baseline check
   run: pytest tests/ -v --rung-minimum=641
 
 - name: NORTHSTAR alignment report
-  run: python scripts/northstar_report.py > artifacts/northstar_status.json
+  run: python src/scripts/northstar_report.py > artifacts/northstar_status.json
 ```
 
 This makes NORTHSTAR metric advancement machine-verifiable at the CI level — the highest form

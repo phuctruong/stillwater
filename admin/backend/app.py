@@ -6,9 +6,9 @@ from pathlib import Path
 import httpx
 import os
 
-# Add stillwater/cli/src to path (for DataRegistry + SettingsLoader)
+# Add stillwater/src/cli/src to path (for DataRegistry + SettingsLoader)
 REPO_ROOT = Path(__file__).parent.parent.parent
-sys.path.insert(0, str(REPO_ROOT / "cli" / "src"))
+sys.path.insert(0, str(REPO_ROOT / "src" / "cli" / "src"))
 
 from stillwater.data_registry import DataRegistry
 from stillwater.settings_loader import SettingsLoader
@@ -41,14 +41,17 @@ async def health():
 @app.get("/config")
 async def get_config():
     """Serve Firebase config to frontend."""
+    firebase_api_key = os.getenv("FIREBASE_API_KEY", "")
+    if not firebase_api_key:
+        raise HTTPException(500, "FIREBASE_API_KEY env var must be set. No default allowed.")
     return {
         "firebase": {
-            "apiKey": os.getenv("FIREBASE_API_KEY", "AIzaSyC_8HU6dYcPMJyVfUfVVJB-wHkFCXyZ1Zk"),
-            "authDomain": os.getenv("FIREBASE_AUTH_DOMAIN", "solaceagi-dev.firebaseapp.com"),
-            "projectId": os.getenv("FIREBASE_PROJECT_ID", "solaceagi-dev"),
-            "storageBucket": os.getenv("FIREBASE_STORAGE_BUCKET", "solaceagi-dev.appspot.com"),
-            "messagingSenderId": os.getenv("FIREBASE_MESSAGING_SENDER_ID", "123456789"),
-            "appId": os.getenv("FIREBASE_APP_ID", "1:123456789:web:abcdef1234567890")
+            "apiKey": firebase_api_key,
+            "authDomain": os.getenv("FIREBASE_AUTH_DOMAIN", ""),
+            "projectId": os.getenv("FIREBASE_PROJECT_ID", ""),
+            "storageBucket": os.getenv("FIREBASE_STORAGE_BUCKET", ""),
+            "messagingSenderId": os.getenv("FIREBASE_MESSAGING_SENDER_ID", ""),
+            "appId": os.getenv("FIREBASE_APP_ID", "")
         },
         "api_url": SOLACEAGI_API_URL
     }

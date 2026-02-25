@@ -30,7 +30,7 @@ import pytest
 # ---------------------------------------------------------------------------
 REPO_ROOT = Path(__file__).resolve().parents[3]
 ADMIN_DIR = REPO_ROOT / "admin"
-CLI_SRC = REPO_ROOT / "cli" / "src"
+CLI_SRC = REPO_ROOT / "src" / "cli" / "src"
 SWARMS_DIR = ADMIN_DIR / "tests" / "swarms"
 
 for _p in (str(ADMIN_DIR), str(CLI_SRC), str(SWARMS_DIR)):

@@ -15,12 +15,12 @@ Why:
 ## What was implemented
 
 1. CLI moved to framework-first layout:
-- `cli/src` for code
-- `cli/tests` for tests
+- `src/cli/src` for code
+- `src/cli/tests` for tests
 
 2. Prime-Wishes workflow implemented:
 - `stillwater wish list|init|run|verify`
-- `cli/wishes/` quest specs + Prime Mermaid contracts
+- `src/cli/wishes/` quest specs + Prime Mermaid contracts
 
 3. Full-stack command surface implemented:
 - `stillwater stack run|verify`
@@ -30,7 +30,7 @@ Why:
 - `stillwater replay <run_id>`
 
 4. Real execution wrapper added:
-- `cli/stillwater-cli.sh` with `qa-fast` and `qa`
+- `src/cli/stillwater-cli.sh` with `qa-fast` and `qa`
 
 ## Harsh QA findings (critical first)
 
@@ -55,11 +55,11 @@ Why:
 ## Validation evidence
 
 Executed successfully:
-1. `./cli/stillwater-cli.sh qa`
-2. `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q cli/tests`
-3. `PYTHONPATH=cli/src python -m stillwater --help`
-4. `PYTHONPATH=cli/src python -m stillwater.gen_ai_steroids_readme --check`
-5. `python -m compileall -q cli/src`
+1. `./src/cli/stillwater-cli.sh qa`
+2. `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q src/cli/tests`
+3. `PYTHONPATH=src/cli/src python -m stillwater --help`
+4. `PYTHONPATH=src/cli/src python -m stillwater.gen_ai_steroids_readme --check`
+5. `python -m compileall -q src/cli/src`
 
 Result:
 - CLI command flow: PASS
@@ -96,4 +96,4 @@ Overall weighted score: 9.03 / 10
 
 ## Recommendation
 
-Keep Prime Wishes as default (`L1`) for CLI evolution, but gate promotion with strict QA runs (`./cli/stillwater-cli.sh qa`) and artifact verification before claiming capability completion.
+Keep Prime Wishes as default (`L1`) for CLI evolution, but gate promotion with strict QA runs (`./src/cli/stillwater-cli.sh qa`) and artifact verification before claiming capability completion.

@@ -9,7 +9,7 @@
 **GLOW:** W (Wisdom)
 **Related papers:** #05 (Software 5.0), #48 (AI Skills Big Bang Theory), #49 (Three Pillars — LEK/LEAK/LEC)
 **Related skills:** `skills/prime-safety.md`, `skills/prime-coder.md`, `skills/phuc-orchestration.md`, `skills/prime-wishes.md`, `skills/phuc-swarms.md`
-**Related diagrams:** `diagrams/cli-double-twin-architecture.md`, `diagrams/double-twin-latency-model.md`
+**Related diagrams:** `data/default/diagrams/cli-double-twin-architecture.md`, `data/default/diagrams/double-twin-latency-model.md`
 
 ---
 
@@ -56,7 +56,7 @@ A senior software engineer asked a hard question in a team meeting does not star
 
 ### 1.3 The Double-Twin Was the Right First Step
 
-**[A]** The double-twin architecture (documented in `diagrams/cli-double-twin-architecture.md` before this paper's updates) solved the most important half of the latency problem. It forked user input into a CPU Twin (Layer 1, < 300ms) and an LLM Twin (Layer 2, 1-5s), with a Merge Layer compositing the two outputs. The CPU Twin provided the warm acknowledgment. The LLM Twin provided the substantive answer.
+**[A]** The double-twin architecture (documented in `data/default/diagrams/cli-double-twin-architecture.md` before this paper's updates) solved the most important half of the latency problem. It forked user input into a CPU Twin (Layer 1, < 300ms) and an LLM Twin (Layer 2, 1-5s), with a Merge Layer compositing the two outputs. The CPU Twin provided the warm acknowledgment. The LLM Twin provided the substantive answer.
 
 **[B]** But the double-twin left a gap: the user saw a warm acknowledgment at 300ms and then saw nothing until the full LLM response arrived at 1-5 seconds. During that gap — which can be 700ms to 4.7 seconds long — the user knew only that the system had acknowledged them. They did not know what the system was doing, which direction the answer was heading, or whether a simple follow-up question had been correctly routed to the right skill pack.
 
@@ -664,15 +664,15 @@ flowchart TD
 - Paper #05: Software 5.0 — The Extension Economy
 - Paper #48: AI Skills Big Bang Theory
 - Paper #49: Three Pillars of Software 5.0 Kung Fu (LEK + LEAK + LEC)
-- `diagrams/cli-double-twin-architecture.md` — Updated triple-twin architecture flowchart
-- `diagrams/double-twin-latency-model.md` — Updated triple-twin latency model
+- `data/default/diagrams/cli-double-twin-architecture.md` — Updated triple-twin architecture flowchart
+- `data/default/diagrams/double-twin-latency-model.md` — Updated triple-twin latency model
 - `skills/prime-safety.md` — Authority chain, evidence gate, safety override
 - `skills/prime-coder.md` — Red-green gate, evidence bundle, rung targets
 - `skills/phuc-orchestration.md` — Dispatch matrix, skill pack loading, CNF capsule
 - `skills/prime-wishes.md` — Wish decomposition, acceptance criteria, wish library
 - `skills/phuc-swarms.md` — Multi-agent coordination, asymmetric dispatch
-- `diagrams/eq-smalltalk-db-flow.md` — CPU Twin database architecture
-- `diagrams/eq-interaction-flow.md` — EQ system interaction model
+- `data/default/diagrams/eq-smalltalk-db-flow.md` — CPU Twin database architecture
+- `data/default/diagrams/eq-interaction-flow.md` — EQ system interaction model
 - Solace Browser architecture (OSS) — browser twin, OAuth3 vault, recipe library
 - OAuth3 Specification v0.1 (papers/oauth3-spec-v0.1.md) — consent and token mechanics
 

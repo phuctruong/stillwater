@@ -8,7 +8,7 @@ solace_agi:
   version: "1.0.0"
   
   features:
-    firestore_sync: true
+    cloud_sync: false
     lmm_proxy: true
     recipe_store: true
     oauth3_vault: true

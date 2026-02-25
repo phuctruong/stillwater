@@ -91,11 +91,11 @@ Header: [Orchestration] [Swarms] [CPU] [LLM] [Sync]
 - **Instructions**: 3 steps for LLM configuration
 
 #### 5. Solace AGI Sync
-- **Chat**: Cloud backup, Firestore sync, data management
-- **Charts**: Sync progress (gauge), Data volume (area), Firestore health (gauge)
+- **Chat**: Cloud backup, cloud sync, data management
+- **Charts**: Sync progress (gauge), Data volume (area), Cloud health (gauge)
 - **Table**: Sync logs with timestamp, action, status, bytes (4 columns × 4 rows)
-- **Diagram**: Sync flow (Local → API → Firestore) with encryption
-- **Instructions**: 3 steps for Firestore setup
+- **Diagram**: Sync flow (Local → API → Cloud) with encryption
+- **Instructions**: 3 steps for cloud sync setup
 
 **Sample Data**:
 - All tables populated with 3-4 rows of realistic sample data
@@ -318,7 +318,7 @@ admin/evidence/
 1. Replace hardcoded PAGE_DEFINITIONS with API calls
 2. Connect to orchestration.yaml for live data
 3. Connect to llm_config.yaml for LLM settings
-4. Connect to Firestore for sync status
+4. Connect to cloud API for sync status
 5. Connect to skill/swarm metadata
 
 ### Enhanced Features

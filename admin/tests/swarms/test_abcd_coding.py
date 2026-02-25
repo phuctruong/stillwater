@@ -34,7 +34,7 @@ from datetime import datetime
 import pytest
 import yaml
 
-_CLI_SRC = Path(__file__).parent.parent.parent / "cli" / "src"
+_CLI_SRC = Path(__file__).parent.parent.parent / "src" / "cli" / "src"
 if str(_CLI_SRC) not in sys.path:
     sys.path.insert(0, str(_CLI_SRC))
 
@@ -156,7 +156,7 @@ def calculate_code_quality_score(code: str, test_output: str = "") -> float:
     # Parse code
     try:
         tree = ast.parse(code)
-    except:
+    except Exception:
         return 0.0
 
     # Has docstrings (+0.2)
@@ -527,8 +527,8 @@ class TestABCDCoding:
         Returns:
             Tuple of (response_text, system_prompt_used)
         """
-        swarms_dir = Path(__file__).parent.parent.parent.parent / "swarms"
-        skills_dir = Path(__file__).parent.parent.parent.parent / "skills"
+        swarms_dir = Path(__file__).parent.parent.parent.parent / "data" / "default" / "swarms"
+        skills_dir = Path(__file__).parent.parent.parent.parent / "data" / "default" / "skills"
 
         # Load coder swarm metadata
         swarm_file = swarms_dir / "coder.md"
@@ -721,7 +721,7 @@ class TestABCDSummary:
                 try:
                     data = json.loads(result_file.read_text())
                     results.append(data)
-                except:
+                except Exception:
                     pass
 
             if results:

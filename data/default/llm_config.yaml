@@ -17,7 +17,7 @@ claude_code_wrapper:
   enabled: true
   auto_start: true
   port: 8787
-  cli_path: "cli/src/claude_code_wrapper.py"
+  cli_path: "src/cli/src/claude_code_wrapper.py"
   test_prompt: "Say 'Claude Code wrapper is ready' to verify connection"
   timeout_seconds: 30
   retry_attempts: 3

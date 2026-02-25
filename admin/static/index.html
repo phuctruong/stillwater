@@ -760,6 +760,53 @@
             </div>
 
             <div class="section">
+                <div class="section-title">Main Swarms Diagram (Store Topology)</div>
+                <div class="swarm-toolbar">
+                    <button class="chat-btn" onclick="loadMainSwarmsDiagram()">Refresh Main Diagram</button>
+                    <span class="swarm-status-bar" id="main-swarms-status">Loading...</span>
+                </div>
+                <div class="mermaid-container" id="main-swarms-diagram-container">
+                    <div id="main-swarms-mermaid-wrapper">
+                        <div class="mermaid" id="main-swarms-mermaid-static">graph TD
+    CORE["core"] --> CODER["coder"]
+    CORE --> SCOUT["scout"]
+    CORE --> PLANNER["planner"]</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Swarm Studio (Diagram ↔ File)</div>
+                <div class="swarm-toolbar">
+                    <label for="swarm-studio-select" style="color:#aaa;">Swarm:</label>
+                    <select id="swarm-studio-select" class="chat-input" style="max-width:360px;"></select>
+                    <button class="chat-btn" onclick="loadSelectedSwarmStudio()">Load</button>
+                    <button class="chat-btn secondary" onclick="compileSwarmStudioDiagram()">Compile Diagram</button>
+                    <button class="chat-btn secondary" onclick="compileSwarmStudioSwarm()">Compile Swarm</button>
+                    <button class="chat-btn secondary" onclick="validateSwarmStudio()">Validate</button>
+                    <button class="chat-btn secondary" onclick="openSwarmStudioPath()">Open in VSCode</button>
+                    <span class="swarm-status-bar" id="swarm-studio-status">Idle</span>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start;">
+                    <div style="display:flex;flex-direction:column;gap:0.5rem;">
+                        <div style="font-size:0.85rem;color:#999;">Swarm Markdown <span id="swarm-studio-path" style="color:#ff6b35;"></span></div>
+                        <textarea id="swarm-studio-markdown" spellcheck="false" style="width:100%;min-height:360px;background:#0f0f0f;color:#e0e0e0;border:1px solid #444;border-radius:4px;padding:0.75rem;font-family:'Courier New',monospace;font-size:0.84rem;"></textarea>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:0.5rem;">
+                        <div style="font-size:0.85rem;color:#999;">Twin Mermaid Diagram</div>
+                        <textarea id="swarm-studio-diagram" spellcheck="false" style="width:100%;min-height:180px;background:#0f0f0f;color:#e0e0e0;border:1px solid #444;border-radius:4px;padding:0.75rem;font-family:'Courier New',monospace;font-size:0.84rem;"></textarea>
+                        <div class="mermaid-container" style="min-height:180px;padding:1rem;">
+                            <div id="swarm-studio-preview"></div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top:0.75rem;">
+                    <div style="font-size:0.85rem;color:#999;margin-bottom:0.35rem;">Validation</div>
+                    <pre id="swarm-studio-validation" style="background:#0f0f0f;border:1px solid #333;border-radius:4px;color:#ccc;padding:0.75rem;min-height:86px;white-space:pre-wrap;font-size:0.82rem;"></pre>
+                </div>
+            </div>
+
+            <div class="section">
                 <div class="section-title">Instructions</div>
                 <div class="instructions">
                     <div class="instruction-item">
@@ -839,7 +886,7 @@
                         <div class="instruction-text">
                             <p><strong>CLI Diagnostics</strong></p>
                             <p>Use the buttons above to run doctor, version, or llm-status checks via the live CLI runner. Or type a command in the chat box.</p>
-                            <button class="vscode-btn" onclick="openVSCode('cli/src/stillwater/')">Open CLI Source in VSCode</button>
+                            <button class="vscode-btn" onclick="openVSCode('src/cli/src/stillwater/')">Open CLI Source in VSCode</button>
                         </div>
                     </div>
                 </div>
@@ -1428,6 +1475,8 @@
                 // Load live data when Swarm Nodes page becomes active
                 if (page === 'swarms') {
                     loadServiceRegistry();
+                    loadMainSwarmsDiagram();
+                    loadSwarmStudioCatalog();
                 }
 
                 // Load live LLM data when LLM Settings page becomes active
@@ -1823,6 +1872,225 @@
 
             _updateStatusBar(`Health check done — ${onlineCount}/${ids.length} online — ${new Date().toLocaleTimeString()}`);
             if (btn) { btn.disabled = false; btn.textContent = 'Refresh Health'; }
+        }
+
+        // =====================================================================
+        // Swarm Studio — Diagram <-> File
+        // =====================================================================
+        let _swarmStudioCatalog = null;
+        let _swarmStudioPath = '';
+
+        function _studioStatus(msg, isError = false) {
+            const el = document.getElementById('swarm-studio-status');
+            if (!el) return;
+            el.textContent = msg;
+            el.style.color = isError ? '#f44336' : '#999';
+        }
+
+        function _renderMermaidInto(wrapperId, graphDef) {
+            const wrapper = document.getElementById(wrapperId);
+            if (!wrapper) return;
+            const containerId = `${wrapperId}-dyn-${Date.now()}`;
+            wrapper.innerHTML = `<div id="${containerId}" style="width:100%;"></div>`;
+            try {
+                mermaid.render(`${containerId}-svg`, graphDef)
+                    .then(({ svg }) => {
+                        const container = document.getElementById(containerId);
+                        if (container) container.innerHTML = svg;
+                    })
+                    .catch(() => {
+                        wrapper.innerHTML = `<pre style="color:#999;font-size:0.8rem;white-space:pre-wrap;">${graphDef}</pre>`;
+                    });
+            } catch (e) {
+                wrapper.innerHTML = `<pre style="color:#999;font-size:0.8rem;white-space:pre-wrap;">${graphDef}</pre>`;
+            }
+        }
+
+        function _renderSwarmValidation(validation) {
+            const output = document.getElementById('swarm-studio-validation');
+            if (!output) return;
+            if (!validation) {
+                output.textContent = 'No validation data.';
+                return;
+            }
+            const errors = validation.errors || [];
+            const warnings = validation.warnings || [];
+            const lines = [
+                `ok: ${validation.ok ? 'true' : 'false'}`,
+                `errors: ${errors.length}`,
+                ...errors.map(e => `  - ${e}`),
+                `warnings: ${warnings.length}`,
+                ...warnings.map(w => `  - ${w}`),
+            ];
+            output.textContent = lines.join('\n');
+        }
+
+        async function loadMainSwarmsDiagram() {
+            const status = document.getElementById('main-swarms-status');
+            if (status) status.textContent = 'Loading main swarm topology...';
+            try {
+                const resp = await fetch('/api/swarms/studio/main-diagram');
+                const data = await resp.json();
+                if (!resp.ok || !data.ok) {
+                    throw new Error(data.error || 'failed to load main swarms diagram');
+                }
+                _renderMermaidInto('main-swarms-mermaid-wrapper', data.diagram_mermaid || 'graph TD');
+                if (status) status.textContent = `Loaded ${new Date().toLocaleTimeString()}`;
+            } catch (e) {
+                if (status) status.textContent = `Error: ${e.message}`;
+            }
+        }
+
+        async function loadSwarmStudioCatalog() {
+            const select = document.getElementById('swarm-studio-select');
+            if (!select) return;
+            _studioStatus('Loading swarm catalog...');
+            try {
+                const resp = await fetch('/api/swarms/studio/catalog');
+                const data = await resp.json();
+                if (!resp.ok || !data.ok) {
+                    throw new Error(data.error || 'failed to load swarm studio catalog');
+                }
+                _swarmStudioCatalog = data;
+                const swarms = (data.swarms || []).slice().sort((a, b) => {
+                    const ak = `${a.category || ''}/${a.id}`;
+                    const bk = `${b.category || ''}/${b.id}`;
+                    return ak.localeCompare(bk);
+                });
+                select.innerHTML = '';
+                swarms.forEach(row => {
+                    const option = document.createElement('option');
+                    option.value = row.id;
+                    const cat = row.category ? `[${row.category}] ` : '';
+                    option.textContent = `${cat}${row.id}`;
+                    select.appendChild(option);
+                });
+                if (swarms.length > 0) {
+                    await loadSelectedSwarmStudio();
+                } else {
+                    _studioStatus('No swarms found.', true);
+                }
+            } catch (e) {
+                _studioStatus(`Error: ${e.message}`, true);
+            }
+        }
+
+        async function loadSelectedSwarmStudio() {
+            const select = document.getElementById('swarm-studio-select');
+            const markdown = document.getElementById('swarm-studio-markdown');
+            const diagram = document.getElementById('swarm-studio-diagram');
+            const pathEl = document.getElementById('swarm-studio-path');
+            if (!select || !markdown || !diagram) return;
+            const swarmId = (select.value || '').trim();
+            if (!swarmId) {
+                _studioStatus('Select a swarm first.', true);
+                return;
+            }
+            _studioStatus(`Loading ${swarmId}...`);
+            try {
+                const resp = await fetch(`/api/swarms/studio/swarm?swarm_id=${encodeURIComponent(swarmId)}`);
+                const data = await resp.json();
+                if (!resp.ok || !data.ok) {
+                    throw new Error(data.error || `failed to load swarm ${swarmId}`);
+                }
+                markdown.value = data.markdown || '';
+                diagram.value = data.diagram_mermaid || '';
+                _swarmStudioPath = data.path || '';
+                if (pathEl) pathEl.textContent = _swarmStudioPath;
+                _renderSwarmValidation(data.validation || null);
+                _renderMermaidInto('swarm-studio-preview', diagram.value || 'graph TD');
+                _studioStatus(`Loaded ${swarmId}`);
+            } catch (e) {
+                _studioStatus(`Error: ${e.message}`, true);
+            }
+        }
+
+        async function compileSwarmStudioDiagram() {
+            const markdown = document.getElementById('swarm-studio-markdown');
+            const diagram = document.getElementById('swarm-studio-diagram');
+            const select = document.getElementById('swarm-studio-select');
+            if (!markdown || !diagram || !select) return;
+            _studioStatus('Compiling diagram from markdown...');
+            try {
+                const resp = await fetch('/api/swarms/studio/compile-diagram', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        markdown: markdown.value,
+                        swarm_id: select.value || '',
+                        path: _swarmStudioPath || '',
+                    }),
+                });
+                const data = await resp.json();
+                if (!resp.ok || !data.ok) {
+                    throw new Error(data.error || 'compile-diagram failed');
+                }
+                diagram.value = data.diagram_mermaid || '';
+                _renderSwarmValidation(data.validation || null);
+                _renderMermaidInto('swarm-studio-preview', diagram.value || 'graph TD');
+                _studioStatus('Diagram compiled.');
+            } catch (e) {
+                _studioStatus(`Error: ${e.message}`, true);
+            }
+        }
+
+        async function compileSwarmStudioSwarm() {
+            const markdown = document.getElementById('swarm-studio-markdown');
+            const diagram = document.getElementById('swarm-studio-diagram');
+            if (!markdown || !diagram) return;
+            _studioStatus('Compiling swarm from diagram...');
+            try {
+                const resp = await fetch('/api/swarms/studio/compile-swarm', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        diagram_mermaid: diagram.value,
+                    }),
+                });
+                const data = await resp.json();
+                if (!resp.ok || !data.ok) {
+                    throw new Error(data.error || 'compile-swarm failed');
+                }
+                markdown.value = data.markdown || markdown.value;
+                _renderSwarmValidation(data.validation || null);
+                _studioStatus('Swarm markdown compiled.');
+            } catch (e) {
+                _studioStatus(`Error: ${e.message}`, true);
+            }
+        }
+
+        async function validateSwarmStudio() {
+            const markdown = document.getElementById('swarm-studio-markdown');
+            const diagram = document.getElementById('swarm-studio-diagram');
+            if (!markdown || !diagram) return;
+            _studioStatus('Validating swarm...');
+            try {
+                const resp = await fetch('/api/swarms/studio/validate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        markdown: markdown.value,
+                        diagram_mermaid: diagram.value,
+                        path: _swarmStudioPath || '',
+                    }),
+                });
+                const data = await resp.json();
+                if (!resp.ok || !data.ok) {
+                    throw new Error(data.error || 'validation failed');
+                }
+                _renderSwarmValidation(data.validation || null);
+                _studioStatus(`Validation complete (${data.source || 'unknown source'}).`);
+            } catch (e) {
+                _studioStatus(`Error: ${e.message}`, true);
+            }
+        }
+
+        function openSwarmStudioPath() {
+            if (!_swarmStudioPath) {
+                _studioStatus('Load a swarm first.', true);
+                return;
+            }
+            openVSCode(_swarmStudioPath);
         }
 
         // =====================================================================

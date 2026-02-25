@@ -15,7 +15,7 @@ You can use **Stillwater OS skills + swarms** to get *frontier-level engineering
 - deterministic run records
 - CI gates that a skeptic can replay
 
-PZIP is a strong MVP demonstration of the approach **on the native (C++) delivery path**: the CLI round-trips and the proprietary compression lanes are active. The Python packaging/test surface is currently **not** in “skeptic-proof” shape (missing module import breaks `pytest` collection), which is exactly the kind of gap Stillwater is designed to flush out and fix.
+PZIP is a strong MVP demonstration of the approach **on the native (C++) delivery path**: the CLI round-trips and the compression lanes are active. The Python packaging/test surface is currently **not** in “skeptic-proof” shape (missing module import breaks `pytest` collection), which is exactly the kind of gap Stillwater is designed to flush out and fix.
 
 ---
 
@@ -55,7 +55,7 @@ Net effect: cheap models spend fewer tokens “making things sound right” and 
 
 ### 3.1 What PZIP is (1 sentence)
 
-PZIP is a proprietary compression system that achieves industry-leading compression ratios on structured content, with a “never-worse” fallback guarantee.
+PZIP is a specialized compression system that achieves strong compression ratios on structured content, with a “never-worse” fallback guarantee.
 
 ### 3.2 What we can verify locally (without trusting narrative)
 
@@ -182,4 +182,3 @@ At that point, the “built with Haiku + Stillwater” story becomes a receipts-
 **Is Haiku capable?** Yes—especially when Stillwater constrains the workflow and forces verification.  
 **Does Stillwater create real uplift for cheap models?** Yes—primarily via fewer failed iterations and higher auditability.  
 **Is PZIP already a perfect public “live production” proof?** Not yet, based on repo-level test/CI hygiene; the native MVP is strong, but the skeptic-proof harness is the missing last mile.
-

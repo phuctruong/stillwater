@@ -26,7 +26,7 @@ import pytest
 # --- Path setup -----------------------------------------------------------
 REPO_ROOT = Path(__file__).resolve().parents[2]
 ADMIN_DIR = REPO_ROOT / "admin"
-CLI_SRC = REPO_ROOT / "cli" / "src"
+CLI_SRC = REPO_ROOT / "src" / "cli" / "src"
 
 for _p in (str(ADMIN_DIR), str(CLI_SRC)):
     if _p not in sys.path:
@@ -212,7 +212,7 @@ class TestCatalogAPI:
         assert isinstance(data["extras"], list)
 
     def test_catalog_skills_include_prime_safety(self, server_conn):
-        """skills/prime-safety.md should appear in the root_skills group."""
+        """data/default/skills/prime-safety.md should appear in the root_skills group."""
         _, data = _json_request(server_conn, "GET", "/api/catalog")
         root_skills = next(
             (g for g in data["groups"] if g["id"] == "root_skills"), None
@@ -230,9 +230,9 @@ class TestFileReadAPI:
     """Tests for GET /api/file?path=..."""
 
     def test_read_real_file_returns_ok(self, server_conn):
-        """GET /api/file?path=skills/prime-safety.md should return ok=True."""
+        """GET /api/file?path=data/default/skills/prime-safety.md should return ok=True."""
         status, data = _json_request(
-            server_conn, "GET", "/api/file?path=skills/prime-safety.md"
+            server_conn, "GET", "/api/file?path=data/default/skills/prime-safety.md"
         )
         assert status == 200
         assert data.get("ok") is True
@@ -240,7 +240,7 @@ class TestFileReadAPI:
     def test_read_real_file_content_nonempty(self, server_conn):
         """Content field for prime-safety.md should be a non-empty string."""
         _, data = _json_request(
-            server_conn, "GET", "/api/file?path=skills/prime-safety.md"
+            server_conn, "GET", "/api/file?path=data/default/skills/prime-safety.md"
         )
         assert isinstance(data.get("content"), str)
         assert len(data["content"]) > 0
@@ -248,7 +248,7 @@ class TestFileReadAPI:
     def test_read_real_file_sha256_matches(self, server_conn):
         """sha256 returned by the server must match locally computed digest."""
         _, data = _json_request(
-            server_conn, "GET", "/api/file?path=skills/prime-safety.md"
+            server_conn, "GET", "/api/file?path=data/default/skills/prime-safety.md"
         )
         content = data["content"]
         expected_sha256 = hashlib.sha256(content.encode("utf-8")).hexdigest()
@@ -257,7 +257,7 @@ class TestFileReadAPI:
     def test_read_real_file_sha256_is_64_hex_chars(self, server_conn):
         """sha256 field should be a 64-character lowercase hex string."""
         _, data = _json_request(
-            server_conn, "GET", "/api/file?path=skills/prime-safety.md"
+            server_conn, "GET", "/api/file?path=data/default/skills/prime-safety.md"
         )
         sha = data.get("sha256", "")
         assert len(sha) == 64
@@ -266,7 +266,7 @@ class TestFileReadAPI:
     def test_read_real_file_size_matches_content(self, server_conn):
         """size should equal len(content.encode('utf-8'))."""
         _, data = _json_request(
-            server_conn, "GET", "/api/file?path=skills/prime-safety.md"
+            server_conn, "GET", "/api/file?path=data/default/skills/prime-safety.md"
         )
         content = data["content"]
         assert data.get("size") == len(content.encode("utf-8"))
@@ -274,14 +274,14 @@ class TestFileReadAPI:
     def test_read_real_file_path_echoed(self, server_conn):
         """path field in response should match the requested path."""
         _, data = _json_request(
-            server_conn, "GET", "/api/file?path=skills/prime-safety.md"
+            server_conn, "GET", "/api/file?path=data/default/skills/prime-safety.md"
         )
-        assert data.get("path") == "skills/prime-safety.md"
+        assert data.get("path") == "data/default/skills/prime-safety.md"
 
     def test_read_nonexistent_file_returns_error(self, server_conn):
         """A path that does not exist should return ok=False and 400."""
         status, data = _json_request(
-            server_conn, "GET", "/api/file?path=skills/does_not_exist_xyzzy.md"
+            server_conn, "GET", "/api/file?path=data/default/skills/does_not_exist_xyzzy.md"
         )
         assert status == 400
         assert data.get("ok") is False
@@ -318,7 +318,7 @@ class TestFileSaveAPI:
 
     def _writable_skill_path(self) -> str | None:
         """Return relative path of a writable skill file, or None."""
-        d = REPO_ROOT / "skills"
+        d = REPO_ROOT / "data" / "default" / "skills"
         if not d.exists():
             return None
         files = list(d.glob("*.md"))
@@ -330,12 +330,12 @@ class TestFileSaveAPI:
         Uses a temporary file inside the skills/ directory to avoid polluting
         existing files. The file is cleaned up after the test.
         """
-        skills_dir = REPO_ROOT / "skills"
+        skills_dir = REPO_ROOT / "data" / "default" / "skills"
         if not skills_dir.exists():
-            pytest.skip("skills/ directory does not exist")
+            pytest.skip("data/default/skills directory does not exist")
 
         test_filename = "zzz_test_save_temp.md"
-        test_path_rel = f"skills/{test_filename}"
+        test_path_rel = f"data/default/skills/{test_filename}"
         test_file = skills_dir / test_filename
         original_content = "# Test save\n\nContent written by test.\n"
 
@@ -365,12 +365,12 @@ class TestFileSaveAPI:
 
     def test_save_returns_sha256(self, server_conn):
         """POST /api/file/save should return the sha256 of saved content."""
-        skills_dir = REPO_ROOT / "skills"
+        skills_dir = REPO_ROOT / "data" / "default" / "skills"
         if not skills_dir.exists():
-            pytest.skip("skills/ directory does not exist")
+            pytest.skip("data/default/skills directory does not exist")
 
         test_filename = "zzz_test_sha256_temp.md"
-        test_path_rel = f"skills/{test_filename}"
+        test_path_rel = f"data/default/skills/{test_filename}"
         test_file = skills_dir / test_filename
         content = "# sha256 test\n"
         try:
@@ -431,9 +431,9 @@ class TestFileCreateAPI:
 
     def test_create_file_in_valid_group(self, server_conn):
         """Creating a file in a valid group should return ok=True and created=True."""
-        skills_dir = REPO_ROOT / "skills"
+        skills_dir = REPO_ROOT / "data" / "default" / "skills"
         if not skills_dir.exists():
-            pytest.skip("skills/ directory does not exist")
+            pytest.skip("data/default/skills directory does not exist")
 
         test_filename = "zzz_create_test_temp"
         expected_file = skills_dir / f"{test_filename}.md"
@@ -455,9 +455,9 @@ class TestFileCreateAPI:
 
     def test_create_file_adds_md_extension(self, server_conn):
         """Filename without extension should get .md appended."""
-        skills_dir = REPO_ROOT / "skills"
+        skills_dir = REPO_ROOT / "data" / "default" / "skills"
         if not skills_dir.exists():
-            pytest.skip("skills/ directory does not exist")
+            pytest.skip("data/default/skills directory does not exist")
 
         test_filename = "zzz_ext_test_temp"
         expected_file = skills_dir / f"{test_filename}.md"
@@ -478,9 +478,9 @@ class TestFileCreateAPI:
 
     def test_create_file_uses_template_content(self, server_conn):
         """Newly created file should contain the group's create_template content."""
-        skills_dir = REPO_ROOT / "skills"
+        skills_dir = REPO_ROOT / "data" / "default" / "skills"
         if not skills_dir.exists():
-            pytest.skip("skills/ directory does not exist")
+            pytest.skip("data/default/skills directory does not exist")
 
         test_filename = "zzz_template_test_temp"
         expected_file = skills_dir / f"{test_filename}.md"
@@ -503,9 +503,9 @@ class TestFileCreateAPI:
 
     def test_create_file_duplicate_returns_error(self, server_conn):
         """Creating a file that already exists should return ok=False."""
-        skills_dir = REPO_ROOT / "skills"
+        skills_dir = REPO_ROOT / "data" / "default" / "skills"
         if not skills_dir.exists():
-            pytest.skip("skills/ directory does not exist")
+            pytest.skip("data/default/skills directory does not exist")
 
         test_filename = "zzz_dup_test_temp"
         expected_file = skills_dir / f"{test_filename}.md"
@@ -709,18 +709,18 @@ class TestCommunityAPI:
         assert "sync_events" in c
 
     def test_community_link_valid_email(self, server_conn):
-        """POST /api/community/link with a valid email should return ok=True."""
+        """POST /api/community/link returns not_configured when cloud key is missing."""
         status, data = _json_request(
             server_conn,
             "POST",
             "/api/community/link",
             {"email": "testuser@example.com"},
         )
-        assert status == 200
-        assert data.get("ok") is True
+        assert status == 503
+        assert data.get("ok") is False
 
     def test_community_link_returns_link_object(self, server_conn):
-        """Community link response should contain a 'link' object with email and status."""
+        """Community link response should return cloud not_configured state."""
         _, data = _json_request(
             server_conn,
             "POST",
@@ -729,12 +729,11 @@ class TestCommunityAPI:
         )
         assert "link" in data
         link = data["link"]
-        assert link.get("email") == "verify@example.com"
-        assert "status" in link
-        assert link["status"] == "magic_link_sent_mock"
+        assert link.get("status") == "not_configured"
+        assert "message" in link
 
     def test_community_link_generates_api_key(self, server_conn):
-        """Link response should include a stub api_key."""
+        """Link response should never include raw API keys."""
         _, data = _json_request(
             server_conn,
             "POST",
@@ -742,11 +741,10 @@ class TestCommunityAPI:
             {"email": "apikey@example.com"},
         )
         link = data.get("link", {})
-        assert "api_key" in link
-        assert len(link["api_key"]) > 0
+        assert "api_key" not in link
 
-    def test_community_link_generates_login_link_stub(self, server_conn):
-        """Link response should include a login_link_stub URL."""
+    def test_community_link_no_login_link_field(self, server_conn):
+        """Link response should not include legacy login-link fields."""
         _, data = _json_request(
             server_conn,
             "POST",
@@ -754,8 +752,7 @@ class TestCommunityAPI:
             {"email": "loginlink@example.com"},
         )
         link = data.get("link", {})
-        stub = link.get("login_link_stub", "")
-        assert stub.startswith("https://")
+        assert "login_link" not in link
 
     def test_community_link_invalid_email_blocked(self, server_conn):
         """POST /api/community/link with a non-email should return ok=False."""
@@ -769,7 +766,8 @@ class TestCommunityAPI:
         assert data.get("ok") is False
 
     def test_community_link_updates_status(self, server_conn):
-        """After linking, GET /api/community/status should show linked=True."""
+        """Community status should not change when link feature is unimplemented."""
+        _, before = _json_request(server_conn, "GET", "/api/community/status")
         _json_request(
             server_conn,
             "POST",
@@ -777,23 +775,21 @@ class TestCommunityAPI:
             {"email": "statuscheck@example.com"},
         )
         _, status_data = _json_request(server_conn, "GET", "/api/community/status")
-        c = status_data["community"]
-        assert c.get("linked") is True
-        assert c.get("email") == "statuscheck@example.com"
+        assert status_data["community"].get("linked") == before["community"].get("linked")
 
     def test_community_sync_returns_ok(self, server_conn):
-        """POST /api/community/sync should return ok=True."""
+        """POST /api/community/sync returns not_configured when cloud key is missing."""
         status, data = _json_request(
             server_conn,
             "POST",
             "/api/community/sync",
             {"direction": "both"},
         )
-        assert status == 200
-        assert data.get("ok") is True
+        assert status == 503
+        assert data.get("ok") is False
 
     def test_community_sync_response_structure(self, server_conn):
-        """Sync response should contain sync.status and sync.direction."""
+        """Sync response should include cloud status details."""
         _, data = _json_request(
             server_conn,
             "POST",
@@ -801,13 +797,11 @@ class TestCommunityAPI:
             {"direction": "both"},
         )
         sync = data.get("sync", {})
-        assert sync.get("status") == "mock_sync_complete"
-        assert "direction" in sync
-        assert "uploaded" in sync
-        assert "remote_available" in sync
+        assert sync.get("status") == "not_configured"
+        assert "message" in sync
 
     def test_community_sync_increments_event_count(self, server_conn):
-        """Each sync call should increment sync_events in community status."""
+        """Sync event count should not change when cloud is not configured."""
         _, before = _json_request(server_conn, "GET", "/api/community/status")
         before_count = before["community"].get("sync_events", 0)
 
@@ -820,7 +814,14 @@ class TestCommunityAPI:
 
         _, after = _json_request(server_conn, "GET", "/api/community/status")
         after_count = after["community"].get("sync_events", 0)
-        assert after_count == before_count + 1
+        assert after_count == before_count
+
+    def test_cloud_health_endpoint_not_configured(self, server_conn):
+        """GET /api/health/cloud should report not_configured without key."""
+        status, data = _json_request(server_conn, "GET", "/api/health/cloud")
+        assert status == 200
+        assert data.get("ok") is False
+        assert data.get("cloud", {}).get("status") == "not_configured"
 
 
 # =========================================================================
@@ -1173,6 +1174,7 @@ class TestErrorHandling:
             ("GET", "/api/catalog"),
             ("GET", "/api/llm/status"),
             ("GET", "/api/community/status"),
+            ("GET", "/api/health/cloud"),
             ("GET", "/api/cli/commands"),
         ]
         for method, path in endpoints:
@@ -1184,7 +1186,116 @@ class TestErrorHandling:
 
 
 # =========================================================================
-# 12. Response Content-Type
+# 12. Swarm Studio API
+# =========================================================================
+
+class TestSwarmStudioAPI:
+    """Tests for diagram <-> swarm studio endpoints."""
+
+    def test_swarms_studio_catalog_returns_ok(self, server_conn):
+        status, data = _json_request(server_conn, "GET", "/api/swarms/studio/catalog")
+        assert status == 200
+        assert data.get("ok") is True
+        assert isinstance(data.get("swarms"), list)
+        assert isinstance(data.get("skills"), list)
+        assert isinstance(data.get("recipes"), list)
+        assert isinstance(data.get("personas"), list)
+
+    def test_swarms_studio_main_diagram_returns_mermaid(self, server_conn):
+        status, data = _json_request(server_conn, "GET", "/api/swarms/studio/main-diagram")
+        assert status == 200
+        assert data.get("ok") is True
+        graph = data.get("diagram_mermaid", "")
+        assert isinstance(graph, str)
+        assert "graph TD" in graph
+
+    def test_swarms_studio_load_swarm_returns_markdown_and_diagram(self, server_conn):
+        status, data = _json_request(
+            server_conn, "GET", "/api/swarms/studio/swarm?swarm_id=coder"
+        )
+        assert status == 200
+        assert data.get("ok") is True
+        assert isinstance(data.get("markdown"), str)
+        assert isinstance(data.get("diagram_mermaid"), str)
+        assert isinstance(data.get("validation"), dict)
+
+    def test_swarms_studio_compile_diagram_from_markdown(self, server_conn):
+        status, loaded = _json_request(
+            server_conn, "GET", "/api/swarms/studio/swarm?swarm_id=coder"
+        )
+        assert status == 200 and loaded.get("ok") is True
+        status, compiled = _json_request(
+            server_conn,
+            "POST",
+            "/api/swarms/studio/compile-diagram",
+            {
+                "swarm_id": "coder",
+                "path": loaded.get("path"),
+                "markdown": loaded.get("markdown"),
+            },
+        )
+        assert status == 200
+        assert compiled.get("ok") is True
+        assert "%% SWARM_SPEC:" in compiled.get("diagram_mermaid", "")
+
+    def test_swarms_studio_compile_swarm_from_diagram(self, server_conn):
+        status, loaded = _json_request(
+            server_conn, "GET", "/api/swarms/studio/swarm?swarm_id=coder"
+        )
+        assert status == 200 and loaded.get("ok") is True
+        status, compiled = _json_request(
+            server_conn,
+            "POST",
+            "/api/swarms/studio/compile-swarm",
+            {"diagram_mermaid": loaded.get("diagram_mermaid")},
+        )
+        assert status == 200
+        assert compiled.get("ok") is True
+        markdown = compiled.get("markdown", "")
+        assert isinstance(markdown, str)
+        assert markdown.startswith("---\n")
+
+    def test_swarms_studio_validate_returns_validation_block(self, server_conn):
+        status, loaded = _json_request(
+            server_conn, "GET", "/api/swarms/studio/swarm?swarm_id=coder"
+        )
+        assert status == 200 and loaded.get("ok") is True
+        status, data = _json_request(
+            server_conn,
+            "POST",
+            "/api/swarms/studio/validate",
+            {"markdown": loaded.get("markdown")},
+        )
+        assert status == 200
+        assert data.get("ok") is True
+        assert isinstance(data.get("validation"), dict)
+        assert "errors" in data["validation"]
+        assert "warnings" in data["validation"]
+
+
+# =========================================================================
+# 13. VSCode Open API
+# =========================================================================
+
+class TestVSCodeOpenAPI:
+    def test_vscode_open_missing_file_returns_400(self, server_conn):
+        status, data = _json_request(server_conn, "POST", "/api/vscode/open", {})
+        assert status == 400
+        assert data.get("ok") is False
+
+    def test_vscode_open_nonexistent_path_returns_400(self, server_conn):
+        status, data = _json_request(
+            server_conn,
+            "POST",
+            "/api/vscode/open",
+            {"file": "data/default/swarms/nope/missing.md"},
+        )
+        assert status == 400
+        assert data.get("success") is False
+
+
+# =========================================================================
+# 14. Response Content-Type
 # =========================================================================
 
 class TestResponseHeaders:

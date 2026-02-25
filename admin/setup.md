@@ -152,7 +152,7 @@ claude:                   # Anthropic API direct
 ## Security Notes
 
 - **Localhost only by default.** The server binds to `127.0.0.1`. Do not expose it to a network interface without understanding the risks.
-- **Edit restrictions.** File writes are restricted to curated Stillwater config and content paths (`skills/`, `cli/`, `llm_config.yaml`, etc.). Arbitrary filesystem writes are not permitted.
+- **Edit restrictions.** File writes are restricted to curated Stillwater config and content paths (`skills/`, `src/cli/`, `llm_config.yaml`, etc.). Arbitrary filesystem writes are not permitted.
 - **No credential storage.** The admin UI does not store API keys, passwords, or tokens in any persistent file. Community magic-link stubs are local only.
 - **Sudo actions.** The "Install Ollama" button runs `sudo` commands on your machine. Only use this on trusted, local machines.
 
@@ -190,10 +190,10 @@ If your system defaults to Python 2, use `python3` explicitly.
 
 ### Module not found errors (ImportError)
 
-The admin server imports from `cli/src` for some features. Set PYTHONPATH from the repo root:
+The admin server imports from `src/cli/src` for some features. Set PYTHONPATH from the repo root:
 
 ```bash
-PYTHONPATH=cli/src python admin/server.py
+PYTHONPATH=src/cli/src python admin/server.py
 ```
 
 Or use the start script which sets this automatically:

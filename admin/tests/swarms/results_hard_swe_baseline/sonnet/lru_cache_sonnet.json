@@ -2,10 +2,10 @@
   "model": "sonnet",
   "task_name": "lru_cache",
   "syntax_valid": true,
-  "functional_pass": true,
-  "complexity_score": 0.7,
-  "edge_cases_score": 0.8,
-  "code_length": 6180,
-  "timestamp": "2026-02-22T17:53:38.958491",
+  "functional_pass": false,
+  "complexity_score": 0.85,
+  "edge_cases_score": 0.7,
+  "code_length": 7797,
+  "timestamp": "2026-02-24T15:33:48.917944",
   "baseline": true
 }

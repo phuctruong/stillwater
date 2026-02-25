@@ -1,405 +1,364 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Stillwater LLM Portal - Setup and Configuration">
-    <title>Stillwater Admin Dojo — LLM Portal</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Stillwater Admin Dojo — local orchestration dashboard for the Stillwater AI agent system">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; base-uri 'self'">
+  <title>Stillwater Admin Dojo</title>
 
-    <!-- Bootstrap 5 CSS from CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Mermaid.js from CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-    <!-- Custom stylesheet -->
-    <link href="/static/app.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- App styles -->
+  <link rel="stylesheet" href="app.css">
 </head>
 <body>
-    <!-- TOPBAR / NAVIGATION -->
-    <nav class="topbar">
-        <div class="container-fluid">
-            <div class="topbar-content">
-                <div class="topbar-left">
-                    <img id="dropletLogo" src="../images/droplet-logo-merge.gif" alt="Droplet Logo" class="droplet-icon" onload="setupGifSwitch()">
-                    <span class="topbar-logo">🌊 Stillwater</span>
-                    <span class="topbar-title">Admin Dojo</span>
-                </div>
-                <div class="topbar-right">
-                    <span class="server-status" id="serverStatus">● Connecting...</span>
-                </div>
-            </div>
-        </div>
-    </nav>
 
-    <!-- MAIN CONTAINER -->
-    <div class="main-container">
-        <!-- LEFT SIDEBAR: Status Cards -->
-        <aside class="status-sidebar">
-            <div class="sidebar-header">
-                <h5>System Status</h5>
-            </div>
-
-            <!-- LLM Portal Status Card -->
-            <div class="status-card card-llm" id="cardLLM">
-                <div class="status-dot llm"></div>
-                <div class="status-content">
-                    <h6>🔌 LLM Portal</h6>
-                    <p class="status-text" id="llmStatus">Loading...</p>
-                    <p class="status-detail" id="llmDetail"></p>
-                    <button class="btn-configure" onclick="openLLMWizard()">Configure</button>
-                </div>
-            </div>
-
-            <!-- Solace AGI Status Card -->
-            <div class="status-card card-solace" id="cardSolace">
-                <div class="status-dot solace"></div>
-                <div class="status-content">
-                    <h6>☁️ Solace AGI</h6>
-                    <p class="status-text" id="solaceStatus">Loading...</p>
-                    <p class="status-detail" id="solaceDetail"></p>
-                    <button class="btn-configure" onclick="openSolaceWizard()">Configure</button>
-                </div>
-            </div>
-
-            <!-- Skills Ecosystem Status Card -->
-            <div class="status-card card-skills" id="cardSkills">
-                <div class="status-dot skills"></div>
-                <div class="status-content">
-                    <h6>📊 Skills Ecosystem</h6>
-                    <p class="status-text" id="skillsStatus">Loading...</p>
-                    <p class="status-detail" id="skillsDetail"></p>
-                </div>
-            </div>
-        </aside>
-
-        <!-- MAIN CONTENT AREA -->
-        <main class="main-content">
-            <!-- TAB NAVIGATION -->
-            <div class="tab-navigation">
-                <button class="tab-btn active" data-tab="dashboard" onclick="switchTab('dashboard')">Dashboard</button>
-                <button class="tab-btn" data-tab="skills" onclick="switchTab('skills')">Skills</button>
-                <button class="tab-btn" data-tab="recipes" onclick="switchTab('recipes')">Recipes</button>
-                <button class="tab-btn" data-tab="swarms" onclick="switchTab('swarms')">Swarms</button>
-                <button class="tab-btn" data-tab="personas" onclick="switchTab('personas')">Personas</button>
-            </div>
-
-            <!-- TAB 1: DASHBOARD -->
-            <div class="tab-pane active" id="tab-dashboard">
-                <div class="tab-header">
-                    <h2>Setup & Configuration</h2>
-                    <p>Configure your LLM models and Solace AGI connection below.</p>
-                </div>
-
-                <div class="setup-wizards-container">
-                    <!-- LLM Wizard Placeholder -->
-                    <div class="wizard-card">
-                        <h4>🔌 Configure LLM Portal</h4>
-                        <p>Set up your Claude Code wrapper and select your default model (Haiku, Sonnet, or Opus).</p>
-                        <button class="btn-primary" onclick="openLLMWizard()">Start Setup</button>
-                    </div>
-
-                    <!-- Solace AGI Wizard Placeholder -->
-                    <div class="wizard-card">
-                        <h4>☁️ Connect to Solace AGI</h4>
-                        <p>Enable cloud features: skill submission, cloud sync, and agent orchestration.</p>
-                        <button class="btn-primary" onclick="openSolaceWizard()">Start Setup</button>
-                    </div>
-                </div>
-
-                <!-- Quick Start Guide -->
-                <div class="quick-start">
-                    <h5>📖 Quick Start</h5>
-                    <ol>
-                        <li>Configure LLM Portal to select your preferred Claude model</li>
-                        <li>(Optional) Connect Solace AGI for cloud features</li>
-                        <li>Explore the Skills, Recipes, Swarms, and Personas tabs</li>
-                        <li>Start using Stillwater!</li>
-                    </ol>
-                </div>
-            </div>
-
-            <!-- TAB 2: SKILLS -->
-            <div class="tab-pane" id="tab-skills">
-                <div class="tab-header">
-                    <h2>Skills Ecosystem</h2>
-                    <p>Dependencies and relationships between all Stillwater skills.</p>
-                </div>
-                <div class="mermaid-container" id="mermaid-skills">
-                    <p class="loading-text">Loading skill graph...</p>
-                </div>
-            </div>
-
-            <!-- TAB 3: RECIPES -->
-            <div class="tab-pane" id="tab-recipes">
-                <div class="tab-header">
-                    <h2>Recipes & Combos</h2>
-                    <p>Recipe compositions and workflow combinations.</p>
-                </div>
-                <div class="mermaid-container" id="mermaid-recipes">
-                    <p class="loading-text">Loading recipe graph...</p>
-                </div>
-            </div>
-
-            <!-- TAB 4: SWARMS -->
-            <div class="tab-pane" id="tab-swarms">
-                <div class="tab-header">
-                    <h2>Agent Dispatch Matrix</h2>
-                    <p>Agent roles and their assigned skill packs.</p>
-                </div>
-                <div class="mermaid-container" id="mermaid-swarms">
-                    <p class="loading-text">Loading swarm matrix...</p>
-                </div>
-            </div>
-
-            <!-- TAB 5: PERSONAS -->
-            <div class="tab-pane" id="tab-personas">
-                <div class="tab-header">
-                    <h2>Persona State Machines</h2>
-                    <p>State diagrams for various personas.</p>
-                </div>
-                <div class="mermaid-container" id="mermaid-personas">
-                    <p class="loading-text">Loading persona FSMs...</p>
-                </div>
-            </div>
-        </main>
+  <!-- ======================================================
+       TOPBAR
+       ====================================================== -->
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-left">
+        <img src="../images/droplet-logo.png" alt="Stillwater" class="topbar-logo-img">
+        <span class="topbar-brand">Stillwater</span>
+        <span class="topbar-subtitle">Admin Dojo</span>
+      </div>
+      <div class="topbar-right">
+        <span class="server-status-badge" id="serverStatus" role="status" aria-live="polite">Connecting...</span>
+        <button class="server-retry-btn" id="btnRetryHealth" type="button" aria-label="Retry server health check">Retry</button>
+      </div>
     </div>
+  </nav>
 
-    <!-- LLM CONFIG WIZARD MODAL -->
-    <div class="modal" id="llmModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">LLM Configuration Wizard</h5>
-                    <button type="button" class="btn-close" onclick="closeLLMModal()"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="wizard-steps" id="llmWizardSteps">
-                        <!-- Step 1: Introduction -->
-                        <div class="wizard-step active" id="llmStep1">
-                            <h6>Step 1 of 4: Welcome</h6>
-                            <p>This wizard will help you configure your LLM Portal and select your default model.</p>
-                            <p>You can choose between:</p>
-                            <ul>
-                                <li><strong>Haiku</strong> - Fast and efficient</li>
-                                <li><strong>Sonnet</strong> - Balanced performance</li>
-                                <li><strong>Opus</strong> - Most capable</li>
-                            </ul>
-                            <div class="wizard-buttons">
-                                <button class="btn btn-primary" onclick="goToLLMStep(2)">Next</button>
-                                <button class="btn btn-secondary" onclick="closeLLMModal()">Cancel</button>
-                            </div>
-                        </div>
+  <!-- ======================================================
+       MAIN LAYOUT
+       ====================================================== -->
+  <div class="main-layout">
 
-                        <!-- Step 2: Model Selection -->
-                        <div class="wizard-step" id="llmStep2">
-                            <h6>Step 2 of 4: Select Default Model</h6>
-                            <p>Which model would you like to use by default?</p>
-                            <div class="model-selection">
-                                <label class="model-option">
-                                    <input type="radio" name="model" value="haiku" checked>
-                                    <span class="model-name">Haiku (Fast)</span>
-                                    <span class="model-desc">Fastest and most cost-effective</span>
-                                </label>
-                                <label class="model-option">
-                                    <input type="radio" name="model" value="sonnet">
-                                    <span class="model-name">Sonnet (Balanced)</span>
-                                    <span class="model-desc">Good balance of speed and capability</span>
-                                </label>
-                                <label class="model-option">
-                                    <input type="radio" name="model" value="opus">
-                                    <span class="model-name">Opus (Powerful)</span>
-                                    <span class="model-desc">Most capable, slower</span>
-                                </label>
-                            </div>
-                            <div class="wizard-options">
-                                <label>
-                                    <input type="checkbox" id="autoStart" checked>
-                                    Auto-start wrapper on boot
-                                </label>
-                            </div>
-                            <div class="wizard-buttons">
-                                <button class="btn btn-secondary" onclick="goToLLMStep(1)">Back</button>
-                                <button class="btn btn-primary" onclick="goToLLMStep(3)">Next</button>
-                                <button class="btn btn-secondary" onclick="closeLLMModal()">Cancel</button>
-                            </div>
-                        </div>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-heading">System Status</div>
 
-                        <!-- Step 3: Review & Save -->
-                        <div class="wizard-step" id="llmStep3">
-                            <h6>Step 3 of 4: Review Configuration</h6>
-                            <p>Please review your settings before saving:</p>
-                            <div class="config-summary">
-                                <div class="summary-item">
-                                    <span class="summary-label">Default Model:</span>
-                                    <span class="summary-value" id="reviewModel">Haiku</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="summary-label">Auto-start:</span>
-                                    <span class="summary-value" id="reviewAutoStart">Enabled</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="summary-label">Config File:</span>
-                                    <span class="summary-value">data/custom/llm_config.yaml</span>
-                                </div>
-                            </div>
-                            <div class="wizard-buttons">
-                                <button class="btn btn-secondary" onclick="goToLLMStep(2)">Back</button>
-                                <button class="btn btn-success" onclick="saveLLMConfig()" id="btnSaveLLM">Save Configuration</button>
-                                <button class="btn btn-secondary" onclick="closeLLMModal()">Cancel</button>
-                            </div>
-                        </div>
-
-                        <!-- Step 4: Success -->
-                        <div class="wizard-step" id="llmStep4">
-                            <h6>✓ Success!</h6>
-                            <p>Your LLM configuration has been saved.</p>
-                            <div class="success-message">
-                                <p>Configuration saved to: <code>data/custom/llm_config.yaml</code></p>
-                                <p>The dashboard will update automatically with your new settings.</p>
-                            </div>
-                            <div class="wizard-buttons">
-                                <button class="btn btn-primary" onclick="closeLLMModal()">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <!-- LLM Portal card -->
+      <div class="status-card card-llm" id="cardLLM">
+        <div class="status-dot-wrap">
+          <span class="status-dot dot-llm"></span>
         </div>
-    </div>
-
-    <!-- SOLACE AGI CONFIG WIZARD MODAL -->
-    <div class="modal" id="solaceModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Solace AGI Connection Wizard</h5>
-                    <button type="button" class="btn-close" onclick="closeSolaceModal()"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="wizard-steps" id="solaceWizardSteps">
-                        <!-- Step 1: Welcome -->
-                        <div class="wizard-step active" id="solaceStep1">
-                            <h6>Step 1 of 5: Welcome</h6>
-                            <p>Solace AGI is an optional cloud platform that enables:</p>
-                            <ul>
-                                <li>Skill submission to the Store</li>
-                                <li>Cloud sync and backup</li>
-                                <li>Recipe sharing with the community</li>
-                                <li>Twin browser orchestration</li>
-                            </ul>
-                            <p><strong>Cost:</strong> Free tier (local only) or paid tiers for cloud features.</p>
-                            <div class="wizard-buttons">
-                                <button class="btn btn-primary" onclick="goToSolaceStep(2)">Get Started</button>
-                                <button class="btn btn-secondary" onclick="closeSolaceModal()">Skip for Now</button>
-                            </div>
-                        </div>
-
-                        <!-- Step 2: Sign Up -->
-                        <div class="wizard-step" id="solaceStep2">
-                            <h6>Step 2 of 5: Get API Key</h6>
-                            <p>First, you need an API key from Solace AGI (takes 1 minute).</p>
-                            <p>You'll receive a key like: <code>sk_test_abc123...</code></p>
-                            <div class="wizard-buttons">
-                                <button class="btn btn-info" onclick="window.open('https://solaceagi.com', '_blank')">
-                                    Open solaceagi.com
-                                </button>
-                                <button class="btn btn-secondary" onclick="goToSolaceStep(3)">Already Have Key</button>
-                                <button class="btn btn-secondary" onclick="closeSolaceModal()">Cancel</button>
-                            </div>
-                        </div>
-
-                        <!-- Step 3: Paste API Key -->
-                        <div class="wizard-step" id="solaceStep3">
-                            <h6>Step 3 of 5: Paste API Key</h6>
-                            <p>Paste your API key here (will be encrypted before saving):</p>
-                            <input type="password" class="form-control" id="apiKeyInput" placeholder="sk_..." maxlength="100">
-                            <small class="text-muted">Your key will be encrypted using AES-256-GCM</small>
-                            <div class="wizard-buttons">
-                                <button class="btn btn-secondary" onclick="goToSolaceStep(2)">Back</button>
-                                <button class="btn btn-primary" onclick="goToSolaceStep(4)">Next</button>
-                                <button class="btn btn-secondary" onclick="closeSolaceModal()">Cancel</button>
-                            </div>
-                        </div>
-
-                        <!-- Step 4: Test Connection -->
-                        <div class="wizard-step" id="solaceStep4">
-                            <h6>Step 4 of 5: Test Connection</h6>
-                            <p id="testMessage">Testing Solace AGI connection...</p>
-                            <div id="testResults" class="test-results"></div>
-                            <div class="wizard-buttons" id="testButtons" style="display: none;">
-                                <button class="btn btn-secondary" onclick="goToSolaceStep(3)">Back</button>
-                                <button class="btn btn-primary" onclick="goToSolaceStep(5)">Next</button>
-                                <button class="btn btn-secondary" onclick="closeSolaceModal()">Cancel</button>
-                            </div>
-                        </div>
-
-                        <!-- Step 5: Review & Save -->
-                        <div class="wizard-step" id="solaceStep5">
-                            <h6>Step 5 of 5: Confirm & Save</h6>
-                            <p>Ready to save your Solace AGI configuration?</p>
-                            <div class="config-summary">
-                                <div class="summary-item">
-                                    <span class="summary-label">Service:</span>
-                                    <span class="summary-value">solaceagi.com</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="summary-label">API Key:</span>
-                                    <span class="summary-value" id="reviewApiKey">••••••••••</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="summary-label">Encryption:</span>
-                                    <span class="summary-value">AES-256-GCM</span>
-                                </div>
-                            </div>
-                            <div class="wizard-buttons">
-                                <button class="btn btn-secondary" onclick="goToSolaceStep(4)">Back</button>
-                                <button class="btn btn-success" onclick="saveSolaceConfig()" id="btnSaveSolace">Save Configuration</button>
-                                <button class="btn btn-secondary" onclick="closeSolaceModal()">Cancel</button>
-                            </div>
-                        </div>
-
-                        <!-- Step 6: Success -->
-                        <div class="wizard-step" id="solaceStep6">
-                            <h6>✓ Success!</h6>
-                            <p>Your Solace AGI configuration has been saved.</p>
-                            <div class="success-message">
-                                <p>Configuration saved to: <code>data/custom/solace_agi_config.yaml</code></p>
-                                <p>API key has been encrypted using AES-256-GCM.</p>
-                                <p>The dashboard will update automatically.</p>
-                            </div>
-                            <div class="wizard-buttons">
-                                <button class="btn btn-primary" onclick="closeSolaceModal()">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="status-card-body">
+          <div class="status-card-title">LLM Portal</div>
+          <div class="status-card-status" id="llmStatus">Loading...</div>
+          <div class="status-card-detail" id="llmDetail"></div>
+          <button class="btn-configure" id="btnConfigLLM">Configure</button>
         </div>
+      </div>
+
+      <!-- Solace AGI card -->
+      <div class="status-card card-solace" id="cardSolace">
+        <div class="status-dot-wrap">
+          <span class="status-dot dot-solace"></span>
+        </div>
+        <div class="status-card-body">
+          <div class="status-card-title">Solace AGI</div>
+          <div class="status-card-status" id="solaceStatus">Loading...</div>
+          <div class="status-card-detail" id="solaceDetail"></div>
+          <button class="btn-configure" id="btnConfigSolace">Configure</button>
+        </div>
+      </div>
+
+      <!-- Skills Ecosystem card -->
+      <div class="status-card card-skills" id="cardSkills">
+        <div class="status-dot-wrap">
+          <span class="status-dot dot-skills"></span>
+        </div>
+        <div class="status-card-body">
+          <div class="status-card-title">Skills Ecosystem</div>
+          <div class="status-card-status" id="skillsStatus">Loading...</div>
+          <div class="status-card-detail" id="skillsDetail"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="content">
+
+      <!-- TAB BAR -->
+      <div class="tab-bar">
+        <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+        <button class="tab-btn" data-tab="orchestration">Orchestration</button>
+        <button class="tab-btn" data-tab="skills">Skills</button>
+        <button class="tab-btn" data-tab="swarms">Swarms</button>
+        <button class="tab-btn" data-tab="personas">Personas</button>
+        <button class="tab-btn" data-tab="recipes">Recipes</button>
+      </div>
+
+      <!-- ================================================
+           TAB: DASHBOARD
+           ================================================ -->
+      <div class="tab-pane active" id="tab-dashboard">
+        <div class="tab-welcome">
+          <h2 class="welcome-heading">Stillwater Admin</h2>
+          <p class="welcome-desc">
+            Stillwater is an AI agent orchestration system. This dashboard lets you monitor your local Stillwater server, browse the architecture of each module, and connect your LLM provider. Start your server with
+            <code>stillwater serve</code>, then configure your LLM and watch your agents work.
+          </p>
+        </div>
+
+        <!-- Hero Cards Grid: 5 local modules -->
+        <div class="hero-grid">
+
+          <div class="hero-card" data-navigate="orchestration">
+            <div class="hero-card-img-wrap">
+              <img src="../images/droplets/orchestration.png" alt="Orchestration">
+            </div>
+            <div class="hero-card-body">
+              <h4 class="hero-card-title">Orchestration</h4>
+              <p class="hero-card-desc">Triple Twin Engine: Phase 1 (SmallTalk) &rarr; Phase 2 (Intent) &rarr; Phase 3 (Execution). CPU-first, LLM fallback.</p>
+              <span class="hero-badge" title="Three-phase control flow that routes from smalltalk to intent to execution">Architecture</span>
+            </div>
+          </div>
+
+          <div class="hero-card" data-navigate="skills">
+            <div class="hero-card-img-wrap">
+              <img src="../images/droplets/prime-phuc-skills.png" alt="Skills">
+            </div>
+            <div class="hero-card-body">
+              <h4 class="hero-card-title">Skills Ecosystem</h4>
+              <p class="hero-card-desc">Capability modules: prime-safety, prime-coder, phuc-orchestration, and domain skills. Rung-gated publishing.</p>
+              <span class="hero-badge" id="badgeSkillsCount" title="Live skill count loaded from /api/skills/list">Skills: --</span>
+            </div>
+          </div>
+
+          <div class="hero-card" data-navigate="swarms">
+            <div class="hero-card-img-wrap">
+              <img src="../images/droplets/swarm-node.png" alt="Swarms">
+            </div>
+            <div class="hero-card-body">
+              <h4 class="hero-card-title">Swarm Agents</h4>
+              <p class="hero-card-desc">Typed agents: coder, planner, skeptic, scout, mathematician. Each gets a skill pack + persona + model tier.</p>
+              <span class="hero-badge" id="badgeSwarmsCount" title="Live swarm count loaded from /api/swarms/list">Swarms: --</span>
+            </div>
+          </div>
+
+          <div class="hero-card" data-navigate="personas">
+            <div class="hero-card-img-wrap">
+              <img src="../images/droplets/famous-personas.png" alt="Personas">
+            </div>
+            <div class="hero-card-body">
+              <h4 class="hero-card-title">Famous Personas</h4>
+              <p class="hero-card-desc">Donald Knuth (code), Bruce Schneier (security), Barbara Liskov (contracts), Grace Hopper (compilers).</p>
+              <span class="hero-badge" id="badgePersonasCount" title="Live persona count loaded from /api/personas/list">Personas: --</span>
+            </div>
+          </div>
+
+          <div class="hero-card" data-navigate="recipes">
+            <div class="hero-card-img-wrap">
+              <img src="../images/droplets/recipes.png" alt="Recipes">
+            </div>
+            <div class="hero-card-body">
+              <h4 class="hero-card-title">Recipes &amp; Combos</h4>
+              <p class="hero-card-desc">Saved reasoning chains that replay repeatable workflows without re-prompting an LLM every run.</p>
+              <span class="hero-badge hero-badge-gold" title="Reusable workflow packs for repeat operations">Workflow Library</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Quick Start -->
+        <div class="quick-start">
+          <h5 class="quick-start-heading">Quick Start</h5>
+          <ol class="quick-start-list">
+            <li>Start your local server: <code>stillwater serve</code>.</li>
+            <li>Use the five dashboard cards to open architecture views for each module.</li>
+            <li>Configure your default LLM model from the sidebar to enable real status updates.</li>
+            <li>Optionally connect a Solace AGI key for cloud sync features.</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- ================================================
+           TAB: ORCHESTRATION
+           ================================================ -->
+      <div class="tab-pane" id="tab-orchestration">
+        <div class="tab-hero">
+          <img src="../images/droplets/orchestration.png" alt="Orchestration" class="tab-hero-img">
+          <div class="tab-hero-text">
+            <h2 class="tab-hero-title">Orchestration Engine</h2>
+            <p class="tab-hero-desc"><span class="term-hint" title="Stillwater's three-stage routing model: SmallTalk, Intent, then Execution">Triple Twin</span>: Phase 1 (SmallTalk, 0.70) &rarr; Phase 2 (Intent, 0.80) &rarr; Phase 3 (Execution, 0.90). CPU-first with LLM fallback. Each sub-agent inherits <span class="term-hint" title="Foundational safety skill that overrides conflicting instructions">prime-safety</span> before any domain skill.</p>
+          </div>
+        </div>
+        <div class="mermaid-wrap" id="mermaid-orchestration">
+          <div class="mermaid-loading">
+            <img src="../images/yinyang/yinyang-loading-128.gif" alt="Loading" class="loading-gif">
+            <p class="loading-label">Loading orchestration diagram...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================
+           TAB: SKILLS
+           ================================================ -->
+      <div class="tab-pane" id="tab-skills">
+        <div class="tab-hero">
+          <img src="../images/droplets/prime-phuc-skills.png" alt="Skills" class="tab-hero-img">
+          <div class="tab-hero-text">
+            <h2 class="tab-hero-title">Skills Ecosystem</h2>
+            <p class="tab-hero-desc">Dependency graph of all Stillwater skills. Each skill defines capabilities, constraints, and <span class="term-hint" title="Verification target level used to gate reliability and safety">rung targets</span>. <span class="term-hint" title="Safety skill precedence rule">prime-safety</span> always wins conflicts.</p>
+          </div>
+        </div>
+        <div class="mermaid-wrap" id="mermaid-skills">
+          <div class="mermaid-loading">
+            <img src="../images/yinyang/yinyang-loading-128.gif" alt="Loading" class="loading-gif">
+            <p class="loading-label">Loading skill dependency graph...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================
+           TAB: SWARMS
+           ================================================ -->
+      <div class="tab-pane" id="tab-swarms">
+        <div class="tab-hero">
+          <img src="../images/droplets/swarm-node.png" alt="Swarms" class="tab-hero-img">
+          <div class="tab-hero-text">
+            <h2 class="tab-hero-title">Agent Dispatch Matrix</h2>
+            <p class="tab-hero-desc">Each swarm agent type gets a <span class="term-hint" title="Pre-selected capability bundle assigned to an agent role">typed skill pack</span>, persona, and model tier. Dispatched by the orchestration engine for coding, planning, verification, and research tasks.</p>
+          </div>
+        </div>
+        <div class="mermaid-wrap" id="mermaid-swarms">
+          <div class="mermaid-loading">
+            <img src="../images/yinyang/yinyang-loading-128.gif" alt="Loading" class="loading-gif">
+            <p class="loading-label">Loading swarm dispatch matrix...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================
+           TAB: PERSONAS
+           ================================================ -->
+      <div class="tab-pane" id="tab-personas">
+        <div class="tab-hero">
+          <img src="../images/droplets/famous-personas.png" alt="Personas" class="tab-hero-img">
+          <div class="tab-hero-text">
+            <h2 class="tab-hero-title">Famous Personas</h2>
+            <p class="tab-hero-desc">Domain experts activate specific LLM reasoning styles. Persona lenses are <span class="term-hint" title="Personas adjust communication style, not permissions or capabilities">style-only</span> and cannot grant capabilities.</p>
+          </div>
+        </div>
+        <div class="mermaid-wrap" id="mermaid-personas">
+          <div class="mermaid-loading">
+            <img src="../images/yinyang/yinyang-loading-128.gif" alt="Loading" class="loading-gif">
+            <p class="loading-label">Loading persona state machines...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================
+           TAB: RECIPES
+           ================================================ -->
+      <div class="tab-pane" id="tab-recipes">
+        <div class="tab-hero">
+          <img src="../images/droplets/recipes.png" alt="Recipes" class="tab-hero-img">
+          <div class="tab-hero-text">
+            <h2 class="tab-hero-title">Recipes &amp; Combos</h2>
+            <p class="tab-hero-desc">Saved reasoning chains that replay consistent workflows. The combos directory pairs WISH+RECIPE for planning, bugfix, run-test, CI triage, security, and dependency workflows.</p>
+          </div>
+        </div>
+        <div class="mermaid-wrap" id="mermaid-recipes">
+          <div class="mermaid-loading">
+            <img src="../images/yinyang/yinyang-loading-128.gif" alt="Loading" class="loading-gif">
+            <p class="loading-label">Loading recipe workflow graph...</p>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ======================================================
+       LLM WIZARD MODAL
+       ====================================================== -->
+  <div class="modal-overlay" id="llmModal" role="dialog" aria-modal="true" aria-labelledby="llmModalTitle" aria-hidden="true" tabindex="-1">
+    <div class="modal-box">
+      <div class="modal-head">
+        <span class="modal-title" id="llmModalTitle">LLM Configuration</span>
+        <button class="modal-close" id="btnCloseLLM" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-notice" id="llmModalNotice" aria-live="polite"></div>
+        <div class="wizard-step" id="llmStep1">
+          <h6 class="wizard-step-heading">Step 1: Select Default Model</h6>
+          <div class="model-selection">
+            <label class="model-option">
+              <input type="radio" name="llmModel" value="haiku" checked>
+              <span class="model-option-content">
+                <span class="model-name">Haiku <span class="model-tag">Fast</span></span>
+                <span class="model-desc">Coordination, scaffolding, volume tasks</span>
+              </span>
+            </label>
+            <label class="model-option">
+              <input type="radio" name="llmModel" value="sonnet">
+              <span class="model-option-content">
+                <span class="model-name">Sonnet <span class="model-tag">Balanced</span></span>
+                <span class="model-desc">Coding, planning, domain work</span>
+              </span>
+            </label>
+            <label class="model-option">
+              <input type="radio" name="llmModel" value="opus">
+              <span class="model-option-content">
+                <span class="model-name">Opus <span class="model-tag">Powerful</span></span>
+                <span class="model-desc">Math, security, adversarial audit</span>
+              </span>
+            </label>
+          </div>
+          <div class="wizard-check-row">
+            <label class="wizard-check-label">
+              <input type="checkbox" id="autoStart" checked>
+              Auto-start wrapper on boot
+            </label>
+          </div>
+          <div class="wizard-actions">
+            <button class="btn-primary" id="btnSaveLLM">Save Configuration</button>
+            <button class="btn-secondary" id="btnCancelLLM">Cancel</button>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Bootstrap JS from CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom JavaScript -->
-    <script src="/static/app.js"></script>
-    <script src="/static/wizards.js"></script>
-    <script src="/static/mermaid-handler.js"></script>
+  <!-- ======================================================
+       SOLACE AGI WIZARD MODAL
+       ====================================================== -->
+  <div class="modal-overlay" id="solaceModal" role="dialog" aria-modal="true" aria-labelledby="solaceModalTitle" aria-hidden="true" tabindex="-1">
+    <div class="modal-box">
+      <div class="modal-head">
+        <span class="modal-title" id="solaceModalTitle">Connect to Solace AGI</span>
+        <button class="modal-close" id="btnCloseSolace" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-notice" id="solaceModalNotice" aria-live="polite"></div>
+        <div class="wizard-step" id="solaceStep1">
+          <h6 class="wizard-step-heading">API Key</h6>
+          <p class="wizard-step-desc">Enter your API key from <a class="link-cyan" href="https://www.solaceagi.com" target="_blank" rel="noopener">solaceagi.com</a></p>
+          <input
+            type="password"
+            class="form-input"
+            id="solaceApiKey"
+            placeholder="sw_sk_..."
+            autocomplete="off"
+          >
+          <div class="wizard-actions">
+            <button class="btn-primary" id="btnSaveSolace">Connect</button>
+            <button class="btn-secondary" id="btnCancelSolace">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <!-- Droplet Logo GIF Switch -->
-    <script>
-        function setupGifSwitch() {
-            const dropletLogo = document.getElementById('dropletLogo');
-            let animationCount = 0;
-
-            // Track animation end events
-            dropletLogo.addEventListener('animationend', () => {
-                animationCount++;
-            });
-
-            // Switch to rotating GIF after merge animation completes
-            // Check every 100ms if we should switch (after ~3-4 seconds)
-            setTimeout(() => {
-                dropletLogo.src = '../images/droplet-logo-rotating.gif';
-            }, 3000);
-        }
-    </script>
+  <!-- App script (single file — all logic merged) -->
+  <script src="app.js"></script>
 </body>
 </html>
