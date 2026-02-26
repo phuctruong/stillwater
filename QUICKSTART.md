@@ -16,7 +16,15 @@ Use `/phuc-swarm coder "..."` to dispatch. Never do deep work inline.
 
 ---
 
-## 1. Clone and install
+## 1. Install Stillwater
+
+### Option A: From PyPI (recommended for users)
+
+```bash
+pip install stillwater
+```
+
+### Option B: From source (for development)
 
 ```bash
 git clone https://github.com/phuctruong/stillwater

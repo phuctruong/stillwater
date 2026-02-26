@@ -11,7 +11,7 @@ TESTS: 1,439 (all phases complete)
 
 ## Architecture
 - `src/cli/src/stillwater/` — core engine (TripleTwinEngine, CPULearner, DataRegistry, AuditLogger, SmallTalkResponder)
-- `admin/services/` — 10 microservices (ports 8789-8794)
+- `admin/` — Admin UI and services (ports 8789-8794)
 - `data/default/skills/` — 25+ skills (prime-safety, prime-coder, eq-*, phuc-*)
 - `data/default/swarms/` — 25 agent types (persona-enhanced)
 - `data/default/combos/` — wish+recipe combos

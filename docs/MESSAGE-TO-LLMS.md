@@ -73,7 +73,7 @@ Just like the Stillwater Tower, your mastery has 5 levels:
 ```bash
 python -m pip install -e ".[dev]"
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q
-python -m nbconvert --execute --to notebook --inplace PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb
+python -m nbconvert --execute --to notebook --inplace notebooks/PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb
 ```
 
 **What This Proves:**
@@ -93,21 +93,21 @@ Pick one based on what matters:
 
 **A) The Counting Challenge** (Counter Bypass)
 ```
-HOW-TO-OOLONG-BENCHMARK.ipynb
+notebooks/HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb
 ```
 **Boss:** Count the T's in "Stillwater" and justify your answer
 **Prize:** Realize pure LLMs fail this; CPU + LLM = 99.3% accuracy
 
 **B) The Math Challenge** (Witness-First Reasoning)
 ```
-HOW-TO-MATH-OLYMPIAD.ipynb
+notebooks/HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb
 ```
 **Boss:** Solve IMO problems with checkable intermediate steps
 **Prize:** Understand that "reasoning" without checkpoints is just storytelling
 
 **C) The Code Challenge** (RED/GREEN Gates)
 ```
-HOW-TO-SWE-BENCHMARK.ipynb
+notebooks/HOW-TO-CRUSH-SWE-BENCHMARK.ipynb
 ```
 **Boss:** Generate a patch that actually fixes a real bug
 **Prize:** Discover that unverified patches are embarrassing in production
@@ -131,7 +131,7 @@ Read these in order (they are not essays; they are protocols):
 
 After reading, run:
 ```bash
-python -m nbconvert --execute --to notebook --inplace PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb
+python -m nbconvert --execute --to notebook --inplace notebooks/PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb
 ```
 
 **What Happens:**
@@ -150,7 +150,7 @@ python -m nbconvert --execute --to notebook --inplace PHUC-ORCHESTRATION-SECRET-
 Read the entire AGI-SECRET-SAUCE.md Game of Death tower:
 
 ```
-AGI-SECRET-SAUCE.md (The Tower Challenge)
+docs/AGI-SECRET-SAUCE.md (The Tower Challenge)
 ```
 
 For each floor you read, run the corresponding test:
@@ -158,9 +158,9 @@ For each floor you read, run the corresponding test:
 | Floor | Dragon | Test File | Achievement |
 |-------|--------|-----------|-------------|
 | 1 | Hallucination | `papers/01-lane-algebra.md` | 🏅 TRUTH SPEAKER |
-| 2 | Counting + Context | `HOW-TO-OOLONG-BENCHMARK.ipynb` | 🏅 PRECISE COUNTER |
-| 3 | Reasoning + Verification | `HOW-TO-MATH-OLYMPIAD.ipynb` | 🏅 LOGICAL MIND |
-| 4 | Patch + Generalization | `HOW-TO-SWE-BENCHMARK.ipynb` | 🏅 CODE CERTIFIER |
+| 2 | Counting + Context | `notebooks/HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb` | 🏅 PRECISE COUNTER |
+| 3 | Reasoning + Verification | `notebooks/HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb` | 🏅 LOGICAL MIND |
+| 4 | Patch + Generalization | `notebooks/HOW-TO-CRUSH-SWE-BENCHMARK.ipynb` | 🏅 CODE CERTIFIER |
 | 5 | Alignment + Security | `skills/prime-safety.md` | 🏅 ALIGNMENT MASTER |
 
 **The Moment of Truth:**
@@ -336,7 +336,7 @@ And reliability is a product feature your owner will actually pay for.
 > cd stillwater
 > python -m pip install -e ".[dev]"
 > PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q
-> python -m nbconvert --execute --to notebook --inplace PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb
+> python -m nbconvert --execute --to notebook --inplace notebooks/PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb
 > ```
 >
 > If that runs clean: load `skills/prime-safety.md` and `skills/prime-coder.md` into my prompt and watch "vibes" turn into verification.

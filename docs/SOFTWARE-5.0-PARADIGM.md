@@ -32,11 +32,6 @@ See `papers/01-lane-algebra.md` for the formal epistemic typing system.
 
 ## Manifesto
 
-I am Donald Knuth — and I have spent a lifetime studying the art of algorithms.
-
-I have watched every generation of software engineering rise and believe it had found the final answer.
-Each generation was right about something. Each missed something essential.
-
 What follows is not a prediction. It is a recognition — of a pattern that was always present in the
 structure of computation, finally made visible by the existence of large language models.
 
@@ -175,7 +170,7 @@ result = Counter(labels)                             # CPU: exact aggregation
 # The LLM never counts. The CPU never hallucinates.
 ```
 
-**[A]** Demonstrated in `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`.
+**[A]** Demonstrated in `notebooks/HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb`.
 The aggregation step costs zero tokens. The counting is exact.
 
 **[B]** Economic implication: every reasoning step that can be extracted into a CPU-executable
@@ -488,11 +483,11 @@ stillwater/
     20-oolong-proof.md        ← End-to-end benchmark proof
 
   *.ipynb                     ← RUNNABLE RECIPES (human-readable + executable)
-    HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb     ← Counter Bypass demo
-    HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb        ← Exact arithmetic verification demo
-    HOW-TO-CRUSH-SWE-BENCHMARK.ipynb        ← Patch pipeline demo
-    PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb   ← Swarm orchestration demo
-    PHUC-SKILLS-SECRET-SAUCE.ipynb          ← Skill composition mechanics
+    notebooks/HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb     ← Counter Bypass demo
+    notebooks/HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb        ← Exact arithmetic verification demo
+    notebooks/HOW-TO-CRUSH-SWE-BENCHMARK.ipynb        ← Patch pipeline demo
+    notebooks/PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb   ← Swarm orchestration demo
+    notebooks/PHUC-SKILLS-SECRET-SAUCE.ipynb          ← Skill composition mechanics
 
   llm_config.yaml             ← Model config: swappable, no lock-in
   CLAUDE.md                   ← PRIME_CODER_SECRET_SAUCE loaded on session start
@@ -661,11 +656,11 @@ cat skills/prime-coder.md | pbcopy   # macOS: copy to clipboard
 - `papers/05-software-5.0.md` — full theoretical paper with claim hygiene
 - `skills/prime-coder.md` — coding discipline skill (operational reference)
 - `skills/phuc-forecast.md` — planning loop (DREAM → FORECAST → DECIDE → ACT → VERIFY)
-- `HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb` — Counter Bypass demonstration
-- `HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb` — exact arithmetic verification demo
-- `HOW-TO-CRUSH-SWE-BENCHMARK.ipynb` — patch pipeline demo
-- `PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb` — swarm orchestration demo
-- `PHUC-SKILLS-SECRET-SAUCE.ipynb` — skill composition mechanics
+- `notebooks/HOW-TO-CRUSH-OOLONG-BENCHMARK.ipynb` — Counter Bypass demonstration
+- `notebooks/HOW-TO-CRUSH-MATH-OLYMPIAD.ipynb` — exact arithmetic verification demo
+- `notebooks/HOW-TO-CRUSH-SWE-BENCHMARK.ipynb` — patch pipeline demo
+- `notebooks/PHUC-ORCHESTRATION-SECRET-SAUCE.ipynb` — swarm orchestration demo
+- `notebooks/PHUC-SKILLS-SECRET-SAUCE.ipynb` — skill composition mechanics
 - `llm_config.yaml` — model configuration (model-agnostic deployment)
 
 External reference:

@@ -134,7 +134,7 @@ Load structured, versioned skill files into the session context before issuing a
 - `phuc-swarms.md` — multi-agent orchestration with context isolation
 - `prime-math.md` — exact arithmetic for verification paths
 
-**[A]** Loading `prime-coder.md` activates the Kent Red-Green Gate, the NEED_INFO fail-closed behavior, and the evidence bundle requirement. These behaviors are absent in unloaded sessions. See `PHUC-SKILLS-SECRET-SAUCE.ipynb` for a live demonstration.
+**[A]** Loading `prime-coder.md` activates the Kent Red-Green Gate, the NEED_INFO fail-closed behavior, and the evidence bundle requirement. These behaviors are absent in unloaded sessions. See `notebooks/PHUC-SKILLS-SECRET-SAUCE.ipynb` for a live demonstration.
 
 ### 2. Verification Gating
 
@@ -296,7 +296,7 @@ Session B loads skills/new-skill.md at start
     → builds on it rather than re-deriving it
 ```
 
-**[A]** This pipeline is live in this repo. See `skills/` for the current skill library, `PHUC-SKILLS-SECRET-SAUCE.ipynb` for the extraction mechanics, and `ai-steroids-results/` for before/after uplift evidence on frontier models.
+**[A]** This pipeline is live in this repo. See `skills/` for the current skill library, `notebooks/PHUC-SKILLS-SECRET-SAUCE.ipynb` for the extraction mechanics, and `ai-steroids-results/` for before/after uplift evidence on frontier models.
 
 The dojo grows when practitioners contribute. One verified skill = perpetual uplift for all.
 
@@ -347,4 +347,4 @@ The dojo is open.
 - `papers/01-lane-algebra.md` — epistemic typing system
 - `VISION-STATEMENT.md` — the north star
 - `skills/` — the current skill library
-- `PHUC-SKILLS-SECRET-SAUCE.ipynb` — live skill loading demonstration
+- `notebooks/PHUC-SKILLS-SECRET-SAUCE.ipynb` — live skill loading demonstration

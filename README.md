@@ -22,6 +22,17 @@ No silent fallback. No unwitnessed pass. No fake `ok: true` on failure.
 
 ## Quickstart
 
+### Option 1: Install from PyPI (recommended for users)
+
+```bash
+pip install stillwater
+
+# CLI
+stillwater --help
+```
+
+### Option 2: Install from source (for development)
+
 ```bash
 git clone https://github.com/phuctruong/stillwater
 cd stillwater
