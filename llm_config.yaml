@@ -25,6 +25,14 @@ claude-code:
   requires_api_key: false
   environment_variables:
   - ANTHROPIC_API_KEY
+codex-wrapper:
+  name: Codex CLI Wrapper
+  type: http
+  url: http://localhost:8081
+  model: codex-default
+  description: Local Codex CLI wrapper on localhost:8081 (Ollama-compatible API)
+  requires_api_key: false
+  environment_variables: []
 openai:
   name: OpenAI
   type: api

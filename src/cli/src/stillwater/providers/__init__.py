@@ -24,6 +24,7 @@ from .together_provider import TogetherProvider
 from .openrouter_provider import OpenRouterProvider
 from .ollama_provider import OllamaProvider
 from .claude_code_cli_provider import ClaudeCodeCLIProvider
+from .codex_wrapper_provider import CodexWrapperProvider
 from .http_provider import HTTPProvider
 
 
@@ -35,6 +36,7 @@ _PROVIDER_CLASSES: dict[str, type[LLMProvider]] = {
     "openrouter": OpenRouterProvider,
     "ollama": OllamaProvider,
     "claude-code-cli": ClaudeCodeCLIProvider,
+    "codex-wrapper": CodexWrapperProvider,
     "http": HTTPProvider,
 }
 
@@ -42,6 +44,7 @@ _PROVIDER_CLASSES: dict[str, type[LLMProvider]] = {
 PROVIDER_PRIORITY: list[str] = [
     "claude-code-cli",  # free (local, no API key)
     "ollama",           # free (local)
+    "codex-wrapper",    # free (local, no API key)
     "together",         # market rate
     "openai",           # gpt-4o-mini: $0.15/M input
     "openrouter",       # variable
@@ -102,6 +105,7 @@ __all__ = [
     "OpenRouterProvider",
     "OllamaProvider",
     "ClaudeCodeCLIProvider",
+    "CodexWrapperProvider",
     "HTTPProvider",
     "get_provider",
     "list_available_providers",

@@ -66,6 +66,13 @@ PROVIDERS: dict[str, dict[str, Any]] = {
             "mistral:7b",
         ],
     },
+    "codex-wrapper": {
+        "base_url": os.environ.get("CODEX_WRAPPER_URL", "http://localhost:8081"),
+        "api_key_env": None,
+        "models": [
+            "codex-default",
+        ],
+    },
     "together": {
         "base_url": "https://api.together.xyz/v1",
         "api_key_env": "TOGETHER_API_KEY",
@@ -100,6 +107,7 @@ _MODEL_PROVIDER_MAP: dict[str, str] = {
     # OpenAI
     "gpt-4o": "openai",
     "gpt-4o-mini": "openai",
+    "codex-default": "codex-wrapper",
     # Together
     "meta-llama/Llama-3.3-70B-Instruct": "together",
     "meta-llama/Llama-3.1-8B-Instruct-Turbo": "together",

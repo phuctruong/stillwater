@@ -588,6 +588,25 @@ class TestHandlerGetUnknown:
         assert "error" in body
 
 
+class TestHandlerGetPlayground:
+    """GET /playground returns browser test page."""
+
+    def test_status_200(self):
+        _, raw = _make_handler("/playground", "GET")
+        status, _ = _parse_response(raw)
+        assert status == 200
+
+    def test_body_contains_page_title(self):
+        _, raw = _make_handler("/playground", "GET")
+        text = raw.decode(errors="replace")
+        assert "Claude Wrapper Playground" in text
+
+    def test_body_links_to_codex_playground(self):
+        _, raw = _make_handler("/playground", "GET")
+        text = raw.decode(errors="replace")
+        assert "http://127.0.0.1:8081/playground" in text
+
+
 # ===========================================================================
 # Group 7: OllamaCompatibleHandler — POST /api/generate
 # ===========================================================================

@@ -22,6 +22,15 @@ claude_code_wrapper:
   timeout_seconds: 30
   retry_attempts: 3
 
+codex_cli_wrapper:
+  enabled: true
+  auto_start: false
+  port: 8081
+  cli_path: "src/cli/src/codex_cli_wrapper.py"
+  test_prompt: "Reply exactly: CODEX_WRAPPER_READY"
+  timeout_seconds: 60
+  retry_attempts: 1
+
 preferences:
   cache_recipes: true
   max_history: 100

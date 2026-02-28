@@ -179,7 +179,7 @@ class LLMConfigManager:
                 else:
                     return False, f"⚠️  {self.get_provider_name()} responded with {response.status_code}"
             except requests.exceptions.ConnectionError:
-                return False, f"❌ Cannot connect to {config.get('url')} - is Claude Code server running?"
+                return False, f"❌ Cannot connect to {config.get('url')} - is the local wrapper running?"
             except Exception as e:
                 return False, f"❌ Error checking server: {str(e)}"
 

@@ -41,6 +41,241 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def _playground_html(host: str, port: int) -> str:
+    """Render a small browser playground for Claude wrapper testing."""
+    endpoint = f"http://{host}:{port}/api/generate"
+    codex_url = os.getenv("CODEX_WRAPPER_URL", "http://127.0.0.1:8081")
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Claude Wrapper Playground</title>
+  <style>
+    :root {{
+      --bg: #f4efe8;
+      --panel: #fffaf4;
+      --ink: #1c2730;
+      --line: #bba288;
+      --accent: #8a4b20;
+      --accent-2: #215f73;
+    }}
+    * {{ box-sizing: border-box; }}
+    body {{
+      margin: 0;
+      min-height: 100vh;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top right, rgba(138,75,32,0.14), transparent 22rem),
+        radial-gradient(circle at bottom left, rgba(33,95,115,0.14), transparent 24rem),
+        linear-gradient(180deg, #fbf6ef 0%, var(--bg) 100%);
+    }}
+    main {{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }}
+    .hero, .card {{
+      border: 1px solid rgba(28,39,48,0.1);
+      border-radius: 1.1rem;
+      background: rgba(255,250,244,0.9);
+      box-shadow: 0 16px 40px rgba(28,39,48,0.08);
+    }}
+    .hero {{
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }}
+    .hero h1 {{
+      margin: 0 0 0.45rem;
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+    }}
+    .hero p {{
+      margin: 0.25rem 0;
+      line-height: 1.5;
+    }}
+    .meta {{
+      font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+      font-size: 0.84rem;
+      color: #5b6870;
+    }}
+    .links {{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }}
+    .links a {{
+      color: var(--accent-2);
+      text-decoration: none;
+      font-weight: 700;
+    }}
+    .grid {{
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }}
+    .card {{
+      padding: 1rem;
+    }}
+    label {{
+      display: block;
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }}
+    input, textarea {{
+      width: 100%;
+      margin-top: 0.35rem;
+      padding: 0.8rem 0.9rem;
+      border: 1px solid rgba(28,39,48,0.18);
+      border-radius: 0.85rem;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+    }}
+    textarea {{
+      min-height: 10rem;
+      resize: vertical;
+    }}
+    .actions {{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }}
+    button {{
+      cursor: pointer;
+      border: 0;
+      border-radius: 999px;
+      padding: 0.85rem 1.2rem;
+      font: inherit;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #6b3715);
+    }}
+    button.secondary {{
+      color: var(--ink);
+      background: linear-gradient(135deg, #d7e6ec, #c8dde5);
+    }}
+    .status {{
+      margin-top: 0.75rem;
+      min-height: 1.5rem;
+      color: var(--accent);
+      font-weight: 700;
+    }}
+    pre {{
+      margin: 0;
+      min-height: 16rem;
+      overflow: auto;
+      white-space: pre-wrap;
+      border-radius: 0.9rem;
+      padding: 1rem;
+      background: #1c2730;
+      color: #edf4f7;
+      font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+      line-height: 1.45;
+    }}
+    @media (max-width: 640px) {{
+      main {{ padding: 1rem 0.9rem 2rem; }}
+      .actions {{ flex-direction: column; }}
+      button {{ width: 100%; }}
+    }}
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <div class="meta">Stillwater local webservice / Claude Code bridge</div>
+      <h1>Claude Wrapper Playground</h1>
+      <p>Use this page to test the Claude Code wrapper directly from a browser.</p>
+      <p class="meta">POST endpoint: {endpoint}</p>
+      <div class="links">
+        <a href="/">Health JSON</a>
+        <a href="{codex_url}/playground">Open Codex Playground</a>
+      </div>
+    </section>
+    <section class="grid">
+      <form id="prompt-form" class="card">
+        <label>
+          Model
+          <input id="model" name="model" value="claude-haiku-4-5-20251001" />
+        </label>
+        <label>
+          System prompt
+          <textarea id="system" name="system" placeholder="Optional system instruction"></textarea>
+        </label>
+        <label>
+          User prompt
+          <textarea id="prompt" name="prompt" required>Reply in one sentence: what does this wrapper do?</textarea>
+        </label>
+        <div class="actions">
+          <button type="submit">Send Request</button>
+          <button type="button" class="secondary" id="health-btn">Check Health</button>
+        </div>
+        <div class="status" id="status"></div>
+      </form>
+      <section class="card">
+        <div class="meta">Response</div>
+        <pre id="output">Waiting for request...</pre>
+      </section>
+    </section>
+  </main>
+  <script>
+    const form = document.getElementById("prompt-form");
+    const output = document.getElementById("output");
+    const status = document.getElementById("status");
+    const healthBtn = document.getElementById("health-btn");
+
+    async function checkHealth() {{
+      status.textContent = "Checking health...";
+      const res = await fetch("/");
+      const data = await res.json();
+      output.textContent = JSON.stringify(data, null, 2);
+      status.textContent = res.ok ? "Wrapper reachable." : "Wrapper returned an error.";
+    }}
+
+    form.addEventListener("submit", async (event) => {{
+      event.preventDefault();
+      const payload = {{
+        prompt: document.getElementById("prompt").value,
+        system: document.getElementById("system").value || undefined,
+        model: document.getElementById("model").value || undefined,
+        stream: false
+      }};
+
+      status.textContent = "Sending request...";
+      output.textContent = "";
+
+      try {{
+        const res = await fetch("/api/generate", {{
+          method: "POST",
+          headers: {{ "Content-Type": "application/json" }},
+          body: JSON.stringify(payload)
+        }});
+        const data = await res.json();
+        output.textContent = JSON.stringify(data, null, 2);
+        status.textContent = res.ok ? "Request finished." : "Request failed.";
+      }} catch (error) {{
+        output.textContent = String(error);
+        status.textContent = "Network error.";
+      }}
+    }});
+
+    healthBtn.addEventListener("click", () => {{
+      checkHealth().catch((error) => {{
+        output.textContent = String(error);
+        status.textContent = "Health check failed.";
+      }});
+    }});
+  </script>
+</body>
+</html>
+"""
+
+
 class Config:
     """Configuration for Claude Code Server"""
     HOST = os.getenv("CLAUDE_CODE_HOST", "127.0.0.1")
@@ -308,6 +543,14 @@ class OllamaCompatibleHandler(BaseHTTPRequestHandler):
             }
             self.wfile.write(json.dumps(response).encode())
 
+        elif self.path == "/playground":
+            html = _playground_html(Config.HOST, Config.PORT).encode("utf-8")
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.send_header('Content-Length', str(len(html)))
+            self.end_headers()
+            self.wfile.write(html)
+
         else:
             self.send_response(404)
             self.send_header('Content-Type', 'application/json')
@@ -451,6 +694,7 @@ def run_server(host: str = Config.HOST, port: int = Config.PORT):
         print("   Install with: pip install claude-code")
     print("\n📝 Test with curl:")
     print(f'   curl http://{host}:{port}/')
+    print(f'   curl http://{host}:{port}/playground')
     print(f'   curl -X POST http://{host}:{port}/api/generate \\')
     print('     -H "Content-Type: application/json" \\')
     print('     -d \'{"prompt": "Hello", "stream": false}\'')
