@@ -184,6 +184,14 @@ LEK x LEAK x LEC = MASTERY = Software 5.0 Kung Fu
 
 Submission and policy: `STORE.md`
 
+## Companion Projects
+
+| Project | Role | License |
+|---------|------|---------|
+| **Stillwater OS** (this) | Verification layer, skills, recipes | OSS (MIT) |
+| [Solace Browser](https://github.com/phuctruong/solace-browser) | OAuth3 reference impl, web automation | Source-Available (FSL) |
+| [solaceagi.com](https://www.solaceagi.com) | Hosted integration platform | Paid |
+
 ## License
 
 MIT (`LICENSE`)
