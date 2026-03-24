@@ -19,6 +19,7 @@ import urllib.parse
 import urllib.request
 
 from . import __version__
+from . import store_client
 
 
 def _repo_root() -> Path:
@@ -68,6 +69,34 @@ def _write_json(path: Path, data: Any) -> None:
 
 def _load_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _print_store_apps_table(data: dict[str, Any]) -> None:
+    print(
+        "apps:"
+        f" total={data.get('total', 0)}"
+        f" available={data.get('available_count', 0)}"
+        f" locked={data.get('locked_count', 0)}"
+        f" installed={data.get('installed_count', 0)}"
+    )
+    for item in data.get("items", []):
+        print(
+            f"- {item.get('app_id')} "
+            f"[{item.get('status')}] "
+            f"{item.get('category')} "
+            f"v{item.get('version')}"
+        )
+
+
+def _print_store_status(data: dict[str, Any]) -> None:
+    print(f"source: {data.get('source')}")
+    print(f"manifest_app_count: {data.get('manifest_app_count')}")
+    print(f"catalog_app_count: {data.get('catalog_app_count')}")
+    print(f"manifest_index_in_sync: {data.get('manifest_index_in_sync')}")
+    git = data.get("git", {})
+    if isinstance(git, dict):
+        print(f"git_branch: {git.get('branch')}")
+        print(f"git_commit: {git.get('commit_short') or git.get('commit')}")
 
 
 def _belt_for_score(score: float) -> str:
@@ -5797,6 +5826,44 @@ def main(argv: list[str] | None = None) -> int:
     p_run.add_argument("--run-id", default=None, help="Optional run id (default: auto-generated).")
     p_run.add_argument("--json", action="store_true", help="Machine-readable output.")
 
+    p_store = sub.add_parser("store", help="Exercise the SolaceAGI Git-backed app store webservice.")
+    p_store_sub = p_store.add_subparsers(dest="store_cmd", required=True)
+
+    p_store_status = p_store_sub.add_parser("status", help="Show app-store catalog status.")
+    p_store_status.add_argument("--base-url", default=None, help="SolaceAGI base URL (default: SOLACE_STORE_BASE_URL or http://127.0.0.1:8090).")
+    p_store_status.add_argument("--token", default=None, help="Bearer token/API key if auth is required.")
+    p_store_status.add_argument("--timeout", type=float, default=10.0, help="HTTP timeout in seconds.")
+    p_store_status.add_argument("--json", action="store_true", help="Machine-readable output.")
+
+    p_store_apps = p_store_sub.add_parser("apps", help="List store apps.")
+    p_store_apps.add_argument("--base-url", default=None, help="SolaceAGI base URL.")
+    p_store_apps.add_argument("--token", default=None, help="Bearer token/API key if auth is required.")
+    p_store_apps.add_argument("--category", default=None, help="Optional category filter.")
+    p_store_apps.add_argument("--timeout", type=float, default=10.0, help="HTTP timeout in seconds.")
+    p_store_apps.add_argument("--json", action="store_true", help="Machine-readable output.")
+
+    p_store_app = p_store_sub.add_parser("app", help="Fetch one app detail.")
+    p_store_app.add_argument("app_id", help="Application identifier.")
+    p_store_app.add_argument("--base-url", default=None, help="SolaceAGI base URL.")
+    p_store_app.add_argument("--token", default=None, help="Bearer token/API key if auth is required.")
+    p_store_app.add_argument("--timeout", type=float, default=10.0, help="HTTP timeout in seconds.")
+    p_store_app.add_argument("--json", action="store_true", help="Machine-readable output.")
+
+    p_store_install = p_store_sub.add_parser("install", help="Install an app through the store API.")
+    p_store_install.add_argument("app_id", help="Application identifier.")
+    p_store_install.add_argument("--optional-scope", action="append", default=[], help="Optional scope to enable (repeatable).")
+    p_store_install.add_argument("--base-url", default=None, help="SolaceAGI base URL.")
+    p_store_install.add_argument("--token", default=None, help="Bearer token/API key if auth is required.")
+    p_store_install.add_argument("--timeout", type=float, default=10.0, help="HTTP timeout in seconds.")
+    p_store_install.add_argument("--json", action="store_true", help="Machine-readable output.")
+
+    p_store_uninstall = p_store_sub.add_parser("uninstall", help="Uninstall an app through the store API.")
+    p_store_uninstall.add_argument("app_id", help="Application identifier.")
+    p_store_uninstall.add_argument("--base-url", default=None, help="SolaceAGI base URL.")
+    p_store_uninstall.add_argument("--token", default=None, help="Bearer token/API key if auth is required.")
+    p_store_uninstall.add_argument("--timeout", type=float, default=10.0, help="HTTP timeout in seconds.")
+    p_store_uninstall.add_argument("--json", action="store_true", help="Machine-readable output.")
+
     p_evidence = sub.add_parser("evidence", help="Prime-coder evidence directory management.")
     p_evidence_sub = p_evidence.add_subparsers(dest="evidence_cmd", required=True)
 
@@ -5899,6 +5966,48 @@ def main(argv: list[str] | None = None) -> int:
             print("notebooks:")
             for p in data["notebooks"]:
                 print(f"  - {p}")
+        return 0
+
+    if ns.cmd == "store":
+        try:
+            if ns.store_cmd == "status":
+                data = store_client.catalog_status(base_url=ns.base_url, token=ns.token, timeout=ns.timeout)
+            elif ns.store_cmd == "apps":
+                data = store_client.list_apps(
+                    base_url=ns.base_url,
+                    token=ns.token,
+                    category=ns.category,
+                    timeout=ns.timeout,
+                )
+            elif ns.store_cmd == "app":
+                data = store_client.get_app(ns.app_id, base_url=ns.base_url, token=ns.token, timeout=ns.timeout)
+            elif ns.store_cmd == "install":
+                data = store_client.install_app(
+                    ns.app_id,
+                    optional_scopes_enabled=list(ns.optional_scope or []),
+                    base_url=ns.base_url,
+                    token=ns.token,
+                    timeout=ns.timeout,
+                )
+            elif ns.store_cmd == "uninstall":
+                data = store_client.uninstall_app(ns.app_id, base_url=ns.base_url, token=ns.token, timeout=ns.timeout)
+            else:
+                print(f"ERROR: unknown store subcommand: {ns.store_cmd}")
+                return 1
+        except store_client.StoreClientError as exc:
+            print(f"ERROR: {exc}")
+            return 1
+
+        if getattr(ns, "json", False):
+            print(json.dumps(data, indent=2, sort_keys=True))
+            return 0
+
+        if ns.store_cmd == "status":
+            _print_store_status(data)
+        elif ns.store_cmd == "apps":
+            _print_store_apps_table(data)
+        else:
+            print(json.dumps(data, indent=2, sort_keys=True))
         return 0
 
     if ns.cmd == "init":

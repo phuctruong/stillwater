@@ -1,3 +1,4 @@
+# DNA: `code(task) = red_gate(fail_first) × patch(minimal) × evidence(test+artifact+hash) × promotion(641→274177→65537); no_claim_without_witness`
 <!-- QUICK LOAD (10-15 lines): Use this block for fast context; load full file for production.
 SKILL: prime-coder v2.3.0
 MW_ANCHORS: [verification, evidence, rung, boundary, integrity, causality, emergence, reversibility]
@@ -1728,3 +1729,45 @@ This skill contributes to GLOW score across these dimensions:
 
 - `S5-EVO-CODER-01` `ENGINE_STATE_STABILITY` (see `skills/prime-skills-evolution.md`)
 - `S5-EVO-CODER-02` `SCOPED_REGRESSION_ISOLATION` (see `skills/prime-skills-evolution.md`)
+
+---
+
+## DNA
+
+`prime_coder(task) = red_gate(fail) × green_gate(fix) × evidence(seal); no_pass_without_witness`
+
+---
+
+## Interaction Effects
+
+| Skill | Interaction | Resolution |
+|-------|------------|------------|
+| **prime-safety** | Safety envelope constrains which files prime-coder may write | prime-safety wins all conflicts; prime-coder operates within the declared write_roots |
+| **styleguide-first** | Style tokens must be verified before UI code ships | prime-coder runs red/green gate on component code only after styleguide-first confirms token alignment |
+| **unit-test-first** | Both enforce TDD; prime-coder adds evidence bundle on top | unit-test-first defines the test structure; prime-coder seals it with rung verification and evidence hash |
+| **live-llm-browser-discovery** | Discovery loop generates actions that prime-coder must verify deterministically | LLM-discovered selectors enter prime-coder pipeline as test inputs; non-deterministic outputs are normalized before seal |
+| **browser-recipe-engine** | Recipes are sealed artifacts; prime-coder enforces the seal | Recipe replay must produce identical output; prime-coder blocks promotion if replay drift is detected |
+
+---
+
+## Forbidden States
+
+| State | Description |
+|-------|-------------|
+| UNWITNESSED_PASS | Claiming PASS without executable evidence (tests + artifacts + env snapshot) |
+| NONDETERMINISTIC_OUTPUT | Output that varies across runs without seed or environment change |
+| CROSS_LANE_UPGRADE | Promoting an artifact past a rung gate without meeting that rung's evidence threshold |
+| NULL_ZERO_COERCION | Silently converting null/undefined to 0 or empty string instead of failing |
+| STACKED_SPECULATIVE_PATCHES | Applying multiple untested patches — each patch must have its own red→green cycle |
+| FLOAT_IN_VERIFICATION_PATH | Using floating-point in any verification, hash, or comparison path |
+| CONVERGENCE_CLAIM_WITHOUT_R_P_CERTIFICATE | Declaring convergence without a reproducibility + provenance certificate |
+
+## Cross-References
+
+| Reference | Type | Relationship |
+|-----------|------|-------------|
+| Paper 06 (SW5.0 Pipeline) | Architecture | Defines the 8-stage pipeline that prime-coder enforces at stage [7] CODE |
+| Paper 43 (Webservices-First) | Doctrine | Northstar certification feeds into prime-coder's evidence gate |
+| Paper 44 (CI Hook) | Enforcement | Pre-push gate runs prime-coder's red/green check before allowing push |
+| `prime-safety.md` | Skill | Safety envelope constrains all prime-coder actions (stricter wins) |
+| `unit-test-first.md` | Skill | TDD structure that prime-coder builds evidence bundles on top of |

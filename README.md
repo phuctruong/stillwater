@@ -12,7 +12,7 @@
 |  Belt: [][][][] (Orange -- Store skill submitted)             |
 |  Rung: ########________ 641/65537                             |
 |  Papers: 61 | Diagrams: 10 | Skills: 37 | Personas: 29       |
-|  Tests: 2,399 | Recipes: 34 | Swarms: 13 | Combos: 40        |
+|  Tests: 2,399 | Recipes: 34 | Swarms: 38 | Combos: 40        |
 |  Pipeline: papers>diagrams>styleguides>webservices>tests>code |
 +==============================================================+
 ```
@@ -119,8 +119,8 @@ SKILLS (37)                       |- Infra: Gregg, Hightower
 |- prime-coder                    |- Business: Isenberg, Levels
 |- phuc-forecast                  |  ...19 more
 |- glow-score
-|- persona-engine                 SWARMS (13)
-|- eq-core, eq-mirror             |- 13 agent types
+|- persona-engine                 SWARMS (38)
+|- eq-core, eq-mirror             |- 38 agent types
 |  ...31 more                     |- Persona-enhanced dispatch
 ```
 
