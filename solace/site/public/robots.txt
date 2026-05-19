@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://stillwater-qa-mfjzxmegpq-uc.a.run.app/sitemap.xml
